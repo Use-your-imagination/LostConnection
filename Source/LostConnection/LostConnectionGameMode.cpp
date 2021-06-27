@@ -1,8 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+#include "UObject/ConstructorHelpers.h"
+
 #include "LostConnectionGameMode.h"
 #include "LostConnectionCharacter.h"
-#include "UObject/ConstructorHelpers.h"
 
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
