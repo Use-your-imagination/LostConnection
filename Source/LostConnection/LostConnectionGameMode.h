@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/GameModeBase.h"
+
 #include "LostConnectionGameMode.generated.h"
 
 UCLASS(minimalapi)
