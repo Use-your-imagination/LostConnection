@@ -16,6 +16,3 @@ class ALostConnectionGameMode : public AGameModeBase
 public:
 	ALostConnectionGameMode();
 };
-
-
-
