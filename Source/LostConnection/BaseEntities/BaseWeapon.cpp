@@ -2,5 +2,5 @@
 
 ABaseWeapon::ABaseWeapon()
 {
-
+	
 }

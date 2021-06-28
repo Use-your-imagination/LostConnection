@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "../BaseEntities/BaseWeapon.h"
 
 #include "LostConnectionCharacter.generated.h"
 
@@ -23,6 +24,9 @@ class ALostConnectionCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
+
+	UPROPERTY(Category = Weapon, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* weapon;
 
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */

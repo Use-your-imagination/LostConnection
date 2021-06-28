@@ -7,12 +7,14 @@
 
 ALostConnectionCharacter::ALostConnectionCharacter()
 {
+	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
+
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 
 	// set our turn rates for input
-	BaseTurnRate = 45.f;
-	BaseLookUpRate = 45.f;
+	BaseTurnRate = 45.0f;
+	BaseLookUpRate = 45.0f;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -35,6 +37,10 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
+	weapon->SetupAttachment(mesh);
+	weapon->AttachToComponent(mesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), "hand_r");
 }
 
 void ALostConnectionCharacter::MoveForward(float Value)
