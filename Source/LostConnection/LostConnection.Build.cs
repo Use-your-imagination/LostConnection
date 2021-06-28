@@ -11,6 +11,6 @@ public class LostConnection : ModuleRules
 		MinFilesUsingPrecompiledHeaderOverride = 1;
 		bUseUnity = false;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 	}
 }
