@@ -2,8 +2,6 @@
 
 #include "UObject/ConstructorHelpers.h"
 
-#include "LostConnectionCharacter.h"
-
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
 	// set default pawn class to our Blueprinted character
