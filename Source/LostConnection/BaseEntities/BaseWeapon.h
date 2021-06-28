@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Actor.h"
+#include "BaseAmmo.h"
 
 #include "BaseWeapon.generated.h"
 
@@ -12,13 +13,18 @@ class LOSTCONNECTION_API ABaseWeapon : public AActor
 	GENERATED_BODY()
 
 protected:
+	void BeginPlay() override;
+
+protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* mesh;
+	USkeletalMeshComponent* mesh;
+
+	ABaseAmmo* ammo;
 
 public:
 	ABaseWeapon();
 
-	virtual UStaticMesh* getWeaponMesh() const final;
+	virtual USkeletalMesh* getWeaponMesh() const final;
 
 	virtual ~ABaseWeapon() = default;
 };

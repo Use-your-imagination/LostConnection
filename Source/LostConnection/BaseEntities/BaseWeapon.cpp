@@ -1,11 +1,18 @@
 #include "BaseWeapon.h"
 
-ABaseWeapon::ABaseWeapon()
+void ABaseWeapon::BeginPlay()
 {
-	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
+	AActor::BeginPlay();
+
+
 }
 
-UStaticMesh* ABaseWeapon::getWeaponMesh() const
+ABaseWeapon::ABaseWeapon()
 {
-	return mesh->GetStaticMesh();
+	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
+}
+
+USkeletalMesh* ABaseWeapon::getWeaponMesh() const
+{
+	return mesh->SkeletalMesh;
 }

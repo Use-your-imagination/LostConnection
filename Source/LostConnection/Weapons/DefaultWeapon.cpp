@@ -5,5 +5,5 @@
 
 ADefaultWeapon::ADefaultWeapon()
 {
-	mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr, TEXT("StaticMesh'/Game/LostConnection/Meshes/Linear_Stair_StaticMesh.Linear_Stair_StaticMesh'")));
+	
 }

@@ -27,7 +27,7 @@ class LOSTCONNECTION_API ALostConnectionCharacter : public ACharacter
 	UCameraComponent* FollowCamera;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* currentWeaponMesh;
+	USkeletalMeshComponent* currentWeaponMesh;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	ABaseWeapon* currentWeapon;

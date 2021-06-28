@@ -109,7 +109,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	currentWeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CurrentWeaponMesh"));
+	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
 	currentWeaponMesh->SetupAttachment(mesh, "middle_02_r");
 }
 
@@ -144,6 +144,6 @@ void ALostConnectionCharacter::updateWeaponMesh()
 {
 	if (currentWeapon)
 	{
-		currentWeaponMesh->SetStaticMesh(currentWeapon->getWeaponMesh());
+		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
 	}
 }
