@@ -9,24 +9,37 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "../BaseEntities/BaseWeapon.h"
+#include "../Weapons/DefaultWeapon.h"
 
 #include "LostConnectionCharacter.generated.h"
 
-UCLASS(config=Game)
-class ALostConnectionCharacter : public ACharacter
+UCLASS()
+class LOSTCONNECTION_API ALostConnectionCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
 
 	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(Category = Weapon, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* weapon;
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* currentWeaponMesh;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	ABaseWeapon* currentWeapon;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	ABaseWeapon* firstWeaponSlot;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	ABaseWeapon* secondWeaponSlot;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	ADefaultWeapon* defaultWeaponSlot;
 
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -38,6 +51,8 @@ public:
 	float BaseLookUpRate;
 
 protected:
+	void BeginPlay() override;
+
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
@@ -63,6 +78,14 @@ protected:
 
 public:
 	ALostConnectionCharacter();
+
+	void changeToFirstWeapon();
+
+	void changeToSecondWeapon();
+
+	void changeToDefaultWeapon();
+
+	void updateWeaponMesh();
 
 	/** Returns CameraBoom subobject **/
 	USpringArmComponent* GetCameraBoom() const;

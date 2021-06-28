@@ -8,8 +8,8 @@
 
 #include "LostConnectionGameMode.generated.h"
 
-UCLASS(minimalapi)
-class ALostConnectionGameMode : public AGameModeBase
+UCLASS()
+class LOSTCONNECTION_API ALostConnectionGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 

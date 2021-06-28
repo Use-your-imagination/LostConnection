@@ -7,12 +7,18 @@
 #include "BaseWeapon.generated.h"
 
 UCLASS()
-class ABaseWeapon : public AActor
+class LOSTCONNECTION_API ABaseWeapon : public AActor
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* mesh;
+
 public:
 	ABaseWeapon();
+
+	virtual UStaticMesh* getWeaponMesh() const final;
 
 	virtual ~ABaseWeapon() = default;
 };

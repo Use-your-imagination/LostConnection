@@ -7,7 +7,7 @@
 #include "BaseBullet.generated.h"
 
 UCLASS()
-class ABaseBullet : public APawn
+class LOSTCONNECTION_API ABaseBullet : public APawn
 {
 	GENERATED_BODY()
 

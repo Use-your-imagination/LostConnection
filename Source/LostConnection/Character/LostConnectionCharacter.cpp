@@ -5,42 +5,11 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 
-ALostConnectionCharacter::ALostConnectionCharacter()
+void ALostConnectionCharacter::BeginPlay()
 {
-	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
+	Super::BeginPlay();
 
-	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
-
-	// set our turn rates for input
-	BaseTurnRate = 45.0f;
-	BaseLookUpRate = 45.0f;
-
-	// Don't rotate when the controller rotates. Let that just affect the camera.
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
-
-	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->JumpZVelocity = 600.f;
-	GetCharacterMovement()->AirControl = 0.2f;
-
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
-	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-
-	// Create a follow camera
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
-	weapon->SetupAttachment(mesh);
-	weapon->AttachToComponent(mesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), "hand_r");
+	defaultWeaponSlot = NewObject<ADefaultWeapon>();
 }
 
 void ALostConnectionCharacter::MoveForward(float Value)
@@ -91,6 +60,10 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
+	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
+	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALostConnectionCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALostConnectionCharacter::MoveRight);
 
@@ -98,4 +71,79 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAxis("TurnRate", this, &ALostConnectionCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ALostConnectionCharacter::LookUpAtRate);
+}
+
+ALostConnectionCharacter::ALostConnectionCharacter()
+{
+	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
+
+	firstWeaponSlot = nullptr;
+	secondWeaponSlot = nullptr;
+
+	// Set size for collision capsule
+	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
+
+	// set our turn rates for input
+	BaseTurnRate = 45.0f;
+	BaseLookUpRate = 45.0f;
+
+	// Don't rotate when the controller rotates. Let that just affect the camera.
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	// Configure character movement
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
+	GetCharacterMovement()->JumpZVelocity = 600.f;
+	GetCharacterMovement()->AirControl = 0.2f;
+
+	// Create a camera boom (pulls in towards the player if there is a collision)
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
+	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+
+	// Create a follow camera
+	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	currentWeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CurrentWeaponMesh"));
+	currentWeaponMesh->SetupAttachment(mesh, "middle_02_r");
+}
+
+void ALostConnectionCharacter::changeToFirstWeapon()
+{
+	if (firstWeaponSlot)
+	{
+		currentWeapon = firstWeaponSlot;
+
+		this->updateWeaponMesh();
+	}
+}
+
+void ALostConnectionCharacter::changeToSecondWeapon()
+{
+	if (secondWeaponSlot)
+	{
+		currentWeapon = secondWeaponSlot;
+
+		this->updateWeaponMesh();
+	}
+}
+
+void ALostConnectionCharacter::changeToDefaultWeapon()
+{
+	currentWeapon = defaultWeaponSlot;
+
+	this->updateWeaponMesh();
+}
+
+void ALostConnectionCharacter::updateWeaponMesh()
+{
+	if (currentWeapon)
+	{
+		currentWeaponMesh->SetStaticMesh(currentWeapon->getWeaponMesh());
+	}
 }
