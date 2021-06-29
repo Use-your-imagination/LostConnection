@@ -64,6 +64,8 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
 	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
 
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALostConnectionCharacter::fire);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALostConnectionCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALostConnectionCharacter::MoveRight);
 
@@ -75,8 +77,6 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 ALostConnectionCharacter::ALostConnectionCharacter()
 {
-	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
-
 	firstWeaponSlot = nullptr;
 	secondWeaponSlot = nullptr;
 
@@ -110,7 +110,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
-	currentWeaponMesh->SetupAttachment(mesh, "middle_02_r");
+	currentWeaponMesh->SetupAttachment(ACharacter::GetMesh(), "middle_02_r");
 }
 
 void ALostConnectionCharacter::changeToFirstWeapon()
@@ -145,5 +145,13 @@ void ALostConnectionCharacter::updateWeaponMesh()
 	if (currentWeapon)
 	{
 		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
+	}
+}
+
+void ALostConnectionCharacter::fire()
+{
+	if (currentWeapon)
+	{
+		currentWeapon->fire();
 	}
 }

@@ -87,6 +87,8 @@ public:
 
 	void updateWeaponMesh();
 
+	void fire();
+
 	/** Returns CameraBoom subobject **/
 	USpringArmComponent* GetCameraBoom() const;
 

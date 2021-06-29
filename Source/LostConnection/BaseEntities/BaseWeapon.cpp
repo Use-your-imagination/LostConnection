@@ -1,15 +1,13 @@
 #include "BaseWeapon.h"
 
-void ABaseWeapon::BeginPlay()
-{
-	AActor::BeginPlay();
-
-
-}
-
 ABaseWeapon::ABaseWeapon()
 {
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
+}
+
+void ABaseWeapon::fire()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(TEXT("%s weapon fires with %s bullets"), *StaticClass()->GetName(), *ammo->StaticClass()->GetName()));
 }
 
 USkeletalMesh* ABaseWeapon::getWeaponMesh() const

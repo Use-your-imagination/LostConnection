@@ -11,6 +11,7 @@ class LOSTCONNECTION_API ABaseAmmo : public APawn
 {
 	GENERATED_BODY()
 
+protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* mesh;
 

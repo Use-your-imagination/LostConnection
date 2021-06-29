@@ -13,9 +13,6 @@ class LOSTCONNECTION_API ABaseWeapon : public AActor
 	GENERATED_BODY()
 
 protected:
-	void BeginPlay() override;
-
-protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* mesh;
 
@@ -25,6 +22,8 @@ public:
 	ABaseWeapon();
 
 	virtual USkeletalMesh* getWeaponMesh() const final;
+
+	virtual void fire();
 
 	virtual ~ABaseWeapon() = default;
 };
