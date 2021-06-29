@@ -64,7 +64,7 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
 	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
 
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALostConnectionCharacter::fire);
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALostConnectionCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALostConnectionCharacter::MoveRight);
@@ -115,22 +115,16 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 
 void ALostConnectionCharacter::changeToFirstWeapon()
 {
-	if (firstWeaponSlot)
-	{
-		currentWeapon = firstWeaponSlot;
+	currentWeapon = firstWeaponSlot;
 
-		this->updateWeaponMesh();
-	}
+	this->updateWeaponMesh();
 }
 
 void ALostConnectionCharacter::changeToSecondWeapon()
 {
-	if (secondWeaponSlot)
-	{
-		currentWeapon = secondWeaponSlot;
+	currentWeapon = secondWeaponSlot;
 
-		this->updateWeaponMesh();
-	}
+	this->updateWeaponMesh();
 }
 
 void ALostConnectionCharacter::changeToDefaultWeapon()
@@ -146,12 +140,16 @@ void ALostConnectionCharacter::updateWeaponMesh()
 	{
 		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
 	}
+	else
+	{
+		currentWeaponMesh->SetSkeletalMesh(nullptr);
+	}
 }
 
-void ALostConnectionCharacter::fire()
+void ALostConnectionCharacter::shoot()
 {
 	if (currentWeapon)
 	{
-		currentWeapon->fire();
+		currentWeapon->shoot();
 	}
 }

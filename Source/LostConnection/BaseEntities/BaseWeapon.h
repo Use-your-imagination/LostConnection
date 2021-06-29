@@ -23,7 +23,7 @@ public:
 
 	virtual USkeletalMesh* getWeaponMesh() const final;
 
-	virtual void fire();
+	virtual void shoot();
 
 	virtual ~ABaseWeapon() = default;
 };
