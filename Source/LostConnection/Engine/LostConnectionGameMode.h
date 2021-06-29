@@ -13,6 +13,9 @@ class LOSTCONNECTION_API ALostConnectionGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+protected:
+	void BeginPlay() override;
+
 public:
 	ALostConnectionGameMode();
 };

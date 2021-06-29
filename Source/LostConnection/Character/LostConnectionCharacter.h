@@ -83,6 +83,7 @@ public:
 
 	void changeToSecondWeapon();
 
+	UFUNCTION(BlueprintCallable)
 	void changeToDefaultWeapon();
 
 	void updateWeaponMesh();

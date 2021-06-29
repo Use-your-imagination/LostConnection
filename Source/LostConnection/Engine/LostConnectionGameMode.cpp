@@ -2,6 +2,11 @@
 
 #include "UObject/ConstructorHelpers.h"
 
+void ALostConnectionGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
 	// set default pawn class to our Blueprinted character
