@@ -95,6 +95,9 @@ public:
 	/** Returns FollowCamera subobject **/
 	UCameraComponent* GetFollowCamera() const;
 
+	UFUNCTION(BlueprintCallable)
+	bool isWeaponEquipped() const;
+
 	~ALostConnectionCharacter() = default;
 };
 
@@ -106,4 +109,9 @@ inline USpringArmComponent* ALostConnectionCharacter::GetCameraBoom() const
 inline UCameraComponent* ALostConnectionCharacter::GetFollowCamera() const
 {
 	return FollowCamera;
+}
+
+inline bool ALostConnectionCharacter::isWeaponEquipped() const
+{
+	return static_cast<bool>(currentWeapon);
 }
