@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "BaseAmmo.h"
 
 #include "BaseWeapon.generated.h"
@@ -19,11 +20,14 @@ protected:
 	ABaseAmmo* ammo;
 
 public:
+	ACharacter* character;
+
+public:
 	ABaseWeapon();
 
 	virtual USkeletalMesh* getWeaponMesh() const final;
 
-	virtual void shoot();
+	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh);
 
 	virtual ~ABaseWeapon() = default;
 };

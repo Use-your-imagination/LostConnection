@@ -10,6 +10,8 @@ void ALostConnectionCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	defaultWeaponSlot = NewObject<ADefaultWeapon>();
+
+	defaultWeaponSlot->character = this;
 }
 
 void ALostConnectionCharacter::MoveForward(float Value)
@@ -150,6 +152,6 @@ void ALostConnectionCharacter::shoot()
 {
 	if (currentWeapon)
 	{
-		currentWeapon->shoot();
+		currentWeapon->shoot(currentWeaponMesh);
 	}
 }

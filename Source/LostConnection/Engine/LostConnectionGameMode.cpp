@@ -1,6 +1,7 @@
 #include "LostConnectionGameMode.h"
 
 #include "UObject/ConstructorHelpers.h"
+#include "LostConnectionPlayerState.h"
 
 void ALostConnectionGameMode::BeginPlay()
 {
@@ -15,4 +16,6 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	PlayerStateClass = ALostConnectionPlayerState::StaticClass();
 }

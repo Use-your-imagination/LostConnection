@@ -16,6 +16,9 @@ class LOSTCONNECTION_API ADefaultAmmo : public ABaseAmmo
 {
 	GENERATED_BODY()
 	
+private:
+	GET_STATIC_CLASS_OVERRIDE(ADefaultAmmo)
+
 public:
 	ADefaultAmmo();
 
