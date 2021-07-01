@@ -28,13 +28,15 @@ ABaseAmmo::ABaseAmmo()
 {
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	damage = 0.0f;
-	speed = 5.0f;
+	speed = 1.0f;
+
+	SetRootComponent(mesh);
 
 	mesh->SetSimulatePhysics(true);
 	mesh->SetEnableGravity(true);
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::PhysicsOnly);
 
-	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
 	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::beginOverlap);
 
@@ -54,4 +56,9 @@ void ABaseAmmo::setDamage(float damage)
 void ABaseAmmo::setAmmoSpeed(float speed)
 {
 	this->speed = speed;
+}
+
+UStaticMeshComponent* ABaseAmmo::getAmmoMesh() const
+{
+	return mesh;
 }

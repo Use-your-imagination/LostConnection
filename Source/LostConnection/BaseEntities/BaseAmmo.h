@@ -46,5 +46,7 @@ public:
 
 	virtual void setAmmoSpeed(float speed) final;
 
+	virtual UStaticMeshComponent* getAmmoMesh() const final;
+
 	virtual ~ABaseAmmo() = default;
 };
