@@ -41,17 +41,23 @@ class LOSTCONNECTION_API ALostConnectionCharacter : public ACharacter
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	ADefaultWeapon* defaultWeaponSlot;
 
+protected:
+	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
+	float healths;
+
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseTurnRate;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseLookUpRate;
 
 protected:
 	void BeginPlay() override;
+
+	void Tick(float DeltaSeconds) override;
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
@@ -90,11 +96,17 @@ public:
 
 	void shoot();
 
+	void restoreHealths(float amount);
+
+	void takeDamage(float amount);
+
 	/** Returns CameraBoom subobject **/
 	USpringArmComponent* GetCameraBoom() const;
 
 	/** Returns FollowCamera subobject **/
 	UCameraComponent* GetFollowCamera() const;
+
+	float getHealths() const;
 
 	UFUNCTION(BlueprintCallable)
 	bool isWeaponEquipped() const;

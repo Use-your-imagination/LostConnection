@@ -14,6 +14,14 @@ void ALostConnectionCharacter::BeginPlay()
 	defaultWeaponSlot->character = this;
 }
 
+void ALostConnectionCharacter::Tick(float DeltaSeconds)
+{
+	if (healths <= 0.0f)
+	{
+		Destroy();
+	}
+}
+
 void ALostConnectionCharacter::MoveForward(float Value)
 {
 	if (Controller && Value)
@@ -81,6 +89,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 {
 	firstWeaponSlot = nullptr;
 	secondWeaponSlot = nullptr;
+	healths = 1000.0f;
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
@@ -154,4 +163,19 @@ void ALostConnectionCharacter::shoot()
 	{
 		currentWeapon->shoot(currentWeaponMesh);
 	}
+}
+
+void ALostConnectionCharacter::restoreHealths(float amount)
+{
+	healths += amount;
+}
+
+void ALostConnectionCharacter::takeDamage(float amount)
+{
+	healths -= amount;
+}
+
+float ALostConnectionCharacter::getHealths() const
+{
+	return healths;
 }

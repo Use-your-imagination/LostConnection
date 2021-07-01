@@ -17,6 +17,7 @@ protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* mesh;
 
+	UPROPERTY()
 	ABaseAmmo* ammo;
 
 public:

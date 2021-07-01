@@ -1,18 +1,27 @@
 #include "BaseAmmo.h"
 
+#include "../Character/LostConnectionCharacter.h"
+
 #pragma warning(disable: 4458)
 
 void ABaseAmmo::Tick(float deltaSeconds)
 {
-	if (!IsPendingKill())
-	{
-		AddActorLocalOffset({ speed, 0.0f, 0.0f });
-	}
+	AddActorLocalOffset({ speed, 0.0f, 0.0f });
 }
 
 void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
 
+	if (lostCharacter)
+	{
+		lostCharacter->takeDamage(damage);
+	}
+
+	if (damage <= 0.0f)
+	{
+		MarkPendingKill();
+	}
 }
 
 void ABaseAmmo::endOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -31,13 +40,13 @@ ABaseAmmo::ABaseAmmo()
 {
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	damage = 0.0f;
-	speed = 100.0f;
+	speed = 50.0f;
 
 	SetRootComponent(mesh);
 
 	mesh->SetSimulatePhysics(true);
 	mesh->SetEnableGravity(true);
-	mesh->SetCollisionEnabled(ECollisionEnabled::Type::PhysicsOnly);
+	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
@@ -66,7 +75,12 @@ UStaticMeshComponent* ABaseAmmo::getAmmoMesh() const
 	return mesh;
 }
 
-ABaseAmmo::~ABaseAmmo()
+float ABaseAmmo::getDamage() const
 {
-	// RemoveFromRoot();
+	return damage;
+}
+
+float ABaseAmmo::getSpeed() const
+{
+	return speed;
 }
