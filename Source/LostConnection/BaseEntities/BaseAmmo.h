@@ -48,5 +48,5 @@ public:
 
 	virtual UStaticMeshComponent* getAmmoMesh() const final;
 
-	virtual ~ABaseAmmo() = default;
+	virtual ~ABaseAmmo();
 };

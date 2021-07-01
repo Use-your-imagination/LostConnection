@@ -4,7 +4,10 @@
 
 void ABaseAmmo::Tick(float deltaSeconds)
 {
-	AddActorLocalOffset({ 0.0f, 0.0f, speed });
+	if (!IsPendingKill())
+	{
+		AddActorLocalOffset({ speed, 0.0f, 0.0f });
+	}
 }
 
 void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -28,7 +31,7 @@ ABaseAmmo::ABaseAmmo()
 {
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	damage = 0.0f;
-	speed = 1.0f;
+	speed = 100.0f;
 
 	SetRootComponent(mesh);
 
@@ -36,7 +39,7 @@ ABaseAmmo::ABaseAmmo()
 	mesh->SetEnableGravity(true);
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::PhysicsOnly);
 
-	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
 	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::beginOverlap);
 
@@ -61,4 +64,9 @@ void ABaseAmmo::setAmmoSpeed(float speed)
 UStaticMeshComponent* ABaseAmmo::getAmmoMesh() const
 {
 	return mesh;
+}
+
+ABaseAmmo::~ABaseAmmo()
+{
+	// RemoveFromRoot();
 }
