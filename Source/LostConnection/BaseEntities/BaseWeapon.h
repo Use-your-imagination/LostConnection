@@ -5,11 +5,14 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
 #include "BaseAmmo.h"
+#include "../Interfaces/ShotThrough.h"
 
 #include "BaseWeapon.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ABaseWeapon : public AActor
+class LOSTCONNECTION_API ABaseWeapon :
+	public AActor,
+	public IShotThrough
 {
 	GENERATED_BODY()
 
@@ -26,9 +29,13 @@ public:
 public:
 	ABaseWeapon();
 
+	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh);
+
 	virtual USkeletalMesh* getWeaponMesh() const final;
 
-	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh);
+	float getFlatDamageReduction_Implementation() const override;
+
+	float getPercentageDamageReduction_Implementation() const override;
 
 	virtual ~ABaseWeapon() = default;
 };

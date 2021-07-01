@@ -26,5 +26,10 @@ public:
 template<typename T>
 T* ALostConnectionPlayerState::spawn(UClass* staticClass, const FVector& location, const FRotator& rotation)
 {
-	return GetWorld()->SpawnActor<T>(staticClass, location, rotation);
+	FActorSpawnParameters parameters;
+
+	parameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	parameters.bNoFail = true;
+
+	return GetWorld()->SpawnActor<T>(staticClass, location, rotation, parameters);
 }

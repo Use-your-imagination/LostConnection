@@ -6,16 +6,45 @@
 
 void ABaseAmmo::Tick(float deltaSeconds)
 {
-	AddActorLocalOffset({ speed, 0.0f, 0.0f });
+	if (!IsPendingKill())
+	{
+		AddActorLocalOffset({ speed, 0.0f, 0.0f });
+	}
 }
 
 void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, L"Begin overlap");
 
-	if (lostCharacter)
+	if (IsPendingKill())
+	{
+		return;
+	}
+
+	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
+	IShotThrough* shotThrough = Cast<IShotThrough>(OtherActor);
+
+	if (lostCharacter && !lostCharacter->getIsAlly())
 	{
 		lostCharacter->takeDamage(damage);
+	}
+
+	if (shotThrough)
+	{
+		if (lostCharacter->getIsAlly())
+		{
+			return;
+		}
+
+		damage = damage * shotThrough->getPercentageDamageReduction_Implementation() - shotThrough->getFlatDamageReduction_Implementation();
+	}
+	else
+	{
+		mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+		MarkPendingKill();
+		
+		return;
 	}
 
 	if (damage <= 0.0f)
@@ -26,6 +55,11 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 void ABaseAmmo::endOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (IsPendingKill())
+	{
+		return;
+	}
+
 
 }
 
@@ -83,4 +117,14 @@ float ABaseAmmo::getDamage() const
 float ABaseAmmo::getSpeed() const
 {
 	return speed;
+}
+
+float ABaseAmmo::getFlatDamageReduction_Implementation() const
+{
+	return 0.0;
+}
+
+float ABaseAmmo::getPercentageDamageReduction_Implementation() const
+{
+	return 1.0;
 }

@@ -6,8 +6,8 @@
 ADefaultAmmo::ADefaultAmmo()
 {
 	mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr, TEXT("StaticMesh'/Game/Assets/Weapons/Ammo/Bullet.Bullet'")));
-
-	mesh->SetWorldScale3D(FVector(2.0f));
+	
+	mesh->SetWorldScale3D(FVector(10.0f));
 
 	damage = 500;
 }

@@ -10,11 +10,14 @@
 #include "Components/InputComponent.h"
 #include "../BaseEntities/BaseWeapon.h"
 #include "../Weapons/DefaultWeapon.h"
+#include "../Interfaces/ShotThrough.h"
 
 #include "LostConnectionCharacter.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ALostConnectionCharacter : public ACharacter
+class LOSTCONNECTION_API ALostConnectionCharacter :
+	public ACharacter,
+	public IShotThrough
 {
 	GENERATED_BODY()
 
@@ -44,6 +47,9 @@ class LOSTCONNECTION_API ALostConnectionCharacter : public ACharacter
 protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
 	float healths;
+
+	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
+	bool isAlly;
 
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -106,10 +112,18 @@ public:
 	/** Returns FollowCamera subobject **/
 	UCameraComponent* GetFollowCamera() const;
 
+	UFUNCTION(BlueprintCallable)
 	float getHealths() const;
 
 	UFUNCTION(BlueprintCallable)
+	bool getIsAlly() const;
+
+	UFUNCTION(BlueprintCallable)
 	bool isWeaponEquipped() const;
+
+	float getFlatDamageReduction_Implementation() const override;
+
+	float getPercentageDamageReduction_Implementation() const override;
 
 	~ALostConnectionCharacter() = default;
 };

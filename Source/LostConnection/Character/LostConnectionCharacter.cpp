@@ -90,6 +90,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	firstWeaponSlot = nullptr;
 	secondWeaponSlot = nullptr;
 	healths = 1000.0f;
+	isAlly = true;
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
@@ -178,4 +179,19 @@ void ALostConnectionCharacter::takeDamage(float amount)
 float ALostConnectionCharacter::getHealths() const
 {
 	return healths;
+}
+
+bool ALostConnectionCharacter::getIsAlly() const
+{
+	return isAlly;
+}
+
+float ALostConnectionCharacter::getFlatDamageReduction_Implementation() const
+{
+	return 200.0f;
+}
+
+float ALostConnectionCharacter::getPercentageDamageReduction_Implementation() const
+{
+	return 0.25f;
 }

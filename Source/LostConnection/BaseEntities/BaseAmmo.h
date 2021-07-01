@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Pawn.h"
+#include "../Interfaces/ShotThrough.h"
 
 #include "BaseAmmo.generated.h"
 
@@ -12,7 +13,9 @@
 }
 
 UCLASS()
-class LOSTCONNECTION_API ABaseAmmo : public APawn
+class LOSTCONNECTION_API ABaseAmmo :
+	public APawn,
+	public IShotThrough
 {
 	GENERATED_BODY()
 
@@ -51,6 +54,10 @@ public:
 	virtual float getDamage() const final;
 
 	virtual float getSpeed() const final;
+
+	float getFlatDamageReduction_Implementation() const override;
+
+	float getPercentageDamageReduction_Implementation() const override;
 
 	virtual ~ABaseAmmo() = default;
 };

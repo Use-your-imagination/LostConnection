@@ -25,3 +25,14 @@ USkeletalMesh* ABaseWeapon::getWeaponMesh() const
 {
 	return mesh->SkeletalMesh;
 }
+
+float ABaseWeapon::getFlatDamageReduction_Implementation() const
+{
+	return 0.0f;
+}
+
+float ABaseWeapon::getPercentageDamageReduction_Implementation() const
+{
+	return 1.0f;
+}
+
