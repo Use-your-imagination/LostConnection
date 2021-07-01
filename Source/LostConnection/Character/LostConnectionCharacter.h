@@ -33,6 +33,9 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	USkeletalMeshComponent* currentWeaponMesh;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* magazine;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	ABaseWeapon* currentWeapon;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

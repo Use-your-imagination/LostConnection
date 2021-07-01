@@ -122,7 +122,10 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
-	currentWeaponMesh->SetupAttachment(ACharacter::GetMesh(), "middle_02_r");
+	currentWeaponMesh->SetupAttachment(ACharacter::GetMesh(), "weapon_socket");
+
+	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
+	magazine->SetupAttachment(currentWeaponMesh, "BBarrel_end");
 }
 
 void ALostConnectionCharacter::changeToFirstWeapon()

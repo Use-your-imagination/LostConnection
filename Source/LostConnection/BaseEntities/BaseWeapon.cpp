@@ -13,7 +13,7 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh)
 	{
 		ALostConnectionPlayerState* playerState = Cast<APlayerController>(character->GetController())->GetPlayerState<ALostConnectionPlayerState>();
 
-		playerState->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("Bone_end"), FRotator(0.0f, 0.0f, 0.0f))->getAmmoMesh()->AddRelativeRotation(character->GetActorRotation());
+		playerState->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("BBarrel_end"), FRotator(0.0f, 0.0f, 0.0f))->getAmmoMesh()->AddRelativeRotation(character->GetActorRotation());
 	}
 	else
 	{
