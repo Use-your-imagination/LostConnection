@@ -219,7 +219,10 @@ void ALostConnectionCharacter::reload()
 
 	currentWeapon->setCurrentMagazineSize(currentMagazineSize + reloadedAmmoRequire);
 
-	ammoCount -= reloadedAmmoRequire;
+	if (ammoCount != 9999)
+	{
+		ammoCount -= reloadedAmmoRequire;
+	}
 }
 
 void ALostConnectionCharacter::restoreHealths(float amount)
