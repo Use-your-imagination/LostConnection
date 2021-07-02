@@ -97,14 +97,16 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	secondWeaponSlot = nullptr;
 	healths = 1000.0f;
 	isAlly = true;
-	USkeletalMeshComponent* mesh = GetMesh();
+	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
 
-	currentAmmoHolding.Reserve(3);
+	currentAmmoHolding.Reserve(4);
 
 	for (size_t i = 0; i < 3; i++)
 	{
 		currentAmmoHolding.Add(0);
 	}
+
+	currentAmmoHolding.Add(9999);
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
@@ -215,7 +217,7 @@ void ALostConnectionCharacter::reload()
 
 	// TODO: start reload animation
 
-	currentWeapon->setCurrentMagazineSize(reloadedAmmoRequire);
+	currentWeapon->setCurrentMagazineSize(currentMagazineSize + reloadedAmmoRequire);
 
 	ammoCount -= reloadedAmmoRequire;
 }

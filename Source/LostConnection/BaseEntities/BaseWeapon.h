@@ -20,7 +20,7 @@ protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* mesh;
 
-	UPROPERTY()
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	ABaseAmmo* ammo;
 
 	int currentMagazineSize;
@@ -43,8 +43,10 @@ public:
 
 	virtual ABaseAmmo* getAmmo() const final;
 
+	UFUNCTION(BlueprintCallable)
 	virtual int getCurrentMagazineSize() const final;
 
+	UFUNCTION(BlueprintCallable)
 	virtual int getMagazineSize() const final;
 
 	float getFlatDamageReduction_Implementation() const override;

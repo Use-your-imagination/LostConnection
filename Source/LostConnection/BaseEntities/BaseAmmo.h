@@ -63,10 +63,13 @@ public:
 
 	virtual UStaticMeshComponent* getAmmoMesh() const final;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getDamage() const final;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getSpeed() const final;
 
+	UFUNCTION(BlueprintCallable)
 	virtual ammoType getAmmoType() const final;
 
 	float getFlatDamageReduction_Implementation() const override;

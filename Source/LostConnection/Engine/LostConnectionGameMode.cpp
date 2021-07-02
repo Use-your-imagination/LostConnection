@@ -1,6 +1,8 @@
 #include "LostConnectionGameMode.h"
 
 #include "UObject/ConstructorHelpers.h"
+#include "GameFramework/HUD.h"
+
 #include "LostConnectionPlayerState.h"
 
 void ALostConnectionGameMode::BeginPlay()
@@ -10,12 +12,10 @@ void ALostConnectionGameMode::BeginPlay()
 
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
-	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/LostConnectionCPP/Blueprints/BP_LostConnectionCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
+	static ConstructorHelpers::FClassFinder<AHUD> PlayerHUDBPClass(TEXT("/Game/HUD/BP_HUD"));
 
+	DefaultPawnClass = PlayerPawnBPClass.Class;
 	PlayerStateClass = ALostConnectionPlayerState::StaticClass();
+	HUDClass = PlayerHUDBPClass.Class;
 }
