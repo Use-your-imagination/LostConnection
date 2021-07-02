@@ -23,15 +23,29 @@ protected:
 	UPROPERTY()
 	ABaseAmmo* ammo;
 
+	int currentMagazineSize;
+
+	int magazineSize;
+
+	int ammoCost;
+
 public:
 	ACharacter* character;
 
 public:
 	ABaseWeapon();
 
-	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh);
+	virtual bool shoot(USkeletalMeshComponent* currentVisibleWeaponMesh);
+
+	virtual void setCurrentMagazineSize(int currentMagazineSize) final;
 
 	virtual USkeletalMesh* getWeaponMesh() const final;
+
+	virtual ABaseAmmo* getAmmo() const final;
+
+	virtual int getCurrentMagazineSize() const final;
+
+	virtual int getMagazineSize() const final;
 
 	float getFlatDamageReduction_Implementation() const override;
 

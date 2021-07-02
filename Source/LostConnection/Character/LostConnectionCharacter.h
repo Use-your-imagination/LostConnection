@@ -54,6 +54,9 @@ protected:
 	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
 	bool isAlly;
 
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly)
+	TArray<int32> currentAmmoHolding;
+
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
@@ -105,7 +108,12 @@ public:
 
 	void shoot();
 
+	void reload();
+
 	void restoreHealths(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void pickupAmmo(ammoType type, int32 count);
 
 	void takeDamage(float amount);
 
@@ -120,6 +128,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool getIsAlly() const;
+
+	UFUNCTION(BlueprintCallable)
+	int32 getAmmoHoldingCount(ammoType type) const;
 
 	UFUNCTION(BlueprintCallable)
 	bool isWeaponEquipped() const;

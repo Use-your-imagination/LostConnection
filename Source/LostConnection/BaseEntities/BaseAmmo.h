@@ -12,6 +12,15 @@
 	return className::StaticClass(); \
 }
 
+UENUM(BlueprintType)
+enum class ammoType : uint8
+{
+	large = 0 UMETA(DisplayName = "Large ammo"),
+	small = 1 UMETA(DisplayName = "Small ammo"),
+	energy = 2 UMETA(DisplayName = "Energy ammo"),
+	defaultType = 3 UMETA(DisplayName = "Default ammo")
+};
+
 UCLASS()
 class LOSTCONNECTION_API ABaseAmmo :
 	public APawn,
@@ -38,6 +47,9 @@ protected:
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
 	float speed;
 
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
+	ammoType type;
+
 public:
 	ABaseAmmo();
 
@@ -54,6 +66,8 @@ public:
 	virtual float getDamage() const final;
 
 	virtual float getSpeed() const final;
+
+	virtual ammoType getAmmoType() const final;
 
 	float getFlatDamageReduction_Implementation() const override;
 

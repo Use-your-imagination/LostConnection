@@ -10,4 +10,7 @@ ADefaultWeapon::ADefaultWeapon()
 	mesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, TEXT("SkeletalMesh'/Game/Assets/Weapons/Rifle/Rifle.Rifle'")));
 
 	ammo = NewObject<ADefaultAmmo>();
+
+	currentMagazineSize = 30;
+	magazineSize = 30;
 }

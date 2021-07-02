@@ -73,6 +73,7 @@ ABaseAmmo::ABaseAmmo()
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	damage = 0.0f;
 	speed = 50.0f;
+	type = ammoType::large;
 
 	SetRootComponent(mesh);
 
@@ -115,6 +116,11 @@ float ABaseAmmo::getDamage() const
 float ABaseAmmo::getSpeed() const
 {
 	return speed;
+}
+
+ammoType ABaseAmmo::getAmmoType() const
+{
+	return type;
 }
 
 float ABaseAmmo::getFlatDamageReduction_Implementation() const

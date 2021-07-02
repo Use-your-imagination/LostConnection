@@ -1,9 +1,14 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "LostConnectionCharacter.h"
+
+#include <algorithm>
+
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+
+using namespace std;
 
 void ALostConnectionCharacter::BeginPlay()
 {
@@ -75,6 +80,7 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
 
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALostConnectionCharacter::reload);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALostConnectionCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALostConnectionCharacter::MoveRight);
@@ -91,9 +97,20 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	secondWeaponSlot = nullptr;
 	healths = 1000.0f;
 	isAlly = true;
+	USkeletalMeshComponent* mesh = GetMesh();
+
+	currentAmmoHolding.Reserve(3);
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		currentAmmoHolding.Add(0);
+	}
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
+
+	mesh->SetGenerateOverlapEvents(true);
+	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
 
 	// set our turn rates for input
 	BaseTurnRate = 45.0f;
@@ -165,13 +182,52 @@ void ALostConnectionCharacter::shoot()
 {
 	if (currentWeapon)
 	{
-		currentWeapon->shoot(currentWeaponMesh);
+		if (!currentWeapon->shoot(currentWeaponMesh))
+		{
+			this->reload();
+		}
 	}
+}
+
+void ALostConnectionCharacter::reload()
+{
+	if (!currentWeapon)
+	{
+		return;
+	}
+
+	int currentMagazineSize = currentWeapon->getCurrentMagazineSize();
+	int magazineSize = currentWeapon->getMagazineSize();
+
+	if (currentMagazineSize == magazineSize)
+	{
+		return;
+	}
+
+	int32& ammoCount = currentAmmoHolding[static_cast<size_t>(currentWeapon->getAmmo()->getAmmoType())];
+
+	if (!ammoCount)
+	{
+		return;
+	}
+
+	int reloadedAmmoRequire = min(magazineSize - currentMagazineSize, ammoCount);
+
+	// TODO: start reload animation
+
+	currentWeapon->setCurrentMagazineSize(reloadedAmmoRequire);
+
+	ammoCount -= reloadedAmmoRequire;
 }
 
 void ALostConnectionCharacter::restoreHealths(float amount)
 {
 	healths += amount;
+}
+
+void ALostConnectionCharacter::pickupAmmo(ammoType type, int32 count)
+{
+	currentAmmoHolding[static_cast<size_t>(type)] += count;
 }
 
 void ALostConnectionCharacter::takeDamage(float amount)
@@ -187,6 +243,11 @@ float ALostConnectionCharacter::getHealths() const
 bool ALostConnectionCharacter::getIsAlly() const
 {
 	return isAlly;
+}
+
+int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoType type) const
+{
+	return currentAmmoHolding[static_cast<size_t>(type)];
 }
 
 float ALostConnectionCharacter::getFlatDamageReduction_Implementation() const
