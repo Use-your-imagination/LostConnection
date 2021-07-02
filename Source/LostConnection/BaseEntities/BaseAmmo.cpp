@@ -80,6 +80,7 @@ ABaseAmmo::ABaseAmmo()
 	mesh->SetSimulatePhysics(true);
 	mesh->SetEnableGravity(true);
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+	mesh->SetGenerateOverlapEvents(false);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 

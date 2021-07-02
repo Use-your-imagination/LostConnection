@@ -1,6 +1,7 @@
 #include "BaseWeapon.h"
 
 #include "../Engine/LostConnectionPlayerState.h"
+#include "../Character/LostConnectionCharacter.h"
 
 #pragma warning(disable: 4458)
 
@@ -11,11 +12,11 @@ ABaseWeapon::ABaseWeapon()
 	ammoCost = 1;
 }
 
-bool ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh)
+void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh)
 {
 	if (character)
 	{
-		if (currentMagazineSize)
+		if (currentMagazineSize >= ammoCost)
 		{
 			ALostConnectionPlayerState* playerState = Cast<APlayerController>(character->GetController())->GetPlayerState<ALostConnectionPlayerState>();
 
@@ -25,20 +26,25 @@ bool ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh)
 		}
 		else
 		{
-			return false;
+			ALostConnectionCharacter* tem = Cast<ALostConnectionCharacter>(character);
+
+			tem->reload();
 		}
 	}
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, L"character is nullptr");
 	}
-
-	return true;
 }
 
 void ABaseWeapon::setCurrentMagazineSize(int currentMagazineSize)
 {
 	this->currentMagazineSize = currentMagazineSize;
+}
+
+void ABaseWeapon::setRateOfFire(int rateOfFire)
+{
+	this->rateOfFire = rateOfFire;
 }
 
 USkeletalMesh* ABaseWeapon::getWeaponMesh() const
@@ -59,6 +65,11 @@ int ABaseWeapon::getCurrentMagazineSize() const
 int ABaseWeapon::getMagazineSize() const
 {
 	return magazineSize;
+}
+
+int ABaseWeapon::getRateOfFire() const
+{
+	return rateOfFire;
 }
 
 float ABaseWeapon::getFlatDamageReduction_Implementation() const

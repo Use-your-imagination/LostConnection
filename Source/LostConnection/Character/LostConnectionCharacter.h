@@ -47,6 +47,9 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	ADefaultWeapon* defaultWeaponSlot;
 
+private:
+	FTimerHandle shootHandle;
+
 protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
 	float healths;
@@ -107,6 +110,8 @@ public:
 	void updateWeaponMesh();
 
 	void shoot();
+
+	void resetShoot();
 
 	void reload();
 

@@ -13,4 +13,5 @@ ADefaultWeapon::ADefaultWeapon()
 
 	currentMagazineSize = 30;
 	magazineSize = 30;
+	rateOfFire = 2;
 }

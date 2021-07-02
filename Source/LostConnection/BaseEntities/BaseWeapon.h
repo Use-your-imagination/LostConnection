@@ -29,15 +29,19 @@ protected:
 
 	int ammoCost;
 
+	int rateOfFire;
+
 public:
 	ACharacter* character;
 
 public:
 	ABaseWeapon();
 
-	virtual bool shoot(USkeletalMeshComponent* currentVisibleWeaponMesh);
+	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh);
 
 	virtual void setCurrentMagazineSize(int currentMagazineSize) final;
+
+	virtual void setRateOfFire(int rateOfFire) final;
 
 	virtual USkeletalMesh* getWeaponMesh() const final;
 
@@ -48,6 +52,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual int getMagazineSize() const final;
+
+	virtual int getRateOfFire() const final;
 
 	float getFlatDamageReduction_Implementation() const override;
 

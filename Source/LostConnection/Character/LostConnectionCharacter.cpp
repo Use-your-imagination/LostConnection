@@ -80,6 +80,7 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
 
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
+	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALostConnectionCharacter::reload);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALostConnectionCharacter::MoveForward);
@@ -184,10 +185,26 @@ void ALostConnectionCharacter::shoot()
 {
 	if (currentWeapon)
 	{
-		if (!currentWeapon->shoot(currentWeaponMesh))
+		UWorld* world = GetWorld();
+
+		if (world)
 		{
-			this->reload();
+			FTimerDelegate delegate;
+
+			delegate.BindLambda([this]() { currentWeapon->shoot(currentWeaponMesh); });
+
+			world->GetTimerManager().SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, 0.0f);
 		}
+	}
+}
+
+void ALostConnectionCharacter::resetShoot()
+{
+	UWorld* world = GetWorld();
+
+	if (world)
+	{
+		world->GetTimerManager().ClearTimer(shootHandle);
 	}
 }
 
