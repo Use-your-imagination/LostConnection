@@ -28,6 +28,9 @@ class LOSTCONNECTION_API ABaseAmmo :
 {
 	GENERATED_BODY()
 
+private:
+	FTimerHandle launchHandle;
+
 protected:
 	virtual void Tick(float deltaSeconds) override;
 
@@ -50,8 +53,13 @@ protected:
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
 	ammoTypes ammoType;
 
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
+	float length;
+
 public:
 	ABaseAmmo();
+
+	void launch();
 
 	virtual UClass* getStaticClass() const;
 
@@ -76,5 +84,5 @@ public:
 
 	float getPercentageDamageReduction_Implementation() const override;
 
-	virtual ~ABaseAmmo() = default;
+	virtual ~ABaseAmmo();
 };

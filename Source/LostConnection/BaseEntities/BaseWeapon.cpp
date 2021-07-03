@@ -26,7 +26,11 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh)
 		{
 			ALostConnectionPlayerState* playerState = Cast<APlayerController>(character->GetController())->GetPlayerState<ALostConnectionPlayerState>();
 
-			playerState->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("barrel"), FRotator(0.0f, 0.0f, 0.0f))->getAmmoMesh()->AddRelativeRotation(character->GetActorRotation());
+			ABaseAmmo* launchedAmmo = playerState->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("barrel"), FRotator(0.0f, 0.0f, 0.0f));
+
+			launchedAmmo->getAmmoMesh()->AddRelativeRotation(character->GetActorRotation());
+
+			launchedAmmo->launch();
 
 			currentMagazineSize -= ammoCost;
 		}

@@ -7,10 +7,10 @@
 
 void ABaseAmmo::Tick(float deltaSeconds)
 {
-	if (!IsPendingKill())
-	{
-		AddActorLocalOffset({ speed, 0.0f, 0.0f });
-	}
+	// if (!IsPendingKill())
+	// {
+	// 	AddActorLocalOffset({ speed, 0.0f, 0.0f });
+	// }
 }
 
 void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -42,7 +42,7 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
 		MarkPendingKill();
-		
+
 		return;
 	}
 
@@ -72,8 +72,6 @@ UClass* ABaseAmmo::getStaticClass() const
 ABaseAmmo::ABaseAmmo()
 {
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
-	damage = 0.0f;
-	speed = 50.0f;
 	ammoType = ammoTypes::large;
 
 	SetRootComponent(mesh);
@@ -87,6 +85,27 @@ ABaseAmmo::ABaseAmmo()
 	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::beginOverlap);
 
 	mesh->OnComponentEndOverlap.AddDynamic(this, &ABaseAmmo::endOverlap);
+}
+
+void ABaseAmmo::launch()
+{
+	UWorld* world = GetWorld();
+	length = mesh->GetStaticMesh()->GetBounds().GetBox().GetSize().Y;
+
+	if (world)
+	{
+		FTimerDelegate delegate;
+
+		delegate.BindLambda([this]()
+			{
+				if (!IsPendingKill())
+				{
+					AddActorLocalOffset({ 0.0f, length, 0.0f });
+				}
+			});
+
+		world->GetTimerManager().SetTimer(launchHandle, delegate, 1.0f / (speed / length), true, 0.0f);
+	}
 }
 
 void ABaseAmmo::setAmmoMesh(UStaticMesh* mesh)
@@ -132,4 +151,14 @@ float ABaseAmmo::getFlatDamageReduction_Implementation() const
 float ABaseAmmo::getPercentageDamageReduction_Implementation() const
 {
 	return 1.0;
+}
+
+ABaseAmmo::~ABaseAmmo()
+{
+	UWorld* world = GetWorld();
+
+	if (world)
+	{
+		world->GetTimerManager().ClearTimer(launchHandle);
+	}
 }
