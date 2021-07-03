@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 
+#pragma warning(disable: 4458)
+
 using namespace std;
 
 void ALostConnectionCharacter::BeginPlay()
@@ -21,7 +23,7 @@ void ALostConnectionCharacter::BeginPlay()
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
 {
-	if (healths <= 0.0f)
+	if (currentHealths <= 0.0f)
 	{
 		Destroy();
 	}
@@ -97,6 +99,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	firstWeaponSlot = nullptr;
 	secondWeaponSlot = nullptr;
 	healths = 1000.0f;
+	currentHealths = healths;
 	isAlly = true;
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
 
@@ -244,17 +247,27 @@ void ALostConnectionCharacter::reload()
 
 void ALostConnectionCharacter::restoreHealths(float amount)
 {
-	healths += amount;
-}
+	currentHealths += amount;
 
-void ALostConnectionCharacter::pickupAmmo(ammoType type, int32 count)
-{
-	currentAmmoHolding[static_cast<size_t>(type)] += count;
+	if (currentHealths > healths)
+	{
+		currentHealths = healths;
+	}
 }
 
 void ALostConnectionCharacter::takeDamage(float amount)
 {
-	healths -= amount;
+	currentHealths -= amount;
+}
+
+void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
+{
+	currentAmmoHolding[static_cast<size_t>(type)] += count;
+}
+
+void ALostConnectionCharacter::setCurrentHealths(int currentHealths)
+{
+	this->currentHealths = currentHealths;
 }
 
 float ALostConnectionCharacter::getHealths() const
@@ -262,12 +275,17 @@ float ALostConnectionCharacter::getHealths() const
 	return healths;
 }
 
+float ALostConnectionCharacter::getCurrentHealths() const
+{
+	return currentHealths;
+}
+
 bool ALostConnectionCharacter::getIsAlly() const
 {
 	return isAlly;
 }
 
-int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoType type) const
+int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
 {
 	return currentAmmoHolding[static_cast<size_t>(type)];
 }

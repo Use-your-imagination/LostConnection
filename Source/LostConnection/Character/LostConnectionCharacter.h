@@ -54,6 +54,9 @@ protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
 	float healths;
 
+	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
+	float currentHealths;
+
 	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
 	bool isAlly;
 
@@ -117,10 +120,12 @@ public:
 
 	void restoreHealths(float amount);
 
-	UFUNCTION(BlueprintCallable)
-	void pickupAmmo(ammoType type, int32 count);
-
 	void takeDamage(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void pickupAmmo(ammoTypes type, int32 count);
+
+	void setCurrentHealths(int currentHealths);
 
 	/** Returns CameraBoom subobject **/
 	USpringArmComponent* GetCameraBoom() const;
@@ -132,10 +137,13 @@ public:
 	float getHealths() const;
 
 	UFUNCTION(BlueprintCallable)
+	float getCurrentHealths() const;
+
+	UFUNCTION(BlueprintCallable)
 	bool getIsAlly() const;
 
 	UFUNCTION(BlueprintCallable)
-	int32 getAmmoHoldingCount(ammoType type) const;
+	int32 getAmmoHoldingCount(ammoTypes type) const;
 
 	UFUNCTION(BlueprintCallable)
 	bool isWeaponEquipped() const;

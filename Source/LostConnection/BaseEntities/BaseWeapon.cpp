@@ -10,12 +10,18 @@ ABaseWeapon::ABaseWeapon()
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
 
 	ammoCost = 1;
+	weaponType = weaponTypes::automatic;
 }
 
 void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh)
 {
 	if (character)
 	{
+		if (weaponType == weaponTypes::semiAutomatic)
+		{
+			Cast<ALostConnectionCharacter>(character)->resetShoot();
+		}
+
 		if (currentMagazineSize >= ammoCost)
 		{
 			ALostConnectionPlayerState* playerState = Cast<APlayerController>(character->GetController())->GetPlayerState<ALostConnectionPlayerState>();
@@ -70,6 +76,11 @@ int ABaseWeapon::getMagazineSize() const
 int ABaseWeapon::getRateOfFire() const
 {
 	return rateOfFire;
+}
+
+weaponTypes ABaseWeapon::getWeaponType() const
+{
+	return weaponType;
 }
 
 float ABaseWeapon::getFlatDamageReduction_Implementation() const

@@ -13,7 +13,7 @@
 }
 
 UENUM(BlueprintType)
-enum class ammoType : uint8
+enum class ammoTypes : uint8
 {
 	large = 0 UMETA(DisplayName = "Large ammo"),
 	small = 1 UMETA(DisplayName = "Small ammo"),
@@ -48,7 +48,7 @@ protected:
 	float speed;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
-	ammoType type;
+	ammoTypes ammoType;
 
 public:
 	ABaseAmmo();
@@ -70,7 +70,7 @@ public:
 	virtual float getSpeed() const final;
 
 	UFUNCTION(BlueprintCallable)
-	virtual ammoType getAmmoType() const final;
+	virtual ammoTypes getAmmoType() const final;
 
 	float getFlatDamageReduction_Implementation() const override;
 

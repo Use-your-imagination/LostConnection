@@ -1,6 +1,7 @@
 #include "BaseAmmo.h"
 
 #include "../Character/LostConnectionCharacter.h"
+#include "BaseWeapon.h"
 
 #pragma warning(disable: 4458)
 
@@ -14,7 +15,7 @@ void ABaseAmmo::Tick(float deltaSeconds)
 
 void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (IsPendingKill())
+	if (IsPendingKill() || Cast<ABaseAmmo>(OtherActor) || Cast<ABaseWeapon>(OtherActor))
 	{
 		return;
 	}
@@ -73,14 +74,13 @@ ABaseAmmo::ABaseAmmo()
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	damage = 0.0f;
 	speed = 50.0f;
-	type = ammoType::large;
+	ammoType = ammoTypes::large;
 
 	SetRootComponent(mesh);
 
 	mesh->SetSimulatePhysics(true);
 	mesh->SetEnableGravity(true);
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
-	mesh->SetGenerateOverlapEvents(false);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
@@ -119,9 +119,9 @@ float ABaseAmmo::getSpeed() const
 	return speed;
 }
 
-ammoType ABaseAmmo::getAmmoType() const
+ammoTypes ABaseAmmo::getAmmoType() const
 {
-	return type;
+	return ammoType;
 }
 
 float ABaseAmmo::getFlatDamageReduction_Implementation() const

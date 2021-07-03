@@ -9,6 +9,13 @@
 
 #include "BaseWeapon.generated.h"
 
+UENUM(BlueprintType)
+enum class weaponTypes : uint8
+{
+	automatic = 0 UMETA(DisplayName = "Automatic"),
+	semiAutomatic = 1 UMETA(DisplayName = "Semi-automatic")
+};
+
 UCLASS()
 class LOSTCONNECTION_API ABaseWeapon :
 	public AActor,
@@ -30,6 +37,9 @@ protected:
 	int ammoCost;
 
 	int rateOfFire;
+
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
+	weaponTypes weaponType;
 
 public:
 	ACharacter* character;
@@ -54,6 +64,8 @@ public:
 	virtual int getMagazineSize() const final;
 
 	virtual int getRateOfFire() const final;
+
+	virtual weaponTypes getWeaponType() const final;
 
 	float getFlatDamageReduction_Implementation() const override;
 
