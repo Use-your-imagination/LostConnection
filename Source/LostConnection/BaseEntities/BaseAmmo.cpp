@@ -5,12 +5,9 @@
 
 #pragma warning(disable: 4458)
 
-void ABaseAmmo::Tick(float deltaSeconds)
+void ABaseAmmo::Tick(float DeltaSeconds)
 {
-	// if (!IsPendingKill())
-	// {
-	// 	AddActorLocalOffset({ speed, 0.0f, 0.0f });
-	// }
+	Super::Tick(DeltaSeconds);
 }
 
 void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

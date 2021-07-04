@@ -50,6 +50,10 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 private:
 	FTimerHandle shootHandle;
 
+	float shootRemainingTime;
+
+	bool clearTimer;
+
 protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
 	float healths;

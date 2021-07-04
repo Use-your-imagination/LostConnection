@@ -5,6 +5,13 @@
 
 #pragma warning(disable: 4458)
 
+void ABaseWeapon::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+
+}
+
 ABaseWeapon::ABaseWeapon()
 {
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));

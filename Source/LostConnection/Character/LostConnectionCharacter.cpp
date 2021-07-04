@@ -23,9 +23,16 @@ void ALostConnectionCharacter::BeginPlay()
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
 {
+	Super::Tick(DeltaSeconds);
+
 	if (currentHealths <= 0.0f)
 	{
 		Destroy();
+	}
+
+	if (shootRemainingTime > 0.0f)
+	{
+		shootRemainingTime -= DeltaSeconds;
 	}
 }
 
@@ -102,6 +109,8 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	currentHealths = healths;
 	isAlly = true;
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
+	shootRemainingTime = 0.0f; 
+	clearTimer = false;
 
 	currentAmmoHolding.Reserve(4);
 
@@ -192,11 +201,20 @@ void ALostConnectionCharacter::shoot()
 
 		if (world)
 		{
+			FTimerManager& manager = world->GetTimerManager();
+
+			if (manager.IsTimerActive(shootHandle))
+			{
+				return;
+			}
+
 			FTimerDelegate delegate;
 
-			delegate.BindLambda([this]() { currentWeapon->shoot(currentWeaponMesh); });
+			delegate.BindLambda([this, &manager]() { if (clearTimer) { clearTimer = false; manager.ClearTimer(shootHandle); return; } currentWeapon->shoot(currentWeaponMesh); });
 
-			world->GetTimerManager().SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, 0.0f);
+			manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
+
+			shootRemainingTime = 1.0f / static_cast<float>(currentWeapon->getRateOfFire());
 		}
 	}
 }
@@ -207,6 +225,13 @@ void ALostConnectionCharacter::resetShoot()
 
 	if (world)
 	{
+		if (shootRemainingTime > 0.0f)
+		{
+			clearTimer = true;
+
+			return;
+		}
+
 		world->GetTimerManager().ClearTimer(shootHandle);
 	}
 }

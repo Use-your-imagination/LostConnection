@@ -24,6 +24,9 @@ class LOSTCONNECTION_API ABaseWeapon :
 	GENERATED_BODY()
 
 protected:
+	virtual void Tick(float DeltaSeconds) override;
+
+protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* mesh;
 
