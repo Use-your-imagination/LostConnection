@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Pawn.h"
+#include "NiagaraComponent.h"
+
 #include "../Interfaces/ShotThrough.h"
 
 #include "BaseAmmo.generated.h"
@@ -43,6 +45,9 @@ protected:
 protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* mesh;
+
+	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
+	UNiagaraComponent* tracer;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
 	float damage;

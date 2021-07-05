@@ -70,6 +70,7 @@ ABaseAmmo::ABaseAmmo()
 {
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	ammoType = ammoTypes::large;
+	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 
 	SetRootComponent(mesh);
 
@@ -87,7 +88,7 @@ ABaseAmmo::ABaseAmmo()
 void ABaseAmmo::launch()
 {
 	UWorld* world = GetWorld();
-	length = mesh->GetStaticMesh()->GetBounds().GetBox().GetSize().Y;
+	length = mesh->GetStaticMesh()->GetBounds().GetBox().GetSize().X;
 
 	if (world)
 	{
@@ -97,7 +98,7 @@ void ABaseAmmo::launch()
 			{
 				if (!IsPendingKill())
 				{
-					AddActorLocalOffset({ 0.0f, length, 0.0f });
+					AddActorLocalOffset({ length, 0.0f, 0.0f });
 				}
 			});
 
