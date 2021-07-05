@@ -3,11 +3,18 @@
 
 #include "DefaultWeapon.h"
 
+#include "UObject/ConstructorHelpers.h"
+
 #include "Ammo/DefaultAmmo.h"
 
 ADefaultWeapon::ADefaultWeapon()
 {
-	mesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, TEXT("SkeletalMesh'/Game/Assets/Weapons/Rifle/Rifle.Rifle'")));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> defaultWeaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/Rifle/Rifle.Rifle'"));
+
+	if (defaultWeaponMeshFinder.Succeeded())
+	{
+		mesh->SetSkeletalMesh(defaultWeaponMeshFinder.Object);
+	}
 
 	ammo = NewObject<ADefaultAmmo>();
 

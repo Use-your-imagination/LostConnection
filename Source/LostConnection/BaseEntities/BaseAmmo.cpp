@@ -1,5 +1,7 @@
 #include "BaseAmmo.h"
 
+#include "UObject/ConstructorHelpers.h"
+
 #include "Character/LostConnectionCharacter.h"
 #include "BaseWeapon.h"
 
@@ -36,7 +38,11 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	}
 	else
 	{
+		mesh->SetStaticMesh(brokenAmmoMesh);
+
 		mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+		tracer->Deactivate();
 
 		MarkPendingKill();
 
@@ -69,8 +75,9 @@ UClass* ABaseAmmo::getStaticClass() const
 ABaseAmmo::ABaseAmmo()
 {
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
-	ammoType = ammoTypes::large;
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
+	ammoType = ammoTypes::large;
+	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerSystemFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'"));
 
 	SetRootComponent(mesh);
 
@@ -84,7 +91,10 @@ ABaseAmmo::ABaseAmmo()
 
 	mesh->OnComponentEndOverlap.AddDynamic(this, &ABaseAmmo::endOverlap);
 
-	tracer->SetAsset(LoadObject<UNiagaraSystem>(nullptr, TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'")));
+	if (tracerSystemFinder.Succeeded())
+	{
+		tracer->SetAsset(tracerSystemFinder.Object);
+	}
 
 	tracer->SetAutoAttachmentParameters(mesh, "Tracer", EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative);
 

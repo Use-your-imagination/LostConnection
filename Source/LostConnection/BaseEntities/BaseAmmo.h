@@ -43,11 +43,14 @@ protected:
 	void endOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 protected:
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* mesh;
-
+	
 	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* tracer;
+
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
+	UStaticMesh* brokenAmmoMesh;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
 	float damage;
