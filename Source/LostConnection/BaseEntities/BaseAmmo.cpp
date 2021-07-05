@@ -72,6 +72,8 @@ ABaseAmmo::ABaseAmmo()
 	ammoType = ammoTypes::large;
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 
+	tracer->SetAsset(LoadObject<UNiagaraSystem>(nullptr, TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'")));
+
 	SetRootComponent(mesh);
 
 	mesh->SetSimulatePhysics(true);
