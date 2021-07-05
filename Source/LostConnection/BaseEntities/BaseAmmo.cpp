@@ -72,8 +72,6 @@ ABaseAmmo::ABaseAmmo()
 	ammoType = ammoTypes::large;
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 
-	tracer->SetAsset(LoadObject<UNiagaraSystem>(nullptr, TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'")));
-
 	SetRootComponent(mesh);
 
 	mesh->SetSimulatePhysics(true);
@@ -85,6 +83,12 @@ ABaseAmmo::ABaseAmmo()
 	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::beginOverlap);
 
 	mesh->OnComponentEndOverlap.AddDynamic(this, &ABaseAmmo::endOverlap);
+
+	tracer->SetAsset(LoadObject<UNiagaraSystem>(nullptr, TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'")));
+
+	tracer->SetAutoAttachmentParameters(mesh, "Tracer", EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative);
+
+	tracer->SetUseAutoManageAttachment(true);
 }
 
 void ABaseAmmo::launch()
