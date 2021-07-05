@@ -3,7 +3,7 @@
 
 #include "DefaultWeapon.h"
 
-#include "../Ammo/DefaultAmmo.h"
+#include "Ammo/DefaultAmmo.h"
 
 ADefaultWeapon::ADefaultWeapon()
 {

@@ -8,6 +8,6 @@ ADefaultAmmo::ADefaultAmmo()
 	mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr, TEXT("StaticMesh'/Game/Assets/Weapons/Ammo/Bullet.Bullet'")));
 
 	speed = 5200;
-	damage = 500;
+	damage = 75;
 	ammoType = ammoTypes::defaultType;
 }

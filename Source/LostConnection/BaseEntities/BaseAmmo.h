@@ -5,7 +5,7 @@
 #include "GameFramework/Pawn.h"
 #include "NiagaraComponent.h"
 
-#include "../Interfaces/ShotThrough.h"
+#include "Interfaces/ShotThrough.h"
 
 #include "BaseAmmo.generated.h"
 

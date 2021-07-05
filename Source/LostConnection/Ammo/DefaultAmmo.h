@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "../BaseEntities/BaseAmmo.h"
+#include "BaseEntities/BaseAmmo.h"
 
 #include "DefaultAmmo.generated.h"
 

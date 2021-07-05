@@ -1,6 +1,6 @@
 #include "BaseAmmo.h"
 
-#include "../Character/LostConnectionCharacter.h"
+#include "Character/LostConnectionCharacter.h"
 #include "BaseWeapon.h"
 
 #pragma warning(disable: 4458)

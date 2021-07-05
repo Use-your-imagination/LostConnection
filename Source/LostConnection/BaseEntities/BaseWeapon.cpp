@@ -1,7 +1,7 @@
 #include "BaseWeapon.h"
 
-#include "../Engine/LostConnectionPlayerState.h"
-#include "../Character/LostConnectionCharacter.h"
+#include "Engine/LostConnectionPlayerState.h"
+#include "Character/LostConnectionCharacter.h"
 
 #pragma warning(disable: 4458)
 

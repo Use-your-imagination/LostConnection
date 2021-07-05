@@ -8,9 +8,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
-#include "../BaseEntities/BaseWeapon.h"
-#include "../Weapons/DefaultWeapon.h"
-#include "../Interfaces/ShotThrough.h"
+#include "BaseEntities/BaseWeapon.h"
+#include "Weapons/DefaultWeapon.h"
+#include "Interfaces/ShotThrough.h"
 
 #include "LostConnectionCharacter.generated.h"
 
