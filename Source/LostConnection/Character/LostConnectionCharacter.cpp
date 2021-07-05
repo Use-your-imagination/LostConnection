@@ -186,10 +186,14 @@ void ALostConnectionCharacter::updateWeaponMesh()
 	if (currentWeapon)
 	{
 		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
+
+		magazine->SetStaticMesh(currentWeapon->getMagazineMesh());
 	}
 	else
 	{
 		currentWeaponMesh->SetSkeletalMesh(nullptr);
+
+		magazine->SetStaticMesh(nullptr);
 	}
 }
 

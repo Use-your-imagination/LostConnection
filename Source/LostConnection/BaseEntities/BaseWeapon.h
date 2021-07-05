@@ -27,8 +27,11 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 
 protected:
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* mesh;
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USkeletalMesh* mesh;
+
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMesh* magazineMesh;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	ABaseAmmo* ammo;
@@ -57,6 +60,8 @@ public:
 	virtual void setRateOfFire(int rateOfFire) final;
 
 	virtual USkeletalMesh* getWeaponMesh() const final;
+
+	virtual UStaticMesh* getMagazineMesh() const final;
 
 	virtual ABaseAmmo* getAmmo() const final;
 

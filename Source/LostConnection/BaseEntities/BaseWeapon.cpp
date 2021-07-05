@@ -1,5 +1,7 @@
 #include "BaseWeapon.h"
 
+#include "UObject/ConstructorHelpers.h"
+
 #include "Engine/LostConnectionPlayerState.h"
 #include "Character/LostConnectionCharacter.h"
 
@@ -14,8 +16,6 @@ void ABaseWeapon::Tick(float DeltaSeconds)
 
 ABaseWeapon::ABaseWeapon()
 {
-	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
-
 	ammoCost = 1;
 	weaponType = weaponTypes::automatic;
 }
@@ -68,7 +68,12 @@ void ABaseWeapon::setRateOfFire(int rateOfFire)
 
 USkeletalMesh* ABaseWeapon::getWeaponMesh() const
 {
-	return mesh->SkeletalMesh;
+	return mesh;
+}
+
+UStaticMesh* ABaseWeapon::getMagazineMesh() const
+{
+	return magazineMesh;
 }
 
 ABaseAmmo* ABaseWeapon::getAmmo() const

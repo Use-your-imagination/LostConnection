@@ -10,10 +10,16 @@
 ADefaultWeapon::ADefaultWeapon()
 {
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> defaultWeaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/Rifle/Rifle.Rifle'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> defaultMagazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Rifle/RifleMagazine.RifleMagazine'"));
 
 	if (defaultWeaponMeshFinder.Succeeded())
 	{
-		mesh->SetSkeletalMesh(defaultWeaponMeshFinder.Object);
+		mesh = defaultWeaponMeshFinder.Object;
+	}
+
+	if (defaultMagazineFinder.Succeeded())
+	{
+		magazineMesh = defaultMagazineFinder.Object;
 	}
 
 	ammo = NewObject<ADefaultAmmo>();
