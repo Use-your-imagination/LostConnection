@@ -157,7 +157,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	currentWeaponMesh->SetupAttachment(ACharacter::GetMesh(), "weapon_socket");
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
-	magazine->SetupAttachment(currentWeaponMesh, "magazine");
+	magazine->SetupAttachment(currentWeaponMesh);
 }
 
 void ALostConnectionCharacter::changeToFirstWeapon()
@@ -186,6 +186,8 @@ void ALostConnectionCharacter::updateWeaponMesh()
 	if (currentWeapon)
 	{
 		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
+
+		magazine->AttachToComponent(currentWeaponMesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false), "magazine");
 
 		magazine->SetStaticMesh(currentWeapon->getMagazineMesh());
 	}
