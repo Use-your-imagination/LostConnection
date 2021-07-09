@@ -17,8 +17,6 @@ void ALostConnectionCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	defaultWeaponSlot = NewObject<ADefaultWeapon>();
-
-	defaultWeaponSlot->character = this;
 }
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
@@ -216,7 +214,17 @@ void ALostConnectionCharacter::shoot()
 
 			FTimerDelegate delegate;
 
-			delegate.BindLambda([this, &manager]() { if (clearTimer) { clearTimer = false; manager.ClearTimer(shootHandle); return; } currentWeapon->shoot(currentWeaponMesh); });
+			delegate.BindLambda([this, &manager]()
+				{
+					if (clearTimer)
+					{ 
+						clearTimer = false; manager.ClearTimer(shootHandle);
+
+						return;
+					}
+					
+					currentWeapon->shoot(currentWeaponMesh, this); 
+				});
 
 			manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
 

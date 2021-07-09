@@ -18,18 +18,4 @@ class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 
 public:
 	ALostConnectionPlayerState();
-
-	template<typename T>
-	T* spawn(UClass* staticClass, const FVector& location, const FRotator& rotation);
 };
-
-template<typename T>
-T* ALostConnectionPlayerState::spawn(UClass* staticClass, const FVector& location, const FRotator& rotation)
-{
-	FActorSpawnParameters parameters;
-
-	parameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	parameters.bNoFail = true;
-
-	return GetWorld()->SpawnActor<T>(staticClass, location, rotation, parameters);
-}
