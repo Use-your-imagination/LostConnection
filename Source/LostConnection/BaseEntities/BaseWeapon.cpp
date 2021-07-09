@@ -35,7 +35,7 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 
 		launchedAmmo->getAmmoMesh()->AddRelativeRotation({ FMath::RandRange(-2.0f, 2.0f), FMath::RandRange(-2.0f, 2.0f), 0.0f });
 
-		launchedAmmo->launch();
+		launchedAmmo->launch(character);
 
 		currentMagazineSize -= ammoCost;
 	}
