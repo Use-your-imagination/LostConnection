@@ -22,7 +22,7 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
 	IShotThrough* shotThrough = Cast<IShotThrough>(OtherActor);
 
-	if (lostCharacter && !lostCharacter->getIsAlly())
+	if (lostCharacter && isAlly != lostCharacter->getIsAlly())
 	{
 		lostCharacter->takeDamage(damage);
 	}
@@ -101,7 +101,7 @@ ABaseAmmo::ABaseAmmo()
 	tracer->SetUseAutoManageAttachment(true);
 }
 
-void ABaseAmmo::launch()
+void ABaseAmmo::launch(ACharacter* character)
 {
 	UWorld* world = GetWorld();
 	length = mesh->GetStaticMesh()->GetBounds().GetBox().GetSize().X;
@@ -109,6 +109,7 @@ void ABaseAmmo::launch()
 	if (world)
 	{
 		FTimerDelegate delegate;
+		isAlly = Cast<ALostConnectionCharacter>(character)->getIsAlly();
 
 		delegate.BindLambda([this]()
 			{

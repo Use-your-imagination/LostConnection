@@ -48,12 +48,9 @@ protected:
 	weaponTypes weaponType;
 
 public:
-	ACharacter* character;
-
-public:
 	ABaseWeapon();
 
-	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh);
+	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
 
 	virtual void setCurrentMagazineSize(int currentMagazineSize) final;
 

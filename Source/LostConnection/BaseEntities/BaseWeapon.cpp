@@ -2,7 +2,7 @@
 
 #include "UObject/ConstructorHelpers.h"
 
-#include "Engine/LostConnectionPlayerState.h"
+#include "Engine/LostConnectionGameState.h"
 #include "Character/LostConnectionCharacter.h"
 
 #pragma warning(disable: 4458)
@@ -20,39 +20,28 @@ ABaseWeapon::ABaseWeapon()
 	weaponType = weaponTypes::automatic;
 }
 
-void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh)
+void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
-	if (character)
+	if (weaponType == weaponTypes::semiAutomatic)
 	{
-		if (weaponType == weaponTypes::semiAutomatic)
-		{
-			Cast<ALostConnectionCharacter>(character)->resetShoot();
-		}
+		Cast<ALostConnectionCharacter>(character)->resetShoot();
+	}
 
-		if (currentMagazineSize >= ammoCost)
-		{
-			ALostConnectionPlayerState* playerState = Cast<APlayerController>(character->GetController())->GetPlayerState<ALostConnectionPlayerState>();
+	if (currentMagazineSize >= ammoCost)
+	{
+		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("barrel"), { 0.0f, 0.0f, 0.0f });
 
-			ABaseAmmo* launchedAmmo = playerState->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("barrel"), { 0.0f, 0.0f, 0.0f });
+		launchedAmmo->getAmmoMesh()->AddRelativeRotation(character->GetActorRotation());
 
-			launchedAmmo->getAmmoMesh()->AddRelativeRotation(character->GetActorRotation());
+		launchedAmmo->getAmmoMesh()->AddRelativeRotation({ FMath::RandRange(-2.0f, 2.0f), FMath::RandRange(-2.0f, 2.0f), 0.0f });
 
-			launchedAmmo->getAmmoMesh()->AddRelativeRotation({ FMath::RandRange(-2.0f, 2.0f), FMath::RandRange(-2.0f, 2.0f), 0.0f });
+		launchedAmmo->launch(character);
 
-			launchedAmmo->launch();
-
-			currentMagazineSize -= ammoCost;
-		}
-		else
-		{
-			ALostConnectionCharacter* tem = Cast<ALostConnectionCharacter>(character);
-
-			tem->reload();
-		}
+		currentMagazineSize -= ammoCost;
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, L"character is nullptr");
+		Cast<ALostConnectionCharacter>(character)->reload();
 	}
 }
 

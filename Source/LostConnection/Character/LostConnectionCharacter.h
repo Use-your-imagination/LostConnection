@@ -116,8 +116,10 @@ public:
 
 	void updateWeaponMesh();
 
+	UFUNCTION(BlueprintCallable)
 	void shoot();
 
+	UFUNCTION(BlueprintCallable)
 	void resetShoot();
 
 	void reload();

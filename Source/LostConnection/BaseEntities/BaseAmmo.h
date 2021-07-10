@@ -32,6 +32,7 @@ class LOSTCONNECTION_API ABaseAmmo :
 
 private:
 	FTimerHandle launchHandle;
+	bool isAlly;
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;
@@ -67,7 +68,7 @@ protected:
 public:
 	ABaseAmmo();
 
-	void launch();
+	void launch(ACharacter* character);
 
 	virtual UClass* getStaticClass() const;
 
