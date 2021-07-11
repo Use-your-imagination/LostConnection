@@ -33,7 +33,7 @@ protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMesh* magazineMesh;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	ABaseAmmo* ammo;
 
 	int currentMagazineSize;
@@ -46,6 +46,9 @@ protected:
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
 	weaponTypes weaponType;
+
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float spreadDistance;
 
 public:
 	ABaseWeapon();
@@ -68,8 +71,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual int getMagazineSize() const final;
 
+	UFUNCTION(BlueprintCallable)
 	virtual int getRateOfFire() const final;
 
+	UFUNCTION(BlueprintCallable)
 	virtual weaponTypes getWeaponType() const final;
 
 	float getFlatDamageReduction_Implementation() const override;

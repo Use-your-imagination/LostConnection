@@ -82,6 +82,9 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALostConnectionCharacter::sprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALostConnectionCharacter::run);
+
 	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
 	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
 	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
@@ -97,6 +100,16 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAxis("TurnRate", this, &ALostConnectionCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ALostConnectionCharacter::LookUpAtRate);
+}
+
+void ALostConnectionCharacter::sprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 575.0f;
+}
+
+void ALostConnectionCharacter::run()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 450.0f;
 }
 
 ALostConnectionCharacter::ALostConnectionCharacter()

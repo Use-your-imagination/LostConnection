@@ -18,6 +18,7 @@ ABaseWeapon::ABaseWeapon()
 {
 	ammoCost = 1;
 	weaponType = weaponTypes::automatic;
+	spreadDistance = 2.0f;
 }
 
 void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
@@ -33,7 +34,10 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 
 		launchedAmmo->getAmmoMesh()->AddRelativeRotation(character->GetActorRotation());
 
-		launchedAmmo->getAmmoMesh()->AddRelativeRotation({ FMath::RandRange(-2.0f, 2.0f), FMath::RandRange(-2.0f, 2.0f), 0.0f });
+		float pitch = FMath::RandRange(-spreadDistance, spreadDistance);
+		float yaw = FMath::Tan(FMath::Acos(pitch / spreadDistance)) * pitch;
+
+		launchedAmmo->getAmmoMesh()->AddRelativeRotation({ pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
 		launchedAmmo->launch(character);
 

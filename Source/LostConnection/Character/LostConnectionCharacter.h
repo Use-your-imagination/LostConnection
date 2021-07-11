@@ -104,6 +104,11 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
 
+private:
+	void sprint();
+
+	void run();
+
 public:
 	ALostConnectionCharacter();
 
