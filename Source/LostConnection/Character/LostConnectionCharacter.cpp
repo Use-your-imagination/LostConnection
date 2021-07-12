@@ -153,19 +153,30 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
-	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	// Create a camera offset (pulls in towards the player if there is a collision)
+	CameraOffset = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraOffset"));
+	CameraOffset->SetupAttachment(RootComponent);
+	CameraOffset->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
+	CameraOffset->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	CameraOffset->AddLocalOffset({ 0.0f, 0.0f, 50.0f });
+	CameraOffset->SocketOffset = { 0.0f, 90.0f, 0.0f };
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->SetupAttachment(CameraOffset, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	WeaponOffset = CreateDefaultSubobject<USpringArmComponent>(TEXT("WeaponOffset"));
+	WeaponOffset->SetupAttachment(RootComponent);
+	WeaponOffset->AddLocalOffset({ 0.0f, 0.0f, 10.0f });
+	WeaponOffset->TargetArmLength = 0.0f;
+	WeaponOffset->SocketOffset = { 35.0f, 25.0f, 0.0f };
+
+	WeaponNonSkeletalSocket = CreateDefaultSubobject<USphereComponent>(TEXT("WeaponNonSkeletalSocket"));
+	WeaponNonSkeletalSocket->SetupAttachment(WeaponOffset);
+
 	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
-	currentWeaponMesh->SetupAttachment(ACharacter::GetMesh(), "weapon_socket");
+	currentWeaponMesh->SetupAttachment(WeaponNonSkeletalSocket);
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);

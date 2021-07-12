@@ -1,6 +1,7 @@
 #include "BaseWeapon.h"
 
 #include "UObject/ConstructorHelpers.h"
+#include "Components/CapsuleComponent.h"
 
 #include "Engine/LostConnectionGameState.h"
 #include "Character/LostConnectionCharacter.h"
@@ -32,7 +33,18 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 	{
 		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("barrel"), { 0.0f, 0.0f, 0.0f });
 
-		launchedAmmo->getAmmoMesh()->AddRelativeRotation(character->GetActorRotation());
+		ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(character);
+
+		// TODO: getter for distance
+		float distance = 10000;
+
+		FHitResult hit;
+		FVector start = lostCharacter->GetFollowCamera()->GetComponentLocation();
+		FVector end = start + lostCharacter->GetFollowCamera()->GetComponentRotation().Vector() * distance;
+
+		lostCharacter->GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility);
+
+		launchedAmmo->getAmmoMesh()->SetWorldRotation((hit.Location - lostCharacter->GetCapsuleComponent()->GetComponentLocation()).ToOrientationRotator());
 
 		float pitch = FMath::RandRange(-spreadDistance, spreadDistance);
 		float yaw = FMath::Tan(FMath::Acos(pitch / spreadDistance)) * pitch;

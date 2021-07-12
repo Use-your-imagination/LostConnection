@@ -6,6 +6,7 @@
 
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/SphereComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "BaseEntities/BaseWeapon.h"
@@ -21,13 +22,19 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 {
 	GENERATED_BODY()
 
-	/** Camera boom positioning the camera behind the character */
+	/** Camera offset positioning the camera behind the character */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom;
+	USpringArmComponent* CameraOffset;
 
 	/** Follow camera */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* WeaponOffset;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USphereComponent* WeaponNonSkeletalSocket;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* currentWeaponMesh;
@@ -138,8 +145,8 @@ public:
 
 	void setCurrentHealths(int currentHealths);
 
-	/** Returns CameraBoom subobject **/
-	USpringArmComponent* GetCameraBoom() const;
+	/** Returns CameraOffset subobject **/
+	USpringArmComponent* GetCameraOffset() const;
 
 	/** Returns FollowCamera subobject **/
 	UCameraComponent* GetFollowCamera() const;
@@ -166,9 +173,9 @@ public:
 	~ALostConnectionCharacter() = default;
 };
 
-inline USpringArmComponent* ALostConnectionCharacter::GetCameraBoom() const
+inline USpringArmComponent* ALostConnectionCharacter::GetCameraOffset() const
 {
-	return CameraBoom;
+	return CameraOffset;
 }
 
 inline UCameraComponent* ALostConnectionCharacter::GetFollowCamera() const
