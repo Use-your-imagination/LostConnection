@@ -166,17 +166,8 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	FollowCamera->SetupAttachment(CameraOffset, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	WeaponOffset = CreateDefaultSubobject<USpringArmComponent>(TEXT("WeaponOffset"));
-	WeaponOffset->SetupAttachment(RootComponent);
-	WeaponOffset->AddLocalOffset({ 0.0f, 0.0f, 10.0f });
-	WeaponOffset->TargetArmLength = 0.0f;
-	WeaponOffset->SocketOffset = { 35.0f, 25.0f, 0.0f };
-
-	WeaponNonSkeletalSocket = CreateDefaultSubobject<USphereComponent>(TEXT("WeaponNonSkeletalSocket"));
-	WeaponNonSkeletalSocket->SetupAttachment(WeaponOffset);
-
 	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
-	currentWeaponMesh->SetupAttachment(WeaponNonSkeletalSocket);
+	currentWeaponMesh->SetupAttachment(mesh, "weapon_socket");
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
@@ -240,6 +231,11 @@ void ALostConnectionCharacter::shoot()
 
 			delegate.BindLambda([this, &manager]()
 				{
+					if (IsPendingKill())
+					{
+						return;
+					}
+
 					if (clearTimer)
 					{ 
 						clearTimer = false; manager.ClearTimer(shootHandle);
@@ -351,6 +347,11 @@ bool ALostConnectionCharacter::getIsAlly() const
 int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
 {
 	return currentAmmoHolding[static_cast<size_t>(type)];
+}
+
+USkeletalMeshComponent* ALostConnectionCharacter::getCurrentWeaponMesh() const
+{
+	return currentWeaponMesh;
 }
 
 float ALostConnectionCharacter::getFlatDamageReduction_Implementation() const

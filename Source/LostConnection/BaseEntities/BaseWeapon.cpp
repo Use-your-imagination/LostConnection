@@ -24,40 +24,48 @@ ABaseWeapon::ABaseWeapon()
 
 void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
+	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(character);
+
 	if (weaponType == weaponTypes::semiAutomatic)
 	{
-		Cast<ALostConnectionCharacter>(character)->resetShoot();
+		lostCharacter->resetShoot();
 	}
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("barrel"), { 0.0f, 0.0f, 0.0f });
-
-		ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(character);
+		ABaseAmmo* launchedAmmo = lostCharacter->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("barrel"), { 0.0f, 0.0f, 0.0f });
 
 		// TODO: getter for distance
-		float distance = 10000;
+		float distance = 20000.0f;
 
 		FHitResult hit;
 		FVector start = lostCharacter->GetFollowCamera()->GetComponentLocation();
 		FVector end = start + lostCharacter->GetFollowCamera()->GetComponentRotation().Vector() * distance;
+		FRotator resultRotation;
 
-		lostCharacter->GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility);
+		if (lostCharacter->GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility))
+		{
+			resultRotation = (hit.Location - lostCharacter->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+		}
+		else
+		{
+			resultRotation = ((lostCharacter->GetFollowCamera()->GetComponentRotation().Vector() * distance) - lostCharacter->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+		}
 
-		launchedAmmo->getAmmoMesh()->SetWorldRotation((hit.Location - lostCharacter->GetCapsuleComponent()->GetComponentLocation()).ToOrientationRotator());
+		launchedAmmo->getAmmoMesh()->SetWorldRotation(resultRotation);
 
 		float pitch = FMath::RandRange(-spreadDistance, spreadDistance);
 		float yaw = FMath::Tan(FMath::Acos(pitch / spreadDistance)) * pitch;
 
 		launchedAmmo->getAmmoMesh()->AddRelativeRotation({ pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
-		launchedAmmo->launch(character);
+		launchedAmmo->launch(lostCharacter);
 
 		currentMagazineSize -= ammoCost;
 	}
 	else
 	{
-		Cast<ALostConnectionCharacter>(character)->reload();
+		lostCharacter->reload();
 	}
 }
 
