@@ -17,6 +17,8 @@ void ALostConnectionCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	defaultWeaponSlot = NewObject<ADefaultWeapon>();
+
+	this->changeToDefaultWeapon();
 }
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
@@ -207,6 +209,8 @@ void ALostConnectionCharacter::updateWeaponMesh()
 	else
 	{
 		currentWeaponMesh->SetSkeletalMesh(nullptr);
+
+		magazine->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepRelative, false));
 
 		magazine->SetStaticMesh(nullptr);
 	}
