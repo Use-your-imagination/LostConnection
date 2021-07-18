@@ -12,6 +12,38 @@
 
 using namespace std;
 
+void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
+
+	DOREPLIFETIME(ALostConnectionCharacter, currentWeaponMesh);
+}
+
+void ALostConnectionCharacter::onReplicateCurrentHealth()
+{
+	this->onCurrentHealthUpdate();
+}
+
+void ALostConnectionCharacter::onReplicateCurrentWeaponMesh()
+{
+	this->onCurrentWeaponMeshUpdate();
+}
+
+void ALostConnectionCharacter::onCurrentHealthUpdate()
+{
+	if (IsLocallyControlled())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(L"%f", currentHealth));
+	}
+}
+
+void ALostConnectionCharacter::onCurrentWeaponMeshUpdate()
+{
+	
+}
+
 void ALostConnectionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -19,13 +51,18 @@ void ALostConnectionCharacter::BeginPlay()
 	defaultWeaponSlot = NewObject<ADefaultWeapon>();
 
 	this->changeToDefaultWeapon();
+
+	if (IsLocallyControlled())
+	{
+		isAlly = false;
+	}
 }
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (currentHealths <= 0.0f)
+	if (currentHealth <= 0.0f)
 	{
 		Destroy();
 	}
@@ -118,8 +155,8 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 {
 	firstWeaponSlot = nullptr;
 	secondWeaponSlot = nullptr;
-	healths = 1000.0f;
-	currentHealths = healths;
+	health = 1000.0f;
+	currentHealth = health;
 	isAlly = true;
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
 	shootRemainingTime = 0.0f; 
@@ -170,9 +207,11 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 
 	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
 	currentWeaponMesh->SetupAttachment(mesh, "weapon_socket");
+	currentWeaponMesh->SetIsReplicated(true);
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
+	magazine->SetIsReplicated(true);
 }
 
 void ALostConnectionCharacter::changeToFirstWeapon()
@@ -208,12 +247,14 @@ void ALostConnectionCharacter::updateWeaponMesh()
 	}
 	else
 	{
-		currentWeaponMesh->SetSkeletalMesh(nullptr);
-
 		magazine->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepRelative, false));
 
 		magazine->SetStaticMesh(nullptr);
+
+		currentWeaponMesh->SetSkeletalMesh(nullptr);
 	}
+
+	this->onCurrentWeaponMeshUpdate();
 }
 
 void ALostConnectionCharacter::shoot()
@@ -310,17 +351,19 @@ void ALostConnectionCharacter::reload()
 
 void ALostConnectionCharacter::restoreHealths(float amount)
 {
-	currentHealths += amount;
+	currentHealth += amount;
 
-	if (currentHealths > healths)
+	if (currentHealth > health)
 	{
-		currentHealths = healths;
+		currentHealth = health;
 	}
+
+	this->onCurrentHealthUpdate();
 }
 
 void ALostConnectionCharacter::takeDamage(float amount)
 {
-	currentHealths -= amount;
+	currentHealth -= amount;
 }
 
 void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
@@ -328,19 +371,21 @@ void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
 	currentAmmoHolding[static_cast<size_t>(type)] += count;
 }
 
-void ALostConnectionCharacter::setCurrentHealths(int currentHealths)
+void ALostConnectionCharacter::setCurrentHealths(int currentHealth)
 {
-	this->currentHealths = currentHealths;
+	this->currentHealth = currentHealth;
+
+	this->onCurrentHealthUpdate();
 }
 
 float ALostConnectionCharacter::getHealths() const
 {
-	return healths;
+	return health;
 }
 
 float ALostConnectionCharacter::getCurrentHealths() const
 {
-	return currentHealths;
+	return currentHealth;
 }
 
 bool ALostConnectionCharacter::getIsAlly() const

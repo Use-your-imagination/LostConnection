@@ -46,6 +46,8 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		MarkPendingKill();
 
+		mesh->SetGenerateOverlapEvents(false);
+
 		return;
 	}
 
@@ -78,6 +80,7 @@ ABaseAmmo::ABaseAmmo()
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 	ammoType = ammoTypes::large;
 	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerSystemFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'"));
+	bReplicates = true;
 
 	SetRootComponent(mesh);
 

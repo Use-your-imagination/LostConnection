@@ -8,6 +8,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "Net/UnrealNetwork.h"
+
 #include "BaseEntities/BaseWeapon.h"
 #include "Weapons/DefaultWeapon.h"
 #include "Interfaces/ShotThrough.h"
@@ -29,7 +31,7 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onReplicateCurrentWeaponMesh, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* currentWeaponMesh;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -56,16 +58,30 @@ private:
 
 protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
-	float healths;
+	float health;
 
-	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
-	float currentHealths;
+	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onReplicateCurrentHealth)
+	float currentHealth;
 
 	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
 	bool isAlly;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> currentAmmoHolding;
+
+private:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION()
+	void onReplicateCurrentHealth();
+
+	UFUNCTION()
+	void onReplicateCurrentWeaponMesh();
+
+private:
+	void onCurrentHealthUpdate();
+
+	void onCurrentWeaponMeshUpdate();
 
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -136,7 +152,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void pickupAmmo(ammoTypes type, int32 count);
 
-	void setCurrentHealths(int currentHealths);
+	void setCurrentHealths(int currentHealth);
 
 	/** Returns CameraOffset subobject **/
 	USpringArmComponent* GetCameraOffset() const;
