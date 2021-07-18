@@ -22,9 +22,16 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
 	IShotThrough* shotThrough = Cast<IShotThrough>(OtherActor);
 
+	if (lastTarget == lostCharacter)
+	{
+		return;
+	}
+
 	if (lostCharacter && isAlly != lostCharacter->getIsAlly())
 	{
 		lostCharacter->takeDamage(damage);
+
+		lastTarget = lostCharacter;
 	}
 
 	if (shotThrough)
@@ -45,8 +52,6 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		tracer->Deactivate();
 
 		MarkPendingKill();
-
-		mesh->SetGenerateOverlapEvents(false);
 
 		return;
 	}

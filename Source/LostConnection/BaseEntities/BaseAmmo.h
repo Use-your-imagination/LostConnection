@@ -33,6 +33,7 @@ class LOSTCONNECTION_API ABaseAmmo :
 private:
 	FTimerHandle launchHandle;
 	bool isAlly;
+	ACharacter* lastTarget;
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;
