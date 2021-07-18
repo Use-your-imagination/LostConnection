@@ -93,8 +93,7 @@ ABaseAmmo::ABaseAmmo()
 	mesh->SetEnableGravity(true);
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
-	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
 	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::beginOverlap);
 
