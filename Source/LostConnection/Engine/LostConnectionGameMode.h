@@ -12,6 +12,8 @@ UCLASS()
 class LOSTCONNECTION_API ALostConnectionGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+private:
+	UClass* defaultAI;
 
 protected:
 	void BeginPlay() override;

@@ -52,10 +52,7 @@ void ALostConnectionCharacter::BeginPlay()
 
 	this->changeToDefaultWeapon();
 
-	if (IsLocallyControlled())
-	{
-		isAlly = false;
-	}
+	isAlly = true;
 }
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
