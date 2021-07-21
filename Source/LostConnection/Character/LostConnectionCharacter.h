@@ -81,6 +81,9 @@ public:
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	UFUNCTION(Server, Reliable)
+	void clientChangeCurrentHealth(float newCurrentHealth);
+
 protected:
 	void BeginPlay() override;
 

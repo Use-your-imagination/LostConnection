@@ -19,6 +19,11 @@ void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
 }
 
+void ALostConnectionCharacter::clientChangeCurrentHealth_Implementation(float newCurrentHealth)
+{
+	this->setCurrentHealth(newCurrentHealth);
+}
+
 void ALostConnectionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -352,7 +357,10 @@ void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
 
 void ALostConnectionCharacter::setCurrentHealth(int currentHealth)
 {
-	this->currentHealth = currentHealth;
+	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	{
+		this->currentHealth = currentHealth;
+	}
 }
 
 float ALostConnectionCharacter::getHealth() const
