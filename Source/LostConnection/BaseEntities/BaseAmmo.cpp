@@ -18,7 +18,7 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	{
 		return;
 	}
-
+	
 	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
 	IShotThrough* shotThrough = Cast<IShotThrough>(OtherActor);
 
@@ -62,7 +62,7 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	}
 }
 
-void ABaseAmmo::endOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void ABaseAmmo::endOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (IsPendingKill())
 	{

@@ -60,7 +60,7 @@ protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
 	float health;
 
-	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly, Replicated)
 	float currentHealth;
 
 	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
@@ -77,6 +77,9 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseLookUpRate;
+
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	void BeginPlay() override;

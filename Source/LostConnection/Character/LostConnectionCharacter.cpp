@@ -12,6 +12,13 @@
 
 using namespace std;
 
+void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
+}
+
 void ALostConnectionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -21,6 +28,11 @@ void ALostConnectionCharacter::BeginPlay()
 	this->changeToDefaultWeapon();
 
 	isAlly = true;
+
+	if (IsLocallyControlled())
+	{
+		isAlly = false;
+	}
 }
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
@@ -314,11 +326,17 @@ void ALostConnectionCharacter::reload()
 
 void ALostConnectionCharacter::restoreHealth(float amount)
 {
-	currentHealth += amount;
+	float tem = this->getCurrentHealth();
 
-	if (currentHealth > health)
+	tem += amount;
+
+	if (tem > this->getHealth())
 	{
-		currentHealth = health;
+		this->setCurrentHealth(this->getHealth());
+	}
+	else
+	{
+		this->setCurrentHealth(tem);
 	}
 }
 
