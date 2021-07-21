@@ -31,7 +31,7 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onReplicateCurrentWeaponMesh, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* currentWeaponMesh;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -60,7 +60,7 @@ protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
 	float health;
 
-	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onReplicateCurrentHealth)
+	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
 	float currentHealth;
 
 	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
@@ -68,20 +68,6 @@ protected:
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> currentAmmoHolding;
-
-private:
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	UFUNCTION()
-	void onReplicateCurrentHealth();
-
-	UFUNCTION()
-	void onReplicateCurrentWeaponMesh();
-
-private:
-	void onCurrentHealthUpdate();
-
-	void onCurrentWeaponMeshUpdate();
 
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -145,14 +131,14 @@ public:
 
 	void reload();
 
-	void restoreHealths(float amount);
+	void restoreHealth(float amount);
 
 	void takeDamage(float amount);
 
 	UFUNCTION(BlueprintCallable)
 	void pickupAmmo(ammoTypes type, int32 count);
 
-	void setCurrentHealths(int currentHealth);
+	void setCurrentHealth(int currentHealth);
 
 	/** Returns CameraOffset subobject **/
 	USpringArmComponent* GetCameraOffset() const;
@@ -161,10 +147,10 @@ public:
 	UCameraComponent* GetFollowCamera() const;
 
 	UFUNCTION(BlueprintCallable)
-	float getHealths() const;
+	float getHealth() const;
 
 	UFUNCTION(BlueprintCallable)
-	float getCurrentHealths() const;
+	float getCurrentHealth() const;
 
 	UFUNCTION(BlueprintCallable)
 	bool getIsAlly() const;

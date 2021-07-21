@@ -12,38 +12,6 @@
 
 using namespace std;
 
-void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
-
-	DOREPLIFETIME(ALostConnectionCharacter, currentWeaponMesh);
-}
-
-void ALostConnectionCharacter::onReplicateCurrentHealth()
-{
-	this->onCurrentHealthUpdate();
-}
-
-void ALostConnectionCharacter::onReplicateCurrentWeaponMesh()
-{
-	this->onCurrentWeaponMeshUpdate();
-}
-
-void ALostConnectionCharacter::onCurrentHealthUpdate()
-{
-	if (IsLocallyControlled())
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(L"%f", currentHealth));
-	}
-}
-
-void ALostConnectionCharacter::onCurrentWeaponMeshUpdate()
-{
-	
-}
-
 void ALostConnectionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -156,7 +124,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	currentHealth = health;
 	isAlly = true;
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
-	shootRemainingTime = 0.0f; 
+	shootRemainingTime = 0.0f;
 	clearTimer = false;
 
 	currentAmmoHolding.Reserve(4);
@@ -250,8 +218,6 @@ void ALostConnectionCharacter::updateWeaponMesh()
 
 		currentWeaponMesh->SetSkeletalMesh(nullptr);
 	}
-
-	this->onCurrentWeaponMeshUpdate();
 }
 
 void ALostConnectionCharacter::shoot()
@@ -279,13 +245,13 @@ void ALostConnectionCharacter::shoot()
 					}
 
 					if (clearTimer)
-					{ 
+					{
 						clearTimer = false; manager.ClearTimer(shootHandle);
 
 						return;
 					}
-					
-					currentWeapon->shoot(currentWeaponMesh, this); 
+
+					currentWeapon->shoot(currentWeaponMesh, this);
 				});
 
 			manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
@@ -346,7 +312,7 @@ void ALostConnectionCharacter::reload()
 	}
 }
 
-void ALostConnectionCharacter::restoreHealths(float amount)
+void ALostConnectionCharacter::restoreHealth(float amount)
 {
 	currentHealth += amount;
 
@@ -354,13 +320,11 @@ void ALostConnectionCharacter::restoreHealths(float amount)
 	{
 		currentHealth = health;
 	}
-
-	this->onCurrentHealthUpdate();
 }
 
 void ALostConnectionCharacter::takeDamage(float amount)
 {
-	currentHealth -= amount;
+	this->setCurrentHealth(this->getCurrentHealth() - amount);
 }
 
 void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
@@ -368,19 +332,17 @@ void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
 	currentAmmoHolding[static_cast<size_t>(type)] += count;
 }
 
-void ALostConnectionCharacter::setCurrentHealths(int currentHealth)
+void ALostConnectionCharacter::setCurrentHealth(int currentHealth)
 {
 	this->currentHealth = currentHealth;
-
-	this->onCurrentHealthUpdate();
 }
 
-float ALostConnectionCharacter::getHealths() const
+float ALostConnectionCharacter::getHealth() const
 {
 	return health;
 }
 
-float ALostConnectionCharacter::getCurrentHealths() const
+float ALostConnectionCharacter::getCurrentHealth() const
 {
 	return currentHealth;
 }
