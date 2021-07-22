@@ -32,11 +32,11 @@ void ALostConnectionCharacter::BeginPlay()
 
 	this->changeToDefaultWeapon();
 
-	isAlly = true;
+	isAlly = false;
 
 	if (IsLocallyControlled())
 	{
-		isAlly = false;
+		isAlly = true;
 	}
 }
 
