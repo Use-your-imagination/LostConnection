@@ -31,10 +31,10 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* currentWeaponMesh;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* magazine;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -50,8 +50,10 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	ADefaultWeapon* defaultWeaponSlot;
 
 private:
+	UPROPERTY(Replicated)
 	FTimerHandle shootHandle;
 
+	UPROPERTY(Replicated)
 	float shootRemainingTime;
 
 	bool clearTimer;
@@ -66,7 +68,7 @@ protected:
 	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
 	bool isAlly;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly, Replicated)
 	TArray<int32> currentAmmoHolding;
 
 public:
@@ -82,7 +84,7 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(Server, Reliable)
-	void clientChangeCurrentHealth(float newCurrentHealth);
+	void clientSetCurrentHealth(float newCurrentHealth);
 
 protected:
 	void BeginPlay() override;
@@ -122,17 +124,26 @@ public:
 
 	void changeToFirstWeapon();
 
+	UFUNCTION(Server, Reliable)
+	void clientChangeToFirstWeapon();
+
 	void changeToSecondWeapon();
+
+	UFUNCTION(Server, Reliable)
+	void clientChangeToSecondWeapon();
 
 	UFUNCTION(BlueprintCallable)
 	void changeToDefaultWeapon();
+
+	UFUNCTION(Server, Reliable)
+	void clientChangeToDefaultWeapon();
 
 	void updateWeaponMesh();
 
 	UFUNCTION(BlueprintCallable)
 	void shoot();
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(Server, Unreliable)
 	void clientShoot();
 
 	UFUNCTION(BlueprintCallable)

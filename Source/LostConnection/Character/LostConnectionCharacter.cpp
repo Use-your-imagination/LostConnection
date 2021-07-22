@@ -17,9 +17,19 @@ void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
+
+	DOREPLIFETIME(ALostConnectionCharacter, currentAmmoHolding);
+
+	DOREPLIFETIME(ALostConnectionCharacter, currentWeaponMesh);
+
+	DOREPLIFETIME(ALostConnectionCharacter, magazine);
+
+	DOREPLIFETIME(ALostConnectionCharacter, shootHandle);
+
+	DOREPLIFETIME(ALostConnectionCharacter, shootRemainingTime);
 }
 
-void ALostConnectionCharacter::clientChangeCurrentHealth_Implementation(float newCurrentHealth)
+void ALostConnectionCharacter::clientSetCurrentHealth_Implementation(float newCurrentHealth)
 {
 	this->setCurrentHealth(newCurrentHealth);
 }
@@ -100,17 +110,27 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
+
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALostConnectionCharacter::sprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALostConnectionCharacter::run);
 
-	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
-	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
-	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
+	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	{
+		PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
+		PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
+		PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
+	}
+	else
+	{
+		PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToFirstWeapon);
+		PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToSecondWeapon);
+		PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToDefaultWeapon);
+	}
 
-	if (!IsLocallyControlled())
+	if (GetLocalRole() == ENetRole::ROLE_Authority)
 	{
 		PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
 		PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
@@ -152,6 +172,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
 	shootRemainingTime = 0.0f;
 	clearTimer = false;
+	NetUpdateFrequency = 20;
 
 	currentAmmoHolding.Reserve(4);
 
@@ -207,42 +228,69 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 
 void ALostConnectionCharacter::changeToFirstWeapon()
 {
-	currentWeapon = firstWeaponSlot;
+	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	{
+		currentWeapon = firstWeaponSlot;
 
-	this->updateWeaponMesh();
+		this->updateWeaponMesh();
+	}
+}
+
+void ALostConnectionCharacter::clientChangeToFirstWeapon_Implementation()
+{
+	this->changeToFirstWeapon();
 }
 
 void ALostConnectionCharacter::changeToSecondWeapon()
 {
-	currentWeapon = secondWeaponSlot;
+	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	{
+		currentWeapon = secondWeaponSlot;
 
-	this->updateWeaponMesh();
+		this->updateWeaponMesh();
+	}
+}
+
+void ALostConnectionCharacter::clientChangeToSecondWeapon_Implementation()
+{
+	this->changeToSecondWeapon();
 }
 
 void ALostConnectionCharacter::changeToDefaultWeapon()
 {
-	currentWeapon = defaultWeaponSlot;
+	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	{
+		currentWeapon = defaultWeaponSlot;
 
-	this->updateWeaponMesh();
+		this->updateWeaponMesh();
+	}
+}
+
+void ALostConnectionCharacter::clientChangeToDefaultWeapon_Implementation()
+{
+	this->changeToDefaultWeapon();
 }
 
 void ALostConnectionCharacter::updateWeaponMesh()
 {
-	if (currentWeapon)
+	if (GetLocalRole() == ENetRole::ROLE_Authority)
 	{
-		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
+		if (currentWeapon)
+		{
+			currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
 
-		magazine->AttachToComponent(currentWeaponMesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false), "magazine");
+			magazine->AttachToComponent(currentWeaponMesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false), "magazine");
 
-		magazine->SetStaticMesh(currentWeapon->getMagazineMesh());
-	}
-	else
-	{
-		magazine->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepRelative, false));
+			magazine->SetStaticMesh(currentWeapon->getMagazineMesh());
+		}
+		else
+		{
+			magazine->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepRelative, false));
 
-		magazine->SetStaticMesh(nullptr);
+			magazine->SetStaticMesh(nullptr);
 
-		currentWeaponMesh->SetSkeletalMesh(nullptr);
+			currentWeaponMesh->SetSkeletalMesh(nullptr);
+		}
 	}
 }
 

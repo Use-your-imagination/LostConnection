@@ -15,11 +15,22 @@ void ABaseWeapon::Tick(float DeltaSeconds)
 
 }
 
+void ABaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABaseWeapon, currentMagazineSize);
+	
+	DOREPLIFETIME(ABaseWeapon, magazineSize);
+}
+
 ABaseWeapon::ABaseWeapon()
 {
 	ammoCost = 1;
 	weaponType = weaponTypes::automatic;
 	spreadDistance = 2.0f;
+	NetUpdateFrequency = 20;
+
 }
 
 void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
