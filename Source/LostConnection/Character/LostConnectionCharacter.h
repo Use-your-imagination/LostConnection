@@ -132,8 +132,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void shoot();
 
+	UFUNCTION(Server, Reliable)
+	void clientShoot();
+
 	UFUNCTION(BlueprintCallable)
 	void resetShoot();
+
+	UFUNCTION(Server, Reliable)
+	void clientResetShoot();
 
 	void reload();
 

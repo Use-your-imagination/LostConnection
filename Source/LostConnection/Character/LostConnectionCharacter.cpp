@@ -110,8 +110,17 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
 	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
 
-	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
-	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
+	if (!IsLocallyControlled())
+	{
+		PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
+		PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
+	}
+	else
+	{
+		PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::clientShoot);
+		PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::clientResetShoot);
+	}
+
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALostConnectionCharacter::reload);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALostConnectionCharacter::MoveForward);
@@ -239,6 +248,11 @@ void ALostConnectionCharacter::updateWeaponMesh()
 
 void ALostConnectionCharacter::shoot()
 {
+	if (GetLocalRole() != ENetRole::ROLE_Authority)
+	{
+		return;
+	}
+
 	if (currentWeapon)
 	{
 		UWorld* world = GetWorld();
@@ -278,8 +292,18 @@ void ALostConnectionCharacter::shoot()
 	}
 }
 
+void ALostConnectionCharacter::clientShoot_Implementation()
+{
+	this->shoot();
+}
+
 void ALostConnectionCharacter::resetShoot()
 {
+	if (GetLocalRole() != ENetRole::ROLE_Authority)
+	{
+		return;
+	}
+
 	UWorld* world = GetWorld();
 
 	if (world)
@@ -293,6 +317,11 @@ void ALostConnectionCharacter::resetShoot()
 
 		world->GetTimerManager().ClearTimer(shootHandle);
 	}
+}
+
+void ALostConnectionCharacter::clientResetShoot_Implementation()
+{
+	this->resetShoot();
 }
 
 void ALostConnectionCharacter::reload()
