@@ -17,21 +17,6 @@ void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
-
-	DOREPLIFETIME(ALostConnectionCharacter, currentAmmoHolding);
-
-	DOREPLIFETIME(ALostConnectionCharacter, currentWeaponMesh);
-
-	DOREPLIFETIME(ALostConnectionCharacter, magazine);
-
-	DOREPLIFETIME(ALostConnectionCharacter, shootHandle);
-
-	DOREPLIFETIME(ALostConnectionCharacter, shootRemainingTime);
-}
-
-void ALostConnectionCharacter::clientSetCurrentHealth_Implementation(float newCurrentHealth)
-{
-	this->setCurrentHealth(newCurrentHealth);
 }
 
 void ALostConnectionCharacter::BeginPlay()
@@ -42,11 +27,9 @@ void ALostConnectionCharacter::BeginPlay()
 
 	this->changeToDefaultWeapon();
 
-	isAlly = false;
-
 	if (IsLocallyControlled())
 	{
-		isAlly = true;
+		isAlly = false;
 	}
 }
 
@@ -432,12 +415,9 @@ void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
 	currentAmmoHolding[static_cast<size_t>(type)] += count;
 }
 
-void ALostConnectionCharacter::setCurrentHealth(int currentHealth)
+void ALostConnectionCharacter::setCurrentHealth_Implementation(int newCurrentHealth)
 {
-	if (GetLocalRole() == ENetRole::ROLE_Authority)
-	{
-		this->currentHealth = currentHealth;
-	}
+	currentHealth = newCurrentHealth;
 }
 
 float ALostConnectionCharacter::getHealth() const

@@ -31,10 +31,10 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* currentWeaponMesh;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* magazine;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -50,10 +50,10 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	ADefaultWeapon* defaultWeaponSlot;
 
 private:
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	FTimerHandle shootHandle;
 
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	float shootRemainingTime;
 
 	bool clearTimer;
@@ -62,13 +62,13 @@ protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
 	float health;
 
-	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly, Replicated)
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float currentHealth;
 
 	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
 	bool isAlly;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly, Replicated)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> currentAmmoHolding;
 
 public:
@@ -82,9 +82,6 @@ public:
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	UFUNCTION(Server, Reliable)
-	void clientSetCurrentHealth(float newCurrentHealth);
 
 protected:
 	void BeginPlay() override;
@@ -143,7 +140,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void shoot();
 
-	UFUNCTION(Server, Unreliable)
+	UFUNCTION(Server, Reliable)
 	void clientShoot();
 
 	UFUNCTION(BlueprintCallable)
@@ -161,7 +158,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void pickupAmmo(ammoTypes type, int32 count);
 
-	void setCurrentHealth(int currentHealth);
+	UFUNCTION(Server, Reliable)
+	void setCurrentHealth(int newCurrentHealth);
 
 	/** Returns CameraOffset subobject **/
 	USpringArmComponent* GetCameraOffset() const;

@@ -39,10 +39,10 @@ protected:
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	ABaseAmmo* ammo;
 
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	int currentMagazineSize;
 
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	int magazineSize;
 
 	int ammoCost;
