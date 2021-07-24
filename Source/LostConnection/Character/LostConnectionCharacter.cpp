@@ -16,7 +16,11 @@ void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(ALostConnectionCharacter, health);
+
 	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
+
+	DOREPLIFETIME(ALostConnectionCharacter, isAlly);
 }
 
 void ALostConnectionCharacter::BeginPlay()

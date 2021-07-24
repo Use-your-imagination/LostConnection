@@ -50,22 +50,20 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	ADefaultWeapon* defaultWeaponSlot;
 
 private:
-	UPROPERTY()
 	FTimerHandle shootHandle;
 
-	UPROPERTY()
 	float shootRemainingTime;
 
 	bool clearTimer;
 
 protected:
-	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float health;
 
 	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float currentHealth;
 
-	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadWrite)
 	bool isAlly;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly)
