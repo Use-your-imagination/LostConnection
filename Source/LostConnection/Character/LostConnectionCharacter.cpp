@@ -234,11 +234,9 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 
 	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
 	currentWeaponMesh->SetupAttachment(mesh, "weapon_socket");
-	currentWeaponMesh->SetIsReplicated(true);
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
-	magazine->SetIsReplicated(true);
 }
 
 void ALostConnectionCharacter::changeToFirstWeapon()
@@ -246,9 +244,9 @@ void ALostConnectionCharacter::changeToFirstWeapon()
 	if (HasAuthority())
 	{
 		currentWeapon = firstWeaponSlot;
-
-		this->updateWeaponMesh();
 	}
+
+	this->updateWeaponMesh();
 }
 
 void ALostConnectionCharacter::clientChangeToFirstWeapon_Implementation()
@@ -261,9 +259,9 @@ void ALostConnectionCharacter::changeToSecondWeapon()
 	if (HasAuthority())
 	{
 		currentWeapon = secondWeaponSlot;
-
-		this->updateWeaponMesh();
 	}
+
+	this->updateWeaponMesh();
 }
 
 void ALostConnectionCharacter::clientChangeToSecondWeapon_Implementation()
@@ -276,9 +274,9 @@ void ALostConnectionCharacter::changeToDefaultWeapon()
 	if (HasAuthority())
 	{
 		currentWeapon = defaultWeaponSlot;
-
-		this->updateWeaponMesh();
 	}
+
+	this->updateWeaponMesh();
 }
 
 void ALostConnectionCharacter::clientChangeToDefaultWeapon_Implementation()
@@ -288,24 +286,21 @@ void ALostConnectionCharacter::clientChangeToDefaultWeapon_Implementation()
 
 void ALostConnectionCharacter::updateWeaponMesh()
 {
-	if (HasAuthority())
+	if (currentWeapon)
 	{
-		if (currentWeapon)
-		{
-			currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
+		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
 
-			magazine->AttachToComponent(currentWeaponMesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false), "magazine");
+		magazine->AttachToComponent(currentWeaponMesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false), "magazine");
 
-			magazine->SetStaticMesh(currentWeapon->getMagazineMesh());
-		}
-		else
-		{
-			magazine->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepRelative, false));
+		magazine->SetStaticMesh(currentWeapon->getMagazineMesh());
+	}
+	else
+	{
+		magazine->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepRelative, false));
 
-			magazine->SetStaticMesh(nullptr);
+		magazine->SetStaticMesh(nullptr);
 
-			currentWeaponMesh->SetSkeletalMesh(nullptr);
-		}
+		currentWeaponMesh->SetSkeletalMesh(nullptr);
 	}
 }
 
