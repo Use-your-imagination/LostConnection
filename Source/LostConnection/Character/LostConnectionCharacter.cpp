@@ -21,13 +21,41 @@ void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
 
 	DOREPLIFETIME(ALostConnectionCharacter, isAlly);
+
+	DOREPLIFETIME(ALostConnectionCharacter, currentWeapon);
+
+	DOREPLIFETIME(ALostConnectionCharacter, firstWeaponSlot);
+
+	DOREPLIFETIME(ALostConnectionCharacter, secondWeaponSlot);
+
+	DOREPLIFETIME(ALostConnectionCharacter, defaultWeaponSlot);
+}
+
+void ALostConnectionCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (HasAuthority())
+	{
+		defaultWeaponSlot = NewObject<UDefaultWeapon>(this);
+	}
+}
+
+bool ALostConnectionCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool WroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	if (defaultWeaponSlot)
+	{
+		WroteSomething |= Channel->ReplicateSubobject(defaultWeaponSlot, *Bunch, *RepFlags);
+	}
+
+	return WroteSomething;
 }
 
 void ALostConnectionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	defaultWeaponSlot = NewObject<ADefaultWeapon>();
 
 	this->changeToDefaultWeapon();
 
@@ -104,7 +132,7 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALostConnectionCharacter::sprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALostConnectionCharacter::run);
 
-	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	if (HasAuthority())
 	{
 		PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
 		PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
@@ -117,7 +145,7 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToDefaultWeapon);
 	}
 
-	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	if (HasAuthority())
 	{
 		PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
 		PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
@@ -215,7 +243,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 
 void ALostConnectionCharacter::changeToFirstWeapon()
 {
-	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	if (HasAuthority())
 	{
 		currentWeapon = firstWeaponSlot;
 
@@ -230,7 +258,7 @@ void ALostConnectionCharacter::clientChangeToFirstWeapon_Implementation()
 
 void ALostConnectionCharacter::changeToSecondWeapon()
 {
-	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	if (HasAuthority())
 	{
 		currentWeapon = secondWeaponSlot;
 
@@ -245,7 +273,7 @@ void ALostConnectionCharacter::clientChangeToSecondWeapon_Implementation()
 
 void ALostConnectionCharacter::changeToDefaultWeapon()
 {
-	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	if (HasAuthority())
 	{
 		currentWeapon = defaultWeaponSlot;
 
@@ -260,7 +288,7 @@ void ALostConnectionCharacter::clientChangeToDefaultWeapon_Implementation()
 
 void ALostConnectionCharacter::updateWeaponMesh()
 {
-	if (GetLocalRole() == ENetRole::ROLE_Authority)
+	if (HasAuthority())
 	{
 		if (currentWeapon)
 		{

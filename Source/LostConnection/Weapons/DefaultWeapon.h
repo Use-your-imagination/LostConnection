@@ -12,12 +12,12 @@
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API ADefaultWeapon : public ABaseWeapon
+class LOSTCONNECTION_API UDefaultWeapon : public UBaseWeapon
 {
 	GENERATED_BODY()
 
 public:
-	ADefaultWeapon();
+	UDefaultWeapon();
 
-	~ADefaultWeapon() = default;
+	~UDefaultWeapon() = default;
 };

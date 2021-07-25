@@ -8,19 +8,28 @@
 
 #pragma warning(disable: 4458)
 
-void ABaseWeapon::Tick(float DeltaSeconds)
+bool UBaseWeapon::IsSupportedForNetworking() const
 {
-	Super::Tick(DeltaSeconds);
+	return true;
 }
 
-ABaseWeapon::ABaseWeapon()
+void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UBaseWeapon, currentMagazineSize);
+
+	DOREPLIFETIME(UBaseWeapon, magazineSize);
+}
+
+UBaseWeapon::UBaseWeapon()
 {
 	ammoCost = 1;
 	weaponType = weaponTypes::automatic;
 	spreadDistance = 2.0f;
 }
 
-void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
 	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(character);
 
@@ -67,57 +76,57 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 	}
 }
 
-void ABaseWeapon::setCurrentMagazineSize(int currentMagazineSize)
+void UBaseWeapon::setCurrentMagazineSize(int currentMagazineSize)
 {
 	this->currentMagazineSize = currentMagazineSize;
 }
 
-void ABaseWeapon::setRateOfFire(int rateOfFire)
+void UBaseWeapon::setRateOfFire(int rateOfFire)
 {
 	this->rateOfFire = rateOfFire;
 }
 
-USkeletalMesh* ABaseWeapon::getWeaponMesh() const
+USkeletalMesh* UBaseWeapon::getWeaponMesh() const
 {
 	return mesh;
 }
 
-UStaticMesh* ABaseWeapon::getMagazineMesh() const
+UStaticMesh* UBaseWeapon::getMagazineMesh() const
 {
 	return magazineMesh;
 }
 
-ABaseAmmo* ABaseWeapon::getAmmo() const
+ABaseAmmo* UBaseWeapon::getAmmo() const
 {
 	return ammo;
 }
 
-int ABaseWeapon::getCurrentMagazineSize() const
+int UBaseWeapon::getCurrentMagazineSize() const
 {
 	return currentMagazineSize;
 }
 
-int ABaseWeapon::getMagazineSize() const
+int UBaseWeapon::getMagazineSize() const
 {
 	return magazineSize;
 }
 
-int ABaseWeapon::getRateOfFire() const
+int UBaseWeapon::getRateOfFire() const
 {
 	return rateOfFire;
 }
 
-weaponTypes ABaseWeapon::getWeaponType() const
+weaponTypes UBaseWeapon::getWeaponType() const
 {
 	return weaponType;
 }
 
-float ABaseWeapon::getFlatDamageReduction_Implementation() const
+float UBaseWeapon::getFlatDamageReduction_Implementation() const
 {
 	return 0.0f;
 }
 
-float ABaseWeapon::getPercentageDamageReduction_Implementation() const
+float UBaseWeapon::getPercentageDamageReduction_Implementation() const
 {
 	return 1.0f;
 }
