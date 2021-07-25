@@ -53,6 +53,11 @@ bool ALostConnectionCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutB
 	return WroteSomething;
 }
 
+void ALostConnectionCharacter::onRepCurrentWeapon()
+{
+	this->updateWeaponMesh();
+}
+
 void ALostConnectionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
