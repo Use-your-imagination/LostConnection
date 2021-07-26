@@ -17,14 +17,16 @@ enum class weaponTypes : uint8
 };
 
 UCLASS()
-class LOSTCONNECTION_API ABaseWeapon :
-	public AActor,
+class LOSTCONNECTION_API UBaseWeapon :
+	public UObject,
 	public IShotThrough
 {
 	GENERATED_BODY()
 
 protected:
-	virtual void Tick(float DeltaSeconds) override;
+	virtual bool IsSupportedForNetworking() const override;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -36,8 +38,10 @@ protected:
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	ABaseAmmo* ammo;
 
+	UPROPERTY(Replicated)
 	int currentMagazineSize;
 
+	UPROPERTY(Replicated)
 	int magazineSize;
 
 	int ammoCost;
@@ -51,7 +55,7 @@ protected:
 	float spreadDistance;
 
 public:
-	ABaseWeapon();
+	UBaseWeapon();
 
 	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
 
@@ -81,5 +85,5 @@ public:
 
 	float getPercentageDamageReduction_Implementation() const override;
 
-	virtual ~ABaseWeapon() = default;
+	virtual ~UBaseWeapon() = default;
 };

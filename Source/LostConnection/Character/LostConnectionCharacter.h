@@ -9,6 +9,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Engine/ActorChannel.h"
+#include "Net/DataBunch.h"
 
 #include "BaseEntities/BaseWeapon.h"
 #include "Weapons/DefaultWeapon.h"
@@ -31,23 +33,23 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onReplicateCurrentWeaponMesh, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* currentWeaponMesh;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* magazine;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	ABaseWeapon* currentWeapon;
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onRepCurrentWeapon, meta = (AllowPrivateAccess = "true"))
+	UBaseWeapon* currentWeapon;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	ABaseWeapon* firstWeaponSlot;
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
+	UBaseWeapon* firstWeaponSlot;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	ABaseWeapon* secondWeaponSlot;
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
+	UBaseWeapon* secondWeaponSlot;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	ADefaultWeapon* defaultWeaponSlot;
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
+	UDefaultWeapon* defaultWeaponSlot;
 
 private:
 	FTimerHandle shootHandle;
@@ -57,31 +59,17 @@ private:
 	bool clearTimer;
 
 protected:
-	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float health;
 
-	UPROPERTY(Category = Stats, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onReplicateCurrentHealth)
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float currentHealth;
 
-	UPROPERTY(Category = Properties, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadWrite)
 	bool isAlly;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	TArray<int32> currentAmmoHolding;
-
-private:
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	UFUNCTION()
-	void onReplicateCurrentHealth();
-
-	UFUNCTION()
-	void onReplicateCurrentWeaponMesh();
-
-private:
-	void onCurrentHealthUpdate();
-
-	void onCurrentWeaponMeshUpdate();
 
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -91,6 +79,16 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseLookUpRate;
+
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual void PostInitializeComponents() override;
+
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+	UFUNCTION()
+	void onRepCurrentWeapon();
 
 protected:
 	void BeginPlay() override;
@@ -130,29 +128,45 @@ public:
 
 	void changeToFirstWeapon();
 
+	UFUNCTION(Server, Reliable)
+	void clientChangeToFirstWeapon();
+
 	void changeToSecondWeapon();
+
+	UFUNCTION(Server, Reliable)
+	void clientChangeToSecondWeapon();
 
 	UFUNCTION(BlueprintCallable)
 	void changeToDefaultWeapon();
+
+	UFUNCTION(Server, Reliable)
+	void clientChangeToDefaultWeapon();
 
 	void updateWeaponMesh();
 
 	UFUNCTION(BlueprintCallable)
 	void shoot();
 
+	UFUNCTION(Server, Reliable)
+	void clientShoot();
+
 	UFUNCTION(BlueprintCallable)
 	void resetShoot();
 
+	UFUNCTION(Server, Reliable)
+	void clientResetShoot();
+
 	void reload();
 
-	void restoreHealths(float amount);
+	void restoreHealth(float amount);
 
 	void takeDamage(float amount);
 
 	UFUNCTION(BlueprintCallable)
 	void pickupAmmo(ammoTypes type, int32 count);
 
-	void setCurrentHealths(int currentHealth);
+	UFUNCTION(Server, Reliable)
+	void setCurrentHealth(int newCurrentHealth);
 
 	/** Returns CameraOffset subobject **/
 	USpringArmComponent* GetCameraOffset() const;
@@ -161,10 +175,10 @@ public:
 	UCameraComponent* GetFollowCamera() const;
 
 	UFUNCTION(BlueprintCallable)
-	float getHealths() const;
+	float getHealth() const;
 
 	UFUNCTION(BlueprintCallable)
-	float getCurrentHealths() const;
+	float getCurrentHealth() const;
 
 	UFUNCTION(BlueprintCallable)
 	bool getIsAlly() const;

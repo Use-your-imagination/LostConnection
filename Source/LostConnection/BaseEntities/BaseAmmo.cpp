@@ -14,11 +14,11 @@ void ABaseAmmo::Tick(float DeltaSeconds)
 
 void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (IsPendingKill() || Cast<ABaseAmmo>(OtherActor) || Cast<ABaseWeapon>(OtherActor))
+	if (IsPendingKill() || Cast<ABaseAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor))
 	{
 		return;
 	}
-
+	
 	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
 	IShotThrough* shotThrough = Cast<IShotThrough>(OtherActor);
 
@@ -62,7 +62,7 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	}
 }
 
-void ABaseAmmo::endOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void ABaseAmmo::endOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (IsPendingKill())
 	{
@@ -85,7 +85,6 @@ ABaseAmmo::ABaseAmmo()
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 	ammoType = ammoTypes::large;
 	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerSystemFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'"));
-	bReplicates = true;
 
 	SetRootComponent(mesh);
 

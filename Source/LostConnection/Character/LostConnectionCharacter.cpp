@@ -16,43 +16,58 @@ void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(ALostConnectionCharacter, health);
+
 	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
 
-	DOREPLIFETIME(ALostConnectionCharacter, currentWeaponMesh);
+	DOREPLIFETIME(ALostConnectionCharacter, isAlly);
+
+	DOREPLIFETIME(ALostConnectionCharacter, currentWeapon);
+
+	DOREPLIFETIME(ALostConnectionCharacter, firstWeaponSlot);
+
+	DOREPLIFETIME(ALostConnectionCharacter, secondWeaponSlot);
+
+	DOREPLIFETIME(ALostConnectionCharacter, defaultWeaponSlot);
 }
 
-void ALostConnectionCharacter::onReplicateCurrentHealth()
+void ALostConnectionCharacter::PostInitializeComponents()
 {
-	this->onCurrentHealthUpdate();
-}
+	Super::PostInitializeComponents();
 
-void ALostConnectionCharacter::onReplicateCurrentWeaponMesh()
-{
-	this->onCurrentWeaponMeshUpdate();
-}
-
-void ALostConnectionCharacter::onCurrentHealthUpdate()
-{
-	if (IsLocallyControlled())
+	if (HasAuthority())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(L"%f", currentHealth));
+		defaultWeaponSlot = NewObject<UDefaultWeapon>(this);
 	}
 }
 
-void ALostConnectionCharacter::onCurrentWeaponMeshUpdate()
+bool ALostConnectionCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
-	
+	bool WroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	if (defaultWeaponSlot)
+	{
+		WroteSomething |= Channel->ReplicateSubobject(defaultWeaponSlot, *Bunch, *RepFlags);
+	}
+
+	return WroteSomething;
+}
+
+void ALostConnectionCharacter::onRepCurrentWeapon()
+{
+	this->updateWeaponMesh();
 }
 
 void ALostConnectionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	defaultWeaponSlot = NewObject<ADefaultWeapon>();
-
 	this->changeToDefaultWeapon();
 
-	isAlly = true;
+	if (IsLocallyControlled())
+	{
+		isAlly = false;
+	}
 }
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
@@ -115,18 +130,37 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
+
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALostConnectionCharacter::sprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALostConnectionCharacter::run);
 
-	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
-	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
-	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
+	if (HasAuthority())
+	{
+		PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
+		PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
+		PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
+	}
+	else
+	{
+		PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToFirstWeapon);
+		PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToSecondWeapon);
+		PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToDefaultWeapon);
+	}
 
-	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
-	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
+	if (HasAuthority())
+	{
+		PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
+		PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
+	}
+	else
+	{
+		PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::clientShoot);
+		PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::clientResetShoot);
+	}
+
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALostConnectionCharacter::reload);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALostConnectionCharacter::MoveForward);
@@ -156,8 +190,9 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	currentHealth = health;
 	isAlly = true;
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
-	shootRemainingTime = 0.0f; 
+	shootRemainingTime = 0.0f;
 	clearTimer = false;
+	NetUpdateFrequency = 20;
 
 	currentAmmoHolding.Reserve(4);
 
@@ -204,32 +239,54 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 
 	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
 	currentWeaponMesh->SetupAttachment(mesh, "weapon_socket");
-	currentWeaponMesh->SetIsReplicated(true);
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
-	magazine->SetIsReplicated(true);
 }
 
 void ALostConnectionCharacter::changeToFirstWeapon()
 {
-	currentWeapon = firstWeaponSlot;
+	if (HasAuthority())
+	{
+		currentWeapon = firstWeaponSlot;
+	}
 
 	this->updateWeaponMesh();
+}
+
+void ALostConnectionCharacter::clientChangeToFirstWeapon_Implementation()
+{
+	this->changeToFirstWeapon();
 }
 
 void ALostConnectionCharacter::changeToSecondWeapon()
 {
-	currentWeapon = secondWeaponSlot;
+	if (HasAuthority())
+	{
+		currentWeapon = secondWeaponSlot;
+	}
 
 	this->updateWeaponMesh();
 }
 
+void ALostConnectionCharacter::clientChangeToSecondWeapon_Implementation()
+{
+	this->changeToSecondWeapon();
+}
+
 void ALostConnectionCharacter::changeToDefaultWeapon()
 {
-	currentWeapon = defaultWeaponSlot;
+	if (HasAuthority())
+	{
+		currentWeapon = defaultWeaponSlot;
+	}
 
 	this->updateWeaponMesh();
+}
+
+void ALostConnectionCharacter::clientChangeToDefaultWeapon_Implementation()
+{
+	this->changeToDefaultWeapon();
 }
 
 void ALostConnectionCharacter::updateWeaponMesh()
@@ -250,12 +307,15 @@ void ALostConnectionCharacter::updateWeaponMesh()
 
 		currentWeaponMesh->SetSkeletalMesh(nullptr);
 	}
-
-	this->onCurrentWeaponMeshUpdate();
 }
 
 void ALostConnectionCharacter::shoot()
 {
+	if (GetLocalRole() != ENetRole::ROLE_Authority)
+	{
+		return;
+	}
+
 	if (currentWeapon)
 	{
 		UWorld* world = GetWorld();
@@ -279,13 +339,13 @@ void ALostConnectionCharacter::shoot()
 					}
 
 					if (clearTimer)
-					{ 
+					{
 						clearTimer = false; manager.ClearTimer(shootHandle);
 
 						return;
 					}
-					
-					currentWeapon->shoot(currentWeaponMesh, this); 
+
+					currentWeapon->shoot(currentWeaponMesh, this);
 				});
 
 			manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
@@ -295,8 +355,18 @@ void ALostConnectionCharacter::shoot()
 	}
 }
 
+void ALostConnectionCharacter::clientShoot_Implementation()
+{
+	this->shoot();
+}
+
 void ALostConnectionCharacter::resetShoot()
 {
+	if (GetLocalRole() != ENetRole::ROLE_Authority)
+	{
+		return;
+	}
+
 	UWorld* world = GetWorld();
 
 	if (world)
@@ -310,6 +380,11 @@ void ALostConnectionCharacter::resetShoot()
 
 		world->GetTimerManager().ClearTimer(shootHandle);
 	}
+}
+
+void ALostConnectionCharacter::clientResetShoot_Implementation()
+{
+	this->resetShoot();
 }
 
 void ALostConnectionCharacter::reload()
@@ -346,21 +421,25 @@ void ALostConnectionCharacter::reload()
 	}
 }
 
-void ALostConnectionCharacter::restoreHealths(float amount)
+void ALostConnectionCharacter::restoreHealth(float amount)
 {
-	currentHealth += amount;
+	float tem = this->getCurrentHealth();
 
-	if (currentHealth > health)
+	tem += amount;
+
+	if (tem > this->getHealth())
 	{
-		currentHealth = health;
+		this->setCurrentHealth(this->getHealth());
 	}
-
-	this->onCurrentHealthUpdate();
+	else
+	{
+		this->setCurrentHealth(tem);
+	}
 }
 
 void ALostConnectionCharacter::takeDamage(float amount)
 {
-	currentHealth -= amount;
+	this->setCurrentHealth(this->getCurrentHealth() - amount);
 }
 
 void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
@@ -368,19 +447,17 @@ void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
 	currentAmmoHolding[static_cast<size_t>(type)] += count;
 }
 
-void ALostConnectionCharacter::setCurrentHealths(int currentHealth)
+void ALostConnectionCharacter::setCurrentHealth_Implementation(int newCurrentHealth)
 {
-	this->currentHealth = currentHealth;
-
-	this->onCurrentHealthUpdate();
+	currentHealth = newCurrentHealth;
 }
 
-float ALostConnectionCharacter::getHealths() const
+float ALostConnectionCharacter::getHealth() const
 {
 	return health;
 }
 
-float ALostConnectionCharacter::getCurrentHealths() const
+float ALostConnectionCharacter::getCurrentHealth() const
 {
 	return currentHealth;
 }
