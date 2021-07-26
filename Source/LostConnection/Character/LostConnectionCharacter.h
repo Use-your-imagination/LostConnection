@@ -68,7 +68,7 @@ protected:
 	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadWrite)
 	bool isAlly;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> currentAmmoHolding;
 
 public:

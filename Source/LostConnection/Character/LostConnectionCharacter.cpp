@@ -63,11 +63,6 @@ void ALostConnectionCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	this->changeToDefaultWeapon();
-
-	if (IsLocallyControlled())
-	{
-		isAlly = false;
-	}
 }
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
