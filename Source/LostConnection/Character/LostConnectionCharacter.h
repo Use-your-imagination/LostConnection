@@ -119,9 +119,14 @@ protected:
 	// End of APawn interface
 
 private:
+	UFUNCTION(Server, Unreliable)
 	void sprint();
 
+	UFUNCTION(Server, Unreliable)
 	void run();
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void changeMaxSpeed(float speed);
 
 	UFUNCTION(NetMulticast, Reliable)
 	void reloadAnimationMulticast();

@@ -150,14 +150,19 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ALostConnectionCharacter::LookUpAtRate);
 }
 
-void ALostConnectionCharacter::sprint()
+void ALostConnectionCharacter::sprint_Implementation()
 {
-	GetCharacterMovement()->MaxWalkSpeed = 575.0f;
+	this->changeMaxSpeed(575.0f);
 }
 
-void ALostConnectionCharacter::run()
+void ALostConnectionCharacter::run_Implementation()
 {
-	GetCharacterMovement()->MaxWalkSpeed = 450.0f;
+	this->changeMaxSpeed(450.0f);
+}
+
+void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
 void ALostConnectionCharacter::reloadAnimationMulticast_Implementation()
