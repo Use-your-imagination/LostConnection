@@ -123,6 +123,15 @@ private:
 
 	void run();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void reloadAnimationMulticast();
+
+protected:
+	void reloadGameplay();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void reloadAnimation();
+
 public:
 	ALostConnectionCharacter();
 

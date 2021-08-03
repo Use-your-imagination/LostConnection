@@ -160,6 +160,50 @@ void ALostConnectionCharacter::run()
 	GetCharacterMovement()->MaxWalkSpeed = 450.0f;
 }
 
+void ALostConnectionCharacter::reloadAnimationMulticast_Implementation()
+{
+	this->reloadAnimation();
+}
+
+void ALostConnectionCharacter::reloadGameplay()
+{
+	if (!currentWeapon)
+	{
+		return;
+	}
+
+	int currentMagazineSize = currentWeapon->getCurrentMagazineSize();
+	int magazineSize = currentWeapon->getMagazineSize();
+
+	if (currentMagazineSize == magazineSize)
+	{
+		return;
+	}
+
+	int32& ammoCount = currentAmmoHolding[static_cast<size_t>(currentWeapon->getAmmo()->getAmmoType())];
+
+	if (!ammoCount)
+	{
+		return;
+	}
+
+	int reloadedAmmoRequire = min(magazineSize - currentMagazineSize, ammoCount);
+
+	// TODO: start reload animation
+
+	currentWeapon->setCurrentMagazineSize(currentMagazineSize + reloadedAmmoRequire);
+
+	if (ammoCount != 9999)
+	{
+		ammoCount -= reloadedAmmoRequire;
+	}
+}
+
+void ALostConnectionCharacter::reloadAnimation_Implementation()
+{
+
+}
+
 ALostConnectionCharacter::ALostConnectionCharacter()
 {
 	firstWeaponSlot = nullptr;
@@ -323,36 +367,9 @@ void ALostConnectionCharacter::resetShoot_Implementation()
 
 void ALostConnectionCharacter::reload_Implementation()
 {
-	if (!currentWeapon)
-	{
-		return;
-	}
+	this->reloadAnimationMulticast();
 
-	int currentMagazineSize = currentWeapon->getCurrentMagazineSize();
-	int magazineSize = currentWeapon->getMagazineSize();
-
-	if (currentMagazineSize == magazineSize)
-	{
-		return;
-	}
-
-	int32& ammoCount = currentAmmoHolding[static_cast<size_t>(currentWeapon->getAmmo()->getAmmoType())];
-
-	if (!ammoCount)
-	{
-		return;
-	}
-
-	int reloadedAmmoRequire = min(magazineSize - currentMagazineSize, ammoCount);
-
-	// TODO: start reload animation
-
-	currentWeapon->setCurrentMagazineSize(currentMagazineSize + reloadedAmmoRequire);
-
-	if (ammoCount != 9999)
-	{
-		ammoCount -= reloadedAmmoRequire;
-	}
+	this->reloadGameplay();
 }
 
 void ALostConnectionCharacter::restoreHealth(float amount)
