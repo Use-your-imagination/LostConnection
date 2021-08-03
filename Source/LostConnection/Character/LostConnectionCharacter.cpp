@@ -132,29 +132,12 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALostConnectionCharacter::sprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALostConnectionCharacter::run);
 
-	if (HasAuthority())
-	{
-		PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
-		PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
-		PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
-	}
-	else
-	{
-		PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToFirstWeapon);
-		PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToSecondWeapon);
-		PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::clientChangeToDefaultWeapon);
-	}
+	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
+	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
+	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
 
-	if (HasAuthority())
-	{
-		PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
-		PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
-	}
-	else
-	{
-		PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::clientShoot);
-		PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::clientResetShoot);
-	}
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
+	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
 
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALostConnectionCharacter::reload);
 
@@ -239,49 +222,25 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	magazine->SetupAttachment(currentWeaponMesh);
 }
 
-void ALostConnectionCharacter::changeToFirstWeapon()
+void ALostConnectionCharacter::changeToFirstWeapon_Implementation()
 {
-	if (HasAuthority())
-	{
-		currentWeapon = firstWeaponSlot;
-	}
+	currentWeapon = firstWeaponSlot;
 
 	this->updateWeaponMesh();
 }
 
-void ALostConnectionCharacter::clientChangeToFirstWeapon_Implementation()
+void ALostConnectionCharacter::changeToSecondWeapon_Implementation()
 {
-	this->changeToFirstWeapon();
-}
-
-void ALostConnectionCharacter::changeToSecondWeapon()
-{
-	if (HasAuthority())
-	{
-		currentWeapon = secondWeaponSlot;
-	}
+	currentWeapon = secondWeaponSlot;
 
 	this->updateWeaponMesh();
 }
 
-void ALostConnectionCharacter::clientChangeToSecondWeapon_Implementation()
+void ALostConnectionCharacter::changeToDefaultWeapon_Implementation()
 {
-	this->changeToSecondWeapon();
-}
-
-void ALostConnectionCharacter::changeToDefaultWeapon()
-{
-	if (HasAuthority())
-	{
-		currentWeapon = defaultWeaponSlot;
-	}
+	currentWeapon = defaultWeaponSlot;
 
 	this->updateWeaponMesh();
-}
-
-void ALostConnectionCharacter::clientChangeToDefaultWeapon_Implementation()
-{
-	this->changeToDefaultWeapon();
 }
 
 void ALostConnectionCharacter::updateWeaponMesh()
@@ -304,13 +263,8 @@ void ALostConnectionCharacter::updateWeaponMesh()
 	}
 }
 
-void ALostConnectionCharacter::shoot()
+void ALostConnectionCharacter::shoot_Implementation()
 {
-	if (GetLocalRole() != ENetRole::ROLE_Authority)
-	{
-		return;
-	}
-
 	if (currentWeapon)
 	{
 		UWorld* world = GetWorld();
@@ -350,18 +304,8 @@ void ALostConnectionCharacter::shoot()
 	}
 }
 
-void ALostConnectionCharacter::clientShoot_Implementation()
+void ALostConnectionCharacter::resetShoot_Implementation()
 {
-	this->shoot();
-}
-
-void ALostConnectionCharacter::resetShoot()
-{
-	if (GetLocalRole() != ENetRole::ROLE_Authority)
-	{
-		return;
-	}
-
 	UWorld* world = GetWorld();
 
 	if (world)
@@ -377,12 +321,7 @@ void ALostConnectionCharacter::resetShoot()
 	}
 }
 
-void ALostConnectionCharacter::clientResetShoot_Implementation()
-{
-	this->resetShoot();
-}
-
-void ALostConnectionCharacter::reload()
+void ALostConnectionCharacter::reload_Implementation()
 {
 	if (!currentWeapon)
 	{
@@ -445,6 +384,11 @@ void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
 void ALostConnectionCharacter::setCurrentHealth_Implementation(int newCurrentHealth)
 {
 	currentHealth = newCurrentHealth;
+}
+
+void ALostConnectionCharacter::setIsAlly_Implementation(bool newIsAlly)
+{
+	isAlly = newIsAlly;
 }
 
 float ALostConnectionCharacter::getHealth() const

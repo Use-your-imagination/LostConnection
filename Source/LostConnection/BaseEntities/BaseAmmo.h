@@ -30,10 +30,15 @@ class LOSTCONNECTION_API ABaseAmmo :
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 private:
 	FTimerHandle launchHandle;
-	bool isAlly;
 	ACharacter* lastTarget;
+
+	UPROPERTY(Replicated)
+	bool isAlly;
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;

@@ -7,6 +7,13 @@
 
 #pragma warning(disable: 4458)
 
+void ABaseAmmo::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABaseAmmo, isAlly);
+}
+
 void ABaseAmmo::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -53,12 +60,22 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		MarkPendingKill();
 
+		mesh->SetEnableGravity(true);
+
 		return;
 	}
 
 	if (damage <= 0.0f)
 	{
+		mesh->SetStaticMesh(brokenAmmoMesh);
+
+		mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+		tracer->Deactivate();
+
 		MarkPendingKill();
+
+		mesh->SetEnableGravity(true);
 	}
 }
 
@@ -89,7 +106,6 @@ ABaseAmmo::ABaseAmmo()
 	SetRootComponent(mesh);
 
 	mesh->SetSimulatePhysics(true);
-	mesh->SetEnableGravity(true);
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
