@@ -1,0 +1,49 @@
+{
+  "projectName": "LostConnection",
+  "projectVersion": "0.0.2.0",
+  "Map": {
+    "type": "category",
+    "Design": {
+      "type": "item",
+      "notes": [
+        "Still WIP map"
+      ]
+    }
+  },
+  "Game": {
+    "type": "category",
+    "Icon": {
+      "type": "item",
+      "notes": [
+        "Game icon"
+      ]
+    }
+  },
+  "AI": {
+    "type": "category",
+    "Enemy AI": {
+      "type": "item",
+      "notes": [
+        "Some AI tweaks"
+      ]
+    }
+  },
+  "User interface": {
+    "type": "category",
+    "Menu": {
+      "type": "item",
+      "notes": [
+        "ESC menu, just a placeholder for now"
+      ]
+    }
+  },
+  "Gameplay": {
+    "type": "category",
+    "Scope": {
+      "type": "item",
+      "notes": [
+        "Some scope tweaks (animation mostly)"
+      ]
+    }
+  }
+}

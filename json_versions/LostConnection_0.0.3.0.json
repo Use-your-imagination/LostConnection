@@ -1,0 +1,40 @@
+{
+  "projectName": "LostConnection",
+  "projectVersion": "0.0.3.0",
+  "Gameplay": {
+    "type": "category",
+    "Parkour": {
+      "type": "item",
+      "notes": [
+        "Implemented base glitchy parkour"
+      ]
+    }
+  },
+  "Multiplayer": {
+    "type": "category",
+    "Local multiplayer": {
+      "type": "item",
+      "notes": [
+        "Added inaccessible multiplayer"
+      ]
+    }
+  },
+  "User interface": {
+    "type": "category",
+    "Localization": {
+      "type": "item",
+      "notes": [
+        "Added localization eng-ru"
+      ]
+    }
+  },
+  "Map": {
+    "type": "category",
+    "Lighting": {
+      "type": "item",
+      "notes": [
+        "Lighted up a bit"
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "projectName": "LostConnection",
+  "projectVersion": "0.0.1.0",
+  "Game": {
+    "type": "category",
+    "Demo version": {
+      "type": "item",
+      "notes": [
+        "Added base TPS functionality"
+      ]
+    }
+  }
+}

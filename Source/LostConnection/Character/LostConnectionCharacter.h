@@ -119,43 +119,45 @@ protected:
 	// End of APawn interface
 
 private:
+	UFUNCTION(Server, Unreliable)
 	void sprint();
 
+	UFUNCTION(Server, Unreliable)
 	void run();
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void changeMaxSpeed(float speed);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void reloadAnimationMulticast();
+
+protected:
+	void reloadGameplay();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void reloadAnimation();
 
 public:
 	ALostConnectionCharacter();
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void changeToFirstWeapon();
 
-	UFUNCTION(Server, Reliable)
-	void clientChangeToFirstWeapon();
-
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void changeToSecondWeapon();
 
-	UFUNCTION(Server, Reliable)
-	void clientChangeToSecondWeapon();
-
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void changeToDefaultWeapon();
-
-	UFUNCTION(Server, Reliable)
-	void clientChangeToDefaultWeapon();
 
 	void updateWeaponMesh();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void shoot();
 
-	UFUNCTION(Server, Reliable)
-	void clientShoot();
-
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void resetShoot();
 
-	UFUNCTION(Server, Reliable)
-	void clientResetShoot();
-
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void reload();
 
 	void restoreHealth(float amount);
@@ -167,6 +169,9 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void setCurrentHealth(int newCurrentHealth);
+
+	UFUNCTION(Server, Reliable)
+	void setIsAlly(bool newIsAlly);
 
 	/** Returns CameraOffset subobject **/
 	USpringArmComponent* GetCameraOffset() const;
