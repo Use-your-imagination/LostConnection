@@ -1,0 +1,13 @@
+{
+  "projectName": "LostConnection",
+  "projectVersion": "0.0.4.0",
+  "Assets": {
+    "type": "category",
+    "Character mesh": {
+      "type": "item",
+      "notes": [
+        "Created new character mesh"
+      ]
+    }
+  }
+}
