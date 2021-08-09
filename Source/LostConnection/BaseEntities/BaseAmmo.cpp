@@ -27,9 +27,9 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	}
 	
 	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
-	IShotThrough* shotThrough = Cast<IShotThrough>(OtherActor);
+	bool shotThrough = OtherActor->Implements<UShotThrough>();
 
-	if (lastTarget == lostCharacter)
+	if (lostCharacter && lastTarget == lostCharacter)
 	{
 		return;
 	}
@@ -43,12 +43,12 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 	if (shotThrough)
 	{
-		if (lostCharacter->getIsAlly())
+		if (lostCharacter && isAlly == lostCharacter->getIsAlly())
 		{
 			return;
 		}
 
-		damage = damage * shotThrough->getPercentageDamageReduction_Implementation() - shotThrough->getFlatDamageReduction_Implementation();
+		damage = damage * (1.0f - IShotThrough::Execute_getPercentageDamageReduction(OtherActor) * 0.01f) - IShotThrough::Execute_getFlatDamageReduction(OtherActor);
 	}
 	else
 	{
@@ -106,6 +106,7 @@ ABaseAmmo::ABaseAmmo()
 	SetRootComponent(mesh);
 
 	mesh->SetSimulatePhysics(true);
+	mesh->SetEnableGravity(false);
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
@@ -179,16 +180,6 @@ float ABaseAmmo::getSpeed() const
 ammoTypes ABaseAmmo::getAmmoType() const
 {
 	return ammoType;
-}
-
-float ABaseAmmo::getFlatDamageReduction_Implementation() const
-{
-	return 0.0;
-}
-
-float ABaseAmmo::getPercentageDamageReduction_Implementation() const
-{
-	return 1.0;
 }
 
 ABaseAmmo::~ABaseAmmo()

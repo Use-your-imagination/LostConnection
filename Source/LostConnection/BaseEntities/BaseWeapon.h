@@ -18,8 +18,7 @@ enum class weaponTypes : uint8
 
 UCLASS()
 class LOSTCONNECTION_API UBaseWeapon :
-	public UObject,
-	public IShotThrough
+	public UObject
 {
 	GENERATED_BODY()
 
@@ -80,10 +79,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual weaponTypes getWeaponType() const final;
-
-	float getFlatDamageReduction_Implementation() const override;
-
-	float getPercentageDamageReduction_Implementation() const override;
 
 	virtual ~UBaseWeapon() = default;
 };

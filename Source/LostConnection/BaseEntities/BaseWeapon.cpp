@@ -120,13 +120,3 @@ weaponTypes UBaseWeapon::getWeaponType() const
 {
 	return weaponType;
 }
-
-float UBaseWeapon::getFlatDamageReduction_Implementation() const
-{
-	return 0.0f;
-}
-
-float UBaseWeapon::getPercentageDamageReduction_Implementation() const
-{
-	return 1.0f;
-}

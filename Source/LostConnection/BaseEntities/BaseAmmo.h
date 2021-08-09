@@ -25,8 +25,7 @@ enum class ammoTypes : uint8
 
 UCLASS()
 class LOSTCONNECTION_API ABaseAmmo :
-	public APawn,
-	public IShotThrough
+	public APawn
 {
 	GENERATED_BODY()
 
@@ -94,10 +93,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual ammoTypes getAmmoType() const final;
-
-	float getFlatDamageReduction_Implementation() const override;
-
-	float getPercentageDamageReduction_Implementation() const override;
 
 	virtual ~ABaseAmmo();
 };

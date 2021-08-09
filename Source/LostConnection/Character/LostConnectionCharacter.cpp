@@ -445,5 +445,5 @@ float ALostConnectionCharacter::getFlatDamageReduction_Implementation() const
 
 float ALostConnectionCharacter::getPercentageDamageReduction_Implementation() const
 {
-	return 0.25f;
+	return 25.0f;
 }
