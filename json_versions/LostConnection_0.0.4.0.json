@@ -25,8 +25,8 @@
     "Main Menu": {
       "type": "item",
       "notes": [
-        "Added "Createnewgame" option for creating multiplayer session",
-        "Added "Connecttogame" option for joining to sessions"
+        "Added \"Create new game\" option for creating multiplayer session",
+        "Added \"Connect to game\" option for joining to sessions"
       ]
     }
   }
