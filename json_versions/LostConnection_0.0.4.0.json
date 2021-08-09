@@ -9,5 +9,25 @@
         "Created new character mesh"
       ]
     }
+  },
+  "Multiplayer": {
+    "type": "category",
+    "Sessions": {
+      "type": "item",
+      "notes": [
+        "Added first version of sessions",
+        "Now you can create and join to other local games"
+      ]
+    }
+  },
+  "User Interface": {
+    "type": "category",
+    "Main Menu": {
+      "type": "item",
+      "notes": [
+        "Added "Createnewgame" option for creating multiplayer session",
+        "Added "Connecttogame" option for joining to sessions"
+      ]
+    }
   }
 }
