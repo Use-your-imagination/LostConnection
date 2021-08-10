@@ -15,13 +15,19 @@
 #include "BaseEntities/BaseWeapon.h"
 #include "Weapons/DefaultWeapon.h"
 #include "Interfaces/ShotThrough.h"
+#include "Interfaces/Gameplay/Abilities.h"
+#include "Interfaces/Gameplay/MovementActions.h"
+#include "Interfaces/Gameplay/AllySelection.h"
 
 #include "LostConnectionCharacter.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API ALostConnectionCharacter :
 	public ACharacter,
-	public IShotThrough
+	public IShotThrough,
+	public IAbilities,
+	public IMovementActions,
+	public IAllySelection
 {
 	GENERATED_BODY()
 
@@ -193,6 +199,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool isWeaponEquipped() const;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void changeWeapon();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void action();
 
 	USkeletalMeshComponent* getCurrentWeaponMesh() const;
 

@@ -433,6 +433,16 @@ int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
 	return currentAmmoHolding[static_cast<size_t>(type)];
 }
 
+void ALostConnectionCharacter::changeWeapon_Implementation()
+{
+
+}
+
+void ALostConnectionCharacter::action_Implementation()
+{
+
+}
+
 USkeletalMeshComponent* ALostConnectionCharacter::getCurrentWeaponMesh() const
 {
 	return currentWeaponMesh;
