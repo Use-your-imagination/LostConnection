@@ -5,8 +5,6 @@
 #include "GameFramework/Pawn.h"
 #include "NiagaraComponent.h"
 
-#include "Interfaces/ShotThrough.h"
-
 #include "BaseAmmo.generated.h"
 
 #define GET_STATIC_CLASS_OVERRIDE(className) inline UClass* getStaticClass() const override \

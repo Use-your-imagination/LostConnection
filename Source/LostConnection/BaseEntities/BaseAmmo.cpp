@@ -2,8 +2,9 @@
 
 #include "UObject/ConstructorHelpers.h"
 
-#include "Character/LostConnectionCharacter.h"
 #include "BaseWeapon.h"
+#include "Character/LostConnectionCharacter.h"
+#include "Interfaces/PhysicalObjects/ShotThrough.h"
 
 #pragma warning(disable: 4458)
 

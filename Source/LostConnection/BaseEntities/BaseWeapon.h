@@ -5,7 +5,6 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
 #include "BaseAmmo.h"
-#include "Interfaces/ShotThrough.h"
 
 #include "BaseWeapon.generated.h"
 

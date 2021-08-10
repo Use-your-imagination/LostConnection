@@ -33,8 +33,14 @@ public:
 	void sprintAction();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void crouchAction();
+	void pressCrouchAction();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void jumpAction();
+	void releaseCrouchAction();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressJumpAction();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseJumpAction();
 };

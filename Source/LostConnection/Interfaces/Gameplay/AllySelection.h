@@ -27,14 +27,26 @@ public:
 	IAllySelection() = default;
 
 	UFUNCTION(BlueprintNativeEvent)
-	void selectFirstPlayer();
+	void pressSelectFirstPlayer();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void selectSecondPlayer();
+	void releaseSelectFirstPlayer();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void selectThirdPlayer();
+	void pressSelectSecondPlayer();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void selectFourthPlayer();
+	void releaseSelectSecondPlayer();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressSelectThirdPlayer();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseSelectThirdPlayer();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressSelectFourthPlayer();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseSelectFourthPlayer();
 };

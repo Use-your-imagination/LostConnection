@@ -126,18 +126,54 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ALostConnectionCharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ALostConnectionCharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALostConnectionCharacter::sprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALostConnectionCharacter::run);
 
-	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToFirstWeapon);
-	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToSecondWeapon);
-	PlayerInputComponent->BindAction("SelectDefaultWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeToDefaultWeapon);
+	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ALostConnectionCharacter::pressCrouchAction);
+	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &ALostConnectionCharacter::releaseCrouchAction);
 
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
+
+	PlayerInputComponent->BindAction("Alternative", IE_Pressed, this, &ALostConnectionCharacter::pressAlternative);
+	PlayerInputComponent->BindAction("Alternative", IE_Released, this, &ALostConnectionCharacter::releaseAlternative);
+
+	PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, this, &ALostConnectionCharacter::pressChangeWeapon);
+	PlayerInputComponent->BindAction("ChangeWeapon", IE_Released, this, &ALostConnectionCharacter::releaseChangeWeapon);
+
+	PlayerInputComponent->BindAction("Action", IE_Pressed, this, &ALostConnectionCharacter::pressAction);
+	PlayerInputComponent->BindAction("Action", IE_Released, this, &ALostConnectionCharacter::releaseAction);
+
+#pragma region Abilities
+	PlayerInputComponent->BindAction("FirstAbility", IE_Pressed, this, &ALostConnectionCharacter::firstAbility);
+	PlayerInputComponent->BindAction("FirstAbility", IE_Released, this, &ALostConnectionCharacter::releaseFirstAbility);
+
+	PlayerInputComponent->BindAction("SecondAbility", IE_Pressed, this, &ALostConnectionCharacter::secondAbility);
+	PlayerInputComponent->BindAction("SecondAbility", IE_Released, this, &ALostConnectionCharacter::releaseSecondAbility);
+
+	PlayerInputComponent->BindAction("ThirdAbility", IE_Pressed, this, &ALostConnectionCharacter::thirdAbility);
+	PlayerInputComponent->BindAction("ThirdAbility", IE_Released, this, &ALostConnectionCharacter::releaseThirdAbility);
+
+	PlayerInputComponent->BindAction("UltimateAbility", IE_Pressed, this, &ALostConnectionCharacter::ultimateAbility);
+	PlayerInputComponent->BindAction("UltimateAbility", IE_Released, this, &ALostConnectionCharacter::releaseUltimateAbility);
+#pragma endregion
+
+#pragma region PlayerSelection
+	PlayerInputComponent->BindAction("SelectFirstPlayer", IE_Pressed, this, &ALostConnectionCharacter::pressSelectFirstPlayer);
+	PlayerInputComponent->BindAction("SelectFirstPlayer", IE_Released, this, &ALostConnectionCharacter::releaseSelectFirstPlayer);
+
+	PlayerInputComponent->BindAction("SelectSecondPlayer", IE_Pressed, this, &ALostConnectionCharacter::pressSelectSecondPlayer);
+	PlayerInputComponent->BindAction("SelectSecondPlayer", IE_Released, this, &ALostConnectionCharacter::releaseSelectSecondPlayer);
+
+	PlayerInputComponent->BindAction("SelectThirdPlayer", IE_Pressed, this, &ALostConnectionCharacter::pressSelectThirdPlayer);
+	PlayerInputComponent->BindAction("SelectThirdPlayer", IE_Released, this, &ALostConnectionCharacter::releaseSelectThirdPlayer);
+
+	PlayerInputComponent->BindAction("SelectFourthPlayer", IE_Pressed, this, &ALostConnectionCharacter::pressSelectFourthPlayer);
+	PlayerInputComponent->BindAction("SelectFourthPlayer", IE_Released, this, &ALostConnectionCharacter::releaseSelectFourthPlayer);
+#pragma endregion
 
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALostConnectionCharacter::reload);
 
@@ -150,14 +186,32 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ALostConnectionCharacter::LookUpAtRate);
 }
 
+void ALostConnectionCharacter::Jump()
+{
+	Super::Jump();
+
+	this->pressJumpAction();
+}
+
+void ALostConnectionCharacter::StopJumping()
+{
+	Super::StopJumping();
+
+	this->releaseJumpAction();
+}
+
 void ALostConnectionCharacter::sprint_Implementation()
 {
 	this->changeMaxSpeed(575.0f);
+
+	this->sprintAction();
 }
 
 void ALostConnectionCharacter::run_Implementation()
 {
 	this->changeMaxSpeed(450.0f);
+
+	this->runAction();
 }
 
 void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)
@@ -168,6 +222,26 @@ void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)
 void ALostConnectionCharacter::reloadAnimationMulticast_Implementation()
 {
 	this->reloadAnimation();
+}
+
+void ALostConnectionCharacter::pressAlternative_Implementation()
+{
+
+}
+
+void ALostConnectionCharacter::releaseAlternative_Implementation()
+{
+
+}
+
+void ALostConnectionCharacter::pressShoot_Implementation()
+{
+
+}
+
+void ALostConnectionCharacter::releaseShoot_Implementation()
+{
+
 }
 
 void ALostConnectionCharacter::reloadGameplay()
@@ -349,6 +423,8 @@ void ALostConnectionCharacter::shoot_Implementation()
 			manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
 
 			shootRemainingTime = 1.0f / static_cast<float>(currentWeapon->getRateOfFire());
+
+			this->pressShoot();
 		}
 	}
 }
@@ -367,6 +443,8 @@ void ALostConnectionCharacter::resetShoot_Implementation()
 		}
 
 		world->GetTimerManager().ClearTimer(shootHandle);
+
+		this->releaseShoot();
 	}
 }
 
@@ -433,12 +511,42 @@ int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
 	return currentAmmoHolding[static_cast<size_t>(type)];
 }
 
-void ALostConnectionCharacter::changeWeapon_Implementation()
+void ALostConnectionCharacter::firstAbility_Implementation()
+{
+	this->pressFirstAbility();
+}
+
+void ALostConnectionCharacter::secondAbility_Implementation()
+{
+	this->pressSecondAbility();
+}
+
+void ALostConnectionCharacter::thirdAbility_Implementation()
+{
+	this->pressThirdAbility();
+}
+
+void ALostConnectionCharacter::ultimateAbility_Implementation()
+{
+	this->pressUltimateAbility();
+}
+
+void ALostConnectionCharacter::pressChangeWeapon_Implementation()
 {
 
 }
 
-void ALostConnectionCharacter::action_Implementation()
+void ALostConnectionCharacter::releaseChangeWeapon_Implementation()
+{
+
+}
+
+void ALostConnectionCharacter::pressAction_Implementation()
+{
+
+}
+
+void ALostConnectionCharacter::releaseAction_Implementation()
 {
 
 }

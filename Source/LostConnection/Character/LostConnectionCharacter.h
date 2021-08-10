@@ -14,7 +14,7 @@
 
 #include "BaseEntities/BaseWeapon.h"
 #include "Weapons/DefaultWeapon.h"
-#include "Interfaces/ShotThrough.h"
+#include "Interfaces/PhysicalObjects/ShotThrough.h"
 #include "Interfaces/Gameplay/Abilities.h"
 #include "Interfaces/Gameplay/MovementActions.h"
 #include "Interfaces/Gameplay/AllySelection.h"
@@ -125,6 +125,11 @@ protected:
 	// End of APawn interface
 
 private:
+	virtual void Jump() final override;
+
+	virtual void StopJumping() final override;
+
+private:
 	UFUNCTION(Server, Unreliable)
 	void sprint();
 
@@ -136,6 +141,19 @@ private:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void reloadAnimationMulticast();
+
+protected:
+	UFUNCTION(BlueprintNativeEvent)
+	void pressAlternative();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseAlternative();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressShoot();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseShoot();
 
 protected:
 	void reloadGameplay();
@@ -200,11 +218,29 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool isWeaponEquipped() const;
 
-	UFUNCTION(BlueprintNativeEvent)
-	void changeWeapon();
+	UFUNCTION(Server, Reliable)
+	void firstAbility();
+
+	UFUNCTION(Server, Reliable)
+	void secondAbility();
+
+	UFUNCTION(Server, Reliable)
+	void thirdAbility();
+
+	UFUNCTION(Server, Reliable)
+	void ultimateAbility();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void action();
+	void pressChangeWeapon();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseChangeWeapon();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressAction();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseAction();
 
 	USkeletalMeshComponent* getCurrentWeaponMesh() const;
 

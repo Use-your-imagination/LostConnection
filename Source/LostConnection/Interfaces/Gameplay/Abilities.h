@@ -27,14 +27,26 @@ public:
 	IAbilities() = default;
 
 	UFUNCTION(BlueprintNativeEvent)
-	void firstAbility();
+	void pressFirstAbility();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void secondAbility();
+	void releaseFirstAbility();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void thirdAbility();
+	void pressSecondAbility();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void ultimateAbility();
+	void releaseSecondAbility();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressThirdAbility();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseThirdAbility();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressUltimateAbility();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseUltimateAbility();
 };
