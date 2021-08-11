@@ -58,6 +58,9 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	UDefaultWeapon* defaultWeaponSlot;
 
 private:
+	TArray<FInputActionBinding> initInterfaceInputs();
+
+private:
 	FTimerHandle shootHandle;
 
 	float shootRemainingTime;
@@ -229,6 +232,18 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void ultimateAbility();
+
+	UFUNCTION(Server, Reliable)
+	void selectFirstPlayer();
+
+	UFUNCTION(Server, Reliable)
+	void selectSecondPlayer();
+
+	UFUNCTION(Server, Reliable)
+	void selectThirdPlayer();
+
+	UFUNCTION(Server, Reliable)
+	void selectFourthPlayer();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void pressChangeWeapon();

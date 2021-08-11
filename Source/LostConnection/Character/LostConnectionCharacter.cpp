@@ -10,7 +10,55 @@
 
 #pragma warning(disable: 4458)
 
+DECLARE_DELEGATE_OneParam(FStaticInterfaceMethod, UObject*);
+
 using namespace std;
+
+TArray<FInputActionBinding> ALostConnectionCharacter::initInterfaceInputs()
+{
+	TArray<FInputActionBinding> result;
+
+	FInputActionBinding releaseFirstAbility("FirstAbility", IE_Released);
+	FInputActionBinding releaseSecondAbility("SecondAbility", IE_Released);
+	FInputActionBinding releaseThirdAbility("ThirdAbility", IE_Released);
+	FInputActionBinding releaseUltimateAbility("UltimateAbility", IE_Released);
+
+	FInputActionBinding releaseSelectFirstPlayer("SelectFirstPlayer", IE_Released);
+	FInputActionBinding releaseSelectSecondPlayer("SelectSecondPlayer", IE_Released);
+	FInputActionBinding releaseSelectThirdPlayer("SelectThirdPlayer", IE_Released);
+	FInputActionBinding releaseSelectFourthPlayer("SelectFourthPlayer", IE_Released);
+
+	FInputActionBinding pressCrouch("Crouch", IE_Pressed);
+	FInputActionBinding releaseCrouch("Crouch", IE_Released);
+
+	releaseFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseFirstAbility, this);
+	releaseSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseSecondAbility, this);
+	releaseThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseThirdAbility, this);
+	releaseUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseUltimateAbility, this);
+
+	releaseSelectFirstPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAllySelection::Execute_releaseSelectFirstPlayer, this);
+	releaseSelectSecondPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAllySelection::Execute_releaseSelectSecondPlayer, this);
+	releaseSelectThirdPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAllySelection::Execute_releaseSelectThirdPlayer, this);
+	releaseSelectFourthPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAllySelection::Execute_releaseSelectFourthPlayer, this);
+
+	pressCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_pressCrouchAction, this);
+	releaseCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_releaseCrouchAction, this);
+
+	result.Add(releaseFirstAbility);
+	result.Add(releaseSecondAbility);
+	result.Add(releaseThirdAbility);
+	result.Add(releaseUltimateAbility);
+
+	result.Add(releaseSelectFirstPlayer);
+	result.Add(releaseSelectSecondPlayer);
+	result.Add(releaseSelectThirdPlayer);
+	result.Add(releaseSelectFourthPlayer);
+
+	result.Add(pressCrouch);
+	result.Add(releaseCrouch);
+
+	return result;
+}
 
 void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -126,14 +174,18 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 
+	TArray<FInputActionBinding> inputs = this->initInterfaceInputs();
+
+	for (const auto& i : inputs)
+	{
+		PlayerInputComponent->AddActionBinding(i);
+	}
+
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ALostConnectionCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ALostConnectionCharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALostConnectionCharacter::sprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALostConnectionCharacter::run);
-
-	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ALostConnectionCharacter::pressCrouchAction);
-	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &ALostConnectionCharacter::releaseCrouchAction);
 
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
@@ -149,30 +201,22 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 #pragma region Abilities
 	PlayerInputComponent->BindAction("FirstAbility", IE_Pressed, this, &ALostConnectionCharacter::firstAbility);
-	PlayerInputComponent->BindAction("FirstAbility", IE_Released, this, &ALostConnectionCharacter::releaseFirstAbility);
 
 	PlayerInputComponent->BindAction("SecondAbility", IE_Pressed, this, &ALostConnectionCharacter::secondAbility);
-	PlayerInputComponent->BindAction("SecondAbility", IE_Released, this, &ALostConnectionCharacter::releaseSecondAbility);
 
 	PlayerInputComponent->BindAction("ThirdAbility", IE_Pressed, this, &ALostConnectionCharacter::thirdAbility);
-	PlayerInputComponent->BindAction("ThirdAbility", IE_Released, this, &ALostConnectionCharacter::releaseThirdAbility);
 
 	PlayerInputComponent->BindAction("UltimateAbility", IE_Pressed, this, &ALostConnectionCharacter::ultimateAbility);
-	PlayerInputComponent->BindAction("UltimateAbility", IE_Released, this, &ALostConnectionCharacter::releaseUltimateAbility);
 #pragma endregion
 
 #pragma region PlayerSelection
-	PlayerInputComponent->BindAction("SelectFirstPlayer", IE_Pressed, this, &ALostConnectionCharacter::pressSelectFirstPlayer);
-	PlayerInputComponent->BindAction("SelectFirstPlayer", IE_Released, this, &ALostConnectionCharacter::releaseSelectFirstPlayer);
+	PlayerInputComponent->BindAction("SelectFirstPlayer", IE_Pressed, this, &ALostConnectionCharacter::selectFirstPlayer);
 
-	PlayerInputComponent->BindAction("SelectSecondPlayer", IE_Pressed, this, &ALostConnectionCharacter::pressSelectSecondPlayer);
-	PlayerInputComponent->BindAction("SelectSecondPlayer", IE_Released, this, &ALostConnectionCharacter::releaseSelectSecondPlayer);
+	PlayerInputComponent->BindAction("SelectSecondPlayer", IE_Pressed, this, &ALostConnectionCharacter::selectSecondPlayer);
 
-	PlayerInputComponent->BindAction("SelectThirdPlayer", IE_Pressed, this, &ALostConnectionCharacter::pressSelectThirdPlayer);
-	PlayerInputComponent->BindAction("SelectThirdPlayer", IE_Released, this, &ALostConnectionCharacter::releaseSelectThirdPlayer);
+	PlayerInputComponent->BindAction("SelectThirdPlayer", IE_Pressed, this, &ALostConnectionCharacter::selectThirdPlayer);
 
-	PlayerInputComponent->BindAction("SelectFourthPlayer", IE_Pressed, this, &ALostConnectionCharacter::pressSelectFourthPlayer);
-	PlayerInputComponent->BindAction("SelectFourthPlayer", IE_Released, this, &ALostConnectionCharacter::releaseSelectFourthPlayer);
+	PlayerInputComponent->BindAction("SelectFourthPlayer", IE_Pressed, this, &ALostConnectionCharacter::selectFourthPlayer);
 #pragma endregion
 
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALostConnectionCharacter::reload);
@@ -190,28 +234,28 @@ void ALostConnectionCharacter::Jump()
 {
 	Super::Jump();
 
-	this->pressJumpAction();
+	IMovementActions::Execute_pressJumpAction(this);
 }
 
 void ALostConnectionCharacter::StopJumping()
 {
 	Super::StopJumping();
 
-	this->releaseJumpAction();
+	IMovementActions::Execute_releaseJumpAction(this);
 }
 
 void ALostConnectionCharacter::sprint_Implementation()
 {
 	this->changeMaxSpeed(575.0f);
 
-	this->sprintAction();
+	IMovementActions::Execute_sprintAction(this);
 }
 
 void ALostConnectionCharacter::run_Implementation()
 {
 	this->changeMaxSpeed(450.0f);
 
-	this->runAction();
+	IMovementActions::Execute_runAction(this);
 }
 
 void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)
@@ -513,22 +557,42 @@ int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
 
 void ALostConnectionCharacter::firstAbility_Implementation()
 {
-	this->pressFirstAbility();
+	IAbilities::Execute_pressFirstAbility(this);
 }
 
 void ALostConnectionCharacter::secondAbility_Implementation()
 {
-	this->pressSecondAbility();
+	IAbilities::Execute_pressSecondAbility(this);
 }
 
 void ALostConnectionCharacter::thirdAbility_Implementation()
 {
-	this->pressThirdAbility();
+	IAbilities::Execute_pressThirdAbility(this);
 }
 
 void ALostConnectionCharacter::ultimateAbility_Implementation()
 {
-	this->pressUltimateAbility();
+	IAbilities::Execute_pressUltimateAbility(this);
+}
+
+void ALostConnectionCharacter::selectFirstPlayer_Implementation()
+{
+	IAllySelection::Execute_pressSelectFirstPlayer(this);
+}
+
+void ALostConnectionCharacter::selectSecondPlayer_Implementation()
+{
+	IAllySelection::Execute_pressSelectSecondPlayer(this);
+}
+
+void ALostConnectionCharacter::selectThirdPlayer_Implementation()
+{
+	IAllySelection::Execute_pressSelectThirdPlayer(this);
+}
+
+void ALostConnectionCharacter::selectFourthPlayer_Implementation()
+{
+	IAllySelection::Execute_pressSelectFourthPlayer(this);
 }
 
 void ALostConnectionCharacter::pressChangeWeapon_Implementation()
