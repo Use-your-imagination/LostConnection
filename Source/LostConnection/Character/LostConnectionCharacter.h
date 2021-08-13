@@ -259,6 +259,9 @@ public:
 
 	USkeletalMeshComponent* getCurrentWeaponMesh() const;
 
+	UFUNCTION(BlueprintCallable)
+	int getWeaponCount() const;
+
 	float getFlatDamageReduction_Implementation() const override;
 
 	float getPercentageDamageReduction_Implementation() const override;

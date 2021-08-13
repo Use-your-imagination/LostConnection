@@ -620,6 +620,19 @@ USkeletalMeshComponent* ALostConnectionCharacter::getCurrentWeaponMesh() const
 	return currentWeaponMesh;
 }
 
+int ALostConnectionCharacter::getWeaponCount() const
+{
+	int result = 0;
+
+	result += static_cast<bool>(firstWeaponSlot);
+
+	result += static_cast<bool>(secondWeaponSlot);
+
+	result += static_cast<bool>(defaultWeaponSlot);
+
+	return result;
+}
+
 float ALostConnectionCharacter::getFlatDamageReduction_Implementation() const
 {
 	return 200.0f;
