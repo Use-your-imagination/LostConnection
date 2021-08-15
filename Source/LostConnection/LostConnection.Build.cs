@@ -13,12 +13,26 @@ public class LostConnection : ModuleRules
         MinFilesUsingPrecompiledHeaderOverride = 1;
         bUseUnity = false;
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Slate", "SlateCore", "Niagara" });
+        PublicDependencyModuleNames.AddRange(new string[] 
+        {
+            "Core",
+            "CoreUObject",
+            "Engine",
+            "InputCore",
+            "Slate",
+            "SlateCore",
+            "Niagara",
+            "OnlineSubsystem",
+            "OnlineSubsystemUtils"
+        });
 
         PublicIncludePaths.AddRange(new string[]
         {
             Path.Combine(ModuleDirectory),
-            Path.Combine(EngineDirectory, "Plugins", "FX", "Niagara", "Source", "Niagara", "Public")
+            Path.Combine(EngineDirectory, "Plugins", "FX", "Niagara", "Source", "Niagara", "Public"),
+            Path.Combine(EngineDirectory, "Plugins", "Online", "OnlineSubsystem", "Source", "Public")
         });
+
+        DynamicallyLoadedModuleNames.Add("OnlineSubsystemNull");
     }
 }
