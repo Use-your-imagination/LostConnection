@@ -17,6 +17,12 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 {
 	if (wasSuccessful)
 	{
+		APlayerController* controller = GetFirstLocalPlayerController();
+
+		controller->SetInputMode(FInputModeGameOnly());
+
+		controller->SetShowMouseCursor(false);
+
 		UGameplayStatics::OpenLevel(GetWorld(), "LostConnectionMap", true, "?listen?bIsLanMatch=1");
 	}
 }
