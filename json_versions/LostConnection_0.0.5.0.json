@@ -1,0 +1,23 @@
+{
+  "projectName": "LostConnection",
+  "projectVersion": "0.0.5.0",
+  "UI": {
+    "type": "category",
+    "Weapon selector": {
+      "type": "item",
+      "notes": [
+        "Added into the game",
+        "Can be accessed via ALT"
+      ]
+    }
+  },
+  "Gameplay": {
+    "type": "category",
+    "Shooting": {
+      "type": "item",
+      "notes": [
+        "Fixed bug when bullet unintentionally went through walls"
+      ]
+    }
+  }
+}
