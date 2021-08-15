@@ -9,6 +9,13 @@
         "Added into the game",
         "Can be accessed via ALT"
       ]
+    },
+    "Sessions": {
+      "type": "item",
+      "notes": [
+        "Added names for sessions",
+        "Added new menu for creating session"
+      ]
     }
   },
   "Gameplay": {
