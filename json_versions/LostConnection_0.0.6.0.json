@@ -1,0 +1,10 @@
+{
+  "projectName": "LostConnection",
+  "projectVersion": "0.0.6.0",
+  "UI": {
+    "type": "category"
+  },
+  "Multiplayer": {
+    "type": "category"
+  }
+}
