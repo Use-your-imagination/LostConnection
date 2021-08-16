@@ -29,10 +29,14 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 
 void ULostConnectionGameInstance::onFindSessions(bool wasSuccessful, TArray<FBlueprintSessionResult>* sessionsData, TScriptInterface<IInitSessions> widget)
 {
+	session->OnFindSessionsCompleteDelegates.Clear();
+
 	if (wasSuccessful)
 	{
 		if (searchSession.IsValid())
 		{
+			sessionsData->Empty();
+
 			for (const auto& i : searchSession->SearchResults)
 			{
 				sessionsData->Add({ i });
@@ -58,8 +62,7 @@ void ULostConnectionGameInstance::Init()
 			session->OnStartSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onStartSession);
 
 			sessionSettings = MakeShareable(new FOnlineSessionSettings());
-			searchSession = MakeShareable(new FOnlineSessionSearch());
-
+			
 			sessionSettings->bIsLANMatch = true;
 			sessionSettings->bUsesPresence = true;
 			sessionSettings->bShouldAdvertise = true;
@@ -68,15 +71,20 @@ void ULostConnectionGameInstance::Init()
 			sessionSettings->bAllowJoinInProgress = true;
 			sessionSettings->bAllowJoinViaPresence = true;
 
-			sessionSettings->Set(SETTING_MAPNAME, FString("LostConnectionMap"), EOnlineDataAdvertisementType::Type::ViaOnlineService);
-
-			searchSession->bIsLanQuery = true;
-			searchSession->MaxSearchResults = 5;
-			searchSession->PingBucketSize = 200;
-
-			searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
+			sessionSettings->Set(SETTING_MAPNAME, FString("LostConnectionMap"), EOnlineDataAdvertisementType::Type::ViaOnlineService);	
 		}
 	}
+}
+
+void ULostConnectionGameInstance::initSearchSession()
+{
+	searchSession = MakeShareable(new FOnlineSessionSearch());
+
+	searchSession->bIsLanQuery = true;
+	searchSession->MaxSearchResults = 5;
+	searchSession->PingBucketSize = 50;
+
+	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 }
 
 ULostConnectionGameInstance::ULostConnectionGameInstance(const FObjectInitializer& objectInitializer)
@@ -94,6 +102,8 @@ void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> use
 void ULostConnectionGameInstance::findLocalSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
 {
 	session->OnFindSessionsCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onFindSessions, &sessionsData, widget);
+
+	this->initSearchSession();
 
 	session->FindSessions(*userId, searchSession.ToSharedRef());
 }

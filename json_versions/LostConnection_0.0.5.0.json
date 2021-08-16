@@ -16,6 +16,12 @@
         "Added names for sessions",
         "Added new menu for creating session"
       ]
+    },
+    "Refresh": {
+      "type": "item",
+      "notes": [
+        "Added refresh button in connection finding"
+      ]
     }
   },
   "Gameplay": {

@@ -37,6 +37,8 @@ private:
 private:
 	void Init() override;
 
+	void initSearchSession();
+
 public:
 	ULostConnectionGameInstance(const FObjectInitializer& objectInitializer);
 
