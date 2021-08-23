@@ -9,5 +9,15 @@
         "Updated find sessions UI"
       ]
     }
+  },
+  "Gameplay": {
+    "type": "category",
+    "Change weapon": {
+      "type": "item",
+      "notes": [
+        "Added changing between first and second weapons by clicking Q",
+        "Alternative way is using weapon selector by pressing ALT"
+      ]
+    }
   }
 }
