@@ -187,6 +187,9 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void reload();
 
+	UFUNCTION(Server, Reliable)
+	void changeWeapon();
+
 	void restoreHealth(float amount);
 
 	void takeDamage(float amount);

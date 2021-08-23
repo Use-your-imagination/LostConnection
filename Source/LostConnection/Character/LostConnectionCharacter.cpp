@@ -193,7 +193,7 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("Alternative", IE_Pressed, this, &ALostConnectionCharacter::pressAlternative);
 	PlayerInputComponent->BindAction("Alternative", IE_Released, this, &ALostConnectionCharacter::releaseAlternative);
 
-	PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, this, &ALostConnectionCharacter::pressChangeWeapon);
+	PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeWeapon);
 	PlayerInputComponent->BindAction("ChangeWeapon", IE_Released, this, &ALostConnectionCharacter::releaseChangeWeapon);
 
 	PlayerInputComponent->BindAction("Action", IE_Pressed, this, &ALostConnectionCharacter::pressAction);
@@ -497,6 +497,24 @@ void ALostConnectionCharacter::reload_Implementation()
 	this->reloadAnimationMulticast();
 
 	this->reloadGameplay();
+}
+
+void ALostConnectionCharacter::changeWeapon_Implementation()
+{
+	if (currentWeapon == firstWeaponSlot)
+	{
+		this->changeToSecondWeapon();
+	}
+	else if (currentWeapon == secondWeaponSlot)
+	{
+		this->changeToFirstWeapon();
+	}
+	else
+	{
+		this->changeToFirstWeapon();
+	}
+
+	this->pressChangeWeapon();
 }
 
 void ALostConnectionCharacter::restoreHealth(float amount)
