@@ -142,9 +142,6 @@ private:
 	UFUNCTION(NetMulticast, Unreliable)
 	void changeMaxSpeed(float speed);
 
-	UFUNCTION(NetMulticast, Unreliable)
-	void reloadAnimationMulticast();
-
 protected:
 	UFUNCTION(BlueprintNativeEvent)
 	void pressAlternative();
@@ -159,10 +156,17 @@ protected:
 	void releaseShoot();
 
 protected:
-	void reloadGameplay();
+	UFUNCTION(NetMulticast, Reliable)
+	void reloadLogicMulticast();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void reloadAnimationMulticast();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void reloadAnimation();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void reloadLogic();
 
 public:
 	ALostConnectionCharacter();

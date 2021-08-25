@@ -266,11 +266,6 @@ void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
-void ALostConnectionCharacter::reloadAnimationMulticast_Implementation()
-{
-	this->reloadAnimation();
-}
-
 void ALostConnectionCharacter::pressAlternative_Implementation()
 {
 
@@ -291,7 +286,7 @@ void ALostConnectionCharacter::releaseShoot_Implementation()
 
 }
 
-void ALostConnectionCharacter::reloadGameplay()
+void ALostConnectionCharacter::reloadLogicMulticast_Implementation()
 {
 	if (!currentWeapon)
 	{
@@ -315,8 +310,6 @@ void ALostConnectionCharacter::reloadGameplay()
 
 	int reloadedAmmoRequire = min(magazineSize - currentMagazineSize, ammoCount);
 
-	// TODO: start reload animation
-
 	currentWeapon->setCurrentMagazineSize(currentMagazineSize + reloadedAmmoRequire);
 
 	if (ammoCount != 9999)
@@ -325,9 +318,19 @@ void ALostConnectionCharacter::reloadGameplay()
 	}
 }
 
+void ALostConnectionCharacter::reloadAnimationMulticast_Implementation()
+{
+	this->reloadAnimation();
+}
+
 void ALostConnectionCharacter::reloadAnimation_Implementation()
 {
 
+}
+
+void ALostConnectionCharacter::reloadLogic_Implementation()
+{
+	this->reloadLogicMulticast();
 }
 
 ALostConnectionCharacter::ALostConnectionCharacter()
@@ -498,8 +501,6 @@ void ALostConnectionCharacter::resetShoot_Implementation()
 void ALostConnectionCharacter::reload_Implementation()
 {
 	this->reloadAnimationMulticast();
-
-	this->reloadGameplay();
 }
 
 void ALostConnectionCharacter::changeWeapon_Implementation()
