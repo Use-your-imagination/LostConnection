@@ -77,7 +77,7 @@ protected:
 	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadWrite)
 	bool isAlly;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	TArray<int32> currentAmmoHolding;
 
 public:
@@ -142,7 +142,7 @@ private:
 	UFUNCTION(NetMulticast, Unreliable)
 	void changeMaxSpeed(float speed);
 
-	UFUNCTION(NetMulticast, Reliable)
+	UFUNCTION(NetMulticast, Unreliable)
 	void reloadAnimationMulticast();
 
 protected:
@@ -178,7 +178,7 @@ public:
 
 	void updateWeaponMesh();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Server, Unreliable, BlueprintCallable)
 	void shoot();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
@@ -269,7 +269,7 @@ public:
 
 	float getPercentageDamageReduction_Implementation() const override;
 
-	~ALostConnectionCharacter() = default;
+	virtual ~ALostConnectionCharacter() = default;
 };
 
 inline USpringArmComponent* ALostConnectionCharacter::GetCameraOffset() const

@@ -71,6 +71,8 @@ void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 
 	DOREPLIFETIME(ALostConnectionCharacter, isAlly);
 
+	DOREPLIFETIME(ALostConnectionCharacter, currentAmmoHolding);
+
 	DOREPLIFETIME(ALostConnectionCharacter, currentWeapon);
 
 	DOREPLIFETIME(ALostConnectionCharacter, firstWeaponSlot);
@@ -338,7 +340,7 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
 	shootRemainingTime = 0.0f;
 	clearTimer = false;
-	NetUpdateFrequency = 20;
+	NetUpdateFrequency = 60;
 
 	currentAmmoHolding.Reserve(4);
 

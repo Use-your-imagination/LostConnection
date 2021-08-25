@@ -31,6 +31,10 @@ class LOSTCONNECTION_API ABaseAmmo :
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	virtual void PostInitializeComponents() override;
+
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
 private:
 	ACharacter* lastTarget;
 
@@ -47,7 +51,7 @@ protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* mesh;
 
-	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadWrite, Replicated)
 	UProjectileMovementComponent* movement;
 	
 	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)

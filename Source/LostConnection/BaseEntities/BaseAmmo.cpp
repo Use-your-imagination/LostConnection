@@ -13,6 +13,30 @@ void ABaseAmmo::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetim
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ABaseAmmo, isAlly);
+
+	DOREPLIFETIME(ABaseAmmo, movement);
+}
+
+void ABaseAmmo::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (HasAuthority())
+	{
+		
+	}
+}
+
+bool ABaseAmmo::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool WroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	if (movement)
+	{
+		WroteSomething |= Channel->ReplicateSubobject(movement, *Bunch, *RepFlags);
+	}
+
+	return WroteSomething;
 }
 
 void ABaseAmmo::Tick(float DeltaSeconds)
@@ -102,6 +126,7 @@ ABaseAmmo::ABaseAmmo()
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
 	ammoType = ammoTypes::large;
 	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerSystemFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'"));
+	NetUpdateFrequency = 60;
 
 	SetRootComponent(mesh);
 
