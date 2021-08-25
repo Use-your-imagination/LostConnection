@@ -88,16 +88,6 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	}
 }
 
-void ABaseAmmo::endOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if (IsPendingKill())
-	{
-		return;
-	}
-
-
-}
-
 UClass* ABaseAmmo::getStaticClass() const
 {
 	PURE_VIRTUAL(__FUNCTION__);
@@ -110,31 +100,22 @@ ABaseAmmo::ABaseAmmo()
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
-	collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
 	ammoType = ammoTypes::large;
 	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerSystemFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'"));
 
 	SetRootComponent(mesh);
 
-	mesh->SetGenerateOverlapEvents(false);
+	mesh->SetGenerateOverlapEvents(true);
 
-	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+
+	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::beginOverlap);
 
 	movement->SetUpdatedComponent(mesh);
 
-	movement->ProjectileGravityScale = 0.1f;
+	movement->ProjectileGravityScale = 0.0f;
 
-	collision->SetupAttachment(mesh);
-
-	collision->InitBoxExtent({ 2.5f, 0.5f, 0.5f });
-
-	collision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-
-	collision->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
-
-	collision->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::beginOverlap);
-
-	collision->OnComponentEndOverlap.AddDynamic(this, &ABaseAmmo::endOverlap);
+	movement->SetIsReplicated(true);
 
 	if (tracerSystemFinder.Succeeded())
 	{
@@ -163,7 +144,7 @@ void ABaseAmmo::setDamage(float damage)
 
 void ABaseAmmo::setAmmoSpeed(float speed)
 {
-	// this->speed = speed;
+	movement->Velocity = mesh->GetForwardVector() * speed;
 }
 
 UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
@@ -178,7 +159,7 @@ float ABaseAmmo::getDamage() const
 
 float ABaseAmmo::getSpeed() const
 {
-	return movement->InitialSpeed;
+	return movement->Velocity.Size();
 }
 
 ammoTypes ABaseAmmo::getAmmoType() const

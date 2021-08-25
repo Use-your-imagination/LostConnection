@@ -5,7 +5,6 @@
 #include "GameFramework/Pawn.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "Components/BoxComponent.h"
 
 #include "BaseAmmo.generated.h"
 
@@ -44,18 +43,12 @@ protected:
 	UFUNCTION()
 	void beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UFUNCTION()
-	void endOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* mesh;
 
 	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadWrite)
 	UProjectileMovementComponent* movement;
-
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadWrite)
-	UBoxComponent* collision;
 	
 	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* tracer;
