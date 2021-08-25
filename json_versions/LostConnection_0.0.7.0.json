@@ -1,4 +1,14 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.0.7.0"
+  "projectVersion": "0.0.7.0",
+  "Weapon Mechanics": {
+    "type": "category",
+    "Reload": {
+      "type": "item",
+      "notes": [
+        "Reload rework",
+        "Now animation and actual ammo refill is in sync"
+      ]
+    }
+  }
 }
