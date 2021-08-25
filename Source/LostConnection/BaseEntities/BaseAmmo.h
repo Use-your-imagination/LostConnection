@@ -4,6 +4,8 @@
 
 #include "GameFramework/Pawn.h"
 #include "NiagaraComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+#include "Components/BoxComponent.h"
 
 #include "BaseAmmo.generated.h"
 
@@ -31,7 +33,6 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 private:
-	FTimerHandle launchHandle;
 	ACharacter* lastTarget;
 
 	UPROPERTY(Replicated)
@@ -49,6 +50,12 @@ protected:
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* mesh;
+
+	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadWrite)
+	UProjectileMovementComponent* movement;
+
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadWrite)
+	UBoxComponent* collision;
 	
 	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* tracer;
@@ -60,13 +67,7 @@ protected:
 	float damage;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
-	float speed;
-
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
 	ammoTypes ammoType;
-
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
-	float length;
 
 public:
 	ABaseAmmo();
@@ -81,7 +82,7 @@ public:
 
 	virtual void setAmmoSpeed(float speed) final;
 
-	virtual UStaticMeshComponent* getAmmoMesh() const final;
+	virtual UStaticMeshComponent* getAmmoMeshComponent() const final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual float getDamage() const final;
@@ -92,5 +93,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual ammoTypes getAmmoType() const final;
 
-	virtual ~ABaseAmmo();
+	virtual ~ABaseAmmo() = default;
 };

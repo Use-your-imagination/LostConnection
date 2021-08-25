@@ -59,12 +59,12 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 			resultRotation = ((lostCharacter->GetFollowCamera()->GetComponentRotation().Vector() * distance) - lostCharacter->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
 		}
 
-		launchedAmmo->getAmmoMesh()->SetWorldRotation(resultRotation);
+		launchedAmmo->getAmmoMeshComponent()->SetWorldRotation(resultRotation);
 
 		float pitch = FMath::RandRange(-spreadDistance, spreadDistance);
 		float yaw = FMath::Tan(FMath::Acos(pitch / spreadDistance)) * pitch;
 
-		launchedAmmo->getAmmoMesh()->AddRelativeRotation({ pitch, FMath::RandRange(-yaw, yaw), 0.0f });
+		launchedAmmo->getAmmoMeshComponent()->AddRelativeRotation({ pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
 		launchedAmmo->launch(lostCharacter);
 

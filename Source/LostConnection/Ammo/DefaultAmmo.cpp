@@ -20,7 +20,9 @@ ADefaultAmmo::ADefaultAmmo()
 		brokenAmmoMesh = brokenAmmoMeshFinder.Object;
 	}
 
-	speed = 5200.0f;
+	movement->InitialSpeed = 5200.0f;
+	movement->MaxSpeed = 5200.0f;
+
 	damage = 75;
 	ammoType = ammoTypes::defaultType;
 }

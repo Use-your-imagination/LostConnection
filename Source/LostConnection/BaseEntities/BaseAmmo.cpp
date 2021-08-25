@@ -26,7 +26,7 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	{
 		return;
 	}
-	
+
 	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
 	bool shotThrough = OtherActor->Implements<UShotThrough>();
 
@@ -61,7 +61,11 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		MarkPendingKill();
 
-		mesh->SetEnableGravity(true);
+		mesh->SetSimulatePhysics(true);
+
+		movement->ProjectileGravityScale = 1.0f;
+
+		movement->Velocity = FVector(0.0f);
 
 		return;
 	}
@@ -76,7 +80,11 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		MarkPendingKill();
 
-		mesh->SetEnableGravity(true);
+		mesh->SetSimulatePhysics(true);
+
+		movement->ProjectileGravityScale = 1.0f;
+
+		movement->Velocity = FVector(0.0f);
 	}
 }
 
@@ -101,51 +109,46 @@ ABaseAmmo::ABaseAmmo()
 {
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
+	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
+	collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
 	ammoType = ammoTypes::large;
 	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerSystemFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'"));
 
 	SetRootComponent(mesh);
 
-	mesh->SetSimulatePhysics(true);
-	mesh->SetEnableGravity(false);
-	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+	mesh->SetGenerateOverlapEvents(false);
 
-	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
-	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::beginOverlap);
+	movement->SetUpdatedComponent(mesh);
 
-	mesh->OnComponentEndOverlap.AddDynamic(this, &ABaseAmmo::endOverlap);
+	movement->ProjectileGravityScale = 0.1f;
+
+	collision->SetupAttachment(mesh);
+
+	collision->InitBoxExtent({ 2.5f, 0.5f, 0.5f });
+
+	collision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+
+	collision->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
+
+	collision->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::beginOverlap);
+
+	collision->OnComponentEndOverlap.AddDynamic(this, &ABaseAmmo::endOverlap);
 
 	if (tracerSystemFinder.Succeeded())
 	{
 		tracer->SetAsset(tracerSystemFinder.Object);
 	}
 
-	tracer->SetAutoAttachmentParameters(mesh, "Tracer", EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative);
-
-	tracer->SetUseAutoManageAttachment(true);
+	tracer->SetupAttachment(mesh);
 }
 
 void ABaseAmmo::launch(ACharacter* character)
 {
-	UWorld* world = GetWorld();
-	length = mesh->GetStaticMesh()->GetBounds().GetBox().GetSize().X;
+	isAlly = Cast<ALostConnectionCharacter>(character)->getIsAlly();
 
-	if (world)
-	{
-		FTimerDelegate delegate;
-		isAlly = Cast<ALostConnectionCharacter>(character)->getIsAlly();
-
-		delegate.BindLambda([this]()
-			{
-				if (!IsPendingKill())
-				{
-					AddActorLocalOffset({ length, 0.0f, 0.0f });
-				}
-			});
-
-		world->GetTimerManager().SetTimer(launchHandle, delegate, 1.0f / (speed / length), true, 0.0f);
-	}
+	movement->Velocity = mesh->GetForwardVector() * movement->InitialSpeed;
 }
 
 void ABaseAmmo::setAmmoMesh(UStaticMesh* mesh)
@@ -160,10 +163,10 @@ void ABaseAmmo::setDamage(float damage)
 
 void ABaseAmmo::setAmmoSpeed(float speed)
 {
-	this->speed = speed;
+	// this->speed = speed;
 }
 
-UStaticMeshComponent* ABaseAmmo::getAmmoMesh() const
+UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
 {
 	return mesh;
 }
@@ -175,20 +178,10 @@ float ABaseAmmo::getDamage() const
 
 float ABaseAmmo::getSpeed() const
 {
-	return speed;
+	return movement->InitialSpeed;
 }
 
 ammoTypes ABaseAmmo::getAmmoType() const
 {
 	return ammoType;
-}
-
-ABaseAmmo::~ABaseAmmo()
-{
-	UWorld* world = GetWorld();
-
-	if (world)
-	{
-		world->GetTimerManager().ClearTimer(launchHandle);
-	}
 }
