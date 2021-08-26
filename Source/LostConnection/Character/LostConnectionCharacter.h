@@ -167,6 +167,12 @@ protected:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void reloadLogic();
 
+	UFUNCTION()
+	void shootLogic();
+
+	UFUNCTION()
+	void resetShootLogic();
+
 public:
 	ALostConnectionCharacter();
 
@@ -181,10 +187,12 @@ public:
 
 	void updateWeaponMesh();
 
-	UFUNCTION(Server, Unreliable, BlueprintCallable)
+	//UFUNCTION(Server, Unreliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void shoot();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	//UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void resetShoot();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
@@ -223,6 +231,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool isWeaponEquipped() const;
+
+	USkeletalMeshComponent* getCurrentWeaponMesh() const;
+
+	UFUNCTION(BlueprintCallable)
+	int getWeaponCount() const;
 
 #pragma region Abilities
 	UFUNCTION(Server, Reliable)
@@ -266,7 +279,7 @@ public:
 	void pressShoot();
 
 	UFUNCTION()
-	void changeWeaponHandle();
+	void pressChangeWeaponHandle();
 
 	UFUNCTION()
 	void pressActionHandle();
@@ -297,11 +310,6 @@ public:
 	UFUNCTION()
 	void releaseAlternativeHandle();
 #pragma endregion
-
-	USkeletalMeshComponent* getCurrentWeaponMesh() const;
-
-	UFUNCTION(BlueprintCallable)
-	int getWeaponCount() const;
 
 	float getFlatDamageReduction_Implementation() const override;
 

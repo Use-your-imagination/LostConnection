@@ -58,7 +58,7 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	sprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerUnreliable("sprint"); });
 	run.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerUnreliable("run"); });
 
-	pressChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("changeWeaponHandle"); });
+	pressChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("pressChangeWeaponHandle"); });
 	releaseChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseChangeWeaponHandle"); });
 
 	pressAlternative.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("pressAlternativeHandle"); });
@@ -316,26 +316,6 @@ void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
-void ALostConnectionCharacter::pressAlternative_Implementation()
-{
-
-}
-
-void ALostConnectionCharacter::releaseAlternative_Implementation()
-{
-
-}
-
-void ALostConnectionCharacter::pressShoot_Implementation()
-{
-
-}
-
-void ALostConnectionCharacter::releaseShoot_Implementation()
-{
-
-}
-
 void ALostConnectionCharacter::reloadLogicMulticast_Implementation()
 {
 	if (!currentWeapon)
@@ -381,6 +361,68 @@ void ALostConnectionCharacter::reloadAnimation_Implementation()
 void ALostConnectionCharacter::reloadLogic_Implementation()
 {
 	this->reloadLogicMulticast();
+}
+
+void ALostConnectionCharacter::shootLogic()
+{
+	if (currentWeapon)
+	{
+		UWorld* world = GetWorld();
+
+		if (world)
+		{
+			FTimerManager& manager = world->GetTimerManager();
+
+			if (manager.IsTimerActive(shootHandle))
+			{
+				return;
+			}
+
+			FTimerDelegate delegate;
+
+			delegate.BindLambda([this, &manager]()
+				{
+					if (IsPendingKill())
+					{
+						return;
+					}
+
+					if (clearTimer)
+					{
+						clearTimer = false; manager.ClearTimer(shootHandle);
+
+						return;
+					}
+
+					currentWeapon->shoot(currentWeaponMesh, this);
+				});
+
+			manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
+
+			shootRemainingTime = 1.0f / static_cast<float>(currentWeapon->getRateOfFire());
+
+			this->pressShoot();
+		}
+	}
+}
+
+void ALostConnectionCharacter::resetShootLogic()
+{
+	UWorld* world = GetWorld();
+
+	if (world)
+	{
+		if (shootRemainingTime > 0.0f)
+		{
+			clearTimer = true;
+
+			return;
+		}
+
+		world->GetTimerManager().ClearTimer(shootHandle);
+
+		this->releaseShoot();
+	}
 }
 
 ALostConnectionCharacter::ALostConnectionCharacter()
@@ -486,109 +528,19 @@ void ALostConnectionCharacter::updateWeaponMesh()
 	}
 }
 
-void ALostConnectionCharacter::shoot_Implementation()
+void ALostConnectionCharacter::shoot()
 {
-	if (currentWeapon)
-	{
-		UWorld* world = GetWorld();
-
-		if (world)
-		{
-			FTimerManager& manager = world->GetTimerManager();
-
-			if (manager.IsTimerActive(shootHandle))
-			{
-				return;
-			}
-
-			FTimerDelegate delegate;
-
-			delegate.BindLambda([this, &manager]()
-				{
-					if (IsPendingKill())
-					{
-						return;
-					}
-
-					if (clearTimer)
-					{
-						clearTimer = false; manager.ClearTimer(shootHandle);
-
-						return;
-					}
-
-					currentWeapon->shoot(currentWeaponMesh, this);
-				});
-
-			manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
-
-			shootRemainingTime = 1.0f / static_cast<float>(currentWeapon->getRateOfFire());
-
-			this->pressShoot();
-		}
-	}
+	this->runOnServerUnreliable("shootLogic");
 }
 
-void ALostConnectionCharacter::resetShoot_Implementation()
+void ALostConnectionCharacter::resetShoot()
 {
-	UWorld* world = GetWorld();
-
-	if (world)
-	{
-		if (shootRemainingTime > 0.0f)
-		{
-			clearTimer = true;
-
-			return;
-		}
-
-		world->GetTimerManager().ClearTimer(shootHandle);
-
-		this->releaseShoot();
-	}
+	this->runOnServerReliable("resetShootLogic");
 }
 
 void ALostConnectionCharacter::reload_Implementation()
 {
 	this->reloadAnimationMulticast();
-}
-
-void ALostConnectionCharacter::changeWeaponHandle()
-{
-	if (currentWeapon == firstWeaponSlot)
-	{
-		this->changeToSecondWeapon();
-	}
-	else if (currentWeapon == secondWeaponSlot)
-	{
-		this->changeToFirstWeapon();
-	}
-	else
-	{
-		this->changeToFirstWeapon();
-	}
-
-	this->pressChangeWeapon();
-}
-
-void ALostConnectionCharacter::pressAlternativeHandle()
-{
-	this->pressAlternative();
-}
-
-void ALostConnectionCharacter::releaseAlternativeHandle()
-{
-	this->releaseAlternative();
-}
-
-void ALostConnectionCharacter::pressActionHandle()
-{
-	this->pressAction();
-}
-
-void ALostConnectionCharacter::releaseActionHandle()
-{
-	this->releaseAction();
 }
 
 void ALostConnectionCharacter::restoreHealth(float amount)
@@ -647,9 +599,22 @@ int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
 	return currentAmmoHolding[static_cast<size_t>(type)];
 }
 
-void ALostConnectionCharacter::releaseChangeWeaponHandle()
+USkeletalMeshComponent* ALostConnectionCharacter::getCurrentWeaponMesh() const
 {
-	this->releaseChangeWeapon();
+	return currentWeaponMesh;
+}
+
+int ALostConnectionCharacter::getWeaponCount() const
+{
+	int result = 0;
+
+	result += static_cast<bool>(firstWeaponSlot);
+
+	result += static_cast<bool>(secondWeaponSlot);
+
+	result += static_cast<bool>(defaultWeaponSlot);
+
+	return result;
 }
 
 void ALostConnectionCharacter::firstAbility_Implementation()
@@ -697,12 +662,50 @@ void ALostConnectionCharacter::pressChangeWeapon_Implementation()
 
 }
 
-void ALostConnectionCharacter::releaseChangeWeapon_Implementation()
+void ALostConnectionCharacter::pressAction_Implementation()
 {
 
 }
 
-void ALostConnectionCharacter::pressAction_Implementation()
+void ALostConnectionCharacter::pressAlternative_Implementation()
+{
+
+}
+
+void ALostConnectionCharacter::pressShoot_Implementation()
+{
+
+}
+
+void ALostConnectionCharacter::pressChangeWeaponHandle()
+{
+	if (currentWeapon == firstWeaponSlot)
+	{
+		this->changeToSecondWeapon();
+	}
+	else if (currentWeapon == secondWeaponSlot)
+	{
+		this->changeToFirstWeapon();
+	}
+	else
+	{
+		this->changeToFirstWeapon();
+	}
+
+	this->pressChangeWeapon();
+}
+
+void ALostConnectionCharacter::pressActionHandle()
+{
+	this->pressAction();
+}
+
+void ALostConnectionCharacter::pressAlternativeHandle()
+{
+	this->pressAlternative();
+}
+
+void ALostConnectionCharacter::releaseChangeWeapon_Implementation()
 {
 
 }
@@ -712,22 +715,29 @@ void ALostConnectionCharacter::releaseAction_Implementation()
 
 }
 
-USkeletalMeshComponent* ALostConnectionCharacter::getCurrentWeaponMesh() const
+void ALostConnectionCharacter::releaseAlternative_Implementation()
 {
-	return currentWeaponMesh;
+
 }
 
-int ALostConnectionCharacter::getWeaponCount() const
+void ALostConnectionCharacter::releaseShoot_Implementation()
 {
-	int result = 0;
 
-	result += static_cast<bool>(firstWeaponSlot);
+}
 
-	result += static_cast<bool>(secondWeaponSlot);
+void ALostConnectionCharacter::releaseChangeWeaponHandle()
+{
+	this->releaseChangeWeapon();
+}
 
-	result += static_cast<bool>(defaultWeaponSlot);
+void ALostConnectionCharacter::releaseActionHandle()
+{
+	this->releaseAction();
+}
 
-	return result;
+void ALostConnectionCharacter::releaseAlternativeHandle()
+{
+	this->releaseAlternative();
 }
 
 float ALostConnectionCharacter::getFlatDamageReduction_Implementation() const
