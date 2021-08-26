@@ -13,7 +13,7 @@
 
 using namespace std;
 
-TArray<FInputActionBinding> ALostConnectionCharacter::initInterfaceInputs()
+TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 {
 	TArray<FInputActionBinding> result;
 
@@ -33,6 +33,15 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInterfaceInputs()
 	FInputActionBinding sprint("Sprint", IE_Pressed);
 	FInputActionBinding run("Sprint", IE_Released);
 
+	FInputActionBinding pressChangeWeapon("ChangeWeapon", IE_Pressed);
+	FInputActionBinding releaseChangeWeapon("ChangeWeapon", IE_Pressed);
+
+	FInputActionBinding	pressAlternative("Alternative", IE_Pressed);
+	FInputActionBinding releaseAlternative("Alternative", IE_Released);
+
+	FInputActionBinding	pressAction("Action", IE_Pressed);
+	FInputActionBinding releaseAction("Action", IE_Released);
+
 	releaseFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseFirstAbility, this);
 	releaseSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseSecondAbility, this);
 	releaseThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseThirdAbility, this);
@@ -49,6 +58,15 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInterfaceInputs()
 	sprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerUnreliable("sprint"); });
 	run.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerUnreliable("run"); });
 
+	pressChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("changeWeaponHandle"); });
+	releaseChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseChangeWeaponHandle"); });
+
+	pressAlternative.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("pressAlternativeHandle"); });
+	releaseAlternative.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseAlternativeHandle"); });
+
+	pressAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("pressActionHandle"); });
+	releaseAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseActionHandle"); });
+
 	result.Add(releaseFirstAbility);
 	result.Add(releaseSecondAbility);
 	result.Add(releaseThirdAbility);
@@ -64,6 +82,15 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInterfaceInputs()
 
 	result.Add(sprint);
 	result.Add(run);
+
+	result.Add(pressChangeWeapon);
+	result.Add(releaseChangeWeapon);
+
+	result.Add(pressAlternative);
+	result.Add(releaseAlternative);
+
+	result.Add(pressAction);
+	result.Add(releaseAction);
 
 	return result;
 }
@@ -212,7 +239,7 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 
-	TArray<FInputActionBinding> inputs = this->initInterfaceInputs();
+	TArray<FInputActionBinding> inputs = this->initInputs();
 
 	for (const auto& i : inputs)
 	{
@@ -224,15 +251,6 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
-
-	PlayerInputComponent->BindAction("Alternative", IE_Pressed, this, &ALostConnectionCharacter::pressAlternative);
-	PlayerInputComponent->BindAction("Alternative", IE_Released, this, &ALostConnectionCharacter::releaseAlternative);
-
-	PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, this, &ALostConnectionCharacter::changeWeapon);
-	PlayerInputComponent->BindAction("ChangeWeapon", IE_Released, this, &ALostConnectionCharacter::releaseChangeWeapon);
-
-	PlayerInputComponent->BindAction("Action", IE_Pressed, this, &ALostConnectionCharacter::pressAction);
-	PlayerInputComponent->BindAction("Action", IE_Released, this, &ALostConnectionCharacter::releaseAction);
 
 #pragma region Abilities
 	PlayerInputComponent->BindAction("FirstAbility", IE_Pressed, this, &ALostConnectionCharacter::firstAbility);
@@ -535,7 +553,7 @@ void ALostConnectionCharacter::reload_Implementation()
 	this->reloadAnimationMulticast();
 }
 
-void ALostConnectionCharacter::changeWeapon_Implementation()
+void ALostConnectionCharacter::changeWeaponHandle()
 {
 	if (currentWeapon == firstWeaponSlot)
 	{
@@ -551,6 +569,26 @@ void ALostConnectionCharacter::changeWeapon_Implementation()
 	}
 
 	this->pressChangeWeapon();
+}
+
+void ALostConnectionCharacter::pressAlternativeHandle()
+{
+	this->pressAlternative();
+}
+
+void ALostConnectionCharacter::releaseAlternativeHandle()
+{
+	this->releaseAlternative();
+}
+
+void ALostConnectionCharacter::pressActionHandle()
+{
+	this->pressAction();
+}
+
+void ALostConnectionCharacter::releaseActionHandle()
+{
+	this->releaseAction();
 }
 
 void ALostConnectionCharacter::restoreHealth(float amount)
@@ -607,6 +645,11 @@ bool ALostConnectionCharacter::getIsAlly() const
 int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
 {
 	return currentAmmoHolding[static_cast<size_t>(type)];
+}
+
+void ALostConnectionCharacter::releaseChangeWeaponHandle()
+{
+	this->releaseChangeWeapon();
 }
 
 void ALostConnectionCharacter::firstAbility_Implementation()

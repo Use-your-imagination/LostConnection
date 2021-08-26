@@ -58,7 +58,7 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	UDefaultWeapon* defaultWeaponSlot;
 
 private:
-	TArray<FInputActionBinding> initInterfaceInputs();
+	TArray<FInputActionBinding> initInputs();
 
 private:
 	FTimerHandle shootHandle;
@@ -155,19 +155,6 @@ private:
 	void changeMaxSpeed(float speed);
 
 protected:
-	UFUNCTION(BlueprintNativeEvent)
-	void pressAlternative();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseAlternative();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void pressShoot();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseShoot();
-
-protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void reloadLogicMulticast();
 
@@ -203,9 +190,6 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void reload();
 
-	UFUNCTION(Server, Reliable)
-	void changeWeapon();
-
 	void restoreHealth(float amount);
 
 	void takeDamage(float amount);
@@ -240,6 +224,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool isWeaponEquipped() const;
 
+#pragma region Abilities
 	UFUNCTION(Server, Reliable)
 	void firstAbility();
 
@@ -251,7 +236,9 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void ultimateAbility();
+#pragma endregion
 
+#pragma region Selection
 	UFUNCTION(Server, Reliable)
 	void selectFirstPlayer();
 
@@ -263,18 +250,53 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void selectFourthPlayer();
+#pragma endregion
 
+#pragma region PressActions
 	UFUNCTION(BlueprintNativeEvent)
 	void pressChangeWeapon();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseChangeWeapon();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void pressAction();
 
 	UFUNCTION(BlueprintNativeEvent)
+	void pressAlternative();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressShoot();
+
+	UFUNCTION()
+	void changeWeaponHandle();
+
+	UFUNCTION()
+	void pressActionHandle();
+
+	UFUNCTION()
+	void pressAlternativeHandle();
+#pragma endregion
+
+#pragma region ReleaseActions
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseChangeWeapon();
+
+	UFUNCTION(BlueprintNativeEvent)
 	void releaseAction();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseAlternative();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseShoot();
+
+	UFUNCTION()
+	void releaseChangeWeaponHandle();
+
+	UFUNCTION()
+	void releaseActionHandle();
+
+	UFUNCTION()
+	void releaseAlternativeHandle();
+#pragma endregion
 
 	USkeletalMeshComponent* getCurrentWeaponMesh() const;
 
