@@ -238,31 +238,55 @@ public:
 	int getWeaponCount() const;
 
 #pragma region Abilities
-	UFUNCTION(Server, Reliable)
+	UFUNCTION()
 	void firstAbility();
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION()
 	void secondAbility();
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION()
 	void thirdAbility();
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION()
 	void ultimateAbility();
+
+	UFUNCTION()
+	void releaseFirstAbilityHandle();
+
+	UFUNCTION()
+	void releaseSecondAbilityHandle();
+
+	UFUNCTION()
+	void releaseThirdAbilityHandle();
+
+	UFUNCTION()
+	void releaseUltimateAbilityHandle();
 #pragma endregion
 
 #pragma region Selection
-	UFUNCTION(Server, Reliable)
+	UFUNCTION()
 	void selectFirstPlayer();
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION()
 	void selectSecondPlayer();
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION()
 	void selectThirdPlayer();
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION()
 	void selectFourthPlayer();
+
+	UFUNCTION()
+	void releaseSelectFirstPlayerHandle();
+
+	UFUNCTION()
+	void releaseSelectSecondPlayerHandle();
+
+	UFUNCTION()
+	void releaseSelectThirdPlayerHandle();
+
+	UFUNCTION()
+	void releaseSelectFourthPlayerHandle();
 #pragma endregion
 
 #pragma region PressActions

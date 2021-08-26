@@ -17,15 +17,69 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 {
 	TArray<FInputActionBinding> result;
 
+#pragma region Abilities
+	FInputActionBinding pressFirstAbility("FirstAbility", IE_Pressed);
+	FInputActionBinding pressSecondAbility("SecondAbility", IE_Pressed);
+	FInputActionBinding pressThirdAbility("ThirdAbility", IE_Pressed);
+	FInputActionBinding pressUltimateAbility("UltimateAbility", IE_Pressed);
+
 	FInputActionBinding releaseFirstAbility("FirstAbility", IE_Released);
 	FInputActionBinding releaseSecondAbility("SecondAbility", IE_Released);
 	FInputActionBinding releaseThirdAbility("ThirdAbility", IE_Released);
 	FInputActionBinding releaseUltimateAbility("UltimateAbility", IE_Released);
 
-	FInputActionBinding releaseSelectFirstPlayer("SelectFirstPlayer", IE_Released);
-	FInputActionBinding releaseSelectSecondPlayer("SelectSecondPlayer", IE_Released);
-	FInputActionBinding releaseSelectThirdPlayer("SelectThirdPlayer", IE_Released);
-	FInputActionBinding releaseSelectFourthPlayer("SelectFourthPlayer", IE_Released);
+	pressFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("firstAbility"); });
+	pressSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("secondAbility"); });
+	pressThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("thirdAbility"); });
+	pressUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("ultimateAbility"); });
+
+	releaseFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseFirstAbilityHandle"); });
+	releaseSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseSecondAbilityHandle"); });
+	releaseThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseThirdAbilityHandle"); });
+	releaseUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseUltimateAbilityHandle"); });
+
+	result.Add(pressFirstAbility);
+	result.Add(pressSecondAbility);
+	result.Add(pressThirdAbility);
+	result.Add(pressUltimateAbility);
+
+	result.Add(releaseFirstAbility);
+	result.Add(releaseSecondAbility);
+	result.Add(releaseThirdAbility);
+	result.Add(releaseUltimateAbility);
+#pragma endregion
+
+#pragma region Selection
+	FInputActionBinding pressSelectFirstPlayer("FirstPlayer", IE_Pressed);
+	FInputActionBinding pressSelectSecondPlayer("SecondPlayer", IE_Pressed);
+	FInputActionBinding pressSelectThirdPlayer("ThirdPlayer", IE_Pressed);
+	FInputActionBinding pressSelectFourthPlayer("FourthPlayer", IE_Pressed);
+
+	FInputActionBinding releaseSelectFirstPlayer("FirstPlayer", IE_Released);
+	FInputActionBinding releaseSelectSecondPlayer("SecondPlayer", IE_Released);
+	FInputActionBinding releaseSelectThirdPlayer("ThirdPlayer", IE_Released);
+	FInputActionBinding releaseSelectFourthPlayer("FourthPlayer", IE_Released);
+
+	pressSelectFirstPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("selectFirstPlayer"); });
+	pressSelectSecondPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("selectSecondPlayer"); });
+	pressSelectThirdPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("selectThirdPlayer"); });
+	pressSelectFourthPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("selectFourthPlayer"); });
+
+	releaseSelectFirstPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseSelectFirstPlayerHandle"); });
+	releaseSelectSecondPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseSelectSecondPlayerHandle"); });
+	releaseSelectThirdPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseSelectThirdPlayerHandle"); });
+	releaseSelectFourthPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseSelectFourthPlayerHandle"); });
+
+	result.Add(pressSelectFirstPlayer);
+	result.Add(pressSelectSecondPlayer);
+	result.Add(pressSelectThirdPlayer);
+	result.Add(pressSelectFourthPlayer);
+
+	result.Add(releaseSelectFirstPlayer);
+	result.Add(releaseSelectSecondPlayer);
+	result.Add(releaseSelectThirdPlayer);
+	result.Add(releaseSelectFourthPlayer);
+#pragma endregion
 
 	FInputActionBinding pressCrouch("Crouch", IE_Pressed);
 	FInputActionBinding releaseCrouch("Crouch", IE_Released);
@@ -42,16 +96,6 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	FInputActionBinding	pressAction("Action", IE_Pressed);
 	FInputActionBinding releaseAction("Action", IE_Released);
 
-	releaseFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseFirstAbility, this);
-	releaseSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseSecondAbility, this);
-	releaseThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseThirdAbility, this);
-	releaseUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseUltimateAbility, this);
-
-	releaseSelectFirstPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAllySelection::Execute_releaseSelectFirstPlayer, this);
-	releaseSelectSecondPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAllySelection::Execute_releaseSelectSecondPlayer, this);
-	releaseSelectThirdPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAllySelection::Execute_releaseSelectThirdPlayer, this);
-	releaseSelectFourthPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAllySelection::Execute_releaseSelectFourthPlayer, this);
-
 	pressCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_pressCrouchAction, this);
 	releaseCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_releaseCrouchAction, this);
 
@@ -66,16 +110,6 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 
 	pressAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("pressActionHandle"); });
 	releaseAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseActionHandle"); });
-
-	result.Add(releaseFirstAbility);
-	result.Add(releaseSecondAbility);
-	result.Add(releaseThirdAbility);
-	result.Add(releaseUltimateAbility);
-
-	result.Add(releaseSelectFirstPlayer);
-	result.Add(releaseSelectSecondPlayer);
-	result.Add(releaseSelectThirdPlayer);
-	result.Add(releaseSelectFourthPlayer);
 
 	result.Add(pressCrouch);
 	result.Add(releaseCrouch);
@@ -251,26 +285,6 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
-
-#pragma region Abilities
-	PlayerInputComponent->BindAction("FirstAbility", IE_Pressed, this, &ALostConnectionCharacter::firstAbility);
-
-	PlayerInputComponent->BindAction("SecondAbility", IE_Pressed, this, &ALostConnectionCharacter::secondAbility);
-
-	PlayerInputComponent->BindAction("ThirdAbility", IE_Pressed, this, &ALostConnectionCharacter::thirdAbility);
-
-	PlayerInputComponent->BindAction("UltimateAbility", IE_Pressed, this, &ALostConnectionCharacter::ultimateAbility);
-#pragma endregion
-
-#pragma region PlayerSelection
-	PlayerInputComponent->BindAction("SelectFirstPlayer", IE_Pressed, this, &ALostConnectionCharacter::selectFirstPlayer);
-
-	PlayerInputComponent->BindAction("SelectSecondPlayer", IE_Pressed, this, &ALostConnectionCharacter::selectSecondPlayer);
-
-	PlayerInputComponent->BindAction("SelectThirdPlayer", IE_Pressed, this, &ALostConnectionCharacter::selectThirdPlayer);
-
-	PlayerInputComponent->BindAction("SelectFourthPlayer", IE_Pressed, this, &ALostConnectionCharacter::selectFourthPlayer);
-#pragma endregion
 
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALostConnectionCharacter::reload);
 
@@ -617,44 +631,84 @@ int ALostConnectionCharacter::getWeaponCount() const
 	return result;
 }
 
-void ALostConnectionCharacter::firstAbility_Implementation()
+void ALostConnectionCharacter::firstAbility()
 {
 	IAbilities::Execute_pressFirstAbility(this);
 }
 
-void ALostConnectionCharacter::secondAbility_Implementation()
+void ALostConnectionCharacter::secondAbility()
 {
 	IAbilities::Execute_pressSecondAbility(this);
 }
 
-void ALostConnectionCharacter::thirdAbility_Implementation()
+void ALostConnectionCharacter::thirdAbility()
 {
 	IAbilities::Execute_pressThirdAbility(this);
 }
 
-void ALostConnectionCharacter::ultimateAbility_Implementation()
+void ALostConnectionCharacter::ultimateAbility()
 {
 	IAbilities::Execute_pressUltimateAbility(this);
 }
 
-void ALostConnectionCharacter::selectFirstPlayer_Implementation()
+void ALostConnectionCharacter::releaseFirstAbilityHandle()
+{
+	IAbilities::Execute_releaseFirstAbility(this);
+}
+
+void ALostConnectionCharacter::releaseSecondAbilityHandle()
+{
+	IAbilities::Execute_releaseSecondAbility(this);
+}
+
+void ALostConnectionCharacter::releaseThirdAbilityHandle()
+{
+	IAbilities::Execute_releaseThirdAbility(this);
+}
+
+void ALostConnectionCharacter::releaseUltimateAbilityHandle()
+{
+	IAbilities::Execute_releaseUltimateAbility(this);
+}
+
+void ALostConnectionCharacter::selectFirstPlayer()
 {
 	IAllySelection::Execute_pressSelectFirstPlayer(this);
 }
 
-void ALostConnectionCharacter::selectSecondPlayer_Implementation()
+void ALostConnectionCharacter::selectSecondPlayer()
 {
 	IAllySelection::Execute_pressSelectSecondPlayer(this);
 }
 
-void ALostConnectionCharacter::selectThirdPlayer_Implementation()
+void ALostConnectionCharacter::selectThirdPlayer()
 {
 	IAllySelection::Execute_pressSelectThirdPlayer(this);
 }
 
-void ALostConnectionCharacter::selectFourthPlayer_Implementation()
+void ALostConnectionCharacter::selectFourthPlayer()
 {
 	IAllySelection::Execute_pressSelectFourthPlayer(this);
+}
+
+void ALostConnectionCharacter::releaseSelectFirstPlayerHandle()
+{
+	IAllySelection::Execute_releaseSelectFirstPlayer(this);
+}
+
+void ALostConnectionCharacter::releaseSelectSecondPlayerHandle()
+{
+	IAllySelection::Execute_releaseSelectSecondPlayer(this);
+}
+
+void ALostConnectionCharacter::releaseSelectThirdPlayerHandle()
+{
+	IAllySelection::Execute_releaseSelectThirdPlayer(this);
+}
+
+void ALostConnectionCharacter::releaseSelectFourthPlayerHandle()
+{
+	IAllySelection::Execute_releaseSelectFourthPlayer(this);
 }
 
 void ALostConnectionCharacter::pressChangeWeapon_Implementation()
