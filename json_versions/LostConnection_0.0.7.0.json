@@ -10,5 +10,15 @@
         "Now animation and actual ammo refill is in sync"
       ]
     }
+  },
+  "Optimization": {
+    "type": "category",
+    "Multiplayer": {
+      "type": "item",
+      "notes": [
+        "Optimize events for multiplayer",
+        "Set tickrate to 60"
+      ]
+    }
   }
 }
