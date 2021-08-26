@@ -11,8 +11,6 @@
 
 #pragma warning(disable: 4458)
 
-DECLARE_DELEGATE_OneParam(FStaticInterfaceMethod, UObject*);
-
 using namespace std;
 
 TArray<FInputActionBinding> ALostConnectionCharacter::initInterfaceInputs()
@@ -32,6 +30,9 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInterfaceInputs()
 	FInputActionBinding pressCrouch("Crouch", IE_Pressed);
 	FInputActionBinding releaseCrouch("Crouch", IE_Released);
 
+	FInputActionBinding sprint("Sprint", IE_Pressed);
+	FInputActionBinding run("Sprint", IE_Released);
+
 	releaseFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseFirstAbility, this);
 	releaseSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseSecondAbility, this);
 	releaseThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda(&IAbilities::Execute_releaseThirdAbility, this);
@@ -45,6 +46,9 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInterfaceInputs()
 	pressCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_pressCrouchAction, this);
 	releaseCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_releaseCrouchAction, this);
 
+	sprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerUnreliable("sprint"); });
+	run.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerUnreliable("run"); });
+
 	result.Add(releaseFirstAbility);
 	result.Add(releaseSecondAbility);
 	result.Add(releaseThirdAbility);
@@ -57,6 +61,9 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInterfaceInputs()
 
 	result.Add(pressCrouch);
 	result.Add(releaseCrouch);
+
+	result.Add(sprint);
+	result.Add(run);
 
 	return result;
 }
@@ -107,6 +114,34 @@ bool ALostConnectionCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutB
 void ALostConnectionCharacter::onRepCurrentWeapon()
 {
 	this->updateWeaponMesh();
+}
+
+void ALostConnectionCharacter::runMulticastReliable_Implementation(const FName& methodName)
+{
+	FTimerDelegate delegate;
+
+	delegate.BindUFunction(this, methodName);
+
+	delegate.Execute();
+}
+
+void ALostConnectionCharacter::runOnServerReliable_Implementation(const FName& methodName)
+{
+	this->runMulticastReliable(methodName);
+}
+
+void ALostConnectionCharacter::runMulticastUnreliable_Implementation(const FName& methodName)
+{
+	FTimerDelegate delegate;
+
+	delegate.BindUFunction(this, methodName);
+
+	delegate.Execute();
+}
+
+void ALostConnectionCharacter::runOnServerUnreliable_Implementation(const FName& methodName)
+{
+	this->runMulticastUnreliable(methodName);
 }
 
 void ALostConnectionCharacter::BeginPlay()
@@ -187,9 +222,6 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ALostConnectionCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ALostConnectionCharacter::StopJumping);
 
-	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALostConnectionCharacter::sprint);
-	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALostConnectionCharacter::run);
-
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
 
@@ -247,14 +279,14 @@ void ALostConnectionCharacter::StopJumping()
 	IMovementActions::Execute_releaseJumpAction(this);
 }
 
-void ALostConnectionCharacter::sprint_Implementation()
+void ALostConnectionCharacter::sprint()
 {
 	this->changeMaxSpeed(575.0f);
 
 	IMovementActions::Execute_sprintAction(this);
 }
 
-void ALostConnectionCharacter::run_Implementation()
+void ALostConnectionCharacter::run()
 {
 	this->changeMaxSpeed(450.0f);
 

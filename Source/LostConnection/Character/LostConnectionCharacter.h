@@ -99,6 +99,18 @@ protected:
 	UFUNCTION()
 	void onRepCurrentWeapon();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void runMulticastReliable(const FName& methodName);
+
+	UFUNCTION(Server, Reliable)
+	void runOnServerReliable(const FName& methodName);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void runMulticastUnreliable(const FName& methodName);
+
+	UFUNCTION(Server, Unreliable)
+	void runOnServerUnreliable(const FName& methodName);
+
 protected:
 	void BeginPlay() override;
 
@@ -133,10 +145,10 @@ private:
 	virtual void StopJumping() final override;
 
 private:
-	UFUNCTION(Server, Unreliable)
+	UFUNCTION()
 	void sprint();
 
-	UFUNCTION(Server, Unreliable)
+	UFUNCTION()
 	void run();
 
 	UFUNCTION(NetMulticast, Unreliable)
