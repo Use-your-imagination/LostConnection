@@ -26,15 +26,13 @@ ADropppedObject::ADropppedObject()
 
 	collisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 
-	collisionBox->InitBoxExtent({ 2.0f, 2.0f, 2.0f });
+	collisionBox->InitBoxExtent({ 5.0f, 5.0f, 5.0f });
 
 	mesh->SetupAttachment(collisionBox);
 
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
 
-	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-
-	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
 	vfx->SetupAttachment(mesh);
 }

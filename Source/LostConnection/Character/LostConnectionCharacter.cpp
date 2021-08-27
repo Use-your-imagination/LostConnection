@@ -644,6 +644,11 @@ int ALostConnectionCharacter::getWeaponCount() const
 
 void ALostConnectionCharacter::dropWeapon()
 {
+	if (currentWeapon == defaultWeaponSlot)
+	{
+		return;
+	}
+
 	UWorld* world = GetWorld();
 
 	if (!world)
@@ -652,7 +657,7 @@ void ALostConnectionCharacter::dropWeapon()
 	}
 
 	ADroppedWeapon* droppedWeapon = world->SpawnActorDeferred<ADroppedWeapon>(ADroppedWeapon::StaticClass(), {});
-	FTransform spawnPoint(currentWeaponMesh->GetComponentRotation(), currentWeaponMesh->GetComponentLocation() + GetActorForwardVector() + 50.0f);
+	FTransform spawnPoint(currentWeaponMesh->GetComponentRotation(), currentWeaponMesh->GetComponentLocation() + 100.0f * GetActorForwardVector());
 
 	droppedWeapon->setWeapon(currentWeapon);
 
