@@ -39,11 +39,6 @@ bool ABaseAmmo::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FR
 	return WroteSomething;
 }
 
-void ABaseAmmo::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-}
-
 void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (IsPendingKill() || Cast<ABaseAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor))
@@ -121,6 +116,8 @@ UClass* ABaseAmmo::getStaticClass() const
 
 ABaseAmmo::ABaseAmmo()
 {
+	PrimaryActorTick.bCanEverTick = false;
+
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));

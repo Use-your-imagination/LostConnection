@@ -31,30 +31,31 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 {
 	GENERATED_BODY()
 
+protected:
 	/** Camera offset positioning the camera behind the character */
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	USpringArmComponent* CameraOffset;
 
 	/** Follow camera */
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
 	USkeletalMeshComponent* currentWeaponMesh;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* magazine;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onRepCurrentWeapon, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onRepCurrentWeapon)
 	UBaseWeapon* currentWeapon;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
 	UBaseWeapon* firstWeaponSlot;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
 	UBaseWeapon* secondWeaponSlot;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
 	UDefaultWeapon* defaultWeaponSlot;
 
 private:
@@ -237,6 +238,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int getWeaponCount() const;
 
+	UFUNCTION()
+	void dropWeapon();
+
 #pragma region Abilities
 	UFUNCTION()
 	void firstAbility();
@@ -302,6 +306,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void pressShoot();
 
+	UFUNCTION(BlueprintNativeEvent)
+	void pressDropWeapon();
+
 	UFUNCTION()
 	void pressChangeWeaponHandle();
 
@@ -325,6 +332,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void releaseShoot();
 
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseDropWeapon();
+
 	UFUNCTION()
 	void releaseChangeWeaponHandle();
 
@@ -333,6 +343,9 @@ public:
 
 	UFUNCTION()
 	void releaseAlternativeHandle();
+
+	UFUNCTION()
+	void releaseDropWeaponHandle();
 #pragma endregion
 
 	float getFlatDamageReduction_Implementation() const override;

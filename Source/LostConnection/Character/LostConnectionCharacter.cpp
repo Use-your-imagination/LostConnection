@@ -9,6 +9,8 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerInput.h"
 
+#include "WorldPlaceables/DroppedWeapon.h"
+
 #pragma warning(disable: 4458)
 
 using namespace std;
@@ -96,6 +98,9 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	FInputActionBinding	pressAction("Action", IE_Pressed);
 	FInputActionBinding releaseAction("Action", IE_Released);
 
+	FInputActionBinding	pressDropWeapon("DropWeapon", IE_Pressed);
+	FInputActionBinding releaseDropWeapon("DropWeapon", IE_Released);
+
 	pressCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_pressCrouchAction, this);
 	releaseCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_releaseCrouchAction, this);
 
@@ -111,6 +116,9 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	pressAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("pressActionHandle"); });
 	releaseAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseActionHandle"); });
 
+	pressDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("dropWeapon"); });
+	releaseDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->runOnServerReliable("releaseDropWeaponHandle"); });
+
 	result.Add(pressCrouch);
 	result.Add(releaseCrouch);
 
@@ -125,6 +133,9 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 
 	result.Add(pressAction);
 	result.Add(releaseAction);
+
+	result.Add(pressDropWeapon);
+	result.Add(releaseDropWeapon);
 
 	return result;
 }
@@ -631,6 +642,34 @@ int ALostConnectionCharacter::getWeaponCount() const
 	return result;
 }
 
+void ALostConnectionCharacter::dropWeapon()
+{
+	UWorld* world = GetWorld();
+
+	if (!world)
+	{
+		return;
+	}
+
+	ADroppedWeapon* droppedWeapon = world->SpawnActorDeferred<ADroppedWeapon>(ADroppedWeapon::StaticClass(), {});
+	FTransform spawnPoint(currentWeaponMesh->GetComponentRotation(), currentWeaponMesh->GetComponentLocation() + GetActorForwardVector() + 50.0f);
+
+	droppedWeapon->setWeapon(currentWeapon);
+
+	if (currentWeapon && currentWeapon == firstWeaponSlot)
+	{
+		currentWeapon = firstWeaponSlot = nullptr;
+	}
+	else if (currentWeapon && currentWeapon == secondWeaponSlot)
+	{
+		currentWeapon = secondWeaponSlot = nullptr;
+	}
+
+	droppedWeapon->FinishSpawning(spawnPoint);
+
+	this->pressDropWeapon();
+}
+
 void ALostConnectionCharacter::firstAbility()
 {
 	IAbilities::Execute_pressFirstAbility(this);
@@ -731,6 +770,11 @@ void ALostConnectionCharacter::pressShoot_Implementation()
 
 }
 
+void ALostConnectionCharacter::pressDropWeapon_Implementation()
+{
+
+}
+
 void ALostConnectionCharacter::pressChangeWeaponHandle()
 {
 	if (currentWeapon == firstWeaponSlot)
@@ -779,6 +823,11 @@ void ALostConnectionCharacter::releaseShoot_Implementation()
 
 }
 
+void ALostConnectionCharacter::releaseDropWeapon_Implementation()
+{
+
+}
+
 void ALostConnectionCharacter::releaseChangeWeaponHandle()
 {
 	this->releaseChangeWeapon();
@@ -792,6 +841,11 @@ void ALostConnectionCharacter::releaseActionHandle()
 void ALostConnectionCharacter::releaseAlternativeHandle()
 {
 	this->releaseAlternative();
+}
+
+void ALostConnectionCharacter::releaseDropWeaponHandle()
+{
+	this->releaseDropWeapon();
 }
 
 float ALostConnectionCharacter::getFlatDamageReduction_Implementation() const

@@ -27,13 +27,13 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	USkeletalMesh* mesh;
 
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMesh* magazineMesh;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadWrite)
 	ABaseAmmo* ammo;
 
 	UPROPERTY(Replicated)
@@ -49,7 +49,7 @@ protected:
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
 	weaponTypes weaponType;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
 	float spreadDistance;
 
 public:
