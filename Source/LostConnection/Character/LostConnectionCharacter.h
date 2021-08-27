@@ -18,6 +18,7 @@
 #include "Interfaces/Gameplay/Abilities.h"
 #include "Interfaces/Gameplay/MovementActions.h"
 #include "Interfaces/Gameplay/AllySelection.h"
+#include "Interfaces/Gameplay/Actionable.h"
 
 #include "LostConnectionCharacter.generated.h"
 
@@ -298,7 +299,7 @@ public:
 	void pressChangeWeapon();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void pressAction();
+	void pressAction(AActor* object);
 
 	UFUNCTION(BlueprintNativeEvent)
 	void pressAlternative();

@@ -9,6 +9,13 @@
         "Reload rework",
         "Now animation and actual ammo refill is in sync"
       ]
+    },
+    "Weapon drop": {
+      "type": "item",
+      "notes": [
+        "Added drop weapon(primary or secondary)",
+        "Dropped weapons cannot be picked up temporarily"
+      ]
     }
   },
   "Optimization": {

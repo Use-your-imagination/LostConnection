@@ -8,13 +8,16 @@
 #include "NiagaraComponent.h"
 #include "Components/BoxComponent.h"
 
-#include "DropppedObject.generated.h"
+#include "Interfaces/Gameplay/Actionable.h"
+
+#include "DroppedObject.generated.h"
 
 #pragma warning(disable: 4458)
 
 UCLASS()
-class LOSTCONNECTION_API ADropppedObject :
-	public AActor
+class LOSTCONNECTION_API ADroppedObject :
+	public AActor,
+	public IActionable
 {
 	GENERATED_BODY()
 	
@@ -32,9 +35,11 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	ADropppedObject();
+	ADroppedObject();
 
 	virtual void setMesh(USkeletalMesh* mesh) final;
 
-	virtual ~ADropppedObject() = default;
+	virtual void action(AActor* player) override;
+
+	virtual ~ADroppedObject() = default;
 };

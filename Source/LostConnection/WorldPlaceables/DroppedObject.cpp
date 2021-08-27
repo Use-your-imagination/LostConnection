@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DropppedObject.h"
+#include "DroppedObject.h"
 
-void ADropppedObject::BeginPlay()
+void ADroppedObject::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-ADropppedObject::ADropppedObject()
+ADroppedObject::ADroppedObject()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -34,10 +34,18 @@ ADropppedObject::ADropppedObject()
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
+	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
+
 	vfx->SetupAttachment(mesh);
 }
 
-void ADropppedObject::setMesh(USkeletalMesh* mesh)
+void ADroppedObject::setMesh(USkeletalMesh* mesh)
 {
 	this->mesh->SetSkeletalMesh(mesh);
+}
+
+void ADroppedObject::action(AActor* player)
+{
+	
 }

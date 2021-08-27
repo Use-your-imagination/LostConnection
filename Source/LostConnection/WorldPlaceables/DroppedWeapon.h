@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "DropppedObject.h"
+#include "DroppedObject.h"
 #include "BaseEntities/BaseWeapon.h"
 
 #include "DroppedWeapon.generated.h"
@@ -14,7 +14,7 @@
  */
 UCLASS()
 class LOSTCONNECTION_API ADroppedWeapon :
-	public ADropppedObject
+	public ADroppedObject
 {
 	GENERATED_BODY()
 
@@ -29,6 +29,8 @@ public:
 	ADroppedWeapon();
 
 	void setWeapon(UBaseWeapon* weapon);
+
+	void action(AActor* player) final override;
 
 	~ADroppedWeapon() = default;
 };

@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerInput.h"
+#include "DrawDebugHelpers.h"
 
 #include "WorldPlaceables/DroppedWeapon.h"
 
@@ -644,10 +645,10 @@ int ALostConnectionCharacter::getWeaponCount() const
 
 void ALostConnectionCharacter::dropWeapon()
 {
-	if (currentWeapon == defaultWeaponSlot)
-	{
-		return;
-	}
+	// if (currentWeapon == defaultWeaponSlot)
+	// {
+	// 	return;
+	// }
 
 	UWorld* world = GetWorld();
 
@@ -760,7 +761,7 @@ void ALostConnectionCharacter::pressChangeWeapon_Implementation()
 
 }
 
-void ALostConnectionCharacter::pressAction_Implementation()
+void ALostConnectionCharacter::pressAction_Implementation(AActor* object)
 {
 
 }
@@ -800,7 +801,36 @@ void ALostConnectionCharacter::pressChangeWeaponHandle()
 
 void ALostConnectionCharacter::pressActionHandle()
 {
-	this->pressAction();
+	UWorld* world = GetWorld();
+
+	if (!world)
+	{
+		return;
+	}
+
+	FHitResult hit;
+	FVector start = FollowCamera->GetComponentLocation();
+	FVector end = start + (CameraOffset->TargetArmLength + 200.0f) * FollowCamera->GetForwardVector();
+	FCollisionQueryParams ignoreParameters;
+	IActionable* object = nullptr;
+
+	ignoreParameters.AddIgnoredActor(this);
+
+	world->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility, ignoreParameters);
+
+	if (!hit.Actor.IsValid())
+	{
+		return;
+	}
+
+	object = Cast<IActionable>(hit.Actor);
+
+	if (object)
+	{
+		object->action(this);
+
+		this->pressAction(hit.Actor.Get());
+	}
 }
 
 void ALostConnectionCharacter::pressAlternativeHandle()
