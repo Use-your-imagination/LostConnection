@@ -9,7 +9,7 @@
 #include "Actionable.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType, MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
 class UActionable : public UInterface
 {
 	GENERATED_BODY()
@@ -24,8 +24,11 @@ class LOSTCONNECTION_API IActionable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	IActionable();
+	IActionable() = default;
 
 	UFUNCTION()
 	virtual void action(AActor* player) = 0;
+
+	UFUNCTION(BlueprintCallable)
+	virtual FString getActionMessage() const;
 };

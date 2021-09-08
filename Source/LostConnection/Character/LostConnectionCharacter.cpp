@@ -809,14 +809,12 @@ void ALostConnectionCharacter::pressActionHandle()
 	}
 
 	FHitResult hit;
-	FVector start = FollowCamera->GetComponentLocation();
-	FVector end = start + (CameraOffset->TargetArmLength + 200.0f) * FollowCamera->GetForwardVector();
 	FCollisionQueryParams ignoreParameters;
 	IActionable* object = nullptr;
 
 	ignoreParameters.AddIgnoredActor(this);
 
-	world->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility, ignoreParameters);
+	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace(), ECollisionChannel::ECC_Visibility, ignoreParameters);
 
 	if (!hit.Actor.IsValid())
 	{
@@ -881,6 +879,16 @@ void ALostConnectionCharacter::releaseAlternativeHandle()
 void ALostConnectionCharacter::releaseDropWeaponHandle()
 {
 	this->releaseDropWeapon();
+}
+
+FVector ALostConnectionCharacter::getStartActionLineTrace() const
+{
+	return FollowCamera->GetComponentLocation();
+}
+
+FVector ALostConnectionCharacter::getEndActionLineTrace() const
+{
+	return this->getStartActionLineTrace() + (CameraOffset->TargetArmLength + 200.0f) * FollowCamera->GetForwardVector();
 }
 
 float ALostConnectionCharacter::getFlatDamageReduction_Implementation() const

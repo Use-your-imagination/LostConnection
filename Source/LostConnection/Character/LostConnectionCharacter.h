@@ -349,6 +349,12 @@ public:
 	void releaseDropWeaponHandle();
 #pragma endregion
 
+	UFUNCTION(BlueprintCallable)
+	virtual FVector getStartActionLineTrace() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual FVector getEndActionLineTrace() const final;
+
 	float getFlatDamageReduction_Implementation() const override;
 
 	float getPercentageDamageReduction_Implementation() const override;
