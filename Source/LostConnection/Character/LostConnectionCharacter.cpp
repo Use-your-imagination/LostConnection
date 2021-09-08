@@ -447,6 +447,18 @@ void ALostConnectionCharacter::resetShootLogic()
 
 		world->GetTimerManager().ClearTimer(shootHandle);
 
+		if (currentWeapon)
+		{
+			if (currentWeapon->getWeaponType() == weaponTypes::delay)
+			{
+				currentWeapon->setWeaponType(weaponTypes::single);
+
+				currentWeapon->shoot(currentWeaponMesh, this);
+
+				currentWeapon->setWeaponType(weaponTypes::delay);
+			}
+		}
+
 		this->releaseShoot();
 	}
 }
@@ -813,7 +825,10 @@ void ALostConnectionCharacter::pressAction_Implementation(AActor* object)
 
 void ALostConnectionCharacter::pressAlternative_Implementation()
 {
-
+	if (currentWeapon)
+	{
+		currentWeapon->alternativeMode();
+	}
 }
 
 void ALostConnectionCharacter::pressShoot_Implementation()

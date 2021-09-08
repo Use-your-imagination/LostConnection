@@ -33,16 +33,22 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 {
 	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(character);
 
-	if (weaponType == weaponTypes::semiAutomatic)
+	if (weaponType == weaponTypes::semiAutomatic || weaponType == weaponTypes::single)
 	{
 		lostCharacter->resetShoot();
+	}
+	else if (weaponType == weaponTypes::delay)
+	{
+		return;
 	}
 
 	if (currentMagazineSize >= ammoCost)
 	{
 		ABaseAmmo* launchedAmmo = lostCharacter->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), currentVisibleWeaponMesh->GetBoneLocation("barrel"), { 0.0f, 0.0f, 0.0f });
 
-		// TODO: getter for distance
+		launchedAmmo->copyProperties(ammo);
+
+		// Tracer limit
 		float distance = 20000.0f;
 
 		FHitResult hit;
@@ -76,6 +82,11 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 	}
 }
 
+void UBaseWeapon::alternativeMode()
+{
+
+}
+
 void UBaseWeapon::setCurrentMagazineSize(int currentMagazineSize)
 {
 	this->currentMagazineSize = currentMagazineSize;
@@ -84,6 +95,11 @@ void UBaseWeapon::setCurrentMagazineSize(int currentMagazineSize)
 void UBaseWeapon::setRateOfFire(int rateOfFire)
 {
 	this->rateOfFire = rateOfFire;
+}
+
+void UBaseWeapon::setWeaponType(weaponTypes weaponType)
+{
+	this->weaponType = weaponType;
 }
 
 USkeletalMesh* UBaseWeapon::getWeaponMesh() const

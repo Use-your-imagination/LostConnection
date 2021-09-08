@@ -12,7 +12,9 @@ UENUM(BlueprintType)
 enum class weaponTypes : uint8
 {
 	automatic = 0 UMETA(DisplayName = "Automatic"),
-	semiAutomatic = 1 UMETA(DisplayName = "Semi-automatic")
+	semiAutomatic = 1 UMETA(DisplayName = "Semi-automatic"),
+	single = 2 UMETA(DisplayName = "Single"),
+	delay = 3 UMETA(DisplayName = "Delay")
 };
 
 UCLASS()
@@ -57,9 +59,13 @@ public:
 
 	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
 
+	virtual void alternativeMode();
+
 	virtual void setCurrentMagazineSize(int currentMagazineSize) final;
 
 	virtual void setRateOfFire(int rateOfFire) final;
+
+	virtual void setWeaponType(weaponTypes weaponType) final;
 
 	virtual USkeletalMesh* getWeaponMesh() const final;
 

@@ -193,11 +193,9 @@ public:
 
 	void updateWeaponMesh();
 
-	//UFUNCTION(Server, Unreliable, BlueprintCallable)
 	UFUNCTION(BlueprintCallable)
 	void shoot();
 
-	//UFUNCTION(Server, Reliable, BlueprintCallable)
 	UFUNCTION(BlueprintCallable)
 	void resetShoot();
 

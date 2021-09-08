@@ -67,7 +67,9 @@ protected:
 public:
 	ABaseAmmo();
 
-	void launch(ACharacter* character);
+	virtual void launch(ACharacter* character) final;
+
+	virtual void copyProperties(ABaseAmmo* other);
 
 	virtual UClass* getStaticClass() const;
 

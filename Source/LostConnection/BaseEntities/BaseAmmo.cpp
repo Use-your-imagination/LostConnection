@@ -154,6 +154,11 @@ void ABaseAmmo::launch(ACharacter* character)
 	movement->Velocity = mesh->GetForwardVector() * movement->InitialSpeed;
 }
 
+void ABaseAmmo::copyProperties(ABaseAmmo* other)
+{
+
+}
+
 void ABaseAmmo::setAmmoMesh(UStaticMesh* mesh)
 {
 	this->mesh->SetStaticMesh(mesh);
