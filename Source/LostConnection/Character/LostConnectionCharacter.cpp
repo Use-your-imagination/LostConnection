@@ -10,11 +10,11 @@
 #include "GameFramework/PlayerInput.h"
 #include "DrawDebugHelpers.h"
 
-#include "WorldPlaceables/DroppedWeapon.h"
-
 #pragma warning(disable: 4458)
 
 using namespace std;
+
+FString ALostConnectionCharacter::actionHotkey = "F";
 
 TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 {
@@ -645,10 +645,10 @@ int ALostConnectionCharacter::getWeaponCount() const
 
 void ALostConnectionCharacter::dropWeapon()
 {
-	// if (currentWeapon == defaultWeaponSlot)
-	// {
-	// 	return;
-	// }
+	if (currentWeapon == defaultWeaponSlot)
+	{
+		return;
+	}
 
 	UWorld* world = GetWorld();
 
@@ -674,6 +674,51 @@ void ALostConnectionCharacter::dropWeapon()
 	droppedWeapon->FinishSpawning(spawnPoint);
 
 	this->pressDropWeapon();
+}
+
+void ALostConnectionCharacter::pickupWeapon(ADroppedWeapon* weaponToEquip)
+{
+	UBaseWeapon* weapon = weaponToEquip->getWeapon();
+
+	if (currentWeapon)
+	{
+		if (currentWeapon == firstWeaponSlot)
+		{
+			this->dropWeapon();
+
+			firstWeaponSlot = weapon;
+		}
+		else if (currentWeapon == secondWeaponSlot)
+		{
+			this->dropWeapon();
+
+			secondWeaponSlot = weapon;
+		}
+		else
+		{
+			if (!firstWeaponSlot)
+			{
+				firstWeaponSlot = weapon;
+			}
+			else if (!secondWeaponSlot)
+			{
+				secondWeaponSlot = weapon;
+			}
+		}
+	}
+	else
+	{
+		if (!firstWeaponSlot)
+		{
+			firstWeaponSlot = weapon;
+		}
+		else if (!secondWeaponSlot)
+		{
+			secondWeaponSlot = weapon;
+		}
+	}
+
+	weaponToEquip->Destroy(true);
 }
 
 void ALostConnectionCharacter::firstAbility()

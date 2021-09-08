@@ -30,7 +30,9 @@ public:
 
 	void setWeapon(UBaseWeapon* weapon);
 
-	void action(AActor* player) final override;
+	virtual void action(AActor* player) final override;
+
+	UBaseWeapon* getWeapon();
 
 	~ADroppedWeapon() = default;
 };

@@ -3,6 +3,8 @@
 
 #include "DroppedWeapon.h"
 
+#include "Character/LostConnectionCharacter.h"
+
 ADroppedWeapon::ADroppedWeapon()
 {
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
@@ -28,5 +30,10 @@ void ADroppedWeapon::setWeapon(UBaseWeapon* weapon)
 
 void ADroppedWeapon::action(AActor* player)
 {
-	
+	Cast<ALostConnectionCharacter>(player)->pickupWeapon(this);
+}
+
+UBaseWeapon* ADroppedWeapon::getWeapon()
+{
+	return weapon;
 }

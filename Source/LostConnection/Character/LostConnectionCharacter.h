@@ -14,6 +14,7 @@
 
 #include "BaseEntities/BaseWeapon.h"
 #include "Weapons/DefaultWeapon.h"
+#include "WorldPlaceables/DroppedWeapon.h"
 #include "Interfaces/PhysicalObjects/ShotThrough.h"
 #include "Interfaces/Gameplay/Abilities.h"
 #include "Interfaces/Gameplay/MovementActions.h"
@@ -90,6 +91,9 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseLookUpRate;
+
+public:
+	static FString actionHotkey;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -241,6 +245,9 @@ public:
 
 	UFUNCTION()
 	void dropWeapon();
+
+	UFUNCTION()
+	void pickupWeapon(ADroppedWeapon* weaponToEquip);
 
 #pragma region Abilities
 	UFUNCTION()
