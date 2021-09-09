@@ -151,6 +151,8 @@ void ABaseAmmo::launch(ACharacter* character)
 {
 	isAlly = Cast<ALostConnectionCharacter>(character)->getIsAlly();
 
+	FinishSpawning({}, true);
+
 	movement->Velocity = mesh->GetForwardVector() * movement->InitialSpeed;
 }
 

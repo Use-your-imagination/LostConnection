@@ -20,16 +20,11 @@ public:
 	ALostConnectionGameState() = default;
 
 	template<typename T>
-	T* spawn(UClass* staticClass, const FVector& location, const FRotator& rotation);
+	T* spawn(UClass* staticClass, const FTransform& transform);
 };
 
 template<typename T>
-T* ALostConnectionGameState::spawn(UClass* staticClass, const FVector& location, const FRotator& rotation)
+T* ALostConnectionGameState::spawn(UClass* staticClass, const FTransform& transform)
 {
-	FActorSpawnParameters parameters;
-
-	parameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	parameters.bNoFail = true;
-
-	return GetWorld()->SpawnActor<T>(staticClass, location, rotation, parameters);
+	return GetWorld()->SpawnActorDeferred<T>(staticClass, transform, nullptr, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 }

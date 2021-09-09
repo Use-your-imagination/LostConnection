@@ -7,8 +7,8 @@
 
 ADefaultAmmo::ADefaultAmmo()
 {
-	ConstructorHelpers::FObjectFinder<UStaticMesh> defaultAmmoMeshFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Ammo/Bullet.Bullet'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> brokenAmmoMeshFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Ammo/BulletBroken.BulletBroken'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> defaultAmmoMeshFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Ammo/BallBullet.BallBullet'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> brokenAmmoMeshFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Ammo/BallBulletBroken.BallBulletBroken'"));
 
 	if (defaultAmmoMeshFinder.Succeeded())
 	{

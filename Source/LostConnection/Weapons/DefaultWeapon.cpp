@@ -9,8 +9,8 @@
 
 UDefaultWeapon::UDefaultWeapon()
 {
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> defaultWeaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/Rifle/Rifle.Rifle'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> defaultMagazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Rifle/RifleMagazine.RifleMagazine'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> defaultWeaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/Pistols/Gauss/Gauss.Gauss'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> defaultMagazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Pistols/Gauss/GaussMagazine.GaussMagazine'"));
 
 	if (defaultWeaponMeshFinder.Succeeded())
 	{
