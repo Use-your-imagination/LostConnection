@@ -10,8 +10,7 @@ void ALostConnectionGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	/// @brief Second week release ai spawning
-	for (size_t i = 0; i < 0; i++)
+	for (size_t i = 0; i < 2; i++)
 	{
 		FVector location(FMath::RandRange(-11000.0f, -5900.0f), FMath::RandRange(0.0f, 1000.0f), FMath::RandRange(131.0f, 1650.0f));
 		FRotator rotation(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
