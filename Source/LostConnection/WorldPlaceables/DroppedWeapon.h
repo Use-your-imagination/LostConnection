@@ -19,6 +19,9 @@ class LOSTCONNECTION_API ADroppedWeapon :
 	GENERATED_BODY()
 
 private:
+	virtual void Tick(float DeltaSeconds) final override;
+
+private:
 	UBaseWeapon* weapon;
 
 protected:

@@ -22,13 +22,6 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseWeapon, magazineSize);
 }
 
-UBaseWeapon::UBaseWeapon()
-{
-	ammoCost = 1;
-	weaponType = weaponTypes::automatic;
-	spreadDistance = 2.0f;
-}
-
 void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
 	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(character);
@@ -49,7 +42,7 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 		launchedAmmo->copyProperties(ammo);
 
 		// Tracer limit
-		float distance = 20000.0f;
+		static constexpr float distance = 20000.0f;
 
 		FHitResult hit;
 		FVector start = lostCharacter->GetFollowCamera()->GetComponentLocation();
@@ -79,6 +72,72 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 	else
 	{
 		lostCharacter->reload();
+	}
+}
+
+UBaseWeapon::UBaseWeapon()
+{
+	shootRemainingTime = 0.0f;
+	clearTimer = false;
+
+	ammoCost = 1;
+	weaponType = weaponTypes::automatic;
+	spreadDistance = 2.0f;
+}
+
+void UBaseWeapon::shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+{
+	FTimerManager& manager = world->GetTimerManager();
+
+	if (manager.IsTimerActive(shootHandle))
+	{
+		return;
+	}
+
+	FTimerDelegate delegate;
+
+	delegate.BindLambda([this, &manager, currentVisibleWeaponMesh, character]()
+		{
+			if (character->IsPendingKill())
+			{
+				return;
+			}
+
+			if (clearTimer || currentVisibleWeaponMesh->SkeletalMesh != mesh)
+			{
+				clearTimer = false;
+
+				manager.ClearTimer(shootHandle);
+
+				return;
+			}
+
+			this->shoot(currentVisibleWeaponMesh, character);
+		});
+
+	manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(rateOfFire), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
+
+	shootRemainingTime = 1.0f / static_cast<float>(rateOfFire);
+}
+
+void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+{
+	if (shootRemainingTime > 0.0f)
+	{
+		clearTimer = true;
+
+		return;
+	}
+
+	world->GetTimerManager().ClearTimer(shootHandle);
+
+	if (weaponType == weaponTypes::delay)
+	{
+		weaponType = weaponTypes::single;
+
+		this->shoot(world, currentVisibleWeaponMesh, character);
+
+		weaponType = weaponTypes::delay;
 	}
 }
 

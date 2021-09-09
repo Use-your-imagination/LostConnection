@@ -5,6 +5,14 @@
 
 #include "Character/LostConnectionCharacter.h"
 
+void ADroppedWeapon::Tick(float DeltaSeconds)
+{
+	if (weapon->getShootRemainingTime() > 0.0f)
+	{
+		weapon->getShootRemainingTime() -= DeltaSeconds;
+	}
+}
+
 ADroppedWeapon::ADroppedWeapon()
 {
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));

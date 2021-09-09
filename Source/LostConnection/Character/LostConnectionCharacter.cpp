@@ -237,9 +237,28 @@ void ALostConnectionCharacter::Tick(float DeltaSeconds)
 		Destroy();
 	}
 
-	if (shootRemainingTime > 0.0f)
+	if (firstWeaponSlot)
 	{
-		shootRemainingTime -= DeltaSeconds;
+		if (firstWeaponSlot->getShootRemainingTime() > 0.0f)
+		{
+			firstWeaponSlot->getShootRemainingTime() -= DeltaSeconds;
+		}
+	}
+
+	if (secondWeaponSlot)
+	{
+		if (secondWeaponSlot->getShootRemainingTime() > 0.0f)
+		{
+			secondWeaponSlot->getShootRemainingTime() -= DeltaSeconds;
+		}
+	}
+
+	if (defaultWeaponSlot)
+	{
+		if (defaultWeaponSlot->getShootRemainingTime() > 0.0f)
+		{
+			defaultWeaponSlot->getShootRemainingTime() -= DeltaSeconds;
+		}
 	}
 }
 
@@ -401,35 +420,7 @@ void ALostConnectionCharacter::shootLogic()
 
 		if (world)
 		{
-			FTimerManager& manager = world->GetTimerManager();
-
-			if (manager.IsTimerActive(shootHandle))
-			{
-				return;
-			}
-
-			FTimerDelegate delegate;
-
-			delegate.BindLambda([this, &manager]()
-				{
-					if (IsPendingKill())
-					{
-						return;
-					}
-
-					if (clearTimer)
-					{
-						clearTimer = false; manager.ClearTimer(shootHandle);
-
-						return;
-					}
-
-					currentWeapon->shoot(currentWeaponMesh, this);
-				});
-
-			manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(currentWeapon->getRateOfFire()), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
-
-			shootRemainingTime = 1.0f / static_cast<float>(currentWeapon->getRateOfFire());
+			currentWeapon->shoot(world, currentWeaponMesh, this);
 
 			this->pressShoot();
 		}
@@ -438,32 +429,16 @@ void ALostConnectionCharacter::shootLogic()
 
 void ALostConnectionCharacter::resetShootLogic()
 {
-	UWorld* world = GetWorld();
-
-	if (world)
+	if (currentWeapon)
 	{
-		if (shootRemainingTime > 0.0f)
+		UWorld* world = GetWorld();
+
+		if (world)
 		{
-			clearTimer = true;
+			currentWeapon->resetShoot(world, currentWeaponMesh, this);
 
-			return;
+			this->releaseShoot();
 		}
-
-		world->GetTimerManager().ClearTimer(shootHandle);
-
-		if (currentWeapon)
-		{
-			if (currentWeapon->getWeaponType() == weaponTypes::delay)
-			{
-				currentWeapon->setWeaponType(weaponTypes::single);
-
-				currentWeapon->shoot(currentWeaponMesh, this);
-
-				currentWeapon->setWeaponType(weaponTypes::delay);
-			}
-		}
-
-		this->releaseShoot();
 	}
 }
 
@@ -475,8 +450,6 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	currentHealth = health;
 	isAlly = true;
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
-	shootRemainingTime = 0.0f;
-	clearTimer = false;
 	NetUpdateFrequency = 60;
 
 	currentAmmoHolding.Reserve(4);

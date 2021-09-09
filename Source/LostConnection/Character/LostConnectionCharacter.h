@@ -63,13 +63,6 @@ protected:
 private:
 	TArray<FInputActionBinding> initInputs();
 
-private:
-	FTimerHandle shootHandle;
-
-	float shootRemainingTime;
-
-	bool clearTimer;
-
 protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float health;

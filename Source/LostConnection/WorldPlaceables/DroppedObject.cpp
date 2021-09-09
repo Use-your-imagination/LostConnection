@@ -8,9 +8,14 @@ void ADroppedObject::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ADroppedObject::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+}
+
 ADroppedObject::ADroppedObject()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	collisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));

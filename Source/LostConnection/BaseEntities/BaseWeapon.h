@@ -22,11 +22,18 @@ class LOSTCONNECTION_API UBaseWeapon :
 	public UObject
 {
 	GENERATED_BODY()
+		
+private:
+	FTimerHandle shootHandle;
+	float shootRemainingTime;
+	bool clearTimer;
 
 protected:
 	virtual bool IsSupportedForNetworking() const override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
 
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
@@ -57,7 +64,9 @@ protected:
 public:
 	UBaseWeapon();
 
-	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
+	virtual void shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character) final;
+
+	virtual void resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character) final;
 
 	virtual void alternativeMode();
 
@@ -85,5 +94,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual weaponTypes getWeaponType() const final;
 
+	virtual float& getShootRemainingTime() final;
+
+	virtual float getShootRemainingTime() const final;
+
 	virtual ~UBaseWeapon() = default;
 };
+
+inline float& UBaseWeapon::getShootRemainingTime()
+{
+	return shootRemainingTime;
+}
+
+inline float UBaseWeapon::getShootRemainingTime() const
+{
+	return shootRemainingTime;
+}
