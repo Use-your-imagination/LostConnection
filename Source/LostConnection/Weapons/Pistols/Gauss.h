@@ -6,18 +6,18 @@
 
 #include "BaseEntities/BaseWeapon.h"
 
-#include "DefaultWeapon.generated.h"
+#include "Gauss.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API UDefaultWeapon : public UBaseWeapon
+class LOSTCONNECTION_API UGauss : public UBaseWeapon
 {
 	GENERATED_BODY()
 
 public:
-	UDefaultWeapon();
+	UGauss();
 
-	~UDefaultWeapon() = default;
+	~UGauss() = default;
 };

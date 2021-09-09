@@ -6,21 +6,21 @@
 
 #include "BaseEntities/BaseAmmo.h"
 
-#include "DefaultAmmo.generated.h"
+#include "Bullet.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API ADefaultAmmo : public ABaseAmmo
+class LOSTCONNECTION_API ABullet : public ABaseAmmo
 {
 	GENERATED_BODY()
-	
+
 private:
-	GET_STATIC_CLASS_OVERRIDE(ADefaultAmmo)
+	GET_STATIC_CLASS_OVERRIDE(ABullet)
 
 public:
-	ADefaultAmmo();
+	ABullet();
 
-	~ADefaultAmmo() = default;
+	~ABullet() = default;
 };

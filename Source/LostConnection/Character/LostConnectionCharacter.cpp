@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+#include "Weapons/SubmachineGuns/Hipter.h"
+
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -168,7 +170,9 @@ void ALostConnectionCharacter::PostInitializeComponents()
 
 	if (HasAuthority())
 	{
-		defaultWeaponSlot = NewObject<UDefaultWeapon>(this);
+		defaultWeaponSlot = NewObject<UGauss>(this);
+
+		firstWeaponSlot = NewObject<UHipter>(this);
 	}
 }
 
@@ -683,6 +687,8 @@ void ALostConnectionCharacter::dropWeapon()
 		currentWeapon = secondWeaponSlot = nullptr;
 	}
 
+	this->updateWeaponMesh();
+
 	droppedWeapon->FinishSpawning(spawnPoint);
 
 	this->pressDropWeapon();
@@ -699,12 +705,16 @@ void ALostConnectionCharacter::pickupWeapon(ADroppedWeapon* weaponToEquip)
 			this->dropWeapon();
 
 			firstWeaponSlot = weapon;
+
+			this->changeToFirstWeapon();
 		}
 		else if (currentWeapon == secondWeaponSlot)
 		{
 			this->dropWeapon();
 
 			secondWeaponSlot = weapon;
+
+			this->changeToSecondWeapon();
 		}
 		else
 		{
@@ -723,10 +733,14 @@ void ALostConnectionCharacter::pickupWeapon(ADroppedWeapon* weaponToEquip)
 		if (!firstWeaponSlot)
 		{
 			firstWeaponSlot = weapon;
+
+			this->changeToFirstWeapon();
 		}
 		else if (!secondWeaponSlot)
 		{
 			secondWeaponSlot = weapon;
+
+			this->changeToSecondWeapon();
 		}
 	}
 

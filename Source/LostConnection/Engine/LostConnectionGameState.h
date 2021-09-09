@@ -19,6 +19,11 @@ class LOSTCONNECTION_API ALostConnectionGameState : public AGameStateBase
 public:
 	ALostConnectionGameState() = default;
 
+	/// @brief Spawn actor deferred
+	/// @tparam T 
+	/// @param staticClass 
+	/// @param transform 
+	/// @return 
 	template<typename T>
 	T* spawn(UClass* staticClass, const FTransform& transform);
 };

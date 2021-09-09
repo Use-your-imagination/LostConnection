@@ -1,18 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DefaultAmmo.h"
+#include "Ball.h"
 
 #include "UObject/ConstructorHelpers.h"
 
-ADefaultAmmo::ADefaultAmmo()
+ABall::ABall()
 {
-	ConstructorHelpers::FObjectFinder<UStaticMesh> defaultAmmoMeshFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Ammo/BallBullet.BallBullet'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> ammoMeshFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Ammo/BallBullet.BallBullet'"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> brokenAmmoMeshFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Ammo/BallBulletBroken.BallBulletBroken'"));
 
-	if (defaultAmmoMeshFinder.Succeeded())
+	if (ammoMeshFinder.Succeeded())
 	{
-		mesh->SetStaticMesh(defaultAmmoMeshFinder.Object);
+		mesh->SetStaticMesh(ammoMeshFinder.Object);
 	}
 
 	if (brokenAmmoMeshFinder.Succeeded())

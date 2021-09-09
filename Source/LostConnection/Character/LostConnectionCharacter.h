@@ -13,7 +13,7 @@
 #include "Net/DataBunch.h"
 
 #include "BaseEntities/BaseWeapon.h"
-#include "Weapons/DefaultWeapon.h"
+#include "Weapons/Pistols/Gauss.h"
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Interfaces/PhysicalObjects/ShotThrough.h"
 #include "Interfaces/Gameplay/Abilities.h"
@@ -58,7 +58,7 @@ protected:
 	UBaseWeapon* secondWeaponSlot;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
-	UDefaultWeapon* defaultWeaponSlot;
+	UGauss* defaultWeaponSlot;
 
 private:
 	TArray<FInputActionBinding> initInputs();
