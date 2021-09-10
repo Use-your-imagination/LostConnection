@@ -181,14 +181,15 @@ void ALostConnectionCharacter::PostInitializeComponents()
 
 bool ALostConnectionCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
-	bool WroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	if (defaultWeaponSlot)
-	{
-		WroteSomething |= Channel->ReplicateSubobject(defaultWeaponSlot, *Bunch, *RepFlags);
-	}
+	wroteSomething |= Channel->ReplicateSubobject(firstWeaponSlot, *Bunch, *RepFlags);
 
-	return WroteSomething;
+	wroteSomething |= Channel->ReplicateSubobject(secondWeaponSlot, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(defaultWeaponSlot, *Bunch, *RepFlags);
+
+	return wroteSomething;
 }
 
 void ALostConnectionCharacter::onRepCurrentWeapon()
@@ -234,8 +235,6 @@ void ALostConnectionCharacter::BeginPlay()
 	{
 		ALostConnectionCharacter::globalPlayerPtr = UGameplayStatics::GetPlayerController(world, 0)->GetPawn<ALostConnectionCharacter>();
 	}
-
-	this->changeToDefaultWeapon();
 }
 
 void ALostConnectionCharacter::Tick(float DeltaSeconds)
