@@ -35,9 +35,6 @@ protected:
 
 	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
 
-	UFUNCTION()
-	virtual void reduceShootRemainigTimeLogic(float deltaSeconds) final;
-
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	USkeletalMesh* mesh;
@@ -73,6 +70,7 @@ public:
 
 	virtual void alternativeMode();
 
+	UFUNCTION(NetMulticast, Reliable)
 	virtual void reduceShootRemainigTime(float deltaSeconds);
 
 	virtual void setCurrentMagazineSize(int currentMagazineSize) final;

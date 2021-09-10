@@ -78,14 +78,6 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 	}
 }
 
-void UBaseWeapon::reduceShootRemainigTimeLogic(float deltaSeconds)
-{
-	if (shootRemainingTime > 0.0f)
-	{
-		shootRemainingTime -= deltaSeconds;
-	}
-}
-
 UBaseWeapon::UBaseWeapon()
 {
 	shootRemainingTime = 0.0f;
@@ -157,9 +149,12 @@ void UBaseWeapon::alternativeMode()
 
 }
 
-void UBaseWeapon::reduceShootRemainigTime(float deltaSeconds)
+void UBaseWeapon::reduceShootRemainigTime_Implementation(float deltaSeconds)
 {
-	ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>()->runOnServerReliable(this, "reduceShootRemainigTimeLogic", deltaSeconds);
+	if (shootRemainingTime > 0.0f)
+	{
+		shootRemainingTime -= deltaSeconds;
+	}
 }
 
 void UBaseWeapon::setCurrentMagazineSize(int currentMagazineSize)

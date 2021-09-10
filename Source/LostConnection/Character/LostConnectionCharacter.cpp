@@ -249,17 +249,26 @@ void ALostConnectionCharacter::Tick(float DeltaSeconds)
 
 	if (firstWeaponSlot)
 	{
-		firstWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
+		if (HasAuthority())
+		{
+			firstWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
+		}
 	}
 
 	if (secondWeaponSlot)
 	{
-		secondWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
+		if (HasAuthority())
+		{
+			secondWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
+		}
 	}
 
 	if (defaultWeaponSlot)
 	{
-		defaultWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
+		if (HasAuthority())
+		{
+			defaultWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
+		}
 	}
 }
 

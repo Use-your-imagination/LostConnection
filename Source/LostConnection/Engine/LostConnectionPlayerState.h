@@ -19,39 +19,15 @@ class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 public:
 	ALostConnectionPlayerState() = default;
 
-	template<typename... Args>
 	UFUNCTION(NetMulticast, Reliable)
-	void runMulticastReliable(UObject* caller, const FName& methodName, Args&&... args)
-	{
-		FTimerDelegate delegate;
+	void runMulticastReliable(UObject* caller, const FName& methodName);
 
-		delegate.BindUFunction(caller, methodName, std::forward<Args...>(args)...);
-
-		delegate.Execute();
-	}
-
-	template<typename... Args>
 	UFUNCTION(Server, Reliable)
-	void runOnServerReliable(UObject* caller, const FName& methodName, Args&&... args)
-	{
-		this->runMulticastReliable(caller, methodName, std::forward<Args...>(args)...);
-	}
+	void runOnServerReliable(UObject* caller, const FName& methodName);
 
-	template<typename... Args>
 	UFUNCTION(NetMulticast, Unreliable)
-	void runMulticastUnreliable(UObject* caller, const FName& methodName, Args&&... args)
-	{
-		FTimerDelegate delegate;
+	void runMulticastUnreliable(UObject* caller, const FName& methodName);
 
-		delegate.BindUFunction(caller, methodName, std::forward<Args...>(args)...);
-
-		delegate.Execute();
-	}
-
-	template<typename... Args>
 	UFUNCTION(Server, Unreliable)
-	void runOnServerUnreliable(UObject* caller, const FName& methodName, Args&&... args)
-	{
-		this->runMulticastUnreliable(caller, methodName, std::forward<Args...>(args)...);
-	}
+	void runOnServerUnreliable(UObject* caller, const FName& methodName);
 };
