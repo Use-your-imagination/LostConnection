@@ -88,6 +88,8 @@ public:
 public:
 	static FString actionHotkey;
 
+	static ALostConnectionCharacter* globalPlayerPtr;
+
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

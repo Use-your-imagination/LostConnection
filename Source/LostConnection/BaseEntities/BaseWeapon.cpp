@@ -3,6 +3,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/CapsuleComponent.h"
 
+#include "Engine/LostConnectionPlayerState.h"
 #include "Engine/LostConnectionGameState.h"
 #include "Character/LostConnectionCharacter.h"
 
@@ -20,6 +21,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseWeapon, currentMagazineSize);
 
 	DOREPLIFETIME(UBaseWeapon, magazineSize);
+
+	DOREPLIFETIME(UBaseWeapon, weaponType);
 }
 
 void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
@@ -72,6 +75,14 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 	else
 	{
 		lostCharacter->reload();
+	}
+}
+
+void UBaseWeapon::reduceShootRemainigTimeLogic(float deltaSeconds)
+{
+	if (shootRemainingTime > 0.0f)
+	{
+		shootRemainingTime -= deltaSeconds;
 	}
 }
 
@@ -144,6 +155,11 @@ void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisib
 void UBaseWeapon::alternativeMode()
 {
 
+}
+
+void UBaseWeapon::reduceShootRemainigTime(float deltaSeconds)
+{
+	ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>()->runOnServerReliable(this, "reduceShootRemainigTimeLogic", deltaSeconds);
 }
 
 void UBaseWeapon::setCurrentMagazineSize(int currentMagazineSize)

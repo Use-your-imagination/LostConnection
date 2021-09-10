@@ -35,6 +35,9 @@ protected:
 
 	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
 
+	UFUNCTION()
+	virtual void reduceShootRemainigTimeLogic(float deltaSeconds) final;
+
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	USkeletalMesh* mesh;
@@ -55,7 +58,7 @@ protected:
 
 	int rateOfFire;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, Replicated)
 	weaponTypes weaponType;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
@@ -69,6 +72,8 @@ public:
 	virtual void resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character) final;
 
 	virtual void alternativeMode();
+
+	virtual void reduceShootRemainigTime(float deltaSeconds);
 
 	virtual void setCurrentMagazineSize(int currentMagazineSize) final;
 
@@ -94,19 +99,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual weaponTypes getWeaponType() const final;
 
-	virtual float& getShootRemainingTime() final;
-
-	virtual float getShootRemainingTime() const final;
-
 	virtual ~UBaseWeapon() = default;
 };
-
-inline float& UBaseWeapon::getShootRemainingTime()
-{
-	return shootRemainingTime;
-}
-
-inline float UBaseWeapon::getShootRemainingTime() const
-{
-	return shootRemainingTime;
-}

@@ -4,19 +4,22 @@
 
 #include <algorithm>
 
-#include "Weapons/SubmachineGuns/Hipter.h"
-
+#include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerInput.h"
-#include "DrawDebugHelpers.h"
+
+#include "Engine/LostConnectionPlayerState.h"
+#include "Weapons/SubmachineGuns/Hipter.h"
 
 #pragma warning(disable: 4458)
 
 using namespace std;
 
 FString ALostConnectionCharacter::actionHotkey = "F";
+
+ALostConnectionCharacter* ALostConnectionCharacter::globalPlayerPtr = nullptr;
 
 TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 {
@@ -225,6 +228,13 @@ void ALostConnectionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UWorld* world = GetWorld();
+
+	if (world)
+	{
+		ALostConnectionCharacter::globalPlayerPtr = UGameplayStatics::GetPlayerController(world, 0)->GetPawn<ALostConnectionCharacter>();
+	}
+
 	this->changeToDefaultWeapon();
 }
 
@@ -239,26 +249,17 @@ void ALostConnectionCharacter::Tick(float DeltaSeconds)
 
 	if (firstWeaponSlot)
 	{
-		if (firstWeaponSlot->getShootRemainingTime() > 0.0f)
-		{
-			firstWeaponSlot->getShootRemainingTime() -= DeltaSeconds;
-		}
+		firstWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
 	}
 
 	if (secondWeaponSlot)
 	{
-		if (secondWeaponSlot->getShootRemainingTime() > 0.0f)
-		{
-			secondWeaponSlot->getShootRemainingTime() -= DeltaSeconds;
-		}
+		secondWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
 	}
 
 	if (defaultWeaponSlot)
 	{
-		if (defaultWeaponSlot->getShootRemainingTime() > 0.0f)
-		{
-			defaultWeaponSlot->getShootRemainingTime() -= DeltaSeconds;
-		}
+		defaultWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
 	}
 }
 
@@ -545,7 +546,7 @@ void ALostConnectionCharacter::updateWeaponMesh()
 
 void ALostConnectionCharacter::shoot()
 {
-	this->runOnServerUnreliable("shootLogic");
+	this->GetPlayerState<ALostConnectionPlayerState>()->runOnServerUnreliable(this, "shootLogic");
 }
 
 void ALostConnectionCharacter::resetShoot()
