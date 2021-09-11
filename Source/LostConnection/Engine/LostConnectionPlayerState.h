@@ -16,17 +16,18 @@ class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 
-public:
-	ALostConnectionPlayerState() = default;
-
+private:
 	UFUNCTION(NetMulticast, Reliable)
 	void runMulticastReliable(UObject* caller, const FName& methodName);
 
-	UFUNCTION(Server, Reliable)
-	void runOnServerReliable(UObject* caller, const FName& methodName);
-
 	UFUNCTION(NetMulticast, Unreliable)
 	void runMulticastUnreliable(UObject* caller, const FName& methodName);
+
+public:
+	ALostConnectionPlayerState() = default;
+
+	UFUNCTION(Server, Reliable)
+	void runOnServerReliable(UObject* caller, const FName& methodName);
 
 	UFUNCTION(Server, Unreliable)
 	void runOnServerUnreliable(UObject* caller, const FName& methodName);

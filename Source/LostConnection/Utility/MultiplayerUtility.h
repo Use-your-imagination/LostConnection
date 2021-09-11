@@ -1,26 +1,21 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
 #pragma once
 
 #include "CoreMinimal.h"
 
-#include "Online.h"
-#include "Net/UnrealNetwork.h"
-#include "FindSessionsCallbackProxy.h"
-
-#include "MultiplayerUtility.generated.h"
-
-UENUM(BlueprintType)
-enum executionOutputs
+/**
+ * 
+ */
+class LOSTCONNECTION_API MultiplayerUtility
 {
-	Success UMETA(DisplayName = "Success"),
-	Fail UMETA(DisplayName = "Fail")
-};
+public:
+	MultiplayerUtility() = default;
 
-UCLASS(MinimalApi)
-class UMultiplayerUtility : public UOnlineBlueprintCallProxyBase
-{
-	GENERATED_BODY()
+	~MultiplayerUtility() = default;
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Online|Session", Meta = (ExpandEnumAsExecs = "branches"))
-	static void getSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, TEnumAsByte<executionOutputs>& branches);
+	static void runOnServerReliable(UObject* caller, const FName& methodName);
+
+	static void runOnServerUnreliable(UObject* caller, const FName& methodName);
 };

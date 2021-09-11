@@ -1,17 +1,27 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
 #include "MultiplayerUtility.h"
 
-void UMultiplayerUtility::getSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, TEnumAsByte<executionOutputs>& branches)
+#include "Character/LostConnectionCharacter.h"
+#include "Engine/LostConnectionPlayerState.h"
+
+void MultiplayerUtility::runOnServerReliable(UObject* caller, const FName& methodName)
 {
-	auto it = sessionResult.OnlineResult.Session.SessionSettings.Settings.Find("ServerName");
+	ALostConnectionPlayerState* playerState = ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
 
-	if (it)
+	if (playerState)
 	{
-		branches = executionOutputs::Success;
-
-		sessionName = it->Data.ToString();
+		playerState->runOnServerReliable(caller, methodName);
 	}
-	else
+}
+
+void MultiplayerUtility::runOnServerUnreliable(UObject* caller, const FName& methodName)
+{
+	ALostConnectionPlayerState* playerState = ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+
+	if (playerState)
 	{
-		branches = executionOutputs::Fail;
+		playerState->runOnServerUnreliable(caller, methodName);
 	}
 }
