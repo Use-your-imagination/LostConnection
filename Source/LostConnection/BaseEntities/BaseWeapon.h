@@ -70,7 +70,7 @@ public:
 
 	virtual void alternativeMode();
 
-	UFUNCTION(NetMulticast, Reliable)
+	UFUNCTION(Server, Reliable)
 	virtual void reduceShootRemainigTime(float deltaSeconds);
 
 	virtual void setCurrentMagazineSize(int currentMagazineSize) final;

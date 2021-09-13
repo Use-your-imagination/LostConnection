@@ -125,14 +125,7 @@ void UBaseWeapon::shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWea
 
 void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
-	if (shootRemainingTime > 0.0f)
-	{
-		clearTimer = true;
-
-		return;
-	}
-
-	world->GetTimerManager().ClearTimer(shootHandle);
+	clearTimer = true;
 
 	if (weaponType == weaponTypes::delay)
 	{

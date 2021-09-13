@@ -441,6 +441,8 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 		currentAmmoHolding.Add(0);
 	}
 
+	currentAmmoHolding[static_cast<size_t>(ammoTypes::small)] = 720;
+
 	currentAmmoHolding.Add(9999);
 
 	// Set size for collision capsule

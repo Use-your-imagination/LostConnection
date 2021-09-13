@@ -2,6 +2,11 @@
 
 void ALostConnectionPlayerState::runMulticastReliable_Implementation(UObject* caller, const FName& methodName)
 {
+	if (!caller)
+	{
+		return;
+	}
+
 	FTimerDelegate delegate;
 
 	delegate.BindUFunction(caller, methodName);
@@ -11,6 +16,11 @@ void ALostConnectionPlayerState::runMulticastReliable_Implementation(UObject* ca
 
 void ALostConnectionPlayerState::runMulticastUnreliable_Implementation(UObject* caller, const FName& methodName)
 {
+	if (!caller)
+	{
+		return;
+	}
+
 	FTimerDelegate delegate;
 
 	delegate.BindUFunction(caller, methodName);
