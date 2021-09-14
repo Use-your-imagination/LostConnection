@@ -50,7 +50,7 @@ ADroppedWeapon::ADroppedWeapon()
 
 void ADroppedWeapon::setWeapon_Implementation(UBaseWeapon* newWeapon)
 {
-	weapon = newWeapon;
+	weapon = DuplicateObject(newWeapon, nullptr);
 
 	this->setMesh(weapon->getWeaponMesh());
 }

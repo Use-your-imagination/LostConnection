@@ -24,3 +24,8 @@ UHipter::UHipter()
 	rateOfFire = 20;
 	weaponType = weaponTypes::automatic;
 }
+
+void UHipter::alternativeMode()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, L"Hipter");
+}

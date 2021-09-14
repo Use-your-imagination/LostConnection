@@ -19,5 +19,7 @@ class LOSTCONNECTION_API UHipter : public UBaseWeapon
 public:
 	UHipter();
 
+	virtual void alternativeMode() final override;
+
 	~UHipter() = default;
 };
