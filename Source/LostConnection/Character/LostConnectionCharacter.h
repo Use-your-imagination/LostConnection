@@ -192,6 +192,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void pickupAmmo(ammoTypes type, int32 count);
 
+	UFUNCTION()
+	void dropWeapon();
+
+	UFUNCTION(Server, Reliable)
+	void pickupWeapon(ADroppedWeapon* weaponToEquip);
+
 	UFUNCTION(Server, Reliable)
 	void setCurrentHealth(int newCurrentHealth);
 
@@ -223,12 +229,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int getWeaponCount() const;
-
-	UFUNCTION()
-	void dropWeapon();
-
-	UFUNCTION()
-	void pickupWeapon(ADroppedWeapon* weaponToEquip);
 
 #pragma region Abilities
 	UFUNCTION()

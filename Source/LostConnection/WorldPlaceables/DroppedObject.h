@@ -36,7 +36,7 @@ protected:
 public:	
 	ADroppedObject();
 
-	virtual void setMesh(USkeletalMesh* mesh) final;
+	virtual void setMesh(USkeletalMesh* mesh);
 
 	virtual void action(AActor* player) override;
 

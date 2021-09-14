@@ -20,7 +20,15 @@ class LOSTCONNECTION_API ADroppedWeapon : public ADroppedObject
 private:
 	virtual void Tick(float DeltaSeconds) final override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+	UFUNCTION()
+	virtual void onWeaponChange() final;
+
 private:
+	UPROPERTY(ReplicatedUsing = onWeaponChange)
 	UBaseWeapon* weapon;
 
 protected:
@@ -30,11 +38,14 @@ protected:
 public:
 	ADroppedWeapon();
 
-	void setWeapon(UBaseWeapon* weapon);
-
-	virtual void action(AActor* player) final override;
+	UFUNCTION(Server, Reliable)
+	void setWeapon(UBaseWeapon* newWeapon);
 
 	UBaseWeapon* getWeapon();
+
+	virtual void setMesh(USkeletalMesh* mesh) final override;
+
+	virtual void action(AActor* player) final override;
 
 	~ADroppedWeapon() = default;
 };

@@ -115,16 +115,16 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	sprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "sprint"); });
 	run.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "run"); });
 	
-	pressChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "pressChangeWeaponHandle"); });
+	pressChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "pressChangeWeaponHandle"); });
 	releaseChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseChangeWeaponHandle"); });
 	
 	pressAlternative.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "pressAlternativeHandle"); });
 	releaseAlternative.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseAlternativeHandle"); });
 	
-	pressAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "pressActionHandle"); });
+	pressAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "pressActionHandle"); });
 	releaseAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseActionHandle"); });
 	
-	pressDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "dropWeapon"); });
+	pressDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "dropWeapon"); });
 	releaseDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseDropWeaponHandle"); });
 
 	result.Add(pressCrouch);
@@ -569,54 +569,6 @@ void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
 	currentAmmoHolding[static_cast<size_t>(type)] += count;
 }
 
-void ALostConnectionCharacter::setCurrentHealth_Implementation(int newCurrentHealth)
-{
-	currentHealth = newCurrentHealth;
-}
-
-void ALostConnectionCharacter::setIsAlly_Implementation(bool newIsAlly)
-{
-	isAlly = newIsAlly;
-}
-
-float ALostConnectionCharacter::getHealth() const
-{
-	return health;
-}
-
-float ALostConnectionCharacter::getCurrentHealth() const
-{
-	return currentHealth;
-}
-
-bool ALostConnectionCharacter::getIsAlly() const
-{
-	return isAlly;
-}
-
-int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
-{
-	return currentAmmoHolding[static_cast<size_t>(type)];
-}
-
-USkeletalMeshComponent* ALostConnectionCharacter::getCurrentWeaponMesh() const
-{
-	return currentWeaponMesh;
-}
-
-int ALostConnectionCharacter::getWeaponCount() const
-{
-	int result = 0;
-
-	result += static_cast<bool>(firstWeaponSlot);
-
-	result += static_cast<bool>(secondWeaponSlot);
-
-	result += static_cast<bool>(defaultWeaponSlot);
-
-	return result;
-}
-
 void ALostConnectionCharacter::dropWeapon()
 {
 	if (!currentWeapon || currentWeapon == defaultWeaponSlot)
@@ -657,8 +609,15 @@ void ALostConnectionCharacter::dropWeapon()
 	this->pressDropWeapon();
 }
 
-void ALostConnectionCharacter::pickupWeapon(ADroppedWeapon* weaponToEquip)
+void ALostConnectionCharacter::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 {
+	if (!weaponToEquip)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, L"Empty");
+
+		return;
+	}
+
 	UBaseWeapon* weapon = weaponToEquip->getWeapon();
 
 	if (currentWeapon)
@@ -708,6 +667,54 @@ void ALostConnectionCharacter::pickupWeapon(ADroppedWeapon* weaponToEquip)
 	}
 
 	weaponToEquip->Destroy(true);
+}
+
+void ALostConnectionCharacter::setCurrentHealth_Implementation(int newCurrentHealth)
+{
+	currentHealth = newCurrentHealth;
+}
+
+void ALostConnectionCharacter::setIsAlly_Implementation(bool newIsAlly)
+{
+	isAlly = newIsAlly;
+}
+
+float ALostConnectionCharacter::getHealth() const
+{
+	return health;
+}
+
+float ALostConnectionCharacter::getCurrentHealth() const
+{
+	return currentHealth;
+}
+
+bool ALostConnectionCharacter::getIsAlly() const
+{
+	return isAlly;
+}
+
+int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
+{
+	return currentAmmoHolding[static_cast<size_t>(type)];
+}
+
+USkeletalMeshComponent* ALostConnectionCharacter::getCurrentWeaponMesh() const
+{
+	return currentWeaponMesh;
+}
+
+int ALostConnectionCharacter::getWeaponCount() const
+{
+	int result = 0;
+
+	result += static_cast<bool>(firstWeaponSlot);
+
+	result += static_cast<bool>(secondWeaponSlot);
+
+	result += static_cast<bool>(defaultWeaponSlot);
+
+	return result;
 }
 
 void ALostConnectionCharacter::firstAbility()
