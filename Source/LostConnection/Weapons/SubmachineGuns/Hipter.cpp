@@ -27,5 +27,5 @@ UHipter::UHipter()
 
 void UHipter::alternativeMode()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, L"Hipter");
+	
 }

@@ -96,6 +96,10 @@ void UBaseWeapon::shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWea
 	{
 		return;
 	}
+	else
+	{
+		clearTimer = false;
+	}
 
 	FTimerDelegate delegate;
 
@@ -139,7 +143,7 @@ void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisib
 
 void UBaseWeapon::alternativeMode()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, L"BaseWeapon");
+	
 }
 
 void UBaseWeapon::reduceShootRemainigTime_Implementation(float deltaSeconds)

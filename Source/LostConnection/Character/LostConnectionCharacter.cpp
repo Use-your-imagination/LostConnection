@@ -530,12 +530,12 @@ void ALostConnectionCharacter::updateWeaponMesh()
 
 void ALostConnectionCharacter::shoot()
 {
-	MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "shootLogic");
+	MultiplayerUtility::runOnServerReliable(this, "shootLogic");
 }
 
 void ALostConnectionCharacter::resetShoot()
 {
-	MultiplayerUtility::runOnServerReliableWithMulticast(this, "resetShootLogic");
+	MultiplayerUtility::runOnServerReliable(this, "resetShootLogic");
 }
 
 void ALostConnectionCharacter::reload_Implementation()
