@@ -27,6 +27,12 @@ public:
 	ALostConnectionPlayerState() = default;
 
 	UFUNCTION(Server, Reliable)
+	void runOnServerReliableWithMulticast(UObject* caller, const FName& methodName);
+
+	UFUNCTION(Server, Unreliable)
+	void runOnServerUnreliableWithMulticast(UObject* caller, const FName& methodName);
+
+	UFUNCTION(Server, Reliable)
 	void runOnServerReliable(UObject* caller, const FName& methodName);
 
 	UFUNCTION(Server, Unreliable)

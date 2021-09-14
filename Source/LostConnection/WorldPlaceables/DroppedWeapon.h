@@ -13,8 +13,7 @@
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API ADroppedWeapon :
-	public ADroppedObject
+class LOSTCONNECTION_API ADroppedWeapon : public ADroppedObject
 {
 	GENERATED_BODY()
 

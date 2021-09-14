@@ -23,9 +23,6 @@ class LOSTCONNECTION_API ADroppedObject :
 	
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
-	UBoxComponent* collisionBox;
-
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	USkeletalMeshComponent* mesh;
 
 	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)

@@ -18,8 +18,7 @@ enum class weaponTypes : uint8
 };
 
 UCLASS()
-class LOSTCONNECTION_API UBaseWeapon :
-	public UObject
+class LOSTCONNECTION_API UBaseWeapon : public UObject
 {
 	GENERATED_BODY()
 		

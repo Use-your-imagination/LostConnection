@@ -28,12 +28,40 @@ void ALostConnectionPlayerState::runMulticastUnreliable_Implementation(UObject* 
 	delegate.Execute();
 }
 
-void ALostConnectionPlayerState::runOnServerReliable_Implementation(UObject* caller, const FName& methodName)
+void ALostConnectionPlayerState::runOnServerReliableWithMulticast_Implementation(UObject* caller, const FName& methodName)
 {
 	this->runMulticastReliable(caller, methodName);
 }
 
-void ALostConnectionPlayerState::runOnServerUnreliable_Implementation(UObject* caller, const FName& methodName)
+void ALostConnectionPlayerState::runOnServerUnreliableWithMulticast_Implementation(UObject* caller, const FName& methodName)
 {
 	this->runMulticastUnreliable(caller, methodName);
+}
+
+void ALostConnectionPlayerState::runOnServerReliable_Implementation(UObject* caller, const FName& methodName)
+{
+	if (!caller)
+	{
+		return;
+	}
+
+	FTimerDelegate delegate;
+
+	delegate.BindUFunction(caller, methodName);
+
+	delegate.Execute();
+}
+
+void ALostConnectionPlayerState::runOnServerUnreliable_Implementation(UObject* caller, const FName& methodName)
+{
+	if (!caller)
+	{
+		return;
+	}
+
+	FTimerDelegate delegate;
+
+	delegate.BindUFunction(caller, methodName);
+
+	delegate.Execute();
 }

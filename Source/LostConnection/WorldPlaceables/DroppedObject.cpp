@@ -16,24 +16,12 @@ void ADroppedObject::Tick(float DeltaSeconds)
 ADroppedObject::ADroppedObject()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
-	collisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	vfx = CreateDefaultSubobject<UNiagaraComponent>(TEXT("VFX"));
 
-	SetRootComponent(collisionBox);
-
-	collisionBox->SetSimulatePhysics(true);
-
-	collisionBox->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
-
-	collisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-
-	collisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
-
-	collisionBox->InitBoxExtent({ 5.0f, 5.0f, 5.0f });
-
-	mesh->SetupAttachment(collisionBox);
+	SetRootComponent(mesh);
 
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
 

@@ -23,8 +23,7 @@ enum class ammoTypes : uint8
 };
 
 UCLASS()
-class LOSTCONNECTION_API ABaseAmmo :
-	public APawn
+class LOSTCONNECTION_API ABaseAmmo : public APawn
 {
 	GENERATED_BODY()
 

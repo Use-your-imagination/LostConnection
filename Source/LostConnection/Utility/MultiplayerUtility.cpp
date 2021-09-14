@@ -6,6 +6,26 @@
 #include "Character/LostConnectionCharacter.h"
 #include "Engine/LostConnectionPlayerState.h"
 
+void MultiplayerUtility::runOnServerReliableWithMulticast(UObject* caller, const FName& methodName)
+{
+	ALostConnectionPlayerState* playerState = ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+
+	if (playerState)
+	{
+		playerState->runOnServerReliableWithMulticast(caller, methodName);
+	}
+}
+
+void MultiplayerUtility::runOnServerUnreliableWithMulticast(UObject* caller, const FName& methodName)
+{
+	ALostConnectionPlayerState* playerState = ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+
+	if (playerState)
+	{
+		playerState->runOnServerUnreliableWithMulticast(caller, methodName);
+	}
+}
+
 void MultiplayerUtility::runOnServerReliable(UObject* caller, const FName& methodName)
 {
 	ALostConnectionPlayerState* playerState = ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();

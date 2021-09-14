@@ -48,7 +48,7 @@ protected:
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* magazine;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onRepCurrentWeapon)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onCurrentWeaponChange)
 	UBaseWeapon* currentWeapon;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
@@ -98,7 +98,7 @@ protected:
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	UFUNCTION()
-	void onRepCurrentWeapon();
+	void onCurrentWeaponChange();
 
 protected:
 	void BeginPlay() override;

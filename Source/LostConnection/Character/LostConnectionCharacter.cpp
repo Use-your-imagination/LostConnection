@@ -11,6 +11,7 @@
 #include "GameFramework/PlayerInput.h"
 
 #include "Engine/LostConnectionPlayerState.h"
+#include "Engine/LostConnectionGameState.h"
 #include "Weapons/SubmachineGuns/Hipter.h"
 #include "Utility/MultiplayerUtility.h"
 
@@ -37,15 +38,15 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	FInputActionBinding releaseThirdAbility("ThirdAbility", IE_Released);
 	FInputActionBinding releaseUltimateAbility("UltimateAbility", IE_Released);
 
-	pressFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "firstAbility"); });
-	pressSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "secondAbility"); });
-	pressThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "thirdAbility"); });
-	pressUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "ultimateAbility"); });
+	pressFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "firstAbility"); });
+	pressSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "secondAbility"); });
+	pressThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "thirdAbility"); });
+	pressUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "ultimateAbility"); });
 
-	releaseFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseFirstAbilityHandle"); });
-	releaseSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseSecondAbilityHandle"); });
-	releaseThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseThirdAbilityHandle"); });
-	releaseUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseUltimateAbilityHandle"); });
+	releaseFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseFirstAbilityHandle"); });
+	releaseSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseSecondAbilityHandle"); });
+	releaseThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseThirdAbilityHandle"); });
+	releaseUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseUltimateAbilityHandle"); });
 
 	result.Add(pressFirstAbility);
 	result.Add(pressSecondAbility);
@@ -69,15 +70,15 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	FInputActionBinding releaseSelectThirdPlayer("ThirdPlayer", IE_Released);
 	FInputActionBinding releaseSelectFourthPlayer("FourthPlayer", IE_Released);
 
-	pressSelectFirstPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "selectFirstPlayer"); });
-	pressSelectSecondPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "selectSecondPlayer"); });
-	pressSelectThirdPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "selectThirdPlayer"); });
-	pressSelectFourthPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "selectFourthPlayer"); });
+	pressSelectFirstPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "selectFirstPlayer"); });
+	pressSelectSecondPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "selectSecondPlayer"); });
+	pressSelectThirdPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "selectThirdPlayer"); });
+	pressSelectFourthPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "selectFourthPlayer"); });
 	
-	releaseSelectFirstPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseSelectFirstPlayerHandle"); });
-	releaseSelectSecondPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseSelectSecondPlayerHandle"); });
-	releaseSelectThirdPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseSelectThirdPlayerHandle"); });
-	releaseSelectFourthPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseSelectFourthPlayerHandle"); });
+	releaseSelectFirstPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseSelectFirstPlayerHandle"); });
+	releaseSelectSecondPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseSelectSecondPlayerHandle"); });
+	releaseSelectThirdPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseSelectThirdPlayerHandle"); });
+	releaseSelectFourthPlayer.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseSelectFourthPlayerHandle"); });
 
 	result.Add(pressSelectFirstPlayer);
 	result.Add(pressSelectSecondPlayer);
@@ -111,20 +112,20 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	pressCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_pressCrouchAction, this);
 	releaseCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_releaseCrouchAction, this);
 
-	sprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliable(this, "sprint"); });
-	run.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliable(this, "run"); });
+	sprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "sprint"); });
+	run.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "run"); });
 	
-	pressChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "pressChangeWeaponHandle"); });
-	releaseChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseChangeWeaponHandle"); });
+	pressChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "pressChangeWeaponHandle"); });
+	releaseChangeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseChangeWeaponHandle"); });
 	
-	pressAlternative.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "pressAlternativeHandle"); });
-	releaseAlternative.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseAlternativeHandle"); });
+	pressAlternative.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "pressAlternativeHandle"); });
+	releaseAlternative.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseAlternativeHandle"); });
 	
-	pressAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "pressActionHandle"); });
-	releaseAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseActionHandle"); });
+	pressAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "pressActionHandle"); });
+	releaseAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseActionHandle"); });
 	
-	pressDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "dropWeapon"); });
-	releaseDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseDropWeaponHandle"); });
+	pressDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "dropWeapon"); });
+	releaseDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseDropWeaponHandle"); });
 
 	result.Add(pressCrouch);
 	result.Add(releaseCrouch);
@@ -193,7 +194,7 @@ bool ALostConnectionCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutB
 	return wroteSomething;
 }
 
-void ALostConnectionCharacter::onRepCurrentWeapon()
+void ALostConnectionCharacter::onCurrentWeaponChange()
 {
 	this->updateWeaponMesh();
 }
@@ -529,12 +530,12 @@ void ALostConnectionCharacter::updateWeaponMesh()
 
 void ALostConnectionCharacter::shoot()
 {
-	MultiplayerUtility::runOnServerUnreliable(this, "shootLogic");
+	MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "shootLogic");
 }
 
 void ALostConnectionCharacter::resetShoot()
 {
-	MultiplayerUtility::runOnServerReliable(this, "resetShootLogic");
+	MultiplayerUtility::runOnServerReliableWithMulticast(this, "resetShootLogic");
 }
 
 void ALostConnectionCharacter::reload_Implementation()
@@ -618,7 +619,7 @@ int ALostConnectionCharacter::getWeaponCount() const
 
 void ALostConnectionCharacter::dropWeapon()
 {
-	if (currentWeapon == defaultWeaponSlot)
+	if (!currentWeapon || currentWeapon == defaultWeaponSlot)
 	{
 		return;
 	}
@@ -630,8 +631,13 @@ void ALostConnectionCharacter::dropWeapon()
 		return;
 	}
 
-	ADroppedWeapon* droppedWeapon = world->SpawnActorDeferred<ADroppedWeapon>(ADroppedWeapon::StaticClass(), {});
-	FTransform spawnPoint(currentWeaponMesh->GetComponentRotation(), currentWeaponMesh->GetComponentLocation() + 100.0f * GetActorForwardVector());
+	FVector location = currentWeaponMesh->GetComponentLocation();
+
+	location.Z -= GetMesh()->SkeletalMesh->GetImportedBounds().BoxExtent.Z / 2;
+
+	FTransform spawnPoint(currentWeaponMesh->GetComponentRotation(), location + 100.0f * GetActorForwardVector());
+
+	ADroppedWeapon* droppedWeapon = world->GetGameState<ALostConnectionGameState>()->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), spawnPoint);
 
 	droppedWeapon->setWeapon(currentWeapon);
 
@@ -646,7 +652,7 @@ void ALostConnectionCharacter::dropWeapon()
 
 	this->updateWeaponMesh();
 
-	droppedWeapon->FinishSpawning(spawnPoint);
+	droppedWeapon->FinishSpawning({}, true);
 
 	this->pressDropWeapon();
 }
