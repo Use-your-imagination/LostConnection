@@ -1,4 +1,37 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.0.10.0"
+  "projectVersion": "0.0.10.0",
+  "UI": {
+    "type": "category",
+    "Action": {
+      "type": "item",
+      "notes": [
+        "Active items now show a tooltip"
+      ]
+    }
+  },
+  "Weapon Mechanics": {
+    "type": "category",
+    "Pickup": {
+      "type": "item",
+      "notes": [
+        "Added pickup weapons"
+      ]
+    }
+  },
+  "Weapons": {
+    "type": "category",
+    "Gauss": {
+      "type": "item",
+      "notes": [
+        "Added new default weapon "Gauss""
+      ]
+    },
+    "Hipter": {
+      "type": "item",
+      "notes": [
+        "Previous default weapon"
+      ]
+    }
+  }
 }
