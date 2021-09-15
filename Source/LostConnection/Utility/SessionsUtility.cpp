@@ -1,6 +1,6 @@
 #include "SessionsUtility.h"
 
-void USessionsUtility::getSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, TEnumAsByte<executionOutputs>& branches)
+void USessionsUtility::getFindedSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, TEnumAsByte<executionOutputs>& branches)
 {
 	auto it = sessionResult.OnlineResult.Session.SessionSettings.Settings.Find("ServerName");
 

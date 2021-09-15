@@ -22,5 +22,5 @@ class USessionsUtility : public UOnlineBlueprintCallProxyBase
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Online|Session", Meta = (ExpandEnumAsExecs = "branches"))
-	static void getSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, TEnumAsByte<executionOutputs>& branches);
+	static void getFindedSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, TEnumAsByte<executionOutputs>& branches);
 };
