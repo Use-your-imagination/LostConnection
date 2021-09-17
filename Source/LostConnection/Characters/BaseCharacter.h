@@ -3,27 +3,85 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+#include "Components/InputComponent.h"
+#include "Net/UnrealNetwork.h"
+#include "Engine/ActorChannel.h"
+#include "Net/DataBunch.h"
+
+#include "Weapons/BaseWeapon.h"
+#include "WorldPlaceables/DroppedWeapon.h"
+#include "Interfaces/PhysicalObjects/ShotThrough.h"
+
 #include "BaseCharacter.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ABaseCharacter : public ACharacter
+class LOSTCONNECTION_API ABaseCharacter :
+	public ACharacter,
+	public IShotThrough
 {
 	GENERATED_BODY()
 
-public:
-	// Sets default values for this character's properties
-	ABaseCharacter();
+protected:
+	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
+	USpringArmComponent* CameraOffset;
+
+	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
+	UCameraComponent* FollowCamera;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
+	USkeletalMeshComponent* currentWeaponMesh;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent* magazine;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onCurrentWeaponChange)
+	UBaseWeapon* currentWeapon;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
+	UBaseWeapon* defaultWeaponSlot;
 
 protected:
-	// Called when the game starts or when spawned
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float health;
+
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float currentHealth;
+
+	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadWrite)
+	bool isAlly;
+
+private:
+	UFUNCTION()
+	void onCurrentWeaponChange();
+
+	void updateWeaponMesh();
+
+protected:
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+protected:
+	UFUNCTION()
+	void sprint();
+
+	UFUNCTION()
+	void run();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void setMaxSpeed(float speed);
+
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	ABaseCharacter();
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	virtual ~ABaseCharacter() = default;
 };
