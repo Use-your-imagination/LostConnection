@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "DroppedObject.h"
-#include "BaseEntities/BaseWeapon.h"
+#include "Weapons/BaseWeapon.h"
 
 #include "DroppedWeapon.generated.h"
 

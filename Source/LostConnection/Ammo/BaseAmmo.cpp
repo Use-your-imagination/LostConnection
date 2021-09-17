@@ -2,8 +2,8 @@
 
 #include "UObject/ConstructorHelpers.h"
 
-#include "BaseWeapon.h"
-#include "Character/LostConnectionCharacter.h"
+#include "Weapons/BaseWeapon.h"
+#include "Characters/LostConnectionCharacter.h"
 #include "Interfaces/PhysicalObjects/ShotThrough.h"
 
 #pragma warning(disable: 4458)
@@ -15,16 +15,6 @@ void ABaseAmmo::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetim
 	DOREPLIFETIME(ABaseAmmo, isAlly);
 
 	DOREPLIFETIME(ABaseAmmo, movement);
-}
-
-void ABaseAmmo::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-
-	if (HasAuthority())
-	{
-		
-	}
 }
 
 bool ABaseAmmo::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)

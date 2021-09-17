@@ -3,7 +3,7 @@
 
 #include "MultiplayerUtility.h"
 
-#include "Character/LostConnectionCharacter.h"
+#include "Characters/LostConnectionCharacter.h"
 #include "Engine/LostConnectionPlayerState.h"
 
 void MultiplayerUtility::runOnServerReliableWithMulticast(UObject* caller, const FName& methodName)

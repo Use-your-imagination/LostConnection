@@ -12,7 +12,7 @@
 #include "Engine/ActorChannel.h"
 #include "Net/DataBunch.h"
 
-#include "BaseEntities/BaseWeapon.h"
+#include "Weapons/BaseWeapon.h"
 #include "Weapons/Pistols/Gauss.h"
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Interfaces/PhysicalObjects/ShotThrough.h"

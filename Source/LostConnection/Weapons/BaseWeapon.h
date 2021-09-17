@@ -4,7 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
-#include "BaseAmmo.h"
+#include "Ammo/BaseAmmo.h"
 
 #include "BaseWeapon.generated.h"
 

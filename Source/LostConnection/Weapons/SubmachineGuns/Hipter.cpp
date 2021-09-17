@@ -1,6 +1,6 @@
 #include "Hipter.h"
 
-#include "Ammo/Bullet.h"
+#include "Ammo/Bullets/Bullet.h"
 
 UHipter::UHipter()
 {

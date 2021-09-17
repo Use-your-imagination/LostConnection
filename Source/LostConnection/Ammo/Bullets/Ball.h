@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "BaseEntities/BaseAmmo.h"
+#include "Ammo/BaseAmmo.h"
 
 #include "Ball.generated.h"
 

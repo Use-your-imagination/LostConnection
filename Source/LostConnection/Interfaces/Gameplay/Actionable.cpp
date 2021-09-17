@@ -1,6 +1,6 @@
 #include "Actionable.h"
 
-#include "Character/LostConnectionCharacter.h"
+#include "Characters/LostConnectionCharacter.h"
 
 FString IActionable::getActionMessage() const
 {

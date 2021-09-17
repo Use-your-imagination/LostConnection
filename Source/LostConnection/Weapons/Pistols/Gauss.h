@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "BaseEntities/BaseWeapon.h"
+#include "Weapons/BaseWeapon.h"
 
 #include "Gauss.generated.h"
 

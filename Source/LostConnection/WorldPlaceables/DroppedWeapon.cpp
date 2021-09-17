@@ -2,7 +2,7 @@
 
 #include "Net/UnrealNetwork.h"
 
-#include "Character/LostConnectionCharacter.h"
+#include "Characters/LostConnectionCharacter.h"
 
 void ADroppedWeapon::Tick(float DeltaSeconds)
 {

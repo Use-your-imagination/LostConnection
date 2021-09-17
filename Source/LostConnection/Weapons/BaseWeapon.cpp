@@ -5,7 +5,7 @@
 
 #include "Engine/LostConnectionPlayerState.h"
 #include "Engine/LostConnectionGameState.h"
-#include "Character/LostConnectionCharacter.h"
+#include "Characters/LostConnectionCharacter.h"
 
 #pragma warning(disable: 4458)
 

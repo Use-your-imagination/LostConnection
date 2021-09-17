@@ -5,7 +5,7 @@
 
 #include "UObject/ConstructorHelpers.h"
 
-#include "Ammo/Ball.h"
+#include "Ammo/Bullets/Ball.h"
 
 UGauss::UGauss()
 {
