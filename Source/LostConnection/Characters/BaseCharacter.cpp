@@ -4,6 +4,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 
+#include "Utility/MultiplayerUtility.h"
+
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -94,6 +96,16 @@ void ABaseCharacter::setMaxSpeed_Implementation(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
+void ABaseCharacter::reloadImplementation()
+{
+	
+}
+
+void ABaseCharacter::playReloadAnimation_Implementation()
+{
+
+}
+
 ABaseCharacter::ABaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -130,4 +142,9 @@ ABaseCharacter::ABaseCharacter()
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
+}
+
+void ABaseCharacter::reload()
+{
+	MultiplayerUtility::runOnServerReliableWithMulticast(this, "playReloadAnimation");
 }

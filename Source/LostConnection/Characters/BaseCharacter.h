@@ -80,8 +80,18 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void setMaxSpeed(float speed);
 
+protected:
+	UFUNCTION()
+	void reloadImplementation();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void playReloadAnimation();
+
 public:	
 	ABaseCharacter();
+
+	UFUNCTION()
+	void reload();
 
 	virtual ~ABaseCharacter() = default;
 };
