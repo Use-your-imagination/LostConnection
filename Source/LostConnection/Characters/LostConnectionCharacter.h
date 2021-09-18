@@ -145,9 +145,6 @@ private:
 
 protected:
 	UFUNCTION(NetMulticast, Reliable)
-	void reloadLogicMulticast();
-
-	UFUNCTION(NetMulticast, Reliable)
 	void reloadAnimationMulticast();
 
 	UFUNCTION(BlueprintNativeEvent)

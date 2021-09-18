@@ -348,7 +348,17 @@ void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
-void ALostConnectionCharacter::reloadLogicMulticast_Implementation()
+void ALostConnectionCharacter::reloadAnimationMulticast_Implementation()
+{
+	this->reloadAnimation();
+}
+
+void ALostConnectionCharacter::reloadAnimation_Implementation()
+{
+
+}
+
+void ALostConnectionCharacter::reloadLogic_Implementation()
 {
 	if (!currentWeapon)
 	{
@@ -378,21 +388,6 @@ void ALostConnectionCharacter::reloadLogicMulticast_Implementation()
 	{
 		ammoCount -= reloadedAmmoRequire;
 	}
-}
-
-void ALostConnectionCharacter::reloadAnimationMulticast_Implementation()
-{
-	this->reloadAnimation();
-}
-
-void ALostConnectionCharacter::reloadAnimation_Implementation()
-{
-
-}
-
-void ALostConnectionCharacter::reloadLogic_Implementation()
-{
-	this->reloadLogicMulticast();
 }
 
 void ALostConnectionCharacter::shootLogic()

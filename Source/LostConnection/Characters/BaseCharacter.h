@@ -26,12 +26,6 @@ class LOSTCONNECTION_API ABaseCharacter :
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
-	USpringArmComponent* CameraOffset;
-
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
-	UCameraComponent* FollowCamera;
-
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
 	USkeletalMeshComponent* currentWeaponMesh;
 
