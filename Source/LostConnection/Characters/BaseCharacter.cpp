@@ -96,14 +96,21 @@ void ABaseCharacter::setMaxSpeed_Implementation(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
-void ABaseCharacter::reloadImplementation()
+void ABaseCharacter::reloadVisual()
 {
-	
+
 }
 
-void ABaseCharacter::playReloadAnimation_Implementation()
+void ABaseCharacter::reloadLogic()
 {
+	PURE_VIRTUAL(__FUNCTION__)
+}
 
+void ABaseCharacter::runReloadLogic_Implementation()
+{
+	this->reloadLogic();
+
+	IReload::Execute_reloadEventLogic(this);
 }
 
 ABaseCharacter::ABaseCharacter()
@@ -127,9 +134,4 @@ ABaseCharacter::ABaseCharacter()
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
-}
-
-void ABaseCharacter::reload()
-{
-	MultiplayerUtility::runOnServerReliableWithMulticast(this, "playReloadAnimation");
 }

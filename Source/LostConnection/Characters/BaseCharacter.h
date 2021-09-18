@@ -5,8 +5,6 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Character.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Engine/ActorChannel.h"
@@ -15,13 +13,15 @@
 #include "Weapons/BaseWeapon.h"
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Interfaces/PhysicalObjects/ShotThrough.h"
+#include "Interfaces/Gameplay/AnimatedActions/Reload.h"
 
 #include "BaseCharacter.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API ABaseCharacter :
 	public ACharacter,
-	public IShotThrough
+	public IShotThrough,
+	public IReload
 {
 	GENERATED_BODY()
 
@@ -66,26 +66,26 @@ protected:
 
 protected:
 	UFUNCTION()
-	void sprint();
+	virtual void sprint();
 
 	UFUNCTION()
-	void run();
+	virtual void run();
 
 	UFUNCTION(NetMulticast, Reliable)
 	void setMaxSpeed(float speed);
 
+#pragma region Reload
 protected:
-	UFUNCTION()
-	void reloadImplementation();
+	virtual void reloadVisual() override;
 
-	UFUNCTION(BlueprintNativeEvent)
-	void playReloadAnimation();
+	virtual void reloadLogic() override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runReloadLogic() final;
+#pragma endregion
 
 public:	
 	ABaseCharacter();
-
-	UFUNCTION()
-	void reload();
 
 	virtual ~ABaseCharacter() = default;
 };

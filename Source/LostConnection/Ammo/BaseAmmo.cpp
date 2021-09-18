@@ -166,6 +166,11 @@ void ABaseAmmo::setAmmoSpeed(float speed)
 	movement->Velocity = mesh->GetForwardVector() * speed;
 }
 
+void ABaseAmmo::setAmmoType(ammoTypes ammoType)
+{
+	this->ammoType = ammoType;
+}
+
 UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
 {
 	return mesh;

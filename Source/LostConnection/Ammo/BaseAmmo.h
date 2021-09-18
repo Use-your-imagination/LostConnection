@@ -76,6 +76,8 @@ public:
 
 	virtual void setAmmoSpeed(float speed) final;
 
+	virtual void setAmmoType(ammoTypes ammoType) final;
+
 	virtual UStaticMeshComponent* getAmmoMeshComponent() const final;
 
 	UFUNCTION(BlueprintCallable)
