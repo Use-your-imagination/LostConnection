@@ -96,6 +96,7 @@ void ABaseCharacter::setMaxSpeed_Implementation(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
+#pragma region Reload
 void ABaseCharacter::reloadVisual()
 {
 
@@ -112,6 +113,26 @@ void ABaseCharacter::runReloadLogic_Implementation()
 
 	IReload::Execute_reloadEventLogic(this);
 }
+#pragma endregion
+
+#pragma region Shoot
+void ABaseCharacter::shootVisual()
+{
+
+}
+
+void ABaseCharacter::shootLogic()
+{
+	PURE_VIRTUAL(__FUNCTION__)
+}
+
+void ABaseCharacter::runShootLogic_Implementation()
+{
+	this->reloadLogic();
+
+	IReload::Execute_reloadEventLogic(this);
+}
+#pragma endregion
 
 ABaseCharacter::ABaseCharacter()
 {

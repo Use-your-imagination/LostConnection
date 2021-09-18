@@ -4,34 +4,37 @@
 
 #include "UObject/Interface.h"
 
-#include "Reload.generated.h"
+#include "Shoot.generated.h"
 
 UINTERFACE(BlueprintType)
-class UReload : public UInterface
+class UShoot : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IReload
+/**
+ * 
+ */
+class LOSTCONNECTION_API IShoot
 {
 	GENERATED_BODY()
 
 protected:
 	UFUNCTION()
-	virtual void reloadVisual() = 0;
+	virtual void shootVisual() = 0;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void reloadEventVisual();
+	void shootEventVisual();
 
 	UFUNCTION()
-	virtual void reloadLogic() = 0;
+	virtual void shootLogic() = 0;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void reloadEventLogic();
+	void shootEventLogic();
 
 public:
-	IReload() = default;
+	IShoot() = default;
 
 	UFUNCTION()
-	virtual void reload();
+	virtual void shoot();
 };

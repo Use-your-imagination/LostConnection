@@ -14,6 +14,7 @@
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Interfaces/PhysicalObjects/ShotThrough.h"
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
+#include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -21,7 +22,8 @@ UCLASS()
 class LOSTCONNECTION_API ABaseCharacter :
 	public ACharacter,
 	public IShotThrough,
-	public IReload
+	public IReload,
+	public IShoot
 {
 	GENERATED_BODY()
 
@@ -82,6 +84,17 @@ protected:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void runReloadLogic() final;
+
+#pragma endregion
+
+#pragma region Shoot
+protected:
+	virtual void shootVisual() override;
+
+	virtual void shootLogic() override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runShootLogic() final;
 #pragma endregion
 
 public:	
