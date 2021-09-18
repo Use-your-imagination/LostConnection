@@ -91,6 +91,8 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	result.Add(releaseSelectFourthPlayer);
 #pragma endregion
 
+	FInputActionBinding reload("Reload", IE_Pressed);
+
 	FInputActionBinding pressCrouch("Crouch", IE_Pressed);
 	FInputActionBinding releaseCrouch("Crouch", IE_Released);
 
@@ -109,6 +111,8 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	FInputActionBinding	pressDropWeapon("DropWeapon", IE_Pressed);
 	FInputActionBinding releaseDropWeapon("DropWeapon", IE_Released);
 
+	reload.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "reload"); });
+
 	pressCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_pressCrouchAction, this);
 	releaseCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_releaseCrouchAction, this);
 
@@ -126,6 +130,8 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	
 	pressDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "dropWeapon"); });
 	releaseDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseDropWeaponHandle"); });
+
+	result.Add(reload);
 
 	result.Add(pressCrouch);
 	result.Add(releaseCrouch);
@@ -304,8 +310,6 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
 
-	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALostConnectionCharacter::reload);
-
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALostConnectionCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALostConnectionCharacter::MoveRight);
 
@@ -348,17 +352,42 @@ void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
-void ALostConnectionCharacter::reloadAnimationMulticast_Implementation()
+void ALostConnectionCharacter::shootLogic()
 {
-	this->reloadAnimation();
+	if (currentWeapon)
+	{
+		UWorld* world = GetWorld();
+
+		if (world)
+		{
+			currentWeapon->shoot(world, currentWeaponMesh, this);
+
+			this->pressShoot();
+		}
+	}
 }
 
-void ALostConnectionCharacter::reloadAnimation_Implementation()
+void ALostConnectionCharacter::resetShootLogic()
+{
+	if (currentWeapon)
+	{
+		UWorld* world = GetWorld();
+
+		if (world)
+		{
+			currentWeapon->resetShoot(world, currentWeaponMesh, this);
+
+			this->releaseShoot();
+		}
+	}
+}
+
+void ALostConnectionCharacter::reloadVisual()
 {
 
 }
 
-void ALostConnectionCharacter::reloadLogic_Implementation()
+void ALostConnectionCharacter::reloadLogic()
 {
 	if (!currentWeapon)
 	{
@@ -390,34 +419,11 @@ void ALostConnectionCharacter::reloadLogic_Implementation()
 	}
 }
 
-void ALostConnectionCharacter::shootLogic()
+void ALostConnectionCharacter::runReloadLogic_Implementation()
 {
-	if (currentWeapon)
-	{
-		UWorld* world = GetWorld();
+	this->reloadLogic();
 
-		if (world)
-		{
-			currentWeapon->shoot(world, currentWeaponMesh, this);
-
-			this->pressShoot();
-		}
-	}
-}
-
-void ALostConnectionCharacter::resetShootLogic()
-{
-	if (currentWeapon)
-	{
-		UWorld* world = GetWorld();
-
-		if (world)
-		{
-			currentWeapon->resetShoot(world, currentWeaponMesh, this);
-
-			this->releaseShoot();
-		}
-	}
+	IReload::Execute_reloadEventLogic(this);
 }
 
 ALostConnectionCharacter::ALostConnectionCharacter()
@@ -531,11 +537,6 @@ void ALostConnectionCharacter::shoot()
 void ALostConnectionCharacter::resetShoot()
 {
 	MultiplayerUtility::runOnServerReliable(this, "resetShootLogic");
-}
-
-void ALostConnectionCharacter::reload_Implementation()
-{
-	this->reloadAnimationMulticast();
 }
 
 void ALostConnectionCharacter::restoreHealth(float amount)

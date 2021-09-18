@@ -20,6 +20,7 @@
 #include "Interfaces/Gameplay/MovementActions.h"
 #include "Interfaces/Gameplay/AllySelection.h"
 #include "Interfaces/Gameplay/Actionable.h"
+#include "Interfaces/Gameplay/AnimatedActions/Reload.h"
 
 #include "LostConnectionCharacter.generated.h"
 
@@ -29,7 +30,8 @@ class LOSTCONNECTION_API ALostConnectionCharacter :
 	public IShotThrough,
 	public IAbilities,
 	public IMovementActions,
-	public IAllySelection
+	public IAllySelection,
+	public IReload
 {
 	GENERATED_BODY()
 
@@ -144,20 +146,21 @@ private:
 	void changeMaxSpeed(float speed);
 
 protected:
-	UFUNCTION(NetMulticast, Reliable)
-	void reloadAnimationMulticast();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void reloadAnimation();
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void reloadLogic();
-
 	UFUNCTION()
 	void shootLogic();
 
 	UFUNCTION()
 	void resetShootLogic();
+
+#pragma region Reload
+protected:
+	virtual void reloadVisual() override;
+
+	virtual void reloadLogic() override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runReloadLogic() final;
+#pragma endregion
 
 public:
 	ALostConnectionCharacter();
@@ -178,9 +181,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void resetShoot();
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void reload();
 
 	void restoreHealth(float amount);
 

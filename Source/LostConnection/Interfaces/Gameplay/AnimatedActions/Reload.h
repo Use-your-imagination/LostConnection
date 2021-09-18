@@ -8,7 +8,6 @@
 
 #include "Reload.generated.h"
 
-// This class does not need to be modified.
 UINTERFACE(BlueprintType)
 class UReload : public UInterface
 {
@@ -26,13 +25,13 @@ protected:
 	UFUNCTION()
 	virtual void reloadVisual() = 0;
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintImplementableEvent)
 	void reloadEventVisual();
 
 	UFUNCTION()
 	virtual void reloadLogic() = 0;
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintImplementableEvent)
 	void reloadEventLogic();
 
 public:
