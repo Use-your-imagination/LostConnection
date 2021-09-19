@@ -52,9 +52,12 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		damage = damage * (1.0f - IShotThrough::Execute_getPercentageDamageReduction(OtherActor) * 0.01f) - IShotThrough::Execute_getFlatDamageReduction(OtherActor);
 
-		onHit->SetNiagaraVariableBool("DeathState", false);
+		if (damage > 0.0f)
+		{
+			onHit->SetNiagaraVariableBool("DeathState", false);
 
-		onHit->SetAsset(onHitAsset);
+			onHit->SetAsset(onHitAsset);
+		}
 	}
 	else
 	{
