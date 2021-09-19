@@ -56,6 +56,9 @@ protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMesh* brokenAmmoMesh;
 
+	UPROPERTY()
+	UNiagaraSystem* onHitAsset;
+
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, Replicated)
 	float damage;
 
