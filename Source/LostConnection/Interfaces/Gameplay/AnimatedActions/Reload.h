@@ -20,13 +20,13 @@ protected:
 	UFUNCTION()
 	virtual void reloadVisual() = 0;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void reloadEventVisual();
 
 	UFUNCTION()
 	virtual void reloadLogic() = 0;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void reloadEventLogic();
 
 public:

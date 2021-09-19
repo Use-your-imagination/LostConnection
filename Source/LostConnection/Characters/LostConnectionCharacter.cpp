@@ -13,6 +13,7 @@
 #include "Engine/LostConnectionPlayerState.h"
 #include "Engine/LostConnectionGameState.h"
 #include "Weapons/SubmachineGuns/Hipter.h"
+#include "Weapons/Pistols/Gauss.h"
 #include "Utility/MultiplayerUtility.h"
 
 #pragma warning(disable: 4458)
@@ -93,6 +94,9 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 
 	FInputActionBinding reload("Reload", IE_Pressed);
 
+	FInputActionBinding pressShoot("Shoot", IE_Pressed);
+	FInputActionBinding releaseShoot("Shoot", IE_Released);
+
 	FInputActionBinding pressCrouch("Crouch", IE_Pressed);
 	FInputActionBinding releaseCrouch("Crouch", IE_Released);
 
@@ -113,6 +117,9 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 
 	reload.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "reload"); });
 
+	pressShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "shoot"); });
+	releaseShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "resetShoot"); });
+
 	pressCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_pressCrouchAction, this);
 	releaseCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_releaseCrouchAction, this);
 
@@ -132,6 +139,9 @@ TArray<FInputActionBinding> ALostConnectionCharacter::initInputs()
 	releaseDropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseDropWeaponHandle"); });
 
 	result.Add(reload);
+
+	result.Add(pressShoot);
+	result.Add(releaseShoot);
 
 	result.Add(pressCrouch);
 	result.Add(releaseCrouch);
@@ -158,21 +168,11 @@ void ALostConnectionCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ALostConnectionCharacter, health);
-
-	DOREPLIFETIME(ALostConnectionCharacter, currentHealth);
-
-	DOREPLIFETIME(ALostConnectionCharacter, isAlly);
-
 	DOREPLIFETIME(ALostConnectionCharacter, currentAmmoHolding);
-
-	DOREPLIFETIME(ALostConnectionCharacter, currentWeapon);
 
 	DOREPLIFETIME(ALostConnectionCharacter, firstWeaponSlot);
 
 	DOREPLIFETIME(ALostConnectionCharacter, secondWeaponSlot);
-
-	DOREPLIFETIME(ALostConnectionCharacter, defaultWeaponSlot);
 }
 
 void ALostConnectionCharacter::PostInitializeComponents()
@@ -195,14 +195,7 @@ bool ALostConnectionCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutB
 
 	wroteSomething |= Channel->ReplicateSubobject(secondWeaponSlot, *Bunch, *RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(defaultWeaponSlot, *Bunch, *RepFlags);
-
 	return wroteSomething;
-}
-
-void ALostConnectionCharacter::onCurrentWeaponChange()
-{
-	this->updateWeaponMesh();
 }
 
 void ALostConnectionCharacter::BeginPlay()
@@ -221,11 +214,6 @@ void ALostConnectionCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (currentHealth <= 0.0f)
-	{
-		Destroy();
-	}
-
 	if (firstWeaponSlot)
 	{
 		if (HasAuthority())
@@ -239,14 +227,6 @@ void ALostConnectionCharacter::Tick(float DeltaSeconds)
 		if (HasAuthority())
 		{
 			secondWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
-		}
-	}
-
-	if (defaultWeaponSlot)
-	{
-		if (HasAuthority())
-		{
-			defaultWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
 		}
 	}
 }
@@ -294,7 +274,6 @@ void ALostConnectionCharacter::LookUpAtRate(float Rate)
 
 void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 
 	TArray<FInputActionBinding> inputs = this->initInputs();
@@ -307,9 +286,6 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ALostConnectionCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ALostConnectionCharacter::StopJumping);
 
-	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ALostConnectionCharacter::shoot);
-	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ALostConnectionCharacter::resetShoot);
-
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALostConnectionCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALostConnectionCharacter::MoveRight);
 
@@ -317,70 +293,6 @@ void ALostConnectionCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->BindAxis("TurnRate", this, &ALostConnectionCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ALostConnectionCharacter::LookUpAtRate);
-}
-
-void ALostConnectionCharacter::Jump()
-{
-	Super::Jump();
-
-	IMovementActions::Execute_pressJumpAction(this);
-}
-
-void ALostConnectionCharacter::StopJumping()
-{
-	Super::StopJumping();
-
-	IMovementActions::Execute_releaseJumpAction(this);
-}
-
-void ALostConnectionCharacter::sprint()
-{
-	this->changeMaxSpeed(575.0f);
-}
-
-void ALostConnectionCharacter::run()
-{
-	this->changeMaxSpeed(450.0f);
-}
-
-void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)
-{
-	GetCharacterMovement()->MaxWalkSpeed = speed;
-}
-
-void ALostConnectionCharacter::shootLogic()
-{
-	if (currentWeapon)
-	{
-		UWorld* world = GetWorld();
-
-		if (world)
-		{
-			currentWeapon->shoot(world, currentWeaponMesh, this);
-
-			this->pressShoot();
-		}
-	}
-}
-
-void ALostConnectionCharacter::resetShootLogic()
-{
-	if (currentWeapon)
-	{
-		UWorld* world = GetWorld();
-
-		if (world)
-		{
-			currentWeapon->resetShoot(world, currentWeaponMesh, this);
-
-			this->releaseShoot();
-		}
-	}
-}
-
-void ALostConnectionCharacter::reloadVisual()
-{
-
 }
 
 void ALostConnectionCharacter::reloadLogic()
@@ -415,13 +327,6 @@ void ALostConnectionCharacter::reloadLogic()
 	}
 }
 
-void ALostConnectionCharacter::runReloadLogic_Implementation()
-{
-	this->reloadLogic();
-
-	IReload::Execute_reloadEventLogic(this);
-}
-
 ALostConnectionCharacter::ALostConnectionCharacter()
 {
 	firstWeaponSlot = nullptr;
@@ -429,8 +334,6 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 	health = 1000.0f;
 	currentHealth = health;
 	isAlly = true;
-	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
-	NetUpdateFrequency = 60;
 
 	currentAmmoHolding.Reserve(4);
 
@@ -443,45 +346,23 @@ ALostConnectionCharacter::ALostConnectionCharacter()
 
 	currentAmmoHolding.Add(9999);
 
-	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
-
-	mesh->SetGenerateOverlapEvents(true);
-	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
-
-	// set our turn rates for input
 	BaseTurnRate = 45.0f;
 	BaseLookUpRate = 45.0f;
 
-	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->JumpZVelocity = 600.f;
-	GetCharacterMovement()->AirControl = 0.2f;
-
-	// Create a camera offset (pulls in towards the player if there is a collision)
 	CameraOffset = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraOffset"));
 	CameraOffset->SetupAttachment(RootComponent);
-	CameraOffset->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
-	CameraOffset->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	CameraOffset->TargetArmLength = 300.0f;
+	CameraOffset->bUsePawnControlRotation = true;
 	CameraOffset->AddLocalOffset({ 0.0f, 0.0f, 50.0f });
 	CameraOffset->SocketOffset = { 0.0f, 90.0f, 0.0f };
 
-	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraOffset, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
-	currentWeaponMesh->SetupAttachment(mesh, "Hand_WeaponSocket_R");
-
-	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
-	magazine->SetupAttachment(currentWeaponMesh);
+	FollowCamera->SetupAttachment(CameraOffset, USpringArmComponent::SocketName);
+	FollowCamera->bUsePawnControlRotation = false;
 }
 
 void ALostConnectionCharacter::changeToFirstWeapon_Implementation()
@@ -496,64 +377,6 @@ void ALostConnectionCharacter::changeToSecondWeapon_Implementation()
 	currentWeapon = secondWeaponSlot;
 
 	this->updateWeaponMesh();
-}
-
-void ALostConnectionCharacter::changeToDefaultWeapon_Implementation()
-{
-	currentWeapon = defaultWeaponSlot;
-
-	this->updateWeaponMesh();
-}
-
-void ALostConnectionCharacter::updateWeaponMesh()
-{
-	if (currentWeapon)
-	{
-		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
-
-		magazine->AttachToComponent(currentWeaponMesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false), "magazine");
-
-		magazine->SetStaticMesh(currentWeapon->getMagazineMesh());
-	}
-	else
-	{
-		magazine->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepRelative, false));
-
-		magazine->SetStaticMesh(nullptr);
-
-		currentWeaponMesh->SetSkeletalMesh(nullptr);
-	}
-}
-
-void ALostConnectionCharacter::shoot()
-{
-	MultiplayerUtility::runOnServerReliable(this, "shootLogic");
-}
-
-void ALostConnectionCharacter::resetShoot()
-{
-	MultiplayerUtility::runOnServerReliable(this, "resetShootLogic");
-}
-
-void ALostConnectionCharacter::restoreHealth(float amount)
-{
-	float tem = this->getCurrentHealth();
-
-	tem += amount;
-
-	if (tem > this->getHealth())
-	{
-		this->setCurrentHealth(this->getHealth());
-	}
-	else
-	{
-		this->setCurrentHealth(tem);
-	}
-}
-
-void ALostConnectionCharacter::takeDamage(float amount)
-{
-	this->setCurrentHealth(this->getCurrentHealth() - amount);
 }
 
 void ALostConnectionCharacter::pickupAmmo(ammoTypes type, int32 count)
@@ -661,52 +484,9 @@ void ALostConnectionCharacter::pickupWeapon_Implementation(ADroppedWeapon* weapo
 	weaponToEquip->Destroy(true);
 }
 
-void ALostConnectionCharacter::setCurrentHealth_Implementation(int newCurrentHealth)
-{
-	currentHealth = newCurrentHealth;
-}
-
-void ALostConnectionCharacter::setIsAlly_Implementation(bool newIsAlly)
-{
-	isAlly = newIsAlly;
-}
-
-float ALostConnectionCharacter::getHealth() const
-{
-	return health;
-}
-
-float ALostConnectionCharacter::getCurrentHealth() const
-{
-	return currentHealth;
-}
-
-bool ALostConnectionCharacter::getIsAlly() const
-{
-	return isAlly;
-}
-
 int32 ALostConnectionCharacter::getAmmoHoldingCount(ammoTypes type) const
 {
 	return currentAmmoHolding[static_cast<size_t>(type)];
-}
-
-USkeletalMeshComponent* ALostConnectionCharacter::getCurrentWeaponMesh() const
-{
-	return currentWeaponMesh;
-}
-
-int ALostConnectionCharacter::getWeaponCount() const
-{
-	int result = 0;
-
-	result += static_cast<bool>(firstWeaponSlot);
-
-	result += static_cast<bool>(secondWeaponSlot);
-
-	result += static_cast<bool>(defaultWeaponSlot);
-
-	return result;
 }
 
 void ALostConnectionCharacter::firstAbility()

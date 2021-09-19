@@ -3,6 +3,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/CapsuleComponent.h"
 
+#include "Utility/MultiplayerUtility.h"
 #include "Engine/LostConnectionPlayerState.h"
 #include "Engine/LostConnectionGameState.h"
 #include "Characters/LostConnectionCharacter.h"
@@ -74,7 +75,7 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 	}
 	else
 	{
-		lostCharacter->reload();
+		MultiplayerUtility::runOnServerReliableWithMulticast(lostCharacter, "reload");
 	}
 }
 
@@ -135,6 +136,7 @@ void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisib
 	{
 		weaponType = weaponTypes::single;
 
+		// TODO: change to server call
 		this->shoot(world, currentVisibleWeaponMesh, character);
 
 		weaponType = weaponTypes::delay;

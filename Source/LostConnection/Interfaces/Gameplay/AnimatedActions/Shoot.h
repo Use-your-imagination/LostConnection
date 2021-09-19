@@ -23,18 +23,15 @@ protected:
 	UFUNCTION()
 	virtual void shootVisual() = 0;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void shootEventVisual();
 
 	UFUNCTION()
 	virtual void shootLogic() = 0;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void shootEventLogic();
 
 public:
 	IShoot() = default;
-
-	UFUNCTION()
-	virtual void shoot();
 };

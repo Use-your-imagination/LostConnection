@@ -56,8 +56,6 @@ private:
 	UFUNCTION()
 	void onCurrentWeaponChange();
 
-	void updateWeaponMesh();
-
 protected:
 	virtual void BeginPlay() override;
 
@@ -69,6 +67,8 @@ protected:
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 protected:
+	virtual void updateWeaponMesh() final;
+
 	UFUNCTION()
 	virtual void sprint();
 
@@ -110,7 +110,19 @@ public:
 	ABaseCharacter();
 
 	UFUNCTION(BlueprintCallable)
-	void resetShoot();
+	virtual void shoot() final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void resetShoot() final;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void changeToDefaultWeapon() final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void restoreHealth(float amount) final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void takeDamage(float amount) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setHealth(float newHealth) final;
@@ -131,7 +143,7 @@ public:
 	virtual bool getIsAlly() const final;
 
 	UFUNCTION(BlueprintCallable)
-	bool isWeaponEquipped() const;
+	virtual bool isWeaponEquipped() const final;
 
 	virtual USkeletalMeshComponent* getCurrentWeaponMesh() const final;
 

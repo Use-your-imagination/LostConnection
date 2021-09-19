@@ -120,7 +120,7 @@ void ABaseCharacter::reloadVisual()
 
 void ABaseCharacter::reloadLogic()
 {
-	PURE_VIRTUAL(__FUNCTION__)
+	PURE_VIRTUAL(ABaseCharacter::reloadLogic)
 }
 
 void ABaseCharacter::runReloadLogic_Implementation()
@@ -194,9 +194,44 @@ ABaseCharacter::ABaseCharacter()
 	magazine->SetupAttachment(currentWeaponMesh);
 }
 
+void ABaseCharacter::shoot()
+{
+	this->shootVisual();
+
+	IShoot::Execute_shootEventVisual(this);
+}
+
 void ABaseCharacter::resetShoot()
 {
 	MultiplayerUtility::runOnServerReliable(this, "resetShootLogic");
+}
+
+void ABaseCharacter::changeToDefaultWeapon_Implementation()
+{
+	currentWeapon = defaultWeaponSlot;
+
+	this->updateWeaponMesh();
+}
+
+void ABaseCharacter::restoreHealth(float amount)
+{
+	float tem = this->getCurrentHealth();
+
+	tem += amount;
+
+	if (tem > this->getHealth())
+	{
+		this->setCurrentHealth(this->getHealth());
+	}
+	else
+	{
+		this->setCurrentHealth(tem);
+	}
+}
+
+void ABaseCharacter::takeDamage(float amount)
+{
+	this->setCurrentHealth(this->getCurrentHealth() - amount);
 }
 
 void ABaseCharacter::setHealth_Implementation(float newHealth)
