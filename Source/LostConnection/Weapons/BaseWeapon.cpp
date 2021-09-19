@@ -32,7 +32,7 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 
 	if (weaponType == weaponTypes::semiAutomatic || weaponType == weaponTypes::single)
 	{
-		lostCharacter->resetShoot();
+		MultiplayerUtility::runOnServerReliable(lostCharacter, "resetShoot");
 	}
 	else if (weaponType == weaponTypes::delay)
 	{
@@ -136,7 +136,6 @@ void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisib
 	{
 		weaponType = weaponTypes::single;
 
-		// TODO: change to server call
 		this->shoot(world, currentVisibleWeaponMesh, character);
 
 		weaponType = weaponTypes::delay;

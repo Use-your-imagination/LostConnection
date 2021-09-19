@@ -15,18 +15,10 @@ void ABaseAmmo::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetim
 	DOREPLIFETIME(ABaseAmmo, isAlly);
 
 	DOREPLIFETIME(ABaseAmmo, movement);
-}
+	
+	DOREPLIFETIME(ABaseAmmo, damage);
 
-bool ABaseAmmo::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool WroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	if (movement)
-	{
-		WroteSomething |= Channel->ReplicateSubobject(movement, *Bunch, *RepFlags);
-	}
-
-	return WroteSomething;
+	DOREPLIFETIME(ABaseAmmo, ammoType);
 }
 
 void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -103,9 +95,9 @@ ABaseAmmo::ABaseAmmo()
 	onHit = CreateDefaultSubobject<UNiagaraComponent>(TEXT("OnHit"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
 	ammoType = ammoTypes::large;
+	NetUpdateFrequency = 60;
 	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletTracer.NPSBulletTracer'"));
 	ConstructorHelpers::FObjectFinder<UNiagaraSystem> onHitFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletOnHit.NPSBulletOnHit'"));
-	NetUpdateFrequency = 60;
 
 	SetRootComponent(mesh);
 

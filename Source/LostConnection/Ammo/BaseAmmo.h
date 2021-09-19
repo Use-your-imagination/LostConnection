@@ -30,8 +30,6 @@ class LOSTCONNECTION_API ABaseAmmo : public APawn
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
-
 private:
 	ACharacter* lastTarget;
 
@@ -58,10 +56,10 @@ protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMesh* brokenAmmoMesh;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, Replicated)
 	float damage;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, Replicated)
 	ammoTypes ammoType;
 
 public:
