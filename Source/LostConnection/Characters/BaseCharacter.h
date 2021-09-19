@@ -13,6 +13,7 @@
 #include "Weapons/BaseWeapon.h"
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Interfaces/PhysicalObjects/ShotThrough.h"
+#include "Interfaces/Gameplay/MovementActions.h"
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
 #include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
 
@@ -23,7 +24,8 @@ class LOSTCONNECTION_API ABaseCharacter :
 	public ACharacter,
 	public IShotThrough,
 	public IReload,
-	public IShoot
+	public IShoot,
+	public IMovementActions
 {
 	GENERATED_BODY()
 
@@ -73,6 +75,10 @@ protected:
 	UFUNCTION()
 	virtual void run();
 
+	virtual void Jump() final override;
+
+	virtual void StopJumping() final override;
+
 	UFUNCTION(NetMulticast, Reliable)
 	void setMaxSpeed(float speed);
 
@@ -97,8 +103,49 @@ protected:
 	virtual void runShootLogic() final;
 #pragma endregion
 
+	UFUNCTION()
+	void resetShootLogic();
+
 public:	
 	ABaseCharacter();
 
+	UFUNCTION(BlueprintCallable)
+	void resetShoot();
+
+	UFUNCTION(Server, Reliable)
+	virtual void setHealth(float newHealth) final;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setCurrentHealth(float newCurrentHealth) final;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setIsAlly(bool newIsAlly) final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float getHealth() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float getCurrentHealth() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool getIsAlly() const final;
+
+	UFUNCTION(BlueprintCallable)
+	bool isWeaponEquipped() const;
+
+	virtual USkeletalMeshComponent* getCurrentWeaponMesh() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual int getWeaponCount() const;
+
+	virtual float getFlatDamageReduction_Implementation() const override;
+
+	virtual float getPercentageDamageReduction_Implementation() const override;
+
 	virtual ~ABaseCharacter() = default;
 };
+
+inline bool ABaseCharacter::isWeaponEquipped() const
+{
+	return static_cast<bool>(currentWeapon);
+}

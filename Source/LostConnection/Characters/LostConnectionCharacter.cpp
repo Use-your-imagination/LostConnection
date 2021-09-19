@@ -336,15 +336,11 @@ void ALostConnectionCharacter::StopJumping()
 void ALostConnectionCharacter::sprint()
 {
 	this->changeMaxSpeed(575.0f);
-
-	IMovementActions::Execute_sprintAction(this);
 }
 
 void ALostConnectionCharacter::run()
 {
 	this->changeMaxSpeed(450.0f);
-
-	IMovementActions::Execute_runAction(this);
 }
 
 void ALostConnectionCharacter::changeMaxSpeed_Implementation(float speed)

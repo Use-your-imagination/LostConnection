@@ -6,6 +6,8 @@
 
 #include "Utility/MultiplayerUtility.h"
 
+#pragma warning(disable: 4458)
+
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -91,6 +93,20 @@ void ABaseCharacter::run()
 	this->setMaxSpeed(450.0f);
 }
 
+void ABaseCharacter::Jump()
+{
+	Super::Jump();
+
+	IMovementActions::Execute_pressJumpAction(this);
+}
+
+void ABaseCharacter::StopJumping()
+{
+	Super::StopJumping();
+
+	IMovementActions::Execute_releaseJumpAction(this);
+}
+
 void ABaseCharacter::setMaxSpeed_Implementation(float speed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = speed;
@@ -123,16 +139,37 @@ void ABaseCharacter::shootVisual()
 
 void ABaseCharacter::shootLogic()
 {
-	PURE_VIRTUAL(__FUNCTION__)
+	if (currentWeapon)
+	{
+		UWorld* world = GetWorld();
+
+		if (world)
+		{
+			currentWeapon->shoot(world, currentWeaponMesh, this);
+		}
+	}
 }
 
 void ABaseCharacter::runShootLogic_Implementation()
 {
-	this->reloadLogic();
+	this->shootLogic();
 
-	IReload::Execute_reloadEventLogic(this);
+	IShoot::Execute_shootEventLogic(this);
 }
 #pragma endregion
+
+void ABaseCharacter::resetShootLogic()
+{
+	if (currentWeapon)
+	{
+		UWorld* world = GetWorld();
+
+		if (world)
+		{
+			currentWeapon->resetShoot(world, currentWeaponMesh, this);
+		}
+	}
+}
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -155,4 +192,63 @@ ABaseCharacter::ABaseCharacter()
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
+}
+
+void ABaseCharacter::resetShoot()
+{
+	MultiplayerUtility::runOnServerReliable(this, "resetShootLogic");
+}
+
+void ABaseCharacter::setHealth_Implementation(float newHealth)
+{
+	health = newHealth;
+}
+
+void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
+{
+	currentHealth = newCurrentHealth;
+}
+
+void ABaseCharacter::setIsAlly_Implementation(bool newIsAlly)
+{
+	isAlly = newIsAlly;
+}
+
+float ABaseCharacter::getHealth() const
+{
+	return health;
+}
+
+float ABaseCharacter::getCurrentHealth() const
+{
+	return currentHealth;
+}
+
+bool ABaseCharacter::getIsAlly() const
+{
+	return isAlly;
+}
+
+USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMesh() const
+{
+	return currentWeaponMesh;
+}
+
+int ABaseCharacter::getWeaponCount() const
+{
+	int result = 0;
+
+	result += static_cast<bool>(defaultWeaponSlot);
+
+	return result;
+}
+
+float ABaseCharacter::getFlatDamageReduction_Implementation() const
+{
+	return 200.0f;
+}
+
+float ABaseCharacter::getPercentageDamageReduction_Implementation() const
+{
+	return 25.0f;
 }

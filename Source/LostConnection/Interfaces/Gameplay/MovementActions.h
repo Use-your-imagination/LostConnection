@@ -27,12 +27,6 @@ public:
 	IMovementActions() = default;
 
 	UFUNCTION(BlueprintNativeEvent)
-	void runAction();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void sprintAction();
-
-	UFUNCTION(BlueprintNativeEvent)
 	void pressCrouchAction();
 
 	UFUNCTION(BlueprintNativeEvent)
