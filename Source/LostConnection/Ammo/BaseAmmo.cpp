@@ -52,6 +52,8 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		damage = damage * (1.0f - IShotThrough::Execute_getPercentageDamageReduction(OtherActor) * 0.01f) - IShotThrough::Execute_getFlatDamageReduction(OtherActor);
 
+		onHit->Activate();
+
 		onHit->SetNiagaraVariableBool("DeathState", false);
 	}
 	else
@@ -72,6 +74,8 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		movement->Velocity = FVector(0.0f);
 
 		tracer->Deactivate();
+
+		onHit->Activate();
 
 		onHit->SetNiagaraVariableBool("DeathState", true);
 
@@ -126,6 +130,8 @@ ABaseAmmo::ABaseAmmo()
 	tracer->SetupAttachment(mesh);
 
 	onHit->SetupAttachment(mesh);
+
+	onHit->Deactivate();
 }
 
 void ABaseAmmo::launch(ACharacter* character)
