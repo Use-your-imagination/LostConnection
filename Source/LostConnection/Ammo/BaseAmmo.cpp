@@ -54,6 +54,8 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		if (damage > 0.0f)
 		{
+			onHit->SetAsset(nullptr);
+
 			onHit->SetNiagaraVariableBool("DeathState", false);
 
 			onHit->SetAsset(onHitAsset);
@@ -77,6 +79,8 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		movement->Velocity = FVector(0.0f);
 
 		tracer->SetAsset(nullptr);
+
+		onHit->SetAsset(nullptr);
 
 		onHit->SetNiagaraVariableBool("DeathState", true);
 
