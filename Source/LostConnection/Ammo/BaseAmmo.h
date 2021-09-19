@@ -52,6 +52,9 @@ protected:
 	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* tracer;
 
+	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
+	UNiagaraComponent* onHit;
+
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMesh* brokenAmmoMesh;
 

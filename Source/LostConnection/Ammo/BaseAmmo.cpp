@@ -59,24 +59,12 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		}
 
 		damage = damage * (1.0f - IShotThrough::Execute_getPercentageDamageReduction(OtherActor) * 0.01f) - IShotThrough::Execute_getFlatDamageReduction(OtherActor);
+
+		onHit->SetNiagaraVariableBool("DeathState", false);
 	}
 	else
 	{
-		mesh->SetStaticMesh(brokenAmmoMesh);
-
-		mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-
-		tracer->Deactivate();
-
-		MarkPendingKill();
-
-		mesh->SetSimulatePhysics(true);
-
-		movement->ProjectileGravityScale = 1.0f;
-
-		movement->Velocity = FVector(0.0f);
-
-		return;
+		damage = 0.0f;
 	}
 
 	if (damage <= 0.0f)
@@ -85,15 +73,17 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
-		tracer->Deactivate();
-
-		MarkPendingKill();
-
 		mesh->SetSimulatePhysics(true);
 
 		movement->ProjectileGravityScale = 1.0f;
 
 		movement->Velocity = FVector(0.0f);
+
+		tracer->Deactivate();
+
+		onHit->SetNiagaraVariableBool("DeathState", true);
+
+		MarkPendingKill();
 	}
 }
 
@@ -110,9 +100,11 @@ ABaseAmmo::ABaseAmmo()
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
+	onHit = CreateDefaultSubobject<UNiagaraComponent>(TEXT("OnHit"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
 	ammoType = ammoTypes::large;
-	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerSystemFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NSPBulletTracer.NSPBulletTracer'"));
+	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletTracer.NPSBulletTracer'"));
+	ConstructorHelpers::FObjectFinder<UNiagaraSystem> onHitFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletOnHit.NPSBulletOnHit'"));
 	NetUpdateFrequency = 60;
 
 	SetRootComponent(mesh);
@@ -129,12 +121,19 @@ ABaseAmmo::ABaseAmmo()
 
 	movement->SetIsReplicated(true);
 
-	if (tracerSystemFinder.Succeeded())
+	if (tracerFinder.Succeeded())
 	{
-		tracer->SetAsset(tracerSystemFinder.Object);
+		tracer->SetAsset(tracerFinder.Object);
+	}
+
+	if (onHitFinder.Succeeded())
+	{
+		onHit->SetAsset(onHitFinder.Object);
 	}
 
 	tracer->SetupAttachment(mesh);
+
+	onHit->SetupAttachment(mesh);
 }
 
 void ABaseAmmo::launch(ACharacter* character)
