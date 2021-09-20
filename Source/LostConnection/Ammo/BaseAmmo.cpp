@@ -4,7 +4,7 @@
 #include "NiagaraFunctionLibrary.h"
 
 #include "Weapons/BaseWeapon.h"
-#include "Characters/LostConnectionCharacter.h"
+#include "Characters/BaseDrone.h"
 #include "Interfaces/PhysicalObjects/ShotThrough.h"
 
 #pragma warning(disable: 4458)
@@ -29,24 +29,24 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		return;
 	}
 
-	ALostConnectionCharacter* lostCharacter = Cast<ALostConnectionCharacter>(OtherActor);
+	ABaseDrone* drone = Cast<ABaseDrone>(OtherActor);
 	bool shotThrough = OtherActor->Implements<UShotThrough>();
 
-	if (lostCharacter && lastTarget == lostCharacter)
+	if (drone && lastTarget == drone)
 	{
 		return;
 	}
 
-	if (lostCharacter && isAlly != lostCharacter->getIsAlly())
+	if (drone && isAlly != drone->getIsAlly())
 	{
-		lostCharacter->takeDamage(damage);
+		drone->takeDamage(damage);
 
-		lastTarget = lostCharacter;
+		lastTarget = drone;
 	}
 
 	if (shotThrough)
 	{
-		if (lostCharacter && isAlly == lostCharacter->getIsAlly())
+		if (drone && isAlly == drone->getIsAlly())
 		{
 			return;
 		}
@@ -155,7 +155,7 @@ ABaseAmmo::ABaseAmmo()
 
 void ABaseAmmo::launch(ACharacter* character)
 {
-	isAlly = Cast<ALostConnectionCharacter>(character)->getIsAlly();
+	isAlly = Cast<ABaseDrone>(character)->getIsAlly();
 
 	FinishSpawning({}, true);
 

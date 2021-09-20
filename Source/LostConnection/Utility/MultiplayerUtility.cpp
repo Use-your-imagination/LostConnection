@@ -3,12 +3,12 @@
 
 #include "MultiplayerUtility.h"
 
-#include "Characters/LostConnectionCharacter.h"
+#include "Characters/BaseDrone.h"
 #include "Engine/LostConnectionPlayerState.h"
 
 void MultiplayerUtility::runOnServerReliableWithMulticast(UObject* caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+	ALostConnectionPlayerState* playerState = ABaseDrone::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
 
 	if (playerState)
 	{
@@ -18,7 +18,7 @@ void MultiplayerUtility::runOnServerReliableWithMulticast(UObject* caller, const
 
 void MultiplayerUtility::runOnServerUnreliableWithMulticast(UObject* caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+	ALostConnectionPlayerState* playerState = ABaseDrone::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
 
 	if (playerState)
 	{
@@ -28,7 +28,7 @@ void MultiplayerUtility::runOnServerUnreliableWithMulticast(UObject* caller, con
 
 void MultiplayerUtility::runOnServerReliable(UObject* caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+	ALostConnectionPlayerState* playerState = ABaseDrone::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
 
 	if (playerState)
 	{
@@ -38,7 +38,7 @@ void MultiplayerUtility::runOnServerReliable(UObject* caller, const FName& metho
 
 void MultiplayerUtility::runOnServerUnreliable(UObject* caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = ALostConnectionCharacter::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+	ALostConnectionPlayerState* playerState = ABaseDrone::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
 
 	if (playerState)
 	{

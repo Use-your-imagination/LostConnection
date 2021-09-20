@@ -2,7 +2,7 @@
 
 #include "Net/UnrealNetwork.h"
 
-#include "Characters/LostConnectionCharacter.h"
+#include "Characters/BaseDrone.h"
 
 void ADroppedWeapon::Tick(float DeltaSeconds)
 {
@@ -71,5 +71,5 @@ void ADroppedWeapon::setMesh(USkeletalMesh* mesh)
 
 void ADroppedWeapon::action(AActor* player)
 {
-	Cast<ALostConnectionCharacter>(player)->pickupWeapon(this);
+	Cast<ABaseDrone>(player)->pickupWeapon(this);
 }
