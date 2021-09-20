@@ -55,21 +55,19 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		if (damage > 0.0f)
 		{
-			UNiagaraComponent* component = UNiagaraFunctionLibrary::SpawnSystemAtLocation
+			UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 			(
 				GetWorld(),
 				onHitAsset,
 				GetActorLocation(),
-				GetActorRotation()
+				GetActorRotation(),
+				FVector(1.0f),
+				true,
+				true,
+				ENCPoolMethod::AutoRelease
 			);
 
-			component->SetNiagaraVariableBool("DeathState", false);
-
-			// onHit->SetAsset(nullptr);
-			// 
-			// onHit->SetNiagaraVariableBool("DeathState", false);
-			// 
-			// onHit->SetAsset(onHitAsset);
+			onHit->SetNiagaraVariableBool("DeathState", false);
 		}
 	}
 	else
@@ -91,21 +89,19 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		tracer->SetAsset(nullptr);
 
-		UNiagaraComponent* component = UNiagaraFunctionLibrary::SpawnSystemAtLocation
+		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(
 			GetWorld(),
 			onHitAsset,
 			GetActorLocation(),
-			GetActorRotation()
+			GetActorRotation(),
+			FVector(1.0f),
+			true,
+			true,
+			ENCPoolMethod::AutoRelease
 		);
 
-		component->SetNiagaraVariableBool("DeathState", true);
-
-		// onHit->SetAsset(nullptr);
-		// 
-		// onHit->SetNiagaraVariableBool("DeathState", true);
-		// 
-		// onHit->SetAsset(onHitAsset);
+		onHit->SetNiagaraVariableBool("DeathState", true);
 
 		MarkPendingKill();
 	}
@@ -124,7 +120,6 @@ ABaseAmmo::ABaseAmmo()
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
-	onHit = CreateDefaultSubobject<UNiagaraComponent>(TEXT("OnHit"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
 	ammoType = ammoTypes::large;
 	NetUpdateFrequency = 60;
@@ -156,8 +151,6 @@ ABaseAmmo::ABaseAmmo()
 	}
 
 	tracer->SetupAttachment(mesh);
-
-	onHit->SetupAttachment(mesh);
 }
 
 void ABaseAmmo::launch(ACharacter* character)
