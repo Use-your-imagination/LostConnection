@@ -106,112 +106,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual int32 getAmmoHoldingCount(ammoTypes type) const final;
 
-#pragma region Abilities
 	UFUNCTION()
-	virtual void firstAbility();
-
-	UFUNCTION()
-	virtual void secondAbility();
+	virtual void changeWeapon() final;
 
 	UFUNCTION()
-	virtual void thirdAbility();
+	virtual void alternativeWeaponMode() final;
 
 	UFUNCTION()
-	virtual void ultimateAbility();
-
-	UFUNCTION()
-	virtual void releaseFirstAbilityHandle();
-
-	UFUNCTION()
-	virtual void releaseSecondAbilityHandle();
-
-	UFUNCTION()
-	virtual void releaseThirdAbilityHandle();
-
-	UFUNCTION()
-	virtual void releaseUltimateAbilityHandle();
-#pragma endregion
-
-#pragma region Selection
-	UFUNCTION()
-	virtual void selectFirstPlayer();
-
-	UFUNCTION()
-	virtual void selectSecondPlayer();
-
-	UFUNCTION()
-	virtual void selectThirdPlayer();
-
-	UFUNCTION()
-	virtual void selectFourthPlayer();
-
-	UFUNCTION()
-	virtual void releaseSelectFirstPlayerHandle();
-
-	UFUNCTION()
-	virtual void releaseSelectSecondPlayerHandle();
-
-	UFUNCTION()
-	virtual void releaseSelectThirdPlayerHandle();
-
-	UFUNCTION()
-	virtual void releaseSelectFourthPlayerHandle();
-#pragma endregion
-
-#pragma region PressActions
-	UFUNCTION(BlueprintNativeEvent)
-	void pressChangeWeapon();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void pressAction(AActor* object);
-
-	UFUNCTION(BlueprintNativeEvent)
-	void pressAlternative();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void pressShoot();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void pressDropWeapon();
-
-	UFUNCTION()
-	virtual void pressChangeWeaponHandle();
-
-	UFUNCTION()
-	virtual void pressActionHandle();
-
-	UFUNCTION()
-	virtual void pressAlternativeHandle();
-#pragma endregion
-
-#pragma region ReleaseActions
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseChangeWeapon();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseAction();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseAlternative();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseShoot();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseDropWeapon();
-
-	UFUNCTION()
-	virtual void releaseChangeWeaponHandle();
-
-	UFUNCTION()
-	virtual void releaseActionHandle();
-
-	UFUNCTION()
-	virtual void releaseAlternativeHandle();
-
-	UFUNCTION()
-	virtual void releaseDropWeaponHandle();
-#pragma endregion
+	virtual void action() final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FVector getStartActionLineTrace() const final;
