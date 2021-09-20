@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "Characters/BaseCharacter.h"
+#include "BaseDrone.h"
 
 #include "BaseBot.generated.h"
 
@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API ABaseBot : public ABaseCharacter
+class LOSTCONNECTION_API ABaseBot : public ABaseDrone
 {
 	GENERATED_BODY()
 	
