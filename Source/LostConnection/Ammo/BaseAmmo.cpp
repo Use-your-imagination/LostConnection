@@ -1,6 +1,7 @@
 #include "BaseAmmo.h"
 
 #include "UObject/ConstructorHelpers.h"
+#include "NiagaraFunctionLibrary.h"
 
 #include "Weapons/BaseWeapon.h"
 #include "Characters/LostConnectionCharacter.h"
@@ -54,11 +55,21 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		if (damage > 0.0f)
 		{
-			onHit->SetAsset(nullptr);
+			UNiagaraComponent* component = UNiagaraFunctionLibrary::SpawnSystemAtLocation
+			(
+				GetWorld(),
+				onHitAsset,
+				GetActorLocation(),
+				GetActorRotation()
+			);
 
-			onHit->SetNiagaraVariableBool("DeathState", false);
+			component->SetNiagaraVariableBool("DeathState", false);
 
-			onHit->SetAsset(onHitAsset);
+			// onHit->SetAsset(nullptr);
+			// 
+			// onHit->SetNiagaraVariableBool("DeathState", false);
+			// 
+			// onHit->SetAsset(onHitAsset);
 		}
 	}
 	else
@@ -80,11 +91,21 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		tracer->SetAsset(nullptr);
 
-		onHit->SetAsset(nullptr);
+		UNiagaraComponent* component = UNiagaraFunctionLibrary::SpawnSystemAtLocation
+		(
+			GetWorld(),
+			onHitAsset,
+			GetActorLocation(),
+			GetActorRotation()
+		);
 
-		onHit->SetNiagaraVariableBool("DeathState", true);
+		component->SetNiagaraVariableBool("DeathState", true);
 
-		onHit->SetAsset(onHitAsset);
+		// onHit->SetAsset(nullptr);
+		// 
+		// onHit->SetNiagaraVariableBool("DeathState", true);
+		// 
+		// onHit->SetAsset(onHitAsset);
 
 		MarkPendingKill();
 	}
