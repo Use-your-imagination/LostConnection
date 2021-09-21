@@ -364,7 +364,7 @@ void ABaseDrone::resetShoot()
 {
 	ABaseCharacter::resetShoot();
 
-	this->releaseShoot();
+	MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseShoot");
 }
 
 void ABaseDrone::changeToFirstWeapon_Implementation()
