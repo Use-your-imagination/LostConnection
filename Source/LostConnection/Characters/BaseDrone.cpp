@@ -100,8 +100,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	FInputActionBinding pressCrouch("Crouch", IE_Pressed);
 	FInputActionBinding releaseCrouch("Crouch", IE_Released);
 
-	FInputActionBinding sprint("Sprint", IE_Pressed);
-	FInputActionBinding run("Sprint", IE_Released);
+	FInputActionBinding holdSprint("Sprint", IE_Pressed);
+	FInputActionBinding releaseSprint("Sprint", IE_Released);
 
 	FInputActionBinding changeWeapon("ChangeWeapon", IE_Pressed);
 
@@ -119,8 +119,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	pressCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_pressCrouchAction, this);
 	releaseCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda(&IMovementActions::Execute_releaseCrouchAction, this);
 
-	sprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "sprint"); });
-	run.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "run"); });
+	holdSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "holdSprint"); });
+	releaseSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "releaseSprint"); });
 
 	changeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "changeWeapon"); });
 
@@ -138,8 +138,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	result.Add(pressCrouch);
 	result.Add(releaseCrouch);
 
-	result.Add(sprint);
-	result.Add(run);
+	result.Add(holdSprint);
+	result.Add(releaseSprint);
 
 	result.Add(changeWeapon);
 

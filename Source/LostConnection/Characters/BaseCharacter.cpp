@@ -83,14 +83,18 @@ void ABaseCharacter::updateWeaponMesh()
 	}
 }
 
-void ABaseCharacter::sprint()
+void ABaseCharacter::holdSprint()
 {
 	this->setMaxSpeed(575.0f);
+
+	IMovementActions::Execute_pressSprintAction(this);
 }
 
-void ABaseCharacter::run()
+void ABaseCharacter::releaseSprint()
 {
 	this->setMaxSpeed(450.0f);
+
+	IMovementActions::Execute_releaseSprintAction(this);
 }
 
 void ABaseCharacter::Jump()

@@ -22,9 +22,14 @@ class LOSTCONNECTION_API IMovementActions
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	IMovementActions() = default;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressSprintAction();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseSprintAction();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void pressCrouchAction();

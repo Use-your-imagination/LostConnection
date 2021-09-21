@@ -70,10 +70,10 @@ protected:
 	virtual void updateWeaponMesh() final;
 
 	UFUNCTION()
-	virtual void sprint();
+	virtual void holdSprint();
 
 	UFUNCTION()
-	virtual void run();
+	virtual void releaseSprint();
 
 	virtual void Jump() final override;
 
