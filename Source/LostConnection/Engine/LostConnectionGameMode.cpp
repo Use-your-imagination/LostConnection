@@ -20,7 +20,7 @@ void ALostConnectionGameMode::BeginPlay()
 
 		GetWorld()->SpawnActor(defaultAI, &location, &rotation);
 	}
-#endif // UE_BUILD_SHIPPING
+#endif // !UE_BUILD_DEBUG
 }
 
 ALostConnectionGameMode::ALostConnectionGameMode()
@@ -37,7 +37,6 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	defaultAI = DefaultAIClass.Class;
 }
 
-#if WITH_EDITORONLY_DATA
 void ALostConnectionGameMode::spawnAI_Implementation() const
 {
 	FActorSpawnParameters parameters;
@@ -52,4 +51,3 @@ void ALostConnectionGameMode::spawnAI_Implementation() const
 		GetWorld()->SpawnActor(defaultAI, &location, &rotation, parameters);
 	}
 }
-#endif // WITH_EDITORONLY_DATA

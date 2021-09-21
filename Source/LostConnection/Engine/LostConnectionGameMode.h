@@ -15,13 +15,11 @@ class LOSTCONNECTION_API ALostConnectionGameMode : public AGameModeBase
 private:
 	UClass* defaultAI;
 
-#if WITH_EDITORONLY_DATA
 	UPROPERTY(Category = "Debug|Spawn", EditAnywhere)
 	FVector location;
 
 	UPROPERTY(Category = "Debug|Spawn", EditAnywhere, Meta = (DisplayAfter = "location"))
 	uint16 count;
-#endif // WITH_EDITOR_ONLY_DATA
 
 protected:
 	void BeginPlay() override;
@@ -29,8 +27,6 @@ protected:
 public:
 	ALostConnectionGameMode();
 
-#if WITH_EDITORONLY_DATA
 	UFUNCTION(Category = "Debug|Spawn", Server, Reliable, CallInEditor, Meta = (DisplayAfter = "count"))
 	void spawnAI() const;
-#endif // WITH_EDITOR_ONLY_DATA
 };
