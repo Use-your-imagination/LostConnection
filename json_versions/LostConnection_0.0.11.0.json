@@ -1,4 +1,19 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.0.11.0"
+  "projectVersion": "0.0.11.0",
+  "UI": {
+    "type": "category",
+    "Input settings": {
+      "type": "item",
+      "notes": [
+        "Change font size"
+      ]
+    },
+    "HUD": {
+      "type": "item",
+      "notes": [
+        "Change ammo capacity color to black"
+      ]
+    }
+  }
 }
