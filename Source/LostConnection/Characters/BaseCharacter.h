@@ -110,10 +110,10 @@ public:
 	ABaseCharacter();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void shoot() final;
+	virtual void shoot();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void resetShoot() final;
+	virtual void resetShoot() ;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void changeToDefaultWeapon() final;

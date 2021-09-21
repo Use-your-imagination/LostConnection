@@ -84,6 +84,10 @@ protected:
 public:
 	ABaseDrone();
 
+	virtual void shoot() final override;
+
+	virtual void resetShoot() final override;
+
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void changeToFirstWeapon() final;
 
@@ -124,6 +128,12 @@ public:
 	virtual float getFlatDamageReduction_Implementation() const override;
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void pressShoot();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void releaseShoot();
 
 	virtual ~ABaseDrone() = default;
 };

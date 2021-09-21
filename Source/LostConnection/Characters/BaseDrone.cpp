@@ -353,6 +353,20 @@ ABaseDrone::ABaseDrone()
 	FollowCamera->bUsePawnControlRotation = false;
 }
 
+void ABaseDrone::shoot()
+{
+	ABaseCharacter::shoot();
+
+	this->pressShoot();
+}
+
+void ABaseDrone::resetShoot()
+{
+	ABaseCharacter::resetShoot();
+
+	this->releaseShoot();
+}
+
 void ABaseDrone::changeToFirstWeapon_Implementation()
 {
 	currentWeapon = firstWeaponSlot;
@@ -547,4 +561,14 @@ float ABaseDrone::getFlatDamageReduction_Implementation() const
 float ABaseDrone::getPercentageDamageReduction_Implementation() const
 {
 	return 25.0f;
+}
+
+void ABaseDrone::pressShoot_Implementation()
+{
+
+}
+
+void ABaseDrone::releaseShoot_Implementation()
+{
+
 }
