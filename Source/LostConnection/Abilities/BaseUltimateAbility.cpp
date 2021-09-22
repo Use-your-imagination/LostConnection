@@ -4,12 +4,9 @@ void ABaseUltimateAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (HasAuthority())
+	if (HasAuthority() && currentCooldown > 0.0f)
 	{
-		if (currentCooldown > 0.0f)
-		{
-			currentCooldown -= DeltaTime;
-		}
+		currentCooldown -= DeltaTime;
 	}
 }
 
