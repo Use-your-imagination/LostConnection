@@ -11,12 +11,17 @@
 #include "BaseCharacter.h"
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
+
+#include "Abilities/BasePassiveAbility.h"
+#include "Abilities/BaseUltimateAbility.h"
 
 #include "BaseDrone.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API ABaseDrone :
-	public ABaseCharacter
+	public ABaseCharacter,
+	public ICaster
 {
 	GENERATED_BODY()
 
@@ -39,6 +44,25 @@ private:
 protected:
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	TArray<int32> currentAmmoHolding;
+
+protected:
+	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float energy;
+
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	ABasePassiveAbility* passiveAbility;
+
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	ABaseAbility* firstAbility;
+
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	ABaseAbility* secondAbility;
+
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	ABaseAbility* thirdAbility;
+
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	ABaseUltimateAbility* ultimateAbility;
 
 public:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
@@ -99,13 +123,6 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void pickupWeapon(ADroppedWeapon* weaponToEquip) final;
 
-	virtual USpringArmComponent* GetCameraOffset() const final;
-
-	virtual UCameraComponent* GetFollowCamera() const final;
-
-	UFUNCTION(BlueprintCallable)
-	virtual int32 getAmmoHoldingCount(ammoTypes type) const final;
-
 	UFUNCTION()
 	virtual void changeWeapon() final;
 
@@ -115,21 +132,44 @@ public:
 	UFUNCTION()
 	virtual void action() final;
 
+	virtual void setEnergy(float newEnergy) final override;
+
+	virtual void setEnergy_Implementation(float newEnergy) final override;
+
+	virtual USpringArmComponent* GetCameraOffset() const final;
+
+	virtual UCameraComponent* GetFollowCamera() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual int32 getAmmoHoldingCount(ammoTypes type) const final;
+
 	UFUNCTION(BlueprintCallable)
 	virtual FVector getStartActionLineTrace() const final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FVector getEndActionLineTrace() const final;
 
-	virtual float getFlatDamageReduction_Implementation() const override;
-
-	virtual float getPercentageDamageReduction_Implementation() const override;
-
 	UFUNCTION(BlueprintNativeEvent)
 	void pressShoot();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void releaseShoot();
+
+	virtual float getFlatDamageReduction_Implementation() const override;
+
+	virtual float getPercentageDamageReduction_Implementation() const override;
+
+	virtual void usePassiveAbility() final override;
+
+	virtual void useFirstAbility() final override;
+
+	virtual void useSecondAbility() final override;
+
+	virtual void useThirdAbility() final override;
+
+	virtual void useUltimateAbility() final override;
+
+	virtual float getEnergy() const final override;
 
 	virtual ~ABaseDrone() = default;
 };

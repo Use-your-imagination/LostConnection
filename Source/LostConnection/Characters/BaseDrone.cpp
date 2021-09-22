@@ -29,35 +29,20 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	TArray<FInputActionBinding> result;
 
 #pragma region Abilities
-	// FInputActionBinding pressFirstAbility("FirstAbility", IE_Pressed);
-	// FInputActionBinding pressSecondAbility("SecondAbility", IE_Pressed);
-	// FInputActionBinding pressThirdAbility("ThirdAbility", IE_Pressed);
-	// FInputActionBinding pressUltimateAbility("UltimateAbility", IE_Pressed);
+	// FInputActionBinding firstAbility("FirstAbility", IE_Pressed);
+	// FInputActionBinding secondAbility("SecondAbility", IE_Pressed);
+	// FInputActionBinding thirdAbility("ThirdAbility", IE_Pressed);
+	// FInputActionBinding ultimateAbility("UltimateAbility", IE_Pressed);
 	// 
-	// FInputActionBinding releaseFirstAbility("FirstAbility", IE_Released);
-	// FInputActionBinding releaseSecondAbility("SecondAbility", IE_Released);
-	// FInputActionBinding releaseThirdAbility("ThirdAbility", IE_Released);
-	// FInputActionBinding releaseUltimateAbility("UltimateAbility", IE_Released);
+	// firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "firstAbility"); });
+	// secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "secondAbility"); });
+	// thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "thirdAbility"); });
+	// ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "ultimateAbility"); });
 	// 
-	// pressFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "firstAbility"); });
-	// pressSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "secondAbility"); });
-	// pressThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "thirdAbility"); });
-	// pressUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "ultimateAbility"); });
-	// 
-	// releaseFirstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseFirstAbilityHandle"); });
-	// releaseSecondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseSecondAbilityHandle"); });
-	// releaseThirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseThirdAbilityHandle"); });
-	// releaseUltimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseUltimateAbilityHandle"); });
-	// 
-	// result.Add(pressFirstAbility);
-	// result.Add(pressSecondAbility);
-	// result.Add(pressThirdAbility);
-	// result.Add(pressUltimateAbility);
-	// 
-	// result.Add(releaseFirstAbility);
-	// result.Add(releaseSecondAbility);
-	// result.Add(releaseThirdAbility);
-	// result.Add(releaseUltimateAbility);
+	// result.Add(firstAbility);
+	// result.Add(secondAbility);
+	// result.Add(thirdAbility);
+	// result.Add(ultimateAbility);
 #pragma endregion
 
 #pragma region Selection
@@ -158,9 +143,21 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, currentAmmoHolding);
 
+	DOREPLIFETIME(ABaseDrone, energy);
+
 	DOREPLIFETIME(ABaseDrone, firstWeaponSlot);
 
 	DOREPLIFETIME(ABaseDrone, secondWeaponSlot);
+
+	DOREPLIFETIME(ABaseDrone, passiveAbility);
+
+	DOREPLIFETIME(ABaseDrone, firstAbility);
+
+	DOREPLIFETIME(ABaseDrone, secondAbility);
+
+	DOREPLIFETIME(ABaseDrone, thirdAbility);
+
+	DOREPLIFETIME(ABaseDrone, ultimateAbility);
 }
 
 void ABaseDrone::PostInitializeComponents()
@@ -182,6 +179,16 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	wroteSomething |= Channel->ReplicateSubobject(firstWeaponSlot, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(secondWeaponSlot, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(secondAbility, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(thirdAbility, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
 	return wroteSomething;
 }
@@ -320,6 +327,7 @@ ABaseDrone::ABaseDrone()
 	firstWeaponSlot = nullptr;
 	secondWeaponSlot = nullptr;
 	health = 1000.0f;
+	energy = 1000.0f;
 	currentHealth = health;
 	isAlly = true;
 
@@ -484,11 +492,6 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 	weaponToEquip->Destroy(true);
 }
 
-int32 ABaseDrone::getAmmoHoldingCount(ammoTypes type) const
-{
-	return currentAmmoHolding[static_cast<size_t>(type)];
-}
-
 void ABaseDrone::changeWeapon()
 {
 	if (currentWeapon == firstWeaponSlot)
@@ -543,6 +546,21 @@ void ABaseDrone::action()
 	}
 }
 
+void ABaseDrone::setEnergy(float newEnergy)
+{
+	PURE_VIRTUAL(ABaseDrone::setEnergy);
+}
+
+void ABaseDrone::setEnergy_Implementation(float newEnergy)
+{
+	energy = newEnergy;
+}
+
+int32 ABaseDrone::getAmmoHoldingCount(ammoTypes type) const
+{
+	return currentAmmoHolding[static_cast<size_t>(type)];
+}
+
 FVector ABaseDrone::getStartActionLineTrace() const
 {
 	return FollowCamera->GetComponentLocation();
@@ -551,6 +569,16 @@ FVector ABaseDrone::getStartActionLineTrace() const
 FVector ABaseDrone::getEndActionLineTrace() const
 {
 	return this->getStartActionLineTrace() + (CameraOffset->TargetArmLength + 200.0f) * FollowCamera->GetForwardVector();
+}
+
+void ABaseDrone::pressShoot_Implementation()
+{
+
+}
+
+void ABaseDrone::releaseShoot_Implementation()
+{
+
 }
 
 float ABaseDrone::getFlatDamageReduction_Implementation() const
@@ -563,12 +591,32 @@ float ABaseDrone::getPercentageDamageReduction_Implementation() const
 	return 25.0f;
 }
 
-void ABaseDrone::pressShoot_Implementation()
+void ABaseDrone::usePassiveAbility()
 {
-
+	passiveAbility->useAbility();
 }
 
-void ABaseDrone::releaseShoot_Implementation()
+void ABaseDrone::useFirstAbility()
 {
+	firstAbility->useAbility();
+}
 
+void ABaseDrone::useSecondAbility()
+{
+	secondAbility->useAbility();
+}
+
+void ABaseDrone::useThirdAbility()
+{
+	thirdAbility->useAbility();
+}
+
+void ABaseDrone::useUltimateAbility()
+{
+	ultimateAbility->useAbility();
+}
+
+float ABaseDrone::getEnergy() const
+{
+	return energy;
 }

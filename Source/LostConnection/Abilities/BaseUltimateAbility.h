@@ -29,11 +29,12 @@ protected:
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-protected:
-	virtual void useAbility(AActor* target);
-
 public:
 	ABaseUltimateAbility();
+
+	virtual void applyAbility(class ABaseDrone* target) override;
+
+	virtual void useAbility() override;
 
 	virtual ~ABaseUltimateAbility() = default;
 };

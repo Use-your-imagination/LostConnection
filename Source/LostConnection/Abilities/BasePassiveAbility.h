@@ -15,12 +15,13 @@ UCLASS()
 class LOSTCONNECTION_API ABasePassiveAbility : public ABaseAbility
 {
 	GENERATED_BODY()
-	
-protected:
-	virtual void useAbility(AActor* target);
 
 public:
 	ABasePassiveAbility() = default;
+
+	virtual void applyAbility(class ABaseDrone* target) override;
+
+	virtual void useAbility() override;
 
 	virtual ~ABasePassiveAbility() = default;
 };

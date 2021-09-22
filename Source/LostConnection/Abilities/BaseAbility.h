@@ -24,7 +24,7 @@ protected:
 	FString name;
 	FString localizedName;
 	FString description;
-	AActor* owner;
+	class ABaseDrone* owner;
 
 protected:
 	virtual void BeginPlay() override;
@@ -34,16 +34,17 @@ protected:
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-protected:
-	virtual void useAbility(AActor* target);
-
 public:
 	ABaseAbility();
+
+	virtual void applyAbility(class ABaseDrone* target);
+
+	virtual void useAbility();
 
 	UFUNCTION(Server, Reliable)
 	virtual void setCost(float newCost) final;
 
-	virtual void setOwner(AActor* owner) final;
+	virtual void setOwner(class ABaseDrone* owner) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void disable() final;

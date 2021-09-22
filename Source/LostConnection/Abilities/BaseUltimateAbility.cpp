@@ -1,5 +1,7 @@
 #include "BaseUltimateAbility.h"
 
+#include "Characters/BaseDrone.h"
+
 void ABaseUltimateAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -19,12 +21,17 @@ void ABaseUltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME(ABaseUltimateAbility, currentCooldown);
 }
 
-void ABaseUltimateAbility::useAbility(AActor* target)
-{
-	currentCooldown = cooldown;
-}
-
 ABaseUltimateAbility::ABaseUltimateAbility()
 {
 	NetUpdateFrequency = 60;
+}
+
+void ABaseUltimateAbility::applyAbility(ABaseDrone* target)
+{
+	PURE_VIRTUAL(ABaseUltimateAbility::applyAbility)
+}
+
+void ABaseUltimateAbility::useAbility()
+{
+	currentCooldown = cooldown;
 }

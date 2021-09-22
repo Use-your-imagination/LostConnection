@@ -1,5 +1,7 @@
 #include "BaseAbility.h"
 
+#include "Characters/BaseDrone.h"
+
 #pragma warning(disable: 4458)
 
 void ABaseAbility::BeginPlay()
@@ -21,15 +23,20 @@ void ABaseAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(ABaseAbility, isDisabled);
 }
 
-void ABaseAbility::useAbility(AActor* target)
-{
-	PURE_VIRTUAL(ABaseAbility::useAbility);
-}
-
 ABaseAbility::ABaseAbility()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = 1;
+}
+
+void ABaseAbility::applyAbility(ABaseDrone* target)
+{
+	PURE_VIRTUAL(ABaseAbility::applyAbility);
+}
+
+void ABaseAbility::useAbility()
+{
+	PURE_VIRTUAL(ABaseAbility::useAbility);
 }
 
 void ABaseAbility::setCost_Implementation(float newCost)
@@ -37,7 +44,7 @@ void ABaseAbility::setCost_Implementation(float newCost)
 	cost = newCost;
 }
 
-void ABaseAbility::setOwner(AActor* owner)
+void ABaseAbility::setOwner(ABaseDrone* owner)
 {
 	this->owner = owner;
 }

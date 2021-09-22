@@ -23,23 +23,23 @@ public:
 	ICaster() = default;
 
 	UFUNCTION()
-	virtual void usePassiveAbility(AActor* target) = 0;
+	virtual void usePassiveAbility() = 0;
 
 	UFUNCTION()
-	virtual void useFirstAbility(AActor* target) = 0;
+	virtual void useFirstAbility() = 0;
 
 	UFUNCTION()
-	virtual void useSecondAbility(AActor* target) = 0;
+	virtual void useSecondAbility() = 0;
 
 	UFUNCTION()
-	virtual void useThirdAbility(AActor* target) = 0;
+	virtual void useThirdAbility() = 0;
 
 	UFUNCTION()
-	virtual void useUltimateAbility(AActor* target) = 0;
+	virtual void useUltimateAbility() = 0;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setEnergy(float newEnergy) = 0;
 
 	UFUNCTION(BlueprintCallable)
-	virtual float getEnergy() = 0;
+	virtual float getEnergy() const = 0;
 };
