@@ -10,6 +10,7 @@
 
 #include "BaseCharacter.h"
 #include "WorldPlaceables/DroppedWeapon.h"
+#include "Utility/TimersUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 
@@ -53,9 +54,17 @@ protected:
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	TArray<int32> currentAmmoHolding;
 
+	UTimersUtility* timers;
+
 protected:
 	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float energy;
+
+	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float currentEnergy;
+
+	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float energyRestorationPerSecond;
 
 	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	ABasePassiveAbility* passiveAbility;
@@ -140,10 +149,6 @@ public:
 	UFUNCTION()
 	virtual void action() final;
 
-	virtual void setEnergy(float newEnergy) final override;
-
-	virtual void setEnergy_Implementation(float newEnergy) final override;
-
 	virtual USpringArmComponent* GetCameraOffset() const final;
 
 	virtual UCameraComponent* GetFollowCamera() const final;
@@ -167,7 +172,17 @@ public:
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
 
+	virtual void setEnergy_Implementation(float newEnergy) final override;
+
+	virtual void setCurrentEnergy_Implementation(float newCurrentEnergy) final override;
+
+	virtual void setEnergyRestorationPerSecond_Implementation(float newEnergyRestorationPerSecond) final override;
+
 	virtual float getEnergy() const final override;
+
+	virtual float getCurrentEnergy() const final override;
+
+	virtual float getEnergyRestorationPerSecond() const final override;
 
 	virtual ABasePassiveAbility* getPassiveAbility() final override;
 

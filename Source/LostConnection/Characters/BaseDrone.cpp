@@ -145,6 +145,10 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, energy);
 
+	DOREPLIFETIME(ABaseDrone, currentEnergy);
+
+	DOREPLIFETIME(ABaseDrone, energyRestorationPerSecond);
+
 	DOREPLIFETIME(ABaseDrone, firstWeaponSlot);
 
 	DOREPLIFETIME(ABaseDrone, secondWeaponSlot);
@@ -198,10 +202,25 @@ void ABaseDrone::BeginPlay()
 	Super::BeginPlay();
 
 	UWorld* world = GetWorld();
-
+	
 	if (world)
 	{
 		ABaseDrone::globalPlayerPtr = UGameplayStatics::GetPlayerController(world, 0)->GetPawn<ABaseDrone>();
+
+		if (HasAuthority())
+		{
+			timers = NewObject<UTimersUtility>();
+
+			timers->setWorld(world);
+
+			timers->addTimer([this]() 
+				{
+					if (currentEnergy != energy)
+					{
+						ICaster::Execute_setCurrentEnergy(this, currentEnergy + energyRestorationPerSecond);
+					}
+				}, 1.0f);
+		}
 	}
 }
 
@@ -209,17 +228,14 @@ void ABaseDrone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (firstWeaponSlot)
+	if (HasAuthority())
 	{
-		if (HasAuthority())
+		if (firstWeaponSlot)
 		{
 			firstWeaponSlot->reduceShootRemainigTime(DeltaTime);
 		}
-	}
 
-	if (secondWeaponSlot)
-	{
-		if (HasAuthority())
+		if (secondWeaponSlot)
 		{
 			secondWeaponSlot->reduceShootRemainigTime(DeltaTime);
 		}
@@ -326,10 +342,12 @@ ABaseDrone::ABaseDrone()
 {
 	firstWeaponSlot = nullptr;
 	secondWeaponSlot = nullptr;
-	health = 1000.0f;
-	energy = 1000.0f;
-	currentHealth = health;
+	health = currentHealth = 1000.0f;
+	energy = currentEnergy = 1000.0f;
+	energyRestorationPerSecond = 5.0f;
 	isAlly = true;
+
+	currentEnergy /= 2;
 
 	currentAmmoHolding.Reserve(4);
 
@@ -546,16 +564,6 @@ void ABaseDrone::action()
 	}
 }
 
-void ABaseDrone::setEnergy(float newEnergy)
-{
-	PURE_VIRTUAL(ABaseDrone::setEnergy);
-}
-
-void ABaseDrone::setEnergy_Implementation(float newEnergy)
-{
-	energy = newEnergy;
-}
-
 int32 ABaseDrone::getAmmoHoldingCount(ammoTypes type) const
 {
 	return currentAmmoHolding[static_cast<size_t>(type)];
@@ -591,9 +599,41 @@ float ABaseDrone::getPercentageDamageReduction_Implementation() const
 	return 25.0f;
 }
 
+void ABaseDrone::setEnergy_Implementation(float newEnergy)
+{
+	energy = newEnergy;
+}
+
+void ABaseDrone::setCurrentEnergy_Implementation(float newCurrentEnergy)
+{
+	if (newCurrentEnergy > energy)
+	{
+		currentEnergy = energy;
+	}
+	else
+	{
+		currentEnergy = newCurrentEnergy;
+	}
+}
+
+void ABaseDrone::setEnergyRestorationPerSecond_Implementation(float newEnergyRestorationPerSecond)
+{
+	energyRestorationPerSecond = newEnergyRestorationPerSecond;
+}
+
 float ABaseDrone::getEnergy() const
 {
 	return energy;
+}
+
+float ABaseDrone::getCurrentEnergy() const
+{
+	return currentEnergy;
+}
+
+float ABaseDrone::getEnergyRestorationPerSecond() const
+{
+	return energyRestorationPerSecond;
 }
 
 ABasePassiveAbility* ABaseDrone::getPassiveAbility()
@@ -629,7 +669,7 @@ void ABaseDrone::passiveAbilityVisual()
 
 void ABaseDrone::passiveAbilityLogic()
 {
-
+	passiveAbility->useAbility();
 }
 
 void ABaseDrone::runPassiveAbilityLogic_Implementation()
@@ -648,7 +688,7 @@ void ABaseDrone::firstAbilityVisual()
 
 void ABaseDrone::firstAbilityLogic()
 {
-
+	firstAbility->useAbility();
 }
 
 void ABaseDrone::runFirstAbilityLogic_Implementation()
@@ -667,7 +707,7 @@ void ABaseDrone::secondAbilityVisual()
 
 void ABaseDrone::secondAbilityLogic()
 {
-
+	secondAbility->useAbility();
 }
 
 void ABaseDrone::runSecondAbilityLogic_Implementation()
@@ -686,7 +726,7 @@ void ABaseDrone::thirdAbilityVisual()
 
 void ABaseDrone::thirdAbilityLogic()
 {
-
+	thirdAbility->useAbility();
 }
 
 void ABaseDrone::runThirdAbilityLogic_Implementation()
@@ -705,7 +745,7 @@ void ABaseDrone::ultimateAbilityVisual()
 
 void ABaseDrone::ultimateAbilityLogic()
 {
-
+	ultimateAbility->useAbility();
 }
 
 void ABaseDrone::runUltimateAbilityLogic_Implementation()
