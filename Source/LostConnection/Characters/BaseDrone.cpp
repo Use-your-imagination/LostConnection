@@ -29,20 +29,20 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	TArray<FInputActionBinding> result;
 
 #pragma region Abilities
-	// FInputActionBinding firstAbility("FirstAbility", IE_Pressed);
-	// FInputActionBinding secondAbility("SecondAbility", IE_Pressed);
-	// FInputActionBinding thirdAbility("ThirdAbility", IE_Pressed);
-	// FInputActionBinding ultimateAbility("UltimateAbility", IE_Pressed);
-	// 
-	// firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "firstAbility"); });
-	// secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "secondAbility"); });
-	// thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "thirdAbility"); });
-	// ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "ultimateAbility"); });
-	// 
-	// result.Add(firstAbility);
-	// result.Add(secondAbility);
-	// result.Add(thirdAbility);
-	// result.Add(ultimateAbility);
+	FInputActionBinding firstAbility("FirstAbility", IE_Pressed);
+	FInputActionBinding secondAbility("SecondAbility", IE_Pressed);
+	FInputActionBinding thirdAbility("ThirdAbility", IE_Pressed);
+	FInputActionBinding ultimateAbility("UltimateAbility", IE_Pressed);
+
+	firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "firstAbility"); });
+	secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "secondAbility"); });
+	thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "thirdAbility"); });
+	ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "ultimateAbility"); });
+
+	result.Add(firstAbility);
+	result.Add(secondAbility);
+	result.Add(thirdAbility);
+	result.Add(ultimateAbility);
 #pragma endregion
 
 #pragma region Selection
@@ -591,32 +591,127 @@ float ABaseDrone::getPercentageDamageReduction_Implementation() const
 	return 25.0f;
 }
 
-void ABaseDrone::usePassiveAbility()
-{
-	passiveAbility->useAbility();
-}
-
-void ABaseDrone::useFirstAbility()
-{
-	firstAbility->useAbility();
-}
-
-void ABaseDrone::useSecondAbility()
-{
-	secondAbility->useAbility();
-}
-
-void ABaseDrone::useThirdAbility()
-{
-	thirdAbility->useAbility();
-}
-
-void ABaseDrone::useUltimateAbility()
-{
-	ultimateAbility->useAbility();
-}
-
 float ABaseDrone::getEnergy() const
 {
 	return energy;
 }
+
+ABasePassiveAbility* ABaseDrone::getPassiveAbility()
+{
+	return passiveAbility;
+}
+
+ABaseAbility* ABaseDrone::getFirstAbility()
+{
+	return firstAbility;
+}
+
+ABaseAbility* ABaseDrone::getSecondAbility()
+{
+	return secondAbility;
+}
+
+ABaseAbility* ABaseDrone::getThirdAbility()
+{
+	return thirdAbility;
+}
+
+ABaseUltimateAbility* ABaseDrone::getUltimateAbility()
+{
+	return ultimateAbility;
+}
+
+#pragma region PassiveAbility
+void ABaseDrone::passiveAbilityVisual()
+{
+
+}
+
+void ABaseDrone::passiveAbilityLogic()
+{
+
+}
+
+void ABaseDrone::runPassiveAbilityLogic_Implementation()
+{
+	this->passiveAbilityLogic();
+
+	IPassiveAbility::Execute_passiveAbilityEventLogic(this);
+}
+#pragma endregion
+
+#pragma region FirstAbility
+void ABaseDrone::firstAbilityVisual()
+{
+
+}
+
+void ABaseDrone::firstAbilityLogic()
+{
+
+}
+
+void ABaseDrone::runFirstAbilityLogic_Implementation()
+{
+	this->firstAbilityLogic();
+
+	IFirstAbility::Execute_firstAbilityEventLogic(this);
+}
+#pragma endregion
+
+#pragma region SecondAbility
+void ABaseDrone::secondAbilityVisual()
+{
+
+}
+
+void ABaseDrone::secondAbilityLogic()
+{
+
+}
+
+void ABaseDrone::runSecondAbilityLogic_Implementation()
+{
+	this->secondAbilityLogic();
+
+	ISecondAbility::Execute_secondAbilityEventLogic(this);
+}
+#pragma endregion
+
+#pragma region ThirdAbility
+void ABaseDrone::thirdAbilityVisual()
+{
+
+}
+
+void ABaseDrone::thirdAbilityLogic()
+{
+
+}
+
+void ABaseDrone::runThirdAbilityLogic_Implementation()
+{
+	this->thirdAbilityLogic();
+
+	IThirdAbility::Execute_thirdAbilityEventLogic(this);
+}
+#pragma endregion
+
+#pragma region UltimateAbility
+void ABaseDrone::ultimateAbilityVisual()
+{
+
+}
+
+void ABaseDrone::ultimateAbilityLogic()
+{
+
+}
+
+void ABaseDrone::runUltimateAbilityLogic_Implementation()
+{
+	this->ultimateAbilityLogic();
+
+	IUltimateAbility::Execute_ultimateAbilityEventLogic(this);
+}
+#pragma endregion

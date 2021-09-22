@@ -4,6 +4,9 @@
 
 #include "UObject/Interface.h"
 
+#include "Abilities/BasePassiveAbility.h"
+#include "Abilities/BaseUltimateAbility.h"
+
 #include "Caster.generated.h"
 
 UINTERFACE(BlueprintType, Meta = (CannotImplementInterfaceInBlueprint))
@@ -22,24 +25,19 @@ class LOSTCONNECTION_API ICaster
 public:
 	ICaster() = default;
 
-	UFUNCTION()
-	virtual void usePassiveAbility() = 0;
-
-	UFUNCTION()
-	virtual void useFirstAbility() = 0;
-
-	UFUNCTION()
-	virtual void useSecondAbility() = 0;
-
-	UFUNCTION()
-	virtual void useThirdAbility() = 0;
-
-	UFUNCTION()
-	virtual void useUltimateAbility() = 0;
-
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setEnergy(float newEnergy) = 0;
 
 	UFUNCTION(BlueprintCallable)
 	virtual float getEnergy() const = 0;
+
+	virtual ABasePassiveAbility* getPassiveAbility() = 0;
+
+	virtual ABaseAbility* getFirstAbility() = 0;
+
+	virtual ABaseAbility* getSecondAbility() = 0;
+
+	virtual ABaseAbility* getThirdAbility() = 0;
+
+	virtual ABaseUltimateAbility* getUltimateAbility() = 0;
 };

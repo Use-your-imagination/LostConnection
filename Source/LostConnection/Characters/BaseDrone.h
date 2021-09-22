@@ -13,15 +13,23 @@
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 
-#include "Abilities/BasePassiveAbility.h"
-#include "Abilities/BaseUltimateAbility.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbility.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbility.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/SecondAbility.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/ThirdAbility.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/UltimateAbility.h"
 
 #include "BaseDrone.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API ABaseDrone :
 	public ABaseCharacter,
-	public ICaster
+	public ICaster,
+	public IPassiveAbility,
+	public IFirstAbility,
+	public ISecondAbility,
+	public IThirdAbility,
+	public IUltimateAbility
 {
 	GENERATED_BODY()
 
@@ -159,17 +167,62 @@ public:
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
 
-	virtual void usePassiveAbility() final override;
-
-	virtual void useFirstAbility() final override;
-
-	virtual void useSecondAbility() final override;
-
-	virtual void useThirdAbility() final override;
-
-	virtual void useUltimateAbility() final override;
-
 	virtual float getEnergy() const final override;
+
+	virtual ABasePassiveAbility* getPassiveAbility() final override;
+
+	virtual ABaseAbility* getFirstAbility() final override;
+
+	virtual ABaseAbility* getSecondAbility() final override;
+
+	virtual ABaseAbility* getThirdAbility() final override;
+
+	virtual ABaseUltimateAbility* getUltimateAbility() final override;
+
+#pragma region PassiveAbility
+	virtual void passiveAbilityVisual() override;
+
+	virtual void passiveAbilityLogic() override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runPassiveAbilityLogic() final;
+#pragma endregion
+
+#pragma region FirstAbility
+	virtual void firstAbilityVisual() override;
+
+	virtual void firstAbilityLogic() override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runFirstAbilityLogic() final;
+#pragma endregion
+
+#pragma region SecondAbility
+	virtual void secondAbilityVisual() override;
+
+	virtual void secondAbilityLogic() override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runSecondAbilityLogic() final;
+#pragma endregion
+
+#pragma region ThirdAbility
+	virtual void thirdAbilityVisual() override;
+
+	virtual void thirdAbilityLogic() override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runThirdAbilityLogic() final;
+#pragma endregion
+
+#pragma region UltimateAbility
+	virtual void ultimateAbilityVisual() override;
+
+	virtual void ultimateAbilityLogic() override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runUltimateAbilityLogic() final;
+#pragma endregion
 
 	virtual ~ABaseDrone() = default;
 };

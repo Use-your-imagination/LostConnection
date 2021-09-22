@@ -90,7 +90,6 @@ protected:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void runReloadLogic() final;
-
 #pragma endregion
 
 #pragma region Shoot
