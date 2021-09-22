@@ -13,9 +13,9 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ABaseCharacter::Tick(float DeltaSeconds)
+void ABaseCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaSeconds);
+	Super::Tick(DeltaTime);
 
 	if (currentHealth <= 0.0f)
 	{
@@ -29,7 +29,7 @@ void ABaseCharacter::Tick(float DeltaSeconds)
 	{
 		if (HasAuthority())
 		{
-			defaultWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
+			defaultWeaponSlot->reduceShootRemainigTime(DeltaTime);
 		}
 	}
 }

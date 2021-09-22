@@ -12,8 +12,8 @@
 
 #include "Weapons/BaseWeapon.h"
 #include "WorldPlaceables/DroppedWeapon.h"
-#include "Interfaces/PhysicalObjects/ShotThrough.h"
-#include "Interfaces/Gameplay/MovementActions.h"
+#include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
+#include "Interfaces/Gameplay/Actions/MovementActions.h"
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
 #include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
 
@@ -59,7 +59,7 @@ private:
 protected:
 	virtual void BeginPlay() override;
 
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

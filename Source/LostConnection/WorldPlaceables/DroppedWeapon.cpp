@@ -4,11 +4,11 @@
 
 #include "Characters/BaseDrone.h"
 
-void ADroppedWeapon::Tick(float DeltaSeconds)
+void ADroppedWeapon::Tick(float DeltaTime)
 {
 	if (HasAuthority())
 	{
-		weapon->reduceShootRemainigTime(DeltaSeconds);
+		weapon->reduceShootRemainigTime(DeltaTime);
 	}
 }
 

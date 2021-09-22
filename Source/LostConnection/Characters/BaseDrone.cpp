@@ -198,15 +198,15 @@ void ABaseDrone::BeginPlay()
 	}
 }
 
-void ABaseDrone::Tick(float DeltaSeconds)
+void ABaseDrone::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaSeconds);
+	Super::Tick(DeltaTime);
 
 	if (firstWeaponSlot)
 	{
 		if (HasAuthority())
 		{
-			firstWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
+			firstWeaponSlot->reduceShootRemainigTime(DeltaTime);
 		}
 	}
 
@@ -214,7 +214,7 @@ void ABaseDrone::Tick(float DeltaSeconds)
 	{
 		if (HasAuthority())
 		{
-			secondWeaponSlot->reduceShootRemainigTime(DeltaSeconds);
+			secondWeaponSlot->reduceShootRemainigTime(DeltaTime);
 		}
 	}
 }

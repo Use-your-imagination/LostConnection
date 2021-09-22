@@ -8,7 +8,7 @@
 #include "NiagaraComponent.h"
 #include "Components/BoxComponent.h"
 
-#include "Interfaces/Gameplay/Actionable.h"
+#include "Interfaces/Gameplay/Descriptions/Actionable.h"
 
 #include "DroppedObject.generated.h"
 
@@ -31,7 +31,7 @@ protected:
 protected:
 	virtual void BeginPlay() override;
 
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(float DeltaTime) override;
 
 public:	
 	ADroppedObject();

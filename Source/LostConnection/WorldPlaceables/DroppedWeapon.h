@@ -18,7 +18,7 @@ class LOSTCONNECTION_API ADroppedWeapon : public ADroppedObject
 	GENERATED_BODY()
 
 private:
-	virtual void Tick(float DeltaSeconds) final override;
+	virtual void Tick(float DeltaTime) final override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

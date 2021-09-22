@@ -5,7 +5,7 @@
 
 #include "Weapons/BaseWeapon.h"
 #include "Characters/BaseDrone.h"
-#include "Interfaces/PhysicalObjects/ShotThrough.h"
+#include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 
 #pragma warning(disable: 4458)
 
