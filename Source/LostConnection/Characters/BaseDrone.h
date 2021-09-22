@@ -10,17 +10,13 @@
 
 #include "BaseCharacter.h"
 #include "WorldPlaceables/DroppedWeapon.h"
-#include "Interfaces/Gameplay/Abilities.h"
-#include "Interfaces/Gameplay/AllySelection.h"
 #include "Interfaces/Gameplay/Actionable.h"
 
 #include "BaseDrone.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API ABaseDrone :
-	public ABaseCharacter,
-	public IAbilities,
-	public IAllySelection
+	public ABaseCharacter
 {
 	GENERATED_BODY()
 
