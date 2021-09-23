@@ -24,7 +24,7 @@ protected:
 	FString name;
 	FString localizedName;
 	FString description;
-	class ABaseDrone* owner;
+	class ICaster* owner;
 
 protected:
 	virtual void BeginPlay() override;
@@ -37,14 +37,14 @@ protected:
 public:
 	ABaseAbility();
 
-	virtual void applyAbility(class ABaseDrone* target);
+	virtual void applyAbility(class ABaseCharacter* target);
 
 	virtual void useAbility();
 
 	UFUNCTION(Server, Reliable)
 	virtual void setCost(float newCost) final;
 
-	virtual void setOwner(class ABaseDrone* owner) final;
+	virtual void setOwner(class ICaster* owner) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void disable() final;

@@ -29,24 +29,24 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		return;
 	}
 
-	ABaseDrone* drone = Cast<ABaseDrone>(OtherActor);
+	ABaseCharacter* character = Cast<ABaseCharacter>(OtherActor);
 	bool shotThrough = OtherActor->Implements<UShotThrough>();
 
-	if (drone && lastTarget == drone)
+	if (character && lastTarget == character)
 	{
 		return;
 	}
 
-	if (drone && isAlly != drone->getIsAlly())
+	if (character && isAlly != character->getIsAlly())
 	{
-		drone->takeDamage(damage);
+		character->takeDamage(damage);
 
-		lastTarget = drone;
+		lastTarget = character;
 	}
 
 	if (shotThrough)
 	{
-		if (drone && isAlly == drone->getIsAlly())
+		if (character && isAlly == character->getIsAlly())
 		{
 			return;
 		}

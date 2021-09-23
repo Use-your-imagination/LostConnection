@@ -1,5 +1,7 @@
 #include "BaseCharacter.h"
 
+#include <algorithm>
+
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -7,6 +9,8 @@
 #include "Utility/MultiplayerUtility.h"
 
 #pragma warning(disable: 4458)
+
+using namespace std;
 
 void ABaseCharacter::BeginPlay()
 {
@@ -21,7 +25,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 	{
 		if (HasAuthority())
 		{
-			Destroy();
+			this->death();
 		}
 	}
 
@@ -43,6 +47,8 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, currentHealth);
 
 	DOREPLIFETIME(ABaseCharacter, isAlly);
+
+	DOREPLIFETIME(ABaseCharacter, currentAmmoHolding);
 
 	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
@@ -124,7 +130,34 @@ void ABaseCharacter::reloadVisual()
 
 void ABaseCharacter::reloadLogic()
 {
-	PURE_VIRTUAL(ABaseCharacter::reloadLogic)
+	if (!currentWeapon)
+	{
+		return;
+	}
+
+	int currentMagazineSize = currentWeapon->getCurrentMagazineSize();
+	int magazineSize = currentWeapon->getMagazineSize();
+
+	if (currentMagazineSize == magazineSize)
+	{
+		return;
+	}
+
+	int32& ammoCount = currentAmmoHolding[static_cast<size_t>(currentWeapon->getAmmo()->getAmmoType())];
+
+	if (!ammoCount)
+	{
+		return;
+	}
+
+	int reloadedAmmoRequire = min(magazineSize - currentMagazineSize, ammoCount);
+
+	currentWeapon->setCurrentMagazineSize(currentMagazineSize + reloadedAmmoRequire);
+
+	if (ammoCount != 9999)
+	{
+		ammoCount -= reloadedAmmoRequire;
+	}
 }
 
 void ABaseCharacter::runReloadLogic_Implementation()
@@ -162,6 +195,25 @@ void ABaseCharacter::runShootLogic_Implementation()
 }
 #pragma endregion
 
+#pragma region Death
+void ABaseCharacter::deathVisual()
+{
+
+}
+
+void ABaseCharacter::deathLogic()
+{
+	
+}
+
+void ABaseCharacter::runDeathLogic_Implementation()
+{
+	this->deathLogic();
+
+	IDeath::Execute_deathEventLogic(this);
+}
+#pragma endregion
+
 void ABaseCharacter::resetShootLogic()
 {
 	if (currentWeapon)
@@ -180,6 +232,10 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
 	NetUpdateFrequency = 60;
+
+	currentAmmoHolding.Init(0, 4);
+
+	currentAmmoHolding[static_cast<size_t>(ammoTypes::defaultType)] = 9999;
 
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 
@@ -266,6 +322,11 @@ float ABaseCharacter::getCurrentHealth() const
 bool ABaseCharacter::getIsAlly() const
 {
 	return isAlly;
+}
+
+int32 ABaseCharacter::getAmmoHoldingCount(ammoTypes type) const
+{
+	return currentAmmoHolding[static_cast<size_t>(type)];
 }
 
 USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMesh() const

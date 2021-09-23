@@ -1,6 +1,7 @@
 #include "BaseAbility.h"
 
-#include "Characters/BaseDrone.h"
+#include "Characters/BaseCharacter.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
 
 #pragma warning(disable: 4458)
 
@@ -29,7 +30,7 @@ ABaseAbility::ABaseAbility()
 	NetUpdateFrequency = 1;
 }
 
-void ABaseAbility::applyAbility(ABaseDrone* target)
+void ABaseAbility::applyAbility(ABaseCharacter* target)
 {
 	PURE_VIRTUAL(ABaseAbility::applyAbility);
 }
@@ -44,7 +45,7 @@ void ABaseAbility::setCost_Implementation(float newCost)
 	cost = newCost;
 }
 
-void ABaseAbility::setOwner(ABaseDrone* owner)
+void ABaseAbility::setOwner(ICaster* owner)
 {
 	this->owner = owner;
 }

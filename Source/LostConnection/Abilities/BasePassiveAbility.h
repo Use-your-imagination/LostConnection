@@ -19,7 +19,7 @@ class LOSTCONNECTION_API ABasePassiveAbility : public ABaseAbility
 public:
 	ABasePassiveAbility() = default;
 
-	virtual void applyAbility(class ABaseDrone* target) override;
+	virtual void applyAbility(class ABaseCharacter* target) override;
 
 	virtual void useAbility() override;
 

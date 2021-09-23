@@ -51,9 +51,6 @@ private:
 	TArray<FInputActionBinding> initInputs();
 
 protected:
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
-	TArray<int32> currentAmmoHolding;
-
 	UTimersUtility* timers;
 
 protected:
@@ -116,8 +113,6 @@ protected:
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
-	virtual void reloadLogic() override final;
-
 public:
 	ABaseDrone();
 
@@ -152,9 +147,6 @@ public:
 	virtual USpringArmComponent* GetCameraOffset() const final;
 
 	virtual UCameraComponent* GetFollowCamera() const final;
-
-	UFUNCTION(BlueprintCallable)
-	virtual int32 getAmmoHoldingCount(ammoTypes type) const final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FVector getStartActionLineTrace() const final;

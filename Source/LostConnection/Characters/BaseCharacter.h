@@ -16,6 +16,7 @@
 #include "Interfaces/Gameplay/Actions/MovementActions.h"
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
 #include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
+#include "Interfaces/Gameplay/AnimatedActions/Death.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -25,7 +26,8 @@ class LOSTCONNECTION_API ABaseCharacter :
 	public IShotThrough,
 	public IReload,
 	public IShoot,
-	public IMovementActions
+	public IMovementActions,
+	public IDeath
 {
 	GENERATED_BODY()
 
@@ -51,6 +53,9 @@ protected:
 
 	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadWrite)
 	bool isAlly;
+
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	TArray<int32> currentAmmoHolding;
 
 private:
 	UFUNCTION()
@@ -102,6 +107,16 @@ protected:
 	virtual void runShootLogic() final;
 #pragma endregion
 
+#pragma region Death
+protected:
+	virtual void deathVisual() override;
+
+	virtual void deathLogic() override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runDeathLogic() final;
+#pragma endregion
+
 	UFUNCTION()
 	void resetShootLogic();
 
@@ -112,7 +127,7 @@ public:
 	virtual void shoot();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void resetShoot() ;
+	virtual void resetShoot();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void changeToDefaultWeapon() final;
@@ -140,6 +155,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool getIsAlly() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual int32 getAmmoHoldingCount(ammoTypes type) const final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool isWeaponEquipped() const final;

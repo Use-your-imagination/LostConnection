@@ -7,6 +7,7 @@
 #include "Engine/LostConnectionPlayerState.h"
 #include "Engine/LostConnectionGameState.h"
 #include "Characters/BaseDrone.h"
+#include "Characters/BaseBot.h"
 
 #pragma warning(disable: 4458)
 
@@ -28,11 +29,11 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
-	ABaseDrone* drone = Cast<ABaseDrone>(character);
+	ABaseCharacter* baseCharacter = Cast<ABaseCharacter>(character);
 
 	if (weaponType == weaponTypes::semiAutomatic || weaponType == weaponTypes::single)
 	{
-		MultiplayerUtility::runOnServerReliable(drone, "resetShoot");
+		MultiplayerUtility::runOnServerReliable(baseCharacter, "resetShoot");
 	}
 	else if (weaponType == weaponTypes::delay)
 	{
@@ -41,7 +42,7 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = drone->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), FTransform(currentVisibleWeaponMesh->GetBoneLocation("barrel")));
+		ABaseAmmo* launchedAmmo = baseCharacter->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), FTransform(currentVisibleWeaponMesh->GetBoneLocation("barrel")));
 
 		launchedAmmo->copyProperties(ammo);
 
@@ -49,17 +50,26 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 		static constexpr float distance = 20000.0f;
 
 		FHitResult hit;
-		FVector start = drone->GetFollowCamera()->GetComponentLocation();
-		FVector end = start + drone->GetFollowCamera()->GetComponentRotation().Vector() * distance;
 		FRotator resultRotation;
+		ABaseDrone* drone = Cast<ABaseDrone>(baseCharacter);
 
-		if (drone->GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility))
+		if (drone)
 		{
-			resultRotation = (hit.Location - drone->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+			FVector start = drone->GetFollowCamera()->GetComponentLocation();
+			FVector end = start + drone->GetFollowCamera()->GetComponentRotation().Vector() * distance;
+
+			if (drone->GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility))
+			{
+				resultRotation = (hit.Location - drone->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+			}
+			else
+			{
+				resultRotation = ((drone->GetFollowCamera()->GetComponentRotation().Vector() * distance) - drone->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+			}
 		}
 		else
 		{
-			resultRotation = ((drone->GetFollowCamera()->GetComponentRotation().Vector() * distance) - drone->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+			resultRotation = baseCharacter->getCurrentWeaponMesh()->GetBoneLocation("barrel").ToOrientationRotator();
 		}
 
 		launchedAmmo->getAmmoMeshComponent()->SetWorldRotation(resultRotation);
@@ -69,13 +79,13 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 
 		launchedAmmo->getAmmoMeshComponent()->AddRelativeRotation({ pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
-		launchedAmmo->launch(drone);
+		launchedAmmo->launch(baseCharacter);
 
 		currentMagazineSize -= ammoCost;
 	}
 	else
 	{
-		MultiplayerUtility::runOnServerReliableWithMulticast(drone, "reload");
+		MultiplayerUtility::runOnServerReliableWithMulticast(baseCharacter, "reload");
 	}
 }
 

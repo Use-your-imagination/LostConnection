@@ -16,4 +16,8 @@ class LOSTCONNECTION_API ABaseBot : public ABaseDrone
 {
 	GENERATED_BODY()
 	
+public:
+	ABaseBot();
+
+	virtual ~ABaseBot() = default;
 };

@@ -1,8 +1,8 @@
 #include "BasePassiveAbility.h"
 
-#include "Characters/BaseDrone.h"
+#include "Characters/BaseCharacter.h"
 
-void ABasePassiveAbility::applyAbility(ABaseDrone* target)
+void ABasePassiveAbility::applyAbility(ABaseCharacter* target)
 {
 	PURE_VIRTUAL(ABasePassiveAbility::applyAbility);
 }

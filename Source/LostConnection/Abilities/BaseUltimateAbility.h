@@ -32,7 +32,7 @@ protected:
 public:
 	ABaseUltimateAbility();
 
-	virtual void applyAbility(class ABaseDrone* target) override;
+	virtual void applyAbility(class ABaseCharacter* target) override;
 
 	virtual void useAbility() override;
 

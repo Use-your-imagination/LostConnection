@@ -1,6 +1,6 @@
 #include "BaseUltimateAbility.h"
 
-#include "Characters/BaseDrone.h"
+#include "Characters/BaseCharacter.h"
 
 void ABaseUltimateAbility::Tick(float DeltaTime)
 {
@@ -26,7 +26,7 @@ ABaseUltimateAbility::ABaseUltimateAbility()
 	NetUpdateFrequency = 60;
 }
 
-void ABaseUltimateAbility::applyAbility(ABaseDrone* target)
+void ABaseUltimateAbility::applyAbility(ABaseCharacter* target)
 {
 	PURE_VIRTUAL(ABaseUltimateAbility::applyAbility)
 }

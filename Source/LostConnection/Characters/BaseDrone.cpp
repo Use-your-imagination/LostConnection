@@ -2,8 +2,6 @@
 
 #include "BaseDrone.h"
 
-#include <algorithm>
-
 #include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -140,8 +138,6 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ABaseDrone, currentAmmoHolding);
 
 	DOREPLIFETIME(ABaseDrone, energy);
 
@@ -306,38 +302,6 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ABaseDrone::LookUpAtRate);
 }
 
-void ABaseDrone::reloadLogic()
-{
-	if (!currentWeapon)
-	{
-		return;
-	}
-
-	int currentMagazineSize = currentWeapon->getCurrentMagazineSize();
-	int magazineSize = currentWeapon->getMagazineSize();
-
-	if (currentMagazineSize == magazineSize)
-	{
-		return;
-	}
-
-	int32& ammoCount = currentAmmoHolding[static_cast<size_t>(currentWeapon->getAmmo()->getAmmoType())];
-
-	if (!ammoCount)
-	{
-		return;
-	}
-
-	int reloadedAmmoRequire = min(magazineSize - currentMagazineSize, ammoCount);
-
-	currentWeapon->setCurrentMagazineSize(currentMagazineSize + reloadedAmmoRequire);
-
-	if (ammoCount != 9999)
-	{
-		ammoCount -= reloadedAmmoRequire;
-	}
-}
-
 ABaseDrone::ABaseDrone()
 {
 	firstWeaponSlot = nullptr;
@@ -347,16 +311,7 @@ ABaseDrone::ABaseDrone()
 	energyRestorationPerSecond = 5.0f;
 	isAlly = true;
 
-	currentAmmoHolding.Reserve(4);
-
-	for (size_t i = 0; i < 3; i++)
-	{
-		currentAmmoHolding.Add(0);
-	}
-
 	currentAmmoHolding[static_cast<size_t>(ammoTypes::small)] = 720;
-
-	currentAmmoHolding.Add(9999);
 
 	BaseTurnRate = 45.0f;
 	BaseLookUpRate = 45.0f;
@@ -560,11 +515,6 @@ void ABaseDrone::action()
 	{
 		object->action(this);
 	}
-}
-
-int32 ABaseDrone::getAmmoHoldingCount(ammoTypes type) const
-{
-	return currentAmmoHolding[static_cast<size_t>(type)];
 }
 
 FVector ABaseDrone::getStartActionLineTrace() const
