@@ -25,7 +25,7 @@ void ALostConnectionGameMode::BeginPlay()
 
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
-	ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/LostConnectionCPP/Blueprints/BP_LostConnectionCharacter"));
+	ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Characters/BP_BaseDrone"));
 	ConstructorHelpers::FClassFinder<AHUD> PlayerHUDBPClass(TEXT("/Game/HUD/BP_HUD"));
 	ConstructorHelpers::FClassFinder<APawn> DefaultAIClass(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
 

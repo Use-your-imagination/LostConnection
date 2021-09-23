@@ -347,8 +347,6 @@ ABaseDrone::ABaseDrone()
 	energyRestorationPerSecond = 5.0f;
 	isAlly = true;
 
-	currentEnergy /= 2;
-
 	currentAmmoHolding.Reserve(4);
 
 	for (size_t i = 0; i < 3; i++)
