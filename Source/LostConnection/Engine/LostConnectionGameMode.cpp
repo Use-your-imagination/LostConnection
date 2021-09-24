@@ -26,13 +26,11 @@ void ALostConnectionGameMode::BeginPlay()
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
 	ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Drones/BP_BaseDrone"));
-	ConstructorHelpers::FClassFinder<AHUD> PlayerHUDBPClass(TEXT("/Game/HUD/BP_HUD"));
 	ConstructorHelpers::FClassFinder<APawn> DefaultAIClass(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
 	
 	count = 1;
 	DefaultPawnClass = PlayerPawnBPClass.Class;
 	PlayerStateClass = ALostConnectionPlayerState::StaticClass();
-	HUDClass = PlayerHUDBPClass.Class;
 	GameStateClass = ALostConnectionGameState::StaticClass();
 
 	defaultAI = DefaultAIClass.Class;

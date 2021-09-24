@@ -211,9 +211,12 @@ void ABaseDrone::BeginPlay()
 
 			timers->addTimer([this]() 
 				{
-					if (currentEnergy != energy)
+					if (IsValid())
 					{
-						ICaster::Execute_setCurrentEnergy(this, currentEnergy + energyRestorationPerSecond);
+						if (currentEnergy != energy)
+						{
+							ICaster::Execute_setCurrentEnergy(this, currentEnergy + energyRestorationPerSecond);
+						}
 					}
 				}, 1.0f);
 		}
