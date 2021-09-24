@@ -1,9 +1,9 @@
 #include "LostConnectionGameMode.h"
 
 #include "UObject/ConstructorHelpers.h"
-#include "GameFramework/HUD.h"
+#include "GameFramework/PlayerController.h"
+#include "GameFramework/PlayerState.h"
 
-#include "LostConnectionPlayerState.h"
 #include "LostConnectionGameState.h"
 
 #pragma warning(disable: 4458)
@@ -25,15 +25,18 @@ void ALostConnectionGameMode::BeginPlay()
 
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
-	ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Drones/BP_BaseDrone"));
-	ConstructorHelpers::FClassFinder<APawn> DefaultAIClass(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
+	ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/Drones/BP_BaseDrone"));
+	ConstructorHelpers::FClassFinder<APawn> defaultAIClassFinder(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
+	ConstructorHelpers::FClassFinder<APlayerController> defaultPlayerControllerClassFinder(TEXT("/Game/Engine/PlayerControllers/BP_LostConnectionPlayerController"));
+	ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/PlayerStates/BP_LostConnectionPlayerState"));
 	
 	count = 1;
-	DefaultPawnClass = PlayerPawnBPClass.Class;
-	PlayerStateClass = ALostConnectionPlayerState::StaticClass();
+	DefaultPawnClass = defaultPawnClassFinder.Class;
+	PlayerControllerClass = defaultPlayerControllerClassFinder.Class;
+	PlayerStateClass = defaultPlayerStateClassFinder.Class;
 	GameStateClass = ALostConnectionGameState::StaticClass();
 
-	defaultAI = DefaultAIClass.Class;
+	defaultAI = defaultAIClassFinder.Class;
 }
 
 void ALostConnectionGameMode::spawnAI_Implementation() const

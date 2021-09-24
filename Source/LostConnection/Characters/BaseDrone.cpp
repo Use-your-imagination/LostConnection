@@ -211,7 +211,7 @@ void ABaseDrone::BeginPlay()
 
 			timers->addTimer([this]() 
 				{
-					if (IsValid())
+					if (IsValid(this))
 					{
 						if (currentEnergy != energy)
 						{
