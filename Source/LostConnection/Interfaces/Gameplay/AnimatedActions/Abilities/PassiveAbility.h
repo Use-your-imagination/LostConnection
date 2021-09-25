@@ -27,10 +27,10 @@ protected:
 	void passiveAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void passiveAbilityLogic() = 0;
+	virtual void passiveAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void passiveAbilityEventLogic();
+	void passiveAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	IPassiveAbility() = default;

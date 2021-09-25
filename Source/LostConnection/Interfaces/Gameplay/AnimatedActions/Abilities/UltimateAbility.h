@@ -27,10 +27,10 @@ protected:
 	void ultimateAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void ultimateAbilityLogic() = 0;
+	virtual void ultimateAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ultimateAbilityEventLogic();
+	void ultimateAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	IUltimateAbility() = default;

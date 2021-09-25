@@ -189,46 +189,31 @@ public:
 #pragma region PassiveAbility
 	virtual void passiveAbilityVisual() override;
 
-	virtual void passiveAbilityLogic() override;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runPassiveAbilityLogic() final;
+	virtual void passiveAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 #pragma region FirstAbility
 	virtual void firstAbilityVisual() override;
 
-	virtual void firstAbilityLogic() override;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runFirstAbilityLogic() final;
+	virtual void firstAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 #pragma region SecondAbility
 	virtual void secondAbilityVisual() override;
 
-	virtual void secondAbilityLogic() override;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runSecondAbilityLogic() final;
+	virtual void secondAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 #pragma region ThirdAbility
 	virtual void thirdAbilityVisual() override;
 
-	virtual void thirdAbilityLogic() override;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runThirdAbilityLogic() final;
+	virtual void thirdAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 #pragma region UltimateAbility
 	virtual void ultimateAbilityVisual() override;
 
-	virtual void ultimateAbilityLogic() override;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runUltimateAbilityLogic() final;
+	virtual void ultimateAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 	virtual ~ABaseDrone() = default;

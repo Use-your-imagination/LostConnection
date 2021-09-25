@@ -618,16 +618,14 @@ void ABaseDrone::passiveAbilityVisual()
 
 }
 
-void ABaseDrone::passiveAbilityLogic()
+void ABaseDrone::passiveAbilityLogic(ABaseCharacter* target)
 {
-	passiveAbility->useAbility();
-}
+	if (HasAuthority())
+	{
+		this->passiveAbilityLogic(target);
 
-void ABaseDrone::runPassiveAbilityLogic_Implementation()
-{
-	this->passiveAbilityLogic();
-
-	IPassiveAbility::Execute_passiveAbilityEventLogic(this);
+		IPassiveAbility::Execute_passiveAbilityEventLogic(this, target);
+	}
 }
 #pragma endregion
 
@@ -637,16 +635,14 @@ void ABaseDrone::firstAbilityVisual()
 
 }
 
-void ABaseDrone::firstAbilityLogic()
+void ABaseDrone::firstAbilityLogic(ABaseCharacter* target)
 {
-	firstAbility->useAbility();
-}
+	if (HasAuthority())
+	{
+		this->firstAbilityLogic(target);
 
-void ABaseDrone::runFirstAbilityLogic_Implementation()
-{
-	this->firstAbilityLogic();
-
-	IFirstAbility::Execute_firstAbilityEventLogic(this);
+		IFirstAbility::Execute_firstAbilityEventLogic(this, target);
+	}
 }
 #pragma endregion
 
@@ -656,16 +652,14 @@ void ABaseDrone::secondAbilityVisual()
 
 }
 
-void ABaseDrone::secondAbilityLogic()
+void ABaseDrone::secondAbilityLogic(ABaseCharacter* target)
 {
-	secondAbility->useAbility();
-}
+	if (HasAuthority())
+	{
+		this->secondAbilityLogic(target);
 
-void ABaseDrone::runSecondAbilityLogic_Implementation()
-{
-	this->secondAbilityLogic();
-
-	ISecondAbility::Execute_secondAbilityEventLogic(this);
+		ISecondAbility::Execute_secondAbilityEventLogic(this, target);
+	}
 }
 #pragma endregion
 
@@ -675,16 +669,14 @@ void ABaseDrone::thirdAbilityVisual()
 
 }
 
-void ABaseDrone::thirdAbilityLogic()
+void ABaseDrone::thirdAbilityLogic(ABaseCharacter* target)
 {
-	thirdAbility->useAbility();
-}
+	if (HasAuthority())
+	{
+		this->thirdAbilityLogic(target);
 
-void ABaseDrone::runThirdAbilityLogic_Implementation()
-{
-	this->thirdAbilityLogic();
-
-	IThirdAbility::Execute_thirdAbilityEventLogic(this);
+		IThirdAbility::Execute_thirdAbilityEventLogic(this, target);
+	}
 }
 #pragma endregion
 
@@ -694,15 +686,13 @@ void ABaseDrone::ultimateAbilityVisual()
 
 }
 
-void ABaseDrone::ultimateAbilityLogic()
+void ABaseDrone::ultimateAbilityLogic(ABaseCharacter* target)
 {
-	ultimateAbility->useAbility();
-}
+	if (HasAuthority())
+	{
+		this->ultimateAbilityLogic(target);
 
-void ABaseDrone::runUltimateAbilityLogic_Implementation()
-{
-	this->ultimateAbilityLogic();
-
-	IUltimateAbility::Execute_ultimateAbilityEventLogic(this);
+		IUltimateAbility::Execute_ultimateAbilityEventLogic(this, target);
+	}
 }
 #pragma endregion

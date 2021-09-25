@@ -27,10 +27,10 @@ protected:
 	void secondAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void secondAbilityLogic() = 0;
+	virtual void secondAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void secondAbilityEventLogic();
+	void secondAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	ISecondAbility() = default;

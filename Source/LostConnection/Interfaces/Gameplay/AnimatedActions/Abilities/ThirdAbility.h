@@ -27,10 +27,10 @@ protected:
 	void thirdAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void thirdAbilityLogic() = 0;
+	virtual void thirdAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void thirdAbilityEventLogic();
+	void thirdAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	IThirdAbility() = default;

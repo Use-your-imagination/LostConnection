@@ -27,10 +27,10 @@ protected:
 	void firstAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void firstAbilityLogic() = 0;
+	virtual void firstAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void firstAbilityEventLogic();
+	void firstAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	IFirstAbility() = default;
