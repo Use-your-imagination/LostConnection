@@ -335,6 +335,11 @@ int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
 	return spareAmmo[static_cast<size_t>(type)];
 }
 
+bool ABaseCharacter::getIsReloading() const
+{
+	return isReloading;
+}
+
 USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMesh() const
 {
 	return currentWeaponMesh;

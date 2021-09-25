@@ -29,6 +29,11 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
+	if (character->getIsReloading())
+	{
+		return;
+	}
+
 	ABaseCharacter* baseCharacter = Cast<ABaseCharacter>(character);
 
 	if (weaponType == weaponTypes::semiAutomatic || weaponType == weaponTypes::single)

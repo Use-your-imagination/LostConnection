@@ -164,6 +164,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual int32 getSpareAmmo(ammoTypes type) const final;
 
+	virtual bool getIsReloading() const final;
+
 	UFUNCTION(BlueprintCallable)
 	virtual bool isWeaponEquipped() const final;
 
