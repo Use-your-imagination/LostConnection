@@ -58,7 +58,7 @@ protected:
 	TArray<int32> spareAmmo;
 
 #pragma region BlueprintFunctionLibrary
-	UPROPERTY(Category = Reloading, BlueprintReadWrite)
+	UPROPERTY(Category = Reloading, VisibleAnywhere, BlueprintReadWrite)
 	bool isReloading;
 #pragma endregion
 
