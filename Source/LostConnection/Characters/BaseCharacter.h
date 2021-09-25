@@ -57,6 +57,11 @@ protected:
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	TArray<int32> spareAmmo;
 
+#pragma region BlueprintFunctionLibrary
+	UPROPERTY(Category = Reloading, BlueprintReadWrite)
+	bool isReloading;
+#pragma endregion
+
 private:
 	UFUNCTION()
 	void onCurrentWeaponChange();

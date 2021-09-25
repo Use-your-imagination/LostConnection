@@ -252,6 +252,12 @@ ABaseCharacter::ABaseCharacter()
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
+
+#pragma region BlueprintFunctionLibrary
+	isReloading = false;
+
+
+#pragma endregion
 }
 
 void ABaseCharacter::shoot()
