@@ -314,7 +314,7 @@ ABaseDrone::ABaseDrone()
 	energyRestorationPerSecond = 5.0f;
 	isAlly = true;
 
-	currentAmmoHolding[static_cast<size_t>(ammoTypes::small)] = 720;
+	spareAmmo[static_cast<size_t>(ammoTypes::small)] = 720;
 
 	BaseTurnRate = 45.0f;
 	BaseLookUpRate = 45.0f;
@@ -365,7 +365,7 @@ void ABaseDrone::changeToSecondWeapon_Implementation()
 
 void ABaseDrone::pickupAmmo(ammoTypes type, int32 count)
 {
-	currentAmmoHolding[static_cast<size_t>(type)] += count;
+	spareAmmo[static_cast<size_t>(type)] += count;
 }
 
 void ABaseDrone::dropWeapon()

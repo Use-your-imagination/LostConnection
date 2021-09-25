@@ -55,7 +55,7 @@ protected:
 	bool isAlly;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
-	TArray<int32> currentAmmoHolding;
+	TArray<int32> spareAmmo;
 
 private:
 	UFUNCTION()
@@ -157,7 +157,7 @@ public:
 	virtual bool getIsAlly() const final;
 
 	UFUNCTION(BlueprintCallable)
-	virtual int32 getAmmoHoldingCount(ammoTypes type) const final;
+	virtual int32 getSpareAmmo(ammoTypes type) const final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool isWeaponEquipped() const final;

@@ -48,7 +48,7 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ABaseCharacter, isAlly);
 
-	DOREPLIFETIME(ABaseCharacter, currentAmmoHolding);
+	DOREPLIFETIME(ABaseCharacter, spareAmmo);
 
 	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
@@ -143,7 +143,7 @@ void ABaseCharacter::reloadLogic()
 		return;
 	}
 
-	int32& ammoCount = currentAmmoHolding[static_cast<size_t>(currentWeapon->getAmmo()->getAmmoType())];
+	int32& ammoCount = spareAmmo[static_cast<size_t>(currentWeapon->getAmmo()->getAmmoType())];
 
 	if (!ammoCount)
 	{
@@ -233,9 +233,9 @@ ABaseCharacter::ABaseCharacter()
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
 	NetUpdateFrequency = 60;
 
-	currentAmmoHolding.Init(0, 4);
+	spareAmmo.Init(0, 4);
 
-	currentAmmoHolding[static_cast<size_t>(ammoTypes::defaultType)] = 9999;
+	spareAmmo[static_cast<size_t>(ammoTypes::defaultType)] = 9999;
 
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 
@@ -324,9 +324,9 @@ bool ABaseCharacter::getIsAlly() const
 	return isAlly;
 }
 
-int32 ABaseCharacter::getAmmoHoldingCount(ammoTypes type) const
+int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
 {
-	return currentAmmoHolding[static_cast<size_t>(type)];
+	return spareAmmo[static_cast<size_t>(type)];
 }
 
 USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMesh() const
