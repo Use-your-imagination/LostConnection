@@ -54,6 +54,9 @@ protected:
 	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadWrite)
 	bool isAlly;
 
+	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	bool isDead;
+
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	TArray<int32> spareAmmo;
 

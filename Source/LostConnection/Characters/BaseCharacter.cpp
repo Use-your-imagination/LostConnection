@@ -21,11 +21,11 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (currentHealth <= 0.0f)
+	if (!isDead && currentHealth <= 0.0f)
 	{
 		if (HasAuthority())
 		{
-			this->death();
+			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
 		}
 	}
 
@@ -47,6 +47,8 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, currentHealth);
 
 	DOREPLIFETIME(ABaseCharacter, isAlly);
+
+	DOREPLIFETIME(ABaseCharacter, isDead);
 
 	DOREPLIFETIME(ABaseCharacter, spareAmmo);
 
@@ -203,7 +205,7 @@ void ABaseCharacter::deathVisual()
 
 void ABaseCharacter::deathLogic()
 {
-	
+	isDead = true;
 }
 
 void ABaseCharacter::runDeathLogic_Implementation()
