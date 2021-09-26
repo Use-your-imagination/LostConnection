@@ -78,6 +78,10 @@ protected:
 	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	ABaseUltimateAbility* ultimateAbility;
 
+#pragma region BlueprintFunctionLibrary
+
+#pragma endregion
+
 public:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseTurnRate;
@@ -112,6 +116,13 @@ protected:
 
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+protected:
+	UFUNCTION()
+	virtual void pressCrouch() final;
+
+	UFUNCTION()
+	virtual void releaseCrouch() final;
 
 public:
 	ABaseDrone();

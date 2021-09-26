@@ -26,12 +26,6 @@ public:
 	IMovementActions() = default;
 
 	UFUNCTION(BlueprintNativeEvent)
-	void pressSprintAction();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseSprintAction();
-
-	UFUNCTION(BlueprintNativeEvent)
 	void pressCrouchAction();
 
 	UFUNCTION(BlueprintNativeEvent)
@@ -39,7 +33,4 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void pressJumpAction();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseJumpAction();
 };

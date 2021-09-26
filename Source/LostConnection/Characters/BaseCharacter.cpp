@@ -95,19 +95,21 @@ void ABaseCharacter::holdSprint()
 {
 	this->setMaxSpeed(575.0f);
 
-	IMovementActions::Execute_pressSprintAction(this);
+	sprintHold = true;
 }
 
 void ABaseCharacter::releaseSprint()
 {
 	this->setMaxSpeed(450.0f);
 
-	IMovementActions::Execute_releaseSprintAction(this);
+	sprintHold = false;
 }
 
 void ABaseCharacter::Jump()
 {
 	Super::Jump();
+
+	jumpHold = true;
 
 	IMovementActions::Execute_pressJumpAction(this);
 }
@@ -116,7 +118,7 @@ void ABaseCharacter::StopJumping()
 {
 	Super::StopJumping();
 
-	IMovementActions::Execute_releaseJumpAction(this);
+	jumpHold = false;
 }
 
 void ABaseCharacter::setMaxSpeed_Implementation(float speed)
@@ -258,7 +260,13 @@ ABaseCharacter::ABaseCharacter()
 #pragma region BlueprintFunctionLibrary
 	isReloading = false;
 
+	jumpHold = false;
 
+	sprintHold = false;
+
+	crouchHold = false;
+
+	primaryHold = false;
 #pragma endregion
 }
 
