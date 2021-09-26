@@ -317,6 +317,11 @@ void ABaseCharacter::setIsAlly_Implementation(bool newIsAlly)
 	isAlly = newIsAlly;
 }
 
+void ABaseCharacter::setIsDead_Implementation(bool newIsDead)
+{
+	isDead = newIsDead;
+}
+
 float ABaseCharacter::getHealth() const
 {
 	return health;
@@ -330,6 +335,11 @@ float ABaseCharacter::getCurrentHealth() const
 bool ABaseCharacter::getIsAlly() const
 {
 	return isAlly;
+}
+
+bool ABaseCharacter::getIsDead() const
+{
+	return isDead;
 }
 
 int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const

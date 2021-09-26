@@ -45,23 +45,23 @@ protected:
 	UBaseWeapon* defaultWeaponSlot;
 
 protected:
-	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, Replicated, BlueprintReadWrite)
 	float health;
 
-	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, Replicated, BlueprintReadWrite)
 	float currentHealth;
 
-	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadWrite)
+	UPROPERTY(Category = Properties, Replicated, BlueprintReadWrite)
 	bool isAlly;
 
-	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Properties, Replicated, BlueprintReadWrite)
 	bool isDead;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = AmmoSettings, Replicated, BlueprintReadWrite)
 	TArray<int32> spareAmmo;
 
 #pragma region BlueprintFunctionLibrary
-	UPROPERTY(Category = Reloading, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Reloading, BlueprintReadWrite)
 	bool isReloading;
 #pragma endregion
 
@@ -155,6 +155,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void setIsAlly(bool newIsAlly) final;
 
+	UFUNCTION(Server, Reliable)
+	virtual void setIsDead(bool newIsDead) final;
+
 	UFUNCTION(BlueprintCallable)
 	virtual float getHealth() const final;
 
@@ -163,6 +166,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool getIsAlly() const final;
+
+	virtual bool getIsDead() const final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual int32 getSpareAmmo(ammoTypes type) const final;
