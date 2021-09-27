@@ -96,8 +96,32 @@ protected:
 	UPROPERTY(Category = Zoom, VisibleAnywhere, BlueprintReadWrite)
 	bool zooming;
 
+	UPROPERTY(Category = Zoom, VisibleAnywhere, BlueprintReadWrite)
+	bool zoomBlocked;
+
 	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
 	bool wallrun;
+
+	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	bool wallrunBlocked;
+
+	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	FVector currentWallNormal;
+
+	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	FRotator wallrunForward;
+
+	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	FTimerHandle wallrunUpdateHandle;
+
+	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
+	bool slideCooldown;
+
+	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
+	FTimerHandle slideCooldownHandle;
+
+	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
+	FTimerHandle slideActivityHandle;
 #pragma endregion
 
 public:

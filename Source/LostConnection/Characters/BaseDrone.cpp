@@ -387,7 +387,15 @@ ABaseDrone::ABaseDrone()
 
 	zooming = false;
 
+	zoomBlocked = false;
+
 	wallrun = false;
+
+	wallrunBlocked = false;
+
+	wallrunForward = FRotator(0.0f);
+
+	slideCooldown = false;
 #pragma endregion
 }
 
