@@ -293,10 +293,16 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABaseDrone::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABaseDrone::MoveRight);
 
+	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &ABaseDrone::pressZoom);
+	PlayerInputComponent->BindAction("Zoom", IE_Released, this, &ABaseDrone::releaseZoom);
+
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("TurnRate", this, &ABaseDrone::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ABaseDrone::LookUpAtRate);
+
+	PlayerInputComponent->BindAction("WeaponSelector", IE_Pressed, this, &ABaseDrone::pressWeaponSelector);
+	PlayerInputComponent->BindAction("WeaponSelector", IE_Released, this, &ABaseDrone::releaseWeaponSelector);
 }
 
 void ABaseDrone::pressCrouch()
@@ -311,6 +317,34 @@ void ABaseDrone::releaseCrouch()
 	crouchHold = false;
 
 	IMovementActions::Execute_releaseCrouchAction(this);
+}
+
+void ABaseDrone::pressZoom()
+{
+	secondaryHold = true;
+
+	IInputActions::Execute_pressZoomAction(this);
+}
+
+void ABaseDrone::releaseZoom()
+{
+	secondaryHold = false;
+
+	IInputActions::Execute_releaseZoomAction(this);
+}
+
+void ABaseDrone::pressWeaponSelector()
+{
+	weaponSelectorHold = true;
+
+	IInputActions::Execute_pressWeaponSelectorAction(this);
+}
+
+void ABaseDrone::releaseWeaponSelector()
+{
+	weaponSelectorHold = false;
+
+	IInputActions::Execute_releaseWeaponSelectorAction(this);
 }
 
 ABaseDrone::ABaseDrone()
@@ -341,6 +375,12 @@ ABaseDrone::ABaseDrone()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraOffset, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+#pragma region BlueprintFunctionLibrary
+	secondaryHold = false;
+
+	weaponSelectorHold = false;
+#pragma endregion
 }
 
 void ABaseDrone::shoot()

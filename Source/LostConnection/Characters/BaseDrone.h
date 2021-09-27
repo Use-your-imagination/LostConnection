@@ -13,6 +13,7 @@
 #include "Utility/TimersUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
+#include "Interfaces/Gameplay/Actions/InputActions.h"
 
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbility.h"
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbility.h"
@@ -26,6 +27,7 @@ UCLASS()
 class LOSTCONNECTION_API ABaseDrone :
 	public ABaseCharacter,
 	public ICaster,
+	public IInputActions,
 	public IPassiveAbility,
 	public IFirstAbility,
 	public ISecondAbility,
@@ -79,7 +81,11 @@ protected:
 	ABaseUltimateAbility* ultimateAbility;
 
 #pragma region BlueprintFunctionLibrary
+	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
+	bool secondaryHold;
 
+	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
+	bool weaponSelectorHold;
 #pragma endregion
 
 public:
@@ -123,6 +129,18 @@ protected:
 
 	UFUNCTION()
 	virtual void releaseCrouch() final;
+
+	UFUNCTION()
+	virtual void pressZoom() final;
+
+	UFUNCTION()
+	virtual void releaseZoom() final;
+
+	UFUNCTION()
+	virtual void pressWeaponSelector() final;
+
+	UFUNCTION()
+	virtual void releaseWeaponSelector() final;
 
 public:
 	ABaseDrone();
