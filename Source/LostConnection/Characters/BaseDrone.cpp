@@ -380,6 +380,10 @@ ABaseDrone::ABaseDrone()
 	secondaryHold = false;
 
 	weaponSelectorHold = false;
+
+	selectedWeaponId = 0;
+
+	inputDimensions = FVector(0.0f);
 #pragma endregion
 }
 

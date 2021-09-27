@@ -86,6 +86,12 @@ protected:
 
 	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
 	bool weaponSelectorHold;
+
+	UPROPERTY(Category = WeaponSelector, VisibleAnywhere, BlueprintReadWrite)
+	int32 selectedWeaponId;
+
+	UPROPERTY(Category = WeaponSelector, VisibleAnywhere, BlueprintReadWrite)
+	FVector inputDimensions;
 #pragma endregion
 
 public:
