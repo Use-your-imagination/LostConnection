@@ -92,6 +92,12 @@ protected:
 
 	UPROPERTY(Category = WeaponSelector, VisibleAnywhere, BlueprintReadWrite)
 	FVector inputDimensions;
+
+	UPROPERTY(Category = Zoom, VisibleAnywhere, BlueprintReadWrite)
+	bool zooming;
+
+	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	bool wallrun;
 #pragma endregion
 
 public:

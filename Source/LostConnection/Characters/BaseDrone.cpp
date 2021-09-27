@@ -384,6 +384,10 @@ ABaseDrone::ABaseDrone()
 	selectedWeaponId = 0;
 
 	inputDimensions = FVector(0.0f);
+
+	zooming = false;
+
+	wallrun = false;
 #pragma endregion
 }
 
