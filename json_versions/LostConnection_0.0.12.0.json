@@ -2,9 +2,21 @@
   "projectName": "LostConnection",
   "projectVersion": "0.0.12.0",
   "UI": {
-    "type": "category"
+    "type": "category",
+    "Main menu": {
+      "type": "item",
+      "notes": [
+        "Added main menu"
+      ]
+    }
   },
   "Gameplay": {
-    "type": "category"
+    "type": "category",
+    "Death animation": {
+      "type": "item",
+      "notes": [
+        "Added death animation"
+      ]
+    }
   }
 }
