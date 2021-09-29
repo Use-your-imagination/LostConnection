@@ -18,8 +18,6 @@
 
 using namespace std;
 
-FString ABaseDrone::actionHotkey = "F";
-
 ABaseDrone* ABaseDrone::globalPlayerPtr = nullptr;
 
 TArray<FInputActionBinding> ABaseDrone::initInputs()

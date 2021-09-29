@@ -132,8 +132,6 @@ public:
 	float BaseLookUpRate;
 
 public:
-	static FString actionHotkey;
-
 	static ABaseDrone* globalPlayerPtr;
 
 protected:
