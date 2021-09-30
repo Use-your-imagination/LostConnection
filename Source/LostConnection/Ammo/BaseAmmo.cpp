@@ -87,7 +87,7 @@ void ABaseAmmo::beginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 		movement->Velocity = FVector(0.0f);
 
-		tracer->SetAsset(nullptr);
+		tracer->Deactivate();
 
 		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(

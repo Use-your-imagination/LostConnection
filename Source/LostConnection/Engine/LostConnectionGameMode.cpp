@@ -12,7 +12,7 @@ void ALostConnectionGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-#ifndef UE_BUILD_DEBUG
+#ifdef UE_BUILD_SHIPPING 
 	for (size_t i = 0; i < 3; i++)
 	{
 		FVector location(FMath::RandRange(-11000.0f, -5900.0f), FMath::RandRange(0.0f, 1000.0f), FMath::RandRange(131.0f, 1650.0f));
@@ -20,7 +20,7 @@ void ALostConnectionGameMode::BeginPlay()
 
 		GetWorld()->SpawnActor(defaultAI, &location, &rotation);
 	}
-#endif // !UE_BUILD_DEBUG
+#endif // UE_BUILD_SHIPPING
 }
 
 ALostConnectionGameMode::ALostConnectionGameMode()

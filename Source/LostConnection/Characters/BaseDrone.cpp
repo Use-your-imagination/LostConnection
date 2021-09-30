@@ -349,8 +349,10 @@ ABaseDrone::ABaseDrone()
 {
 	firstWeaponSlot = nullptr;
 	secondWeaponSlot = nullptr;
-	health = currentHealth = 1000.0f;
-	energy = currentEnergy = 1000.0f;
+	health = 1000.0f;
+	currentHealth = health;
+	energy = 1000.0f;
+	currentEnergy = energy;
 	energyRestorationPerSecond = 5.0f;
 	isAlly = true;
 

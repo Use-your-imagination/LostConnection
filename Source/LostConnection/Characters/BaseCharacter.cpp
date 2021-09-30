@@ -26,6 +26,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 		if (HasAuthority())
 		{
 			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
+
+			isDead = true;
 		}
 	}
 
@@ -207,7 +209,7 @@ void ABaseCharacter::deathVisual()
 
 void ABaseCharacter::deathLogic()
 {
-	isDead = true;
+	
 }
 
 void ABaseCharacter::runDeathLogic_Implementation()
@@ -307,7 +309,18 @@ void ABaseCharacter::restoreHealth(float amount)
 
 void ABaseCharacter::takeDamage(float amount)
 {
-	this->setCurrentHealth(this->getCurrentHealth() - amount);
+	float tem = this->getCurrentHealth();
+
+	tem -= amount;
+
+	if (tem < 0.0f)
+	{
+		this->setCurrentHealth(0.0f);
+	}
+	else
+	{
+		this->setCurrentHealth(tem);
+	}
 }
 
 void ABaseCharacter::setHealth_Implementation(float newHealth)

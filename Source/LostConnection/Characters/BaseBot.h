@@ -15,7 +15,16 @@ UCLASS()
 class LOSTCONNECTION_API ABaseBot : public ABaseDrone
 {
 	GENERATED_BODY()
-	
+
+private:
+	bool isReadyForDestroy;
+
+protected:
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+	virtual void deathLogic() override;
+
 public:
 	ABaseBot();
 

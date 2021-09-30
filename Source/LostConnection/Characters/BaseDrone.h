@@ -53,6 +53,7 @@ private:
 	TArray<FInputActionBinding> initInputs();
 
 protected:
+	UPROPERTY()
 	UTimersUtility* timers;
 
 protected:
