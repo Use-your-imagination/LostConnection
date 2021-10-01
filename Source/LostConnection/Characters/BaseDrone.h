@@ -116,13 +116,16 @@ protected:
 	FTimerHandle wallrunUpdateHandle;
 
 	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
-	bool slideCooldown;
+	bool isSlideCooldown;
 
 	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
 	FTimerHandle slideCooldownHandle;
 
 	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
 	FTimerHandle slideActivityHandle;
+
+	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
+	float slideCooldown;
 #pragma endregion
 
 public:

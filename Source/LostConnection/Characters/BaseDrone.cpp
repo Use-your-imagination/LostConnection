@@ -395,7 +395,9 @@ ABaseDrone::ABaseDrone()
 
 	wallrunForward = FRotator(0.0f);
 
-	slideCooldown = false;
+	isSlideCooldown = false;
+
+	slideCooldown = 5.0f;
 #pragma endregion
 }
 
