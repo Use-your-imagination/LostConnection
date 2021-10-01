@@ -36,7 +36,20 @@ void UUtilityBlueprintFunctionLibrary::rebindHotkeys(const TMap<FName, FString>&
 
 		if (key)
 		{
-			hotkey.Key = FKey(FName(*key));
+			int32 index = 0;
+
+			if (key->Find(TEXT(" Ctrl")) != INDEX_NONE)
+			{
+				hotkey.Key = FKey(FName(key->Replace(TEXT(" Ctrl"), TEXT("Control"))));
+			}
+			else if (key->FindChar(' ', index))
+			{
+				hotkey.Key = FKey(FName(key->Replace(TEXT(" "), TEXT(""))));
+			}
+			else
+			{
+				hotkey.Key = FKey(FName(*key));
+			}
 		}
 	}
 
