@@ -9,5 +9,5 @@ FString IActionable::getActionMessage() const
 	TArray<FInputActionKeyMapping> actionKey;
 	GetDefault<UInputSettings>()->GetActionMappingByName("Action", actionKey);
 
-	return FText::FormatNamed(FText::FromStringTable("/Game/Text/Actions.Actions", "DefaultActionMessage"), TEXT("ActionHotkey"), actionKey[0].Key.GetDisplayName(false)).ToString();
+	return FText::FormatNamed(FText::FromStringTable("/Game/Text/Actions.Actions", "DefaultActionMessage"), TEXT("ActionHotkey"), actionKey[0].Key.GetDisplayName()).ToString();
 }

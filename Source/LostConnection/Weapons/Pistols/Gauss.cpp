@@ -24,8 +24,11 @@ UGauss::UGauss()
 
 	ammo = NewObject<ABall>();
 
-	currentMagazineSize = 30;
-	magazineSize = 30;
-	rateOfFire = 20;
+	ammo->setAmmoType(ammoTypes::defaultType);
+
+	currentMagazineSize = 12;
+	magazineSize = 12;
+	roundsPerSecond = 2;
 	weaponType = weaponTypes::single;
+	spreadDistance = 0.1f;
 }

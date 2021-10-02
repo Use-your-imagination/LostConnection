@@ -37,3 +37,11 @@ FTimerHandle& UTimersUtility::operator [] (size_t index)
 {
 	return timers[index];
 }
+
+UTimersUtility::~UTimersUtility()
+{
+	for (auto& timer : timers)
+	{
+		timer.Invalidate();
+	}
+}

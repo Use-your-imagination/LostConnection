@@ -355,6 +355,7 @@ ABaseDrone::ABaseDrone()
 	currentEnergy = energy;
 	energyRestorationPerSecond = 5.0f;
 	isAlly = true;
+	timers = nullptr;
 
 	spareAmmo[static_cast<size_t>(ammoTypes::small)] = 720;
 

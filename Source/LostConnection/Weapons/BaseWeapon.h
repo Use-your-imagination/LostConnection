@@ -52,7 +52,7 @@ protected:
 
 	int ammoCost;
 
-	int rateOfFire;
+	int roundsPerSecond;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, Replicated)
 	weaponTypes weaponType;
@@ -74,7 +74,7 @@ public:
 
 	virtual void setCurrentMagazineSize(int currentMagazineSize) final;
 
-	virtual void setRateOfFire(int rateOfFire) final;
+	virtual void setRateOfFire(int roundsPerSecond) final;
 
 	virtual void setWeaponType(weaponTypes weaponType) final;
 

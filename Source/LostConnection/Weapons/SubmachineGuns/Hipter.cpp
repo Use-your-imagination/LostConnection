@@ -19,10 +19,15 @@ UHipter::UHipter()
 
 	ammo = NewObject<ABullet>();
 
-	currentMagazineSize = 30;
-	magazineSize = 30;
-	rateOfFire = 20;
+	ammo->setDamage(55.0f);
+
+	ammo->setAmmoType(ammoTypes::small);
+
+	currentMagazineSize = 150;
+	magazineSize = 150;
+	roundsPerSecond = 30;
 	weaponType = weaponTypes::automatic;
+	spreadDistance = 0.25f;
 }
 
 void UHipter::alternativeMode()

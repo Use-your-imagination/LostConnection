@@ -35,5 +35,5 @@ public:
 
 	FTimerHandle& operator [] (size_t index);
 
-	~UTimersUtility() = default;
+	~UTimersUtility();
 };

@@ -138,9 +138,9 @@ void UBaseWeapon::shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWea
 			this->shoot(currentVisibleWeaponMesh, character);
 		});
 
-	manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(rateOfFire), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
+	manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(roundsPerSecond), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
 
-	shootRemainingTime = 1.0f / static_cast<float>(rateOfFire);
+	shootRemainingTime = 1.0f / static_cast<float>(roundsPerSecond);
 }
 
 void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
@@ -175,9 +175,9 @@ void UBaseWeapon::setCurrentMagazineSize(int currentMagazineSize)
 	this->currentMagazineSize = currentMagazineSize;
 }
 
-void UBaseWeapon::setRateOfFire(int rateOfFire)
+void UBaseWeapon::setRateOfFire(int roundsPerSecond)
 {
-	this->rateOfFire = rateOfFire;
+	this->roundsPerSecond = roundsPerSecond;
 }
 
 void UBaseWeapon::setWeaponType(weaponTypes weaponType)
@@ -212,7 +212,7 @@ int UBaseWeapon::getMagazineSize() const
 
 int UBaseWeapon::getRateOfFire() const
 {
-	return rateOfFire;
+	return roundsPerSecond;
 }
 
 weaponTypes UBaseWeapon::getWeaponType() const
