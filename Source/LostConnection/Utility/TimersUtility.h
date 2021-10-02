@@ -29,6 +29,8 @@ public:
 
 	size_t size() const;
 
+	void clear();
+
 	void setWorld(UWorld* world);
 
 	const FTimerHandle& operator [] (size_t index) const;

@@ -23,6 +23,21 @@ size_t UTimersUtility::size() const
 	return timers.Num();
 }
 
+void UTimersUtility::clear()
+{
+	FTimerManager* manager = &world->GetTimerManager();
+
+	if (manager)
+	{
+		for (auto& timer : timers)
+		{
+			manager->ClearTimer(timer);
+		}
+
+		timers.Empty();
+	}
+}
+
 void UTimersUtility::setWorld(UWorld* world)
 {
 	this->world = world;
@@ -40,8 +55,5 @@ FTimerHandle& UTimersUtility::operator [] (size_t index)
 
 UTimersUtility::~UTimersUtility()
 {
-	for (auto& timer : timers)
-	{
-		timer.Invalidate();
-	}
+	this->clear();
 }

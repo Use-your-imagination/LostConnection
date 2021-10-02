@@ -200,7 +200,7 @@ void ABaseDrone::BeginPlay()
 
 			timers->addTimer([this]() 
 				{
-					if (IsValid(this))
+					if (IsValidLowLevel())
 					{
 						if (currentEnergy != energy)
 						{
@@ -345,17 +345,25 @@ void ABaseDrone::releaseWeaponSelector()
 	IInputActions::Execute_releaseWeaponSelectorAction(this);
 }
 
-ABaseDrone::ABaseDrone()
+void ABaseDrone::deathLogic()
 {
-	firstWeaponSlot = nullptr;
-	secondWeaponSlot = nullptr;
+	if (timers)
+	{
+		timers->clear();
+	}
+}
+
+ABaseDrone::ABaseDrone() :
+	firstWeaponSlot(nullptr),
+	secondWeaponSlot(nullptr),
+	timers(nullptr),
+	energy(1000.0f),
+	currentEnergy(1000.0f),
+	energyRestorationPerSecond(5.0f)
+{
 	health = 1000.0f;
-	currentHealth = health;
-	energy = 1000.0f;
-	currentEnergy = energy;
-	energyRestorationPerSecond = 5.0f;
+	currentHealth = 1000.0f;
 	isAlly = true;
-	timers = nullptr;
 
 	spareAmmo[static_cast<size_t>(ammoTypes::small)] = 720;
 
