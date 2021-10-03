@@ -95,6 +95,9 @@ protected:
 	UPROPERTY(Category = Zoom, VisibleAnywhere, BlueprintReadWrite)
 	bool zoomBlocked;
 
+	UPROPERTY(Category = Zoom, VisibleAnywhere, BlueprintReadWrite)
+	FTimerHandle zoomUpdateHandle;
+
 	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
 	bool wallrun;
 
@@ -121,6 +124,17 @@ protected:
 
 	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
 	float slideCooldown;
+#pragma endregion
+
+#pragma region BlueprintFunctionLibraryEvents
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void zoomTimerUpdate();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void slideTimerUpdate();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void wallrunTimerUpdate();
 #pragma endregion
 
 public:

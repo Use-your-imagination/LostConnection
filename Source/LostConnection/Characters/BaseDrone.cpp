@@ -124,6 +124,21 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	return result;
 }
 
+void ABaseDrone::zoomTimerUpdate_Implementation()
+{
+
+}
+
+void ABaseDrone::slideTimerUpdate_Implementation()
+{
+
+}
+
+void ABaseDrone::wallrunTimerUpdate_Implementation()
+{
+
+}
+
 void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -187,14 +202,14 @@ void ABaseDrone::BeginPlay()
 	Super::BeginPlay();
 
 	UWorld* world = GetWorld();
-	
+
 	if (world)
 	{
 		ABaseDrone::globalPlayerPtr = UGameplayStatics::GetPlayerController(world, 0)->GetPawn<ABaseDrone>();
 
 		if (HasAuthority())
 		{
-			timers->addTimer([this]() 
+			timers->addTimer([this]()
 				{
 					if (IsValidLowLevel())
 					{
