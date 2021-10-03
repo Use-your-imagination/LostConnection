@@ -24,6 +24,8 @@ UGauss::UGauss()
 
 	ammo = NewObject<ABall>();
 
+	ammo->setDamage(150.0f);
+
 	ammo->setAmmoType(ammoTypes::defaultType);
 
 	currentMagazineSize = 12;
