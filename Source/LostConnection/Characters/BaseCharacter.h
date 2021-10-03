@@ -12,6 +12,7 @@
 
 #include "Weapons/BaseWeapon.h"
 #include "WorldPlaceables/DroppedWeapon.h"
+#include "Utility/TimersUtility.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Interfaces/Gameplay/Actions/MovementActions.h"
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
@@ -43,6 +44,10 @@ protected:
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
 	UBaseWeapon* defaultWeaponSlot;
+
+protected:
+	UPROPERTY()
+	UTimersUtility* timers;
 
 protected:
 	UPROPERTY(Category = Stats, Replicated, BlueprintReadWrite)

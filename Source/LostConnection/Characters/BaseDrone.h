@@ -10,7 +10,6 @@
 
 #include "BaseCharacter.h"
 #include "WorldPlaceables/DroppedWeapon.h"
-#include "Utility/TimersUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Interfaces/Gameplay/Actions/InputActions.h"
@@ -51,10 +50,6 @@ protected:
 
 private:
 	TArray<FInputActionBinding> initInputs();
-
-protected:
-	UPROPERTY()
-	UTimersUtility* timers;
 
 protected:
 	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)

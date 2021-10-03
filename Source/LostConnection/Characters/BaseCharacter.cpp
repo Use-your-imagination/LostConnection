@@ -15,6 +15,18 @@ using namespace std;
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UWorld* world = GetWorld();
+
+	if (world)
+	{
+		if (HasAuthority())
+		{
+			timers = NewObject<UTimersUtility>();
+
+			timers->setWorld(world);
+		}
+	}
 }
 
 void ABaseCharacter::Tick(float DeltaTime)
@@ -233,7 +245,9 @@ void ABaseCharacter::resetShootLogic()
 	}
 }
 
-ABaseCharacter::ABaseCharacter()
+ABaseCharacter::ABaseCharacter() :
+	timers(nullptr),
+	isDead(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();

@@ -2,6 +2,12 @@
 
 #pragma warning(disable: 4458)
 
+UTimersUtility::UTimersUtility() :
+	world(nullptr)
+{
+
+}
+
 void UTimersUtility::addTimer(const TFunction<void()>& function, float rate, bool loop, float firstDelay)
 {
 	FTimerDelegate delegate;
@@ -25,16 +31,19 @@ size_t UTimersUtility::size() const
 
 void UTimersUtility::clear()
 {
-	FTimerManager* manager = &world->GetTimerManager();
-
-	if (manager)
+	if (world)
 	{
-		for (auto& timer : timers)
-		{
-			manager->ClearTimer(timer);
-		}
+		FTimerManager* manager = &world->GetTimerManager();
 
-		timers.Empty();
+		if (manager)
+		{
+			for (auto& timer : timers)
+			{
+				manager->ClearTimer(timer);
+			}
+
+			timers.Empty();
+		}
 	}
 }
 

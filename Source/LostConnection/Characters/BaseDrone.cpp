@@ -194,10 +194,6 @@ void ABaseDrone::BeginPlay()
 
 		if (HasAuthority())
 		{
-			timers = NewObject<UTimersUtility>();
-
-			timers->setWorld(world);
-
 			timers->addTimer([this]() 
 				{
 					if (IsValidLowLevel())
@@ -356,7 +352,6 @@ void ABaseDrone::deathLogic()
 ABaseDrone::ABaseDrone() :
 	firstWeaponSlot(nullptr),
 	secondWeaponSlot(nullptr),
-	timers(nullptr),
 	energy(1000.0f),
 	currentEnergy(1000.0f),
 	energyRestorationPerSecond(5.0f)

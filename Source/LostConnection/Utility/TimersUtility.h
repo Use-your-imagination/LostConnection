@@ -21,7 +21,7 @@ private:
 	UWorld* world;
 
 public:
-	UTimersUtility() = default;
+	UTimersUtility();
 
 	void addTimer(const TFunction<void()>& function, float rate, bool loop = true, float firstDelay = 0.0f);
 
