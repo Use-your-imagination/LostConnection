@@ -49,7 +49,7 @@ protected:
 	UBaseWeapon* secondWeaponSlot;
 
 private:
-	TArray<FInputActionBinding> initInputs();
+	virtual TArray<FInputActionBinding> initInputs();
 
 protected:
 	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)

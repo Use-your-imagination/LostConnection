@@ -627,12 +627,12 @@ void ABaseDrone::releaseShoot_Implementation()
 
 float ABaseDrone::getFlatDamageReduction_Implementation() const
 {
-	return 200.0f;
+	return 10.0f;
 }
 
 float ABaseDrone::getPercentageDamageReduction_Implementation() const
 {
-	return 25.0f;
+	return 15.0f;
 }
 
 void ABaseDrone::setEnergy_Implementation(float newEnergy)
