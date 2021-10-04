@@ -293,7 +293,7 @@ ABaseCharacter::ABaseCharacter() :
 
 	deathMaskRenderTexture = NewObject<UTextureRenderTarget2D>();
 
-	deathMaskRenderTexture->InitCustomFormat(256, 256, EPixelFormat::PF_FloatRGBA, false);
+	deathMaskRenderTexture->InitCustomFormat(256, 256, EPixelFormat::PF_G16, false);
 #pragma endregion
 }
 
