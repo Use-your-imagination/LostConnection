@@ -61,6 +61,9 @@ protected:
 	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float energyRestorationPerSecond;
 
+	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float cooldownReduction;
+
 	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	ABasePassiveAbility* passiveAbility;
 
@@ -117,12 +120,9 @@ protected:
 	bool isSlideCooldown;
 
 	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
-	FTimerHandle slideCooldownHandle;
-
-	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
 	FTimerHandle slideActivityHandle;
 
-	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Slide, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float slideCooldown;
 #pragma endregion
 
@@ -222,6 +222,9 @@ public:
 	UFUNCTION()
 	virtual void action() final;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void setSlideCooldown(float newSlideCooldown) final;
+
 	virtual USpringArmComponent* GetCameraOffset() const final;
 
 	virtual UCameraComponent* GetFollowCamera() const final;
@@ -248,11 +251,15 @@ public:
 
 	virtual void setEnergyRestorationPerSecond_Implementation(float newEnergyRestorationPerSecond) final override;
 
+	virtual void setCooldownReduction_Implementation(float newCooldownReduction) final override;
+
 	virtual float getEnergy() const final override;
 
 	virtual float getCurrentEnergy() const final override;
 
 	virtual float getEnergyRestorationPerSecond() const final override;
+
+	virtual float getCooldownReduction() const final override;
 
 	virtual ABasePassiveAbility* getPassiveAbility() final override;
 

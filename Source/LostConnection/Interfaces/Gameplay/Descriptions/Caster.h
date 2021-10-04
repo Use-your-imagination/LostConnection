@@ -34,6 +34,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void setEnergyRestorationPerSecond(float newEnergyRestorationPerSecond);
 
+	UFUNCTION(Server, Reliable)
+	virtual void setCooldownReduction(float newCooldownReduction);
+
 	UFUNCTION(BlueprintCallable)
 	virtual float getEnergy() const = 0;
 
@@ -42,6 +45,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual float getEnergyRestorationPerSecond() const = 0;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float getCooldownReduction() const = 0;
 
 	virtual ABasePassiveAbility* getPassiveAbility() = 0;
 

@@ -149,6 +149,8 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, energyRestorationPerSecond);
 
+	DOREPLIFETIME(ABaseDrone, cooldownReduction);
+
 	DOREPLIFETIME(ABaseDrone, firstWeaponSlot);
 
 	DOREPLIFETIME(ABaseDrone, secondWeaponSlot);
@@ -162,6 +164,8 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(ABaseDrone, thirdAbility);
 
 	DOREPLIFETIME(ABaseDrone, ultimateAbility);
+
+	DOREPLIFETIME(ABaseDrone, slideCooldown);
 }
 
 void ABaseDrone::PostInitializeComponents()
@@ -237,6 +241,20 @@ void ABaseDrone::Tick(float DeltaTime)
 		if (secondWeaponSlot)
 		{
 			secondWeaponSlot->reduceShootRemainigTime(DeltaTime);
+		}
+
+		if (slideCooldown > 0.0f)
+		{
+			float tem = slideCooldown - DeltaTime;
+
+			if (tem < 0.0)
+			{
+				slideCooldown = 0.0f;
+			}
+			else
+			{
+				slideCooldown = tem;
+			}
 		}
 	}
 }
@@ -369,7 +387,8 @@ ABaseDrone::ABaseDrone() :
 	secondWeaponSlot(nullptr),
 	energy(1000.0f),
 	currentEnergy(1000.0f),
-	energyRestorationPerSecond(5.0f)
+	energyRestorationPerSecond(5.0f),
+	cooldownReduction(0.0f)
 {
 	health = 1000.0f;
 	currentHealth = 1000.0f;
@@ -605,6 +624,11 @@ void ABaseDrone::action()
 	}
 }
 
+void ABaseDrone::setSlideCooldown_Implementation(float newSlideCooldown)
+{
+	slideCooldown = newSlideCooldown;
+}
+
 FVector ABaseDrone::getStartActionLineTrace() const
 {
 	return FollowCamera->GetComponentLocation();
@@ -657,6 +681,11 @@ void ABaseDrone::setEnergyRestorationPerSecond_Implementation(float newEnergyRes
 	energyRestorationPerSecond = newEnergyRestorationPerSecond;
 }
 
+void ABaseDrone::setCooldownReduction_Implementation(float newCooldownReduction)
+{
+	cooldownReduction = newCooldownReduction;
+}
+
 float ABaseDrone::getEnergy() const
 {
 	return energy;
@@ -670,6 +699,11 @@ float ABaseDrone::getCurrentEnergy() const
 float ABaseDrone::getEnergyRestorationPerSecond() const
 {
 	return energyRestorationPerSecond;
+}
+
+float ABaseDrone::getCooldownReduction() const
+{
+	return cooldownReduction;
 }
 
 ABasePassiveAbility* ABaseDrone::getPassiveAbility()

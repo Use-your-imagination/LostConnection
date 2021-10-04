@@ -14,3 +14,8 @@ void ICaster::setEnergyRestorationPerSecond_Implementation(float newEnergyRestor
 {
 
 }
+
+void ICaster::setCooldownReduction_Implementation(float newCooldownReduction)
+{
+
+}
