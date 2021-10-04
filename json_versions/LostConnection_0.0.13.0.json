@@ -1,4 +1,37 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.0.13.0"
+  "projectVersion": "0.0.13.0",
+  "UI": {
+    "type": "category",
+    "Main menu": {
+      "type": "item",
+      "notes": [
+        "Finished main menu"
+      ]
+    }
+  },
+  "Localization": {
+    "type": "category",
+    "Config": {
+      "type": "item",
+      "notes": [
+        "Changing localization settings in game now saves in config file"
+      ]
+    }
+  },
+  "Known issues": {
+    "type": "category",
+    "Sprint": {
+      "type": "item",
+      "notes": [
+        "Sprint doesn't work with weapon in hands"
+      ]
+    },
+    "Enemies": {
+      "type": "item",
+      "notes": [
+        "Enemies can't die"
+      ]
+    }
+  }
 }
