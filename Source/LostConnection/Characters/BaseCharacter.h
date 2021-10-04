@@ -80,6 +80,20 @@ protected:
 
 	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
 	bool primaryHold;
+
+	UPROPERTY(Category = Materials, VisibleAnywhere, BlueprintReadWrite)
+	UMaterialInstanceDynamic* characterMaterial;
+
+	UPROPERTY(Category = Death, VisibleAnywhere, BlueprintReadWrite)
+	UTextureRenderTarget2D* deathMaskRenderTexture;
+
+	UPROPERTY(Category = Death, VisibleAnywhere, BlueprintReadWrite)
+	FTimerHandle deathUpdateHandle;
+#pragma endregion
+
+#pragma region BlueprintFunctionLibraryEvents
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void deathMaterialTimerUpdate();
 #pragma endregion
 
 private:

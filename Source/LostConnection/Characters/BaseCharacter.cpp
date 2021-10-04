@@ -80,6 +80,11 @@ bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 	return wroteSomething;
 }
 
+void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
+{
+
+}
+
 void ABaseCharacter::onCurrentWeaponChange()
 {
 	this->updateWeaponMesh();
@@ -283,6 +288,12 @@ ABaseCharacter::ABaseCharacter() :
 	crouchHold = false;
 
 	primaryHold = false;
+
+	characterMaterial = nullptr;
+
+	deathMaskRenderTexture = NewObject<UTextureRenderTarget2D>();
+
+	deathMaskRenderTexture->InitCustomFormat(256, 256, EPixelFormat::PF_R8, false);
 #pragma endregion
 }
 
