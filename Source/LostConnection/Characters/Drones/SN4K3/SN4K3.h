@@ -21,5 +21,7 @@ private:
 public:
 	ASN4K3();
 
+	void castFirstAbilityVisual() override;
+
 	~ASN4K3() = default;
 };

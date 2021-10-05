@@ -764,7 +764,7 @@ void ABaseDrone::castPassiveAbilityLogic()
 #pragma region FirstAbility
 void ABaseDrone::castFirstAbilityVisual()
 {
-	this->castFirstAbilityLogic();
+	
 }
 
 void ABaseDrone::castFirstAbilityLogic()

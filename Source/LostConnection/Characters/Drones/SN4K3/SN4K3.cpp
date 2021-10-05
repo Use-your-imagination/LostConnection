@@ -1,5 +1,7 @@
 #include "SN4K3.h"
 
+#include "Components/CapsuleComponent.h"
+
 #include "Abilities/SN4K3PassiveAbility.h"
 #include "Abilities/SN4K3FirstAbility.h"
 #include "Abilities/SN4K3SecondAbility.h"
@@ -34,4 +36,9 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 ASN4K3::ASN4K3()
 {
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);
+}
+
+void ASN4K3::castFirstAbilityVisual()
+{
+	this->castFirstAbilityLogic();
 }
