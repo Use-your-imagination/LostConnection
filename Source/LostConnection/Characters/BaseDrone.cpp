@@ -30,10 +30,10 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	FInputActionBinding thirdAbility("ThirdAbility", IE_Pressed);
 	FInputActionBinding ultimateAbility("UltimateAbility", IE_Pressed);
 
-	firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "useFirstAbility"); });
-	secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "useSecondAbility"); });
-	thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "useThirdAbility"); });
-	ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "useUltimateAbility"); });
+	firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castFirstAbility"); });
+	secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castSecondAbility"); });
+	thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castThirdAbility"); });
+	ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castUltimateAbility"); });
 
 	result.Add(firstAbility);
 	result.Add(secondAbility);
@@ -743,86 +743,86 @@ ABaseUltimateAbility* ABaseDrone::getUltimateAbility()
 }
 
 #pragma region PassiveAbility
-void ABaseDrone::usePassiveAbilityVisual()
+void ABaseDrone::castPassiveAbilityVisual()
 {
 
 }
 
-void ABaseDrone::usePassiveAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::castPassiveAbilityLogic()
 {
 	if (HasAuthority())
 	{
-		this->usePassiveAbilityLogic(target);
+		passiveAbility->useAbility();
 
-		IPassiveAbility::Execute_usePassiveAbilityEventLogic(this, target);
+		IPassiveAbilityCast::Execute_castPassiveAbilityEventLogic(this);
 	}
 }
 #pragma endregion
 
 #pragma region FirstAbility
-void ABaseDrone::useFirstAbilityVisual()
+void ABaseDrone::castFirstAbilityVisual()
 {
 
 }
 
-void ABaseDrone::useFirstAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::castFirstAbilityLogic()
 {
 	if (HasAuthority())
 	{
-		this->useFirstAbilityLogic(target);
+		firstAbility->useAbility();
 
-		IFirstAbility::Execute_useFirstAbilityEventLogic(this, target);
+		IFirstAbilityCast::Execute_castFirstAbilityEventLogic(this);
 	}
 }
 #pragma endregion
 
 #pragma region SecondAbility
-void ABaseDrone::useSecondAbilityVisual()
+void ABaseDrone::castSecondAbilityVisual()
 {
 
 }
 
-void ABaseDrone::useSecondAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::castSecondAbilityLogic()
 {
 	if (HasAuthority())
 	{
-		this->useSecondAbilityLogic(target);
+		secondAbility->useAbility();
 
-		ISecondAbility::Execute_useSecondAbilityEventLogic(this, target);
+		ISecondAbilityCast::Execute_castSecondAbilityEventLogic(this);
 	}
 }
 #pragma endregion
 
 #pragma region ThirdAbility
-void ABaseDrone::useThirdAbilityVisual()
+void ABaseDrone::castThirdAbilityVisual()
 {
 
 }
 
-void ABaseDrone::useThirdAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::castThirdAbilityLogic()
 {
 	if (HasAuthority())
 	{
-		this->useThirdAbilityLogic(target);
+		thirdAbility->useAbility();
 
-		IThirdAbility::Execute_useThirdAbilityEventLogic(this, target);
+		IThirdAbilityCast::Execute_castThirdAbilityEventLogic(this);
 	}
 }
 #pragma endregion
 
 #pragma region UltimateAbility
-void ABaseDrone::useUltimateAbilityVisual()
+void ABaseDrone::castUltimateAbilityVisual()
 {
 
 }
 
-void ABaseDrone::useUltimateAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::castUltimateAbilityLogic()
 {
 	if (HasAuthority())
 	{
-		this->useUltimateAbilityLogic(target);
+		ultimateAbility->useAbility();
 
-		IUltimateAbility::Execute_useUltimateAbilityEventLogic(this, target);
+		IUltimateAbilityCast::Execute_castUltimateAbilityEventLogic(this);
 	}
 }
 #pragma endregion

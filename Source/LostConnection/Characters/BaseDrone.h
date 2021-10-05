@@ -14,11 +14,11 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Interfaces/Gameplay/Actions/InputActions.h"
 
-#include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbility.h"
-#include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbility.h"
-#include "Interfaces/Gameplay/AnimatedActions/Abilities/SecondAbility.h"
-#include "Interfaces/Gameplay/AnimatedActions/Abilities/ThirdAbility.h"
-#include "Interfaces/Gameplay/AnimatedActions/Abilities/UltimateAbility.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbilityCast.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbilityCast.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/SecondAbilityCast.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/ThirdAbilityCast.h"
+#include "Interfaces/Gameplay/AnimatedActions/Abilities/UltimateAbilityCast.h"
 
 #include "BaseDrone.generated.h"
 
@@ -27,11 +27,11 @@ class LOSTCONNECTION_API ABaseDrone :
 	public ABaseCharacter,
 	public ICaster,
 	public IInputActions,
-	public IPassiveAbility,
-	public IFirstAbility,
-	public ISecondAbility,
-	public IThirdAbility,
-	public IUltimateAbility
+	public IPassiveAbilityCast,
+	public IFirstAbilityCast,
+	public ISecondAbilityCast,
+	public IThirdAbilityCast,
+	public IUltimateAbilityCast
 {
 	GENERATED_BODY()
 
@@ -275,33 +275,33 @@ public:
 	virtual ABaseUltimateAbility* getUltimateAbility() final override;
 
 #pragma region PassiveAbility
-	virtual void usePassiveAbilityVisual() override;
+	virtual void castPassiveAbilityVisual() override;
 
-	virtual void usePassiveAbilityLogic(ABaseCharacter* target) override;
+	virtual void castPassiveAbilityLogic() override;
 #pragma endregion
 
 #pragma region FirstAbility
-	virtual void useFirstAbilityVisual() override;
+	virtual void castFirstAbilityVisual() override;
 
-	virtual void useFirstAbilityLogic(ABaseCharacter* target) override;
+	virtual void castFirstAbilityLogic() override;
 #pragma endregion
 
 #pragma region SecondAbility
-	virtual void useSecondAbilityVisual() override;
+	virtual void castSecondAbilityVisual() override;
 
-	virtual void useSecondAbilityLogic(ABaseCharacter* target) override;
+	virtual void castSecondAbilityLogic() override;
 #pragma endregion
 
 #pragma region ThirdAbility
-	virtual void useThirdAbilityVisual() override;
+	virtual void castThirdAbilityVisual() override;
 
-	virtual void useThirdAbilityLogic(ABaseCharacter* target) override;
+	virtual void castThirdAbilityLogic() override;
 #pragma endregion
 
 #pragma region UltimateAbility
-	virtual void useUltimateAbilityVisual() override;
+	virtual void castUltimateAbilityVisual() override;
 
-	virtual void useUltimateAbilityLogic(ABaseCharacter* target) override;
+	virtual void castUltimateAbilityLogic() override;
 #pragma endregion
 
 	virtual ~ABaseDrone() = default;
