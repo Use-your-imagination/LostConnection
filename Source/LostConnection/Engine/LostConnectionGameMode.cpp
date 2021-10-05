@@ -23,7 +23,7 @@ void ALostConnectionGameMode::BeginPlay()
 
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
-	ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/Drones/BP_BaseDrone"));
+	ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/Drones/BP_SN4K3"));
 	ConstructorHelpers::FClassFinder<APawn> defaultAIClassFinder(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
 	ConstructorHelpers::FClassFinder<APlayerController> defaultPlayerControllerClassFinder(TEXT("/Game/Engine/PlayerControllers/BP_LostConnectionPlayerController"));
 	ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/PlayerStates/BP_LostConnectionPlayerState"));

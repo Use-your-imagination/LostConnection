@@ -14,6 +14,8 @@
 #include "Weapons/Pistols/Gauss.h"
 #include "Utility/MultiplayerUtility.h"
 
+#include "Drones/SN4K3/Abilities/SN4K3FirstAbility.h"
+
 #pragma warning(disable: 4458)
 
 using namespace std;
@@ -762,7 +764,7 @@ void ABaseDrone::castPassiveAbilityLogic()
 #pragma region FirstAbility
 void ABaseDrone::castFirstAbilityVisual()
 {
-
+	this->castFirstAbilityLogic();
 }
 
 void ABaseDrone::castFirstAbilityLogic()

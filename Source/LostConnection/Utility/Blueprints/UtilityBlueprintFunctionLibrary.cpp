@@ -22,6 +22,19 @@ FString UUtilityBlueprintFunctionLibrary::firstSymbolToUpperCase(const FString& 
 void UUtilityBlueprintFunctionLibrary::rebindHotkeys(const TMap<FName, FString>& newHotkeys)
 {
 	UInputSettings* settings = const_cast<UInputSettings*>(GetDefault<UInputSettings>());
+	static const TMap<FString, FString> numbers =
+	{
+		{ "0", "Zero" },
+		{ "1", "One" },
+		{ "2", "Two" },
+		{ "3", "Three" },
+		{ "4", "Four" },
+		{ "5", "Five" },
+		{ "6", "Six" },
+		{ "7", "Seven" },
+		{ "8", "Eight" },
+		{ "9", "Nine" }
+	};
 
 	if (!settings)
 	{
@@ -45,6 +58,10 @@ void UUtilityBlueprintFunctionLibrary::rebindHotkeys(const TMap<FName, FString>&
 			else if (key->FindChar(' ', index))
 			{
 				hotkey.Key = FKey(FName(key->Replace(TEXT(" "), TEXT(""))));
+			}
+			else if (numbers.Find(*key))
+			{
+				hotkey.Key = FKey(FName(numbers[*key]));
 			}
 			else
 			{
