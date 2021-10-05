@@ -6,6 +6,11 @@
 #include "Abilities/SN4K3ThirdAbility.h"
 #include "Abilities/SN4K3UltimateAbility.h"
 
+void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+}
+
 ASN4K3::ASN4K3()
 {
 	passiveAbility = NewObject<ASN4K3PassiveAbility>();
@@ -19,4 +24,6 @@ ASN4K3::ASN4K3()
 	secondAbility->setOwner(this);
 	thirdAbility->setOwner(this);
 	ultimateAbility->setOwner(this);
+
+	GetMesh()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);
 }
