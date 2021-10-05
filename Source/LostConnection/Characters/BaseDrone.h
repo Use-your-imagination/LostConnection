@@ -125,7 +125,7 @@ protected:
 	UPROPERTY(Category = Slide, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float slideCooldown;
 
-	UPROPERTY(Category = Shoot, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Shoot, VisibleAnywhere, BlueprintReadWrite)
 	FTimerHandle shootUpdateHandle;
 #pragma endregion
 
