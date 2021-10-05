@@ -89,11 +89,17 @@ protected:
 
 	UPROPERTY(Category = Death, VisibleAnywhere, BlueprintReadWrite)
 	FTimerHandle deathUpdateHandle;
+
+	UPROPERTY(Category = Shoot, VisibleAnywhere, BlueprintReadWrite)
+	FTimerHandle shootUpdateHandle;
 #pragma endregion
 
 #pragma region BlueprintFunctionLibraryEvents
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(Category = Death, BlueprintNativeEvent, BlueprintCallable)
 	void deathMaterialTimerUpdate();
+
+	UFUNCTION(Category = Shoot, BlueprintNativeEvent, BlueprintCallable)
+	void shootTimerUpdate();
 #pragma endregion
 
 private:

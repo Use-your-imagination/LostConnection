@@ -85,6 +85,11 @@ void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
 
 }
 
+void ABaseCharacter::shootTimerUpdate_Implementation()
+{
+
+}
+
 void ABaseCharacter::onCurrentWeaponChange()
 {
 	this->updateWeaponMesh();

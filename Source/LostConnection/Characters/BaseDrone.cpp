@@ -143,11 +143,6 @@ void ABaseDrone::slideTimerUpdate_Implementation()
 
 }
 
-void ABaseDrone::shootTimerUpdate_Implementation()
-{
-
-}
-
 void ABaseDrone::wallrunTimerUpdate_Implementation()
 {
 
