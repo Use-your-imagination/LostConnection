@@ -30,10 +30,10 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	FInputActionBinding thirdAbility("ThirdAbility", IE_Pressed);
 	FInputActionBinding ultimateAbility("UltimateAbility", IE_Pressed);
 
-	firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "firstAbility"); });
-	secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "secondAbility"); });
-	thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "thirdAbility"); });
-	ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "ultimateAbility"); });
+	firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "useFirstAbility"); });
+	secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "useSecondAbility"); });
+	thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "useThirdAbility"); });
+	ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "useUltimateAbility"); });
 
 	result.Add(firstAbility);
 	result.Add(secondAbility);
@@ -134,7 +134,17 @@ void ABaseDrone::slideTimerUpdate_Implementation()
 
 }
 
+void ABaseDrone::shootTimerUpdate_Implementation()
+{
+
+}
+
 void ABaseDrone::wallrunTimerUpdate_Implementation()
+{
+
+}
+
+void ABaseDrone::wallrunCooldown_Implementation()
 {
 
 }
@@ -334,16 +344,22 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ABaseDrone::pressCrouch()
 {
-	crouchHold = true;
+	if (HasAuthority())
+	{
+		crouchHold = true;
 
-	IMovementActions::Execute_pressCrouchAction(this);
+		IMovementActions::Execute_pressCrouchAction(this);
+	}
 }
 
 void ABaseDrone::releaseCrouch()
 {
-	crouchHold = false;
+	if (HasAuthority())
+	{
+		crouchHold = false;
 
-	IMovementActions::Execute_releaseCrouchAction(this);
+		IMovementActions::Execute_releaseCrouchAction(this);
+	}
 }
 
 void ABaseDrone::pressZoom()

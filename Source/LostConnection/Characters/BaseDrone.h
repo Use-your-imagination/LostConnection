@@ -124,17 +124,26 @@ protected:
 
 	UPROPERTY(Category = Slide, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float slideCooldown;
+
+	UPROPERTY(Category = Shoot, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	FTimerHandle shootUpdateHandle;
 #pragma endregion
 
 #pragma region BlueprintFunctionLibraryEvents
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(Category = Zoom, BlueprintNativeEvent, BlueprintCallable)
 	void zoomTimerUpdate();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(Category = Slide, BlueprintNativeEvent, BlueprintCallable)
 	void slideTimerUpdate();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(Category = Shoot, BlueprintNativeEvent, BlueprintCallable)
+	void shootTimerUpdate();
+
+	UFUNCTION(Category = Wallrun, BlueprintNativeEvent, BlueprintCallable)
 	void wallrunTimerUpdate();
+
+	UFUNCTION(Category = Wallrun, BlueprintNativeEvent, BlueprintCallable)
+	void wallrunCooldown();
 #pragma endregion
 
 public:

@@ -21,20 +21,20 @@ class LOSTCONNECTION_API IFirstAbility
 
 protected:
 	UFUNCTION()
-	virtual void firstAbilityVisual() = 0;
+	virtual void useFirstAbilityVisual() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void firstAbilityEventVisual();
+	void useFirstAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void firstAbilityLogic(class ABaseCharacter* target) = 0;
+	virtual void useFirstAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void firstAbilityEventLogic(class ABaseCharacter* target);
+	void useFirstAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	IFirstAbility() = default;
 
 	UFUNCTION()
-	virtual void firstAbility();
+	virtual void useFirstAbility();
 };

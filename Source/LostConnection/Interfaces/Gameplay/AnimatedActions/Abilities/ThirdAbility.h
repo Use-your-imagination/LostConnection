@@ -21,20 +21,20 @@ class LOSTCONNECTION_API IThirdAbility
 
 protected:
 	UFUNCTION()
-	virtual void thirdAbilityVisual() = 0;
+	virtual void useThirdAbilityVisual() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void thirdAbilityEventVisual();
+	void useThirdAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void thirdAbilityLogic(class ABaseCharacter* target) = 0;
+	virtual void useThirdAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void thirdAbilityEventLogic(class ABaseCharacter* target);
+	void useThirdAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	IThirdAbility() = default;
 
 	UFUNCTION()
-	virtual void thirdAbility();
+	virtual void useThirdAbility();
 };

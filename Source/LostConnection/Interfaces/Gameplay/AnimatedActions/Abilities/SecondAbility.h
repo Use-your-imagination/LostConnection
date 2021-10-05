@@ -21,20 +21,20 @@ class LOSTCONNECTION_API ISecondAbility
 
 protected:
 	UFUNCTION()
-	virtual void secondAbilityVisual() = 0;
+	virtual void useSecondAbilityVisual() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void secondAbilityEventVisual();
+	void useSecondAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void secondAbilityLogic(class ABaseCharacter* target) = 0;
+	virtual void useSecondAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void secondAbilityEventLogic(class ABaseCharacter* target);
+	void useSecondAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	ISecondAbility() = default;
 
 	UFUNCTION()
-	virtual void secondAbility();
+	virtual void useSecondAbility();
 };

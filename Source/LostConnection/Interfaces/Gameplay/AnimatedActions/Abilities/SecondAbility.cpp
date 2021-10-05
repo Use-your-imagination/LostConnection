@@ -1,8 +1,8 @@
 #include "SecondAbility.h"
 
-void ISecondAbility::secondAbility()
+void ISecondAbility::useSecondAbility()
 {
-	this->secondAbilityVisual();
+	this->useSecondAbilityVisual();
 
-	ISecondAbility::Execute_secondAbilityEventVisual(Cast<UObject>(this));
+	ISecondAbility::Execute_useSecondAbilityEventVisual(Cast<UObject>(this));
 }

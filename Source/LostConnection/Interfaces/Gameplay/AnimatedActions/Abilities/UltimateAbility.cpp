@@ -1,8 +1,8 @@
 #include "UltimateAbility.h"
 
-void IUltimateAbility::ultimateAbility()
+void IUltimateAbility::useUltimateAbility()
 {
-	this->ultimateAbilityVisual();
+	this->useUltimateAbilityVisual();
 
-	IUltimateAbility::Execute_ultimateAbilityEventVisual(Cast<UObject>(this));
+	IUltimateAbility::Execute_useUltimateAbilityEventVisual(Cast<UObject>(this));
 }

@@ -1,16 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 
-#include "Abilities/BaseUltimateAbility.h"
+#include "Abilities/BaseUltimate.h"
 
 #include "SN4K3UltimateAbility.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class LOSTCONNECTION_API ASN4K3UltimateAbility : public ABaseUltimateAbility
 {
@@ -18,6 +13,10 @@ class LOSTCONNECTION_API ASN4K3UltimateAbility : public ABaseUltimateAbility
 	
 public:
 	ASN4K3UltimateAbility();
+
+	virtual void applyAbility(class ABaseCharacter* target) final override;
+
+	virtual void useAbility() final override;
 
 	~ASN4K3UltimateAbility() = default;
 };

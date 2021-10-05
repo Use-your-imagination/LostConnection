@@ -1,8 +1,8 @@
 #include "PassiveAbility.h"
 
-void IPassiveAbility::passiveAbility()
+void IPassiveAbility::usePassiveAbility()
 {
-	this->passiveAbilityVisual();
+	this->usePassiveAbilityVisual();
 
-	IPassiveAbility::Execute_passiveAbilityEventVisual(Cast<UObject>(this));
+	IPassiveAbility::Execute_usePassiveAbilityEventVisual(Cast<UObject>(this));
 }

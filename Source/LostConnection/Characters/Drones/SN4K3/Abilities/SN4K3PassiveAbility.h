@@ -1,16 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 
-#include "Abilities/BasePassiveAbility.h"
+#include "Abilities/BasePassive.h"
 
 #include "SN4K3PassiveAbility.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class LOSTCONNECTION_API ASN4K3PassiveAbility : public ABasePassiveAbility
 {
@@ -18,6 +13,10 @@ class LOSTCONNECTION_API ASN4K3PassiveAbility : public ABasePassiveAbility
 	
 public:
 	ASN4K3PassiveAbility();
+
+	virtual void applyAbility(class ABaseCharacter* target) final override;
+
+	virtual void useAbility() final override;
 
 	~ASN4K3PassiveAbility() = default;
 };

@@ -21,20 +21,20 @@ class LOSTCONNECTION_API IUltimateAbility
 
 protected:
 	UFUNCTION()
-	virtual void ultimateAbilityVisual() = 0;
+	virtual void useUltimateAbilityVisual() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ultimateAbilityEventVisual();
+	void useUltimateAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void ultimateAbilityLogic(class ABaseCharacter* target) = 0;
+	virtual void useUltimateAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ultimateAbilityEventLogic(class ABaseCharacter* target);
+	void useUltimateAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	IUltimateAbility() = default;
 
 	UFUNCTION()
-	virtual void ultimateAbility();
+	virtual void useUltimateAbility();
 };

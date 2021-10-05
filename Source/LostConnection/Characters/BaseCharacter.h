@@ -75,7 +75,7 @@ protected:
 	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
 	bool sprintHold;
 
-	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Inputs, VisibleAnywhere, Replicated, BlueprintReadWrite)
 	bool crouchHold;
 
 	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)

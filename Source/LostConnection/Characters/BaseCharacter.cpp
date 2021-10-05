@@ -66,6 +66,8 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ABaseCharacter, spareAmmo);
 
+	DOREPLIFETIME(ABaseCharacter, crouchHold);
+
 	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
 	DOREPLIFETIME(ABaseCharacter, defaultWeaponSlot);

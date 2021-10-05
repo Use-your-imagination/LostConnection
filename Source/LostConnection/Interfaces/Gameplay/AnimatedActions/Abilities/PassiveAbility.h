@@ -21,20 +21,20 @@ class LOSTCONNECTION_API IPassiveAbility
 
 protected:
 	UFUNCTION()
-	virtual void passiveAbilityVisual() = 0;
+	virtual void usePassiveAbilityVisual() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void passiveAbilityEventVisual();
+	void usePassiveAbilityEventVisual();
 
 	UFUNCTION()
-	virtual void passiveAbilityLogic(class ABaseCharacter* target) = 0;
+	virtual void usePassiveAbilityLogic(class ABaseCharacter* target) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void passiveAbilityEventLogic(class ABaseCharacter* target);
+	void usePassiveAbilityEventLogic(class ABaseCharacter* target);
 
 public:
 	IPassiveAbility() = default;
 
 	UFUNCTION()
-	virtual void passiveAbility();
+	virtual void usePassiveAbility();
 };

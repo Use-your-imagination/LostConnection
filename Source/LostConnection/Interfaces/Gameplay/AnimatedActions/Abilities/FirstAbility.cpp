@@ -1,8 +1,8 @@
 #include "FirstAbility.h"
 
-void IFirstAbility::firstAbility()
+void IFirstAbility::useFirstAbility()
 {
-	this->firstAbilityVisual();
+	this->useFirstAbilityVisual();
 
-	IFirstAbility::Execute_firstAbilityEventVisual(Cast<UObject>(this));
+	IFirstAbility::Execute_useFirstAbilityEventVisual(Cast<UObject>(this));
 }

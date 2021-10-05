@@ -1,8 +1,8 @@
 #include "ThirdAbility.h"
 
-void IThirdAbility::thirdAbility()
+void IThirdAbility::useThirdAbility()
 {
-	this->thirdAbilityVisual();
+	this->useThirdAbilityVisual();
 
-	IThirdAbility::Execute_thirdAbilityEventVisual(Cast<UObject>(this));
+	IThirdAbility::Execute_useThirdAbilityEventVisual(Cast<UObject>(this));
 }
