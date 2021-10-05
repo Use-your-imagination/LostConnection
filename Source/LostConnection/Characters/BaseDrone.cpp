@@ -81,6 +81,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	FInputActionBinding holdSprint("Sprint", IE_Pressed);
 	FInputActionBinding releaseSprint("Sprint", IE_Released);
 
+	FInputActionBinding pressCrouch("Crouch", IE_Pressed);
+	FInputActionBinding releaseCrouch("Crouch", IE_Released);
+
 	FInputActionBinding changeWeapon("ChangeWeapon", IE_Pressed);
 
 	FInputActionBinding	alternativeWeaponMode("Alternative", IE_Pressed);
@@ -97,6 +100,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	holdSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "holdSprint"); });
 	releaseSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "releaseSprint"); });
 
+	pressCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "pressCrouch"); });
+	releaseCrouch.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "releaseCrouch"); });
+
 	changeWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "changeWeapon"); });
 
 	alternativeWeaponMode.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "alternativeWeaponMode"); });
@@ -112,6 +118,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 
 	result.Add(holdSprint);
 	result.Add(releaseSprint);
+
+	result.Add(pressCrouch);
+	result.Add(releaseCrouch);
 
 	result.Add(changeWeapon);
 
@@ -324,9 +333,6 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ABaseDrone::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ABaseDrone::StopJumping);
 
-	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ABaseDrone::pressCrouch);
-	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &ABaseDrone::releaseCrouch);
-
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABaseDrone::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABaseDrone::MoveRight);
 
@@ -344,22 +350,16 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ABaseDrone::pressCrouch()
 {
-	if (HasAuthority())
-	{
-		crouchHold = true;
+	crouchHold = true;
 
-		IMovementActions::Execute_pressCrouchAction(this);
-	}
+	IMovementActions::Execute_pressCrouchAction(this);
 }
 
 void ABaseDrone::releaseCrouch()
 {
-	if (HasAuthority())
-	{
-		crouchHold = false;
+	crouchHold = false;
 
-		IMovementActions::Execute_releaseCrouchAction(this);
-	}
+	IMovementActions::Execute_releaseCrouchAction(this);
 }
 
 void ABaseDrone::pressZoom()
@@ -748,86 +748,86 @@ ABaseUltimateAbility* ABaseDrone::getUltimateAbility()
 }
 
 #pragma region PassiveAbility
-void ABaseDrone::passiveAbilityVisual()
+void ABaseDrone::usePassiveAbilityVisual()
 {
 
 }
 
-void ABaseDrone::passiveAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::usePassiveAbilityLogic(ABaseCharacter* target)
 {
 	if (HasAuthority())
 	{
-		this->passiveAbilityLogic(target);
+		this->usePassiveAbilityLogic(target);
 
-		IPassiveAbility::Execute_passiveAbilityEventLogic(this, target);
+		IPassiveAbility::Execute_usePassiveAbilityEventLogic(this, target);
 	}
 }
 #pragma endregion
 
 #pragma region FirstAbility
-void ABaseDrone::firstAbilityVisual()
+void ABaseDrone::useFirstAbilityVisual()
 {
 
 }
 
-void ABaseDrone::firstAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::useFirstAbilityLogic(ABaseCharacter* target)
 {
 	if (HasAuthority())
 	{
-		this->firstAbilityLogic(target);
+		this->useFirstAbilityLogic(target);
 
-		IFirstAbility::Execute_firstAbilityEventLogic(this, target);
+		IFirstAbility::Execute_useFirstAbilityEventLogic(this, target);
 	}
 }
 #pragma endregion
 
 #pragma region SecondAbility
-void ABaseDrone::secondAbilityVisual()
+void ABaseDrone::useSecondAbilityVisual()
 {
 
 }
 
-void ABaseDrone::secondAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::useSecondAbilityLogic(ABaseCharacter* target)
 {
 	if (HasAuthority())
 	{
-		this->secondAbilityLogic(target);
+		this->useSecondAbilityLogic(target);
 
-		ISecondAbility::Execute_secondAbilityEventLogic(this, target);
+		ISecondAbility::Execute_useSecondAbilityEventLogic(this, target);
 	}
 }
 #pragma endregion
 
 #pragma region ThirdAbility
-void ABaseDrone::thirdAbilityVisual()
+void ABaseDrone::useThirdAbilityVisual()
 {
 
 }
 
-void ABaseDrone::thirdAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::useThirdAbilityLogic(ABaseCharacter* target)
 {
 	if (HasAuthority())
 	{
-		this->thirdAbilityLogic(target);
+		this->useThirdAbilityLogic(target);
 
-		IThirdAbility::Execute_thirdAbilityEventLogic(this, target);
+		IThirdAbility::Execute_useThirdAbilityEventLogic(this, target);
 	}
 }
 #pragma endregion
 
 #pragma region UltimateAbility
-void ABaseDrone::ultimateAbilityVisual()
+void ABaseDrone::useUltimateAbilityVisual()
 {
 
 }
 
-void ABaseDrone::ultimateAbilityLogic(ABaseCharacter* target)
+void ABaseDrone::useUltimateAbilityLogic(ABaseCharacter* target)
 {
 	if (HasAuthority())
 	{
-		this->ultimateAbilityLogic(target);
+		this->useUltimateAbilityLogic(target);
 
-		IUltimateAbility::Execute_ultimateAbilityEventLogic(this, target);
+		IUltimateAbility::Execute_useUltimateAbilityEventLogic(this, target);
 	}
 }
 #pragma endregion

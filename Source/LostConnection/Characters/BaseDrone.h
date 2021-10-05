@@ -281,33 +281,33 @@ public:
 	virtual ABaseUltimateAbility* getUltimateAbility() final override;
 
 #pragma region PassiveAbility
-	virtual void passiveAbilityVisual() override;
+	virtual void usePassiveAbilityVisual() override;
 
-	virtual void passiveAbilityLogic(ABaseCharacter* target) override;
+	virtual void usePassiveAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 #pragma region FirstAbility
-	virtual void firstAbilityVisual() override;
+	virtual void useFirstAbilityVisual() override;
 
-	virtual void firstAbilityLogic(ABaseCharacter* target) override;
+	virtual void useFirstAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 #pragma region SecondAbility
-	virtual void secondAbilityVisual() override;
+	virtual void useSecondAbilityVisual() override;
 
-	virtual void secondAbilityLogic(ABaseCharacter* target) override;
+	virtual void useSecondAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 #pragma region ThirdAbility
-	virtual void thirdAbilityVisual() override;
+	virtual void useThirdAbilityVisual() override;
 
-	virtual void thirdAbilityLogic(ABaseCharacter* target) override;
+	virtual void useThirdAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 #pragma region UltimateAbility
-	virtual void ultimateAbilityVisual() override;
+	virtual void useUltimateAbilityVisual() override;
 
-	virtual void ultimateAbilityLogic(ABaseCharacter* target) override;
+	virtual void useUltimateAbilityLogic(ABaseCharacter* target) override;
 #pragma endregion
 
 	virtual ~ABaseDrone() = default;

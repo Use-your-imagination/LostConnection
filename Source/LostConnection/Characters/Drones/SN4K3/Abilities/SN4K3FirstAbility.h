@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-#include "Abilities/Base.h"
+#include "Abilities/BaseAbility.h"
 
 #include "SN4K3FirstAbility.generated.h"
 

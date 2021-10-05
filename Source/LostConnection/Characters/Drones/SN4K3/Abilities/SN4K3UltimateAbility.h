@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-#include "Abilities/BaseUltimate.h"
+#include "Abilities/BaseUltimateAbility.h"
 
 #include "SN4K3UltimateAbility.generated.h"
 

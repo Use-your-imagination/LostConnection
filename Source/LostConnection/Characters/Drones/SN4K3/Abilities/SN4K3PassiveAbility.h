@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-#include "Abilities/BasePassive.h"
+#include "Abilities/BasePassiveAbility.h"
 
 #include "SN4K3PassiveAbility.generated.h"
 
