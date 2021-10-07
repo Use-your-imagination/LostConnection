@@ -20,15 +20,13 @@ private:
 
 private:
 	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	int naniteMeter;
+	int32 naniteMeter;
 
 	float lastTimeAbilityUsed;
 
 	directionTypes type;
 
 private:
-	void Tick(float DeltaTime) override;
-
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:

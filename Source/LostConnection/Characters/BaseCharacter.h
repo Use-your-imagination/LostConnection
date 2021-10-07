@@ -50,19 +50,25 @@ protected:
 	UTimersUtility* timers;
 
 protected:
-	UPROPERTY(Category = Stats, Replicated, BlueprintReadWrite)
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float health;
 
-	UPROPERTY(Category = Stats, Replicated, BlueprintReadWrite)
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float currentHealth;
 
-	UPROPERTY(Category = Properties, Replicated, BlueprintReadWrite)
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float defaultMovementSpeed;
+
+	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float sprintMovementSpeed;
+
+	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	bool isAlly;
 
-	UPROPERTY(Category = Properties, Replicated, BlueprintReadWrite)
+	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	bool isDead;
 
-	UPROPERTY(Category = AmmoSettings, Replicated, BlueprintReadWrite)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	TArray<int32> spareAmmo;
 
 #pragma region BlueprintFunctionLibrary
@@ -129,7 +135,6 @@ protected:
 
 	virtual void StopJumping() final override;
 
-	UFUNCTION(NetMulticast, Reliable)
 	void setMaxSpeed(float speed);
 
 #pragma region Reload
@@ -190,18 +195,25 @@ public:
 	virtual void setCurrentHealth(float newCurrentHealth) final;
 
 	UFUNCTION(Server, Reliable)
+	virtual void setDefaultMovementSpeed(float speed);
+
+	UFUNCTION(Server, Reliable)
+	virtual void setSprintMovementSpeed(float speed);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setIsAlly(bool newIsAlly) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setIsDead(bool newIsDead) final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getHealth() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getCurrentHealth() const final;
 
-	UFUNCTION(BlueprintCallable)
+	virtual float getDefaultMovementSpeed() const final;
+
+	virtual float getSprintMovementSpeed() const final;
+
 	virtual bool getIsAlly() const final;
 
 	virtual bool getIsDead() const final;

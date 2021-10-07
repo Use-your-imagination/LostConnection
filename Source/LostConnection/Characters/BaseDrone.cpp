@@ -754,6 +754,15 @@ void ABaseDrone::castPassiveAbilityLogic()
 {
 	if (HasAuthority())
 	{
+		float cost = passiveAbility->getCost();
+
+		if (currentEnergy < cost)
+		{
+			return;
+		}
+
+		currentEnergy -= cost;
+
 		passiveAbility->useAbility();
 
 		IPassiveAbilityCast::Execute_castPassiveAbilityEventLogic(this);
@@ -771,6 +780,15 @@ void ABaseDrone::castFirstAbilityLogic()
 {
 	if (HasAuthority())
 	{
+		float cost = firstAbility->getCost();
+
+		if (currentEnergy < cost)
+		{
+			return;
+		}
+
+		currentEnergy -= cost;
+
 		firstAbility->useAbility();
 
 		IFirstAbilityCast::Execute_castFirstAbilityEventLogic(this);
@@ -788,6 +806,15 @@ void ABaseDrone::castSecondAbilityLogic()
 {
 	if (HasAuthority())
 	{
+		float cost = secondAbility->getCost();
+
+		if (currentEnergy < cost)
+		{
+			return;
+		}
+
+		currentEnergy -= cost;
+
 		secondAbility->useAbility();
 
 		ISecondAbilityCast::Execute_castSecondAbilityEventLogic(this);
@@ -805,6 +832,15 @@ void ABaseDrone::castThirdAbilityLogic()
 {
 	if (HasAuthority())
 	{
+		float cost = thirdAbility->getCost();
+
+		if (currentEnergy < cost)
+		{
+			return;
+		}
+
+		currentEnergy -= cost;
+
 		thirdAbility->useAbility();
 
 		IThirdAbilityCast::Execute_castThirdAbilityEventLogic(this);
@@ -822,6 +858,15 @@ void ABaseDrone::castUltimateAbilityLogic()
 {
 	if (HasAuthority())
 	{
+		float cost = ultimateAbility->getCost();
+
+		if (currentEnergy < cost)
+		{
+			return;
+		}
+
+		currentEnergy -= cost;
+
 		ultimateAbility->useAbility();
 
 		IUltimateAbilityCast::Execute_castUltimateAbilityEventLogic(this);

@@ -10,7 +10,7 @@ UCLASS()
 class LOSTCONNECTION_API ASN4K3FirstAbility : public ABaseAbility
 {
 	GENERATED_BODY()
-	
+
 public:
 	ASN4K3FirstAbility();
 

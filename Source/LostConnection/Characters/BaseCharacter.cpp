@@ -60,6 +60,10 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ABaseCharacter, currentHealth);
 
+	DOREPLIFETIME(ABaseCharacter, defaultMovementSpeed);
+
+	DOREPLIFETIME(ABaseCharacter, sprintMovementSpeed);
+
 	DOREPLIFETIME(ABaseCharacter, isAlly);
 
 	DOREPLIFETIME(ABaseCharacter, isDead);
@@ -117,14 +121,14 @@ void ABaseCharacter::updateWeaponMesh()
 
 void ABaseCharacter::holdSprint()
 {
-	this->setMaxSpeed(575.0f);
+	this->setMaxSpeed(sprintMovementSpeed);
 
 	sprintHold = true;
 }
 
 void ABaseCharacter::releaseSprint()
 {
-	this->setMaxSpeed(450.0f);
+	this->setMaxSpeed(defaultMovementSpeed);
 
 	sprintHold = false;
 }
@@ -145,7 +149,7 @@ void ABaseCharacter::StopJumping()
 	jumpHold = false;
 }
 
-void ABaseCharacter::setMaxSpeed_Implementation(float speed)
+void ABaseCharacter::setMaxSpeed(float speed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
@@ -257,10 +261,14 @@ void ABaseCharacter::resetShootLogic()
 
 ABaseCharacter::ABaseCharacter() :
 	timers(nullptr),
+	defaultMovementSpeed(450.0f),
+	sprintMovementSpeed(575.0f),
 	isDead(false)
 {
-	PrimaryActorTick.bCanEverTick = true;
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
+	UCharacterMovementComponent* movement = GetCharacterMovement();
+	
+	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = 60;
 
 	spareAmmo.Init(0, 4);
@@ -272,16 +280,22 @@ ABaseCharacter::ABaseCharacter() :
 	mesh->SetGenerateOverlapEvents(true);
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
 
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
-	GetCharacterMovement()->JumpZVelocity = 600.f;
-	GetCharacterMovement()->AirControl = 0.2f;
+	movement->bOrientRotationToMovement = true;
+	movement->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
+	movement->JumpZVelocity = 600.f;
+	movement->AirControl = 1.0f;
+	movement->GetNavAgentPropertiesRef().bCanCrouch = true;
+	movement->MaxWalkSpeed = defaultMovementSpeed;
+	movement->MaxWalkSpeedCrouched = defaultMovementSpeed / 3;
+	movement->bCanWalkOffLedgesWhenCrouching = true;
 
 	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
 	currentWeaponMesh->SetupAttachment(mesh, "Hand_WeaponSocket_R");
+	currentWeaponMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
+	magazine->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
 #pragma region BlueprintFunctionLibrary
 	isReloading = false;
@@ -363,6 +377,18 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 	currentHealth = newCurrentHealth;
 }
 
+void ABaseCharacter::setDefaultMovementSpeed_Implementation(float speed)
+{
+	defaultMovementSpeed = speed;
+
+	GetCharacterMovement()->MaxWalkSpeedCrouched = defaultMovementSpeed / 3;
+}
+
+void ABaseCharacter::setSprintMovementSpeed_Implementation(float speed)
+{
+	sprintMovementSpeed = speed;
+}
+
 void ABaseCharacter::setIsAlly_Implementation(bool newIsAlly)
 {
 	isAlly = newIsAlly;
@@ -381,6 +407,16 @@ float ABaseCharacter::getHealth() const
 float ABaseCharacter::getCurrentHealth() const
 {
 	return currentHealth;
+}
+
+float ABaseCharacter::getDefaultMovementSpeed() const
+{
+	return defaultMovementSpeed;
+}
+
+float ABaseCharacter::getSprintMovementSpeed() const
+{
+	return sprintMovementSpeed;
 }
 
 bool ABaseCharacter::getIsAlly() const
