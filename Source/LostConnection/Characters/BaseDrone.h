@@ -256,12 +256,16 @@ public:
 
 	virtual void setCooldownReduction_Implementation(float newCooldownReduction) final override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getEnergy() const final override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getCurrentEnergy() const final override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getEnergyRestorationPerSecond() const final override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getCooldownReduction() const final override;
 
 	virtual ABasePassiveAbility* getPassiveAbility() final override;

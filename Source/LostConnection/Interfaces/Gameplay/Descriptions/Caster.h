@@ -9,7 +9,7 @@
 
 #include "Caster.generated.h"
 
-UINTERFACE(BlueprintType, Meta = (CannotImplementInterfaceInBlueprint))
+UINTERFACE(BlueprintType)
 class UCaster : public UInterface
 {
 	GENERATED_BODY()
@@ -37,16 +37,12 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void setCooldownReduction(float newCooldownReduction);
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getEnergy() const = 0;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getCurrentEnergy() const = 0;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getEnergyRestorationPerSecond() const = 0;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getCooldownReduction() const = 0;
 
 	virtual ABasePassiveAbility* getPassiveAbility() = 0;
@@ -58,4 +54,19 @@ public:
 	virtual ABaseAbility* getThirdAbility() = 0;
 
 	virtual ABaseUltimateAbility* getUltimateAbility() = 0;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void applyPassiveAbilityEvent(class ABaseCharacter* target);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void applyFirstAbilityEvent(class ABaseCharacter* target);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void applySecondAbilityEvent(class ABaseCharacter* target);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void applyThirdAbilityEvent(class ABaseCharacter* target);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void applyUltimateAbilityEvent(class ABaseCharacter* target);
 };
