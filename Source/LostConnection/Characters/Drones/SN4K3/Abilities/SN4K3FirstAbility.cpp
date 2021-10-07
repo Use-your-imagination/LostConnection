@@ -33,7 +33,7 @@ void ASN4K3FirstAbility::useAbility()
 	{
 		FVector tem = camera->GetComponentRotation().Vector();
 
-		tem.X = tem.Y = 0.0f;
+		tem.Z = 0.0f;
 
 		drone->AddActorWorldOffset(tem * 1200.0f, true);
 	}

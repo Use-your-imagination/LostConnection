@@ -60,3 +60,8 @@ void ASN4K3::castFirstAbilityVisual()
 {
 	this->castFirstAbilityLogic();
 }
+
+void ASN4K3::castSecondAbilityVisual()
+{
+	this->castSecondAbilityLogic();
+}

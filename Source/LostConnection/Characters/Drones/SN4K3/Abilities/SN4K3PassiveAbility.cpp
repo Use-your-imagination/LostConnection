@@ -25,36 +25,33 @@ void ASN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 
 void ASN4K3PassiveAbility::useAbility()
 {
-	if (HasAuthority())
+	static constexpr float coeff = 5.0f;
+
+	if (lastTimeAbilityUsed < coeff)
 	{
-		static constexpr float coeff = 5.0f;
+		type = directionTypes::up;
+	}
+	else
+	{
+		type = directionTypes::down;
+	}
 
-		if (lastTimeAbilityUsed < coeff)
-		{
-			type = directionTypes::up;
-		}
-		else
-		{
-			type = directionTypes::down;
-		}
+	lastTimeAbilityUsed += FApp::GetDeltaTime();
 
-		lastTimeAbilityUsed += FApp::GetDeltaTime();
+	switch (type)
+	{
+	case directionTypes::up:
+		naniteMeter = FMath::Clamp(FMath::LogX(10, lastTimeAbilityUsed / coeff) / 2.0f + 1.0f, 0.5f, 1.0f) * 100;
 
-		switch (type)
-		{
-		case directionTypes::up:
-			naniteMeter = FMath::Clamp(FMath::LogX(10, lastTimeAbilityUsed / coeff) / 2.0f + 1.0f, 0.5f, 1.0f) * 100;
+		break;
 
-			break;
+	case directionTypes::down:
+		naniteMeter = FMath::Clamp((FMath::Pow((lastTimeAbilityUsed - coeff) / 2.0f, 4) * -1 + 1), 0.0f, 1.0f) * 100;
 
-		case directionTypes::down:
-			naniteMeter = FMath::Clamp((FMath::Pow((lastTimeAbilityUsed - coeff) / 2.0f, 4) * -1 + 1), 0.0f, 1.0f) * 100;
+		break;
 
-			break;
-
-		default:
-			break;
-		}
+	default:
+		break;
 	}
 }
 
