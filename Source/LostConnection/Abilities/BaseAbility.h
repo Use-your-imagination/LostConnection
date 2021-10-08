@@ -39,7 +39,6 @@ public:
 
 	virtual void applyAbility(class ABaseCharacter* target);
 
-	UFUNCTION(BlueprintCallable)
 	virtual void useAbility();
 
 	UFUNCTION(Server, Reliable)

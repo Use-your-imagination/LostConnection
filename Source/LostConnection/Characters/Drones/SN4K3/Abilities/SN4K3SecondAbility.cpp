@@ -24,7 +24,7 @@ void ASN4K3SecondAbility::useAbility()
 
 	target = Cast<ABaseCharacter>(hit.Actor);
 
-	if (target)
+	if (!target || target->getIsAlly())
 	{
 		return;
 	}

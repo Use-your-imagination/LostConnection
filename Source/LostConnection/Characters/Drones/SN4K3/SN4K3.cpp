@@ -58,10 +58,16 @@ ASN4K3::ASN4K3()
 
 void ASN4K3::castFirstAbilityVisual()
 {
-	this->castFirstAbilityLogic();
+	if (HasAuthority())
+	{
+		this->castFirstAbilityLogic();
+	}
 }
 
 void ASN4K3::castSecondAbilityVisual()
 {
-	this->castSecondAbilityLogic();
+	if (HasAuthority())
+	{
+		this->castSecondAbilityLogic();
+	}
 }

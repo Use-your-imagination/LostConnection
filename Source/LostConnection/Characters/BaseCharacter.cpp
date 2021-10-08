@@ -84,6 +84,15 @@ bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 	return wroteSomething;
 }
 
+void ABaseCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	deathMaskRenderTexture = NewObject<UTextureRenderTarget2D>();
+
+	deathMaskRenderTexture->InitCustomFormat(256, 256, EPixelFormat::PF_G16, false);
+}
+
 void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
 {
 
@@ -309,10 +318,6 @@ ABaseCharacter::ABaseCharacter() :
 	primaryHold = false;
 
 	characterMaterial = nullptr;
-
-	deathMaskRenderTexture = NewObject<UTextureRenderTarget2D>();
-
-	deathMaskRenderTexture->InitCustomFormat(256, 256, EPixelFormat::PF_G16, false);
 #pragma endregion
 }
 
