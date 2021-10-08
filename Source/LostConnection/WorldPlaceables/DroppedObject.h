@@ -9,16 +9,13 @@
 #include "Components/BoxComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
-#include "Interfaces/Gameplay/Descriptions/Actionable.h"
-
 #include "DroppedObject.generated.h"
 
 #pragma warning(disable: 4458)
 
 UCLASS()
 class LOSTCONNECTION_API ADroppedObject :
-	public AActor,
-	public IActionable
+	public AActor
 {
 	GENERATED_BODY()
 	
@@ -38,8 +35,6 @@ public:
 	ADroppedObject();
 
 	virtual void setMesh(USkeletalMesh* mesh);
-
-	virtual void action(AActor* player) override;
 
 	virtual ~ADroppedObject() = default;
 };

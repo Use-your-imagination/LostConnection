@@ -14,9 +14,11 @@ class LOSTCONNECTION_API ASN4K3ThirdAbility : public ABaseAbility
 public:
 	ASN4K3ThirdAbility();
 
-	virtual void applyAbility(class ABaseCharacter* target) final override;
+	void applyAbility(class ABaseCharacter* target) override;
 
-	virtual void useAbility() final override;
+	void removeAbilityEffect(class ABaseCharacter* target);
+
+	void useAbility() override;
 
 	~ASN4K3ThirdAbility() = default;
 };

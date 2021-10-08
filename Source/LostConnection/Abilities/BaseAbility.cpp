@@ -74,3 +74,8 @@ const FString& ABaseAbility::getLocalizedName() const
 {
 	return localizedName;
 }
+
+AActor* ABaseAbility::getOwnerCaster()
+{
+	return Cast<AActor>(owner);
+}

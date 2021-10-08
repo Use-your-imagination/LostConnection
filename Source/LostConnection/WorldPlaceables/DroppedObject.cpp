@@ -37,8 +37,3 @@ void ADroppedObject::setMesh(USkeletalMesh* mesh)
 {
 	this->mesh->SetSkeletalMesh(mesh);
 }
-
-void ADroppedObject::action(AActor* player)
-{
-	
-}

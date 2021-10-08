@@ -61,5 +61,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual const FString& getLocalizedName() const final;
 
+	UFUNCTION(BlueprintCallable)
+	virtual AActor* getOwnerCaster() final;
+
 	virtual ~ABaseAbility() = default;
 };

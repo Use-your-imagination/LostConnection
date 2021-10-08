@@ -4,6 +4,8 @@
 
 #include "Characters/BaseDrone.h"
 
+#include "Characters/BaseDrone.h"
+
 void ADroppedWeapon::Tick(float DeltaTime)
 {
 	if (HasAuthority())
@@ -69,7 +71,7 @@ void ADroppedWeapon::setMesh(USkeletalMesh* mesh)
 	magazine->SetStaticMesh(weapon->getMagazineMesh());
 }
 
-void ADroppedWeapon::action(AActor* player)
+void ADroppedWeapon::action(ABaseDrone* player)
 {
-	Cast<ABaseDrone>(player)->pickupWeapon(this);
+	player->pickupWeapon(this);
 }

@@ -6,6 +6,7 @@
 
 #include "DroppedObject.h"
 #include "Weapons/BaseWeapon.h"
+#include "Interfaces/Gameplay/Descriptions/Actionable.h"
 
 #include "DroppedWeapon.generated.h"
 
@@ -13,7 +14,9 @@
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API ADroppedWeapon : public ADroppedObject
+class LOSTCONNECTION_API ADroppedWeapon : 
+	public ADroppedObject,
+	public IActionable
 {
 	GENERATED_BODY()
 
@@ -45,7 +48,7 @@ public:
 
 	virtual void setMesh(USkeletalMesh* mesh) final override;
 
-	virtual void action(AActor* player) final override;
+	virtual void action(class ABaseDrone* player) final override;
 
 	~ADroppedWeapon() = default;
 };

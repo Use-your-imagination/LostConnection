@@ -25,7 +25,7 @@ public:
 	IActionable() = default;
 
 	UFUNCTION()
-	virtual void action(AActor* player) = 0;
+	virtual void action(class ABaseDrone* player) = 0;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FString getActionMessage() const;
