@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "NiagaraComponent.h"
 #include "Components/BoxComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 
