@@ -18,5 +18,5 @@ void ASN4K3ThirdAbility::useAbility()
 {
 	ASN4K3* drone = Cast<ASN4K3>(owner);
 
-	drone->GetWorld()->SpawnActor<ASN4K3ThirdAbilityFlag>(ASN4K3ThirdAbilityFlag::StaticClass(), FVector(drone->GetActorForwardVector() * 300), FRotator());
+	drone->GetWorld()->SpawnActor<ASN4K3ThirdAbilityFlag>(ASN4K3ThirdAbilityFlag::StaticClass(), FVector(drone->GetActorForwardVector() * 300) + drone->GetActorLocation(), FRotator());
 }

@@ -27,5 +27,7 @@ public:
 
 	void castSecondAbilityVisual() override;
 
+	void castThirdAbilityVisual() override;
+
 	~ASN4K3() = default;
 };

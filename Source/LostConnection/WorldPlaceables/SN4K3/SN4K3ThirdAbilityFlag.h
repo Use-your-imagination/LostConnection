@@ -15,6 +15,12 @@ UCLASS()
 class LOSTCONNECTION_API ASN4K3ThirdAbilityFlag : public ADroppedObject
 {
 	GENERATED_BODY()
+
+private:
+	float lifeTime;
+
+private:
+	void Tick(float DeltaTime) override;
 	
 public:
 	ASN4K3ThirdAbilityFlag();
