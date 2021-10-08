@@ -122,6 +122,8 @@ protected:
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
+	virtual void PostInitializeComponents() override;
+
 protected:
 	virtual void updateWeaponMesh() final;
 

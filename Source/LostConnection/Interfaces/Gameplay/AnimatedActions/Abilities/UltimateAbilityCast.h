@@ -17,13 +17,11 @@ class LOSTCONNECTION_API IUltimateAbilityCast
 	GENERATED_BODY()
 
 protected:
-	UFUNCTION()
 	virtual void castUltimateAbilityVisual() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void castUltimateAbilityEventVisual();
 
-	UFUNCTION()
 	virtual void castUltimateAbilityLogic() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)

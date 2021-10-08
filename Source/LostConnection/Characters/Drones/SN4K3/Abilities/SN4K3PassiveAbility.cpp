@@ -2,7 +2,8 @@
 
 #include "Misc/App.h"	
 
-#include "Characters/BaseCharacter.h"
+#include "Characters/Drones/SN4K3/SN4K3.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
 
 void ASN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -21,6 +22,8 @@ ASN4K3PassiveAbility::ASN4K3PassiveAbility() :
 void ASN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 {
 	// TODO: second part
+
+	ICaster::Execute_applyPassiveAbilityEvent(Cast<UObject>(owner), target);
 }
 
 void ASN4K3PassiveAbility::useAbility()

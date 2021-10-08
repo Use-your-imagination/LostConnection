@@ -64,19 +64,19 @@ protected:
 	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float cooldownReduction;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
 	ABasePassiveAbility* passiveAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
 	ABaseAbility* firstAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
 	ABaseAbility* secondAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
 	ABaseAbility* thirdAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
 	ABaseUltimateAbility* ultimateAbility;
 
 #pragma region BlueprintFunctionLibrary
@@ -256,12 +256,16 @@ public:
 
 	virtual void setCooldownReduction_Implementation(float newCooldownReduction) final override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getEnergy() const final override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getCurrentEnergy() const final override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getEnergyRestorationPerSecond() const final override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual float getCooldownReduction() const final override;
 
 	virtual ABasePassiveAbility* getPassiveAbility() final override;
@@ -277,30 +281,35 @@ public:
 #pragma region PassiveAbility
 	virtual void castPassiveAbilityVisual() override;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void castPassiveAbilityLogic() override;
 #pragma endregion
 
 #pragma region FirstAbility
 	virtual void castFirstAbilityVisual() override;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void castFirstAbilityLogic() override;
 #pragma endregion
 
 #pragma region SecondAbility
 	virtual void castSecondAbilityVisual() override;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void castSecondAbilityLogic() override;
 #pragma endregion
 
 #pragma region ThirdAbility
 	virtual void castThirdAbilityVisual() override;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void castThirdAbilityLogic() override;
 #pragma endregion
 
 #pragma region UltimateAbility
 	virtual void castUltimateAbilityVisual() override;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void castUltimateAbilityLogic() override;
 #pragma endregion
 

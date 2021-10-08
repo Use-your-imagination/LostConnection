@@ -17,13 +17,11 @@ class LOSTCONNECTION_API IThirdAbilityCast
 	GENERATED_BODY()
 
 protected:
-	UFUNCTION()
 	virtual void castThirdAbilityVisual() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void castThirdAbilityEventVisual();
 
-	UFUNCTION()
 	virtual void castThirdAbilityLogic() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)

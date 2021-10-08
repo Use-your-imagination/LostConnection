@@ -171,16 +171,6 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, secondWeaponSlot);
 
-	DOREPLIFETIME(ABaseDrone, passiveAbility);
-
-	DOREPLIFETIME(ABaseDrone, firstAbility);
-
-	DOREPLIFETIME(ABaseDrone, secondAbility);
-
-	DOREPLIFETIME(ABaseDrone, thirdAbility);
-
-	DOREPLIFETIME(ABaseDrone, ultimateAbility);
-
 	DOREPLIFETIME(ABaseDrone, slideCooldown);
 }
 
@@ -203,16 +193,6 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	wroteSomething |= Channel->ReplicateSubobject(firstWeaponSlot, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(secondWeaponSlot, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(secondAbility, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(thirdAbility, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
 	return wroteSomething;
 }
@@ -426,6 +406,8 @@ ABaseDrone::ABaseDrone() :
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraOffset, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	JumpMaxCount = 2;
 
 #pragma region BlueprintFunctionLibrary
 	secondaryHold = false;
@@ -745,49 +727,43 @@ void ABaseDrone::castPassiveAbilityVisual()
 
 }
 
-void ABaseDrone::castPassiveAbilityLogic()
+void ABaseDrone::castPassiveAbilityLogic_Implementation()
 {
-	if (HasAuthority())
+	float cost = passiveAbility->getCost();
+
+	if (currentEnergy < cost)
 	{
-		float cost = passiveAbility->getCost();
-
-		if (currentEnergy < cost)
-		{
-			return;
-		}
-
-		currentEnergy -= cost;
-
-		passiveAbility->useAbility();
-
-		IPassiveAbilityCast::Execute_castPassiveAbilityEventLogic(this);
+		return;
 	}
+
+	currentEnergy -= cost;
+
+	passiveAbility->useAbility();
+
+	IPassiveAbilityCast::Execute_castPassiveAbilityEventLogic(this);
 }
 #pragma endregion
 
 #pragma region FirstAbility
 void ABaseDrone::castFirstAbilityVisual()
 {
-	
+
 }
 
-void ABaseDrone::castFirstAbilityLogic()
+void ABaseDrone::castFirstAbilityLogic_Implementation()
 {
-	if (HasAuthority())
+	float cost = firstAbility->getCost();
+
+	if (currentEnergy < cost)
 	{
-		float cost = firstAbility->getCost();
-
-		if (currentEnergy < cost)
-		{
-			return;
-		}
-
-		currentEnergy -= cost;
-
-		firstAbility->useAbility();
-
-		IFirstAbilityCast::Execute_castFirstAbilityEventLogic(this);
+		return;
 	}
+
+	currentEnergy -= cost;
+
+	firstAbility->useAbility();
+
+	IFirstAbilityCast::Execute_castFirstAbilityEventLogic(this);
 }
 #pragma endregion
 
@@ -797,23 +773,20 @@ void ABaseDrone::castSecondAbilityVisual()
 
 }
 
-void ABaseDrone::castSecondAbilityLogic()
+void ABaseDrone::castSecondAbilityLogic_Implementation()
 {
-	if (HasAuthority())
+	float cost = secondAbility->getCost();
+
+	if (currentEnergy < cost)
 	{
-		float cost = secondAbility->getCost();
-
-		if (currentEnergy < cost)
-		{
-			return;
-		}
-
-		currentEnergy -= cost;
-
-		secondAbility->useAbility();
-
-		ISecondAbilityCast::Execute_castSecondAbilityEventLogic(this);
+		return;
 	}
+
+	currentEnergy -= cost;
+
+	secondAbility->useAbility();
+
+	ISecondAbilityCast::Execute_castSecondAbilityEventLogic(this);
 }
 #pragma endregion
 
@@ -823,23 +796,20 @@ void ABaseDrone::castThirdAbilityVisual()
 
 }
 
-void ABaseDrone::castThirdAbilityLogic()
+void ABaseDrone::castThirdAbilityLogic_Implementation()
 {
-	if (HasAuthority())
+	float cost = thirdAbility->getCost();
+
+	if (currentEnergy < cost)
 	{
-		float cost = thirdAbility->getCost();
-
-		if (currentEnergy < cost)
-		{
-			return;
-		}
-
-		currentEnergy -= cost;
-
-		thirdAbility->useAbility();
-
-		IThirdAbilityCast::Execute_castThirdAbilityEventLogic(this);
+		return;
 	}
+
+	currentEnergy -= cost;
+
+	thirdAbility->useAbility();
+
+	IThirdAbilityCast::Execute_castThirdAbilityEventLogic(this);
 }
 #pragma endregion
 
@@ -849,22 +819,19 @@ void ABaseDrone::castUltimateAbilityVisual()
 
 }
 
-void ABaseDrone::castUltimateAbilityLogic()
+void ABaseDrone::castUltimateAbilityLogic_Implementation()
 {
-	if (HasAuthority())
+	float cost = ultimateAbility->getCost();
+
+	if (currentEnergy < cost)
 	{
-		float cost = ultimateAbility->getCost();
-
-		if (currentEnergy < cost)
-		{
-			return;
-		}
-
-		currentEnergy -= cost;
-
-		ultimateAbility->useAbility();
-
-		IUltimateAbilityCast::Execute_castUltimateAbilityEventLogic(this);
+		return;
 	}
+
+	currentEnergy -= cost;
+
+	ultimateAbility->useAbility();
+
+	IUltimateAbilityCast::Execute_castUltimateAbilityEventLogic(this);
 }
 #pragma endregion

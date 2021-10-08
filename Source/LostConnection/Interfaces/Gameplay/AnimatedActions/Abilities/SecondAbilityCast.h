@@ -17,13 +17,11 @@ class LOSTCONNECTION_API ISecondAbilityCast
 	GENERATED_BODY()
 
 protected:
-	UFUNCTION()
 	virtual void castSecondAbilityVisual() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void castSecondAbilityEventVisual();
 
-	UFUNCTION()
 	virtual void castSecondAbilityLogic() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)

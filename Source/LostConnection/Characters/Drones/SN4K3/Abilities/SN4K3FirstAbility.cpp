@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Characters/Drones/SN4K3/Abilities/SN4K3PassiveAbility.h"
 
 ASN4K3FirstAbility::ASN4K3FirstAbility()
@@ -14,6 +15,8 @@ ASN4K3FirstAbility::ASN4K3FirstAbility()
 void ASN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 {
 	target->takeDamage(375.0f);
+
+	ICaster::Execute_applyFirstAbilityEvent(Cast<UObject>(owner), target);
 }
 
 void ASN4K3FirstAbility::useAbility()
