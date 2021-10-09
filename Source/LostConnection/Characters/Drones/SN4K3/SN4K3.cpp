@@ -39,6 +39,13 @@ void ASN4K3::PostInitializeComponents()
 	}
 }
 
+void ASN4K3::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASN4K3, naniteMeter);
+}
+
 void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ABaseCharacter* target = Cast<ABaseCharacter>(OtherActor);
@@ -51,7 +58,8 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 	firstAbility->applyAbility(target);
 }
 
-ASN4K3::ASN4K3()
+ASN4K3::ASN4K3() :
+	naniteMeter(0)
 {
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);
 }

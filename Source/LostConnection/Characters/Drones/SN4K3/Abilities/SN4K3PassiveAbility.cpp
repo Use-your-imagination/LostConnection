@@ -5,18 +5,11 @@
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 
-void ASN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ASN4K3PassiveAbility, naniteMeter);
-}
-
 ASN4K3PassiveAbility::ASN4K3PassiveAbility() :
 	lastTimeAbilityUsed(0.0f),
 	type(directionTypes::up)
 {
-	NetUpdateFrequency = 60;
+	
 }
 
 void ASN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
@@ -29,6 +22,7 @@ void ASN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 void ASN4K3PassiveAbility::useAbility()
 {
 	static constexpr float coeff = 5.0f;
+	int32& naniteMeter = Cast<ASN4K3>(owner)->getNaniteMeter();
 
 	if (lastTimeAbilityUsed < coeff)
 	{

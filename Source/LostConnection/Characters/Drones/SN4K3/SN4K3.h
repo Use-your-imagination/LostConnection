@@ -6,15 +6,23 @@
 
 #include "SN4K3.generated.h"
 
+#pragma warning(disable: 4458)
+
 UCLASS()
 class LOSTCONNECTION_API ASN4K3 : public ABaseDrone
 {
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	int32 naniteMeter;
+
+private:
 	void Tick(float DeltaTime) override;
 
 	void PostInitializeComponents() override;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
 private:
 	UFUNCTION()
@@ -29,5 +37,12 @@ public:
 
 	void castThirdAbilityVisual() override;
 
+	int32& getNaniteMeter();
+
 	~ASN4K3() = default;
 };
+
+inline int32& ASN4K3::getNaniteMeter()
+{
+	return naniteMeter;
+}

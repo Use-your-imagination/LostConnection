@@ -19,15 +19,9 @@ private:
 	};
 
 private:
-	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	int32 naniteMeter;
-
 	float lastTimeAbilityUsed;
 
 	directionTypes type;
-
-private:
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:
 	ASN4K3PassiveAbility();
