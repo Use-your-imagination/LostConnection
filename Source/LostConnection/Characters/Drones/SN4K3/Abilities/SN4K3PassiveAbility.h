@@ -32,9 +32,9 @@ private:
 public:
 	ASN4K3PassiveAbility();
 
-	virtual void applyAbility(class ABaseCharacter* target) final override;
+	void applyAbility(class ABaseCharacter* target) override;
 
-	virtual void useAbility() final override;
+	void useAbility() override;
 
 	void resetLastTimeAbilityUsed();
 

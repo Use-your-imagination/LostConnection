@@ -14,9 +14,9 @@ class LOSTCONNECTION_API ASN4K3UltimateAbility : public ABaseUltimateAbility
 public:
 	ASN4K3UltimateAbility();
 
-	virtual void applyAbility(class ABaseCharacter* target) final override;
+	void applyAbility(class ABaseCharacter* target) override;
 
-	virtual void useAbility() final override;
+	void useAbility() override;
 
 	~ASN4K3UltimateAbility() = default;
 };
