@@ -87,3 +87,11 @@ void ASN4K3::castThirdAbilityVisual()
 		this->castThirdAbilityLogic();
 	}
 }
+
+void ASN4K3::castUltimateAbilityVisual()
+{
+	if (HasAuthority())
+	{
+		this->castUltimateAbilityLogic();
+	}
+}

@@ -64,7 +64,22 @@ protected:
 	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float cooldownReduction;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float duration;
+
+	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float power;
+
+	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float energyEfficiency;
+
+	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float AOE;
+
+	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float castPoint;
+
+protected:UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
 	ABasePassiveAbility* passiveAbility;
 
 	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
@@ -256,6 +271,16 @@ public:
 
 	virtual void setCooldownReduction_Implementation(float newCooldownReduction) final override;
 
+	virtual void setDuration_Implementation(float newDuration) final;
+
+	virtual void setPower_Implementation(float newPower) final;
+	
+	virtual void setEnergyEfficiency_Implementation(float newEnergyEfficiency) final;
+	
+	virtual void setAOE_Implementation(float newAOE) final;
+	
+	virtual void setCastPoint_Implementation(float newCastPoint) final;
+
 	UFUNCTION(BlueprintCallable)
 	virtual float getEnergy() const final override;
 
@@ -267,6 +292,21 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual float getCooldownReduction() const final override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float getDuration() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float getPower() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float getEnergyEfficiency() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float getAOE() const final;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float getCastPoint() const final;
 
 	virtual ABasePassiveAbility* getPassiveAbility() final override;
 

@@ -381,7 +381,12 @@ ABaseDrone::ABaseDrone() :
 	energy(1000.0f),
 	currentEnergy(1000.0f),
 	energyRestorationPerSecond(5.0f),
-	cooldownReduction(0.0f)
+	cooldownReduction(0.0f),
+	duration(100.0f),
+	power(100.0f),
+	energyEfficiency(100.0f),
+	AOE(100.0f),
+	castPoint(100.0f)
 {
 	health = 1000.0f;
 	currentHealth = 1000.0f;
@@ -676,6 +681,31 @@ void ABaseDrone::setCooldownReduction_Implementation(float newCooldownReduction)
 	cooldownReduction = newCooldownReduction;
 }
 
+void ABaseDrone::setDuration_Implementation(float newDuration)
+{
+	duration = newDuration;
+}
+
+void ABaseDrone::setPower_Implementation(float newPower)
+{
+	power = newPower;
+}
+
+void ABaseDrone::setEnergyEfficiency_Implementation(float newEnergyEfficiency)
+{
+	energyEfficiency = newEnergyEfficiency;
+}
+
+void ABaseDrone::setAOE_Implementation(float newAOE)
+{
+	AOE = newAOE;
+}
+
+void ABaseDrone::setCastPoint_Implementation(float newCastPoint)
+{
+	castPoint = newCastPoint;
+}
+
 float ABaseDrone::getEnergy() const
 {
 	return energy;
@@ -694,6 +724,31 @@ float ABaseDrone::getEnergyRestorationPerSecond() const
 float ABaseDrone::getCooldownReduction() const
 {
 	return cooldownReduction;
+}
+
+float ABaseDrone::getDuration() const
+{
+	return duration;
+}
+
+float ABaseDrone::getPower() const
+{
+	return power;
+}
+
+float ABaseDrone::getEnergyEfficiency() const
+{
+	return energyEfficiency;
+}
+
+float ABaseDrone::getAOE() const
+{
+	return AOE;
+}
+
+float ABaseDrone::getCastPoint() const
+{
+	return castPoint;
 }
 
 ABasePassiveAbility* ABaseDrone::getPassiveAbility()

@@ -37,6 +37,8 @@ public:
 
 	void castThirdAbilityVisual() override;
 
+	void castUltimateAbilityVisual() override;
+
 	int32& getNaniteMeter();
 
 	~ASN4K3() = default;

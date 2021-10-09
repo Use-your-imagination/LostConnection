@@ -37,6 +37,21 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void setCooldownReduction(float newCooldownReduction);
 
+	UFUNCTION(Server, Reliable)
+	virtual void setDuration(float newDuration);
+
+	UFUNCTION(Server, Reliable)
+	virtual void setPower(float newPower);
+
+	UFUNCTION(Server, Reliable)
+	virtual void setEnergyEfficiency(float newEnergyEfficiency);
+
+	UFUNCTION(Server, Reliable)
+	virtual void setAOE(float newAOE);
+
+	UFUNCTION(Server, Reliable)
+	virtual void setCastPoint(float newCastPoint);
+
 	virtual float getEnergy() const = 0;
 
 	virtual float getCurrentEnergy() const = 0;
@@ -44,6 +59,16 @@ public:
 	virtual float getEnergyRestorationPerSecond() const = 0;
 
 	virtual float getCooldownReduction() const = 0;
+
+	virtual float getDuration() const = 0;
+
+	virtual float getPower() const = 0;
+
+	virtual float getEnergyEfficiency() const = 0;
+
+	virtual float getAOE() const = 0;
+
+	virtual float getCastPoint() const = 0;
 
 	virtual ABasePassiveAbility* getPassiveAbility() = 0;
 
