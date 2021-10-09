@@ -62,6 +62,9 @@ ASN4K3::ASN4K3() :
 	naniteMeter(0)
 {
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);
+
+	spareAmmo[static_cast<size_t>(ammoTypes::large)] = 120;
+	spareAmmo[static_cast<size_t>(ammoTypes::energy)] = 180;
 }
 
 void ASN4K3::castFirstAbilityVisual()

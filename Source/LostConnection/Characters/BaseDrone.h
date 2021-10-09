@@ -79,7 +79,8 @@ protected:
 	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float castPoint;
 
-protected:UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
+protected:
+	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
 	ABasePassiveAbility* passiveAbility;
 
 	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
