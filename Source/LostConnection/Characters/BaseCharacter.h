@@ -237,6 +237,8 @@ public:
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
 
+	virtual void impactAction_Implementation(ABaseAmmo* ammo) override;
+
 	virtual ~ABaseCharacter() = default;
 };
 

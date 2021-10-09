@@ -467,3 +467,11 @@ float ABaseCharacter::getPercentageDamageReduction_Implementation() const
 {
 	return 25.0f;
 }
+
+void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo)
+{
+	if (isAlly != ammo->getIsAlly())
+	{
+		this->takeDamage(ammo->getDamage());
+	}
+}

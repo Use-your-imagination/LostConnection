@@ -25,32 +25,28 @@ void ABaseAmmo::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetim
 
 void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (!HasAuthority())
+	{
+		return;
+	}
+
 	if (IsPendingKill() || Cast<ABaseAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor) || Cast<UCapsuleComponent>(OtherComp))
 	{
 		return;
 	}
 
-	ABaseCharacter* character = Cast<ABaseCharacter>(OtherActor);
 	bool shotThrough = OtherActor->Implements<UShotThrough>();
 
-	if (character && lastTarget == character)
+	if (OtherActor && lastTarget == OtherActor)
 	{
 		return;
 	}
 
-	if (character && isAlly != character->getIsAlly())
+	if (shotThrough && OtherActor)
 	{
-		character->takeDamage(damage);
+		IShotThrough::Execute_impactAction(OtherActor, this);
 
-		lastTarget = character;
-	}
-
-	if (shotThrough)
-	{
-		if (character && isAlly == character->getIsAlly())
-		{
-			return;
-		}
+		lastTarget = OtherActor;
 
 		damage = damage * (1.0f - IShotThrough::Execute_getPercentageDamageReduction(OtherActor) * 0.01f) - IShotThrough::Execute_getFlatDamageReduction(OtherActor);
 
@@ -115,6 +111,11 @@ UClass* ABaseAmmo::getStaticClass() const
 	return StaticClass();
 }
 
+void ABaseAmmo::setAmmoMeshMulticast_Implementation(UStaticMesh* newMesh)
+{
+	mesh->SetStaticMesh(newMesh);
+}
+
 ABaseAmmo::ABaseAmmo()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -168,24 +169,24 @@ void ABaseAmmo::copyProperties(ABaseAmmo* other)
 
 }
 
-void ABaseAmmo::setAmmoMesh(UStaticMesh* mesh)
+void ABaseAmmo::setAmmoMesh_Implementation(UStaticMesh* newMesh)
 {
-	this->mesh->SetStaticMesh(mesh);
+	this->setAmmoMeshMulticast(newMesh);
 }
 
-void ABaseAmmo::setDamage(float damage)
+void ABaseAmmo::setDamage_Implementation(float newDamage)
 {
-	this->damage = damage;
+	damage = newDamage;
 }
 
-void ABaseAmmo::setAmmoSpeed(float speed)
+void ABaseAmmo::setAmmoSpeed_Implementation(float speed)
 {
 	movement->Velocity = mesh->GetForwardVector() * speed;
 }
 
-void ABaseAmmo::setAmmoType(ammoTypes ammoType)
+void ABaseAmmo::setAmmoType_Implementation(ammoTypes newAmmoType)
 {
-	this->ammoType = ammoType;
+	ammoType = newAmmoType;
 }
 
 UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
@@ -206,4 +207,9 @@ float ABaseAmmo::getSpeed() const
 ammoTypes ABaseAmmo::getAmmoType() const
 {
 	return ammoType;
+}
+
+bool ABaseAmmo::getIsAlly() const
+{
+	return isAlly;
 }

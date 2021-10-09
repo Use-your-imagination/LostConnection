@@ -22,19 +22,13 @@ enum class ammoTypes : uint8
 	defaultType = 3 UMETA(DisplayName = "Default ammo")
 };
 
-UCLASS()
+UCLASS(BlueprintType)
 class LOSTCONNECTION_API ABaseAmmo : public APawn
 {
 	GENERATED_BODY()
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-private:
-	ACharacter* lastTarget;
-
-	UPROPERTY(Replicated)
-	bool isAlly;
 
 protected:
 	UFUNCTION()
@@ -56,11 +50,20 @@ protected:
 	UPROPERTY()
 	UNiagaraSystem* onHitAsset;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, Replicated)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly, Replicated)
 	float damage;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, Replicated)
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly, Replicated)
 	ammoTypes ammoType;
+
+	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly, Replicated)
+	bool isAlly;
+
+	AActor* lastTarget;
+
+private:
+	UFUNCTION(NetMulticast, Reliable)
+	void setAmmoMeshMulticast(UStaticMesh* newMesh);
 
 public:
 	ABaseAmmo();
@@ -71,24 +74,28 @@ public:
 
 	virtual UClass* getStaticClass() const;
 
-	virtual void setAmmoMesh(UStaticMesh* mesh) final;
+	UFUNCTION(Server, Reliable)
+	virtual void setAmmoMesh(UStaticMesh* newMesh) final;
 
-	virtual void setDamage(float damage) final;
+	UFUNCTION(Server, Reliable)
+	virtual void setDamage(float newDamage) final;
 
+	UFUNCTION(Server, Reliable)
 	virtual void setAmmoSpeed(float speed) final;
 
-	virtual void setAmmoType(ammoTypes ammoType) final;
+	UFUNCTION(Server, Reliable)
+	virtual void setAmmoType(ammoTypes newAmmoType) final;
 
 	virtual UStaticMeshComponent* getAmmoMeshComponent() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getDamage() const final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual float getSpeed() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual ammoTypes getAmmoType() const final;
+
+	virtual bool getIsAlly() const final;
 
 	virtual ~ABaseAmmo() = default;
 };
