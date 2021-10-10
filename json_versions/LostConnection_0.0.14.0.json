@@ -1,4 +1,49 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.0.14.0"
+  "projectVersion": "0.0.14.0",
+  "Gameplay": {
+    "type": "category",
+    "SN4K3": {
+      "type": "item",
+      "notes": [
+        "Standard character replaced by new drone SN4K3",
+        "All his stats and abilities see here https://github.com/Use-your-imagination/LostConnection/discussions/58"
+      ]
+    },
+    "Double jump": {
+      "type": "item",
+      "notes": [
+        "Now you can make additional jump"
+      ]
+    },
+    "Shooting": {
+      "type": "item",
+      "notes": [
+        "Rebuild shooting"
+      ]
+    }
+  },
+  "UI": {
+    "type": "category",
+    "Sight": {
+      "type": "item",
+      "notes": [
+        "Added sight",
+        "If enemy was aimed sight become red",
+        "If ally was aimed sight become green"
+      ]
+    },
+    "Abilities": {
+      "type": "item",
+      "notes": [
+        "Placeholder abilities icons"
+      ]
+    },
+    "Meter": {
+      "type": "item",
+      "notes": [
+        "SN4K3 has meter for his abilities"
+      ]
+    }
+  }
 }
