@@ -17,6 +17,11 @@ private:
 	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 naniteMeter;
 
+	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	bool isUltimateAbilityPressed;
+
+	class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder;
+
 private:
 	void Tick(float DeltaTime) override;
 
@@ -30,6 +35,14 @@ private:
 
 public:
 	ASN4K3();
+
+	void setUltimatePlaceholder(class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceHolder);
+
+	int32& getNaniteMeter();
+
+	bool& getIsUltimateAbilityUsed();
+
+	class ASN4K3UltimateAbilityPlaceholder* getUltimatePlaceholder();
 	
 	void castFirstAbilityVisual() override;
 
@@ -38,8 +51,6 @@ public:
 	void castThirdAbilityVisual() override;
 
 	void castUltimateAbilityVisual() override;
-
-	int32& getNaniteMeter();
 
 	~ASN4K3() = default;
 };

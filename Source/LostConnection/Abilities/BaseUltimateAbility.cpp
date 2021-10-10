@@ -9,6 +9,11 @@ void ABaseUltimateAbility::Tick(float DeltaTime)
 	if (HasAuthority() && currentCooldown > 0.0f)
 	{
 		currentCooldown -= DeltaTime;
+
+		if (currentCooldown < 0.0f)
+		{
+			currentCooldown = 0.0f;
+		}
 	}
 }
 
@@ -33,5 +38,10 @@ void ABaseUltimateAbility::applyAbility(ABaseCharacter* target)
 
 void ABaseUltimateAbility::useAbility()
 {
+	if (!currentCooldown)
+	{
+		return;
+	}
+
 	currentCooldown = cooldown;
 }

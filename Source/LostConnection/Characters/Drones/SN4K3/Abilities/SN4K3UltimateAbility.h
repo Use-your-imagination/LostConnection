@@ -11,8 +11,14 @@ class LOSTCONNECTION_API ASN4K3UltimateAbility : public ABaseUltimateAbility
 {
 	GENERATED_BODY()
 	
+private:
+	float abilityDuration;
+	float currentAbilityDuration;
+
 public:
 	ASN4K3UltimateAbility();
+
+	void Tick(float DeltaTime) override;
 
 	void applyAbility(class ABaseCharacter* target) override;
 

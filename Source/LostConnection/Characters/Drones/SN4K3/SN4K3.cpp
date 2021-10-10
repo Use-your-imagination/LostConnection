@@ -8,6 +8,7 @@
 #include "Abilities/SN4K3SecondAbility.h"
 #include "Abilities/SN4K3ThirdAbility.h"
 #include "Abilities/SN4K3UltimateAbility.h"
+#include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 
 void ASN4K3::Tick(float DeltaTime)
 {
@@ -16,6 +17,8 @@ void ASN4K3::Tick(float DeltaTime)
 	if (HasAuthority())
 	{
 		passiveAbility->useAbility();
+
+		Cast<ASN4K3UltimateAbility>(ultimateAbility)->Tick(DeltaTime);
 	}
 }
 
@@ -59,12 +62,28 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 }
 
 ASN4K3::ASN4K3() :
-	naniteMeter(0)
+	naniteMeter(0),
+	isUltimateAbilityPressed(false)
 {
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);
 
 	spareAmmo[static_cast<size_t>(ammoTypes::large)] = 120;
 	spareAmmo[static_cast<size_t>(ammoTypes::energy)] = 180;
+}
+
+void ASN4K3::setUltimatePlaceholder(ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder)
+{
+	this->ultimatePlaceholder = ultimatePlaceholder;
+}
+
+bool& ASN4K3::getIsUltimateAbilityUsed()
+{
+	return isUltimateAbilityPressed;
+}
+
+ASN4K3UltimateAbilityPlaceholder* ASN4K3::getUltimatePlaceholder()
+{
+	return ultimatePlaceholder;
 }
 
 void ASN4K3::castFirstAbilityVisual()
