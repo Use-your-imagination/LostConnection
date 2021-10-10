@@ -2,6 +2,7 @@
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
+#include "SN4K3PassiveAbility.h"
 
 ASN4K3SecondAbility::ASN4K3SecondAbility()
 {
@@ -30,4 +31,6 @@ void ASN4K3SecondAbility::useAbility()
 	}
 
 	this->applyAbility(target);
+
+	Cast<ASN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }

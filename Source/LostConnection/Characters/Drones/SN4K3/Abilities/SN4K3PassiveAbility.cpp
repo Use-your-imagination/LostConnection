@@ -22,7 +22,15 @@ void ASN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 void ASN4K3PassiveAbility::useAbility()
 {
 	static constexpr float coeff = 5.0f;
-	int32& naniteMeter = Cast<ASN4K3>(owner)->getNaniteMeter();
+
+	ASN4K3* drone = Cast<ASN4K3>(owner);
+
+	if (drone->getIsUltimateAbilityUsed())
+	{
+		return;
+	}
+
+	int32& naniteMeter = drone->getNaniteMeter();
 
 	if (lastTimeAbilityUsed < coeff)
 	{
@@ -43,7 +51,7 @@ void ASN4K3PassiveAbility::useAbility()
 		break;
 
 	case directionTypes::down:
-		naniteMeter = FMath::Clamp((FMath::Pow((lastTimeAbilityUsed - coeff) / 2.0f, 4) * -1 + 1), 0.0f, 1.0f) * 100;
+		naniteMeter = FMath::Clamp((FMath::Pow((lastTimeAbilityUsed - coeff) / 2.0f, 4) * -1 + 1.25f), 0.0f, 1.0f) * 100;
 
 		break;
 
@@ -54,5 +62,10 @@ void ASN4K3PassiveAbility::useAbility()
 
 void ASN4K3PassiveAbility::resetLastTimeAbilityUsed()
 {
+	if (Cast<ASN4K3>(owner)->getIsUltimateAbilityUsed())
+	{
+		return;
+	}
+
 	lastTimeAbilityUsed = 0.0f;
 }

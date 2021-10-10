@@ -4,6 +4,7 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "WorldPlaceables/SN4K3/SN4K3ThirdAbilityFlag.h"
 #include "Engine/LostConnectionGameState.h"
+#include "SN4K3PassiveAbility.h"
 
 ASN4K3ThirdAbility::ASN4K3ThirdAbility()
 {
@@ -42,4 +43,6 @@ void ASN4K3ThirdAbility::useAbility()
 	flag->setPeriod(1.0f);
 
 	flag->FinishSpawning({}, true);
+
+	Cast<ASN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }
