@@ -28,9 +28,9 @@ private:
 	bool clearTimer;
 
 protected:
-	virtual bool IsSupportedForNetworking() const override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
 
@@ -41,23 +41,25 @@ protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMesh* magazineMesh;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	ABaseAmmo* ammo;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	int currentMagazineSize;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	int magazineSize;
 
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	int ammoCost;
 
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	int roundsPerSecond;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite, Replicated)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	weaponTypes weaponType;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float spreadDistance;
 
 public:
@@ -72,11 +74,14 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void reduceShootRemainigTime(float deltaSeconds);
 
-	virtual void setCurrentMagazineSize(int currentMagazineSize) final;
+	UFUNCTION(Server, Reliable)
+	virtual void setCurrentMagazineSize(int newCurrentMagazineSize) final;
 
-	virtual void setRateOfFire(int roundsPerSecond) final;
+	UFUNCTION(Server, Reliable)
+	virtual void setRateOfFire(int newRoundsPerSecond) final;
 
-	virtual void setWeaponType(weaponTypes weaponType) final;
+	UFUNCTION(Server, Reliable)
+	virtual void setWeaponType(weaponTypes newWeaponType) final;
 
 	virtual USkeletalMesh* getWeaponMesh() const final;
 
@@ -84,16 +89,12 @@ public:
 
 	virtual ABaseAmmo* getAmmo() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual int getCurrentMagazineSize() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual int getMagazineSize() const final;
 
-	UFUNCTION(BlueprintCallable)
-	virtual int getRateOfFire() const final;
+	virtual int getRoundsPerSecond() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual weaponTypes getWeaponType() const final;
 
 	virtual ~ABaseWeapon() = default;

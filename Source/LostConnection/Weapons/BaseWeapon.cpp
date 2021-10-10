@@ -11,20 +11,32 @@
 
 #pragma warning(disable: 4458)
 
-bool ABaseWeapon::IsSupportedForNetworking() const
-{
-	return true;
-}
-
 void ABaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABaseWeapon, ammo);
 
 	DOREPLIFETIME(ABaseWeapon, currentMagazineSize);
 
 	DOREPLIFETIME(ABaseWeapon, magazineSize);
 
+	DOREPLIFETIME(ABaseWeapon, ammoCost);
+
+	DOREPLIFETIME(ABaseWeapon, roundsPerSecond);
+
 	DOREPLIFETIME(ABaseWeapon, weaponType);
+
+	DOREPLIFETIME(ABaseWeapon, spreadDistance);
+}
+
+bool ABaseWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(ammo, *Bunch, *RepFlags);
+
+	return wroteSomething;
 }
 
 void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
@@ -170,19 +182,19 @@ void ABaseWeapon::reduceShootRemainigTime_Implementation(float deltaSeconds)
 	}
 }
 
-void ABaseWeapon::setCurrentMagazineSize(int currentMagazineSize)
+void ABaseWeapon::setCurrentMagazineSize_Implementation(int newCurrentMagazineSize)
 {
-	this->currentMagazineSize = currentMagazineSize;
+	currentMagazineSize = newCurrentMagazineSize;
 }
 
-void ABaseWeapon::setRateOfFire(int roundsPerSecond)
+void ABaseWeapon::setRateOfFire_Implementation(int newRoundsPerSecond)
 {
-	this->roundsPerSecond = roundsPerSecond;
+	roundsPerSecond = newRoundsPerSecond;
 }
 
-void ABaseWeapon::setWeaponType(weaponTypes weaponType)
+void ABaseWeapon::setWeaponType_Implementation(weaponTypes newWeaponType)
 {
-	this->weaponType = weaponType;
+	weaponType = newWeaponType;
 }
 
 USkeletalMesh* ABaseWeapon::getWeaponMesh() const
@@ -210,7 +222,7 @@ int ABaseWeapon::getMagazineSize() const
 	return magazineSize;
 }
 
-int ABaseWeapon::getRateOfFire() const
+int ABaseWeapon::getRoundsPerSecond() const
 {
 	return roundsPerSecond;
 }
