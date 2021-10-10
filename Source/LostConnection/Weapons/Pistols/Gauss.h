@@ -12,12 +12,12 @@
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API UGauss : public UBaseWeapon
+class LOSTCONNECTION_API AGauss : public ABaseWeapon
 {
 	GENERATED_BODY()
 
 public:
-	UGauss();
+	AGauss();
 
-	~UGauss() = default;
+	~AGauss() = default;
 };

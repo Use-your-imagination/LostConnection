@@ -50,14 +50,14 @@ ADroppedWeapon::ADroppedWeapon()
 	magazine->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
 }
 
-void ADroppedWeapon::setWeapon_Implementation(UBaseWeapon* newWeapon)
+void ADroppedWeapon::setWeapon_Implementation(ABaseWeapon* newWeapon)
 {
 	weapon = DuplicateObject(newWeapon, nullptr);
 
 	this->setMesh(weapon->getWeaponMesh());
 }
 
-UBaseWeapon* ADroppedWeapon::getWeapon()
+ABaseWeapon* ADroppedWeapon::getWeapon()
 {
 	return weapon;
 }

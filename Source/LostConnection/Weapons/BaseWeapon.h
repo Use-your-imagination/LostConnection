@@ -18,7 +18,7 @@ enum class weaponTypes : uint8
 };
 
 UCLASS()
-class LOSTCONNECTION_API UBaseWeapon : public UObject
+class LOSTCONNECTION_API ABaseWeapon : public AActor
 {
 	GENERATED_BODY()
 		
@@ -61,7 +61,7 @@ protected:
 	float spreadDistance;
 
 public:
-	UBaseWeapon();
+	ABaseWeapon();
 
 	virtual void shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character) final;
 
@@ -96,5 +96,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual weaponTypes getWeaponType() const final;
 
-	virtual ~UBaseWeapon() = default;
+	virtual ~ABaseWeapon() = default;
 };

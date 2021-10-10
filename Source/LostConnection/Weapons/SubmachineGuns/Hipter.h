@@ -12,14 +12,14 @@
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API UHipter : public UBaseWeapon
+class LOSTCONNECTION_API AHipter : public ABaseWeapon
 {
 	GENERATED_BODY()
 	
 public:
-	UHipter();
+	AHipter();
 
 	virtual void alternativeMode() final override;
 
-	~UHipter() = default;
+	~AHipter() = default;
 };

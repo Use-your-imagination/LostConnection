@@ -11,23 +11,23 @@
 
 #pragma warning(disable: 4458)
 
-bool UBaseWeapon::IsSupportedForNetworking() const
+bool ABaseWeapon::IsSupportedForNetworking() const
 {
 	return true;
 }
 
-void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void ABaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UBaseWeapon, currentMagazineSize);
+	DOREPLIFETIME(ABaseWeapon, currentMagazineSize);
 
-	DOREPLIFETIME(UBaseWeapon, magazineSize);
+	DOREPLIFETIME(ABaseWeapon, magazineSize);
 
-	DOREPLIFETIME(UBaseWeapon, weaponType);
+	DOREPLIFETIME(ABaseWeapon, weaponType);
 }
 
-void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
 	ABaseCharacter* baseCharacter = Cast<ABaseCharacter>(character);
 
@@ -94,7 +94,7 @@ void UBaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 	}
 }
 
-UBaseWeapon::UBaseWeapon()
+ABaseWeapon::ABaseWeapon()
 {
 	shootRemainingTime = 0.0f;
 	clearTimer = false;
@@ -104,7 +104,7 @@ UBaseWeapon::UBaseWeapon()
 	spreadDistance = 2.0f;
 }
 
-void UBaseWeapon::shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+void ABaseWeapon::shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
 	FTimerManager& manager = world->GetTimerManager();
 
@@ -143,7 +143,7 @@ void UBaseWeapon::shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWea
 	shootRemainingTime = 1.0f / static_cast<float>(roundsPerSecond);
 }
 
-void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+void ABaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
 	clearTimer = true;
 
@@ -157,12 +157,12 @@ void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisib
 	}
 }
 
-void UBaseWeapon::alternativeMode()
+void ABaseWeapon::alternativeMode()
 {
 	
 }
 
-void UBaseWeapon::reduceShootRemainigTime_Implementation(float deltaSeconds)
+void ABaseWeapon::reduceShootRemainigTime_Implementation(float deltaSeconds)
 {
 	if (shootRemainingTime > 0.0f)
 	{
@@ -170,52 +170,52 @@ void UBaseWeapon::reduceShootRemainigTime_Implementation(float deltaSeconds)
 	}
 }
 
-void UBaseWeapon::setCurrentMagazineSize(int currentMagazineSize)
+void ABaseWeapon::setCurrentMagazineSize(int currentMagazineSize)
 {
 	this->currentMagazineSize = currentMagazineSize;
 }
 
-void UBaseWeapon::setRateOfFire(int roundsPerSecond)
+void ABaseWeapon::setRateOfFire(int roundsPerSecond)
 {
 	this->roundsPerSecond = roundsPerSecond;
 }
 
-void UBaseWeapon::setWeaponType(weaponTypes weaponType)
+void ABaseWeapon::setWeaponType(weaponTypes weaponType)
 {
 	this->weaponType = weaponType;
 }
 
-USkeletalMesh* UBaseWeapon::getWeaponMesh() const
+USkeletalMesh* ABaseWeapon::getWeaponMesh() const
 {
 	return mesh;
 }
 
-UStaticMesh* UBaseWeapon::getMagazineMesh() const
+UStaticMesh* ABaseWeapon::getMagazineMesh() const
 {
 	return magazineMesh;
 }
 
-ABaseAmmo* UBaseWeapon::getAmmo() const
+ABaseAmmo* ABaseWeapon::getAmmo() const
 {
 	return ammo;
 }
 
-int UBaseWeapon::getCurrentMagazineSize() const
+int ABaseWeapon::getCurrentMagazineSize() const
 {
 	return currentMagazineSize;
 }
 
-int UBaseWeapon::getMagazineSize() const
+int ABaseWeapon::getMagazineSize() const
 {
 	return magazineSize;
 }
 
-int UBaseWeapon::getRateOfFire() const
+int ABaseWeapon::getRateOfFire() const
 {
 	return roundsPerSecond;
 }
 
-weaponTypes UBaseWeapon::getWeaponType() const
+weaponTypes ABaseWeapon::getWeaponType() const
 {
 	return weaponType;
 }

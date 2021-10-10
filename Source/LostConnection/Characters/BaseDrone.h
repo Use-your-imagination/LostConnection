@@ -43,10 +43,10 @@ protected:
 	UCameraComponent* FollowCamera;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
-	UBaseWeapon* firstWeaponSlot;
+	ABaseWeapon* firstWeaponSlot;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
-	UBaseWeapon* secondWeaponSlot;
+	ABaseWeapon* secondWeaponSlot;
 
 private:
 	virtual TArray<FInputActionBinding> initInputs();

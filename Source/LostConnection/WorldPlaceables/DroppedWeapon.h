@@ -32,7 +32,7 @@ private:
 
 private:
 	UPROPERTY(ReplicatedUsing = onWeaponChange)
-	UBaseWeapon* weapon;
+	ABaseWeapon* weapon;
 
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
@@ -42,9 +42,9 @@ public:
 	ADroppedWeapon();
 
 	UFUNCTION(Server, Reliable)
-	void setWeapon(UBaseWeapon* newWeapon);
+	void setWeapon(ABaseWeapon* newWeapon);
 
-	UBaseWeapon* getWeapon();
+	ABaseWeapon* getWeapon();
 
 	virtual void setMesh(USkeletalMesh* mesh) final override;
 
