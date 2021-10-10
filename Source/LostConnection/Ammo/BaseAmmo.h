@@ -47,7 +47,7 @@ protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMesh* brokenAmmoMesh;
 
-	UPROPERTY()
+	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadObly)
 	UNiagaraSystem* onHitAsset;
 
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly, Replicated)
