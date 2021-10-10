@@ -4,6 +4,7 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Engine/LostConnectionGameState.h"
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
+#include "SN4K3PassiveAbility.h"
 
 ASN4K3UltimateAbility::ASN4K3UltimateAbility() :
 	abilityDuration(15.0f),
@@ -90,4 +91,6 @@ void ASN4K3UltimateAbility::useAbility()
 	placeholder->FinishSpawning({}, true);
 
 	drone->setUltimatePlaceholder(placeholder);
+
+	Cast<ASN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }

@@ -5,7 +5,7 @@
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
-#include "Characters/Drones/SN4K3/Abilities/SN4K3PassiveAbility.h"
+#include "SN4K3PassiveAbility.h"
 
 ASN4K3FirstAbility::ASN4K3FirstAbility()
 {

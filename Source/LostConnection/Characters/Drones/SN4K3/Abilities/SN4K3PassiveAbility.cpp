@@ -51,7 +51,7 @@ void ASN4K3PassiveAbility::useAbility()
 		break;
 
 	case directionTypes::down:
-		naniteMeter = FMath::Clamp((FMath::Pow((lastTimeAbilityUsed - coeff) / 2.0f, 4) * -1 + 1), 0.0f, 1.0f) * 100;
+		naniteMeter = FMath::Clamp((FMath::Pow((lastTimeAbilityUsed - coeff) / 2.0f, 4) * -1 + 1.25f), 0.0f, 1.0f) * 100;
 
 		break;
 

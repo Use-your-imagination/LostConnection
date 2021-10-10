@@ -62,7 +62,7 @@ protected:
 	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float sprintMovementSpeed;
 
-	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Properties, EditAnywhere, Replicated, BlueprintReadOnly)
 	bool isAlly;
 
 	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadOnly)
