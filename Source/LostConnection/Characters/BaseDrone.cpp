@@ -167,6 +167,16 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, cooldownReduction);
 
+	DOREPLIFETIME(ABaseDrone, duration);
+
+	DOREPLIFETIME(ABaseDrone, power);
+
+	DOREPLIFETIME(ABaseDrone, energyEfficiency);
+
+	DOREPLIFETIME(ABaseDrone, AOE);
+
+	DOREPLIFETIME(ABaseDrone, castPoint);
+
 	DOREPLIFETIME(ABaseDrone, firstWeaponSlot);
 
 	DOREPLIFETIME(ABaseDrone, secondWeaponSlot);
