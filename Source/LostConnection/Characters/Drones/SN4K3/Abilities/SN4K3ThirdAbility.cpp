@@ -28,9 +28,9 @@ void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
 void USN4K3ThirdAbility::useAbility()
 {
 	ASN4K3* drone = Cast<ASN4K3>(caster);
-	FVector tem = drone->GetActorForwardVector() * 300;
-	
-	tem.Z = -97.0f;
+	FVector tem = drone->GetActorForwardVector() * 200;
+
+	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
 
 	ASN4K3ThirdAbilityFlag* flag = drone->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3ThirdAbilityFlag>({ drone->GetActorRotation(), tem + drone->GetActorLocation() });
 

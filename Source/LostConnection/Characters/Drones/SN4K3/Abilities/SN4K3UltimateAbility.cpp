@@ -1,5 +1,7 @@
 #include "SN4K3UltimateAbility.h"
 
+#include "Components/CapsuleComponent.h"
+
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Engine/LostConnectionGameState.h"
@@ -44,7 +46,6 @@ void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 void USN4K3UltimateAbility::useAbility()
 {
 	ASN4K3* drone = Cast<ASN4K3>(caster);
-	FVector tem = drone->GetActorForwardVector() * 300;
 
 	if (isUltimateAbilityUsed)
 	{
@@ -59,7 +60,9 @@ void USN4K3UltimateAbility::useAbility()
 		return;
 	}
 
-	tem.Z = -97.0f;
+	FVector tem = drone->GetActorForwardVector() * 200;
+
+	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
 
 	isUltimateAbilityUsed = true;
 
