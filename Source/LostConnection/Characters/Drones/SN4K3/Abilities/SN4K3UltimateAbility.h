@@ -12,11 +12,22 @@ class LOSTCONNECTION_API USN4K3UltimateAbility : public UBaseUltimateAbility
 	GENERATED_BODY()
 	
 private:
+	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	bool isUltimateAbilityUsed;
+
+	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float abilityDuration;
+
+	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float currentAbilityDuration;
+
+private:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const final override;
 
 public:
 	USN4K3UltimateAbility();
+
+	bool getIsUltimateAbilityUsed() const;
 
 	void applyAbility(class ABaseCharacter* target) override;
 
@@ -26,3 +37,8 @@ public:
 
 	~USN4K3UltimateAbility() = default;
 };
+
+inline bool USN4K3UltimateAbility::getIsUltimateAbilityUsed() const
+{
+	return isUltimateAbilityUsed;
+}

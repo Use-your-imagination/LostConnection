@@ -9,22 +9,26 @@
 
 #include "BaseAbility.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class LOSTCONNECTION_API UBaseAbility : public UObject
 {
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Replicated)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float cost;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	bool isDisabled;
 
-	FString name;
+	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
 	FString localizedName;
+
+	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
 	FString description;
+
 	class ICaster* caster;
+	FString name;
 
 protected:
 	virtual bool IsSupportedForNetworking() const final override;
@@ -51,17 +55,13 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void enable() final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getCost() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool getIsDisabled() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual const FString& getLocalizedName() const final;
 
-	UFUNCTION(BlueprintCallable)
-	virtual AActor* getCasterCaster() final;
+	virtual class ICaster* getCaster() final;
 
 	virtual ~UBaseAbility() = default;
 };

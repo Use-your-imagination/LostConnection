@@ -3,7 +3,15 @@
 #include "Misc/App.h"	
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
+#include "SN4K3UltimateAbility.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
+
+void USN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(USN4K3PassiveAbility, naniteMeter);
+}
 
 USN4K3PassiveAbility::USN4K3PassiveAbility() :
 	lastTimeAbilityUsed(0.0f),
@@ -14,7 +22,7 @@ USN4K3PassiveAbility::USN4K3PassiveAbility() :
 
 void USN4K3PassiveAbility::resetLastTimeAbilityUsed()
 {
-	if (Cast<ASN4K3>(caster)->getIsUltimateAbilityUsed())
+	if (Cast<USN4K3UltimateAbility>(Cast<ICaster>(caster)->getUltimateAbility())->getIsUltimateAbilityUsed())
 	{
 		return;
 	}
@@ -42,13 +50,12 @@ void USN4K3PassiveAbility::Tick(float DeltaTime)
 	static constexpr float coeff = 5.0f;
 
 	ASN4K3* drone = Cast<ASN4K3>(caster);
+	USN4K3UltimateAbility* ultimateAbility = Cast<USN4K3UltimateAbility>(drone->getUltimateAbility());
 
-	if (drone->getIsUltimateAbilityUsed())
+	if (ultimateAbility->getIsUltimateAbilityUsed())
 	{
 		return;
 	}
-
-	int32& naniteMeter = drone->getNaniteMeter();
 
 	if (lastTimeAbilityUsed < coeff)
 	{

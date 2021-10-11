@@ -177,6 +177,16 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, castPoint);
 
+	DOREPLIFETIME(ABaseDrone, passiveAbility);
+
+	DOREPLIFETIME(ABaseDrone, firstAbility);
+
+	DOREPLIFETIME(ABaseDrone, secondAbility);
+
+	DOREPLIFETIME(ABaseDrone, thirdAbility);
+
+	DOREPLIFETIME(ABaseDrone, ultimateAbility);
+
 	DOREPLIFETIME(ABaseDrone, firstWeaponSlot);
 
 	DOREPLIFETIME(ABaseDrone, secondWeaponSlot);
@@ -216,6 +226,16 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	wroteSomething |= Channel->ReplicateSubobject(firstWeaponSlot, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(secondWeaponSlot, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(secondAbility, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(thirdAbility, *Bunch, *RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
 	return wroteSomething;
 }

@@ -6,6 +6,17 @@
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 #include "SN4K3PassiveAbility.h"
 
+void USN4K3UltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(USN4K3UltimateAbility, isUltimateAbilityUsed);
+
+	DOREPLIFETIME(USN4K3UltimateAbility, abilityDuration);
+
+	DOREPLIFETIME(USN4K3UltimateAbility, currentAbilityDuration);
+}
+
 USN4K3UltimateAbility::USN4K3UltimateAbility() :
 	abilityDuration(15.0f),
 	currentAbilityDuration(0.0f)
@@ -34,11 +45,10 @@ void USN4K3UltimateAbility::useAbility()
 {
 	ASN4K3* drone = Cast<ASN4K3>(caster);
 	FVector tem = drone->GetActorForwardVector() * 300;
-	bool& isUltimateAbilityPressed = drone->getIsUltimateAbilityUsed();
 
-	if (isUltimateAbilityPressed)
+	if (isUltimateAbilityUsed)
 	{
-		isUltimateAbilityPressed = false;
+		isUltimateAbilityUsed = false;
 
 		this->applyAbility(drone);
 
@@ -51,7 +61,7 @@ void USN4K3UltimateAbility::useAbility()
 
 	tem.Z = -97.0f;
 
-	isUltimateAbilityPressed = true;
+	isUltimateAbilityUsed = true;
 
 	currentCooldown = cooldown;
 
@@ -72,13 +82,13 @@ void USN4K3UltimateAbility::Tick(float DeltaTime)
 
 	ASN4K3* drone = Cast<ASN4K3>(caster);
 
-	if (drone->getIsUltimateAbilityUsed())
+	if (isUltimateAbilityUsed)
 	{
 		currentAbilityDuration += DeltaTime;
 
 		if (currentAbilityDuration >= abilityDuration)
 		{
-			drone->getIsUltimateAbilityUsed() = false;
+			isUltimateAbilityUsed = false;
 
 			this->applyAbility(drone);
 		}

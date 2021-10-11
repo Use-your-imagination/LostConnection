@@ -17,10 +17,10 @@ class LOSTCONNECTION_API UBaseUltimateAbility : public UBaseAbility
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(Replicated)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float cooldown;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float currentCooldown;
 
 protected:

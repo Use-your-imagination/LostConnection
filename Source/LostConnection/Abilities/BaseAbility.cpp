@@ -74,7 +74,7 @@ const FString& UBaseAbility::getLocalizedName() const
 	return localizedName;
 }
 
-AActor* UBaseAbility::getCasterCaster()
+ICaster* UBaseAbility::getCaster()
 {
-	return Cast<AActor>(caster);
+	return caster;
 }

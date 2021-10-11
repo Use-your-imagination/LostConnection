@@ -33,7 +33,7 @@ float ASN4K3UltimateAbilityPlaceholder::getPercentageDamageReduction_Implementat
 
 void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(ABaseAmmo* ammo)
 {
-	ASN4K3* drone = Cast<ASN4K3>(ability->getCasterCaster());
+	ASN4K3* drone = Cast<ASN4K3>(ability->getCaster());
 
 	if (drone->getIsAlly() == ammo->getIsAlly())
 	{

@@ -80,19 +80,19 @@ protected:
 	float castPoint;
 
 protected:
-	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	UBasePassiveAbility* passiveAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	UBaseAbility* firstAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	UBaseAbility* secondAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	UBaseAbility* thirdAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	UBaseUltimateAbility* ultimateAbility;
 
 #pragma region BlueprintFunctionLibrary

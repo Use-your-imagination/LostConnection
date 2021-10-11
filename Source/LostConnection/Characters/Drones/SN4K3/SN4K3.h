@@ -14,18 +14,10 @@ class LOSTCONNECTION_API ASN4K3 : public ABaseDrone
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	int32 naniteMeter;
-
-	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	bool isUltimateAbilityPressed;
-
 	class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder;
 
 private:
 	void PostInitializeComponents() override;
-
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
 private:
 	UFUNCTION()
@@ -35,10 +27,6 @@ public:
 	ASN4K3();
 
 	void setUltimatePlaceholder(class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceHolder);
-
-	int32& getNaniteMeter();
-
-	bool& getIsUltimateAbilityUsed();
 
 	class ASN4K3UltimateAbilityPlaceholder* getUltimatePlaceholder();
 	
@@ -52,8 +40,3 @@ public:
 
 	~ASN4K3() = default;
 };
-
-inline int32& ASN4K3::getNaniteMeter()
-{
-	return naniteMeter;
-}
