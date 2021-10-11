@@ -40,10 +40,10 @@ protected:
 	UStaticMeshComponent* magazine;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onCurrentWeaponChange)
-	ABaseWeapon* currentWeapon;
+	UBaseWeapon* currentWeapon;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
-	ABaseWeapon* defaultWeaponSlot;
+	UBaseWeapon* defaultWeaponSlot;
 
 protected:
 	UPROPERTY()

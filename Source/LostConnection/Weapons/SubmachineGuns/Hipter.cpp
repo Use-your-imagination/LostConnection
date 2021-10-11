@@ -2,7 +2,7 @@
 
 #include "Ammo/Bullets/Bullet.h"
 
-AHipter::AHipter()
+UHipter::UHipter()
 {
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> weaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/SubmachineGuns/Hipter/Hipter.Hipter'"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> magazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/SubmachineGuns/Hipter/HipterMagazine.HipterMagazine'"));
@@ -32,7 +32,7 @@ AHipter::AHipter()
 	this->updateTimeBetweenShots();
 }
 
-void AHipter::alternativeMode()
+void UHipter::alternativeMode()
 {
 	
 }

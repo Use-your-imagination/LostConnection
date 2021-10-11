@@ -11,35 +11,31 @@
 
 #pragma warning(disable: 4458)
 
-void ABaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+bool UBaseWeapon::IsSupportedForNetworking() const
+{
+	return true;
+}
+
+void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABaseWeapon, ammo);
+	DOREPLIFETIME(UBaseWeapon, ammo);
 
-	DOREPLIFETIME(ABaseWeapon, currentMagazineSize);
+	DOREPLIFETIME(UBaseWeapon, currentMagazineSize);
 
-	DOREPLIFETIME(ABaseWeapon, magazineSize);
+	DOREPLIFETIME(UBaseWeapon, magazineSize);
 
-	DOREPLIFETIME(ABaseWeapon, ammoCost);
+	DOREPLIFETIME(UBaseWeapon, ammoCost);
 
-	DOREPLIFETIME(ABaseWeapon, roundsPerSecond);
+	DOREPLIFETIME(UBaseWeapon, roundsPerSecond);
 
-	DOREPLIFETIME(ABaseWeapon, weaponType);
+	DOREPLIFETIME(UBaseWeapon, weaponType);
 
-	DOREPLIFETIME(ABaseWeapon, spreadDistance);
+	DOREPLIFETIME(UBaseWeapon, spreadDistance);
 }
 
-bool ABaseWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(ammo, *Bunch, *RepFlags);
-
-	return wroteSomething;
-}
-
-void ABaseWeapon::shoot()
+void UBaseWeapon::shoot()
 {
 	if (character->getIsReloading() && !character->isWeaponEquipped())
 	{
@@ -106,18 +102,18 @@ void ABaseWeapon::shoot()
 	}
 }
 
-ABaseWeapon::ABaseWeapon() :
+UBaseWeapon::UBaseWeapon() :
 	ammoCost(1)
 {
 	
 }
 
-void ABaseWeapon::startShoot()
+void UBaseWeapon::startShoot()
 {
 	isShooting = true;
 }
 
-void ABaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
 	isShooting = false;
 
@@ -131,80 +127,18 @@ void ABaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisib
 	}
 }
 
-void ABaseWeapon::alternativeMode()
+void UBaseWeapon::alternativeMode()
 {
 
 }
 
-void ABaseWeapon::updateTimeBetweenShots_Implementation()
+void UBaseWeapon::updateTimeBetweenShots_Implementation()
 {
 	timeBetweenShots = 1.0f / static_cast<float>(roundsPerSecond);
 }
 
-void ABaseWeapon::setWorld(UWorld* world)
+void UBaseWeapon::Tick(float DeltaTime)
 {
-	this->world = world;
-}
-
-void ABaseWeapon::setCharacter(ABaseCharacter* character)
-{
-	this->character = character;
-}
-
-void ABaseWeapon::setCurrentMagazineSize_Implementation(int newCurrentMagazineSize)
-{
-	currentMagazineSize = newCurrentMagazineSize;
-}
-
-void ABaseWeapon::setRateOfFire_Implementation(int newRoundsPerSecond)
-{
-	roundsPerSecond = newRoundsPerSecond;
-}
-
-void ABaseWeapon::setWeaponType_Implementation(weaponTypes newWeaponType)
-{
-	weaponType = newWeaponType;
-}
-
-USkeletalMesh* ABaseWeapon::getWeaponMesh() const
-{
-	return mesh;
-}
-
-UStaticMesh* ABaseWeapon::getMagazineMesh() const
-{
-	return magazineMesh;
-}
-
-ABaseAmmo* ABaseWeapon::getAmmo() const
-{
-	return ammo;
-}
-
-int ABaseWeapon::getCurrentMagazineSize() const
-{
-	return currentMagazineSize;
-}
-
-int ABaseWeapon::getMagazineSize() const
-{
-	return magazineSize;
-}
-
-int ABaseWeapon::getRoundsPerSecond() const
-{
-	return roundsPerSecond;
-}
-
-weaponTypes ABaseWeapon::getWeaponType() const
-{
-	return weaponType;
-}
-
-void ABaseWeapon::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 	if (isShooting)
 	{
 		this->shoot();
@@ -219,4 +153,64 @@ void ABaseWeapon::Tick(float DeltaTime)
 			currentTimeBetweenShots = 0.0f;
 		}
 	}
+}
+
+void UBaseWeapon::setWorld(UWorld* world)
+{
+	this->world = world;
+}
+
+void UBaseWeapon::setCharacter(ABaseCharacter* character)
+{
+	this->character = character;
+}
+
+void UBaseWeapon::setCurrentMagazineSize_Implementation(int newCurrentMagazineSize)
+{
+	currentMagazineSize = newCurrentMagazineSize;
+}
+
+void UBaseWeapon::setRateOfFire_Implementation(int newRoundsPerSecond)
+{
+	roundsPerSecond = newRoundsPerSecond;
+}
+
+void UBaseWeapon::setWeaponType_Implementation(weaponTypes newWeaponType)
+{
+	weaponType = newWeaponType;
+}
+
+USkeletalMesh* UBaseWeapon::getWeaponMesh() const
+{
+	return mesh;
+}
+
+UStaticMesh* UBaseWeapon::getMagazineMesh() const
+{
+	return magazineMesh;
+}
+
+ABaseAmmo* UBaseWeapon::getAmmo() const
+{
+	return ammo;
+}
+
+int UBaseWeapon::getCurrentMagazineSize() const
+{
+	return currentMagazineSize;
+}
+
+int UBaseWeapon::getMagazineSize() const
+{
+	return magazineSize;
+}
+
+int UBaseWeapon::getRoundsPerSecond() const
+{
+	return roundsPerSecond;
+}
+
+weaponTypes UBaseWeapon::getWeaponType() const
+{
+	return weaponType;
 }

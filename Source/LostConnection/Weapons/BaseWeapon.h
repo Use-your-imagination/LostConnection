@@ -18,7 +18,7 @@ enum class weaponTypes : uint8
 };
 
 UCLASS()
-class LOSTCONNECTION_API ABaseWeapon : public AActor
+class LOSTCONNECTION_API UBaseWeapon : public UObject
 {
 	GENERATED_BODY()
 		
@@ -30,9 +30,9 @@ private:
 	bool isShooting;
 
 protected:
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual bool IsSupportedForNetworking() const final override;
 
-	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual void shoot();
 
@@ -65,7 +65,7 @@ protected:
 	float spreadDistance;
 
 public:
-	ABaseWeapon();
+	UBaseWeapon();
 
 	virtual void startShoot() final;
 
@@ -75,6 +75,8 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	virtual void updateTimeBetweenShots() final;
+
+	virtual void Tick(float DeltaTime);
 
 	virtual void setWorld(UWorld* world) final;
 
@@ -103,7 +105,5 @@ public:
 
 	virtual weaponTypes getWeaponType() const final;
 
-	virtual void Tick(float DeltaTime) override;
-
-	virtual ~ABaseWeapon() = default;
+	virtual ~UBaseWeapon() = default;
 };

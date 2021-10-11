@@ -194,13 +194,13 @@ void ABaseDrone::PostInitializeComponents()
 
 		if (world)
 		{
-			defaultWeaponSlot = NewObject<AGauss>(this);
+			defaultWeaponSlot = NewObject<UGauss>(this);
 
 			defaultWeaponSlot->setWorld(world);
 
 			defaultWeaponSlot->setCharacter(this);
 
-			firstWeaponSlot = NewObject<AHipter>(this);
+			firstWeaponSlot = NewObject<UHipter>(this);
 
 			firstWeaponSlot->setWorld(world);
 
@@ -542,7 +542,7 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 		return;
 	}
 
-	ABaseWeapon* weapon = weaponToEquip->getWeapon();
+	UBaseWeapon* weapon = weaponToEquip->getWeapon();
 
 	if (currentWeapon)
 	{
