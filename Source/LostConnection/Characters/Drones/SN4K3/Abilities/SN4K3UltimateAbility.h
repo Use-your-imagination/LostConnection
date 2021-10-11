@@ -7,7 +7,7 @@
 #include "SN4K3UltimateAbility.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ASN4K3UltimateAbility : public ABaseUltimateAbility
+class LOSTCONNECTION_API USN4K3UltimateAbility : public UBaseUltimateAbility
 {
 	GENERATED_BODY()
 	
@@ -16,7 +16,7 @@ private:
 	float currentAbilityDuration;
 
 public:
-	ASN4K3UltimateAbility();
+	USN4K3UltimateAbility();
 
 	void Tick(float DeltaTime) override;
 
@@ -24,5 +24,5 @@ public:
 
 	void useAbility() override;
 
-	~ASN4K3UltimateAbility() = default;
+	~USN4K3UltimateAbility() = default;
 };

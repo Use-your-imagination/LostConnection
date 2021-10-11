@@ -16,7 +16,7 @@ ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
 }
 
-void ASN4K3UltimateAbilityPlaceholder::setAbility(ASN4K3UltimateAbility* ability)
+void ASN4K3UltimateAbilityPlaceholder::setAbility(USN4K3UltimateAbility* ability)
 {
 	this->ability = ability;
 }
@@ -33,7 +33,7 @@ float ASN4K3UltimateAbilityPlaceholder::getPercentageDamageReduction_Implementat
 
 void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(ABaseAmmo* ammo)
 {
-	ASN4K3* drone = Cast<ASN4K3>(ability->getOwnerCaster());
+	ASN4K3* drone = Cast<ASN4K3>(ability->getCasterCaster());
 
 	if (drone->getIsAlly() == ammo->getIsAlly())
 	{

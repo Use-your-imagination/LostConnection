@@ -10,7 +10,7 @@
 #include "BaseAbility.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ABaseAbility : public AActor
+class LOSTCONNECTION_API UBaseAbility : public UObject
 {
 	GENERATED_BODY()
 
@@ -24,27 +24,26 @@ protected:
 	FString name;
 	FString localizedName;
 	FString description;
-	class ICaster* owner;
+	class ICaster* caster;
 
 protected:
-	virtual void BeginPlay() override;
+	virtual bool IsSupportedForNetworking() const final override;
 
-	virtual void Tick(float DeltaTime) override;
-
-protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	ABaseAbility();
+	UBaseAbility();
 
 	virtual void applyAbility(class ABaseCharacter* target);
 
 	virtual void useAbility();
 
+	virtual void Tick(float DeltaTime);
+
 	UFUNCTION(Server, Reliable)
 	virtual void setCost(float newCost) final;
 
-	virtual void setOwner(class ICaster* owner) final;
+	virtual void setCaster(class ICaster* caster) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void disable() final;
@@ -62,7 +61,7 @@ public:
 	virtual const FString& getLocalizedName() const final;
 
 	UFUNCTION(BlueprintCallable)
-	virtual AActor* getOwnerCaster() final;
+	virtual AActor* getCasterCaster() final;
 
-	virtual ~ABaseAbility() = default;
+	virtual ~UBaseAbility() = default;
 };

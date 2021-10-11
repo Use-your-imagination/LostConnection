@@ -7,21 +7,21 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "SN4K3PassiveAbility.h"
 
-ASN4K3FirstAbility::ASN4K3FirstAbility()
+USN4K3FirstAbility::USN4K3FirstAbility()
 {
 	cost = 90.0f;
 }
 
-void ASN4K3FirstAbility::applyAbility(ABaseCharacter* target)
+void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 {
 	target->takeDamage(375.0f);
 
-	ICaster::Execute_applyFirstAbilityEvent(Cast<UObject>(owner), target);
+	ICaster::Execute_applyFirstAbilityEvent(Cast<UObject>(caster), target);
 }
 
-void ASN4K3FirstAbility::useAbility()
+void USN4K3FirstAbility::useAbility()
 {
-	ASN4K3* drone = Cast<ASN4K3>(owner);
+	ASN4K3* drone = Cast<ASN4K3>(caster);
 	UCapsuleComponent* capsule = drone->GetCapsuleComponent();
 	UCameraComponent* camera = drone->GetFollowCamera();
 	bool isFalling = drone->GetMovementComponent()->IsFalling();
@@ -43,5 +43,5 @@ void ASN4K3FirstAbility::useAbility()
 
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 
-	Cast<ASN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
+	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }

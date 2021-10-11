@@ -7,7 +7,7 @@
 #include "SN4K3PassiveAbility.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ASN4K3PassiveAbility : public ABasePassiveAbility
+class LOSTCONNECTION_API USN4K3PassiveAbility : public UBasePassiveAbility
 {
 	GENERATED_BODY()
 
@@ -24,7 +24,7 @@ private:
 	directionTypes type;
 	
 public:
-	ASN4K3PassiveAbility();
+	USN4K3PassiveAbility();
 
 	void applyAbility(class ABaseCharacter* target) override;
 
@@ -32,5 +32,5 @@ public:
 
 	void resetLastTimeAbilityUsed();
 
-	~ASN4K3PassiveAbility() = default;
+	~USN4K3PassiveAbility() = default;
 };

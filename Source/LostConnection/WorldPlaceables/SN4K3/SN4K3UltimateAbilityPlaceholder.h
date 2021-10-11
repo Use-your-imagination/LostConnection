@@ -16,12 +16,12 @@ class LOSTCONNECTION_API ASN4K3UltimateAbilityPlaceholder :
 	GENERATED_BODY()
 
 private:
-	ASN4K3UltimateAbility* ability;
+	USN4K3UltimateAbility* ability;
 
 public:
 	ASN4K3UltimateAbilityPlaceholder();
 
-	void setAbility(ASN4K3UltimateAbility* ability);
+	void setAbility(USN4K3UltimateAbility* ability);
 
 	float getFlatDamageReduction_Implementation() const override;
 

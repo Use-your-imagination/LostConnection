@@ -12,16 +12,16 @@
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API ABasePassiveAbility : public ABaseAbility
+class LOSTCONNECTION_API UBasePassiveAbility : public UBaseAbility
 {
 	GENERATED_BODY()
 
 public:
-	ABasePassiveAbility() = default;
+	UBasePassiveAbility() = default;
 
 	virtual void applyAbility(class ABaseCharacter* target) override;
 
 	virtual void useAbility() override;
 
-	virtual ~ABasePassiveAbility() = default;
+	virtual ~UBasePassiveAbility() = default;
 };

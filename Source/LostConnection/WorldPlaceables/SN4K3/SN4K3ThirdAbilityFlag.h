@@ -20,7 +20,7 @@ class LOSTCONNECTION_API ASN4K3ThirdAbilityFlag : public ADroppedObject
 	GENERATED_BODY()
 
 private:
-	ASN4K3ThirdAbility* ability;
+	USN4K3ThirdAbility* ability;
 	TSet<AActor*> targets;
 	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes;
 
@@ -37,7 +37,7 @@ public:
 
 	void setLifeTime(float lifeTime);
 
-	void setAbility(ASN4K3ThirdAbility* ability);
+	void setAbility(USN4K3ThirdAbility* ability);
 
 	void setPeriod(float period);
 

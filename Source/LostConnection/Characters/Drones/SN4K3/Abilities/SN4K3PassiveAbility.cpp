@@ -5,25 +5,25 @@
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 
-ASN4K3PassiveAbility::ASN4K3PassiveAbility() :
+USN4K3PassiveAbility::USN4K3PassiveAbility() :
 	lastTimeAbilityUsed(0.0f),
 	type(directionTypes::up)
 {
 	
 }
 
-void ASN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
+void USN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 {
 	// TODO: second part
 
-	ICaster::Execute_applyPassiveAbilityEvent(Cast<UObject>(owner), target);
+	ICaster::Execute_applyPassiveAbilityEvent(Cast<UObject>(caster), target);
 }
 
-void ASN4K3PassiveAbility::useAbility()
+void USN4K3PassiveAbility::useAbility()
 {
 	static constexpr float coeff = 5.0f;
 
-	ASN4K3* drone = Cast<ASN4K3>(owner);
+	ASN4K3* drone = Cast<ASN4K3>(caster);
 
 	if (drone->getIsUltimateAbilityUsed())
 	{
@@ -60,9 +60,9 @@ void ASN4K3PassiveAbility::useAbility()
 	}
 }
 
-void ASN4K3PassiveAbility::resetLastTimeAbilityUsed()
+void USN4K3PassiveAbility::resetLastTimeAbilityUsed()
 {
-	if (Cast<ASN4K3>(owner)->getIsUltimateAbilityUsed())
+	if (Cast<ASN4K3>(caster)->getIsUltimateAbilityUsed())
 	{
 		return;
 	}

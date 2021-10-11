@@ -2,41 +2,26 @@
 
 #include "Characters/BaseCharacter.h"
 
-void ABaseUltimateAbility::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (HasAuthority() && currentCooldown > 0.0f)
-	{
-		currentCooldown -= DeltaTime;
-
-		if (currentCooldown < 0.0f)
-		{
-			currentCooldown = 0.0f;
-		}
-	}
-}
-
-void ABaseUltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UBaseUltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABaseUltimateAbility, cooldown);
+	DOREPLIFETIME(UBaseUltimateAbility, cooldown);
 
-	DOREPLIFETIME(ABaseUltimateAbility, currentCooldown);
+	DOREPLIFETIME(UBaseUltimateAbility, currentCooldown);
 }
 
-ABaseUltimateAbility::ABaseUltimateAbility()
+UBaseUltimateAbility::UBaseUltimateAbility()
 {
-	NetUpdateFrequency = 60;
+
 }
 
-void ABaseUltimateAbility::applyAbility(ABaseCharacter* target)
+void UBaseUltimateAbility::applyAbility(ABaseCharacter* target)
 {
-	PURE_VIRTUAL(ABaseUltimateAbility::applyAbility)
+	PURE_VIRTUAL(UBaseUltimateAbility::applyAbility)
 }
 
-void ABaseUltimateAbility::useAbility()
+void UBaseUltimateAbility::useAbility()
 {
 	if (!currentCooldown)
 	{
@@ -44,4 +29,16 @@ void ABaseUltimateAbility::useAbility()
 	}
 
 	currentCooldown = cooldown;
+}
+
+void UBaseUltimateAbility::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	currentCooldown -= DeltaTime;
+
+	if (currentCooldown < 0.0f)
+	{
+		currentCooldown = 0.0f;
+	}
 }

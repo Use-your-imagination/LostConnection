@@ -7,12 +7,12 @@
 #include "SN4K3ThirdAbility.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ASN4K3ThirdAbility : public ABaseAbility
+class LOSTCONNECTION_API USN4K3ThirdAbility : public UBaseAbility
 {
 	GENERATED_BODY()
 	
 public:
-	ASN4K3ThirdAbility();
+	USN4K3ThirdAbility();
 
 	void applyAbility(class ABaseCharacter* target) override;
 
@@ -20,5 +20,5 @@ public:
 
 	void useAbility() override;
 
-	~ASN4K3ThirdAbility() = default;
+	~USN4K3ThirdAbility() = default;
 };

@@ -70,15 +70,15 @@ public:
 
 	virtual float getCastPoint() const = 0;
 
-	virtual ABasePassiveAbility* getPassiveAbility() = 0;
+	virtual UBasePassiveAbility* getPassiveAbility() = 0;
 
-	virtual ABaseAbility* getFirstAbility() = 0;
+	virtual UBaseAbility* getFirstAbility() = 0;
 
-	virtual ABaseAbility* getSecondAbility() = 0;
+	virtual UBaseAbility* getSecondAbility() = 0;
 
-	virtual ABaseAbility* getThirdAbility() = 0;
+	virtual UBaseAbility* getThirdAbility() = 0;
 
-	virtual ABaseUltimateAbility* getUltimateAbility() = 0;
+	virtual UBaseUltimateAbility* getUltimateAbility() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void applyPassiveAbilityEvent(class ABaseCharacter* target);

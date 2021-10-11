@@ -6,28 +6,28 @@
 #include "Engine/LostConnectionGameState.h"
 #include "SN4K3PassiveAbility.h"
 
-ASN4K3ThirdAbility::ASN4K3ThirdAbility()
+USN4K3ThirdAbility::USN4K3ThirdAbility()
 {
 
 }
 
-void ASN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
+void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
 {
 	target->setHealth(target->getHealth() * 1.5);
 
-	ICaster::Execute_applyThirdAbilityEvent(Cast<UObject>(owner), target);
+	ICaster::Execute_applyThirdAbilityEvent(Cast<UObject>(caster), target);
 }
 
-void ASN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
+void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
 {
 	float health = target->getHealth();
 
 	target->setHealth(health - health / 3);
 }
 
-void ASN4K3ThirdAbility::useAbility()
+void USN4K3ThirdAbility::useAbility()
 {
-	ASN4K3* drone = Cast<ASN4K3>(owner);
+	ASN4K3* drone = Cast<ASN4K3>(caster);
 	FVector tem = drone->GetActorForwardVector() * 300;
 	
 	tem.Z = -97.0f;
@@ -44,5 +44,5 @@ void ASN4K3ThirdAbility::useAbility()
 
 	flag->FinishSpawning({}, true);
 
-	Cast<ASN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
+	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }

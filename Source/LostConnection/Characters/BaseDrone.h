@@ -81,19 +81,19 @@ protected:
 
 protected:
 	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
-	ABasePassiveAbility* passiveAbility;
+	UBasePassiveAbility* passiveAbility;
 
 	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
-	ABaseAbility* firstAbility;
+	UBaseAbility* firstAbility;
 
 	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
-	ABaseAbility* secondAbility;
+	UBaseAbility* secondAbility;
 
 	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
-	ABaseAbility* thirdAbility;
+	UBaseAbility* thirdAbility;
 
 	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
-	ABaseUltimateAbility* ultimateAbility;
+	UBaseUltimateAbility* ultimateAbility;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
@@ -309,15 +309,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual float getCastPoint() const final;
 
-	virtual ABasePassiveAbility* getPassiveAbility() final override;
+	virtual UBasePassiveAbility* getPassiveAbility() final override;
 
-	virtual ABaseAbility* getFirstAbility() final override;
+	virtual UBaseAbility* getFirstAbility() final override;
 
-	virtual ABaseAbility* getSecondAbility() final override;
+	virtual UBaseAbility* getSecondAbility() final override;
 
-	virtual ABaseAbility* getThirdAbility() final override;
+	virtual UBaseAbility* getThirdAbility() final override;
 
-	virtual ABaseUltimateAbility* getUltimateAbility() final override;
+	virtual UBaseUltimateAbility* getUltimateAbility() final override;
 
 #pragma region PassiveAbility
 	virtual void castPassiveAbilityVisual() override;

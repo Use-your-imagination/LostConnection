@@ -2,12 +2,12 @@
 
 #include "Characters/BaseCharacter.h"
 
-void ABasePassiveAbility::applyAbility(ABaseCharacter* target)
+void UBasePassiveAbility::applyAbility(ABaseCharacter* target)
 {
-	PURE_VIRTUAL(ABasePassiveAbility::applyAbility);
+	PURE_VIRTUAL(UBasePassiveAbility::applyAbility);
 }
 
-void ABasePassiveAbility::useAbility()
+void UBasePassiveAbility::useAbility()
 {
-	PURE_VIRTUAL(ABasePassiveAbility::useAbility);
+	PURE_VIRTUAL(UBasePassiveAbility::useAbility);
 }

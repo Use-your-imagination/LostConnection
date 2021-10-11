@@ -73,7 +73,7 @@ void ASN4K3ThirdAbilityFlag::setLifeTime(float lifeTime)
 	this->lifeTime = lifeTime;
 }
 
-void ASN4K3ThirdAbilityFlag::setAbility(ASN4K3ThirdAbility* ability)
+void ASN4K3ThirdAbilityFlag::setAbility(USN4K3ThirdAbility* ability)
 {
 	this->ability = ability;
 }

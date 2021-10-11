@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class LOSTCONNECTION_API ABaseUltimateAbility : public ABaseAbility
+class LOSTCONNECTION_API UBaseUltimateAbility : public UBaseAbility
 {
 	GENERATED_BODY()
 	
@@ -24,17 +24,16 @@ protected:
 	float currentCooldown;
 
 protected:
-	virtual void Tick(float DeltaTime) override;
-
-protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	ABaseUltimateAbility();
+	UBaseUltimateAbility();
 
 	virtual void applyAbility(class ABaseCharacter* target) override;
 
 	virtual void useAbility() override;
 
-	virtual ~ABaseUltimateAbility() = default;
+	virtual void Tick(float DeltaTime) override;
+
+	virtual ~UBaseUltimateAbility() = default;
 };

@@ -18,7 +18,7 @@ void ASN4K3::Tick(float DeltaTime)
 	{
 		passiveAbility->useAbility();
 
-		Cast<ASN4K3UltimateAbility>(ultimateAbility)->Tick(DeltaTime);
+		Cast<USN4K3UltimateAbility>(ultimateAbility)->Tick(DeltaTime);
 	}
 }
 
@@ -28,17 +28,17 @@ void ASN4K3::PostInitializeComponents()
 
 	if (HasAuthority())
 	{
-		passiveAbility = NewObject<ASN4K3PassiveAbility>();
-		firstAbility = NewObject<ASN4K3FirstAbility>();
-		secondAbility = NewObject<ASN4K3SecondAbility>();
-		thirdAbility = NewObject<ASN4K3ThirdAbility>();
-		ultimateAbility = NewObject<ASN4K3UltimateAbility>();
+		passiveAbility = NewObject<USN4K3PassiveAbility>();
+		firstAbility = NewObject<USN4K3FirstAbility>();
+		secondAbility = NewObject<USN4K3SecondAbility>();
+		thirdAbility = NewObject<USN4K3ThirdAbility>();
+		ultimateAbility = NewObject<USN4K3UltimateAbility>();
 
-		passiveAbility->setOwner(this);
-		firstAbility->setOwner(this);
-		secondAbility->setOwner(this);
-		thirdAbility->setOwner(this);
-		ultimateAbility->setOwner(this);
+		passiveAbility->setCaster(this);
+		firstAbility->setCaster(this);
+		secondAbility->setCaster(this);
+		thirdAbility->setCaster(this);
+		ultimateAbility->setCaster(this);
 	}
 }
 

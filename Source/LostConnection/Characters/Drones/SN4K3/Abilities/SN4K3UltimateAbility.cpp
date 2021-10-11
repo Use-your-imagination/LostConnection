@@ -6,18 +6,18 @@
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 #include "SN4K3PassiveAbility.h"
 
-ASN4K3UltimateAbility::ASN4K3UltimateAbility() :
+USN4K3UltimateAbility::USN4K3UltimateAbility() :
 	abilityDuration(15.0f),
 	currentAbilityDuration(0.0f)
 {
 	cooldown = 60.0f;
 }
 
-void ASN4K3UltimateAbility::Tick(float DeltaTime)
+void USN4K3UltimateAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	ASN4K3* drone = Cast<ASN4K3>(owner);
+	ASN4K3* drone = Cast<ASN4K3>(caster);
 
 	if (currentCooldown > 0.0f)
 	{
@@ -42,7 +42,7 @@ void ASN4K3UltimateAbility::Tick(float DeltaTime)
 	}
 }
 
-void ASN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
+void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 {
 	ASN4K3* drone = Cast<ASN4K3>(target);
 	ASN4K3UltimateAbilityPlaceholder* placeholder = drone->getUltimatePlaceholder();
@@ -56,12 +56,12 @@ void ASN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 
 	drone->SetActorLocation(returnPosition);
 
-	ICaster::Execute_applyUltimateAbilityEvent(Cast<UObject>(owner), target);
+	ICaster::Execute_applyUltimateAbilityEvent(Cast<UObject>(caster), target);
 }
 
-void ASN4K3UltimateAbility::useAbility()
+void USN4K3UltimateAbility::useAbility()
 {
-	ASN4K3* drone = Cast<ASN4K3>(owner);
+	ASN4K3* drone = Cast<ASN4K3>(caster);
 	FVector tem = drone->GetActorForwardVector() * 300;
 	bool& isUltimateAbilityPressed = drone->getIsUltimateAbilityUsed();
 
@@ -92,5 +92,5 @@ void ASN4K3UltimateAbility::useAbility()
 
 	drone->setUltimatePlaceholder(placeholder);
 
-	Cast<ASN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
+	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }

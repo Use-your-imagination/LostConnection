@@ -4,19 +4,19 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "SN4K3PassiveAbility.h"
 
-ASN4K3SecondAbility::ASN4K3SecondAbility()
+USN4K3SecondAbility::USN4K3SecondAbility()
 {
 
 }
 
-void ASN4K3SecondAbility::applyAbility(ABaseCharacter* target)
+void USN4K3SecondAbility::applyAbility(ABaseCharacter* target)
 {
-	ICaster::Execute_applySecondAbilityEvent(Cast<UObject>(owner), target);
+	ICaster::Execute_applySecondAbilityEvent(Cast<UObject>(caster), target);
 }
 
-void ASN4K3SecondAbility::useAbility()
+void USN4K3SecondAbility::useAbility()
 {
-	ASN4K3* drone = Cast<ASN4K3>(owner);
+	ASN4K3* drone = Cast<ASN4K3>(caster);
 	FHitResult hit;
 	UWorld* world = drone->GetWorld();
 	ABaseCharacter* target = nullptr;
@@ -32,5 +32,5 @@ void ASN4K3SecondAbility::useAbility()
 
 	this->applyAbility(target);
 
-	Cast<ASN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
+	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }

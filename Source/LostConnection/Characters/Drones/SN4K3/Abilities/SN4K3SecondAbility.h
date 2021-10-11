@@ -7,16 +7,16 @@
 #include "SN4K3SecondAbility.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ASN4K3SecondAbility : public ABaseAbility
+class LOSTCONNECTION_API USN4K3SecondAbility : public UBaseAbility
 {
 	GENERATED_BODY()
 	
 public:
-	ASN4K3SecondAbility();
+	USN4K3SecondAbility();
 
 	void applyAbility(class ABaseCharacter* target) override;
 
 	void useAbility() override;
 
-	~ASN4K3SecondAbility() = default;
+	~USN4K3SecondAbility() = default;
 };

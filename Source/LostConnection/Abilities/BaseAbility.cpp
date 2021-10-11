@@ -5,77 +5,76 @@
 
 #pragma warning(disable: 4458)
 
-void ABaseAbility::BeginPlay()
+bool UBaseAbility::IsSupportedForNetworking() const
 {
-	Super::BeginPlay();
+	return true;
 }
 
-void ABaseAbility::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-void ABaseAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UBaseAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABaseAbility, cost);
+	DOREPLIFETIME(UBaseAbility, cost);
 
-	DOREPLIFETIME(ABaseAbility, isDisabled);
+	DOREPLIFETIME(UBaseAbility, isDisabled);
 }
 
-ABaseAbility::ABaseAbility()
+UBaseAbility::UBaseAbility()
 {
-	PrimaryActorTick.bCanEverTick = true;
-	NetUpdateFrequency = 1;
+	
 }
 
-void ABaseAbility::applyAbility(ABaseCharacter* target)
+void UBaseAbility::applyAbility(ABaseCharacter* target)
 {
-	PURE_VIRTUAL(ABaseAbility::applyAbility);
+	PURE_VIRTUAL(UBaseAbility::applyAbility);
 }
 
-void ABaseAbility::useAbility()
+void UBaseAbility::useAbility()
 {
-	PURE_VIRTUAL(ABaseAbility::useAbility);
+	PURE_VIRTUAL(UBaseAbility::useAbility);
 }
 
-void ABaseAbility::setCost_Implementation(float newCost)
+void UBaseAbility::Tick(float DeltaTime)
+{
+
+}
+
+void UBaseAbility::setCost_Implementation(float newCost)
 {
 	cost = newCost;
 }
 
-void ABaseAbility::setOwner(ICaster* owner)
+void UBaseAbility::setCaster(ICaster* caster)
 {
-	this->owner = owner;
+	this->caster = caster;
 }
 
-void ABaseAbility::disable_Implementation()
+void UBaseAbility::disable_Implementation()
 {
 	isDisabled = true;
 }
 
-void ABaseAbility::enable_Implementation()
+void UBaseAbility::enable_Implementation()
 {
 	isDisabled = false;
 }
 
-float ABaseAbility::getCost() const
+float UBaseAbility::getCost() const
 {
 	return cost;
 }
 
-bool ABaseAbility::getIsDisabled() const
+bool UBaseAbility::getIsDisabled() const
 {
 	return isDisabled;
 }
 
-const FString& ABaseAbility::getLocalizedName() const
+const FString& UBaseAbility::getLocalizedName() const
 {
 	return localizedName;
 }
 
-AActor* ABaseAbility::getOwnerCaster()
+AActor* UBaseAbility::getCasterCaster()
 {
-	return Cast<AActor>(owner);
+	return Cast<AActor>(caster);
 }

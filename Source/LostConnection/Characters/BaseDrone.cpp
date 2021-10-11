@@ -275,6 +275,12 @@ void ABaseDrone::Tick(float DeltaTime)
 				slideCooldown = tem;
 			}
 		}
+
+		passiveAbility->Tick(DeltaTime);
+		firstAbility->Tick(DeltaTime);
+		secondAbility->Tick(DeltaTime);
+		thirdAbility->Tick(DeltaTime);
+		ultimateAbility->Tick(DeltaTime);
 	}
 }
 
@@ -774,27 +780,27 @@ float ABaseDrone::getCastPoint() const
 	return castPoint;
 }
 
-ABasePassiveAbility* ABaseDrone::getPassiveAbility()
+UBasePassiveAbility* ABaseDrone::getPassiveAbility()
 {
 	return passiveAbility;
 }
 
-ABaseAbility* ABaseDrone::getFirstAbility()
+UBaseAbility* ABaseDrone::getFirstAbility()
 {
 	return firstAbility;
 }
 
-ABaseAbility* ABaseDrone::getSecondAbility()
+UBaseAbility* ABaseDrone::getSecondAbility()
 {
 	return secondAbility;
 }
 
-ABaseAbility* ABaseDrone::getThirdAbility()
+UBaseAbility* ABaseDrone::getThirdAbility()
 {
 	return thirdAbility;
 }
 
-ABaseUltimateAbility* ABaseDrone::getUltimateAbility()
+UBaseUltimateAbility* ABaseDrone::getUltimateAbility()
 {
 	return ultimateAbility;
 }
