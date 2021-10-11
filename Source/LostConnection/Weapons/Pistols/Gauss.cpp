@@ -33,4 +33,6 @@ AGauss::AGauss()
 	roundsPerSecond = 2;
 	weaponType = weaponTypes::single;
 	spreadDistance = 0.1f;
+	
+	this->updateTimeBetweenShots();
 }

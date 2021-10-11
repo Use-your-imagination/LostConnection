@@ -190,9 +190,22 @@ void ABaseDrone::PostInitializeComponents()
 
 	if (HasAuthority())
 	{
-		defaultWeaponSlot = NewObject<AGauss>(this);
+		UWorld* world = GetWorld();
 
-		firstWeaponSlot = NewObject<AHipter>(this);
+		if (world)
+		{
+			defaultWeaponSlot = NewObject<AGauss>(this);
+
+			defaultWeaponSlot->setWorld(world);
+
+			defaultWeaponSlot->setCharacter(this);
+
+			firstWeaponSlot = NewObject<AHipter>(this);
+
+			firstWeaponSlot->setWorld(world);
+
+			firstWeaponSlot->setCharacter(this);
+		}
 	}
 }
 
@@ -241,12 +254,12 @@ void ABaseDrone::Tick(float DeltaTime)
 	{
 		if (firstWeaponSlot)
 		{
-			firstWeaponSlot->reduceShootRemainigTime(DeltaTime);
+			firstWeaponSlot->Tick(DeltaTime);
 		}
 
 		if (secondWeaponSlot)
 		{
-			secondWeaponSlot->reduceShootRemainigTime(DeltaTime);
+			secondWeaponSlot->Tick(DeltaTime);
 		}
 
 		if (slideCooldown > 0.0f)

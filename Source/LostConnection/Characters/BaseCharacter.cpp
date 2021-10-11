@@ -47,7 +47,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 	{
 		if (HasAuthority())
 		{
-			defaultWeaponSlot->reduceShootRemainigTime(DeltaTime);
+			defaultWeaponSlot->Tick(DeltaTime);
 		}
 	}
 }
@@ -217,15 +217,7 @@ void ABaseCharacter::shootVisual()
 
 void ABaseCharacter::shootLogic()
 {
-	if (currentWeapon)
-	{
-		UWorld* world = GetWorld();
-
-		if (world)
-		{
-			currentWeapon->shoot(world, currentWeaponMesh, this);
-		}
-	}
+	currentWeapon->startShoot();
 }
 
 void ABaseCharacter::runShootLogic_Implementation()

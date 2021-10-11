@@ -10,7 +10,7 @@ void ADroppedWeapon::Tick(float DeltaTime)
 {
 	if (HasAuthority())
 	{
-		weapon->reduceShootRemainigTime(DeltaTime);
+		weapon->Tick(DeltaTime);
 	}
 }
 

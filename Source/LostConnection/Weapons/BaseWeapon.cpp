@@ -39,18 +39,16 @@ bool ABaseWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, 
 	return wroteSomething;
 }
 
-void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+void ABaseWeapon::shoot()
 {
-	ABaseCharacter* baseCharacter = Cast<ABaseCharacter>(character);
-
-	if (baseCharacter->getIsReloading())
+	if (character->getIsReloading() && !character->isWeaponEquipped())
 	{
 		return;
 	}
 
 	if (weaponType == weaponTypes::semiAutomatic || weaponType == weaponTypes::single)
 	{
-		MultiplayerUtility::runOnServerReliable(baseCharacter, "resetShoot");
+		MultiplayerUtility::runOnServerReliable(character, "resetShoot");
 	}
 	else if (weaponType == weaponTypes::delay)
 	{
@@ -59,7 +57,7 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = baseCharacter->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), FTransform(currentVisibleWeaponMesh->GetBoneLocation("barrel")));
+		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), FTransform(character->getCurrentWeaponMesh()->GetBoneLocation("barrel")));
 
 		launchedAmmo->copyProperties(ammo);
 
@@ -68,7 +66,7 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 
 		FHitResult hit;
 		FRotator resultRotation;
-		ABaseDrone* drone = Cast<ABaseDrone>(baseCharacter);
+		ABaseDrone* drone = Cast<ABaseDrone>(character);
 
 		if (drone)
 		{
@@ -86,7 +84,7 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 		}
 		else
 		{
-			resultRotation = baseCharacter->getCurrentWeaponMesh()->GetBoneLocation("barrel").ToOrientationRotator();
+			resultRotation = character->getCurrentWeaponMesh()->GetBoneLocation("barrel").ToOrientationRotator();
 		}
 
 		launchedAmmo->getAmmoMeshComponent()->SetWorldRotation(resultRotation);
@@ -96,74 +94,38 @@ void ABaseWeapon::shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, AChara
 
 		launchedAmmo->getAmmoMeshComponent()->AddRelativeRotation({ pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
-		launchedAmmo->launch(baseCharacter);
+		launchedAmmo->launch(character);
 
 		currentMagazineSize -= ammoCost;
+
+		currentTimeBetweenShots = timeBetweenShots;
 	}
 	else
 	{
-		MultiplayerUtility::runOnServerReliableWithMulticast(baseCharacter, "reload");
+		MultiplayerUtility::runOnServerReliableWithMulticast(character, "reload");
 	}
 }
 
-ABaseWeapon::ABaseWeapon()
+ABaseWeapon::ABaseWeapon() :
+	ammoCost(1)
 {
-	shootRemainingTime = 0.0f;
-	clearTimer = false;
-
-	ammoCost = 1;
-	weaponType = weaponTypes::automatic;
-	spreadDistance = 2.0f;
+	
 }
 
-void ABaseWeapon::shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+void ABaseWeapon::startShoot()
 {
-	FTimerManager& manager = world->GetTimerManager();
-
-	if (manager.IsTimerActive(shootHandle))
-	{
-		return;
-	}
-	else
-	{
-		clearTimer = false;
-	}
-
-	FTimerDelegate delegate;
-
-	delegate.BindLambda([this, &manager, currentVisibleWeaponMesh, character]()
-		{
-			if (character->IsPendingKill())
-			{
-				return;
-			}
-
-			if (clearTimer || currentVisibleWeaponMesh->SkeletalMesh != mesh)
-			{
-				clearTimer = false;
-
-				manager.ClearTimer(shootHandle);
-
-				return;
-			}
-
-			this->shoot(currentVisibleWeaponMesh, character);
-		});
-
-	manager.SetTimer(shootHandle, delegate, 1.0f / static_cast<float>(roundsPerSecond), true, shootRemainingTime > 0.0f ? shootRemainingTime : 0.0f);
-
-	shootRemainingTime = 1.0f / static_cast<float>(roundsPerSecond);
+	isShooting = true;
 }
 
 void ABaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
-	clearTimer = true;
+	isShooting = false;
 
 	if (weaponType == weaponTypes::delay)
 	{
 		weaponType = weaponTypes::single;
 
-		this->shoot(world, currentVisibleWeaponMesh, character);
+		this->shoot();
 
 		weaponType = weaponTypes::delay;
 	}
@@ -171,15 +133,22 @@ void ABaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisib
 
 void ABaseWeapon::alternativeMode()
 {
-	
+
 }
 
-void ABaseWeapon::reduceShootRemainigTime_Implementation(float deltaSeconds)
+void ABaseWeapon::updateTimeBetweenShots_Implementation()
 {
-	if (shootRemainingTime > 0.0f)
-	{
-		shootRemainingTime -= deltaSeconds;
-	}
+	timeBetweenShots = 1.0f / static_cast<float>(roundsPerSecond);
+}
+
+void ABaseWeapon::setWorld(UWorld* world)
+{
+	this->world = world;
+}
+
+void ABaseWeapon::setCharacter(ABaseCharacter* character)
+{
+	this->character = character;
 }
 
 void ABaseWeapon::setCurrentMagazineSize_Implementation(int newCurrentMagazineSize)
@@ -230,4 +199,24 @@ int ABaseWeapon::getRoundsPerSecond() const
 weaponTypes ABaseWeapon::getWeaponType() const
 {
 	return weaponType;
+}
+
+void ABaseWeapon::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (isShooting)
+	{
+		this->shoot();
+	}
+
+	if (currentTimeBetweenShots > 0.0f)
+	{
+		currentTimeBetweenShots -= DeltaTime;
+
+		if (currentTimeBetweenShots < 0.0f)
+		{
+			currentTimeBetweenShots = 0.0f;
+		}
+	}
 }

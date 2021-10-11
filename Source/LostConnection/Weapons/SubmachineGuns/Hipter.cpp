@@ -28,6 +28,8 @@ AHipter::AHipter()
 	roundsPerSecond = 30;
 	weaponType = weaponTypes::automatic;
 	spreadDistance = 0.25f;
+	
+	this->updateTimeBetweenShots();
 }
 
 void AHipter::alternativeMode()

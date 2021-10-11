@@ -23,16 +23,18 @@ class LOSTCONNECTION_API ABaseWeapon : public AActor
 	GENERATED_BODY()
 		
 private:
-	FTimerHandle shootHandle;
-	float shootRemainingTime;
-	bool clearTimer;
+	UWorld* world;
+	class ABaseCharacter* character;
+	float timeBetweenShots;
+	float currentTimeBetweenShots;
+	bool isShooting;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	virtual void shoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
+	virtual void shoot();
 
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
@@ -65,14 +67,18 @@ protected:
 public:
 	ABaseWeapon();
 
-	virtual void shoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character) final;
+	virtual void startShoot() final;
 
 	virtual void resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character) final;
 
 	virtual void alternativeMode();
 
 	UFUNCTION(Server, Reliable)
-	virtual void reduceShootRemainigTime(float deltaSeconds);
+	virtual void updateTimeBetweenShots() final;
+
+	virtual void setWorld(UWorld* world) final;
+
+	virtual void setCharacter(class ABaseCharacter* character) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setCurrentMagazineSize(int newCurrentMagazineSize) final;
@@ -96,6 +102,8 @@ public:
 	virtual int getRoundsPerSecond() const final;
 
 	virtual weaponTypes getWeaponType() const final;
+
+	virtual void Tick(float DeltaTime) override;
 
 	virtual ~ABaseWeapon() = default;
 };
