@@ -10,18 +10,6 @@
 #include "Abilities/SN4K3UltimateAbility.h"
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 
-void ASN4K3::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (HasAuthority())
-	{
-		passiveAbility->useAbility();
-
-		Cast<USN4K3UltimateAbility>(ultimateAbility)->Tick(DeltaTime);
-	}
-}
-
 void ASN4K3::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();

@@ -12,6 +12,17 @@ USN4K3PassiveAbility::USN4K3PassiveAbility() :
 	
 }
 
+void USN4K3PassiveAbility::resetLastTimeAbilityUsed()
+{
+	if (Cast<ASN4K3>(caster)->getIsUltimateAbilityUsed())
+	{
+		return;
+	}
+
+	lastTimeAbilityUsed = 0.0f;
+}
+
+
 void USN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 {
 	// TODO: second part
@@ -21,6 +32,13 @@ void USN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 
 void USN4K3PassiveAbility::useAbility()
 {
+	
+}
+
+void USN4K3PassiveAbility::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
 	static constexpr float coeff = 5.0f;
 
 	ASN4K3* drone = Cast<ASN4K3>(caster);
@@ -58,14 +76,4 @@ void USN4K3PassiveAbility::useAbility()
 	default:
 		break;
 	}
-}
-
-void USN4K3PassiveAbility::resetLastTimeAbilityUsed()
-{
-	if (Cast<ASN4K3>(caster)->getIsUltimateAbilityUsed())
-	{
-		return;
-	}
-
-	lastTimeAbilityUsed = 0.0f;
 }

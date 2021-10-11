@@ -26,11 +26,13 @@ private:
 public:
 	USN4K3PassiveAbility();
 
+	void resetLastTimeAbilityUsed();
+
 	void applyAbility(class ABaseCharacter* target) override;
 
 	void useAbility() override;
 
-	void resetLastTimeAbilityUsed();
+	void Tick(float DeltaTime) override;
 
 	~USN4K3PassiveAbility() = default;
 };

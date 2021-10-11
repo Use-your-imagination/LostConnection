@@ -18,11 +18,11 @@ private:
 public:
 	USN4K3UltimateAbility();
 
-	void Tick(float DeltaTime) override;
-
 	void applyAbility(class ABaseCharacter* target) override;
 
 	void useAbility() override;
+
+	void Tick(float DeltaTime) override;
 
 	~USN4K3UltimateAbility() = default;
 };

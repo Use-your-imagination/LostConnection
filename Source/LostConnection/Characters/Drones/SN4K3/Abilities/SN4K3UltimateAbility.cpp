@@ -13,35 +13,6 @@ USN4K3UltimateAbility::USN4K3UltimateAbility() :
 	cooldown = 60.0f;
 }
 
-void USN4K3UltimateAbility::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	ASN4K3* drone = Cast<ASN4K3>(caster);
-
-	if (currentCooldown > 0.0f)
-	{
-		currentCooldown -= DeltaTime;
-
-		if (currentCooldown < 0.0f)
-		{
-			currentCooldown = 0.0f;
-		}
-	}
-
-	if (drone->getIsUltimateAbilityUsed())
-	{
-		currentAbilityDuration += DeltaTime;
-
-		if (currentAbilityDuration >= abilityDuration)
-		{
-			drone->getIsUltimateAbilityUsed() = false;
-
-			this->applyAbility(drone);
-		}
-	}
-}
-
 void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 {
 	ASN4K3* drone = Cast<ASN4K3>(target);
@@ -93,4 +64,23 @@ void USN4K3UltimateAbility::useAbility()
 	drone->setUltimatePlaceholder(placeholder);
 
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
+}
+
+void USN4K3UltimateAbility::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	ASN4K3* drone = Cast<ASN4K3>(caster);
+
+	if (drone->getIsUltimateAbilityUsed())
+	{
+		currentAbilityDuration += DeltaTime;
+
+		if (currentAbilityDuration >= abilityDuration)
+		{
+			drone->getIsUltimateAbilityUsed() = false;
+
+			this->applyAbility(drone);
+		}
+	}
 }

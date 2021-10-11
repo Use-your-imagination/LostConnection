@@ -35,10 +35,13 @@ void UBaseUltimateAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	currentCooldown -= DeltaTime;
-
-	if (currentCooldown < 0.0f)
+	if (currentCooldown > 0.0f)
 	{
-		currentCooldown = 0.0f;
+		currentCooldown -= DeltaTime;
+
+		if (currentCooldown < 0.0f)
+		{
+			currentCooldown = 0.0f;
+		}
 	}
 }

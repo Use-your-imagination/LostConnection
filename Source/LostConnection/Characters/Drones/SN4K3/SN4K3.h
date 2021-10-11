@@ -23,8 +23,6 @@ private:
 	class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder;
 
 private:
-	void Tick(float DeltaTime) override;
-
 	void PostInitializeComponents() override;
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
