@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "BaseDrone.h"
 
 #include "Kismet/GameplayStatics.h"

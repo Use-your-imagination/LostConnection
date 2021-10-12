@@ -19,6 +19,10 @@ class LOSTCONNECTION_API ABaseBot : public ABaseCharacter
 protected:
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void BeginPlay() override;
+
+	virtual void PostInitializeComponents() override;
+
 protected:
 	virtual void deathLogic() override;
 

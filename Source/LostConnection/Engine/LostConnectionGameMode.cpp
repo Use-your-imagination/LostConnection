@@ -34,7 +34,7 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	PlayerStateClass = defaultPlayerStateClassFinder.Class;
 	GameStateClass = ALostConnectionGameState::StaticClass();
 
-	defaultAI = defaultAIClassFinder.Class->GeneratedClass;
+	defaultAI = defaultAIClassFinder.Class;
 }
 
 void ALostConnectionGameMode::spawnAI_Implementation() const

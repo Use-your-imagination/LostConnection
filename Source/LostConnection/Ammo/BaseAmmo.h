@@ -68,7 +68,7 @@ private:
 public:
 	ABaseAmmo();
 
-	virtual void launch(ACharacter* character) final;
+	virtual void launch(class ABaseCharacter* character) final;
 
 	virtual void copyProperties(ABaseAmmo* other);
 

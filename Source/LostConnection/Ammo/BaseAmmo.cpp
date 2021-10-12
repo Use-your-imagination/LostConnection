@@ -155,9 +155,9 @@ ABaseAmmo::ABaseAmmo()
 	tracer->SetupAttachment(mesh);
 }
 
-void ABaseAmmo::launch(ACharacter* character)
+void ABaseAmmo::launch(ABaseCharacter* character)
 {
-	isAlly = Cast<ABaseDrone>(character)->getIsAlly();
+	isAlly = character->getIsAlly();
 
 	FinishSpawning({}, true);
 
