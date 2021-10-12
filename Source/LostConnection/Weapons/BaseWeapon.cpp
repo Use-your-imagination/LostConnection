@@ -139,11 +139,6 @@ void UBaseWeapon::updateTimeBetweenShots_Implementation()
 
 void UBaseWeapon::Tick(float DeltaTime)
 {
-	if (isShooting)
-	{
-		this->shoot();
-	}
-
 	if (currentTimeBetweenShots > 0.0f)
 	{
 		currentTimeBetweenShots -= DeltaTime;
@@ -152,6 +147,11 @@ void UBaseWeapon::Tick(float DeltaTime)
 		{
 			currentTimeBetweenShots = 0.0f;
 		}
+	}
+
+	if (isShooting && !currentTimeBetweenShots)
+	{
+		this->shoot();
 	}
 }
 
