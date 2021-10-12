@@ -45,5 +45,14 @@
         "SN4K3 has meter for his abilities"
       ]
     }
+  },
+  "Known issues": {
+    "type": "category",
+    "AI": {
+      "type": "item",
+      "notes": [
+        "Wrong shooting"
+      ]
+    }
   }
 }
