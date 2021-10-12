@@ -10,6 +10,9 @@ UCLASS()
 class LOSTCONNECTION_API USN4K3SecondAbility : public UBaseAbility
 {
 	GENERATED_BODY()
+
+private:
+	class ABaseCharacter* target;
 	
 public:
 	USN4K3SecondAbility();

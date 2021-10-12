@@ -37,7 +37,7 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 void UBaseWeapon::shoot()
 {
-	if (character->getIsReloading() && !character->isWeaponEquipped())
+	if (character->getIsReloading())
 	{
 		return;
 	}

@@ -13,16 +13,66 @@ USN4K3ThirdAbility::USN4K3ThirdAbility()
 
 void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
 {
-	target->setHealth(target->getHealth() * 1.5);
+	float health;
+	float currentHealth = target->getCurrentHealth();
+	
+	target->setHealth(target->getHealth() * 0.5f);
+
+	health = target->getHealth();
+
+	if (health < currentHealth)
+	{
+		target->setCurrentHealth(health);
+	}
+
+	TArray<UBaseWeapon*> weapons;
+
+	weapons.Add(target->getDefaultWeapon());
+
+	ABaseDrone* drone = Cast<ABaseDrone>(target);
+
+	if (drone)
+	{
+		weapons.Add(drone->getFirstWeapon());
+
+		weapons.Add(drone->getSecondWeapon());
+	}
+
+	for (auto& i : weapons)
+	{
+		if (i)
+		{
+			i->getAmmo()->setDamage(i->getAmmo()->getDamage() * 1.5f);
+		}
+	}
 
 	ICaster::Execute_applyThirdAbilityEvent(Cast<UObject>(caster), target);
 }
 
 void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
 {
-	float health = target->getHealth();
+	target->setHealth(target->getHealth() * 2);
 
-	target->setHealth(health - health / 3);
+	TArray<UBaseWeapon*> weapons;
+
+	weapons.Add(target->getDefaultWeapon());
+
+	ABaseDrone* drone = Cast<ABaseDrone>(target);
+
+	if (drone)
+	{
+		weapons.Add(drone->getFirstWeapon());
+
+		weapons.Add(drone->getSecondWeapon());
+	}
+
+	for (auto& i : weapons)
+	{
+		if (i)
+		{
+			i->getAmmo()->setDamage(i->getAmmo()->getDamage() * 2.0f / 3.0f);
+		}
+	}
 }
 
 void USN4K3ThirdAbility::useAbility()

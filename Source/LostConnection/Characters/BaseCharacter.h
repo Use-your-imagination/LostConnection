@@ -39,10 +39,10 @@ protected:
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* magazine;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = onCurrentWeaponChange)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
 	UBaseWeapon* currentWeapon;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	UBaseWeapon* defaultWeaponSlot;
 
 protected:
@@ -207,6 +207,8 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	virtual void setIsDead(bool newIsDead) final;
+
+	virtual UBaseWeapon* getDefaultWeapon() final;
 
 	virtual float getHealth() const final;
 

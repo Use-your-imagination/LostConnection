@@ -42,10 +42,10 @@ protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	UBaseWeapon* firstWeaponSlot;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly, Replicated)
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	UBaseWeapon* secondWeaponSlot;
 
 private:
@@ -244,6 +244,10 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setSlideCooldown(float newSlideCooldown) final;
 
+	virtual UBaseWeapon* getFirstWeapon() final;
+
+	virtual UBaseWeapon* getSecondWeapon() final;
+
 	virtual USpringArmComponent* GetCameraOffset() const final;
 
 	virtual UCameraComponent* GetFollowCamera() const final;
@@ -282,31 +286,22 @@ public:
 	
 	virtual void setCastPoint_Implementation(float newCastPoint) final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getEnergy() const final override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getCurrentEnergy() const final override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getEnergyRestorationPerSecond() const final override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getCooldownReduction() const final override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getDuration() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getPower() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getEnergyEfficiency() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getAOE() const final;
 
-	UFUNCTION(BlueprintCallable)
 	virtual float getCastPoint() const final;
 
 	virtual UBasePassiveAbility* getPassiveAbility() final override;

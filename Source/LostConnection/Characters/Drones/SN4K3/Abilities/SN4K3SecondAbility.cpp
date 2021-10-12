@@ -11,6 +11,8 @@ USN4K3SecondAbility::USN4K3SecondAbility()
 
 void USN4K3SecondAbility::applyAbility(ABaseCharacter* target)
 {
+	this->target = target;
+
 	ICaster::Execute_applySecondAbilityEvent(Cast<UObject>(caster), target);
 }
 

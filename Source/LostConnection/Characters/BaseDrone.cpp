@@ -673,6 +673,16 @@ void ABaseDrone::setSlideCooldown_Implementation(float newSlideCooldown)
 	slideCooldown = newSlideCooldown;
 }
 
+UBaseWeapon* ABaseDrone::getFirstWeapon()
+{
+	return firstWeaponSlot;
+}
+
+UBaseWeapon* ABaseDrone::getSecondWeapon()
+{
+	return secondWeaponSlot;
+}
+
 FVector ABaseDrone::getStartActionLineTrace() const
 {
 	return FollowCamera->GetComponentLocation();

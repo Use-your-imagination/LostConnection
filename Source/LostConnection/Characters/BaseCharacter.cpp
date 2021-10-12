@@ -217,7 +217,10 @@ void ABaseCharacter::shootVisual()
 
 void ABaseCharacter::shootLogic()
 {
-	currentWeapon->startShoot();
+	if (this->isWeaponEquipped())
+	{
+		currentWeapon->startShoot();
+	}
 }
 
 void ABaseCharacter::runShootLogic_Implementation()
@@ -394,6 +397,11 @@ void ABaseCharacter::setIsAlly_Implementation(bool newIsAlly)
 void ABaseCharacter::setIsDead_Implementation(bool newIsDead)
 {
 	isDead = newIsDead;
+}
+
+UBaseWeapon* ABaseCharacter::getDefaultWeapon()
+{
+	return defaultWeaponSlot;
 }
 
 float ABaseCharacter::getHealth() const
