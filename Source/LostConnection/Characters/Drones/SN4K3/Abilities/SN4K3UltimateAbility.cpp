@@ -32,6 +32,10 @@ void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 	ASN4K3UltimateAbilityPlaceholder* placeholder = drone->getUltimatePlaceholder();
 	FVector returnPosition = placeholder->GetActorLocation();
 
+	drone->GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+
+	drone->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+
 	currentAbilityDuration = 0.0f;
 
 	drone->setUltimatePlaceholder(nullptr);
@@ -60,15 +64,19 @@ void USN4K3UltimateAbility::useAbility()
 		return;
 	}
 
-	FVector tem = drone->GetActorForwardVector() * 200;
+	FVector tem = drone->GetActorLocation();
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
+
+	drone->GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+
+	drone->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 
 	isUltimateAbilityUsed = true;
 
 	currentCooldown = cooldown;
 
-	ASN4K3UltimateAbilityPlaceholder* placeholder = drone->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3UltimateAbilityPlaceholder>({ drone->GetActorRotation(), tem + drone->GetActorLocation() });
+	ASN4K3UltimateAbilityPlaceholder* placeholder = drone->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3UltimateAbilityPlaceholder>({ drone->GetMesh()->GetComponentRotation(), std::move(tem) });
 
 	placeholder->setAbility(this);
 

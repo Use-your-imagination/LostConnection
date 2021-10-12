@@ -1,5 +1,7 @@
 #include "BaseBot.h"
 
+#include "Kismet/GameplayStatics.h"
+
 void ABaseBot::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

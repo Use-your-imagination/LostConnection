@@ -5,15 +5,23 @@
 
 ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 {
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/Drone/Drone.Drone'"));
+	// ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/Drone/Drone.Drone'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Mannequin/Character/Mesh/SK_Mannequin.SK_Mannequin'"));
+	// ConstructorHelpers::FObjectFinder<UAnimBlueprint> animBPFinder(TEXT("AnimBlueprint'/Game/Mannequin/Animations/AnimationBP_LostConnectionCharacter.AnimationBP_LostConnectionCharacter'"));
 
 	mesh->SetSkeletalMesh(meshFinder.Object);
+
+	// mesh->SetAnimInstanceClass(animBPFinder.Object->GeneratedClass);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
 	mesh->SetGenerateOverlapEvents(true);
 
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+
+	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
+	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
 }
 
 void ASN4K3UltimateAbilityPlaceholder::setAbility(USN4K3UltimateAbility* ability)

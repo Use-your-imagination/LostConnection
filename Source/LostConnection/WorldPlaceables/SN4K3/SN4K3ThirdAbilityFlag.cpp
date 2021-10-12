@@ -66,6 +66,8 @@ ASN4K3ThirdAbilityFlag::ASN4K3ThirdAbilityFlag()
 	mesh->SetSkeletalMesh(flagMeshFinder.Object);
 
 	traceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+
+	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
 }
 
 void ASN4K3ThirdAbilityFlag::setLifeTime(float lifeTime)
