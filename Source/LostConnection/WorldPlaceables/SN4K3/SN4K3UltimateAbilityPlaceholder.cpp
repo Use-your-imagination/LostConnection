@@ -7,11 +7,11 @@ ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 {
 	// ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/Drone/Drone.Drone'"));
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Mannequin/Character/Mesh/SK_Mannequin.SK_Mannequin'"));
-	ConstructorHelpers::FObjectFinder<UAnimBlueprint> animBPFinder(TEXT("AnimBlueprint'/Game/Mannequin/Animations/AnimBP_PlaceHolder.AnimBP_PlaceHolder'"));
+	ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Mannequin/Animations/AnimBP_PlaceHolder"));
 
 	mesh->SetSkeletalMesh(meshFinder.Object);
 
-	mesh->SetAnimInstanceClass(animBPFinder.Object->GeneratedClass);
+	mesh->SetAnimClass(animBPFinder.Class);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
