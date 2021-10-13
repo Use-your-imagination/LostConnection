@@ -16,9 +16,6 @@ class LOSTCONNECTION_API ABullet : public ABaseAmmo
 {
 	GENERATED_BODY()
 
-private:
-	GET_STATIC_CLASS_OVERRIDE(ABullet)
-
 public:
 	ABullet();
 

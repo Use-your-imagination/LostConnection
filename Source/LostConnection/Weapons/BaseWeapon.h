@@ -17,6 +17,15 @@ enum class weaponTypes : uint8
 	delay = 3 UMETA(DisplayName = "Delay")
 };
 
+UENUM(BlueprintType)
+enum class ammoTypes : uint8
+{
+	large = 0 UMETA(DisplayName = "Large ammo"),
+	small = 1 UMETA(DisplayName = "Small ammo"),
+	energy = 2 UMETA(DisplayName = "Energy ammo"),
+	defaultType = 3 UMETA(DisplayName = "Default ammo")
+};
+
 UCLASS()
 class LOSTCONNECTION_API UBaseWeapon : public UObject
 {
@@ -44,7 +53,10 @@ protected:
 	UStaticMesh* magazineMesh;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
-	ABaseAmmo* ammo;
+	ammoTypes ammoType;
+
+	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	float damage;
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	int currentMagazineSize;
@@ -63,6 +75,8 @@ protected:
 
 	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	float spreadDistance;
+
+	UClass* ammoClass;
 
 public:
 	UBaseWeapon();
@@ -83,6 +97,12 @@ public:
 	virtual void setCharacter(class ABaseCharacter* character) final;
 
 	UFUNCTION(Server, Reliable)
+	virtual void setAmmoType(ammoTypes newAmmoType) final;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setDamage(float newDamage) final;
+
+	UFUNCTION(Server, Reliable)
 	virtual void setCurrentMagazineSize(int newCurrentMagazineSize) final;
 
 	UFUNCTION(Server, Reliable)
@@ -95,7 +115,9 @@ public:
 
 	virtual UStaticMesh* getMagazineMesh() const final;
 
-	virtual ABaseAmmo* getAmmo() const final;
+	virtual ammoTypes getAmmoType() const final;
+
+	virtual float getDamage() const final;
 
 	virtual int getCurrentMagazineSize() const final;
 

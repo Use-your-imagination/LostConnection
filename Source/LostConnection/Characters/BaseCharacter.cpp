@@ -184,7 +184,7 @@ void ABaseCharacter::reloadLogic()
 		return;
 	}
 
-	int32& ammoCount = spareAmmo[static_cast<size_t>(currentWeapon->getAmmo()->getAmmoType())];
+	int32& ammoCount = spareAmmo[static_cast<size_t>(currentWeapon->getAmmoType())];
 
 	if (!ammoCount)
 	{

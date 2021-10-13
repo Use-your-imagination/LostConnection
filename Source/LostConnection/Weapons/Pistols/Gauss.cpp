@@ -12,27 +12,18 @@ UGauss::UGauss()
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> weaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/Pistols/Gauss/Gauss.Gauss'"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> magazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Pistols/Gauss/GaussMagazine.GaussMagazine'"));
 
-	if (weaponMeshFinder.Succeeded())
-	{
-		mesh = weaponMeshFinder.Object;
-	}
+	mesh = weaponMeshFinder.Object;
 
-	if (magazineFinder.Succeeded())
-	{
-		magazineMesh = magazineFinder.Object;
-	}
+	magazineMesh = magazineFinder.Object;
 
-	ammo = NewObject<ABall>();
-
-	ammo->setDamage(150.0f);
-
-	ammo->setAmmoType(ammoTypes::defaultType);
-
+	ammoType = ammoTypes::defaultType;
+	damage = 150.0f;
 	currentMagazineSize = 12;
 	magazineSize = 12;
 	roundsPerSecond = 2;
 	weaponType = weaponTypes::single;
 	spreadDistance = 0.1f;
-	
+	ammoClass = ABall::StaticClass();
+
 	this->updateTimeBetweenShots();
 }

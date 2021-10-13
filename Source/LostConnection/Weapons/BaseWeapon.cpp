@@ -20,7 +20,9 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UBaseWeapon, ammo);
+	DOREPLIFETIME(UBaseWeapon, ammoType);
+
+	DOREPLIFETIME(UBaseWeapon, damage);
 
 	DOREPLIFETIME(UBaseWeapon, currentMagazineSize);
 
@@ -53,9 +55,9 @@ void UBaseWeapon::shoot()
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammo->getStaticClass(), FTransform(character->getCurrentWeaponMesh()->GetBoneLocation("barrel")));
+		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammoClass, FTransform(character->getCurrentWeaponMesh()->GetBoneLocation("barrel")));
 
-		launchedAmmo->copyProperties(ammo);
+		launchedAmmo->copyProperties(this);
 
 		// Tracer limit
 		static constexpr float distance = 20000.0f;
@@ -105,7 +107,7 @@ void UBaseWeapon::shoot()
 UBaseWeapon::UBaseWeapon() :
 	ammoCost(1)
 {
-	
+
 }
 
 void UBaseWeapon::startShoot()
@@ -165,6 +167,16 @@ void UBaseWeapon::setCharacter(ABaseCharacter* character)
 	this->character = character;
 }
 
+void UBaseWeapon::setAmmoType_Implementation(ammoTypes newAmmoType)
+{
+	ammoType = newAmmoType;
+}
+
+void UBaseWeapon::setDamage_Implementation(float newDamage)
+{
+	damage = newDamage;
+}
+
 void UBaseWeapon::setCurrentMagazineSize_Implementation(int newCurrentMagazineSize)
 {
 	currentMagazineSize = newCurrentMagazineSize;
@@ -190,9 +202,14 @@ UStaticMesh* UBaseWeapon::getMagazineMesh() const
 	return magazineMesh;
 }
 
-ABaseAmmo* UBaseWeapon::getAmmo() const
+ammoTypes UBaseWeapon::getAmmoType() const
 {
-	return ammo;
+	return ammoType;
+}
+
+float UBaseWeapon::getDamage() const
+{
+	return damage;
 }
 
 int UBaseWeapon::getCurrentMagazineSize() const

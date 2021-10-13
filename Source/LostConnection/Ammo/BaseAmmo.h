@@ -8,20 +8,6 @@
 
 #include "BaseAmmo.generated.h"
 
-#define GET_STATIC_CLASS_OVERRIDE(className) inline UClass* getStaticClass() const override \
-{ \
-	return className::StaticClass(); \
-}
-
-UENUM(BlueprintType)
-enum class ammoTypes : uint8
-{
-	large = 0 UMETA(DisplayName = "Large ammo"),
-	small = 1 UMETA(DisplayName = "Small ammo"),
-	energy = 2 UMETA(DisplayName = "Energy ammo"),
-	defaultType = 3 UMETA(DisplayName = "Default ammo")
-};
-
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API ABaseAmmo : public APawn
 {
@@ -29,6 +15,8 @@ class LOSTCONNECTION_API ABaseAmmo : public APawn
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 protected:
 	UFUNCTION()
@@ -38,7 +26,7 @@ protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* mesh;
 
-	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadWrite, Replicated)
+	UPROPERTY(Category = Movement, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	UProjectileMovementComponent* movement;
 	
 	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
@@ -50,50 +38,20 @@ protected:
 	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraSystem* onHitAsset;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly, Replicated)
-	float damage;
-
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly, Replicated)
-	ammoTypes ammoType;
-
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, BlueprintReadOnly, Replicated)
-	bool isAlly;
-
 	AActor* lastTarget;
-
-private:
-	UFUNCTION(NetMulticast, Reliable)
-	void setAmmoMeshMulticast(UStaticMesh* newMesh);
+	float damage;
+	bool isAlly;
 
 public:
 	ABaseAmmo();
 
 	virtual void launch(class ABaseCharacter* character) final;
 
-	virtual void copyProperties(ABaseAmmo* other);
-
-	virtual UClass* getStaticClass() const;
-
-	UFUNCTION(Server, Reliable)
-	virtual void setAmmoMesh(UStaticMesh* newMesh) final;
-
-	UFUNCTION(Server, Reliable)
-	virtual void setDamage(float newDamage) final;
-
-	UFUNCTION(Server, Reliable)
-	virtual void setAmmoSpeed(float speed) final;
-
-	UFUNCTION(Server, Reliable)
-	virtual void setAmmoType(ammoTypes newAmmoType) final;
+	virtual void copyProperties(class UBaseWeapon* weapon);
 
 	virtual UStaticMeshComponent* getAmmoMeshComponent() const final;
 
 	virtual float getDamage() const final;
-
-	UFUNCTION(BlueprintCallable)
-	virtual float getSpeed() const final;
-
-	virtual ammoTypes getAmmoType() const final;
 
 	virtual bool getIsAlly() const final;
 

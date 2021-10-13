@@ -42,7 +42,7 @@ void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
 	{
 		if (i)
 		{
-			i->getAmmo()->setDamage(i->getAmmo()->getDamage() * 1.5f);
+			i->setDamage(i->getDamage() * 1.5f);
 		}
 	}
 
@@ -70,7 +70,7 @@ void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
 	{
 		if (i)
 		{
-			i->getAmmo()->setDamage(i->getAmmo()->getDamage() * 2.0f / 3.0f);
+			i->setDamage(i->getDamage() * 2.0f / 3.0f);
 		}
 	}
 }

@@ -16,9 +16,6 @@ class LOSTCONNECTION_API ABall : public ABaseAmmo
 {
 	GENERATED_BODY()
 	
-private:
-	GET_STATIC_CLASS_OVERRIDE(ABall)
-
 public:
 	ABall();
 
