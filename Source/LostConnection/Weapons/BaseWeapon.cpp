@@ -82,7 +82,7 @@ void UBaseWeapon::shoot()
 		}
 		else
 		{
-			resultRotation = character->getCurrentWeaponMesh()->GetBoneLocation("barrel").ToOrientationRotator();
+			resultRotation = character->GetCapsuleComponent()->GetComponentRotation();
 		}
 
 		launchedAmmo->getAmmoMeshComponent()->SetWorldRotation(resultRotation);
