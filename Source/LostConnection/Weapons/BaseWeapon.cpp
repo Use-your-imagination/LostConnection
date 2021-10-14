@@ -68,9 +68,9 @@ void UBaseWeapon::shoot()
 
 		if (drone)
 		{
-			FVector start = drone->GetFollowCamera()->GetComponentLocation();
+			FVector start = drone->getStartActionLineTrace();
 			FVector end = start + drone->GetFollowCamera()->GetComponentRotation().Vector() * distance;
-
+			
 			if (drone->GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility))
 			{
 				resultRotation = (hit.Location - drone->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();

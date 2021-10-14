@@ -8,9 +8,6 @@
 
 #include "Ball.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class LOSTCONNECTION_API ABall : public ABaseAmmo
 {

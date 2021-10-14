@@ -190,10 +190,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void takeDamage(float amount) final;
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setHealth(float newHealth) final;
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setCurrentHealth(float newCurrentHealth) final;
 
 	UFUNCTION(Server, Reliable)

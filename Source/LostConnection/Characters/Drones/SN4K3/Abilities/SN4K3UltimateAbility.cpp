@@ -30,11 +30,20 @@ void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 {
 	ASN4K3* drone = Cast<ASN4K3>(target);
 	ASN4K3UltimateAbilityPlaceholder* placeholder = drone->getUltimatePlaceholder();
-	FVector returnPosition = placeholder->GetActorLocation();
+	FVector returnPosition;
 
 	drone->GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 
 	drone->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+
+	if (currentAbilityDuration >= abilityDuration)
+	{
+		returnPosition = drone->GetActorLocation();
+	}
+	else
+	{
+		returnPosition = placeholder->GetActorLocation();
+	}
 
 	currentAbilityDuration = 0.0f;
 

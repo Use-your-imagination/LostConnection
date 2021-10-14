@@ -8,9 +8,6 @@
 
 #include "Bullet.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class LOSTCONNECTION_API ABullet : public ABaseAmmo
 {
