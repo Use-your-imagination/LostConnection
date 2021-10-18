@@ -368,9 +368,6 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		PlayerInputComponent->AddActionBinding(i);
 	}
 
-	// PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ABaseDrone::Jump);
-	// PlayerInputComponent->BindAction("Jump", IE_Released, this, &ABaseDrone::StopJumping);
-
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABaseDrone::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABaseDrone::MoveRight);
 
