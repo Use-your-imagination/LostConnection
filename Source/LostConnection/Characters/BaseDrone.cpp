@@ -78,6 +78,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	FInputActionBinding pressShoot("Shoot", IE_Pressed);
 	FInputActionBinding releaseShoot("Shoot", IE_Released);
 
+	FInputActionBinding holdJump("Jump", IE_Pressed);
+	FInputActionBinding releaseJump("Jump", IE_Released);
+
 	FInputActionBinding holdSprint("Sprint", IE_Pressed);
 	FInputActionBinding releaseSprint("Sprint", IE_Released);
 
@@ -97,6 +100,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	pressShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "shoot"); });
 	releaseShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "resetShoot"); });
 
+	holdJump.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "Jump"); });
+	releaseJump.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "StopJumping"); });
+
 	holdSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "holdSprint"); });
 	releaseSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseSprint"); });
 
@@ -115,6 +121,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 
 	result.Add(pressShoot);
 	result.Add(releaseShoot);
+
+	result.Add(holdJump);
+	result.Add(releaseJump);
 
 	result.Add(holdSprint);
 	result.Add(releaseSprint);
@@ -359,8 +368,8 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		PlayerInputComponent->AddActionBinding(i);
 	}
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ABaseDrone::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ABaseDrone::StopJumping);
+	// PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ABaseDrone::Jump);
+	// PlayerInputComponent->BindAction("Jump", IE_Released, this, &ABaseDrone::StopJumping);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABaseDrone::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABaseDrone::MoveRight);
