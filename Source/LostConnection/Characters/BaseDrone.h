@@ -117,7 +117,7 @@ protected:
 	UPROPERTY(Category = Zoom, VisibleAnywhere, BlueprintReadWrite)
 	FTimerHandle zoomUpdateHandle;
 
-	UPROPERTY(Category = Wallrun, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
 	bool wallrun;
 
 	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
@@ -159,9 +159,6 @@ protected:
 #pragma region BlueprintFunctionLibrarySetters
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setSlideCooldown(float newSlideCooldown) final;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setWallrun(bool newWallrun) final;
 #pragma endregion
 
 public:
