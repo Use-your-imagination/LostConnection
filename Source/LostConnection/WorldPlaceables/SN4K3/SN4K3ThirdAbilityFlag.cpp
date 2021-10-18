@@ -61,7 +61,7 @@ void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
 
 ASN4K3ThirdAbilityFlag::ASN4K3ThirdAbilityFlag()
 {
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> flagMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/SN3K3/Flag.Flag'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> flagMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/SN4K3/Abilities/Third/Meshes/Flag.Flag'"));
 
 	mesh->SetSkeletalMesh(flagMeshFinder.Object);
 

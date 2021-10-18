@@ -153,6 +153,16 @@ void ABaseDrone::wallrunCooldown_Implementation()
 
 }
 
+void ABaseDrone::setSlideCooldown_Implementation(float newSlideCooldown)
+{
+	slideCooldown = newSlideCooldown;
+}
+
+void ABaseDrone::setWallrun_Implementation(bool newWallrun)
+{
+	wallrun = newWallrun;
+}
+
 void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -190,6 +200,10 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(ABaseDrone, secondWeaponSlot);
 
 	DOREPLIFETIME(ABaseDrone, slideCooldown);
+
+#pragma region BlueprintFunctionLibrary
+	DOREPLIFETIME(ABaseDrone, wallrun);
+#pragma endregion
 }
 
 void ABaseDrone::PostInitializeComponents()
@@ -664,11 +678,6 @@ void ABaseDrone::action()
 	{
 		object->action(this);
 	}
-}
-
-void ABaseDrone::setSlideCooldown_Implementation(float newSlideCooldown)
-{
-	slideCooldown = newSlideCooldown;
 }
 
 UBaseWeapon* ABaseDrone::getFirstWeapon()
