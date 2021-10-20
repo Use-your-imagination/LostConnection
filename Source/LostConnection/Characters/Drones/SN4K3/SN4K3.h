@@ -17,9 +17,6 @@ private:
 	class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder;
 
 private:
-	void PostInitializeComponents() override;
-
-private:
 	UFUNCTION()
 	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 

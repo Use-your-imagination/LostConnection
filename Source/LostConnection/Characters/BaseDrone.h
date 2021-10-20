@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -52,47 +50,47 @@ private:
 	virtual TArray<FInputActionBinding> initInputs();
 
 protected:
-	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float energy;
 
-	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float currentEnergy;
 
-	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float energyRestorationPerSecond;
 
-	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float cooldownReduction;
 
-	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float duration;
 
-	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float power;
 
-	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float energyEfficiency;
 
-	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float AOE;
 
-	UPROPERTY(Category = CasterStats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float castPoint;
 
 protected:
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBasePassiveAbility* passiveAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBaseAbility* firstAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBaseAbility* secondAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBaseAbility* thirdAbility;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBaseUltimateAbility* ultimateAbility;
 
 #pragma region BlueprintFunctionLibrary

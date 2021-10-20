@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -11,9 +9,6 @@
 
 #include "SN4K3ThirdAbilityFlag.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class LOSTCONNECTION_API ASN4K3ThirdAbilityFlag : public ADroppedObject
 {
@@ -24,7 +19,7 @@ private:
 	TSet<AActor*> targets;
 	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes;
 
-	float lifeTime;
+	float lifetime;
 	float currentTime;
 	float period;
 	float radius;
@@ -35,7 +30,7 @@ private:
 public:
 	ASN4K3ThirdAbilityFlag();
 
-	void setLifeTime(float lifeTime);
+	void setLifetime(float lifetime);
 
 	void setAbility(USN4K3ThirdAbility* ability);
 
