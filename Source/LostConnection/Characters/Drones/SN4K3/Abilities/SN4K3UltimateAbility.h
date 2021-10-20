@@ -22,7 +22,7 @@ private:
 	float currentAbilityDuration;
 
 private:
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const final override;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	USN4K3UltimateAbility();

@@ -13,7 +13,7 @@ void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
-		lifeTime -= DeltaTime;
+		lifetime -= DeltaTime;
 
 		currentTime += DeltaTime;
 
@@ -47,7 +47,7 @@ void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
 			}
 		}
 
-		if (lifeTime <= 0.0f)
+		if (lifetime <= 0.0f)
 		{
 			for (auto& i : targets)
 			{
@@ -70,9 +70,9 @@ ASN4K3ThirdAbilityFlag::ASN4K3ThirdAbilityFlag()
 	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
 }
 
-void ASN4K3ThirdAbilityFlag::setLifeTime(float lifeTime)
+void ASN4K3ThirdAbilityFlag::setLifetime(float lifetime)
 {
-	this->lifeTime = lifeTime;
+	this->lifetime = lifetime;
 }
 
 void ASN4K3ThirdAbilityFlag::setAbility(USN4K3ThirdAbility* ability)
