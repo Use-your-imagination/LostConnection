@@ -19,7 +19,7 @@ private:
 	};
 
 private:
-	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = AbilityStats, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 naniteMeter;
 
 	float lastTimeAbilityUsed;

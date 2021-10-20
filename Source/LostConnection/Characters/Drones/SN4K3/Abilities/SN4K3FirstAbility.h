@@ -11,6 +11,13 @@ class LOSTCONNECTION_API USN4K3FirstAbility : public UBaseAbility
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY(Category = AbilityStats, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float damage;
+
+private:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 public:
 	USN4K3FirstAbility();
 

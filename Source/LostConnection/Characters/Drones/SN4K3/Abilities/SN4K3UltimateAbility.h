@@ -12,13 +12,13 @@ class LOSTCONNECTION_API USN4K3UltimateAbility : public UBaseUltimateAbility
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "SN4K3|Ultimate ability", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	bool isUltimateAbilityUsed;
 
-	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = AbilityStats, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float abilityDuration;
 
-	UPROPERTY(Category = SN4K3, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "SN4K3|Ultimate ability", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float currentAbilityDuration;
 
 private:

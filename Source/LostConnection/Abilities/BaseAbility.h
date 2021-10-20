@@ -9,13 +9,13 @@
 
 #include "BaseAbility.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(BlueprintType, DefaultToInstanced)
 class LOSTCONNECTION_API UBaseAbility : public UObject
 {
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float cost;
 
 	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
