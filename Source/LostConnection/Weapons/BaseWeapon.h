@@ -52,6 +52,9 @@ protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMesh* magazineMesh;
 
+	UPROPERTY()
+	UClass* animationBlueprint;
+
 	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	ammoTypes ammoType;
 
@@ -126,6 +129,8 @@ public:
 	virtual int getRoundsPerSecond() const final;
 
 	virtual weaponTypes getWeaponType() const final;
+
+	virtual UClass* getAnimationBlueprint() const final;
 
 	virtual ~UBaseWeapon() = default;
 };

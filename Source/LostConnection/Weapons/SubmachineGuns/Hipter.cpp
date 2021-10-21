@@ -6,10 +6,13 @@ UHipter::UHipter()
 {
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> weaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/SubmachineGuns/Hipter/Hipter.Hipter'"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> magazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/SubmachineGuns/Hipter/HipterMagazine.HipterMagazine'"));
+	ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Assets/Weapons/SubmachineGuns/Hipter/AnimBP_Hipter"));
 
 	mesh = weaponMeshFinder.Object;
 
 	magazineMesh = magazineFinder.Object;
+
+	animationBlueprint = animBPFinder.Class;
 
 	ammoType = ammoTypes::small;
 	damage = 55.0f;

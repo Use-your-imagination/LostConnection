@@ -114,6 +114,8 @@ void ABaseCharacter::updateWeaponMesh()
 	{
 		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
 
+		currentWeaponMesh->SetAnimClass(currentWeapon->getAnimationBlueprint());
+
 		magazine->AttachToComponent(currentWeaponMesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false), "magazine");
 
 		magazine->SetStaticMesh(currentWeapon->getMagazineMesh());
@@ -125,6 +127,8 @@ void ABaseCharacter::updateWeaponMesh()
 		magazine->SetStaticMesh(nullptr);
 
 		currentWeaponMesh->SetSkeletalMesh(nullptr);
+
+		currentWeaponMesh->SetAnimClass(nullptr);
 	}
 }
 

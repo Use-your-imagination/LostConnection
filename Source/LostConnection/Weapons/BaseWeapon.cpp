@@ -231,3 +231,8 @@ weaponTypes UBaseWeapon::getWeaponType() const
 {
 	return weaponType;
 }
+
+UClass* UBaseWeapon::getAnimationBlueprint() const
+{
+	return animationBlueprint;
+}
