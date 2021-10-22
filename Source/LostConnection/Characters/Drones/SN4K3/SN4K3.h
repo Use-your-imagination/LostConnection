@@ -26,14 +26,6 @@ public:
 	void setUltimatePlaceholder(class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceHolder);
 
 	class ASN4K3UltimateAbilityPlaceholder* getUltimatePlaceholder();
-	
-	void castFirstAbilityVisual() override;
-
-	void castSecondAbilityVisual() override;
-
-	void castThirdAbilityVisual() override;
-
-	void castUltimateAbilityVisual() override;
 
 	~ASN4K3() = default;
 };
