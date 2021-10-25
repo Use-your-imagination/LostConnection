@@ -1,4 +1,13 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.0.16.0"
+  "projectVersion": "0.0.16.0",
+  "UI": {
+    "type": "category",
+    "Menus": {
+      "type": "item",
+      "notes": [
+        "Added video settings"
+      ]
+    }
+  }
 }
