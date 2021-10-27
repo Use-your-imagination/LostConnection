@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -21,7 +19,7 @@
 
 #include "BaseCharacter.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType, DefaultToInstanced)
 class LOSTCONNECTION_API ABaseCharacter :
 	public ACharacter,
 	public IShotThrough,
@@ -50,16 +48,16 @@ protected:
 	UTimersUtility* timers;
 
 protected:
-	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float health;
 
-	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float currentHealth;
 
-	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float defaultMovementSpeed;
 
-	UPROPERTY(Category = Stats, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float sprintMovementSpeed;
 
 	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadOnly)

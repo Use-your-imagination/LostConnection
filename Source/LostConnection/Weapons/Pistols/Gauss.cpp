@@ -11,10 +11,13 @@ UGauss::UGauss()
 {
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> weaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/Pistols/Gauss/Gauss.Gauss'"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> magazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Pistols/Gauss/GaussMagazine.GaussMagazine'"));
+	ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Assets/Weapons/Pistols/Gauss/AnimBP_Gauss"));
 
 	mesh = weaponMeshFinder.Object;
 
 	magazineMesh = magazineFinder.Object;
+
+	animationBlueprint = animBPFinder.Class;
 
 	ammoType = ammoTypes::defaultType;
 	damage = 150.0f;

@@ -6,7 +6,21 @@
 #include "Engine/LostConnectionGameState.h"
 #include "SN4K3PassiveAbility.h"
 
-USN4K3ThirdAbility::USN4K3ThirdAbility()
+void USN4K3ThirdAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(USN4K3ThirdAbility, lifetime);
+
+	DOREPLIFETIME(USN4K3ThirdAbility, radius);
+
+	DOREPLIFETIME(USN4K3ThirdAbility, period);
+}
+
+USN4K3ThirdAbility::USN4K3ThirdAbility() :
+	lifetime(10.0f),
+	radius(350.0f),
+	period(1.0f)
 {
 
 }
@@ -84,13 +98,13 @@ void USN4K3ThirdAbility::useAbility()
 
 	ASN4K3ThirdAbilityFlag* flag = drone->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3ThirdAbilityFlag>({ drone->GetActorRotation(), tem + drone->GetActorLocation() });
 
-	flag->setLifeTime(10.0f);
+	flag->setLifetime(lifetime);
 
-	flag->setRadius(350.0f);
+	flag->setRadius(radius);
 
 	flag->setAbility(this);
 
-	flag->setPeriod(1.0f);
+	flag->setPeriod(period);
 
 	flag->FinishSpawning({}, true);
 

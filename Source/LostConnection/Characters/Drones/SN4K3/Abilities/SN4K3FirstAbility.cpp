@@ -7,14 +7,25 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "SN4K3PassiveAbility.h"
 
-USN4K3FirstAbility::USN4K3FirstAbility()
+void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(USN4K3FirstAbility, damage);
+
+	DOREPLIFETIME(USN4K3FirstAbility, distance);
+}
+
+USN4K3FirstAbility::USN4K3FirstAbility() : 
+	damage(375.0f),
+	distance(1200.0f)
 {
 	cost = 90.0f;
 }
 
 void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 {
-	target->takeDamage(375.0f);
+	target->takeDamage(damage);
 
 	ICaster::Execute_applyFirstAbilityEvent(Cast<UObject>(caster), target);
 }
@@ -30,7 +41,7 @@ void USN4K3FirstAbility::useAbility()
 
 	if ((camera->GetComponentRotation().Pitch > 15.0f && !isFalling) || isFalling)
 	{
-		drone->AddActorWorldOffset(camera->GetComponentRotation().Vector() * 1200.0f, true);
+		drone->AddActorWorldOffset(camera->GetComponentRotation().Vector() * distance, true);
 	}
 	else
 	{
@@ -38,7 +49,7 @@ void USN4K3FirstAbility::useAbility()
 
 		tem.Z = 0.0f;
 
-		drone->AddActorWorldOffset(tem * 1200.0f, true);
+		drone->AddActorWorldOffset(tem * distance, true);
 	}
 
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
