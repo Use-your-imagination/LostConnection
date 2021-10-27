@@ -9,5 +9,23 @@
         "Added video settings"
       ]
     }
+  },
+  "Bugs": {
+    "type": "category",
+    "AI": {
+      "type": "item",
+      "notes": [
+        "Fixed AI rotation."
+      ]
+    }
+  },
+  "Known issues": {
+    "type": "category",
+    "AI shooting": {
+      "type": "item",
+      "notes": [
+        "AI can't shoot vertically"
+      ]
+    }
   }
 }
