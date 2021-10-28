@@ -55,12 +55,9 @@ void UBaseWeapon::shoot()
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammoClass, FTransform(character->getCurrentWeaponMesh()->GetBoneLocation("barrel")));
+		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammoClass, FTransform(character->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")));
 
 		launchedAmmo->copyProperties(this);
-
-		// Tracer limit
-		static constexpr float distance = 20000.0f;
 
 		FHitResult hit;
 		FRotator resultRotation;
@@ -68,21 +65,26 @@ void UBaseWeapon::shoot()
 
 		if (drone)
 		{
+			// Tracer limit
+			static constexpr float distance = 20000.0f;
+
 			FVector start = drone->getStartActionLineTrace();
 			FVector end = start + drone->GetFollowCamera()->GetComponentRotation().Vector() * distance;
 			
 			if (drone->GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility))
 			{
-				resultRotation = (hit.Location - drone->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+				resultRotation = (hit.Location - drone->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")).ToOrientationRotator();
 			}
 			else
 			{
-				resultRotation = ((drone->GetFollowCamera()->GetComponentRotation().Vector() * distance) - drone->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+				resultRotation = ((drone->GetFollowCamera()->GetComponentRotation().Vector() * distance) - drone->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")).ToOrientationRotator();
 			}
 		}
 		else
 		{
-			resultRotation = character->GetCapsuleComponent()->GetComponentRotation();
+			resultRotation = character->getCurrentWeaponMeshComponent()->GetComponentRotation().Vector().ToOrientationRotator();
+
+			resultRotation.Yaw = character->GetCapsuleComponent()->GetComponentRotation().Yaw;
 		}
 
 		launchedAmmo->getAmmoMeshComponent()->SetWorldRotation(resultRotation);

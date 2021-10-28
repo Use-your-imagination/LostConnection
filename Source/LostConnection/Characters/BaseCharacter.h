@@ -228,7 +228,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual bool isWeaponEquipped() const final;
 
-	virtual USkeletalMeshComponent* getCurrentWeaponMesh() const final;
+	virtual USkeletalMeshComponent* getCurrentWeaponMeshComponent() const final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual int getWeaponCount() const;

@@ -51,35 +51,3 @@ ASN4K3UltimateAbilityPlaceholder* ASN4K3::getUltimatePlaceholder()
 {
 	return ultimatePlaceholder;
 }
-
-void ASN4K3::castFirstAbilityVisual()
-{
-	if (HasAuthority())
-	{
-		this->castFirstAbilityLogic();
-	}
-}
-
-void ASN4K3::castSecondAbilityVisual()
-{
-	if (HasAuthority())
-	{
-		this->castSecondAbilityLogic();
-	}
-}
-
-void ASN4K3::castThirdAbilityVisual()
-{
-	if (HasAuthority())
-	{
-		this->castThirdAbilityLogic();
-	}
-}
-
-void ASN4K3::castUltimateAbilityVisual()
-{
-	if (HasAuthority())
-	{
-		this->castUltimateAbilityLogic();
-	}
-}
