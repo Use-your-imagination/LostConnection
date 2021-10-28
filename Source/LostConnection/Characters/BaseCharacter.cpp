@@ -448,7 +448,7 @@ bool ABaseCharacter::getIsReloading() const
 	return isReloading;
 }
 
-USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMesh() const
+USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMeshComponent() const
 {
 	return currentWeaponMesh;
 }
