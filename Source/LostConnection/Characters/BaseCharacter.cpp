@@ -287,6 +287,7 @@ ABaseCharacter::ABaseCharacter() :
 
 	mesh->SetGenerateOverlapEvents(true);
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
 	movement->bOrientRotationToMovement = true;
 	movement->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
