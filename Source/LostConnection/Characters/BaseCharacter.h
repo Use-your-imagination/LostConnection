@@ -69,6 +69,9 @@ protected:
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	TArray<int32> spareAmmo;
 
+	UPROPERTY(Category = "Physical Constraints", EditDefaultsOnly, BlueprintReadOnly)
+	TArray<FName> physicsBones;
+
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Reloading, VisibleAnywhere, BlueprintReadWrite)
 	bool isReloading;
