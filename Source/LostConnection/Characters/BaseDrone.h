@@ -177,6 +177,17 @@ protected:
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 protected:
+	virtual bool checkPassiveAbilityCast() const override;
+
+	virtual bool checkFirstAbilityCast() const override;
+
+	virtual bool checkSecondAbilityCast() const override;
+
+	virtual bool checkThirdAbilityCast() const override;
+
+	virtual bool checkUltimateAbilityCast() const override;
+
+protected:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;

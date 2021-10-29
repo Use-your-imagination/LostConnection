@@ -12,8 +12,6 @@
 #include "Weapons/Pistols/Gauss.h"
 #include "Utility/MultiplayerUtility.h"
 
-#include "Drones/SN4K3/Abilities/SN4K3FirstAbility.h"
-
 #pragma warning(disable: 4458)
 
 using namespace std;
@@ -30,10 +28,10 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	FInputActionBinding thirdAbility("ThirdAbility", IE_Pressed);
 	FInputActionBinding ultimateAbility("UltimateAbility", IE_Pressed);
 
-	firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castFirstAbility"); });
-	secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castSecondAbility"); });
-	thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castThirdAbility"); });
-	ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castUltimateAbility"); });
+	firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "castFirstAbility"); });
+	secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "castSecondAbility"); });
+	thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "castThirdAbility"); });
+	ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "castUltimateAbility"); });
 
 	result.Add(firstAbility);
 	result.Add(secondAbility);
@@ -250,6 +248,51 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
 	return wroteSomething;
+}
+
+bool ABaseDrone::checkPassiveAbilityCast() const
+{
+	return true;
+}
+
+bool ABaseDrone::checkFirstAbilityCast() const
+{
+	if (currentEnergy < firstAbility->getCost())
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ABaseDrone::checkSecondAbilityCast() const
+{
+	if (currentEnergy < secondAbility->getCost())
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ABaseDrone::checkThirdAbilityCast() const
+{
+	if (currentEnergy < thirdAbility->getCost())
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ABaseDrone::checkUltimateAbilityCast() const
+{
+	if (currentEnergy < ultimateAbility->getCost() || !ultimateAbility->getCurrentCooldown())
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void ABaseDrone::BeginPlay()
@@ -847,14 +890,7 @@ void ABaseDrone::castPassiveAbilityVisual()
 
 void ABaseDrone::castPassiveAbilityLogic_Implementation()
 {
-	float cost = passiveAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= passiveAbility->getCost();
 
 	passiveAbility->useAbility();
 
@@ -870,14 +906,7 @@ void ABaseDrone::castFirstAbilityVisual()
 
 void ABaseDrone::castFirstAbilityLogic_Implementation()
 {
-	float cost = firstAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= firstAbility->getCost();
 
 	firstAbility->useAbility();
 
@@ -893,14 +922,7 @@ void ABaseDrone::castSecondAbilityVisual()
 
 void ABaseDrone::castSecondAbilityLogic_Implementation()
 {
-	float cost = secondAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= secondAbility->getCost();
 
 	secondAbility->useAbility();
 
@@ -916,14 +938,7 @@ void ABaseDrone::castThirdAbilityVisual()
 
 void ABaseDrone::castThirdAbilityLogic_Implementation()
 {
-	float cost = thirdAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= thirdAbility->getCost();
 
 	thirdAbility->useAbility();
 
@@ -939,14 +954,7 @@ void ABaseDrone::castUltimateAbilityVisual()
 
 void ABaseDrone::castUltimateAbilityLogic_Implementation()
 {
-	float cost = ultimateAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= ultimateAbility->getCost();
 
 	ultimateAbility->useAbility();
 

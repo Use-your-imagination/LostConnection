@@ -29,6 +29,10 @@ protected:
 public:
 	UBaseUltimateAbility();
 
+	virtual float getCooldown() const final;
+
+	virtual float getCurrentCooldown() const final;
+
 	virtual void applyAbility(class ABaseCharacter* target) override;
 
 	virtual void useAbility() override;

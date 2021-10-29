@@ -16,8 +16,13 @@ class LOSTCONNECTION_API IPassiveAbilityCast
 {
 	GENERATED_BODY()
 
+private:
+	UFUNCTION()
+	virtual void callCastPassiveAbilityEventVisual();
+
 protected:
-	virtual void castPassiveAbilityVisual() = 0;
+	UFUNCTION()
+	virtual void castPassiveAbilityVisual();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void castPassiveAbilityEventVisual();
@@ -26,6 +31,8 @@ protected:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void castPassiveAbilityEventLogic();
+
+	virtual bool checkPassiveAbilityCast() const = 0;
 
 public:
 	IPassiveAbilityCast() = default;
