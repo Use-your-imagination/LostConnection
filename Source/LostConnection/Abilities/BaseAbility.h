@@ -27,6 +27,9 @@ protected:
 	FText description;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, BlueprintReadOnly)
+	bool isCancelable;
+
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* animation;
 
 	class ICaster* caster;
@@ -63,6 +66,8 @@ public:
 	virtual const FText& getName() const final;
 
 	virtual const FText& getDescription() const final;
+
+	virtual bool getIsCancelable() const final;
 
 	virtual class ICaster* getCaster() final;
 

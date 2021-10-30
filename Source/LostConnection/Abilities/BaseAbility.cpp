@@ -79,6 +79,11 @@ const FText& UBaseAbility::getDescription() const
 	return description;
 }
 
+bool UBaseAbility::getIsCancelable() const
+{
+	return isCancelable;
+}
+
 ICaster* UBaseAbility::getCaster()
 {
 	return caster;

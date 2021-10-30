@@ -1,6 +1,7 @@
 #include "Caster.h"
 
-#include "Characters/BaseCharacter.h"
+#include "Characters/BaseDrone.h"
+#include "Characters/BaseBotCaster.h"
 
 void ICaster::setEnergy_Implementation(float newEnergy)
 {
@@ -29,5 +30,23 @@ void ICaster::setCurrentAbility(UBaseAbility* ability)
 
 void ICaster::cancelCurrentAbilityAnimation()
 {
-	Cast<ABaseCharacter>(this)->GetMesh()->GetAnimInstance()->Montage_Play(nullptr);
+	ABaseDrone* drone = Cast<ABaseDrone>(this);
+
+	if (drone)
+	{
+		if (drone->getCurrentAbility()->getIsCancelable())
+		{
+			drone->GetMesh()->GetAnimInstance()->Montage_Play(nullptr);
+		}
+	}
+
+	ABaseBotCaster* bot = Cast<ABaseBotCaster>(this);
+
+	if (bot)
+	{
+		if (bot->getCurrentAbility()->getIsCancelable())
+		{
+			bot->GetMesh()->GetAnimInstance()->Montage_Play(nullptr);
+		}
+	}
 }
