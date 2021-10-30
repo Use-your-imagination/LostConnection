@@ -1,10 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 
-#include "GameFramework/Actor.h"
+#include "UObject/Object.h"
+#include "Animation/AnimMontage.h"
 #include "Net/UnrealNetwork.h"
 
 #include "BaseAbility.generated.h"
@@ -21,14 +20,16 @@ protected:
 	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	bool isDisabled;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
-	FString localizedName;
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, BlueprintReadOnly)
+	FText name;
 
-	UPROPERTY(Category = Abilities, VisibleAnywhere, BlueprintReadOnly)
-	FString description;
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, BlueprintReadOnly)
+	FText description;
+
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* animation;
 
 	class ICaster* caster;
-	FString name;
 
 protected:
 	virtual bool IsSupportedForNetworking() const final override;
@@ -59,7 +60,9 @@ public:
 
 	virtual bool getIsDisabled() const final;
 
-	virtual const FString& getLocalizedName() const final;
+	virtual const FText& getName() const final;
+
+	virtual const FText& getDescription() const final;
 
 	virtual class ICaster* getCaster() final;
 

@@ -69,9 +69,14 @@ bool UBaseAbility::getIsDisabled() const
 	return isDisabled;
 }
 
-const FString& UBaseAbility::getLocalizedName() const
+const FText& UBaseAbility::getName() const
 {
-	return localizedName;
+	return name;
+}
+
+const FText& UBaseAbility::getDescription() const
+{
+	return description;
 }
 
 ICaster* UBaseAbility::getCaster()
