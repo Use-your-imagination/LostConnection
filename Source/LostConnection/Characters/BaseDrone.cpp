@@ -187,6 +187,8 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, castPoint);
 
+	DOREPLIFETIME(ABaseDrone, currentAbility);
+
 	DOREPLIFETIME(ABaseDrone, passiveAbility);
 
 	DOREPLIFETIME(ABaseDrone, firstAbility);
@@ -237,6 +239,8 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 
 	wroteSomething |= Channel->ReplicateSubobject(secondWeaponSlot, *Bunch, *RepFlags);
 
+	wroteSomething |= Channel->ReplicateSubobject(currentAbility, *Bunch, *RepFlags);
+
 	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
@@ -257,7 +261,7 @@ bool ABaseDrone::checkPassiveAbilityCast() const
 
 bool ABaseDrone::checkFirstAbilityCast() const
 {
-	if (currentEnergy < firstAbility->getCost())
+	if (currentAbility || currentEnergy < firstAbility->getCost())
 	{
 		return false;
 	}
@@ -267,7 +271,7 @@ bool ABaseDrone::checkFirstAbilityCast() const
 
 bool ABaseDrone::checkSecondAbilityCast() const
 {
-	if (currentEnergy < secondAbility->getCost())
+	if (currentAbility || currentEnergy < firstAbility->getCost())
 	{
 		return false;
 	}
@@ -277,7 +281,7 @@ bool ABaseDrone::checkSecondAbilityCast() const
 
 bool ABaseDrone::checkThirdAbilityCast() const
 {
-	if (currentEnergy < thirdAbility->getCost())
+	if (currentAbility || currentEnergy < firstAbility->getCost())
 	{
 		return false;
 	}
@@ -287,7 +291,7 @@ bool ABaseDrone::checkThirdAbilityCast() const
 
 bool ABaseDrone::checkUltimateAbilityCast() const
 {
-	if (currentEnergy < ultimateAbility->getCost() || !ultimateAbility->getCurrentCooldown())
+	if (currentAbility || currentEnergy < ultimateAbility->getCost() || !ultimateAbility->getCurrentCooldown())
 	{
 		return false;
 	}

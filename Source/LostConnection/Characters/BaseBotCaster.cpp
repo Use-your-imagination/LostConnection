@@ -22,6 +22,8 @@ void ABaseBotCaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ABaseBotCaster, castPoint);
 
+	DOREPLIFETIME(ABaseBotCaster, currentAbility);
+
 	DOREPLIFETIME(ABaseBotCaster, passiveAbility);
 
 	DOREPLIFETIME(ABaseBotCaster, firstAbility);
@@ -36,6 +38,8 @@ void ABaseBotCaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 bool ABaseBotCaster::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(currentAbility, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
 
@@ -57,7 +61,7 @@ bool ABaseBotCaster::checkPassiveAbilityCast() const
 
 bool ABaseBotCaster::checkFirstAbilityCast() const
 {
-	if (currentEnergy < firstAbility->getCost())
+	if (currentAbility || currentEnergy < firstAbility->getCost())
 	{
 		return false;
 	}
@@ -67,7 +71,7 @@ bool ABaseBotCaster::checkFirstAbilityCast() const
 
 bool ABaseBotCaster::checkSecondAbilityCast() const
 {
-	if (currentEnergy < secondAbility->getCost())
+	if (currentAbility || currentEnergy < firstAbility->getCost())
 	{
 		return false;
 	}
@@ -77,7 +81,7 @@ bool ABaseBotCaster::checkSecondAbilityCast() const
 
 bool ABaseBotCaster::checkThirdAbilityCast() const
 {
-	if (currentEnergy < thirdAbility->getCost())
+	if (currentAbility || currentEnergy < firstAbility->getCost())
 	{
 		return false;
 	}
@@ -87,7 +91,7 @@ bool ABaseBotCaster::checkThirdAbilityCast() const
 
 bool ABaseBotCaster::checkUltimateAbilityCast() const
 {
-	if (currentEnergy < ultimateAbility->getCost() || !ultimateAbility->getCurrentCooldown())
+	if (currentAbility || currentEnergy < ultimateAbility->getCost() || !ultimateAbility->getCurrentCooldown())
 	{
 		return false;
 	}
