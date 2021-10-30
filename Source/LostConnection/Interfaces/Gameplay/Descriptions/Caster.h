@@ -52,6 +52,8 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void setCastPoint(float newCastPoint);
 
+	virtual void setCurrentAbility(UBaseAbility* ability);
+
 	virtual float getEnergy() const = 0;
 
 	virtual float getCurrentEnergy() const = 0;
@@ -69,6 +71,8 @@ public:
 	virtual float getAOE() const = 0;
 
 	virtual float getCastPoint() const = 0;
+
+	virtual UBaseAbility* getCurrentAbility() = 0;
 
 	virtual UBasePassiveAbility* getPassiveAbility() = 0;
 

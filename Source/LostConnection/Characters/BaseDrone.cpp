@@ -812,6 +812,11 @@ void ABaseDrone::setCastPoint_Implementation(float newCastPoint)
 	castPoint = newCastPoint;
 }
 
+void ABaseDrone::setCurrentAbility_Implementation(UBaseAbility* ability)
+{
+	currentAbility = ability;
+}
+
 float ABaseDrone::getEnergy() const
 {
 	return energy;
@@ -855,6 +860,11 @@ float ABaseDrone::getAOE() const
 float ABaseDrone::getCastPoint() const
 {
 	return castPoint;
+}
+
+UBaseAbility* ABaseDrone::getCurrentAbility()
+{
+	return currentAbility;
 }
 
 UBasePassiveAbility* ABaseDrone::getPassiveAbility()

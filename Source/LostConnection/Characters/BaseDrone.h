@@ -78,6 +78,9 @@ protected:
 	float castPoint;
 
 protected:
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UBaseAbility* currentAbility;
+
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBasePassiveAbility* passiveAbility;
 
@@ -297,6 +300,9 @@ public:
 	
 	virtual void setCastPoint_Implementation(float newCastPoint) final;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void setCurrentAbility(UBaseAbility* ability) final override;
+
 	virtual float getEnergy() const final override;
 
 	virtual float getCurrentEnergy() const final override;
@@ -314,6 +320,8 @@ public:
 	virtual float getAOE() const final;
 
 	virtual float getCastPoint() const final;
+
+	virtual UBaseAbility* getCurrentAbility() final override; 
 
 	virtual UBasePassiveAbility* getPassiveAbility() final override;
 

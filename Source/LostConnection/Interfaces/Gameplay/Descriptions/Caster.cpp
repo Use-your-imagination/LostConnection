@@ -19,3 +19,8 @@ void ICaster::setCooldownReduction_Implementation(float newCooldownReduction)
 {
 
 }
+
+void ICaster::setCurrentAbility(UBaseAbility* ability)
+{
+
+}
