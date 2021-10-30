@@ -101,4 +101,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void castAbilityEventVisual(UBaseAbility* ability);
+
+	UFUNCTION()
+	virtual void cancelCurrentAbilityAnimation();
 };

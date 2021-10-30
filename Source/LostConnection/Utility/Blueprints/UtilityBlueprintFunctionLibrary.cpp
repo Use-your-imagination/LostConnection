@@ -2,6 +2,11 @@
 
 #include "GameFramework/InputSettings.h"
 
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
+#include "Characters/BaseDrone.h"
+#include "Characters/BaseBotCaster.h"
+#include "Utility/MultiplayerUtility.h"
+
 FString UUtilityBlueprintFunctionLibrary::firstSymbolToUpperCase(const FString& string)
 {
 	if (!string.Len())
@@ -76,4 +81,9 @@ void UUtilityBlueprintFunctionLibrary::rebindHotkeys(const TMap<FName, FString>&
 	{
 		it->ForceRebuildingKeyMaps(true);
 	}
+}
+
+void UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(TScriptInterface<ICaster> caster)
+{
+	MultiplayerUtility::runOnServerReliableWithMulticast(caster.GetObject(), "cancelCurrentAbilityAnimation");
 }

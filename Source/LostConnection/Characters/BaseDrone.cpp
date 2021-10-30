@@ -11,6 +11,7 @@
 #include "Weapons/SubmachineGuns/Hipter.h"
 #include "Weapons/Pistols/Gauss.h"
 #include "Utility/MultiplayerUtility.h"
+#include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
 
 #pragma warning(disable: 4458)
 
@@ -93,6 +94,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 
 	FInputActionBinding	dropWeapon("DropWeapon", IE_Pressed);
 
+	FInputActionBinding	cancelAbility("CancelAbility", IE_Pressed);
+
 	reload.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "reload"); });
 
 	pressShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "shoot"); });
@@ -114,6 +117,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	action.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "action"); });
 
 	dropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "dropWeapon"); });
+	
+	cancelAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { this->setCurrentAbility(nullptr); UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(this); });
 
 	result.Add(reload);
 
@@ -136,6 +141,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	result.Add(action);
 
 	result.Add(dropWeapon);
+
+	result.Add(cancelAbility);
 
 	return result;
 }

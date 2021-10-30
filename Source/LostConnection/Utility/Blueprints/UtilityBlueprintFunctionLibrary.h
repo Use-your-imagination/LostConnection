@@ -7,9 +7,6 @@
 
 #include "UtilityBlueprintFunctionLibrary.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class LOSTCONNECTION_API UUtilityBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
@@ -21,4 +18,7 @@ public:
 
 	UFUNCTION(Category = Utility, BlueprintCallable)
 	static void rebindHotkeys(const TMap<FName, FString>& newHotkeys);
+
+	UFUNCTION(Category = Utility, BlueprintCallable)
+	static void cancelCurrentAbilityAnimation(TScriptInterface<class ICaster> caster);
 };
