@@ -1,10 +1,13 @@
 #include "ThirdAbilityCast.h"
 
 #include "Utility/MultiplayerUtility.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
 
 void IThirdAbilityCast::callCastThirdAbilityEventVisual()
 {
-	IThirdAbilityCast::Execute_castThirdAbilityEventVisual(Cast<UObject>(this));
+	ICaster* caster = Cast<ICaster>(this);
+
+	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getPassiveAbility());
 }
 
 void IThirdAbilityCast::castThirdAbilityVisual()

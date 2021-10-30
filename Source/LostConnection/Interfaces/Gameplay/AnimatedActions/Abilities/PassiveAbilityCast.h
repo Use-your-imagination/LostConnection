@@ -24,9 +24,6 @@ protected:
 	UFUNCTION()
 	virtual void castPassiveAbilityVisual();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void castPassiveAbilityEventVisual();
-
 	virtual void castPassiveAbilityLogic() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)

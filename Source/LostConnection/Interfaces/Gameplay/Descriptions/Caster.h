@@ -98,4 +98,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void applyUltimateAbilityEvent(class ABaseCharacter* target);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void castAbilityEventVisual(UBaseAbility* ability);
 };

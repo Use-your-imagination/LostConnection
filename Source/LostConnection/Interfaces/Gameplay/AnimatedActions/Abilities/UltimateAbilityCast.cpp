@@ -1,10 +1,13 @@
 #include "UltimateAbilityCast.h"
 
 #include "Utility/MultiplayerUtility.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
 
 void IUltimateAbilityCast::callCastUltimateAbilityEventVisual()
 {
-	IUltimateAbilityCast::Execute_castUltimateAbilityEventVisual(Cast<UObject>(this));
+	ICaster* caster = Cast<ICaster>(this);
+
+	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getPassiveAbility());
 }
 
 void IUltimateAbilityCast::castUltimateAbilityVisual()

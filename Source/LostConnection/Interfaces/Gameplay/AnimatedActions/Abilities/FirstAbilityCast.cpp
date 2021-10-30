@@ -1,10 +1,13 @@
 #include "FirstAbilityCast.h"
 
 #include "Utility/MultiplayerUtility.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
 
 void IFirstAbilityCast::callCastFirstAbilityEventVisual()
 {
-	IFirstAbilityCast::Execute_castFirstAbilityEventVisual(Cast<UObject>(this));
+	ICaster* caster = Cast<ICaster>(this);
+
+	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getPassiveAbility());
 }
 
 void IFirstAbilityCast::castFirstAbilityVisual()

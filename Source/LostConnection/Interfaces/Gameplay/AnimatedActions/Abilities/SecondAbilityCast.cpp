@@ -1,10 +1,13 @@
 #include "SecondAbilityCast.h"
 
 #include "Utility/MultiplayerUtility.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
 
 void ISecondAbilityCast::callCastSecondAbilityEventVisual()
 {
-	ISecondAbilityCast::Execute_castSecondAbilityEventVisual(Cast<UObject>(this));
+	ICaster* caster = Cast<ICaster>(this);
+
+	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getPassiveAbility());
 }
 
 void ISecondAbilityCast::castSecondAbilityVisual()

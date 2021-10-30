@@ -24,9 +24,6 @@ protected:
 	UFUNCTION()
 	virtual void castUltimateAbilityVisual();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void castUltimateAbilityEventVisual();
-
 	virtual void castUltimateAbilityLogic() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)

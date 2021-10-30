@@ -24,9 +24,6 @@ protected:
 	UFUNCTION()
 	virtual void castFirstAbilityVisual();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void castFirstAbilityEventVisual();
-
 	virtual void castFirstAbilityLogic() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
