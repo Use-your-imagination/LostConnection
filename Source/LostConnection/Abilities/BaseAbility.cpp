@@ -19,7 +19,8 @@ void UBaseAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(UBaseAbility, isDisabled);
 }
 
-UBaseAbility::UBaseAbility()
+UBaseAbility::UBaseAbility() :
+	cancelBlendOutTime(0.25f)
 {
 	
 }
@@ -82,6 +83,16 @@ const FText& UBaseAbility::getDescription() const
 bool UBaseAbility::getIsCancelable() const
 {
 	return isCancelable;
+}
+
+bool UBaseAbility::getIsGrounded() const
+{
+	return isGrounded;
+}
+
+float UBaseAbility::getCancelBlendOutTime() const
+{
+	return cancelBlendOutTime;
 }
 
 ICaster* UBaseAbility::getCaster()

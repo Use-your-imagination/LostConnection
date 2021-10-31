@@ -30,6 +30,12 @@ protected:
 	bool isCancelable;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, BlueprintReadOnly)
+	bool isGrounded;
+
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, BlueprintReadOnly)
+	float cancelBlendOutTime;
+
+	UPROPERTY(Category = Abilities, EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* animation;
 
 	class ICaster* caster;
@@ -68,6 +74,10 @@ public:
 	virtual const FText& getDescription() const final;
 
 	virtual bool getIsCancelable() const final;
+
+	virtual bool getIsGrounded() const final;
+
+	virtual float getCancelBlendOutTime() const final;
 
 	virtual class ICaster* getCaster() final;
 
