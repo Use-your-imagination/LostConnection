@@ -34,7 +34,9 @@ void ICaster::cancelCurrentAbilityAnimation()
 
 	if (drone)
 	{
-		if (drone->getCurrentAbility()->getIsCancelable())
+		UBaseAbility* currentAbility = drone->getCurrentAbility();
+
+		if (currentAbility && currentAbility->getIsCancelable())
 		{
 			drone->GetMesh()->GetAnimInstance()->Montage_Play(nullptr);
 		}
@@ -44,7 +46,9 @@ void ICaster::cancelCurrentAbilityAnimation()
 
 	if (bot)
 	{
-		if (bot->getCurrentAbility()->getIsCancelable())
+		UBaseAbility* currentAbility = bot->getCurrentAbility();
+
+		if (currentAbility && currentAbility->getIsCancelable())
 		{
 			bot->GetMesh()->GetAnimInstance()->Montage_Play(nullptr);
 		}

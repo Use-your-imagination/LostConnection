@@ -5,8 +5,7 @@
 
 ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 {
-	// ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/Drone/Drone.Drone'"));
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Mannequin/Character/Mesh/SK_Mannequin.SK_Mannequin'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/Drone/Drone.Drone'"));
 	ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Mannequin/Animations/AnimBP_PlaceHolder"));
 
 	mesh->SetSkeletalMesh(meshFinder.Object);
