@@ -117,8 +117,16 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	action.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "action"); });
 
 	dropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "dropWeapon"); });
-	
-	cancelAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(this); this->setCurrentAbility(nullptr); });
+
+	cancelAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
+		{
+			if (currentAbility && currentAbility->getIsCancelable())
+			{
+				UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(this);
+
+				this->setCurrentAbility(nullptr);
+			}
+		});
 
 	result.Add(reload);
 
