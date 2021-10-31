@@ -4,6 +4,7 @@
 
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Misc/MessageDialog.h"
+#include "Components/ListView.h"
 
 #include "UtilityBlueprintFunctionLibrary.generated.h"
 
@@ -21,4 +22,7 @@ public:
 
 	UFUNCTION(Category = Utility, BlueprintCallable)
 	static void cancelCurrentAbilityAnimation(TScriptInterface<class ICaster> caster);
+
+	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
+	static UObject* getSelectedItem(UListView* listView);
 };

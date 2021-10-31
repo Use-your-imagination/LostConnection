@@ -157,12 +157,12 @@ protected:
 	void wallrunCooldown();
 #pragma endregion
 
+public:
 #pragma region BlueprintFunctionLibrarySetters
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setSlideCooldown(float newSlideCooldown) final;
 #pragma endregion
 
-public:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseTurnRate;
 

@@ -1,5 +1,7 @@
 #include "BaseBotCaster.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 void ABaseBotCaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
