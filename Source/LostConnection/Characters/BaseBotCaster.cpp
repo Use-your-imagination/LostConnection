@@ -61,7 +61,10 @@ bool ABaseBotCaster::checkPassiveAbilityCast() const
 
 bool ABaseBotCaster::checkFirstAbilityCast() const
 {
-	if (currentAbility || currentEnergy < firstAbility->getCost())
+	if (firstAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < firstAbility->getCost() ||
+		(firstAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
 	}
@@ -71,7 +74,10 @@ bool ABaseBotCaster::checkFirstAbilityCast() const
 
 bool ABaseBotCaster::checkSecondAbilityCast() const
 {
-	if (currentAbility || currentEnergy < firstAbility->getCost())
+	if (secondAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < secondAbility->getCost() ||
+		(secondAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
 	}
@@ -81,7 +87,10 @@ bool ABaseBotCaster::checkSecondAbilityCast() const
 
 bool ABaseBotCaster::checkThirdAbilityCast() const
 {
-	if (currentAbility || currentEnergy < firstAbility->getCost())
+	if (thirdAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < thirdAbility->getCost() ||
+		(thirdAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
 	}
@@ -91,7 +100,11 @@ bool ABaseBotCaster::checkThirdAbilityCast() const
 
 bool ABaseBotCaster::checkUltimateAbilityCast() const
 {
-	if (currentAbility || currentEnergy < ultimateAbility->getCost() || !ultimateAbility->getCurrentCooldown())
+	if (ultimateAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < ultimateAbility->getCost() ||
+		!ultimateAbility->getCurrentCooldown() ||
+		(ultimateAbility->getCost() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
 	}

@@ -276,7 +276,10 @@ bool ABaseDrone::checkPassiveAbilityCast() const
 
 bool ABaseDrone::checkFirstAbilityCast() const
 {
-	if (currentAbility || currentEnergy < firstAbility->getCost())
+	if (firstAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < firstAbility->getCost() ||
+		(firstAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
 	}
@@ -286,7 +289,10 @@ bool ABaseDrone::checkFirstAbilityCast() const
 
 bool ABaseDrone::checkSecondAbilityCast() const
 {
-	if (currentAbility || currentEnergy < firstAbility->getCost())
+	if (secondAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < secondAbility->getCost() ||
+		(secondAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
 	}
@@ -296,7 +302,10 @@ bool ABaseDrone::checkSecondAbilityCast() const
 
 bool ABaseDrone::checkThirdAbilityCast() const
 {
-	if (currentAbility || currentEnergy < firstAbility->getCost())
+	if (thirdAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < thirdAbility->getCost() ||
+		(thirdAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
 	}
@@ -306,7 +315,11 @@ bool ABaseDrone::checkThirdAbilityCast() const
 
 bool ABaseDrone::checkUltimateAbilityCast() const
 {
-	if (currentAbility || currentEnergy < ultimateAbility->getCost() || !ultimateAbility->getCurrentCooldown())
+	if (ultimateAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < ultimateAbility->getCost() ||
+		!ultimateAbility->getCurrentCooldown() ||
+		(ultimateAbility->getCost() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
 	}
