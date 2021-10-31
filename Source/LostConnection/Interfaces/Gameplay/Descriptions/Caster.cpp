@@ -38,7 +38,7 @@ void ICaster::cancelCurrentAbilityAnimation()
 
 		if (currentAbility && currentAbility->getIsCancelable())
 		{
-			drone->GetMesh()->GetAnimInstance()->Montage_Play(nullptr);
+			drone->GetMesh()->GetAnimInstance()->Montage_StopGroupByName(0.4f, "Skills");
 		}
 	}
 
@@ -50,7 +50,7 @@ void ICaster::cancelCurrentAbilityAnimation()
 
 		if (currentAbility && currentAbility->getIsCancelable())
 		{
-			bot->GetMesh()->GetAnimInstance()->Montage_Play(nullptr);
+			bot->GetMesh()->GetAnimInstance()->Montage_StopGroupByName(0.4f, "Skills");
 		}
 	}
 }
