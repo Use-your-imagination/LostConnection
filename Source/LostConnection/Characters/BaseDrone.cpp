@@ -318,7 +318,7 @@ bool ABaseDrone::checkUltimateAbilityCast() const
 	if (ultimateAbility->getIsDisabled() ||
 		currentAbility ||
 		currentEnergy < ultimateAbility->getCost() ||
-		!ultimateAbility->getCurrentCooldown() ||
+		ultimateAbility->getCurrentCooldown() ||
 		(ultimateAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
