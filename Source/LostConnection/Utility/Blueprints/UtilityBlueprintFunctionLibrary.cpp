@@ -87,8 +87,3 @@ void UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(TScriptInte
 {
 	MultiplayerUtility::runOnServerReliableWithMulticast(caster.GetObject(), "cancelCurrentAbilityAnimation");
 }
-
-UObject* UUtilityBlueprintFunctionLibrary::getSelectedItem(UListView* listView)
-{
-	return listView->GetSelectedItem();
-}

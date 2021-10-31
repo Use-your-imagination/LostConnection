@@ -15,17 +15,22 @@ private:
 	UPROPERTY(Category = "SN4K3|Ultimate ability", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	bool isUltimateAbilityUsed;
 
-	UPROPERTY(Category = AbilityStats, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "SN4K3|Ultimate ability", EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float abilityDuration;
 
 	UPROPERTY(Category = "SN4K3|Ultimate ability", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float currentAbilityDuration;
+
+	UPROPERTY(Category = "SN4K3|Ultimate ability", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* returnAnimation;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	USN4K3UltimateAbility();
+
+	void playReturnAnimation();
 
 	bool getIsUltimateAbilityUsed() const;
 

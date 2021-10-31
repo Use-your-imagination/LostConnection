@@ -106,7 +106,7 @@ bool ABaseBotCaster::checkUltimateAbilityCast() const
 		currentAbility ||
 		currentEnergy < ultimateAbility->getCost() ||
 		!ultimateAbility->getCurrentCooldown() ||
-		(ultimateAbility->getCost() && GetCharacterMovement()->IsFalling()))
+		(ultimateAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
 	{
 		return false;
 	}
