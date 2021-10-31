@@ -7,7 +7,7 @@ void ISecondAbilityCast::callCastSecondAbilityEventVisual()
 {
 	ICaster* caster = Cast<ICaster>(this);
 
-	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getPassiveAbility());
+	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getSecondAbility());
 }
 
 void ISecondAbilityCast::castSecondAbilityVisual()

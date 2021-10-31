@@ -7,7 +7,7 @@ void IFirstAbilityCast::callCastFirstAbilityEventVisual()
 {
 	ICaster* caster = Cast<ICaster>(this);
 
-	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getPassiveAbility());
+	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getFirstAbility());
 }
 
 void IFirstAbilityCast::castFirstAbilityVisual()

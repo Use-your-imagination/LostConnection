@@ -7,7 +7,7 @@ void IThirdAbilityCast::callCastThirdAbilityEventVisual()
 {
 	ICaster* caster = Cast<ICaster>(this);
 
-	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getPassiveAbility());
+	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getThirdAbility());
 }
 
 void IThirdAbilityCast::castThirdAbilityVisual()
