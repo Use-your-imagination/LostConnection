@@ -351,6 +351,11 @@ void ABaseDrone::BeginPlay()
 				}, 1.0f);
 		}
 	}
+
+	abilitiesAnimations.Add(firstAbility->getAnimation());
+	abilitiesAnimations.Add(secondAbility->getAnimation());
+	abilitiesAnimations.Add(thirdAbility->getAnimation());
+	abilitiesAnimations.Add(ultimateAbility->getAnimation());
 }
 
 void ABaseDrone::Tick(float DeltaTime)

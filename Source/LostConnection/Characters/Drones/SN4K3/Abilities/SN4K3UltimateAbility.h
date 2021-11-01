@@ -30,6 +30,7 @@ private:
 public:
 	USN4K3UltimateAbility();
 
+	UFUNCTION()
 	void playReturnAnimation();
 
 	bool getIsUltimateAbilityUsed() const;

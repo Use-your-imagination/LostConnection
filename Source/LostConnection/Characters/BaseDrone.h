@@ -170,6 +170,10 @@ public:
 	float BaseLookUpRate;
 
 public:
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	TArray<UAnimMontage*> abilitiesAnimations;
+
+public:
 	static ABaseDrone* globalPlayerPtr;
 
 protected:

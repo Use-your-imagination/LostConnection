@@ -79,6 +79,8 @@ public:
 
 	virtual float getCancelBlendOutTime() const final;
 
+	virtual UAnimMontage* getAnimation() final;
+
 	virtual class ICaster* getCaster() final;
 
 	virtual ~UBaseAbility() = default;

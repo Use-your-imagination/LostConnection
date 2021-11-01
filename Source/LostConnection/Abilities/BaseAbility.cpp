@@ -95,6 +95,11 @@ float UBaseAbility::getCancelBlendOutTime() const
 	return cancelBlendOutTime;
 }
 
+UAnimMontage* UBaseAbility::getAnimation()
+{
+	return animation;
+}
+
 ICaster* UBaseAbility::getCaster()
 {
 	return caster;
