@@ -9,6 +9,7 @@
 #include "Abilities/SN4K3ThirdAbility.h"
 #include "Abilities/SN4K3UltimateAbility.h"
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
+#include "Utility/MultiplayerUtility.h"
 
 void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -50,4 +51,19 @@ void ASN4K3::setUltimatePlaceholder(ASN4K3UltimateAbilityPlaceholder* ultimatePl
 ASN4K3UltimateAbilityPlaceholder* ASN4K3::getUltimatePlaceholder()
 {
 	return ultimatePlaceholder;
+}
+
+bool ASN4K3::checkUltimateAbilityCast() const
+{
+	USN4K3UltimateAbility* ability = Cast<USN4K3UltimateAbility>(ultimateAbility);
+	bool used = ability->getIsUltimateAbilityUsed();
+	
+	if (used)
+	{
+		MultiplayerUtility::runOnServerReliableWithMulticast(ability, "playReturnAnimation");
+
+		return false;
+	}
+
+	return ABaseDrone::checkUltimateAbilityCast();
 }

@@ -27,5 +27,7 @@ public:
 
 	class ASN4K3UltimateAbilityPlaceholder* getUltimatePlaceholder();
 
+	virtual bool checkUltimateAbilityCast() const override;
+
 	~ASN4K3() = default;
 };
