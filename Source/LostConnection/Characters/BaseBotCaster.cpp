@@ -117,26 +117,6 @@ bool ABaseBotCaster::checkUltimateAbilityCast() const
 void ABaseBotCaster::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (firstAbility)
-	{
-		abilitiesAnimations.Add(firstAbility->getAnimation());
-	}
-
-	if (secondAbility)
-	{
-		abilitiesAnimations.Add(secondAbility->getAnimation());
-	}
-
-	if (thirdAbility)
-	{
-		abilitiesAnimations.Add(thirdAbility->getAnimation());
-	}
-
-	if (ultimateAbility)
-	{
-		abilitiesAnimations.Add(ultimateAbility->getAnimation());
-	}
 }
 
 ABaseBotCaster::ABaseBotCaster()
