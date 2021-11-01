@@ -929,6 +929,11 @@ UBaseUltimateAbility* ABaseDrone::getUltimateAbility()
 	return ultimateAbility;
 }
 
+const TArray<UAnimMontage*>& ABaseDrone::getAbilitiesAnimations() const
+{
+	return abilitiesAnimations;
+}
+
 #pragma region PassiveAbility
 void ABaseDrone::castPassiveAbilityVisual()
 {

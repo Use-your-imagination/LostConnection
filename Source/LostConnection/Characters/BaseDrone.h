@@ -96,6 +96,9 @@ protected:
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBaseUltimateAbility* ultimateAbility;
 
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	TArray<UAnimMontage*> abilitiesAnimations;
+
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
 	bool secondaryHold;
@@ -168,10 +171,6 @@ public:
 
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseLookUpRate;
-
-public:
-	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> abilitiesAnimations;
 
 public:
 	static ABaseDrone* globalPlayerPtr;
@@ -336,6 +335,8 @@ public:
 	virtual UBaseAbility* getThirdAbility() final override;
 
 	virtual UBaseUltimateAbility* getUltimateAbility() final override;
+
+	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 
 #pragma region PassiveAbility
 	virtual void castPassiveAbilityVisual() override;

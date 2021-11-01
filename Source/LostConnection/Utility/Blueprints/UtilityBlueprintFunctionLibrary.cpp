@@ -1,5 +1,7 @@
 #include "UtilityBlueprintFunctionLibrary.h"
 
+#include <algorithm>
+
 #include "GameFramework/InputSettings.h"
 
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
@@ -86,4 +88,17 @@ void UUtilityBlueprintFunctionLibrary::rebindHotkeys(const TMap<FName, FString>&
 void UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(TScriptInterface<ICaster> caster)
 {
 	MultiplayerUtility::runOnServerReliableWithMulticast(caster.GetObject(), "cancelCurrentAbilityAnimation");
+}
+
+bool UUtilityBlueprintFunctionLibrary::isAnyAnimationActive(TScriptInterface<ICaster> caster)
+{
+	if (!caster.GetObject())
+	{
+		return false;
+	}
+
+	UAnimInstance* animInstance = Cast<ABaseCharacter>(caster.GetObject())->GetMesh()->GetAnimInstance();
+	const TArray<UAnimMontage*>& animations = caster->getAbilitiesAnimations();
+	
+	return std::any_of(animations.begin(), animations.end(), [&animInstance](const UAnimMontage* montage) { return animInstance->Montage_IsPlaying(montage); });
 }

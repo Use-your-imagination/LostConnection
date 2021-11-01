@@ -21,4 +21,7 @@ public:
 
 	UFUNCTION(Category = Utility, BlueprintCallable)
 	static void cancelCurrentAbilityAnimation(TScriptInterface<class ICaster> caster);
+
+	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
+	static bool isAnyAnimationActive(TScriptInterface<class ICaster> caster);
 };

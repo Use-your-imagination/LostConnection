@@ -84,6 +84,9 @@ public:
 
 	virtual UBaseUltimateAbility* getUltimateAbility() = 0;
 
+	UFUNCTION()
+	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const;
+
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void applyPassiveAbilityEvent(class ABaseCharacter* target);
 

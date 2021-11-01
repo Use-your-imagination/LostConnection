@@ -88,6 +88,12 @@ protected:
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBaseUltimateAbility* ultimateAbility;
 
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	TArray<UAnimMontage*> abilitiesAnimations;
+
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	ABaseBotCaster();
 
@@ -141,6 +147,8 @@ public:
 	virtual UBaseAbility* getThirdAbility() final override;
 
 	virtual UBaseUltimateAbility* getUltimateAbility() final override;
+
+	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 
 #pragma region PassiveAbility
 	virtual void castPassiveAbilityVisual() override;

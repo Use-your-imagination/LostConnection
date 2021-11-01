@@ -114,6 +114,31 @@ bool ABaseBotCaster::checkUltimateAbilityCast() const
 	return true;
 }
 
+void ABaseBotCaster::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (firstAbility)
+	{
+		abilitiesAnimations.Add(firstAbility->getAnimation());
+	}
+
+	if (secondAbility)
+	{
+		abilitiesAnimations.Add(secondAbility->getAnimation());
+	}
+
+	if (thirdAbility)
+	{
+		abilitiesAnimations.Add(thirdAbility->getAnimation());
+	}
+
+	if (ultimateAbility)
+	{
+		abilitiesAnimations.Add(ultimateAbility->getAnimation());
+	}
+}
+
 ABaseBotCaster::ABaseBotCaster()
 {
 
@@ -249,6 +274,11 @@ UBaseAbility* ABaseBotCaster::getThirdAbility()
 UBaseUltimateAbility* ABaseBotCaster::getUltimateAbility()
 {
 	return ultimateAbility;
+}
+
+const TArray<UAnimMontage*>& ABaseBotCaster::getAbilitiesAnimations() const
+{
+	return abilitiesAnimations;
 }
 
 #pragma region PassiveAbility

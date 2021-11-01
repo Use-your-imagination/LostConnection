@@ -3,6 +3,8 @@
 #include "Characters/BaseDrone.h"
 #include "Characters/BaseBotCaster.h"
 
+static TArray<UAnimMontage*> filler;
+
 void ICaster::setEnergy_Implementation(float newEnergy)
 {
 
@@ -26,6 +28,11 @@ void ICaster::setCooldownReduction_Implementation(float newCooldownReduction)
 void ICaster::setCurrentAbility(UBaseAbility* ability)
 {
 
+}
+
+const TArray<UAnimMontage*>& ICaster::getAbilitiesAnimations() const
+{
+	PURE_VIRTUAL(ICaster::getAbilitiesAnimations, return filler;);
 }
 
 void ICaster::cancelCurrentAbilityAnimation()
