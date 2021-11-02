@@ -4,9 +4,22 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "SN4K3PassiveAbility.h"
 
-USN4K3SecondAbility::USN4K3SecondAbility()
+void USN4K3SecondAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(USN4K3SecondAbility, distance);
+}
+
+USN4K3SecondAbility::USN4K3SecondAbility() :
+	distance(5000.0f)
 {
 
+}
+
+float USN4K3SecondAbility::getDistance() const
+{
+	return distance;
 }
 
 void USN4K3SecondAbility::applyAbility(ABaseCharacter* target)
@@ -22,8 +35,11 @@ void USN4K3SecondAbility::useAbility()
 	FHitResult hit;
 	UWorld* world = drone->GetWorld();
 	ABaseCharacter* target = nullptr;
+	FCollisionQueryParams ignoreParameters;
 
-	world->LineTraceSingleByChannel(hit, drone->getStartActionLineTrace(), drone->getEndActionLineTrace() + (5000.0f * drone->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Visibility);
+	ignoreParameters.AddIgnoredActor(drone);
+
+	world->LineTraceSingleByChannel(hit, drone->getStartActionLineTrace(), drone->getEndActionLineTrace() + (distance * drone->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Camera, ignoreParameters);
 
 	target = Cast<ABaseCharacter>(hit.Actor);
 

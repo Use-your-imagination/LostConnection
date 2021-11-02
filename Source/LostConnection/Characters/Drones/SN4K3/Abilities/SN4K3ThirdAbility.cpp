@@ -6,6 +6,8 @@
 #include "Engine/LostConnectionGameState.h"
 #include "SN4K3PassiveAbility.h"
 
+#pragma warning(disable: 4458)
+
 void USN4K3ThirdAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -23,6 +25,42 @@ USN4K3ThirdAbility::USN4K3ThirdAbility() :
 	period(1.0f)
 {
 
+}
+
+void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
+{
+	target->setHealth(target->getHealth() * 2);
+
+	TArray<UBaseWeapon*> weapons;
+
+	weapons.Add(target->getDefaultWeapon());
+
+	ABaseDrone* drone = Cast<ABaseDrone>(target);
+
+	if (drone)
+	{
+		weapons.Add(drone->getFirstWeapon());
+
+		weapons.Add(drone->getSecondWeapon());
+	}
+
+	for (auto& i : weapons)
+	{
+		if (i)
+		{
+			i->setDamage(i->getDamage() * 2.0f / 3.0f);
+		}
+	}
+}
+
+void USN4K3ThirdAbility::setIsFlagExist(bool isFlagExist)
+{
+	this->isFlagExist = isFlagExist;
+}
+
+bool USN4K3ThirdAbility::getIsFlagExist() const
+{
+	return isFlagExist;
 }
 
 void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
@@ -63,32 +101,6 @@ void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
 	ICaster::Execute_applyThirdAbilityEvent(Cast<UObject>(caster), target);
 }
 
-void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
-{
-	target->setHealth(target->getHealth() * 2);
-
-	TArray<UBaseWeapon*> weapons;
-
-	weapons.Add(target->getDefaultWeapon());
-
-	ABaseDrone* drone = Cast<ABaseDrone>(target);
-
-	if (drone)
-	{
-		weapons.Add(drone->getFirstWeapon());
-
-		weapons.Add(drone->getSecondWeapon());
-	}
-
-	for (auto& i : weapons)
-	{
-		if (i)
-		{
-			i->setDamage(i->getDamage() * 2.0f / 3.0f);
-		}
-	}
-}
-
 void USN4K3ThirdAbility::useAbility()
 {
 	ASN4K3* drone = Cast<ASN4K3>(caster);
@@ -107,6 +119,8 @@ void USN4K3ThirdAbility::useAbility()
 	flag->setPeriod(period);
 
 	flag->FinishSpawning({}, true);
+
+	isFlagExist = true;
 
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }

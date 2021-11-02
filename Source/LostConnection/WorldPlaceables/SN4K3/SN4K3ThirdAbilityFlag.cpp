@@ -54,6 +54,8 @@ void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
 				ability->removeAbilityEffect(Cast<ABaseCharacter>(Cast<ABaseCharacter>(i)));
 			}
 
+			ability->setIsFlagExist(false);
+
 			Destroy();
 		}
 	}
@@ -64,6 +66,8 @@ ASN4K3ThirdAbilityFlag::ASN4K3ThirdAbilityFlag()
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> flagMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/SN4K3/Abilities/Third/Meshes/Flag.Flag'"));
 
 	mesh->SetSkeletalMesh(flagMeshFinder.Object);
+
+	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	traceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
 

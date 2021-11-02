@@ -14,8 +14,16 @@ class LOSTCONNECTION_API USN4K3SecondAbility : public UBaseAbility
 private:
 	class ABaseCharacter* target;
 	
+	UPROPERTY(Category = "SN4K3|Passive ability", EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float distance;
+
+private:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 public:
 	USN4K3SecondAbility();
+
+	float getDistance() const;
 
 	void applyAbility(class ABaseCharacter* target) override;
 

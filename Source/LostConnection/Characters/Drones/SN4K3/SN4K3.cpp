@@ -53,6 +53,31 @@ ASN4K3UltimateAbilityPlaceholder* ASN4K3::getUltimatePlaceholder()
 	return ultimatePlaceholder;
 }
 
+bool ASN4K3::checkSecondAbilityCast() const
+{
+	bool result = ABaseDrone::checkSecondAbilityCast();
+	FHitResult hit;
+	UWorld* world = this->GetWorld();
+	ABaseCharacter* target = nullptr;
+
+	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace() + (Cast<USN4K3SecondAbility>(secondAbility)->getDistance() * this->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Camera);
+
+	target = Cast<ABaseCharacter>(hit.Actor);
+
+	result &= target && !target->getIsAlly();
+
+	return result;
+}
+
+bool ASN4K3::checkThirdAbilityCast() const
+{
+	bool result = ABaseDrone::checkThirdAbilityCast();
+
+	result &= !Cast<USN4K3ThirdAbility>(thirdAbility)->getIsFlagExist();
+
+	return result;
+}
+
 bool ASN4K3::checkUltimateAbilityCast() const
 {
 	USN4K3UltimateAbility* ability = Cast<USN4K3UltimateAbility>(ultimateAbility);
