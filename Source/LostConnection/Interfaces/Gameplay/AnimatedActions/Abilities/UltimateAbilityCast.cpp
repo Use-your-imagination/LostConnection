@@ -1,8 +1,28 @@
 #include "UltimateAbilityCast.h"
 
+#include "Utility/MultiplayerUtility.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
+
+void IUltimateAbilityCast::callCastUltimateAbilityEventVisual()
+{
+	ICaster* caster = Cast<ICaster>(this);
+
+	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getUltimateAbility());
+}
+
+void IUltimateAbilityCast::castUltimateAbilityVisual()
+{
+	PURE_VIRTUAL(IUltimateAbilityCast::castUltimateAbilityVisual);
+}
+
 void IUltimateAbilityCast::castUltimateAbility()
 {
-	this->castUltimateAbilityVisual();
+	if (this->checkUltimateAbilityCast())
+	{
+		UObject* caster = Cast<UObject>(this);
 
-	IUltimateAbilityCast::Execute_castUltimateAbilityEventVisual(Cast<UObject>(this));
+		MultiplayerUtility::runOnServerReliableWithMulticast(caster, "castUltimateAbilityVisual");
+
+		MultiplayerUtility::runOnServerReliableWithMulticast(caster, "callCastUltimateAbilityEventVisual");
+	}
 }

@@ -1,0 +1,22 @@
+{
+  "projectName": "LostConnection",
+  "projectVersion": "0.1.0.0",
+  "Gameplay": {
+    "type": "category",
+    "Abilities": {
+      "type": "item",
+      "notes": [
+        "Added abilities cancel"
+      ]
+    }
+  },
+  "Drone": {
+    "type": "category",
+    "SN4K3": {
+      "type": "item",
+      "notes": [
+        "Finished most of drone creation"
+      ]
+    }
+  }
+}

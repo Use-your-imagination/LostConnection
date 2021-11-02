@@ -69,6 +69,9 @@ protected:
 	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
 	TArray<int32> spareAmmo;
 
+	UPROPERTY(Category = "Physical Constraints", EditDefaultsOnly, BlueprintReadOnly)
+	TArray<FName> physicsBones;
+
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Reloading, VisibleAnywhere, BlueprintReadWrite)
 	bool isReloading;
@@ -142,9 +145,6 @@ protected:
 	virtual void reloadVisual() override;
 
 	virtual void reloadLogic() override;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runReloadLogic() final;
 #pragma endregion
 
 #pragma region Shoot
@@ -152,9 +152,6 @@ protected:
 	virtual void shootVisual() override;
 
 	virtual void shootLogic() override;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runShootLogic() final;
 #pragma endregion
 
 #pragma region Death
@@ -162,9 +159,6 @@ protected:
 	virtual void deathVisual() override;
 
 	virtual void deathLogic() override;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runDeathLogic() final;
 #pragma endregion
 
 	UFUNCTION()
@@ -178,6 +172,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void resetShoot();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runShootLogic() final;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runDeathLogic() final;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void runReloadLogic() final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void changeToDefaultWeapon() final;
@@ -228,7 +231,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual bool isWeaponEquipped() const final;
 
-	virtual USkeletalMeshComponent* getCurrentWeaponMesh() const final;
+	virtual USkeletalMeshComponent* getCurrentWeaponMeshComponent() const final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual int getWeaponCount() const;

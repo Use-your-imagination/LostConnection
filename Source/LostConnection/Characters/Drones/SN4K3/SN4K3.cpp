@@ -9,6 +9,7 @@
 #include "Abilities/SN4K3ThirdAbility.h"
 #include "Abilities/SN4K3UltimateAbility.h"
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
+#include "Utility/MultiplayerUtility.h"
 
 void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -52,34 +53,42 @@ ASN4K3UltimateAbilityPlaceholder* ASN4K3::getUltimatePlaceholder()
 	return ultimatePlaceholder;
 }
 
-void ASN4K3::castFirstAbilityVisual()
+bool ASN4K3::checkSecondAbilityCast() const
 {
-	if (HasAuthority())
-	{
-		this->castFirstAbilityLogic();
-	}
+	bool result = ABaseDrone::checkSecondAbilityCast();
+	FHitResult hit;
+	UWorld* world = this->GetWorld();
+	ABaseCharacter* target = nullptr;
+
+	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace() + (Cast<USN4K3SecondAbility>(secondAbility)->getDistance() * this->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Camera);
+
+	target = Cast<ABaseCharacter>(hit.Actor);
+
+	result &= target && !target->getIsAlly();
+
+	return result;
 }
 
-void ASN4K3::castSecondAbilityVisual()
+bool ASN4K3::checkThirdAbilityCast() const
 {
-	if (HasAuthority())
-	{
-		this->castSecondAbilityLogic();
-	}
+	bool result = ABaseDrone::checkThirdAbilityCast();
+
+	result &= !Cast<USN4K3ThirdAbility>(thirdAbility)->getIsFlagExist();
+
+	return result;
 }
 
-void ASN4K3::castThirdAbilityVisual()
+bool ASN4K3::checkUltimateAbilityCast() const
 {
-	if (HasAuthority())
+	USN4K3UltimateAbility* ability = Cast<USN4K3UltimateAbility>(ultimateAbility);
+	bool used = ability->getIsUltimateAbilityUsed();
+	
+	if (used)
 	{
-		this->castThirdAbilityLogic();
-	}
-}
+		MultiplayerUtility::runOnServerReliableWithMulticast(ability, "playReturnAnimation");
 
-void ASN4K3::castUltimateAbilityVisual()
-{
-	if (HasAuthority())
-	{
-		this->castUltimateAbilityLogic();
+		return false;
 	}
+
+	return ABaseDrone::checkUltimateAbilityCast();
 }

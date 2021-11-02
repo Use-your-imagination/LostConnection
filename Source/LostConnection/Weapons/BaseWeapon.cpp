@@ -2,6 +2,8 @@
 
 #include "UObject/ConstructorHelpers.h"
 #include "Components/CapsuleComponent.h"
+#include "AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 #include "Utility/MultiplayerUtility.h"
 #include "Engine/LostConnectionPlayerState.h"
@@ -55,12 +57,9 @@ void UBaseWeapon::shoot()
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammoClass, FTransform(character->getCurrentWeaponMesh()->GetBoneLocation("barrel")));
+		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammoClass, FTransform(character->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")));
 
 		launchedAmmo->copyProperties(this);
-
-		// Tracer limit
-		static constexpr float distance = 20000.0f;
 
 		FHitResult hit;
 		FRotator resultRotation;
@@ -68,21 +67,28 @@ void UBaseWeapon::shoot()
 
 		if (drone)
 		{
+			// Tracer limit
+			static constexpr float distance = 20000.0f;
+
 			FVector start = drone->getStartActionLineTrace();
 			FVector end = start + drone->GetFollowCamera()->GetComponentRotation().Vector() * distance;
 			
 			if (drone->GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility))
 			{
-				resultRotation = (hit.Location - drone->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+				resultRotation = (hit.Location - drone->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")).ToOrientationRotator();
 			}
 			else
 			{
-				resultRotation = ((drone->GetFollowCamera()->GetComponentRotation().Vector() * distance) - drone->getCurrentWeaponMesh()->GetBoneLocation("barrel")).ToOrientationRotator();
+				resultRotation = ((drone->GetFollowCamera()->GetComponentRotation().Vector() * distance) - drone->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")).ToOrientationRotator();
 			}
 		}
 		else
 		{
-			resultRotation = character->GetCapsuleComponent()->GetComponentRotation();
+			ABaseBot* bot = Cast<ABaseBot>(character);
+			AAIController* controller = bot->GetController<AAIController>();
+			FVector targetLocation = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"))->GetActorLocation();
+
+			resultRotation = (targetLocation - bot->GetActorLocation()).ToOrientationRotator();
 		}
 
 		launchedAmmo->getAmmoMeshComponent()->SetWorldRotation(resultRotation);

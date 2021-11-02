@@ -11,8 +11,7 @@
 #include "Weapons/SubmachineGuns/Hipter.h"
 #include "Weapons/Pistols/Gauss.h"
 #include "Utility/MultiplayerUtility.h"
-
-#include "Drones/SN4K3/Abilities/SN4K3FirstAbility.h"
+#include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
 
 #pragma warning(disable: 4458)
 
@@ -30,10 +29,10 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	FInputActionBinding thirdAbility("ThirdAbility", IE_Pressed);
 	FInputActionBinding ultimateAbility("UltimateAbility", IE_Pressed);
 
-	firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castFirstAbility"); });
-	secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castSecondAbility"); });
-	thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castThirdAbility"); });
-	ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "castUltimateAbility"); });
+	firstAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "castFirstAbility"); });
+	secondAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "castSecondAbility"); });
+	thirdAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "castThirdAbility"); });
+	ultimateAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "castUltimateAbility"); });
 
 	result.Add(firstAbility);
 	result.Add(secondAbility);
@@ -95,6 +94,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 
 	FInputActionBinding	dropWeapon("DropWeapon", IE_Pressed);
 
+	FInputActionBinding	cancelAbility("CancelAbility", IE_Pressed);
+
 	reload.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "reload"); });
 
 	pressShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "shoot"); });
@@ -117,6 +118,16 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 
 	dropWeapon.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "dropWeapon"); });
 
+	cancelAbility.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
+		{
+			if (currentAbility && currentAbility->getIsCancelable())
+			{
+				UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(this);
+
+				this->setCurrentAbility(nullptr);
+			}
+		});
+
 	result.Add(reload);
 
 	result.Add(pressShoot);
@@ -138,6 +149,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	result.Add(action);
 
 	result.Add(dropWeapon);
+
+	result.Add(cancelAbility);
 
 	return result;
 }
@@ -189,6 +202,8 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, castPoint);
 
+	DOREPLIFETIME(ABaseDrone, currentAbility);
+
 	DOREPLIFETIME(ABaseDrone, passiveAbility);
 
 	DOREPLIFETIME(ABaseDrone, firstAbility);
@@ -239,6 +254,8 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 
 	wroteSomething |= Channel->ReplicateSubobject(secondWeaponSlot, *Bunch, *RepFlags);
 
+	wroteSomething |= Channel->ReplicateSubobject(currentAbility, *Bunch, *RepFlags);
+
 	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
@@ -250,6 +267,64 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
 	return wroteSomething;
+}
+
+bool ABaseDrone::checkPassiveAbilityCast() const
+{
+	return true;
+}
+
+bool ABaseDrone::checkFirstAbilityCast() const
+{
+	if (firstAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < firstAbility->getCost() ||
+		(firstAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ABaseDrone::checkSecondAbilityCast() const
+{
+	if (secondAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < secondAbility->getCost() ||
+		(secondAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ABaseDrone::checkThirdAbilityCast() const
+{
+	if (thirdAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < thirdAbility->getCost() ||
+		(thirdAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ABaseDrone::checkUltimateAbilityCast() const
+{
+	if (ultimateAbility->getIsDisabled() ||
+		currentAbility ||
+		currentEnergy < ultimateAbility->getCost() ||
+		ultimateAbility->getCurrentCooldown() ||
+		(ultimateAbility->getIsGrounded() && GetCharacterMovement()->IsFalling()))
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void ABaseDrone::BeginPlay()
@@ -769,6 +844,11 @@ void ABaseDrone::setCastPoint_Implementation(float newCastPoint)
 	castPoint = newCastPoint;
 }
 
+void ABaseDrone::setCurrentAbility_Implementation(UBaseAbility* ability)
+{
+	currentAbility = ability;
+}
+
 float ABaseDrone::getEnergy() const
 {
 	return energy;
@@ -814,6 +894,11 @@ float ABaseDrone::getCastPoint() const
 	return castPoint;
 }
 
+UBaseAbility* ABaseDrone::getCurrentAbility()
+{
+	return currentAbility;
+}
+
 UBasePassiveAbility* ABaseDrone::getPassiveAbility()
 {
 	return passiveAbility;
@@ -839,6 +924,11 @@ UBaseUltimateAbility* ABaseDrone::getUltimateAbility()
 	return ultimateAbility;
 }
 
+const TArray<UAnimMontage*>& ABaseDrone::getAbilitiesAnimations() const
+{
+	return abilitiesAnimations;
+}
+
 #pragma region PassiveAbility
 void ABaseDrone::castPassiveAbilityVisual()
 {
@@ -847,14 +937,7 @@ void ABaseDrone::castPassiveAbilityVisual()
 
 void ABaseDrone::castPassiveAbilityLogic_Implementation()
 {
-	float cost = passiveAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= passiveAbility->getCost();
 
 	passiveAbility->useAbility();
 
@@ -870,14 +953,7 @@ void ABaseDrone::castFirstAbilityVisual()
 
 void ABaseDrone::castFirstAbilityLogic_Implementation()
 {
-	float cost = firstAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= firstAbility->getCost();
 
 	firstAbility->useAbility();
 
@@ -893,14 +969,7 @@ void ABaseDrone::castSecondAbilityVisual()
 
 void ABaseDrone::castSecondAbilityLogic_Implementation()
 {
-	float cost = secondAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= secondAbility->getCost();
 
 	secondAbility->useAbility();
 
@@ -916,14 +985,7 @@ void ABaseDrone::castThirdAbilityVisual()
 
 void ABaseDrone::castThirdAbilityLogic_Implementation()
 {
-	float cost = thirdAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= thirdAbility->getCost();
 
 	thirdAbility->useAbility();
 
@@ -939,14 +1001,7 @@ void ABaseDrone::castUltimateAbilityVisual()
 
 void ABaseDrone::castUltimateAbilityLogic_Implementation()
 {
-	float cost = ultimateAbility->getCost();
-
-	if (currentEnergy < cost)
-	{
-		return;
-	}
-
-	currentEnergy -= cost;
+	currentEnergy -= ultimateAbility->getCost();
 
 	ultimateAbility->useAbility();
 

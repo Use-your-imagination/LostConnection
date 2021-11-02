@@ -16,16 +16,20 @@ class LOSTCONNECTION_API IFirstAbilityCast
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void castFirstAbilityVisual() = 0;
+private:
+	UFUNCTION()
+	virtual void callCastFirstAbilityEventVisual();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void castFirstAbilityEventVisual();
+protected:
+	UFUNCTION()
+	virtual void castFirstAbilityVisual();
 
 	virtual void castFirstAbilityLogic() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void castFirstAbilityEventLogic();
+
+	virtual bool checkFirstAbilityCast() const = 0;
 
 public:
 	IFirstAbilityCast() = default;

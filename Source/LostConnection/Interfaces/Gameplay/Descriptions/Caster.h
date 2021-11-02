@@ -52,6 +52,8 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void setCastPoint(float newCastPoint);
 
+	virtual void setCurrentAbility(UBaseAbility* ability);
+
 	virtual float getEnergy() const = 0;
 
 	virtual float getCurrentEnergy() const = 0;
@@ -70,6 +72,8 @@ public:
 
 	virtual float getCastPoint() const = 0;
 
+	virtual UBaseAbility* getCurrentAbility() = 0;
+
 	virtual UBasePassiveAbility* getPassiveAbility() = 0;
 
 	virtual UBaseAbility* getFirstAbility() = 0;
@@ -79,6 +83,9 @@ public:
 	virtual UBaseAbility* getThirdAbility() = 0;
 
 	virtual UBaseUltimateAbility* getUltimateAbility() = 0;
+
+	UFUNCTION()
+	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void applyPassiveAbilityEvent(class ABaseCharacter* target);
@@ -94,4 +101,10 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void applyUltimateAbilityEvent(class ABaseCharacter* target);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void castAbilityEventVisual(UBaseAbility* ability);
+
+	UFUNCTION()
+	virtual void cancelCurrentAbilityAnimation();
 };

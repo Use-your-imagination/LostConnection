@@ -78,6 +78,9 @@ protected:
 	float castPoint;
 
 protected:
+	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UBaseAbility* currentAbility;
+
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBasePassiveAbility* passiveAbility;
 
@@ -92,6 +95,9 @@ protected:
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UBaseUltimateAbility* ultimateAbility;
+
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	TArray<UAnimMontage*> abilitiesAnimations;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
@@ -154,12 +160,12 @@ protected:
 	void wallrunCooldown();
 #pragma endregion
 
+public:
 #pragma region BlueprintFunctionLibrarySetters
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setSlideCooldown(float newSlideCooldown) final;
 #pragma endregion
 
-public:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseTurnRate;
 
@@ -175,6 +181,17 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+protected:
+	virtual bool checkPassiveAbilityCast() const override;
+
+	virtual bool checkFirstAbilityCast() const override;
+
+	virtual bool checkSecondAbilityCast() const override;
+
+	virtual bool checkThirdAbilityCast() const override;
+
+	virtual bool checkUltimateAbilityCast() const override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -286,6 +303,9 @@ public:
 	
 	virtual void setCastPoint_Implementation(float newCastPoint) final;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void setCurrentAbility(UBaseAbility* ability) final override;
+
 	virtual float getEnergy() const final override;
 
 	virtual float getCurrentEnergy() const final override;
@@ -304,6 +324,8 @@ public:
 
 	virtual float getCastPoint() const final;
 
+	virtual UBaseAbility* getCurrentAbility() final override; 
+
 	virtual UBasePassiveAbility* getPassiveAbility() final override;
 
 	virtual UBaseAbility* getFirstAbility() final override;
@@ -313,6 +335,8 @@ public:
 	virtual UBaseAbility* getThirdAbility() final override;
 
 	virtual UBaseUltimateAbility* getUltimateAbility() final override;
+
+	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 
 #pragma region PassiveAbility
 	virtual void castPassiveAbilityVisual() override;

@@ -23,7 +23,8 @@ public class LostConnection : ModuleRules
             "SlateCore",
             "Niagara",
             "OnlineSubsystem",
-            "OnlineSubsystemUtils"
+            "OnlineSubsystemUtils",
+            "AIModule"
         });
 
         PublicIncludePaths.AddRange(new string[]

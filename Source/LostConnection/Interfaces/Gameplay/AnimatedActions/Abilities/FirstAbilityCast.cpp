@@ -1,8 +1,28 @@
 #include "FirstAbilityCast.h"
 
+#include "Utility/MultiplayerUtility.h"
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
+
+void IFirstAbilityCast::callCastFirstAbilityEventVisual()
+{
+	ICaster* caster = Cast<ICaster>(this);
+
+	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getFirstAbility());
+}
+
+void IFirstAbilityCast::castFirstAbilityVisual()
+{
+	PURE_VIRTUAL(IFirstAbilityCast::castFirstAbilityVisual);
+}
+
 void IFirstAbilityCast::castFirstAbility()
 {
-	this->castFirstAbilityVisual();
+	if (this->checkFirstAbilityCast())
+	{
+		UObject* caster = Cast<UObject>(this);
 
-	IFirstAbilityCast::Execute_castFirstAbilityEventVisual(Cast<UObject>(this));
+		MultiplayerUtility::runOnServerReliableWithMulticast(caster, "castFirstAbilityVisual");
+
+		MultiplayerUtility::runOnServerReliableWithMulticast(caster, "callCastFirstAbilityEventVisual");
+	}
 }

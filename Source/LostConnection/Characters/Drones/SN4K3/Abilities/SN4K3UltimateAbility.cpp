@@ -26,6 +26,13 @@ USN4K3UltimateAbility::USN4K3UltimateAbility() :
 	cooldown = 60.0f;
 }
 
+void USN4K3UltimateAbility::playReturnAnimation()
+{
+	ASN4K3* drone = Cast<ASN4K3>(caster);
+
+	drone->GetMesh()->GetAnimInstance()->Montage_Play(returnAnimation, drone->getCastPoint() / 100.0f);
+}
+
 void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 {
 	ASN4K3* drone = Cast<ASN4K3>(target);
