@@ -14,7 +14,7 @@ class LOSTCONNECTION_API USN4K3SecondAbility : public UBaseAbility
 private:
 	class ABaseCharacter* target;
 	
-	UPROPERTY(Category = "SN4K3|Passive ability", EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "SN4K3|Second ability", EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float distance;
 
 private:
