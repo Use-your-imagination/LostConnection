@@ -2,6 +2,8 @@
 
 #include "UObject/ConstructorHelpers.h"
 #include "Components/CapsuleComponent.h"
+#include "AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 #include "Utility/MultiplayerUtility.h"
 #include "Engine/LostConnectionPlayerState.h"
@@ -82,9 +84,11 @@ void UBaseWeapon::shoot()
 		}
 		else
 		{
-			resultRotation = character->getCurrentWeaponMeshComponent()->GetComponentRotation().Vector().ToOrientationRotator();
+			ABaseBot* bot = Cast<ABaseBot>(character);
+			AAIController* controller = bot->GetController<AAIController>();
+			FVector targetLocation = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"))->GetActorLocation();
 
-			resultRotation.Yaw = character->GetCapsuleComponent()->GetComponentRotation().Yaw;
+			resultRotation = (targetLocation - bot->GetActorLocation()).ToOrientationRotator();
 		}
 
 		launchedAmmo->getAmmoMeshComponent()->SetWorldRotation(resultRotation);
