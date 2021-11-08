@@ -30,6 +30,9 @@ protected:
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
+	UFUNCTION()
+	void onAbilityUsed();
+
 protected:
 	virtual bool checkPassiveAbilityCast() const override;
 
@@ -70,7 +73,10 @@ protected:
 	float castPoint;
 
 protected:
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, ReplicatedUsing = onAbilityUsed, BlueprintReadOnly)
+	abilitySlot abilityId;
+
+	UPROPERTY(Category = Abilities, BlueprintReadOnly)
 	UBaseAbility* currentAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)

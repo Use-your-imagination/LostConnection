@@ -24,7 +24,7 @@ void ABaseBotCaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ABaseBotCaster, castPoint);
 
-	DOREPLIFETIME(ABaseBotCaster, currentAbility);
+	DOREPLIFETIME(ABaseBotCaster, abilityId);
 
 	DOREPLIFETIME(ABaseBotCaster, passiveAbility);
 
@@ -41,8 +41,6 @@ bool ABaseBotCaster::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(currentAbility, *Bunch, *RepFlags);
-
 	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
@@ -54,6 +52,42 @@ bool ABaseBotCaster::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
 	return wroteSomething;
+}
+
+void ABaseBotCaster::onAbilityUsed()
+{
+	switch (abilityId)
+	{
+	case abilitySlot::empty:
+		currentAbility = nullptr;
+
+		break;
+
+	case abilitySlot::passiveAbility:
+		currentAbility = passiveAbility;
+
+		break;
+
+	case abilitySlot::firstAbility:
+		currentAbility = firstAbility;
+
+		break;
+
+	case abilitySlot::secondAbility:
+		currentAbility = secondAbility;
+
+		break;
+
+	case abilitySlot::thirdAbility:
+		currentAbility = thirdAbility;
+
+		break;
+
+	case abilitySlot::ultimateAbility:
+		currentAbility = ultimateAbility;
+
+		break;
+	}
 }
 
 bool ABaseBotCaster::checkPassiveAbilityCast() const
@@ -178,7 +212,16 @@ void ABaseBotCaster::setCastPoint_Implementation(float newCastPoint)
 
 void ABaseBotCaster::setCurrentAbility_Implementation(UBaseAbility* ability)
 {
-	currentAbility = ability;
+	if (ability)
+	{
+		abilityId = ability->getId();
+	}
+	else
+	{
+		abilityId = abilitySlot::empty;
+	}
+
+	this->onAbilityUsed();
 }
 
 float ABaseBotCaster::getEnergy() const

@@ -1,6 +1,7 @@
 #include "SN4K3ThirdAbility.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
+#include "Utility/InitUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "WorldPlaceables/SN4K3/SN4K3ThirdAbilityFlag.h"
 #include "Engine/LostConnectionGameState.h"
@@ -24,7 +25,7 @@ USN4K3ThirdAbility::USN4K3ThirdAbility() :
 	radius(350.0f),
 	period(1.0f)
 {
-
+	InitUtility::initAbilityId(__FILE__, id);
 }
 
 void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)

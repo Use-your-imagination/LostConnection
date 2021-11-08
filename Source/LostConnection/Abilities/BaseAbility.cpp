@@ -100,6 +100,11 @@ UAnimMontage* UBaseAbility::getAnimation()
 	return animation;
 }
 
+abilitySlot UBaseAbility::getId() const
+{
+	return id;
+}
+
 ICaster* UBaseAbility::getCaster()
 {
 	return caster;

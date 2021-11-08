@@ -47,6 +47,10 @@ void ICaster::cancelCurrentAbilityAnimation()
 		{
 			drone->GetMesh()->GetAnimInstance()->Montage_StopGroupByName(currentAbility->getCancelBlendOutTime(), TEXT("Skills"));
 		}
+
+		drone->setCurrentAbility(nullptr);
+
+		return;
 	}
 
 	ABaseBotCaster* bot = Cast<ABaseBotCaster>(this);
@@ -59,5 +63,7 @@ void ICaster::cancelCurrentAbilityAnimation()
 		{
 			bot->GetMesh()->GetAnimInstance()->Montage_StopGroupByName(currentAbility->getCancelBlendOutTime(), TEXT("Skills"));
 		}
+
+		bot->setCurrentAbility(nullptr);
 	}
 }

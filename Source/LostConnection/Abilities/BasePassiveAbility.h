@@ -15,7 +15,7 @@ class LOSTCONNECTION_API UBasePassiveAbility : public UBaseAbility
 	GENERATED_BODY()
 
 public:
-	UBasePassiveAbility() = default;
+	UBasePassiveAbility();
 
 	virtual void applyAbility(class ABaseCharacter* target) override;
 

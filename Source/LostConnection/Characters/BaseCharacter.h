@@ -37,10 +37,13 @@ protected:
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* magazine;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
+	weaponSlot weaponId;
+
+	UPROPERTY(Category = Weapons, BlueprintReadOnly)
 	UBaseWeapon* currentWeapon;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	UBaseWeapon* defaultWeaponSlot;
 
 protected:
@@ -126,6 +129,8 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 protected:
+	virtual void updateCurrentWeapon();
+
 	virtual void updateWeaponMesh() final;
 
 	UFUNCTION()

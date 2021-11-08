@@ -40,11 +40,11 @@ protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	UCameraComponent* FollowCamera;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
-	UBaseWeapon* firstWeaponSlot;
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UBaseWeapon* primaryWeaponSlot;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
-	UBaseWeapon* secondWeaponSlot;
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UBaseWeapon* secondaryWeaponSlot;
 
 private:
 	virtual TArray<FInputActionBinding> initInputs();
@@ -78,7 +78,10 @@ protected:
 	float castPoint;
 
 protected:
-	UPROPERTY(Category = Abilities, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Abilities, ReplicatedUsing = onAbilityUsed, BlueprintReadOnly)
+	abilitySlot abilityId;
+
+	UPROPERTY(Category = Abilities, BlueprintReadOnly)
 	UBaseAbility* currentAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
@@ -181,6 +184,11 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+	virtual void updateCurrentWeapon() override;
+
+	UFUNCTION()
+	void onAbilityUsed();
 
 protected:
 	virtual bool checkPassiveAbilityCast() const override;

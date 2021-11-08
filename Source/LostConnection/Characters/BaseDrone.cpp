@@ -123,8 +123,6 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 			if (currentAbility && currentAbility->getIsCancelable())
 			{
 				UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(this);
-
-				this->setCurrentAbility(nullptr);
 			}
 		});
 
@@ -202,7 +200,7 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, castPoint);
 
-	DOREPLIFETIME(ABaseDrone, currentAbility);
+	DOREPLIFETIME(ABaseDrone, abilityId);
 
 	DOREPLIFETIME(ABaseDrone, passiveAbility);
 
@@ -214,9 +212,9 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, ultimateAbility);
 
-	DOREPLIFETIME(ABaseDrone, firstWeaponSlot);
+	DOREPLIFETIME(ABaseDrone, primaryWeaponSlot);
 
-	DOREPLIFETIME(ABaseDrone, secondWeaponSlot);
+	DOREPLIFETIME(ABaseDrone, secondaryWeaponSlot);
 
 	DOREPLIFETIME(ABaseDrone, slideCooldown);
 }
@@ -237,11 +235,11 @@ void ABaseDrone::PostInitializeComponents()
 
 			defaultWeaponSlot->setCharacter(this);
 
-			firstWeaponSlot = NewObject<UHipter>(this);
+			primaryWeaponSlot = NewObject<UHipter>(this);
 
-			firstWeaponSlot->setWorld(world);
+			primaryWeaponSlot->setWorld(world);
 
-			firstWeaponSlot->setCharacter(this);
+			primaryWeaponSlot->setCharacter(this);
 		}
 	}
 }
@@ -250,11 +248,9 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(firstWeaponSlot, *Bunch, *RepFlags);
+	wroteSomething |= Channel->ReplicateSubobject(primaryWeaponSlot, *Bunch, *RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(secondWeaponSlot, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(currentAbility, *Bunch, *RepFlags);
+	wroteSomething |= Channel->ReplicateSubobject(secondaryWeaponSlot, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
 
@@ -267,6 +263,60 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
 	return wroteSomething;
+}
+
+void ABaseDrone::updateCurrentWeapon()
+{
+	Super::updateCurrentWeapon();
+
+	switch (weaponId)
+	{
+	case weaponSlot::primaryWeapon:
+		currentWeapon = primaryWeaponSlot;
+
+		break;
+
+	case weaponSlot::secondaryWeapon:
+		currentWeapon = secondaryWeaponSlot;
+
+		break;
+	}
+}
+
+void ABaseDrone::onAbilityUsed()
+{
+	switch (abilityId)
+	{
+	case abilitySlot::empty:
+		currentAbility = nullptr;
+
+		break;
+
+	case abilitySlot::passiveAbility:
+		currentAbility = passiveAbility;
+
+		break;
+
+	case abilitySlot::firstAbility:
+		currentAbility = firstAbility;
+
+		break;
+
+	case abilitySlot::secondAbility:
+		currentAbility = secondAbility;
+
+		break;
+
+	case abilitySlot::thirdAbility:
+		currentAbility = thirdAbility;
+
+		break;
+
+	case abilitySlot::ultimateAbility:
+		currentAbility = ultimateAbility;
+
+		break;
+	}
 }
 
 bool ABaseDrone::checkPassiveAbilityCast() const
@@ -359,14 +409,14 @@ void ABaseDrone::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
-		if (firstWeaponSlot)
+		if (primaryWeaponSlot)
 		{
-			firstWeaponSlot->Tick(DeltaTime);
+			primaryWeaponSlot->Tick(DeltaTime);
 		}
 
-		if (secondWeaponSlot)
+		if (secondaryWeaponSlot)
 		{
-			secondWeaponSlot->Tick(DeltaTime);
+			secondaryWeaponSlot->Tick(DeltaTime);
 		}
 
 		if (slideCooldown > 0.0f)
@@ -509,8 +559,8 @@ void ABaseDrone::deathLogic()
 }
 
 ABaseDrone::ABaseDrone() :
-	firstWeaponSlot(nullptr),
-	secondWeaponSlot(nullptr),
+	primaryWeaponSlot(nullptr),
+	secondaryWeaponSlot(nullptr),
 	energy(1000.0f),
 	currentEnergy(1000.0f),
 	energyRestorationPerSecond(5.0f),
@@ -588,14 +638,14 @@ void ABaseDrone::resetShoot()
 
 void ABaseDrone::changeToFirstWeapon_Implementation()
 {
-	currentWeapon = firstWeaponSlot;
+	weaponId = weaponSlot::primaryWeapon;
 
 	this->updateWeaponMesh();
 }
 
 void ABaseDrone::changeToSecondWeapon_Implementation()
 {
-	currentWeapon = secondWeaponSlot;
+	weaponId = weaponSlot::secondaryWeapon;
 
 	this->updateWeaponMesh();
 }
@@ -629,13 +679,13 @@ void ABaseDrone::dropWeapon()
 
 	droppedWeapon->setWeapon(currentWeapon);
 
-	if (currentWeapon && currentWeapon == firstWeaponSlot)
+	if (currentWeapon && currentWeapon == primaryWeaponSlot)
 	{
-		currentWeapon = firstWeaponSlot = nullptr;
+		currentWeapon = primaryWeaponSlot = nullptr;
 	}
-	else if (currentWeapon && currentWeapon == secondWeaponSlot)
+	else if (currentWeapon && currentWeapon == secondaryWeaponSlot)
 	{
-		currentWeapon = secondWeaponSlot = nullptr;
+		currentWeapon = secondaryWeaponSlot = nullptr;
 	}
 
 	this->updateWeaponMesh();
@@ -656,45 +706,45 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 	if (currentWeapon)
 	{
-		if (currentWeapon == firstWeaponSlot)
+		if (currentWeapon == primaryWeaponSlot)
 		{
 			this->dropWeapon();
 
-			firstWeaponSlot = weapon;
+			primaryWeaponSlot = weapon;
 
 			this->changeToFirstWeapon();
 		}
-		else if (currentWeapon == secondWeaponSlot)
+		else if (currentWeapon == secondaryWeaponSlot)
 		{
 			this->dropWeapon();
 
-			secondWeaponSlot = weapon;
+			secondaryWeaponSlot = weapon;
 
 			this->changeToSecondWeapon();
 		}
 		else
 		{
-			if (!firstWeaponSlot)
+			if (!primaryWeaponSlot)
 			{
-				firstWeaponSlot = weapon;
+				primaryWeaponSlot = weapon;
 			}
-			else if (!secondWeaponSlot)
+			else if (!secondaryWeaponSlot)
 			{
-				secondWeaponSlot = weapon;
+				secondaryWeaponSlot = weapon;
 			}
 		}
 	}
 	else
 	{
-		if (!firstWeaponSlot)
+		if (!primaryWeaponSlot)
 		{
-			firstWeaponSlot = weapon;
+			primaryWeaponSlot = weapon;
 
 			this->changeToFirstWeapon();
 		}
-		else if (!secondWeaponSlot)
+		else if (!secondaryWeaponSlot)
 		{
-			secondWeaponSlot = weapon;
+			secondaryWeaponSlot = weapon;
 
 			this->changeToSecondWeapon();
 		}
@@ -705,11 +755,11 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 void ABaseDrone::changeWeapon()
 {
-	if (currentWeapon == firstWeaponSlot)
+	if (currentWeapon == primaryWeaponSlot)
 	{
 		this->changeToSecondWeapon();
 	}
-	else if (currentWeapon == secondWeaponSlot)
+	else if (currentWeapon == secondaryWeaponSlot)
 	{
 		this->changeToFirstWeapon();
 	}
@@ -754,12 +804,12 @@ void ABaseDrone::action()
 
 UBaseWeapon* ABaseDrone::getFirstWeapon()
 {
-	return firstWeaponSlot;
+	return primaryWeaponSlot;
 }
 
 UBaseWeapon* ABaseDrone::getSecondWeapon()
 {
-	return secondWeaponSlot;
+	return secondaryWeaponSlot;
 }
 
 FVector ABaseDrone::getStartActionLineTrace() const
@@ -846,7 +896,16 @@ void ABaseDrone::setCastPoint_Implementation(float newCastPoint)
 
 void ABaseDrone::setCurrentAbility_Implementation(UBaseAbility* ability)
 {
-	currentAbility = ability;
+	if (ability)
+	{
+		abilityId = ability->getId();
+	}
+	else
+	{
+		abilityId = abilitySlot::empty;
+	}
+
+	this->onAbilityUsed();
 }
 
 float ABaseDrone::getEnergy() const

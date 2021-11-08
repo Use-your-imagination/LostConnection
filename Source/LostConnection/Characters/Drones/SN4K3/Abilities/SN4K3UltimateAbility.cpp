@@ -3,6 +3,7 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
+#include "Utility/InitUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Engine/LostConnectionGameState.h"
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
@@ -24,6 +25,8 @@ USN4K3UltimateAbility::USN4K3UltimateAbility() :
 	currentAbilityDuration(0.0f)
 {
 	cooldown = 60.0f;
+
+	InitUtility::initAbilityId(__FILE__, id);
 }
 
 void USN4K3UltimateAbility::playReturnAnimation()

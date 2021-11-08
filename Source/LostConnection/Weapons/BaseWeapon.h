@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
+
 #include "Ammo/BaseAmmo.h"
 
 #include "BaseWeapon.generated.h"
@@ -24,6 +25,15 @@ enum class ammoTypes : uint8
 	small = 1 UMETA(DisplayName = "Small ammo"),
 	energy = 2 UMETA(DisplayName = "Energy ammo"),
 	defaultType = 3 UMETA(DisplayName = "Default ammo")
+};
+
+UENUM(BlueprintType)
+enum class weaponSlot : uint8
+{
+	empty = 0 UMETA(DisplayName = "No weapon"),
+	defaultWeapon = 1 UMETA(DisplayName = "Default weapon"),
+	primaryWeapon = 2 UMETA(DisplayName = "Primary weapon"),
+	secondaryWeapon = 3 UMETA(DisplayName = "Secondary weapon")
 };
 
 UCLASS()

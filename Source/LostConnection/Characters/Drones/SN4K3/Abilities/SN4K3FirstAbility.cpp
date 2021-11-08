@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
+#include "Utility/InitUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "SN4K3PassiveAbility.h"
 
@@ -21,6 +22,8 @@ USN4K3FirstAbility::USN4K3FirstAbility() :
 	distance(1200.0f)
 {
 	cost = 90.0f;
+
+	InitUtility::initAbilityId(__FILE__, id);
 }
 
 void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)

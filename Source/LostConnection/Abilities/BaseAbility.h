@@ -8,6 +8,17 @@
 
 #include "BaseAbility.generated.h"
 
+UENUM(BlueprintType)
+enum class abilitySlot : uint8
+{
+	empty = 0 UMETA(DisplayName = "No ability"),
+	passiveAbility = 1 UMETA(DisplayName = "Passive ability"),
+	firstAbility = 2 UMETA(DisplayName = "First ability"),
+	secondAbility = 4 UMETA(DisplayName = "Second ability"),
+	thirdAbility = 5 UMETA(DisplayName = "Third ability"),
+	ultimateAbility = 6 UMETA(DisplayName = "Ultimate ability")
+};
+
 UCLASS(BlueprintType, DefaultToInstanced)
 class LOSTCONNECTION_API UBaseAbility : public UObject
 {
@@ -37,6 +48,8 @@ protected:
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* animation;
+
+	abilitySlot id;
 
 	class ICaster* caster;
 
@@ -80,6 +93,8 @@ public:
 	virtual float getCancelBlendOutTime() const final;
 
 	virtual UAnimMontage* getAnimation() final;
+
+	virtual abilitySlot getId() const final;
 
 	virtual class ICaster* getCaster() final;
 

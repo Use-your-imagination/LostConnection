@@ -70,7 +70,7 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ABaseCharacter, spareAmmo);
 
-	DOREPLIFETIME(ABaseCharacter, currentWeapon);
+	DOREPLIFETIME(ABaseCharacter, weaponId);
 
 	DOREPLIFETIME(ABaseCharacter, defaultWeaponSlot);
 }
@@ -108,8 +108,26 @@ void ABaseCharacter::onCurrentWeaponChange()
 	this->updateWeaponMesh();
 }
 
+void ABaseCharacter::updateCurrentWeapon()
+{
+	switch (weaponId)
+	{
+	case weaponSlot::empty:
+		currentWeapon = nullptr;
+
+		break;
+
+	case weaponSlot::defaultWeapon:
+		currentWeapon = defaultWeaponSlot;
+
+		break;
+	}
+}
+
 void ABaseCharacter::updateWeaponMesh()
 {
+	this->updateCurrentWeapon();
+
 	if (currentWeapon)
 	{
 		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
@@ -335,7 +353,7 @@ void ABaseCharacter::resetShoot()
 
 void ABaseCharacter::changeToDefaultWeapon_Implementation()
 {
-	currentWeapon = defaultWeaponSlot;
+	weaponId = weaponSlot::defaultWeapon;
 
 	this->updateWeaponMesh();
 }
