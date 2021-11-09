@@ -15,9 +15,6 @@ class UCaster : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class LOSTCONNECTION_API ICaster
 {
 	GENERATED_BODY()

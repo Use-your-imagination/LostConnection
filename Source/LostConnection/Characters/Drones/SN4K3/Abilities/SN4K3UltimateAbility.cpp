@@ -3,8 +3,8 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
-#include "Utility/InitUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
+#include "Utility/InitUtility.h"
 #include "Engine/LostConnectionGameState.h"
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 #include "SN4K3PassiveAbility.h"

@@ -21,5 +21,7 @@ protected:
 public:
 	UBaseStatus();
 
+	virtual void applyStatus(class IStatusReceiver* target);
+
 	virtual ~UBaseStatus() = default;
 };

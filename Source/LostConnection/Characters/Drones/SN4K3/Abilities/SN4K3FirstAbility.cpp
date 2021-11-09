@@ -4,8 +4,8 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
-#include "Utility/InitUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
+#include "Utility/InitUtility.h"
 #include "SN4K3PassiveAbility.h"
 
 void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
