@@ -14,7 +14,7 @@ void ITarget::setPositionTarget(const FVector& positionTarget)
 	this->positionTarget = positionTarget;
 }
 
-void ITarget::setEnvironmentTarget(TScriptInterface<IEnvironmentTarget> environmentTarget)
+void ITarget::setEnvironmentTarget(const TScriptInterface<IEnvironmentTarget>& environmentTarget)
 {
 	this->environmentTarget = environmentTarget;
 }

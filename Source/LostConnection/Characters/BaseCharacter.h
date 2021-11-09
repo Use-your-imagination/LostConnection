@@ -16,6 +16,7 @@
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
 #include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
 #include "Interfaces/Gameplay/AnimatedActions/Death.h"
+#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -26,7 +27,8 @@ class LOSTCONNECTION_API ABaseCharacter :
 	public IReload,
 	public IShoot,
 	public IMovementActions,
-	public IDeath
+	public IDeath,
+	public IStatusReceiver
 {
 	GENERATED_BODY()
 
@@ -74,6 +76,9 @@ protected:
 
 	UPROPERTY(Category = "Physical Constraints", EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FName> physicsBones;
+
+	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
+	TArray<UBaseStatus*> statuses;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Reloading, VisibleAnywhere, BlueprintReadWrite)
@@ -246,6 +251,8 @@ public:
 	virtual float getPercentageDamageReduction_Implementation() const override;
 
 	virtual void impactAction_Implementation(ABaseAmmo* ammo) override;
+
+	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
 
 	virtual ~ABaseCharacter() = default;
 };

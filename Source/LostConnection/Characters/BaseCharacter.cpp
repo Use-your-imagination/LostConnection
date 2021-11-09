@@ -73,6 +73,8 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, weaponId);
 
 	DOREPLIFETIME(ABaseCharacter, defaultWeaponSlot);
+
+	DOREPLIFETIME(ABaseCharacter, statuses);
 }
 
 bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -497,4 +499,9 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo)
 	{
 		this->takeDamage(ammo->getDamage());
 	}
+}
+
+const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
+{
+	return statuses;
 }

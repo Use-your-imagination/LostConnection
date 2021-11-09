@@ -85,12 +85,12 @@ void UUtilityBlueprintFunctionLibrary::rebindHotkeys(const TMap<FName, FString>&
 	}
 }
 
-void UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(TScriptInterface<ICaster> caster)
+void UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(const TScriptInterface<ICaster>& caster)
 {
 	MultiplayerUtility::runOnServerReliableWithMulticast(caster.GetObject(), "cancelCurrentAbilityAnimation");
 }
 
-bool UUtilityBlueprintFunctionLibrary::isAnyAnimationActive(TScriptInterface<ICaster> caster)
+bool UUtilityBlueprintFunctionLibrary::isAnyAnimationActive(const TScriptInterface<ICaster>& caster)
 {
 	if (!caster.GetObject())
 	{

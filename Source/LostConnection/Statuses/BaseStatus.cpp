@@ -7,7 +7,17 @@ UBaseStatus::UBaseStatus()
 
 }
 
-void UBaseStatus::applyStatus(IStatusReceiver* target)
+void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusReceiver>& target)
 {
-	PURE_VIRTUAL(UBaseStatus::applyStatus);
+	target->addStatus(this);
+}
+
+void UBaseStatus::applyEffect(IStatusReceiver* target)
+{
+	PURE_VIRTUAL(UBaseStatus::applyEffect);
+}
+
+void UBaseStatus::removeStatus(IStatusReceiver* target)
+{
+	const_cast<TArray<UBaseStatus*>&>(target->getStatuses()).Remove(this);
 }

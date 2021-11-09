@@ -20,8 +20,8 @@ public:
 	static void rebindHotkeys(const TMap<FName, FString>& newHotkeys);
 
 	UFUNCTION(Category = Utility, BlueprintCallable)
-	static void cancelCurrentAbilityAnimation(TScriptInterface<class ICaster> caster);
+	static void cancelCurrentAbilityAnimation(const TScriptInterface<class ICaster>& caster);
 
 	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
-	static bool isAnyAnimationActive(TScriptInterface<class ICaster> caster);
+	static bool isAnyAnimationActive(const TScriptInterface<class ICaster>& caster);
 };

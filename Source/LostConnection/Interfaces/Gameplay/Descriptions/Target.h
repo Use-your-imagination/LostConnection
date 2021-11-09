@@ -31,7 +31,7 @@ public:
 
 	virtual void setPositionTarget(const FVector& positionTarget);
 
-	virtual void setEnvironmentTarget(TScriptInterface<IEnvironmentTarget> environmentTarget);
+	virtual void setEnvironmentTarget(const TScriptInterface<IEnvironmentTarget>& environmentTarget);
 
 	virtual TWeakObjectPtr<class ABaseCharacter>& getObjectTarget();
 
