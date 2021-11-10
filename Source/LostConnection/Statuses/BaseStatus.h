@@ -48,10 +48,10 @@ protected:
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
-	UNiagaraSystem* onHit;
+	UNiagaraSystem* onApplyStatus;
 
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
-	UNiagaraSystem* onTick;
+	UNiagaraSystem* onApplyEffect;
 
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
 	UNiagaraSystem* underStatus;
@@ -60,7 +60,7 @@ public:
 	UBaseStatus() = default;
 
 	UFUNCTION(Server, Reliable)
-	virtual void applyStatus(const TScriptInterface<class IStatusReceiver>& target);
+	virtual void applyStatus(const TScriptInterface<class IStatusReceiver>& target, const FVector& location);
 
 	virtual void applyEffect(class IStatusReceiver* target);
 

@@ -1,6 +1,9 @@
 #include "BaseStatus.h"
 
+#include "NiagaraFunctionLibrary.h"
+
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Characters/BaseCharacter.h"
 
 bool UBaseStatus::IsSupportedForNetworking() const
 {
@@ -16,11 +19,17 @@ void UBaseStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseStatus, currentDuration);
 }
 
-void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusReceiver>& target)
+void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusReceiver>& target, const FVector& location)
 {
 	this->target = static_cast<IStatusReceiver*>(target.GetInterface());
 
 	target->addStatus(this);
+
+	ABaseCharacter* character = Cast<ABaseCharacter>(target.GetObject());
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(character->GetWorld(), onApplyStatus, location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+
+	UNiagaraFunctionLibrary::SpawnSystemAttached(underStatus, character->GetMesh(), NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true, true, ENCPoolMethod::AutoRelease);
 }
 
 void UBaseStatus::applyEffect(IStatusReceiver* target)
