@@ -2,7 +2,7 @@
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
-#include "Utility/InitUtility.h"
+#include "Utility/InitializationUtility.h"
 #include "SN4K3PassiveAbility.h"
 
 void USN4K3SecondAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -15,7 +15,7 @@ void USN4K3SecondAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 USN4K3SecondAbility::USN4K3SecondAbility() :
 	distance(5000.0f)
 {
-	InitUtility::initAbilityId(__FILE__, id);
+	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
 float USN4K3SecondAbility::getDistance() const

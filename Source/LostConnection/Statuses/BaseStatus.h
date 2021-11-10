@@ -8,6 +8,17 @@
 
 #include "BaseStatus.generated.h"
 
+UENUM(BlueprintType)
+enum class typeOfDamage : uint8
+{
+	none = 0 UMETA(DisplayName = "None"),
+	physical = 1 UMETA(DisplayName = "Physical"),
+	cold = 2 UMETA(DisplayName = "Cold"),
+	nanite = 3 UMETA(DisplayName = "Nanite"),
+	fire = 4 UMETA(DisplayName = "Fire"),
+	electricity = 5 UMETA(DisplayName = "Electricity")
+};
+
 UCLASS(BlueprintType, Blueprintable, DefaultToInstanced)
 class LOSTCONNECTION_API UBaseStatus : public UObject
 {
@@ -37,18 +48,18 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	float currentPeriod;
 
-private:
-	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UNiagaraComponent* onHit;
+protected:
+	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
+	UNiagaraSystem* onHit;
 
-	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UNiagaraComponent* onTick;
+	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
+	UNiagaraSystem* onTick;
 
-	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UNiagaraComponent* underStatus;
+	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
+	UNiagaraSystem* underStatus;
 
 public:
-	UBaseStatus();
+	UBaseStatus() = default;
 
 	UFUNCTION(Server, Reliable)
 	virtual void applyStatus(const TScriptInterface<class IStatusReceiver>& target) final;
@@ -57,7 +68,7 @@ public:
 
 	virtual void removeStatus(class IStatusReceiver* target) final;
 
-	virtual bool Tick(float DeltaTime, TArray<UBaseStatus*>& statusesToRemove) final;
+	virtual bool Tick(float DeltaTime, TArray<UBaseStatus*>& statusesToRemove);
 
 	virtual ~UBaseStatus() = default;
 };

@@ -14,9 +14,9 @@ enum class abilitySlot : uint8
 	empty = 0 UMETA(DisplayName = "No ability"),
 	passiveAbility = 1 UMETA(DisplayName = "Passive ability"),
 	firstAbility = 2 UMETA(DisplayName = "First ability"),
-	secondAbility = 4 UMETA(DisplayName = "Second ability"),
-	thirdAbility = 5 UMETA(DisplayName = "Third ability"),
-	ultimateAbility = 6 UMETA(DisplayName = "Ultimate ability")
+	secondAbility = 3 UMETA(DisplayName = "Second ability"),
+	thirdAbility = 4 UMETA(DisplayName = "Third ability"),
+	ultimateAbility = 5 UMETA(DisplayName = "Ultimate ability")
 };
 
 UCLASS(BlueprintType, DefaultToInstanced)

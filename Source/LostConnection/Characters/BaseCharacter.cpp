@@ -6,6 +6,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 
+#include "Statuses/ShatterStatus.h"
+
 #include "Utility/MultiplayerUtility.h"
 
 #pragma warning(disable: 4458)
@@ -514,7 +516,28 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo)
 {
 	if (isAlly != ammo->getIsAlly())
 	{
+		static TArray<UBaseStatus*> statusesToRemove;
+
 		this->takeDamage(ammo->getDamage());
+
+		for (auto& status : statuses)
+		{
+			UShatterStatus* shatter = Cast<UShatterStatus>(status);
+
+			if (shatter)
+			{
+				shatter->applyEffect(this);
+
+				statusesToRemove.Add(shatter);
+			}
+		}
+
+		for (const auto& statusToRemove : statusesToRemove)
+		{
+			statuses.Remove(statusToRemove);
+		}
+
+		statusesToRemove.Empty();
 	}
 }
 

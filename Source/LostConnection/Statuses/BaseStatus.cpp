@@ -20,11 +20,6 @@ void UBaseStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseStatus, currentPeriod);
 }
 
-UBaseStatus::UBaseStatus()
-{
-
-}
-
 void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusReceiver>& target)
 {
 	target->addStatus(this);

@@ -5,7 +5,7 @@
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
-#include "Utility/InitUtility.h"
+#include "Utility/InitializationUtility.h"
 #include "SN4K3PassiveAbility.h"
 
 void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -23,7 +23,7 @@ USN4K3FirstAbility::USN4K3FirstAbility() :
 {
 	cost = 90.0f;
 
-	InitUtility::initAbilityId(__FILE__, id);
+	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
 void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)

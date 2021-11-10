@@ -4,7 +4,7 @@
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
-#include "Utility/InitUtility.h"
+#include "Utility/InitializationUtility.h"
 #include "SN4K3UltimateAbility.h"
 
 void USN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -18,7 +18,7 @@ USN4K3PassiveAbility::USN4K3PassiveAbility() :
 	lastTimeAbilityUsed(0.0f),
 	type(directionTypes::up)
 {
-	InitUtility::initAbilityId(__FILE__, id);
+	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
 void USN4K3PassiveAbility::resetLastTimeAbilityUsed()

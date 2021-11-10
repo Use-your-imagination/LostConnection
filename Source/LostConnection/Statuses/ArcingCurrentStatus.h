@@ -14,5 +14,5 @@ class LOSTCONNECTION_API UArcingCurrentStatus : public UBaseStatus
 public:
 	UArcingCurrentStatus() = default;
 
-	~UArcingCurrentStatus() = default;
+	virtual ~UArcingCurrentStatus() = default;
 };

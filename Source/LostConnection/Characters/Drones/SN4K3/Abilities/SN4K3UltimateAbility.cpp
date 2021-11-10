@@ -4,7 +4,7 @@
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
-#include "Utility/InitUtility.h"
+#include "Utility/InitializationUtility.h"
 #include "Engine/LostConnectionGameState.h"
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 #include "SN4K3PassiveAbility.h"
@@ -26,7 +26,7 @@ USN4K3UltimateAbility::USN4K3UltimateAbility() :
 {
 	cooldown = 60.0f;
 
-	InitUtility::initAbilityId(__FILE__, id);
+	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
 void USN4K3UltimateAbility::playReturnAnimation()

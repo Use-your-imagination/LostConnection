@@ -1,5 +1,23 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+#include "ShatterStatus.h"
 
+#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Characters/BaseCharacter.h"
 
-#include "Statuses/ShatterStatus.h"
+void UShatterStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(UShatterStatus, reservedDamage);
+}
+
+UShatterStatus::UShatterStatus()
+{
+	period = duration + 1.0f;
+}
+
+void UShatterStatus::applyEffect(IStatusReceiver* target)
+{
+	ABaseCharacter* character = Cast<ABaseCharacter>(target);
+
+	character->takeDamage(reservedDamage);
+}
