@@ -56,9 +56,9 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 		for (auto& status : statuses)
 		{
-			if (status->Tick(DeltaTime, statusesToRemove))
+			if (!status->Tick(DeltaTime))
 			{
-				status->applyEffect(this);
+				statusesToRemove.Add(status);
 			}
 		}
 
@@ -539,6 +539,11 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo)
 
 		statusesToRemove.Empty();
 	}
+}
+
+void ABaseCharacter::addStatus(UBaseStatus* status)
+{
+	statuses.Add(status);
 }
 
 const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const

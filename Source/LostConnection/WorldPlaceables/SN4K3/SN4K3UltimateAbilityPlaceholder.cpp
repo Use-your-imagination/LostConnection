@@ -21,6 +21,8 @@ ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
+
+	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 }
 
 void ASN4K3UltimateAbilityPlaceholder::setAbility(USN4K3UltimateAbility* ability)

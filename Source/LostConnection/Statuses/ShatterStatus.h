@@ -2,12 +2,12 @@
 
 #include "CoreMinimal.h"
 
-#include "Statuses/BaseStatus.h"
+#include "BaseImpactStatus.h"
 
 #include "ShatterStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UShatterStatus : public UBaseStatus
+class LOSTCONNECTION_API UShatterStatus : public UBaseImpactStatus
 {
 	GENERATED_BODY()
 	
@@ -19,7 +19,7 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	UShatterStatus();
+	UShatterStatus() = default;
 
 	void applyEffect(class IStatusReceiver* target) override;
 

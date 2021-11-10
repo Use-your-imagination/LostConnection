@@ -2,12 +2,12 @@
 
 #include "CoreMinimal.h"
 
-#include "Statuses/BaseStatus.h"
+#include "BaseTickStatus.h"
 
 #include "BurnStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UBurnStatus : public UBaseStatus
+class LOSTCONNECTION_API UBurnStatus : public UBaseTickStatus
 {
 	GENERATED_BODY()
 	

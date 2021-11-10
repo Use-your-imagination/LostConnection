@@ -10,11 +10,6 @@ void UShatterStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(UShatterStatus, reservedDamage);
 }
 
-UShatterStatus::UShatterStatus()
-{
-	period = duration + 1.0f;
-}
-
 void UShatterStatus::applyEffect(IStatusReceiver* target)
 {
 	ABaseCharacter* character = Cast<ABaseCharacter>(target);

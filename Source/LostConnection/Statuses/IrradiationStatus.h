@@ -2,12 +2,12 @@
 
 #include "CoreMinimal.h"
 
-#include "Statuses/BaseStatus.h"
+#include "BaseImpactStatus.h"
 
 #include "IrradiationStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UIrradiationStatus : public UBaseStatus
+class LOSTCONNECTION_API UIrradiationStatus : public UBaseImpactStatus
 {
 	GENERATED_BODY()
 	

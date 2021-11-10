@@ -14,14 +14,12 @@ void UBaseStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseStatus, duration);
 
 	DOREPLIFETIME(UBaseStatus, currentDuration);
-
-	DOREPLIFETIME(UBaseStatus, period);
-
-	DOREPLIFETIME(UBaseStatus, currentPeriod);
 }
 
 void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusReceiver>& target)
 {
+	this->target = static_cast<IStatusReceiver*>(target.GetInterface());
+
 	target->addStatus(this);
 }
 
@@ -35,25 +33,14 @@ void UBaseStatus::removeStatus(IStatusReceiver* target)
 	const_cast<TArray<UBaseStatus*>&>(target->getStatuses()).Remove(this);
 }
 
-bool UBaseStatus::Tick(float DeltaTime, TArray<UBaseStatus*>& statusesToRemove)
+bool UBaseStatus::Tick(float DeltaTime)
 {
 	currentDuration += DeltaTime;
 	
 	if (currentDuration >= duration)
 	{
-		statusesToRemove.Add(this);
-
 		return false;
 	}
 
-	currentPeriod += DeltaTime;
-
-	if (currentPeriod >= period)
-	{
-		currentPeriod -= period;
-
-		return true;
-	}
-
-	return false;
+	return true;
 }

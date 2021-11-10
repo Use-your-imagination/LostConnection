@@ -20,7 +20,7 @@ class LOSTCONNECTION_API IStatusReceiver
 public:
 	IStatusReceiver() = default;
 
-	virtual void addStatus(class UBaseStatus* status);
+	virtual void addStatus(class UBaseStatus* status) = 0;
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const = 0;
 };

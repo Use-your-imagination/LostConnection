@@ -2,12 +2,12 @@
 
 #include "CoreMinimal.h"
 
-#include "Statuses/BaseStatus.h"
+#include "BaseImpactStatus.h"
 
 #include "CritStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UCritStatus : public UBaseStatus
+class LOSTCONNECTION_API UCritStatus : public UBaseImpactStatus
 {
 	GENERATED_BODY()
 	

@@ -8,6 +8,8 @@
 
 #include "BaseStatus.generated.h"
 
+#pragma warning(disable: 4458)
+
 UENUM(BlueprintType)
 enum class typeOfDamage : uint8
 {
@@ -42,11 +44,7 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	float currentDuration;
 
-	UPROPERTY(Category = Statuses, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	float period;
-
-	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
-	float currentPeriod;
+	class IStatusReceiver* target;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
@@ -62,13 +60,13 @@ public:
 	UBaseStatus() = default;
 
 	UFUNCTION(Server, Reliable)
-	virtual void applyStatus(const TScriptInterface<class IStatusReceiver>& target) final;
+	virtual void applyStatus(const TScriptInterface<class IStatusReceiver>& target);
 
 	virtual void applyEffect(class IStatusReceiver* target);
 
 	virtual void removeStatus(class IStatusReceiver* target) final;
 
-	virtual bool Tick(float DeltaTime, TArray<UBaseStatus*>& statusesToRemove);
+	virtual bool Tick(float DeltaTime);
 
 	virtual ~UBaseStatus() = default;
 };

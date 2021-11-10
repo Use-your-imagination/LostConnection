@@ -252,6 +252,8 @@ public:
 
 	virtual void impactAction_Implementation(ABaseAmmo* ammo) override;
 
+	virtual void addStatus(class UBaseStatus* status) final override;
+
 	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
 
 	virtual ~ABaseCharacter() = default;
