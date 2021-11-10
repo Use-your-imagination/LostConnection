@@ -1,5 +1,23 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+#include "BurnStatus.h"
 
+#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Characters/BaseCharacter.h"
 
-#include "Statuses/BurnStatus.h"
+void UBurnStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(UBurnStatus, damage);
+}
+
+void UBurnStatus::setDamage_Implementation(float newDamage)
+{
+	damage = newDamage;
+}
+
+void UBurnStatus::applyEffect(IStatusReceiver* target)
+{
+	ABaseCharacter* character = Cast<ABaseCharacter>(target);
+
+	character->takeDamage(damage);
+}

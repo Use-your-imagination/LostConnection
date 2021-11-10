@@ -43,12 +43,29 @@ void ABaseCharacter::Tick(float DeltaTime)
 		}
 	}
 
-	if (defaultWeaponSlot)
+	if (HasAuthority())
 	{
-		if (HasAuthority())
+		static TArray<UBaseStatus*> statusesToRemove;
+
+		if (defaultWeaponSlot)
 		{
 			defaultWeaponSlot->Tick(DeltaTime);
 		}
+
+		for (auto& status : statuses)
+		{
+			if (status->Tick(DeltaTime, statusesToRemove))
+			{
+				status->applyEffect(this);
+			}
+		}
+
+		for (const auto& statusToRemove : statusesToRemove)
+		{
+			statuses.Remove(statusToRemove);
+		}
+
+		statusesToRemove.Empty();
 	}
 }
 
@@ -263,7 +280,7 @@ void ABaseCharacter::deathVisual()
 
 void ABaseCharacter::deathLogic()
 {
-	
+
 }
 
 void ABaseCharacter::runDeathLogic_Implementation()
@@ -295,7 +312,7 @@ ABaseCharacter::ABaseCharacter() :
 {
 	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
 	UCharacterMovementComponent* movement = GetCharacterMovement();
-	
+
 	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = 60;
 
