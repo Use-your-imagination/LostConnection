@@ -5,6 +5,9 @@
 #include "UObject/NoExportTypes.h"
 #include "NiagaraComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "UObject/WeakInterfacePtr.h"
+
+#include "Interfaces/Gameplay/Descriptions/StatusInflictor.h"
 
 #include "BaseStatus.generated.h"
 
@@ -46,7 +49,7 @@ protected:
 
 	class IStatusReceiver* target;
 
-	TWeakObjectPtr<class ABaseCharacter> causer;
+	TWeakInterfacePtr<IStatusInflictor> inflictor;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
@@ -62,7 +65,7 @@ public:
 	UBaseStatus() = default;
 
 	UFUNCTION(Server, Reliable)
-	virtual void applyStatus(class ABaseCharacter* causer, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
+	virtual void applyStatus(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
 
 	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit);
 

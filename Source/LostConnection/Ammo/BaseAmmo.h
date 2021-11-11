@@ -11,7 +11,9 @@
 #include "BaseAmmo.generated.h"
 
 UCLASS(BlueprintType)
-class LOSTCONNECTION_API ABaseAmmo : public APawn
+class LOSTCONNECTION_API ABaseAmmo :
+	public APawn,
+	public IStatusInflictor
 {
 	GENERATED_BODY()
 

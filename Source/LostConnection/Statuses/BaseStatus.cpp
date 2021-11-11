@@ -20,9 +20,9 @@ void UBaseStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseStatus, currentDuration);
 }
 
-void UBaseStatus::applyStatus_Implementation(ABaseCharacter* causer, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
+void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	this->causer = causer;
+	this->inflictor = static_cast<IStatusInflictor*>(inflictor.GetInterface());
 
 	this->target = static_cast<IStatusReceiver*>(target.GetInterface());
 

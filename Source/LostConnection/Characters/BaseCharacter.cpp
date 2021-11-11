@@ -25,7 +25,7 @@ void ABaseCharacter::BeginPlay()
 	{
 		if (HasAuthority())
 		{
-			timers = NewObject<UTimersUtility>();
+			timers = NewObject<UTimersUtility>(this);
 
 			timers->setWorld(world);
 		}
@@ -110,7 +110,7 @@ void ABaseCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	deathMaskRenderTexture = NewObject<UTextureRenderTarget2D>();
+	deathMaskRenderTexture = NewObject<UTextureRenderTarget2D>(this);
 
 	deathMaskRenderTexture->InitCustomFormat(256, 256, EPixelFormat::PF_G16, false);
 }
@@ -524,8 +524,6 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 	{
 		static TArray<UBaseStatus*> statusesToRemove;
 
-		InitializationUtility::createDefaultStatus(ammo->getDamageType(), this)->applyStatus(nullptr, this, hit);
-
 		this->takeDamage(ammo->getDamage());
 
 		for (auto& status : statuses)
@@ -544,6 +542,8 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 		{
 			statuses.Remove(statusToRemove);
 		}
+
+		InitializationUtility::createDefaultStatus(ammo->getDamageType(), this)->applyStatus(nullptr, this, hit);
 
 		statusesToRemove.Empty();
 	}
