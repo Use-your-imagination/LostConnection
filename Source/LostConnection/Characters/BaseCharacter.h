@@ -256,6 +256,8 @@ public:
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
 
+	virtual USkeletalMeshComponent* getMeshComponent() final override;
+
 	virtual ~ABaseCharacter() = default;
 };
 

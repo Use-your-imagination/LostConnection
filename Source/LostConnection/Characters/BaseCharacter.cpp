@@ -550,3 +550,8 @@ const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
 {
 	return statuses;
 }
+
+USkeletalMeshComponent* ABaseCharacter::getMeshComponent()
+{
+	return GetMesh();
+}

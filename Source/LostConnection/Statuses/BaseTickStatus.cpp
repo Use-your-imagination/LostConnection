@@ -16,9 +16,7 @@ void UBaseTickStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 
 void UBaseTickStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
-	ABaseCharacter* character = Cast<ABaseCharacter>(target);
-
-	UNiagaraFunctionLibrary::SpawnSystemAttached(onApplyEffect, character->GetMesh(), NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true, true, ENCPoolMethod::AutoRelease);
+	UNiagaraFunctionLibrary::SpawnSystemAttached(onApplyEffect, target->getMeshComponent(), NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true, true, ENCPoolMethod::AutoRelease);
 }
 
 bool UBaseTickStatus::Tick(float DeltaTime)

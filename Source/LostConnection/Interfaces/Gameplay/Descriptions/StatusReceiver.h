@@ -23,4 +23,6 @@ public:
 	virtual void addStatus(class UBaseStatus* status) = 0;
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const = 0;
+
+	virtual USkeletalMeshComponent* getMeshComponent() = 0;
 };

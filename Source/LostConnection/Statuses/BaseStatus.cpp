@@ -4,6 +4,7 @@
 
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 #include "Characters/BaseCharacter.h"
+#include "Utility/Utility.h"
 
 bool UBaseStatus::IsSupportedForNetworking() const
 {
@@ -25,18 +26,14 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusRecei
 
 	target->addStatus(this);
 
-	ABaseCharacter* character = Cast<ABaseCharacter>(target.GetObject());
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(Utility::getWorld(), onApplyStatus, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
 
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(character->GetWorld(), onApplyStatus, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
-
-	UNiagaraFunctionLibrary::SpawnSystemAttached(underStatus, character->GetMesh(), NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true, true, ENCPoolMethod::AutoRelease);
+	UNiagaraFunctionLibrary::SpawnSystemAttached(underStatus, target->getMeshComponent(), NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true, true, ENCPoolMethod::AutoRelease);
 }
 
 void UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
-	ABaseCharacter* character = Cast<ABaseCharacter>(target);
-
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(character->GetWorld(), onApplyEffect, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(Utility::getWorld(), onApplyEffect, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
 }
 
 void UBaseStatus::removeStatus(IStatusReceiver* target)
