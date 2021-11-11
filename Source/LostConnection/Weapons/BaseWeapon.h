@@ -43,7 +43,7 @@ class LOSTCONNECTION_API UBaseWeapon : public UObject
 		
 private:
 	UWorld* world;
-	class ABaseCharacter* character;
+	TWeakObjectPtr<class ABaseCharacter> ownerCharacter;
 	float timeBetweenShots;
 	float currentTimeBetweenShots;
 	bool isShooting;
@@ -56,37 +56,40 @@ protected:
 	virtual void shoot();
 
 protected:
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Components, BlueprintReadOnly)
 	USkeletalMesh* mesh;
 
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Components, BlueprintReadOnly)
 	UStaticMesh* magazineMesh;
 
 	UPROPERTY()
 	UClass* animationBlueprint;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	ammoTypes ammoType;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	typeOfDamage damageType;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	float damage;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	int currentMagazineSize;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	int magazineSize;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	int ammoCost;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	int roundsPerSecond;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	weaponTypes weaponType;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	float spreadDistance;
 
 	UClass* ammoClass;
@@ -107,7 +110,7 @@ public:
 
 	virtual void setWorld(UWorld* world) final;
 
-	virtual void setCharacter(class ABaseCharacter* character) final;
+	virtual void setOwnerCharacter(class ABaseCharacter* ownerCharacter) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setAmmoType(ammoTypes newAmmoType) final;
@@ -130,6 +133,8 @@ public:
 
 	virtual ammoTypes getAmmoType() const final;
 
+	virtual typeOfDamage getDamageType() const final;
+
 	virtual float getDamage() const final;
 
 	virtual int getCurrentMagazineSize() const final;
@@ -141,6 +146,8 @@ public:
 	virtual weaponTypes getWeaponType() const final;
 
 	virtual UClass* getAnimationBlueprint() const final;
+
+	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
 
 	virtual ~UBaseWeapon() = default;
 };

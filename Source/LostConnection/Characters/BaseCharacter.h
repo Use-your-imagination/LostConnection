@@ -243,6 +243,8 @@ public:
 
 	virtual USkeletalMeshComponent* getCurrentWeaponMeshComponent() const final;
 
+	virtual UBaseWeapon* getCurrentWeapon() final;
+
 	UFUNCTION(BlueprintCallable)
 	virtual int getWeaponCount() const;
 

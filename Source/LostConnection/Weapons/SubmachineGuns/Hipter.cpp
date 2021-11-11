@@ -15,6 +15,7 @@ UHipter::UHipter()
 	animationBlueprint = animBPFinder.Class;
 
 	ammoType = ammoTypes::small;
+	damageType = typeOfDamage::physical;
 	damage = 55.0f;
 	currentMagazineSize = 150;
 	magazineSize = 150;

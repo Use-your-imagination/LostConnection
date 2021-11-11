@@ -7,6 +7,7 @@
 #include "GameFramework/Controller.h"
 
 #include "Statuses/BaseTriggerStatus.h"
+#include "Utility/InitializationUtility.h"
 
 #include "Utility/MultiplayerUtility.h"
 
@@ -493,6 +494,11 @@ USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMeshComponent() const
 	return currentWeaponMesh;
 }
 
+UBaseWeapon* ABaseCharacter::getCurrentWeapon()
+{
+	return currentWeapon;
+}
+
 int ABaseCharacter::getWeaponCount() const
 {
 	int result = 0;
@@ -517,6 +523,8 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 	if (isAlly != ammo->getIsAlly())
 	{
 		static TArray<UBaseStatus*> statusesToRemove;
+
+		InitializationUtility::createDefaultStatus(ammo->getDamageType(), this)->applyStatus(nullptr, this, hit);
 
 		this->takeDamage(ammo->getDamage());
 

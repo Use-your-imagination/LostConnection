@@ -233,13 +233,13 @@ void ABaseDrone::PostInitializeComponents()
 
 			defaultWeaponSlot->setWorld(world);
 
-			defaultWeaponSlot->setCharacter(this);
+			defaultWeaponSlot->setOwnerCharacter(this);
 
 			primaryWeaponSlot = NewObject<UHipter>(this);
 
 			primaryWeaponSlot->setWorld(world);
 
-			primaryWeaponSlot->setCharacter(this);
+			primaryWeaponSlot->setOwnerCharacter(this);
 		}
 	}
 }

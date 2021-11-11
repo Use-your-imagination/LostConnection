@@ -30,7 +30,7 @@ void ABaseBot::PostInitializeComponents()
 
 			defaultWeaponSlot->setWorld(world);
 
-			defaultWeaponSlot->setCharacter(this);	
+			defaultWeaponSlot->setOwnerCharacter(this);	
 		}
 	}
 }

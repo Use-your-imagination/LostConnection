@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Gauss.h"
 
 #include "UObject/ConstructorHelpers.h"
@@ -20,6 +17,7 @@ UGauss::UGauss()
 	animationBlueprint = animBPFinder.Class;
 
 	ammoType = ammoTypes::defaultType;
+	damageType = typeOfDamage::physical;
 	damage = 150.0f;
 	currentMagazineSize = 12;
 	magazineSize = 12;

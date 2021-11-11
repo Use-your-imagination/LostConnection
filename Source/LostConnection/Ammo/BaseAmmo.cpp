@@ -95,7 +95,7 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			onHitAsset,
 			GetActorLocation(),
 			GetActorRotation(),
-			FVector(1.0f),
+			FVector::OneVector,
 			true,
 			true,
 			ENCPoolMethod::AutoRelease
@@ -154,6 +154,10 @@ void ABaseAmmo::launch(ABaseCharacter* character)
 void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 {
 	damage = weapon->getDamage();
+
+	damageType = weapon->getDamageType();
+
+	ownerCharacter = weapon->getOwnerCharacter();
 }
 
 UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
@@ -166,7 +170,17 @@ float ABaseAmmo::getDamage() const
 	return damage;
 }
 
+typeOfDamage ABaseAmmo::getDamageType() const
+{
+	return damageType;
+}
+
 bool ABaseAmmo::getIsAlly() const
 {
 	return isAlly;
+}
+
+const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwnerCharacter() const
+{
+	return ownerCharacter;
 }

@@ -6,12 +6,17 @@
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
+#include "Statuses/BaseStatus.h"
+
 #include "BaseAmmo.generated.h"
 
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API ABaseAmmo : public APawn
 {
 	GENERATED_BODY()
+
+private:
+	TWeakObjectPtr<class ABaseCharacter> ownerCharacter;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -23,23 +28,24 @@ protected:
 	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 protected:
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Components, BlueprintReadOnly)
 	UStaticMeshComponent* mesh;
 
-	UPROPERTY(Category = Movement, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Movement, Replicated, BlueprintReadOnly)
 	UProjectileMovementComponent* movement;
 	
-	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Particles, BlueprintReadOnly)
 	UNiagaraComponent* tracer;
 
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Components, BlueprintReadOnly)
 	UStaticMesh* brokenAmmoMesh;
 
-	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Particles, BlueprintReadOnly)
 	UNiagaraSystem* onHitAsset;
 
 	AActor* lastTarget;
 	float damage;
+	typeOfDamage damageType;
 	bool isAlly;
 
 public:
@@ -53,7 +59,11 @@ public:
 
 	virtual float getDamage() const final;
 
+	virtual typeOfDamage getDamageType() const final;
+
 	virtual bool getIsAlly() const final;
+
+	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
 
 	virtual ~ABaseAmmo() = default;
 };

@@ -46,6 +46,8 @@ protected:
 
 	class IStatusReceiver* target;
 
+	TWeakObjectPtr<class ABaseCharacter> causer;
+
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
 	UNiagaraSystem* onApplyStatus;
@@ -60,7 +62,7 @@ public:
 	UBaseStatus() = default;
 
 	UFUNCTION(Server, Reliable)
-	virtual void applyStatus(const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
+	virtual void applyStatus(class ABaseCharacter* causer, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
 
 	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit);
 

@@ -24,6 +24,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(UBaseWeapon, ammoType);
 
+	DOREPLIFETIME(UBaseWeapon, damageType);
+
 	DOREPLIFETIME(UBaseWeapon, damage);
 
 	DOREPLIFETIME(UBaseWeapon, currentMagazineSize);
@@ -41,14 +43,14 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 void UBaseWeapon::shoot()
 {
-	if (character->getIsReloading())
+	if (ownerCharacter->getIsReloading())
 	{
 		return;
 	}
 
 	if (weaponType == weaponTypes::semiAutomatic || weaponType == weaponTypes::single)
 	{
-		MultiplayerUtility::runOnServerReliable(character, "resetShoot");
+		MultiplayerUtility::runOnServerReliable(ownerCharacter.Get(), "resetShoot");
 	}
 	else if (weaponType == weaponTypes::delay)
 	{
@@ -57,13 +59,13 @@ void UBaseWeapon::shoot()
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = character->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammoClass, FTransform(character->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")));
+		ABaseAmmo* launchedAmmo = ownerCharacter->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammoClass, FTransform(ownerCharacter->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")));
 
 		launchedAmmo->copyProperties(this);
 
 		FHitResult hit;
 		FRotator resultRotation;
-		ABaseDrone* drone = Cast<ABaseDrone>(character);
+		ABaseDrone* drone = Cast<ABaseDrone>(ownerCharacter.Get());
 
 		if (drone)
 		{
@@ -84,7 +86,7 @@ void UBaseWeapon::shoot()
 		}
 		else
 		{
-			ABaseBot* bot = Cast<ABaseBot>(character);
+			ABaseBot* bot = Cast<ABaseBot>(ownerCharacter.Get());
 			AAIController* controller = bot->GetController<AAIController>();
 			FVector targetLocation = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"))->GetActorLocation();
 
@@ -98,7 +100,7 @@ void UBaseWeapon::shoot()
 
 		launchedAmmo->getAmmoMeshComponent()->AddRelativeRotation({ pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
-		launchedAmmo->launch(character);
+		launchedAmmo->launch(ownerCharacter.Get());
 
 		currentMagazineSize -= ammoCost;
 
@@ -106,7 +108,7 @@ void UBaseWeapon::shoot()
 	}
 	else
 	{
-		MultiplayerUtility::runOnServerReliableWithMulticast(character, "reload");
+		MultiplayerUtility::runOnServerReliableWithMulticast(ownerCharacter.Get(), "reload");
 	}
 }
 
@@ -168,9 +170,9 @@ void UBaseWeapon::setWorld(UWorld* world)
 	this->world = world;
 }
 
-void UBaseWeapon::setCharacter(ABaseCharacter* character)
+void UBaseWeapon::setOwnerCharacter(ABaseCharacter* ownerCharacter)
 {
-	this->character = character;
+	this->ownerCharacter = ownerCharacter;
 }
 
 void UBaseWeapon::setAmmoType_Implementation(ammoTypes newAmmoType)
@@ -213,6 +215,11 @@ ammoTypes UBaseWeapon::getAmmoType() const
 	return ammoType;
 }
 
+typeOfDamage UBaseWeapon::getDamageType() const
+{
+	return damageType;
+}
+
 float UBaseWeapon::getDamage() const
 {
 	return damage;
@@ -241,4 +248,9 @@ weaponTypes UBaseWeapon::getWeaponType() const
 UClass* UBaseWeapon::getAnimationBlueprint() const
 {
 	return animationBlueprint;
+}
+
+const TWeakObjectPtr<ABaseCharacter>& UBaseWeapon::getOwnerCharacter() const
+{
+	return ownerCharacter;
 }
