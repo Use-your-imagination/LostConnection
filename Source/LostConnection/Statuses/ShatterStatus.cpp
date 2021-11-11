@@ -10,8 +10,10 @@ void UShatterStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(UShatterStatus, reservedDamage);
 }
 
-void UShatterStatus::applyEffect(IStatusReceiver* target)
+void UShatterStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
+	Super::applyEffect(target, hit);
+
 	ABaseCharacter* character = Cast<ABaseCharacter>(target);
 
 	character->takeDamage(reservedDamage);

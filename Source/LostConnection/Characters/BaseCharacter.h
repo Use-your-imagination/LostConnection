@@ -250,7 +250,7 @@ public:
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
 
-	virtual void impactAction_Implementation(ABaseAmmo* ammo) override;
+	virtual void impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit) override;
 
 	virtual void addStatus(class UBaseStatus* status) final override;
 

@@ -1,10 +1,11 @@
 #include "BaseImpactStatus.h"
 
+#include "Characters/BaseCharacter.h"
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 
-void UBaseImpactStatus::applyStatus_Implementation(const TScriptInterface<IStatusReceiver>& target, const FVector& location)
+void UBaseImpactStatus::applyStatus_Implementation(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	Super::applyStatus(target, location);
+	Super::applyStatus(target, hit);
 
-	this->applyEffect(static_cast<IStatusReceiver*>(target.GetInterface()));
+	this->applyEffect(static_cast<IStatusReceiver*>(target.GetInterface()), hit);
 }

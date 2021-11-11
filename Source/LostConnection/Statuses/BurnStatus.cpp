@@ -15,8 +15,10 @@ void UBurnStatus::setDamage_Implementation(float newDamage)
 	damage = newDamage;
 }
 
-void UBurnStatus::applyEffect(IStatusReceiver* target)
+void UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
+	Super::applyEffect(target, hit);
+
 	ABaseCharacter* character = Cast<ABaseCharacter>(target);
 
 	character->takeDamage(damage);

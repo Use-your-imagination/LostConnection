@@ -47,7 +47,7 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 	if (shotThrough && OtherActor)
 	{
-		IShotThrough::Execute_impactAction(OtherActor, this);
+		IShotThrough::Execute_impactAction(OtherActor, this, SweepResult);
 
 		lastTarget = OtherActor;
 
@@ -61,7 +61,7 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				onHitAsset,
 				GetActorLocation(),
 				GetActorRotation(),
-				FVector(1.0f),
+				FVector::OneVector,
 				true,
 				true,
 				ENCPoolMethod::AutoRelease

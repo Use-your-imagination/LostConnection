@@ -19,7 +19,7 @@ void UBaseStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseStatus, currentDuration);
 }
 
-void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusReceiver>& target, const FVector& location)
+void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	this->target = static_cast<IStatusReceiver*>(target.GetInterface());
 
@@ -27,14 +27,16 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusRecei
 
 	ABaseCharacter* character = Cast<ABaseCharacter>(target.GetObject());
 
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(character->GetWorld(), onApplyStatus, location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(character->GetWorld(), onApplyStatus, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
 
 	UNiagaraFunctionLibrary::SpawnSystemAttached(underStatus, character->GetMesh(), NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true, true, ENCPoolMethod::AutoRelease);
 }
 
-void UBaseStatus::applyEffect(IStatusReceiver* target)
+void UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
-	PURE_VIRTUAL(UBaseStatus::applyEffect);
+	ABaseCharacter* character = Cast<ABaseCharacter>(target);
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(character->GetWorld(), onApplyEffect, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
 }
 
 void UBaseStatus::removeStatus(IStatusReceiver* target)

@@ -6,7 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 
-#include "Statuses/ShatterStatus.h"
+#include "Statuses/BaseTriggerStatus.h"
 
 #include "Utility/MultiplayerUtility.h"
 
@@ -512,7 +512,7 @@ float ABaseCharacter::getPercentageDamageReduction_Implementation() const
 	return 25.0f;
 }
 
-void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo)
+void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit)
 {
 	if (isAlly != ammo->getIsAlly())
 	{
@@ -522,13 +522,13 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo)
 
 		for (auto& status : statuses)
 		{
-			UShatterStatus* shatter = Cast<UShatterStatus>(status);
+			UBaseTriggerStatus* trigger = Cast<UBaseTriggerStatus>(status);
 
-			if (shatter)
+			if (trigger)
 			{
-				shatter->applyEffect(this);
+				trigger->applyEffect(this, hit);
 
-				statusesToRemove.Add(shatter);
+				statusesToRemove.Add(trigger);
 			}
 		}
 

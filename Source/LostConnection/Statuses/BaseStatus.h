@@ -60,9 +60,9 @@ public:
 	UBaseStatus() = default;
 
 	UFUNCTION(Server, Reliable)
-	virtual void applyStatus(const TScriptInterface<class IStatusReceiver>& target, const FVector& location);
+	virtual void applyStatus(const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
 
-	virtual void applyEffect(class IStatusReceiver* target);
+	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit);
 
 	virtual void removeStatus(class IStatusReceiver* target) final;
 

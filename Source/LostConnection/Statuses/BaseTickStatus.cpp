@@ -14,7 +14,7 @@ void UBaseTickStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(UBaseTickStatus, currentTickPeriod);
 }
 
-void UBaseTickStatus::applyEffect(IStatusReceiver* target)
+void UBaseTickStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
 	ABaseCharacter* character = Cast<ABaseCharacter>(target);
 
@@ -36,7 +36,7 @@ bool UBaseTickStatus::Tick(float DeltaTime)
 	{
 		currentTickPeriod -= tickPeriod;
 
-		this->applyEffect(target);
+		this->applyEffect(target, FHitResult());
 	}
 
 	return true;

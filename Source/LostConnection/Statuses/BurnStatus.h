@@ -24,7 +24,7 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void setDamage(float newDamage);
 
-	virtual void applyEffect(class IStatusReceiver* target) override;
+	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
 	virtual ~UBurnStatus() = default;
 };

@@ -2,12 +2,12 @@
 
 #include "CoreMinimal.h"
 
-#include "BaseImpactStatus.h"
+#include "BaseTriggerStatus.h"
 
 #include "ShatterStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UShatterStatus : public UBaseImpactStatus
+class LOSTCONNECTION_API UShatterStatus : public UBaseTriggerStatus
 {
 	GENERATED_BODY()
 	
@@ -21,7 +21,7 @@ protected:
 public:
 	UShatterStatus() = default;
 
-	void applyEffect(class IStatusReceiver* target) override;
+	void applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
 	virtual ~UShatterStatus() = default;
 };

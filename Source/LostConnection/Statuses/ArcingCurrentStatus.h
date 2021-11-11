@@ -2,12 +2,12 @@
 
 #include "CoreMinimal.h"
 
-#include "BaseImpactStatus.h"
+#include "BaseTriggerStatus.h"
 
 #include "ArcingCurrentStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UArcingCurrentStatus : public UBaseImpactStatus
+class LOSTCONNECTION_API UArcingCurrentStatus : public UBaseTriggerStatus
 {
 	GENERATED_BODY()
 	

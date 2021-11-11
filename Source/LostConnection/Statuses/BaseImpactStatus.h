@@ -14,7 +14,7 @@ class LOSTCONNECTION_API UBaseImpactStatus : public UBaseStatus
 public:
 	UBaseImpactStatus() = default;
 
-	virtual void applyStatus_Implementation(const TScriptInterface<class IStatusReceiver>& target, const FVector& location) override;
+	virtual void applyStatus_Implementation(const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
 	virtual ~UBaseImpactStatus() = default;
 };

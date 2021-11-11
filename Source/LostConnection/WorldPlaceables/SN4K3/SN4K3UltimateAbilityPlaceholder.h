@@ -27,7 +27,7 @@ public:
 
 	float getPercentageDamageReduction_Implementation() const override;
 
-	void impactAction_Implementation(class ABaseAmmo* ammo) override;
+	void impactAction_Implementation(class ABaseAmmo* ammo, const FHitResult& hit) override;
 
 	~ASN4K3UltimateAbilityPlaceholder() = default;
 };

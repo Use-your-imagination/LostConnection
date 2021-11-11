@@ -40,7 +40,7 @@ float ASN4K3UltimateAbilityPlaceholder::getPercentageDamageReduction_Implementat
 	return 0.0;
 }
 
-void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(ABaseAmmo* ammo)
+void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit)
 {
 	ASN4K3* drone = Cast<ASN4K3>(ability->getCaster());
 

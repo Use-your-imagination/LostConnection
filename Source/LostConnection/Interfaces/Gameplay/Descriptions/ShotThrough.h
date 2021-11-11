@@ -29,5 +29,5 @@ public:
 	float getPercentageDamageReduction() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void impactAction(class ABaseAmmo* ammo);
+	void impactAction(class ABaseAmmo* ammo, const FHitResult& hitResult);
 };
