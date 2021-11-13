@@ -534,7 +534,10 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 			{
 				trigger->applyEffect(this, hit);
 
-				statusesToRemove.Add(trigger);
+				if (trigger->getIsOnceTriggered())
+				{
+					statusesToRemove.Add(trigger);
+				}
 			}
 		}
 
