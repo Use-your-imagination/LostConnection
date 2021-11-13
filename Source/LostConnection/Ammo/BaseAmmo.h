@@ -67,5 +67,7 @@ public:
 
 	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
 
+	virtual float getInflictorDamage() const final override;
+
 	virtual ~ABaseAmmo() = default;
 };

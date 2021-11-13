@@ -260,6 +260,9 @@ public:
 
 	virtual USkeletalMeshComponent* getMeshComponent() final override;
 
+	UFUNCTION(Server, Reliable)
+	virtual void takeStatusDamage(float damage) final override;
+
 	virtual ~ABaseCharacter() = default;
 };
 

@@ -184,3 +184,8 @@ const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwnerCharacter() const
 {
 	return ownerCharacter;
 }
+
+float ABaseAmmo::getInflictorDamage() const
+{
+	return damage;
+}

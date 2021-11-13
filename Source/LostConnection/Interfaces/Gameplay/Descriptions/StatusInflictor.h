@@ -19,4 +19,5 @@ class LOSTCONNECTION_API IStatusInflictor
 public:
 	IStatusInflictor() = default;
 
+	virtual float getInflictorDamage() const = 0;
 };

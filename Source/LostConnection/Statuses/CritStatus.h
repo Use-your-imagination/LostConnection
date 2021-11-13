@@ -12,7 +12,14 @@ class LOSTCONNECTION_API UCritStatus : public UBaseImpactStatus
 	GENERATED_BODY()
 
 private:
-	float weaponDamage;
+	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float damageMultiplier;
+
+	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float multiplierPerStatus;
+
+private:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:
 	UCritStatus() = default;

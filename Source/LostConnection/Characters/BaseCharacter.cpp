@@ -543,7 +543,7 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 			statuses.Remove(statusToRemove);
 		}
 
-		InitializationUtility::createDefaultStatus(ammo->getDamageType(), this)->applyStatus(nullptr, this, hit);
+		InitializationUtility::createDefaultStatus(ammo->getDamageType(), this)->applyStatus(ammo, this, hit);
 
 		statusesToRemove.Empty();
 	}
@@ -562,4 +562,9 @@ const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
 USkeletalMeshComponent* ABaseCharacter::getMeshComponent()
 {
 	return GetMesh();
+}
+
+void ABaseCharacter::takeStatusDamage_Implementation(float damage)
+{
+	this->takeDamage(damage);
 }
