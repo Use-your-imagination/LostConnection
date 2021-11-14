@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 
 #include "UObject/Interface.h"
+#include "Components/CapsuleComponent.h"
+
 #include "Statuses/BaseStatus.h"
 
 #include "StatusReceiver.generated.h"
@@ -31,4 +33,6 @@ public:
 	virtual const TArray<UBaseStatus*>& getStatuses() const = 0;
 
 	virtual USkeletalMeshComponent* getMeshComponent() = 0;
+
+	virtual UCapsuleComponent* getCapsuleComponent() = 0;
 };

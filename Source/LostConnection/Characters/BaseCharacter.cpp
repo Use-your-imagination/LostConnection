@@ -594,3 +594,8 @@ USkeletalMeshComponent* ABaseCharacter::getMeshComponent()
 {
 	return GetMesh();
 }
+
+UCapsuleComponent* ABaseCharacter::getCapsuleComponent()
+{
+	return GetCapsuleComponent();
+}

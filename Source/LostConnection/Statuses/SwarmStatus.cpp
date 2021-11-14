@@ -14,6 +14,8 @@ void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 
 	DOREPLIFETIME(USwarmStatus, stacksToThresholdCoefficient);
 
+	DOREPLIFETIME(USwarmStatus, rampUpCoefficient);
+
 	DOREPLIFETIME(USwarmStatus, poisonDamage);
 
 	DOREPLIFETIME(USwarmStatus, stacks);
@@ -31,7 +33,7 @@ void USwarmStatus::increaseStacks(float damage)
 
 float USwarmStatus::getThreshold() const
 {
-	return stacks * stacksToThresholdCoefficient;
+	return (1.0f - rampUpCoefficient / (rampUpCoefficient + stacks * stacksToThresholdCoefficient)) * 100.0f;
 }
 
 void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)

@@ -270,6 +270,8 @@ public:
 
 	virtual USkeletalMeshComponent* getMeshComponent() final override;
 
+	virtual UCapsuleComponent* getCapsuleComponent() final override;;
+
 	virtual ~ABaseCharacter() = default;
 };
 
