@@ -34,6 +34,8 @@ public:
 
 	void resetLastTimeAbilityUsed();
 
+	int32 getNaniteMeter() const;
+
 	void applyAbility(class ABaseCharacter* target) override;
 
 	void useAbility() override;

@@ -35,5 +35,7 @@ public:
 
 	typeOfDamage getDamageType() const override;
 
+	bool getCrushingHitProc() const override;
+
 	~USN4K3FirstAbility() = default;
 };

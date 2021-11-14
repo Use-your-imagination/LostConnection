@@ -92,6 +92,9 @@ protected:
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	float spreadDistance;
 
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float crushingHitChance;
+
 	UClass* ammoClass;
 
 public:
@@ -148,6 +151,8 @@ public:
 	virtual UClass* getAnimationBlueprint() const final;
 
 	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
+
+	virtual float getCrushingHitChance() const final;
 
 	virtual ~UBaseWeapon() = default;
 };

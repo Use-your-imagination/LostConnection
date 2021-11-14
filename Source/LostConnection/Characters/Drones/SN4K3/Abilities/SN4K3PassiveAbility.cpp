@@ -31,6 +31,10 @@ void USN4K3PassiveAbility::resetLastTimeAbilityUsed()
 	lastTimeAbilityUsed = 0.0f;
 }
 
+int32 USN4K3PassiveAbility::getNaniteMeter() const
+{
+	return naniteMeter;
+}
 
 void USN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 {

@@ -39,6 +39,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseWeapon, weaponType);
 
 	DOREPLIFETIME(UBaseWeapon, spreadDistance);
+
+	DOREPLIFETIME(UBaseWeapon, crushingHitChance);
 }
 
 void UBaseWeapon::shoot()
@@ -253,4 +255,9 @@ UClass* UBaseWeapon::getAnimationBlueprint() const
 const TWeakObjectPtr<ABaseCharacter>& UBaseWeapon::getOwnerCharacter() const
 {
 	return ownerCharacter;
+}
+
+float UBaseWeapon::getCrushingHitChance() const
+{
+	return crushingHitChance;
 }

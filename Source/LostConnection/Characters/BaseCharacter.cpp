@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
 
 #include "Statuses/BaseTriggerStatus.h"
 #include "Statuses/SwarmStatus.h"
@@ -585,7 +586,10 @@ void ABaseCharacter::inflictorImpactAction_Implementation(const TScriptInterface
 		statuses.Remove(statusToRemove);
 	}
 
-	InitializationUtility::createDefaultStatus(inflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
+	if ((hit.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(hit.PhysMaterial.Get()) == EPhysicalSurface::SurfaceType1) || inflictor->getCrushingHitProc())
+	{
+		InitializationUtility::createDefaultStatus(inflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
+	}
 
 	statusesToRemove.Empty();
 }

@@ -6,6 +6,7 @@
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Utility/InitializationUtility.h"
+#include "Utility/Utility.h"
 #include "SN4K3PassiveAbility.h"
 
 void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -76,4 +77,9 @@ float USN4K3FirstAbility::getInflictorDamage() const
 typeOfDamage USN4K3FirstAbility::getDamageType() const
 {
 	return typeOfDamage::nanite;
+}
+
+bool USN4K3FirstAbility::getCrushingHitProc() const
+{
+	return Utility::checkChanceProc(Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter());
 }

@@ -49,6 +49,7 @@ protected:
 	float damage;
 	typeOfDamage damageType;
 	bool isAlly;
+	float crushingHitChance;
 
 public:
 	ABaseAmmo();
@@ -68,6 +69,8 @@ public:
 	virtual float getInflictorDamage() const final override;
 
 	virtual typeOfDamage getDamageType() const final override;
+
+	virtual bool getCrushingHitProc() const override;
 
 	virtual ~ABaseAmmo() = default;
 };

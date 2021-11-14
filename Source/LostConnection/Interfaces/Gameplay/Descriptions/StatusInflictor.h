@@ -24,4 +24,6 @@ public:
 	virtual float getInflictorDamage() const = 0;
 
 	virtual typeOfDamage getDamageType() const = 0;
+
+	virtual bool getCrushingHitProc() const = 0;
 };

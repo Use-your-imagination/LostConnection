@@ -7,6 +7,7 @@
 #include "Weapons/BaseWeapon.h"
 #include "Characters/BaseDrone.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
+#include "Utility/Utility.h"
 
 #pragma warning(disable: 4458)
 
@@ -124,6 +125,8 @@ ABaseAmmo::ABaseAmmo()
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
+	mesh->bReturnMaterialOnMove = true;
+
 	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::onBeginOverlap);
 
 	movement->SetUpdatedComponent(mesh);
@@ -158,6 +161,8 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 	damageType = weapon->getDamageType();
 
 	ownerCharacter = weapon->getOwnerCharacter();
+
+	crushingHitChance = weapon->getCrushingHitChance();
 }
 
 UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
@@ -188,4 +193,9 @@ float ABaseAmmo::getInflictorDamage() const
 typeOfDamage ABaseAmmo::getDamageType() const
 {
 	return damageType;
+}
+
+bool ABaseAmmo::getCrushingHitProc() const
+{
+	return Utility::checkChanceProc(crushingHitChance);
 }

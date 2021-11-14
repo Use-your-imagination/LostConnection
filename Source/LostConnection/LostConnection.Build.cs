@@ -24,7 +24,8 @@ public class LostConnection : ModuleRules
             "Niagara",
             "OnlineSubsystem",
             "OnlineSubsystemUtils",
-            "AIModule"
+            "AIModule",
+            "PhysicsCore"
         });
 
         PublicIncludePaths.AddRange(new string[]
