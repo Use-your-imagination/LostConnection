@@ -61,13 +61,13 @@ public:
 
 	virtual float getDamage() const final;
 
-	virtual typeOfDamage getDamageType() const final;
-
 	virtual bool getIsAlly() const final;
 
 	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
 
 	virtual float getInflictorDamage() const final override;
+
+	virtual typeOfDamage getDamageType() const final override;
 
 	virtual ~ABaseAmmo() = default;
 };

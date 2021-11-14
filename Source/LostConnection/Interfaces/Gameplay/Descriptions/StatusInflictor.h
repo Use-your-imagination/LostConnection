@@ -6,6 +6,8 @@
 
 #include "StatusInflictor.generated.h"
 
+enum class typeOfDamage : uint8;
+
 UINTERFACE(MinimalAPI)
 class UStatusInflictor : public UInterface
 {
@@ -20,4 +22,6 @@ public:
 	IStatusInflictor() = default;
 
 	virtual float getInflictorDamage() const = 0;
+
+	virtual typeOfDamage getDamageType() const = 0;
 };

@@ -22,7 +22,11 @@ public:
 
 	virtual void takeStatusDamage(float damage) = 0;
 
-	virtual void addStatus(class UBaseStatus* status) = 0;
+	virtual void addStatus(UBaseStatus* status) = 0;
+
+	virtual void applySwarmStatus(class USwarmStatus* swarm) = 0;
+
+	virtual void inflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) = 0;
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const = 0;
 

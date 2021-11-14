@@ -80,6 +80,8 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	TArray<UBaseStatus*> statuses;
 
+	TWeakObjectPtr<class USwarmStatus> swarm;
+
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Reloading, VisibleAnywhere, BlueprintReadWrite)
 	bool isReloading;
@@ -254,14 +256,19 @@ public:
 
 	virtual void impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit) override;
 
+	UFUNCTION(Server, Reliable)
+	virtual void takeStatusDamage(float damage) final override;
+
 	virtual void addStatus(class UBaseStatus* status) final override;
+
+	virtual void applySwarmStatus(class USwarmStatus* swarm) final override;
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
 
-	virtual USkeletalMeshComponent* getMeshComponent() final override;
-
 	UFUNCTION(Server, Reliable)
-	virtual void takeStatusDamage(float damage) final override;
+	virtual void inflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
+
+	virtual USkeletalMeshComponent* getMeshComponent() final override;
 
 	virtual ~ABaseCharacter() = default;
 };

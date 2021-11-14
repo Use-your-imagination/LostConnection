@@ -170,11 +170,6 @@ float ABaseAmmo::getDamage() const
 	return damage;
 }
 
-typeOfDamage ABaseAmmo::getDamageType() const
-{
-	return damageType;
-}
-
 bool ABaseAmmo::getIsAlly() const
 {
 	return isAlly;
@@ -188,4 +183,9 @@ const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwnerCharacter() const
 float ABaseAmmo::getInflictorDamage() const
 {
 	return damage;
+}
+
+typeOfDamage ABaseAmmo::getDamageType() const
+{
+	return damageType;
 }

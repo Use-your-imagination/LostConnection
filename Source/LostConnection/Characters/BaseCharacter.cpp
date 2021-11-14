@@ -7,6 +7,7 @@
 #include "GameFramework/Controller.h"
 
 #include "Statuses/BaseTriggerStatus.h"
+#include "Statuses/SwarmStatus.h"
 #include "Utility/InitializationUtility.h"
 
 #include "Utility/MultiplayerUtility.h"
@@ -419,6 +420,18 @@ void ABaseCharacter::setHealth_Implementation(float newHealth)
 
 void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 {
+	if (swarm.IsValid())
+	{
+		float newPercentHealth = newCurrentHealth / health * 100.0f;
+
+		if (newPercentHealth <= swarm->getThreshold())
+		{
+			currentHealth = 0.0f;
+
+			return;
+		}
+	}
+
 	currentHealth = newCurrentHealth;
 }
 
@@ -522,34 +535,15 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 {
 	if (isAlly != ammo->getIsAlly())
 	{
-		static TArray<UBaseStatus*> statusesToRemove;
-
 		this->takeDamage(ammo->getDamage());
 
-		for (auto& status : statuses)
-		{
-			UBaseTriggerStatus* trigger = Cast<UBaseTriggerStatus>(status);
-
-			if (trigger)
-			{
-				trigger->applyEffect(this, hit);
-
-				if (trigger->getIsOnceTriggered())
-				{
-					statusesToRemove.Add(trigger);
-				}
-			}
-		}
-
-		for (const auto& statusToRemove : statusesToRemove)
-		{
-			statuses.Remove(statusToRemove);
-		}
-
-		InitializationUtility::createDefaultStatus(ammo->getDamageType(), this)->applyStatus(ammo, this, hit);
-
-		statusesToRemove.Empty();
+		this->inflictorImpactAction(ammo, hit);
 	}
+}
+
+void ABaseCharacter::takeStatusDamage_Implementation(float damage)
+{
+	this->takeDamage(damage);
 }
 
 void ABaseCharacter::addStatus(UBaseStatus* status)
@@ -557,17 +551,46 @@ void ABaseCharacter::addStatus(UBaseStatus* status)
 	statuses.Add(status);
 }
 
+void ABaseCharacter::applySwarmStatus(USwarmStatus* swarm)
+{
+	this->swarm = swarm;
+}
+
 const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
 {
 	return statuses;
 }
 
+void ABaseCharacter::inflictorImpactAction_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
+{
+	static TArray<UBaseStatus*> statusesToRemove;
+
+	for (auto& status : statuses)
+	{
+		UBaseTriggerStatus* trigger = Cast<UBaseTriggerStatus>(status);
+
+		if (trigger)
+		{
+			trigger->applyEffect(this, hit);
+
+			if (trigger->getIsOnceTriggered())
+			{
+				statusesToRemove.Add(trigger);
+			}
+		}
+	}
+
+	for (const auto& statusToRemove : statusesToRemove)
+	{
+		statuses.Remove(statusToRemove);
+	}
+
+	InitializationUtility::createDefaultStatus(inflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
+
+	statusesToRemove.Empty();
+}
+
 USkeletalMeshComponent* ABaseCharacter::getMeshComponent()
 {
 	return GetMesh();
-}
-
-void ABaseCharacter::takeStatusDamage_Implementation(float damage)
-{
-	this->takeDamage(damage);
 }

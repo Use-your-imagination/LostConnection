@@ -1,1 +1,65 @@
 #include "SwarmStatus.h"
+
+#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+
+void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(USwarmStatus, poisonDamageCoefficient);
+
+	DOREPLIFETIME(USwarmStatus, damageToStacksCoefficient);
+
+	DOREPLIFETIME(USwarmStatus, limitDamageToStacksCoefficient);
+
+	DOREPLIFETIME(USwarmStatus, stacksToThresholdCoefficient);
+
+	DOREPLIFETIME(USwarmStatus, poisonDamage);
+
+	DOREPLIFETIME(USwarmStatus, stacks);
+}
+
+void USwarmStatus::increaseStacks(float damage)
+{
+	if (damage * limitDamageToStacksCoefficient <= stacks)
+	{
+		return;
+	}
+
+	stacks += damage * damageToStacksCoefficient;
+}
+
+float USwarmStatus::getThreshold() const
+{
+	return stacks * stacksToThresholdCoefficient;
+}
+
+void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
+{
+	const TArray<UBaseStatus*>& statuses = target->getStatuses();
+
+	for (const auto& status : statuses)
+	{
+		USwarmStatus* swarm = Cast<USwarmStatus>(status);
+
+		if (swarm)
+		{
+			swarm->increaseStacks(inflictor->getInflictorDamage());
+
+			return;
+		}
+	}
+
+	Super::applyStatus_Implementation(inflictor, target, hit);
+
+	poisonDamage = inflictor->getInflictorDamage() * poisonDamageCoefficient;
+
+	target->applySwarmStatus(this);
+}
+
+void USwarmStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+{
+	Super::applyEffect(target, hit);
+
+	target->takeStatusDamage(poisonDamage);
+}

@@ -28,7 +28,15 @@ USN4K3FirstAbility::USN4K3FirstAbility() :
 
 void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 {
+	FHitResult hit;
+
+	hit.Actor = target;
+	hit.Component = target->getMeshComponent();
+	hit.Location = target->GetActorLocation();
+
 	target->takeDamage(damage);
+
+	target->inflictorImpactAction(this, hit);
 
 	ICaster::Execute_applyFirstAbilityEvent(Cast<UObject>(caster), target);
 }
@@ -58,4 +66,14 @@ void USN4K3FirstAbility::useAbility()
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
+}
+
+float USN4K3FirstAbility::getInflictorDamage() const
+{
+	return damage;
+}
+
+typeOfDamage USN4K3FirstAbility::getDamageType() const
+{
+	return typeOfDamage::nanite;
 }
