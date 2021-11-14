@@ -50,6 +50,7 @@ protected:
 	class IStatusReceiver* target;
 
 	TWeakInterfacePtr<IStatusInflictor> inflictor;
+	TWeakObjectPtr<UNiagaraComponent> underStatusComponent;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)

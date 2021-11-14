@@ -16,6 +16,8 @@ void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 
 	DOREPLIFETIME(USwarmStatus, rampUpCoefficient);
 
+	DOREPLIFETIME(USwarmStatus, percentsPerSatellite);
+
 	DOREPLIFETIME(USwarmStatus, poisonDamage);
 
 	DOREPLIFETIME(USwarmStatus, stacks);
@@ -29,6 +31,8 @@ void USwarmStatus::increaseStacks(float damage)
 	}
 
 	stacks += damage * damageToStacksCoefficient;
+
+	underStatusComponent->SetNiagaraVariableInt("StatusCount", FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
 }
 
 float USwarmStatus::getThreshold() const
@@ -57,6 +61,8 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 	poisonDamage = inflictor->getInflictorDamage() * poisonDamageCoefficient;
 
 	target->applySwarmStatus(this);
+
+	underStatusComponent->SetNiagaraVariableInt("StatusCount", 1);
 }
 
 void USwarmStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)

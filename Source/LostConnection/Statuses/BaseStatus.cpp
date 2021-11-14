@@ -30,18 +30,21 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(Utility::getWorld(), onApplyStatus, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
 
-	UNiagaraFunctionLibrary::SpawnSystemAttached
-	(
-		underStatus,
-		target->getMeshComponent(),
-		NAME_None,
-		FVector(0.0f, 0.0f, target->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()),
-		FRotator::ZeroRotator,
-		EAttachLocation::KeepRelativeOffset,
-		true,
-		true,
-		ENCPoolMethod::AutoRelease
-	);
+	if (!underStatusComponent.IsValid())
+	{
+		underStatusComponent = UNiagaraFunctionLibrary::SpawnSystemAttached
+		(
+			underStatus,
+			target->getMeshComponent(),
+			NAME_None,
+			FVector(0.0f, 0.0f, target->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()),
+			FRotator::ZeroRotator,
+			EAttachLocation::KeepRelativeOffset,
+			true,
+			true,
+			ENCPoolMethod::AutoRelease
+		);
+	}
 }
 
 void UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
