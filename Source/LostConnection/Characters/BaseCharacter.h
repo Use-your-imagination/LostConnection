@@ -275,7 +275,6 @@ public:
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
 
-	UFUNCTION(Server, Reliable)
 	virtual void inflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
 
 	virtual USkeletalMeshComponent* getMeshComponent() final override;

@@ -11,6 +11,7 @@
 #include "Statuses/BaseTriggerStatus.h"
 #include "Statuses/SwarmStatus.h"
 #include "Utility/InitializationUtility.h"
+#include "BaseBot.h"
 
 #include "Utility/MultiplayerUtility.h"
 
@@ -38,6 +39,11 @@ void ABaseCharacter::BeginPlay()
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!HasAuthority() && Cast<ABaseBot>(this))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(L"%s: %d", *GetName(), static_cast<bool>(defaultWeaponSlot)));
+	}
 
 	if (!isDead && currentHealth <= 0.0f)
 	{
@@ -152,6 +158,8 @@ void ABaseCharacter::updateCurrentWeapon()
 void ABaseCharacter::updateWeaponMesh()
 {
 	this->updateCurrentWeapon();
+
+	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, FString::Printf(L"%s: has authority:%d, current weapon id:%d, current weapon status:%d, default weapon slot status:%d", *GetName(), HasAuthority(), static_cast<int>(weaponId), static_cast<bool>(currentWeapon), static_cast<bool>(defaultWeaponSlot)));
 
 	if (currentWeapon)
 	{
@@ -594,7 +602,7 @@ const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
 	return statuses;
 }
 
-void ABaseCharacter::inflictorImpactAction_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
+void ABaseCharacter::inflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
 {
 	static TArray<UBaseStatus*> statusesToRemove;
 

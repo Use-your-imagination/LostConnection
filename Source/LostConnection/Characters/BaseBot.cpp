@@ -13,13 +13,6 @@ void ABaseBot::BeginPlay()
 {
 	Super::BeginPlay();
 
-	this->changeToDefaultWeapon();
-}
-
-void ABaseBot::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-
 	if (HasAuthority())
 	{
 		UWorld* world = GetWorld();
@@ -30,9 +23,16 @@ void ABaseBot::PostInitializeComponents()
 
 			defaultWeaponSlot->setWorld(world);
 
-			defaultWeaponSlot->setOwnerCharacter(this);	
+			defaultWeaponSlot->setOwnerCharacter(this);
 		}
+
+		this->changeToDefaultWeapon();
 	}
+}
+
+void ABaseBot::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
 }
 
 void ABaseBot::deathLogic()
