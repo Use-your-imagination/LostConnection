@@ -391,7 +391,7 @@ void ABaseDrone::BeginPlay()
 		{
 			timers->addTimer([this]()
 				{
-					if (IsValidLowLevel())
+					if (IsValidLowLevelFast())
 					{
 						if (currentEnergy != energy)
 						{
@@ -662,20 +662,13 @@ void ABaseDrone::dropWeapon()
 		return;
 	}
 
-	UWorld* world = GetWorld();
-
-	if (!world)
-	{
-		return;
-	}
-
 	FVector location = currentWeaponMesh->GetComponentLocation();
 
 	location.Z -= GetMesh()->SkeletalMesh->GetImportedBounds().BoxExtent.Z / 2;
 
 	FTransform spawnPoint(currentWeaponMesh->GetComponentRotation(), location + 100.0f * GetActorForwardVector());
 
-	ADroppedWeapon* droppedWeapon = world->GetGameState<ALostConnectionGameState>()->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), spawnPoint);
+	ADroppedWeapon* droppedWeapon = Utility::getGameState()->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), spawnPoint);
 
 	droppedWeapon->setWeapon(currentWeapon);
 

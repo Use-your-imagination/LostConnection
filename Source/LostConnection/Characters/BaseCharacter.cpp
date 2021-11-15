@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
+#include "NiagaraFunctionLibrary.h"
 
 #include "Statuses/BaseTriggerStatus.h"
 #include "Statuses/SwarmStatus.h"
@@ -539,6 +540,37 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 		this->takeDamage(ammo->getDamage());
 
 		this->inflictorImpactAction(ammo, hit);
+	}
+}
+
+void ABaseCharacter::spawnApplyStatus_Implementation(UBaseStatus* status, const FHitResult& hit)
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), status->getOnApplyStatus(), hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+}
+
+void ABaseCharacter::spawnApplyEffect_Implementation(UBaseStatus* status, const FHitResult& hit)
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), status->getOnApplyEffect(), hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+}
+
+void ABaseCharacter::spawnUnderStatus_Implementation(UBaseStatus* status)
+{
+	TWeakObjectPtr<UNiagaraComponent>& underStatusComponent = status->getUnderStatusComponent();
+
+	if (!underStatusComponent.IsValid())
+	{
+		underStatusComponent = UNiagaraFunctionLibrary::SpawnSystemAttached
+		(
+			status->getUnderStatus(),
+			this->getMeshComponent(),
+			NAME_None,
+			FVector(0.0f, 0.0f, this->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()),
+			FRotator::ZeroRotator,
+			EAttachLocation::KeepRelativeOffset,
+			true,
+			true,
+			ENCPoolMethod::AutoRelease
+		);
 	}
 }
 

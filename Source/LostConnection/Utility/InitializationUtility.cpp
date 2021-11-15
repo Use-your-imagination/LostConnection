@@ -3,6 +3,7 @@
 #include "Characters/BaseDrone.h"
 #include "Engine/LostConnectionGameState.h"
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Utility.h"
 
 void InitializationUtility::initAbilityId(const FString& abilityClassName, abilitySlot& id)
 {
@@ -30,16 +31,5 @@ void InitializationUtility::initAbilityId(const FString& abilityClassName, abili
 
 UBaseStatus* InitializationUtility::createDefaultStatus(typeOfDamage type, IStatusReceiver* target)
 {
-	static ALostConnectionGameState* gameState = ABaseDrone::globalPlayerPtr->GetWorld()->GetGameState<ALostConnectionGameState>();
-
-	static const TMap<typeOfDamage, UClass*> statuses =
-	{
-		{ typeOfDamage::physical, LoadClass<UBaseStatus>(gameState, TEXT("Blueprint'/Game/Statuses/BP_CritStatus.BP_CritStatus_C'")) },
-		{ typeOfDamage::cold, LoadClass<UBaseStatus>(gameState, TEXT("Blueprint'/Game/Statuses/BP_ShatterStatus.BP_ShatterStatus_C'")) },
-		{ typeOfDamage::nanite, LoadClass<UBaseStatus>(gameState, TEXT("Blueprint'/Game/Statuses/BP_SwarmStatus.BP_SwarmStatus_C'")) },
-		{ typeOfDamage::fire, LoadClass<UBaseStatus>(gameState, TEXT("Blueprint'/Game/Statuses/BP_BurnStatus.BP_BurnStatus_C'")) },
-		{ typeOfDamage::electricity, LoadClass<UBaseStatus>(gameState, TEXT("Blueprint'/Game/Statuses/BP_ArcingCurrentStatus.BP_ArcingCurrentStatus_C'")) }
-	};
-
-	return NewObject<UBaseStatus>(target->_getUObject(), statuses[type]);
+	return NewObject<UBaseStatus>(target->_getUObject(), Utility::getGameState()->getDefaultStatus(type));
 }

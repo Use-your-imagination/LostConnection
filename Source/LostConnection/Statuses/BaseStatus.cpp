@@ -5,6 +5,7 @@
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 #include "Characters/BaseCharacter.h"
 #include "Utility/Utility.h"
+#include "Engine/LostConnectionGameState.h"
 
 bool UBaseStatus::IsSupportedForNetworking() const
 {
@@ -28,28 +29,14 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 
 	target->addStatus(this);
 
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(Utility::getWorld(), onApplyStatus, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+	target->spawnApplyStatus(this, hit);
 
-	if (!underStatusComponent.IsValid())
-	{
-		underStatusComponent = UNiagaraFunctionLibrary::SpawnSystemAttached
-		(
-			underStatus,
-			target->getMeshComponent(),
-			NAME_None,
-			FVector(0.0f, 0.0f, target->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()),
-			FRotator::ZeroRotator,
-			EAttachLocation::KeepRelativeOffset,
-			true,
-			true,
-			ENCPoolMethod::AutoRelease
-		);
-	}
+	target->spawnUnderStatus(this);
 }
 
 void UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(Utility::getWorld(), onApplyEffect, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+	target->spawnApplyEffect(this, hit);
 }
 
 void UBaseStatus::removeStatus(IStatusReceiver* target)
@@ -60,11 +47,31 @@ void UBaseStatus::removeStatus(IStatusReceiver* target)
 bool UBaseStatus::Tick(float DeltaTime)
 {
 	currentDuration += DeltaTime;
-	
+
 	if (currentDuration >= duration)
 	{
 		return false;
 	}
 
 	return true;
+}
+
+UNiagaraSystem* UBaseStatus::getOnApplyStatus()
+{
+	return onApplyStatus;
+}
+
+UNiagaraSystem* UBaseStatus::getOnApplyEffect()
+{
+	return onApplyEffect;
+}
+
+UNiagaraSystem* UBaseStatus::getUnderStatus()
+{
+	return underStatus;
+}
+
+TWeakObjectPtr<UNiagaraComponent>& UBaseStatus::getUnderStatusComponent()
+{
+	return underStatusComponent;
 }

@@ -74,5 +74,13 @@ public:
 
 	virtual bool Tick(float DeltaTime);
 
+	virtual UNiagaraSystem* getOnApplyStatus() final;
+
+	virtual UNiagaraSystem* getOnApplyEffect() final;
+
+	virtual UNiagaraSystem* getUnderStatus() final;
+
+	virtual TWeakObjectPtr<UNiagaraComponent>& getUnderStatusComponent() final;
+
 	virtual ~UBaseStatus() = default;
 };

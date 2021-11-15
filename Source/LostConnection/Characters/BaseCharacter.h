@@ -11,6 +11,7 @@
 #include "Weapons/BaseWeapon.h"
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Utility/TimersUtility.h"
+#include "Utility/Utility.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Interfaces/Gameplay/Actions/MovementActions.h"
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
@@ -255,6 +256,15 @@ public:
 	virtual float getPercentageDamageReduction_Implementation() const override;
 
 	virtual void impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit) override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void spawnApplyStatus(UBaseStatus* status, const FHitResult& hit) final override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void spawnApplyEffect(UBaseStatus* status, const FHitResult& hit) final override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void spawnUnderStatus(UBaseStatus* status) final override;
 
 	UFUNCTION(Server, Reliable)
 	virtual void takeStatusDamage(float damage) final override;

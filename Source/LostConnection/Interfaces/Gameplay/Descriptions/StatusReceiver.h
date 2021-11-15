@@ -22,6 +22,12 @@ class LOSTCONNECTION_API IStatusReceiver
 public:
 	IStatusReceiver() = default;
 
+	virtual void spawnApplyStatus(UBaseStatus* status, const FHitResult& hit) = 0;
+
+	virtual void spawnApplyEffect(UBaseStatus* status, const FHitResult& hit) = 0;
+
+	virtual void spawnUnderStatus(UBaseStatus* status) = 0;
+
 	virtual void takeStatusDamage(float damage) = 0;
 
 	virtual void addStatus(UBaseStatus* status) = 0;

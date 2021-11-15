@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,16 +6,20 @@
 
 #include "LostConnectionGameState.generated.h"
 
-/**
- * 
- */
+enum class typeOfDamage : uint8;
+
 UCLASS()
 class LOSTCONNECTION_API ALostConnectionGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 	
+private:
+	TMap<typeOfDamage, UClass*> statuses;
+
 public:
-	ALostConnectionGameState() = default;
+	ALostConnectionGameState();
+
+	UClass* getDefaultStatus(typeOfDamage damageType) const;
 
 	/// @brief Spawn actor deferred
 	/// @tparam T 

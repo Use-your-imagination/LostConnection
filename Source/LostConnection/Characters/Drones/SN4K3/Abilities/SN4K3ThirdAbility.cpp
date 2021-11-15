@@ -109,7 +109,7 @@ void USN4K3ThirdAbility::useAbility()
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
 
-	ASN4K3ThirdAbilityFlag* flag = drone->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3ThirdAbilityFlag>({ drone->GetActorRotation(), tem + drone->GetActorLocation() });
+	ASN4K3ThirdAbilityFlag* flag = Utility::getGameState()->spawn<ASN4K3ThirdAbilityFlag>({drone->GetActorRotation(), tem + drone->GetActorLocation()});
 
 	flag->setLifetime(lifetime);
 

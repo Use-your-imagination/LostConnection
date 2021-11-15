@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 
+#include "Engine/LostConnectionGameState.h"
+
 class LOSTCONNECTION_API Utility
 {
 public:
@@ -11,6 +13,8 @@ public:
 
 public:
 	static UWorld* getWorld();
+
+	static ALostConnectionGameState* getGameState();
 
 	template<typename T>
 	static bool checkChanceProc(const T& chance);

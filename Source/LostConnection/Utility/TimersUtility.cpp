@@ -31,7 +31,7 @@ size_t UTimersUtility::size() const
 
 void UTimersUtility::clear()
 {
-	if (world && world->IsValidLowLevel())
+	if (world && world->IsValidLowLevelFast())
 	{
 		FTimerManager* manager = &world->GetTimerManager();
 
@@ -64,7 +64,7 @@ FTimerHandle& UTimersUtility::operator [] (size_t index)
 
 UTimersUtility::~UTimersUtility()
 {
-	if (IsValidLowLevel())
+	if (IsValidLowLevelFast())
 	{
 		this->clear();
 	}

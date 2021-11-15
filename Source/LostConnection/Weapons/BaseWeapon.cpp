@@ -61,7 +61,7 @@ void UBaseWeapon::shoot()
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = ownerCharacter->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ABaseAmmo>(ammoClass, FTransform(ownerCharacter->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")));
+		ABaseAmmo* launchedAmmo = Utility::getGameState()->spawn<ABaseAmmo>(ammoClass, FTransform(ownerCharacter->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")));
 
 		launchedAmmo->copyProperties(this);
 
@@ -90,9 +90,14 @@ void UBaseWeapon::shoot()
 		{
 			ABaseBot* bot = Cast<ABaseBot>(ownerCharacter.Get());
 			AAIController* controller = bot->GetController<AAIController>();
-			FVector targetLocation = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"))->GetActorLocation();
+			ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"));
 
-			resultRotation = (targetLocation - bot->GetActorLocation()).ToOrientationRotator();
+			if (target && target->IsValidLowLevelFast())
+			{
+				FVector targetLocation = target->GetActorLocation();
+
+				resultRotation = (targetLocation - bot->GetActorLocation()).ToOrientationRotator();
+			}
 		}
 
 		launchedAmmo->getAmmoMeshComponent()->SetWorldRotation(resultRotation);
