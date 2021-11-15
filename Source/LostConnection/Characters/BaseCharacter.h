@@ -41,9 +41,6 @@ protected:
 	UStaticMeshComponent* magazine;
 
 	UPROPERTY(Category = Weapons, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
-	weaponSlot weaponId;
-
-	UPROPERTY(Category = Weapons, BlueprintReadOnly)
 	UBaseWeapon* currentWeapon;
 
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
@@ -137,8 +134,6 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 protected:
-	virtual void updateCurrentWeapon();
-
 	virtual void updateWeaponMesh() final;
 
 	UFUNCTION()
@@ -279,7 +274,7 @@ public:
 
 	virtual USkeletalMeshComponent* getMeshComponent() final override;
 
-	virtual UCapsuleComponent* getCapsuleComponent() final override;;
+	virtual UCapsuleComponent* getCapsuleComponent() final override;
 
 	virtual ~ABaseCharacter() = default;
 };

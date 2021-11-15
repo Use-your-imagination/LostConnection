@@ -185,8 +185,6 @@ protected:
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	virtual void updateCurrentWeapon() override;
-
 	UFUNCTION()
 	void onAbilityUsed();
 

@@ -265,24 +265,6 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	return wroteSomething;
 }
 
-void ABaseDrone::updateCurrentWeapon()
-{
-	Super::updateCurrentWeapon();
-
-	switch (weaponId)
-	{
-	case weaponSlot::primaryWeapon:
-		currentWeapon = primaryWeaponSlot;
-
-		break;
-
-	case weaponSlot::secondaryWeapon:
-		currentWeapon = secondaryWeaponSlot;
-
-		break;
-	}
-}
-
 void ABaseDrone::onAbilityUsed()
 {
 	switch (abilityId)
@@ -638,14 +620,14 @@ void ABaseDrone::resetShoot()
 
 void ABaseDrone::changeToFirstWeapon_Implementation()
 {
-	weaponId = weaponSlot::primaryWeapon;
+	currentWeapon = primaryWeaponSlot;
 
 	this->updateWeaponMesh();
 }
 
 void ABaseDrone::changeToSecondWeapon_Implementation()
 {
-	weaponId = weaponSlot::secondaryWeapon;
+	currentWeapon = secondaryWeaponSlot;
 
 	this->updateWeaponMesh();
 }

@@ -40,11 +40,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!HasAuthority() && Cast<ABaseBot>(this))
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, FString::Printf(L"%s: %d", *GetName(), static_cast<bool>(defaultWeaponSlot)));
-	}
-
 	if (!isDead && currentHealth <= 0.0f)
 	{
 		if (HasAuthority())
@@ -99,7 +94,7 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ABaseCharacter, spareAmmo);
 
-	DOREPLIFETIME(ABaseCharacter, weaponId);
+	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
 	DOREPLIFETIME(ABaseCharacter, defaultWeaponSlot);
 
@@ -109,6 +104,8 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(currentWeapon, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(defaultWeaponSlot, *Bunch, *RepFlags);
 
@@ -139,28 +136,8 @@ void ABaseCharacter::onCurrentWeaponChange()
 	this->updateWeaponMesh();
 }
 
-void ABaseCharacter::updateCurrentWeapon()
-{
-	switch (weaponId)
-	{
-	case weaponSlot::empty:
-		currentWeapon = nullptr;
-
-		break;
-
-	case weaponSlot::defaultWeapon:
-		currentWeapon = defaultWeaponSlot;
-
-		break;
-	}
-}
-
 void ABaseCharacter::updateWeaponMesh()
 {
-	this->updateCurrentWeapon();
-
-	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, FString::Printf(L"%s: has authority:%d, current weapon id:%d, current weapon status:%d, default weapon slot status:%d", *GetName(), HasAuthority(), static_cast<int>(weaponId), static_cast<bool>(currentWeapon), static_cast<bool>(defaultWeaponSlot)));
-
 	if (currentWeapon)
 	{
 		currentWeaponMesh->SetSkeletalMesh(currentWeapon->getWeaponMesh());
@@ -386,7 +363,7 @@ void ABaseCharacter::resetShoot()
 
 void ABaseCharacter::changeToDefaultWeapon_Implementation()
 {
-	weaponId = weaponSlot::defaultWeapon;
+	currentWeapon = defaultWeaponSlot;
 
 	this->updateWeaponMesh();
 }
