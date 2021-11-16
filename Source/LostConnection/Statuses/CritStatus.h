@@ -27,7 +27,9 @@ private:
 public:
 	UCritStatus() = default;
 
-	void applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+	void applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
+
+	void postRemove() final override;
 
 	virtual ~UCritStatus() = default;
 };

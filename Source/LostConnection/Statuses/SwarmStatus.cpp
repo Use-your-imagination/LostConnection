@@ -76,3 +76,8 @@ void USwarmStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 
 	target->takeStatusDamage(poisonDamage);
 }
+
+void USwarmStatus::postRemove()
+{
+	target->setUnderStatusIntVariable(this->getStatusCountKey(), 0);
+}

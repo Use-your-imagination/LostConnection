@@ -71,7 +71,7 @@ public:
 
 	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit);
 
-	virtual void removeStatus(class IStatusReceiver* target) final;
+	virtual void postRemove();
 
 	virtual bool Tick(float DeltaTime);
 

@@ -53,5 +53,7 @@ public:
 
 	void applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
 
+	void postRemove() final override;
+
 	virtual ~USwarmStatus() = default;
 };

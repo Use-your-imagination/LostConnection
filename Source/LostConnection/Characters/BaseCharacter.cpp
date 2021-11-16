@@ -71,6 +71,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 		for (const auto& statusToRemove : statusesToRemove)
 		{
 			statuses.Remove(statusToRemove);
+
+			statusToRemove->postRemove();
 		}
 
 		statusesToRemove.Empty();
@@ -593,6 +595,8 @@ void ABaseCharacter::inflictorImpactAction(const TScriptInterface<IStatusInflict
 	for (const auto& statusToRemove : statusesToRemove)
 	{
 		statuses.Remove(statusToRemove);
+
+		statusToRemove->postRemove();
 	}
 
 	if ((hit.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(hit.PhysMaterial.Get()) == EPhysicalSurface::SurfaceType1) || inflictor->getCrushingHitProc())

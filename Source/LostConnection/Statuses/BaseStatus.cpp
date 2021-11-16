@@ -49,9 +49,9 @@ void UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	target->spawnApplyEffect(onApplyEffect, hit);
 }
 
-void UBaseStatus::removeStatus(IStatusReceiver* target)
+void UBaseStatus::postRemove()
 {
-	const_cast<TArray<UBaseStatus*>&>(target->getStatuses()).Remove(this);
+	PURE_VIRTUAL(UBaseStatus::postRemove);
 }
 
 bool UBaseStatus::Tick(float DeltaTime)
