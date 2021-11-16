@@ -4,9 +4,9 @@
 
 UHipter::UHipter()
 {
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> weaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/SubmachineGuns/Hipter/Hipter.Hipter'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> magazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/SubmachineGuns/Hipter/HipterMagazine.HipterMagazine'"));
-	ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Assets/Weapons/SubmachineGuns/Hipter/AnimBP_Hipter"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> weaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/SubmachineGuns/Hipter/Hipter.Hipter'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> magazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/SubmachineGuns/Hipter/HipterMagazine.HipterMagazine'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Assets/Weapons/SubmachineGuns/Hipter/AnimBP_Hipter"));
 
 	mesh = weaponMeshFinder.Object;
 

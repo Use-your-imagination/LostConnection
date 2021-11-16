@@ -116,8 +116,8 @@ ABaseAmmo::ABaseAmmo()
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
 	NetUpdateFrequency = 60;
-	ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletTracer.NPSBulletTracer'"));
-	ConstructorHelpers::FObjectFinder<UNiagaraSystem> onHitFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletOnHit.NPSBulletOnHit'"));
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletTracer.NPSBulletTracer'"));
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> onHitFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletOnHit.NPSBulletOnHit'"));
 
 	SetRootComponent(mesh);
 

@@ -7,6 +7,7 @@
 #include "GameFramework/Controller.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "NiagaraFunctionLibrary.h"
+#include "UObject/ConstructorHelpers.h"
 
 #include "Statuses/BaseTriggerStatus.h"
 #include "Statuses/SwarmStatus.h"
@@ -301,6 +302,8 @@ ABaseCharacter::ABaseCharacter() :
 	sprintMovementSpeed(575.0f),
 	isDead(false)
 {
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_SatusState.NPS_SatusState'"));
+
 	USkeletalMeshComponent* mesh = GetMesh();
 	UCharacterMovementComponent* movement = GetCharacterMovement();
 
@@ -337,6 +340,7 @@ ABaseCharacter::ABaseCharacter() :
 	underStatusComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("UnderStatus"));
 	underStatusComponent->SetupAttachment(mesh);
 	underStatusComponent->AddLocalOffset(FVector(0.0f, 0.0f, this->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()));
+	underStatusComponent->SetAsset(underStatusFinder.Object);
 
 #pragma region BlueprintFunctionLibrary
 	isReloading = false;

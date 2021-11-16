@@ -6,9 +6,9 @@
 
 UGauss::UGauss()
 {
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> weaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/Pistols/Gauss/Gauss.Gauss'"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> magazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Pistols/Gauss/GaussMagazine.GaussMagazine'"));
-	ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Assets/Weapons/Pistols/Gauss/AnimBP_Gauss"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> weaponMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Weapons/Pistols/Gauss/Gauss.Gauss'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> magazineFinder(TEXT("StaticMesh'/Game/Assets/Weapons/Pistols/Gauss/GaussMagazine.GaussMagazine'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Assets/Weapons/Pistols/Gauss/AnimBP_Gauss"));
 
 	mesh = weaponMeshFinder.Object;
 
