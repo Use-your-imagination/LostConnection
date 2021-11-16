@@ -7,6 +7,11 @@
 #include "Utility/Utility.h"
 #include "Engine/LostConnectionGameState.h"
 
+FString UBaseStatus::getStatusCountKey() const
+{
+	return this->getStatusName() + "Count";
+}
+
 bool UBaseStatus::IsSupportedForNetworking() const
 {
 	return true;
@@ -21,6 +26,11 @@ void UBaseStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseStatus, currentDuration);
 }
 
+FString UBaseStatus::getStatusName() const
+{
+	PURE_VIRTUAL(UBaseStatus::getStatusName, return "";);
+}
+
 void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	this->inflictor = static_cast<IStatusInflictor*>(inflictor.GetInterface());
@@ -31,7 +41,7 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 
 	target->spawnApplyStatus(onApplyStatus, hit);
 
-	target->spawnUnderStatus(underStatus);
+	target->setUnderStatusIntVariable(this->getStatusCountKey(), 1);
 }
 
 void UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
@@ -64,9 +74,4 @@ UNiagaraSystem* UBaseStatus::getOnApplyStatus()
 UNiagaraSystem* UBaseStatus::getOnApplyEffect()
 {
 	return onApplyEffect;
-}
-
-UNiagaraSystem* UBaseStatus::getUnderStatus()
-{
-	return underStatus;
 }

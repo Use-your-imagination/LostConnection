@@ -3,6 +3,11 @@
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 #include "Characters/BaseCharacter.h"
 
+FString UCritStatus::getStatusName() const
+{
+	return "Crit";
+}
+
 void UCritStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

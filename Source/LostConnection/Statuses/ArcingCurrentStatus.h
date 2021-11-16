@@ -11,6 +11,9 @@ class LOSTCONNECTION_API UArcingCurrentStatus : public UBaseTriggerStatus
 {
 	GENERATED_BODY()
 	
+private:
+	FString getStatusName() const override;
+
 public:
 	UArcingCurrentStatus() = default;
 

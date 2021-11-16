@@ -11,6 +11,9 @@ class LOSTCONNECTION_API UBaseImpactStatus : public UBaseStatus
 {
 	GENERATED_BODY()
 
+protected:
+	virtual FString getStatusName() const override;
+
 public:
 	UBaseImpactStatus() = default;
 

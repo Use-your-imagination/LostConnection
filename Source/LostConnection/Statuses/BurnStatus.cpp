@@ -3,6 +3,11 @@
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 #include "Characters/BaseCharacter.h"
 
+FString UBurnStatus::getStatusName() const
+{
+	return "Burn";
+}
+
 void UBurnStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

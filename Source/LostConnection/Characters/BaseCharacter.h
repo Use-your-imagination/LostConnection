@@ -261,9 +261,6 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void spawnApplyEffect(UNiagaraSystem* applyEffectVFX, const FHitResult& hit) final override;
 
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void spawnUnderStatus(UNiagaraSystem* underStatusVFX) final override;
-
 	UFUNCTION(Server, Reliable)
 	virtual void takeStatusDamage(float damage) final override;
 

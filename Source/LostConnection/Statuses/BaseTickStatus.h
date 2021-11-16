@@ -12,6 +12,9 @@ class LOSTCONNECTION_API UBaseTickStatus : public UBaseStatus
 	GENERATED_BODY()
 
 protected:
+	virtual FString getStatusName() const override;
+
+protected:
 	UPROPERTY(Category = TickStatus, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float tickPeriod;
 

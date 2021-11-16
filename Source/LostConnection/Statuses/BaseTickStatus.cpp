@@ -5,6 +5,11 @@
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 #include "Characters/BaseCharacter.h"
 
+FString UBaseTickStatus::getStatusName() const
+{
+	PURE_VIRTUAL(UBaseTickStatus::getStatusName, return "";);
+}
+
 void UBaseTickStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

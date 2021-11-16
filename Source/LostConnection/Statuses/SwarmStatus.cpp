@@ -2,6 +2,11 @@
 
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 
+FString USwarmStatus::getStatusName() const
+{
+	return "Swarm";
+}
+
 void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -32,7 +37,7 @@ void USwarmStatus::increaseStacks(float damage)
 
 	stacks += damage * damageToStacksCoefficient;
 
-	target->setUnderStatusIntVariable("StatusCount", FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
+	target->setUnderStatusIntVariable(this->getStatusCountKey(), FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
 }
 
 float USwarmStatus::getThreshold() const

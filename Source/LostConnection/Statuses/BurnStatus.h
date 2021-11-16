@@ -12,6 +12,9 @@ class LOSTCONNECTION_API UBurnStatus : public UBaseTickStatus
 	GENERATED_BODY()
 	
 private:
+	FString getStatusName() const override;
+
+private:
 	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float damage;
 

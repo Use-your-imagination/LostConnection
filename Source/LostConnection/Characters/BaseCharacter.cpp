@@ -542,11 +542,6 @@ void ABaseCharacter::spawnApplyEffect_Implementation(UNiagaraSystem* applyEffect
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), applyEffectVFX, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
 }
 
-void ABaseCharacter::spawnUnderStatus_Implementation(UNiagaraSystem* underStatusVFX)
-{
-	underStatusComponent->SetAsset(underStatusVFX);
-}
-
 void ABaseCharacter::takeStatusDamage_Implementation(float damage)
 {
 	this->takeDamage(damage);

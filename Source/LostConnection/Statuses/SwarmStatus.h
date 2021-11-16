@@ -12,6 +12,9 @@ class LOSTCONNECTION_API USwarmStatus : public UBaseTickStatus
 	GENERATED_BODY()
 	
 private:
+	FString getStatusName() const override;
+
+private:
 	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float poisonDamageCoefficient;
 

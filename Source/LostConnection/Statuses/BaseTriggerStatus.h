@@ -12,6 +12,9 @@ class LOSTCONNECTION_API UBaseTriggerStatus : public UBaseStatus
 	GENERATED_BODY()
 
 protected:
+	virtual FString getStatusName() const override;
+
+protected:
 	UPROPERTY(Category = TriggerStatus, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	bool isOnceTriggered;
 

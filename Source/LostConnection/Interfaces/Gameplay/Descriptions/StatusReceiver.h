@@ -27,8 +27,6 @@ public:
 
 	virtual void spawnApplyEffect(UNiagaraSystem* applyEffectVFX, const FHitResult& hit) = 0;
 
-	virtual void spawnUnderStatus(UNiagaraSystem* underStatusVFX) = 0;
-
 	virtual void takeStatusDamage(float damage) = 0;
 
 	virtual void addStatus(UBaseStatus* status) = 0;

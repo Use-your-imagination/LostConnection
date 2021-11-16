@@ -30,9 +30,14 @@ class LOSTCONNECTION_API UBaseStatus : public UObject
 	GENERATED_BODY()
 
 protected:
+	virtual FString getStatusCountKey() const final;
+
+protected:
 	virtual bool IsSupportedForNetworking() const final override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual FString getStatusName() const;
 
 protected:
 	UPROPERTY(Category = Statuses, EditDefaultsOnly, BlueprintReadOnly)
@@ -58,9 +63,6 @@ protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
 	UNiagaraSystem* onApplyEffect;
 
-	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
-	UNiagaraSystem* underStatus;
-
 public:
 	UBaseStatus() = default;
 
@@ -76,8 +78,6 @@ public:
 	virtual UNiagaraSystem* getOnApplyStatus() final;
 
 	virtual UNiagaraSystem* getOnApplyEffect() final;
-
-	virtual UNiagaraSystem* getUnderStatus() final;
 
 	virtual ~UBaseStatus() = default;
 };
