@@ -26,5 +26,5 @@ public:
 template<typename T>
 bool Utility::checkChanceProc(const T& chance)
 {
-	return chance >= FMath::RandRange(static_cast<T>(0), static_cast<T>(100));
+	return chance >= FMath::RandRange(static_cast<T>(1), static_cast<T>(100));
 }
