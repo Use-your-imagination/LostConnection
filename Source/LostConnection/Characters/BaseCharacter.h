@@ -40,6 +40,9 @@ protected:
 	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* magazine;
 
+	UPROPERTY(Category = VFX, VisibleAnywhere, BlueprintReadOnly)
+	UNiagaraComponent* underStatusComponent;
+
 	UPROPERTY(Category = Weapons, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
 	UBaseWeapon* currentWeapon;
 
@@ -253,13 +256,13 @@ public:
 	virtual void impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void spawnApplyStatus(UBaseStatus* status, const FHitResult& hit) final override;
+	virtual void spawnApplyStatus(UNiagaraSystem* applyStatusVFX, const FHitResult& hit) final override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void spawnApplyEffect(UBaseStatus* status, const FHitResult& hit) final override;
+	virtual void spawnApplyEffect(UNiagaraSystem* applyEffectVFX, const FHitResult& hit) final override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void spawnUnderStatus(UBaseStatus* status) final override;
+	virtual void spawnUnderStatus(UNiagaraSystem* underStatusVFX) final override;
 
 	UFUNCTION(Server, Reliable)
 	virtual void takeStatusDamage(float damage) final override;
@@ -267,6 +270,9 @@ public:
 	virtual void addStatus(class UBaseStatus* status) final override;
 
 	virtual void applySwarmStatus(class USwarmStatus* swarm) final override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void setUnderStatusIntVariable(const FString& key, int32 value) final override;
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
 

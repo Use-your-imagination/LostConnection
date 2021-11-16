@@ -32,7 +32,7 @@ void USwarmStatus::increaseStacks(float damage)
 
 	stacks += damage * damageToStacksCoefficient;
 
-	underStatusComponent->SetNiagaraVariableInt("StatusCount", FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
+	target->setUnderStatusIntVariable("StatusCount", FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
 }
 
 float USwarmStatus::getThreshold() const
@@ -62,7 +62,7 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 	target->applySwarmStatus(this);
 
-	underStatusComponent->SetNiagaraVariableInt("StatusCount", 1);
+	target->setUnderStatusIntVariable("StatusCount", 1);
 }
 
 void USwarmStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)

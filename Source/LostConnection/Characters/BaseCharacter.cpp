@@ -301,7 +301,7 @@ ABaseCharacter::ABaseCharacter() :
 	sprintMovementSpeed(575.0f),
 	isDead(false)
 {
-	USkeletalMeshComponent* mesh = ACharacter::GetMesh();
+	USkeletalMeshComponent* mesh = GetMesh();
 	UCharacterMovementComponent* movement = GetCharacterMovement();
 
 	PrimaryActorTick.bCanEverTick = true;
@@ -333,6 +333,10 @@ ABaseCharacter::ABaseCharacter() :
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
 	magazine->SetupAttachment(currentWeaponMesh);
 	magazine->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
+	underStatusComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("UnderStatus"));
+	underStatusComponent->SetupAttachment(mesh);
+	underStatusComponent->AddLocalOffset(FVector(0.0f, 0.0f, this->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()));
 
 #pragma region BlueprintFunctionLibrary
 	isReloading = false;
@@ -528,35 +532,19 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 	}
 }
 
-void ABaseCharacter::spawnApplyStatus_Implementation(UBaseStatus* status, const FHitResult& hit)
+void ABaseCharacter::spawnApplyStatus_Implementation(UNiagaraSystem* applyStatusVFX, const FHitResult& hit)
 {
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), status->getOnApplyStatus(), hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), applyStatusVFX, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
 }
 
-void ABaseCharacter::spawnApplyEffect_Implementation(UBaseStatus* status, const FHitResult& hit)
+void ABaseCharacter::spawnApplyEffect_Implementation(UNiagaraSystem* applyEffectVFX, const FHitResult& hit)
 {
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), status->getOnApplyEffect(), hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), applyEffectVFX, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
 }
 
-void ABaseCharacter::spawnUnderStatus_Implementation(UBaseStatus* status)
+void ABaseCharacter::spawnUnderStatus_Implementation(UNiagaraSystem* underStatusVFX)
 {
-	TWeakObjectPtr<UNiagaraComponent>& underStatusComponent = status->getUnderStatusComponent();
-
-	if (!underStatusComponent.IsValid())
-	{
-		underStatusComponent = UNiagaraFunctionLibrary::SpawnSystemAttached
-		(
-			status->getUnderStatus(),
-			this->getMeshComponent(),
-			NAME_None,
-			FVector(0.0f, 0.0f, this->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()),
-			FRotator::ZeroRotator,
-			EAttachLocation::KeepRelativeOffset,
-			true,
-			true,
-			ENCPoolMethod::AutoRelease
-		);
-	}
+	underStatusComponent->SetAsset(underStatusVFX);
 }
 
 void ABaseCharacter::takeStatusDamage_Implementation(float damage)
@@ -572,6 +560,11 @@ void ABaseCharacter::addStatus(UBaseStatus* status)
 void ABaseCharacter::applySwarmStatus(USwarmStatus* swarm)
 {
 	this->swarm = swarm;
+}
+
+void ABaseCharacter::setUnderStatusIntVariable_Implementation(const FString& key, int32 value)
+{
+	underStatusComponent->SetNiagaraVariableInt(key, value);
 }
 
 const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const

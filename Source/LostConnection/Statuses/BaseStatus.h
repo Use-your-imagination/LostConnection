@@ -3,9 +3,9 @@
 #include "CoreMinimal.h"
 
 #include "UObject/NoExportTypes.h"
-#include "NiagaraComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "UObject/WeakInterfacePtr.h"
+#include "NiagaraSystem.h"
 
 #include "Interfaces/Gameplay/Descriptions/StatusInflictor.h"
 
@@ -50,7 +50,6 @@ protected:
 	class IStatusReceiver* target;
 
 	TWeakInterfacePtr<IStatusInflictor> inflictor;
-	TWeakObjectPtr<UNiagaraComponent> underStatusComponent;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
@@ -79,8 +78,6 @@ public:
 	virtual UNiagaraSystem* getOnApplyEffect() final;
 
 	virtual UNiagaraSystem* getUnderStatus() final;
-
-	virtual TWeakObjectPtr<UNiagaraComponent>& getUnderStatusComponent() final;
 
 	virtual ~UBaseStatus() = default;
 };

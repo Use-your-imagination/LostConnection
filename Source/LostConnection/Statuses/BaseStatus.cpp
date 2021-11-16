@@ -29,14 +29,14 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 
 	target->addStatus(this);
 
-	target->spawnApplyStatus(this, hit);
+	target->spawnApplyStatus(onApplyStatus, hit);
 
-	target->spawnUnderStatus(this);
+	target->spawnUnderStatus(underStatus);
 }
 
 void UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
-	target->spawnApplyEffect(this, hit);
+	target->spawnApplyEffect(onApplyEffect, hit);
 }
 
 void UBaseStatus::removeStatus(IStatusReceiver* target)
@@ -69,9 +69,4 @@ UNiagaraSystem* UBaseStatus::getOnApplyEffect()
 UNiagaraSystem* UBaseStatus::getUnderStatus()
 {
 	return underStatus;
-}
-
-TWeakObjectPtr<UNiagaraComponent>& UBaseStatus::getUnderStatusComponent()
-{
-	return underStatusComponent;
 }
