@@ -1,13 +1,11 @@
 #include "Utility.h"
 
-#include "Characters/BaseDrone.h"
-
-UWorld* Utility::getWorld()
+ALostConnectionGameState* Utility::getGameState(APawn* pawn)
 {
-	return ABaseDrone::globalPlayerPtr->GetWorld();
+	return pawn->GetWorld()->GetGameState<ALostConnectionGameState>();
 }
 
-ALostConnectionGameState* Utility::getGameState()
+ALostConnectionPlayerState* Utility::getPlayerState(APawn* pawn)
 {
-	return Utility::getWorld()->GetGameState<ALostConnectionGameState>();
+	return pawn->GetController()->GetPlayerState<ALostConnectionPlayerState>();
 }

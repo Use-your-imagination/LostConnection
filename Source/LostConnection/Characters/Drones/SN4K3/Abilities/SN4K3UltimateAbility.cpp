@@ -29,11 +29,9 @@ USN4K3UltimateAbility::USN4K3UltimateAbility() :
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
-void USN4K3UltimateAbility::playReturnAnimation()
+UAnimMontage* USN4K3UltimateAbility::getReturnAnimation() const
 {
-	ASN4K3* drone = Cast<ASN4K3>(caster);
-
-	drone->GetMesh()->GetAnimInstance()->Montage_Play(returnAnimation, drone->getCastPoint() / 100.0f);
+	return returnAnimation;
 }
 
 void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
@@ -95,7 +93,7 @@ void USN4K3UltimateAbility::useAbility()
 
 	currentCooldown = cooldown;
 
-	ASN4K3UltimateAbilityPlaceholder* placeholder = Utility::getGameState()->spawn<ASN4K3UltimateAbilityPlaceholder>(FTransform(drone->GetMesh()->GetComponentRotation(), std::move(tem)));
+	ASN4K3UltimateAbilityPlaceholder* placeholder = Utility::getGameState(drone)->spawn<ASN4K3UltimateAbilityPlaceholder>(FTransform(drone->GetMesh()->GetComponentRotation(), std::move(tem)));
 
 	placeholder->setAbility(this);
 

@@ -31,5 +31,7 @@ void InitializationUtility::initAbilityId(const FString& abilityClassName, abili
 
 UBaseStatus* InitializationUtility::createDefaultStatus(typeOfDamage type, IStatusReceiver* target)
 {
-	return NewObject<UBaseStatus>(target->_getUObject(), Utility::getGameState()->getDefaultStatus(type));
+	APawn* pawn = Cast<APawn>(target->_getUObject());
+
+	return NewObject<UBaseStatus>(pawn, Utility::getGameState(pawn)->getDefaultStatus(type));
 }

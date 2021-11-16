@@ -175,9 +175,6 @@ public:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	float BaseLookUpRate;
 
-public:
-	static ABaseDrone* globalPlayerPtr;
-
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

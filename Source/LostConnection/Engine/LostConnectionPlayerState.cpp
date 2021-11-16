@@ -1,6 +1,6 @@
 #include "LostConnectionPlayerState.h"
 
-void ALostConnectionPlayerState::runMulticastReliable_Implementation(UObject* caller, const FName& methodName)
+void ALostConnectionPlayerState::runMulticastReliable_Implementation(AActor* caller, const FName& methodName)
 {
 	if (!caller)
 	{
@@ -14,7 +14,7 @@ void ALostConnectionPlayerState::runMulticastReliable_Implementation(UObject* ca
 	delegate.Execute();
 }
 
-void ALostConnectionPlayerState::runMulticastUnreliable_Implementation(UObject* caller, const FName& methodName)
+void ALostConnectionPlayerState::runMulticastUnreliable_Implementation(AActor* caller, const FName& methodName)
 {
 	if (!caller)
 	{
@@ -28,17 +28,17 @@ void ALostConnectionPlayerState::runMulticastUnreliable_Implementation(UObject* 
 	delegate.Execute();
 }
 
-void ALostConnectionPlayerState::runOnServerReliableWithMulticast_Implementation(UObject* caller, const FName& methodName)
+void ALostConnectionPlayerState::runOnServerReliableWithMulticast_Implementation(AActor* caller, const FName& methodName)
 {
 	this->runMulticastReliable(caller, methodName);
 }
 
-void ALostConnectionPlayerState::runOnServerUnreliableWithMulticast_Implementation(UObject* caller, const FName& methodName)
+void ALostConnectionPlayerState::runOnServerUnreliableWithMulticast_Implementation(AActor* caller, const FName& methodName)
 {
 	this->runMulticastUnreliable(caller, methodName);
 }
 
-void ALostConnectionPlayerState::runOnServerReliable_Implementation(UObject* caller, const FName& methodName)
+void ALostConnectionPlayerState::runOnServerReliable_Implementation(AActor* caller, const FName& methodName)
 {
 	if (!caller)
 	{
@@ -52,7 +52,7 @@ void ALostConnectionPlayerState::runOnServerReliable_Implementation(UObject* cal
 	delegate.Execute();
 }
 
-void ALostConnectionPlayerState::runOnServerUnreliable_Implementation(UObject* caller, const FName& methodName)
+void ALostConnectionPlayerState::runOnServerUnreliable_Implementation(AActor* caller, const FName& methodName)
 {
 	if (!caller)
 	{

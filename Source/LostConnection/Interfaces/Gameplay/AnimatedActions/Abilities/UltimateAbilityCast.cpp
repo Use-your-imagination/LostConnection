@@ -1,5 +1,7 @@
 #include "UltimateAbilityCast.h"
 
+#include "GameFramework/Pawn.h"
+
 #include "Utility/MultiplayerUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 
@@ -7,7 +9,7 @@ void IUltimateAbilityCast::callCastUltimateAbilityEventVisual()
 {
 	ICaster* caster = Cast<ICaster>(this);
 
-	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getUltimateAbility());
+	ICaster::Execute_castAbilityEventVisual(Cast<APawn>(this), caster->getUltimateAbility());
 }
 
 void IUltimateAbilityCast::castUltimateAbilityVisual()
@@ -19,7 +21,7 @@ void IUltimateAbilityCast::castUltimateAbility()
 {
 	if (this->checkUltimateAbilityCast())
 	{
-		UObject* caster = Cast<UObject>(this);
+		APawn* caster = Cast<APawn>(this);
 
 		MultiplayerUtility::runOnServerReliableWithMulticast(caster, "castUltimateAbilityVisual");
 

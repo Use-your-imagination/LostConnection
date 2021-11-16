@@ -43,6 +43,11 @@ ASN4K3::ASN4K3()
 	ultimateAbility->setCaster(this);
 }
 
+void ASN4K3::playUltimateReturnAnimation()
+{
+	GetMesh()->GetAnimInstance()->Montage_Play(Cast<USN4K3UltimateAbility>(ultimateAbility)->getReturnAnimation(), this->getCastPoint() / 100.0f);
+}
+
 void ASN4K3::setUltimatePlaceholder(ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder)
 {
 	this->ultimatePlaceholder = ultimatePlaceholder;
@@ -85,7 +90,7 @@ bool ASN4K3::checkUltimateAbilityCast() const
 	
 	if (used)
 	{
-		MultiplayerUtility::runOnServerReliableWithMulticast(ability, "playReturnAnimation");
+		MultiplayerUtility::runOnServerReliableWithMulticast(const_cast<ASN4K3*>(this), "playUltimateReturnAnimation");
 
 		return false;
 	}

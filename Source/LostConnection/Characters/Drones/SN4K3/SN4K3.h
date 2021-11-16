@@ -23,6 +23,9 @@ private:
 public:
 	ASN4K3();
 
+	UFUNCTION()
+	void playUltimateReturnAnimation();
+
 	void setUltimatePlaceholder(class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceHolder);
 
 	class ASN4K3UltimateAbilityPlaceholder* getUltimatePlaceholder();

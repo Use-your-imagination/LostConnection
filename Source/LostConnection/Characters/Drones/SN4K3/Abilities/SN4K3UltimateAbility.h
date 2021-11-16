@@ -30,10 +30,9 @@ private:
 public:
 	USN4K3UltimateAbility();
 
-	UFUNCTION()
-	void playReturnAnimation();
-
 	bool getIsUltimateAbilityUsed() const;
+
+	UAnimMontage* getReturnAnimation() const;
 
 	void applyAbility(class ABaseCharacter* target) override;
 

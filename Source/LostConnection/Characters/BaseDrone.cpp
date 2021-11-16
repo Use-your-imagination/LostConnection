@@ -17,8 +17,6 @@
 
 using namespace std;
 
-ABaseDrone* ABaseDrone::globalPlayerPtr = nullptr;
-
 TArray<FInputActionBinding> ABaseDrone::initInputs()
 {
 	TArray<FInputActionBinding> result;
@@ -367,8 +365,6 @@ void ABaseDrone::BeginPlay()
 
 	if (world)
 	{
-		ABaseDrone::globalPlayerPtr = UGameplayStatics::GetPlayerController(world, 0)->GetPawn<ABaseDrone>();
-
 		if (HasAuthority())
 		{
 			timers->addTimer([this]()
@@ -650,7 +646,7 @@ void ABaseDrone::dropWeapon()
 
 	FTransform spawnPoint(currentWeaponMesh->GetComponentRotation(), location + 100.0f * GetActorForwardVector());
 
-	ADroppedWeapon* droppedWeapon = Utility::getGameState()->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), spawnPoint);
+	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), spawnPoint);
 
 	droppedWeapon->setWeapon(currentWeapon);
 

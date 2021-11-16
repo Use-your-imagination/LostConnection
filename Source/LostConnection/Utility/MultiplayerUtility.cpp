@@ -1,47 +1,61 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "MultiplayerUtility.h"
 
 #include "Characters/BaseDrone.h"
 #include "Engine/LostConnectionPlayerState.h"
+#include "Utility/Utility.h"
 
-void MultiplayerUtility::runOnServerReliableWithMulticast(UObject* caller, const FName& methodName)
+void MultiplayerUtility::runOnServerReliableWithMulticast(APawn* caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = ABaseDrone::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
 
 	if (playerState)
 	{
 		playerState->runOnServerReliableWithMulticast(caller, methodName);
 	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+	}
 }
 
-void MultiplayerUtility::runOnServerUnreliableWithMulticast(UObject* caller, const FName& methodName)
+void MultiplayerUtility::runOnServerUnreliableWithMulticast(APawn* caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = ABaseDrone::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
 
 	if (playerState)
 	{
 		playerState->runOnServerUnreliableWithMulticast(caller, methodName);
 	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+	}
 }
 
-void MultiplayerUtility::runOnServerReliable(UObject* caller, const FName& methodName)
+void MultiplayerUtility::runOnServerReliable(APawn* caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = ABaseDrone::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
 
 	if (playerState)
 	{
 		playerState->runOnServerReliable(caller, methodName);
 	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+	}
 }
 
-void MultiplayerUtility::runOnServerUnreliable(UObject* caller, const FName& methodName)
+void MultiplayerUtility::runOnServerUnreliable(APawn* caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = ABaseDrone::globalPlayerPtr->GetPlayerState<ALostConnectionPlayerState>();
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
 
 	if (playerState)
 	{
 		playerState->runOnServerUnreliable(caller, methodName);
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
 	}
 }

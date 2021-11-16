@@ -1,5 +1,7 @@
 #include "FirstAbilityCast.h"
 
+#include "GameFramework/Pawn.h"
+
 #include "Utility/MultiplayerUtility.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 
@@ -7,7 +9,7 @@ void IFirstAbilityCast::callCastFirstAbilityEventVisual()
 {
 	ICaster* caster = Cast<ICaster>(this);
 
-	ICaster::Execute_castAbilityEventVisual(Cast<UObject>(this), caster->getFirstAbility());
+	ICaster::Execute_castAbilityEventVisual(Cast<APawn>(this), caster->getFirstAbility());
 }
 
 void IFirstAbilityCast::castFirstAbilityVisual()
@@ -19,7 +21,7 @@ void IFirstAbilityCast::castFirstAbility()
 {
 	if (this->checkFirstAbilityCast())
 	{
-		UObject* caster = Cast<UObject>(this);
+		APawn* caster = Cast<APawn>(this);
 
 		MultiplayerUtility::runOnServerReliableWithMulticast(caster, "castFirstAbilityVisual");
 

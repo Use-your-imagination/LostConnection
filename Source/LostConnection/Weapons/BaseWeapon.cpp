@@ -61,7 +61,7 @@ void UBaseWeapon::shoot()
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = Utility::getGameState()->spawn<ABaseAmmo>(ammoClass, FTransform(ownerCharacter->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")));
+		ABaseAmmo* launchedAmmo = Utility::getGameState(ownerCharacter.Get())->spawn<ABaseAmmo>(ammoClass, FTransform(ownerCharacter->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")));
 
 		launchedAmmo->copyProperties(this);
 

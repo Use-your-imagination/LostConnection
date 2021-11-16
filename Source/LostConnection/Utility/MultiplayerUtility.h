@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 
+#include "GameFramework/Pawn.h"
+
 class LOSTCONNECTION_API MultiplayerUtility
 {
 public:
@@ -10,11 +12,11 @@ public:
 	~MultiplayerUtility() = default;
 
 public:
-	static void runOnServerReliableWithMulticast(UObject* caller, const FName& methodName);
+	static void runOnServerReliableWithMulticast(APawn* caller, const FName& methodName);
 
-	static void runOnServerUnreliableWithMulticast(UObject* caller, const FName& methodName);
+	static void runOnServerUnreliableWithMulticast(APawn* caller, const FName& methodName);
 
-	static void runOnServerReliable(UObject* caller, const FName& methodName);
+	static void runOnServerReliable(APawn* caller, const FName& methodName);
 
-	static void runOnServerUnreliable(UObject* caller, const FName& methodName);
+	static void runOnServerUnreliable(APawn* caller, const FName& methodName);
 };

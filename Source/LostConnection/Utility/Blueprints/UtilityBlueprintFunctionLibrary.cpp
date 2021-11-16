@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "GameFramework/InputSettings.h"
+#include "GameFramework/Pawn.h"
 
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Characters/BaseDrone.h"
@@ -87,7 +88,7 @@ void UUtilityBlueprintFunctionLibrary::rebindHotkeys(const TMap<FName, FString>&
 
 void UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(const TScriptInterface<ICaster>& caster)
 {
-	MultiplayerUtility::runOnServerReliableWithMulticast(caster.GetObject(), "cancelCurrentAbilityAnimation");
+	MultiplayerUtility::runOnServerReliableWithMulticast(Cast<APawn>(caster.GetObject()), "cancelCurrentAbilityAnimation");
 }
 
 bool UUtilityBlueprintFunctionLibrary::isAnyAnimationActive(const TScriptInterface<ICaster>& caster)

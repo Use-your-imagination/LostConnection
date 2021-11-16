@@ -18,23 +18,23 @@ class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 
 private:
 	UFUNCTION(NetMulticast, Reliable)
-	void runMulticastReliable(UObject* caller, const FName& methodName);
+	void runMulticastReliable(AActor* caller, const FName& methodName);
 
 	UFUNCTION(NetMulticast, Unreliable)
-	void runMulticastUnreliable(UObject* caller, const FName& methodName);
+	void runMulticastUnreliable(AActor* caller, const FName& methodName);
 
 public:
 	ALostConnectionPlayerState() = default;
 
 	UFUNCTION(Server, Reliable)
-	void runOnServerReliableWithMulticast(UObject* caller, const FName& methodName);
+	void runOnServerReliableWithMulticast(AActor* caller, const FName& methodName);
 
 	UFUNCTION(Server, Unreliable)
-	void runOnServerUnreliableWithMulticast(UObject* caller, const FName& methodName);
+	void runOnServerUnreliableWithMulticast(AActor* caller, const FName& methodName);
 
 	UFUNCTION(Server, Reliable)
-	void runOnServerReliable(UObject* caller, const FName& methodName);
+	void runOnServerReliable(AActor* caller, const FName& methodName);
 
 	UFUNCTION(Server, Unreliable)
-	void runOnServerUnreliable(UObject* caller, const FName& methodName);
+	void runOnServerUnreliable(AActor* caller, const FName& methodName);
 };
