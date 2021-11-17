@@ -12,7 +12,7 @@ class LOSTCONNECTION_API UCritStatus : public UBaseImpactStatus
 	GENERATED_BODY()
 
 private:
-	FString getStatusName() const override;
+	virtual FString getStatusName() const final override;
 
 private:
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))

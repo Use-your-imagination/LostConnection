@@ -15,11 +15,6 @@ void UBurnStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBurnStatus, damage);
 }
 
-void UBurnStatus::setDamage_Implementation(float newDamage)
-{
-	damage = newDamage;
-}
-
 void UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
 	Super::applyEffect(target, hit);

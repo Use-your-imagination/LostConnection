@@ -12,7 +12,7 @@ class LOSTCONNECTION_API UBurnStatus : public UBaseTickStatus
 	GENERATED_BODY()
 	
 private:
-	FString getStatusName() const override;
+	virtual FString getStatusName() const final override;
 
 private:
 	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -24,10 +24,7 @@ protected:
 public:
 	UBurnStatus() = default;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void setDamage(float newDamage);
-
-	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
 
 	virtual ~UBurnStatus() = default;
 };

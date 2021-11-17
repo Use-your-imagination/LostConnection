@@ -12,7 +12,7 @@ class LOSTCONNECTION_API UShatterStatus : public UBaseTriggerStatus
 	GENERATED_BODY()
 	
 private:
-	FString getStatusName() const override;
+	virtual FString getStatusName() const final override;
 
 private:
 	UPROPERTY(Category = Shatter, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))

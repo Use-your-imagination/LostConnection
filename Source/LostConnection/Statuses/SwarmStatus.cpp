@@ -28,18 +28,6 @@ void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(USwarmStatus, stacks);
 }
 
-void USwarmStatus::increaseStacks(float damage)
-{
-	if (damage * limitDamageToStacksCoefficient <= stacks)
-	{
-		return;
-	}
-
-	stacks += damage * damageToStacksCoefficient;
-
-	target->setUnderStatusIntVariable(this->getStatusCountKey(), FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
-}
-
 float USwarmStatus::getThreshold() const
 {
 	return (1.0f - rampUpCoefficient / (rampUpCoefficient + stacks * stacksToThresholdCoefficient)) * 100.0f;
@@ -55,7 +43,7 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 		if (swarm)
 		{
-			swarm->increaseStacks(inflictor->getInflictorDamage());
+			swarm->setStacks(inflictor->getInflictorDamage());
 
 			return;
 		}
@@ -80,4 +68,21 @@ void USwarmStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 void USwarmStatus::postRemove()
 {
 	target->setUnderStatusIntVariable(this->getStatusCountKey(), 0);
+}
+
+void USwarmStatus::setStacks(float damage)
+{
+	if (damage * limitDamageToStacksCoefficient <= stacks)
+	{
+		return;
+	}
+
+	stacks += damage * damageToStacksCoefficient;
+
+	target->setUnderStatusIntVariable(this->getStatusCountKey(), FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
+}
+
+float USwarmStatus::getStacks() const
+{
+	return stacks;
 }

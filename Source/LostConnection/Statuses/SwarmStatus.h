@@ -3,16 +3,19 @@
 #include "CoreMinimal.h"
 
 #include "BaseTickStatus.h"
+#include "Interfaces/Gameplay/Descriptions/Stackable.h"
 
 #include "SwarmStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API USwarmStatus : public UBaseTickStatus
+class LOSTCONNECTION_API USwarmStatus : 
+	public UBaseTickStatus,
+	public IStackable
 {
 	GENERATED_BODY()
 	
 private:
-	FString getStatusName() const override;
+	virtual FString getStatusName() const final override;
 
 private:
 	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -45,15 +48,17 @@ private:
 public:
 	USwarmStatus() = default;
 
-	void increaseStacks(float damage);
+	virtual float getThreshold() const;
 
-	float getThreshold() const;
+	virtual void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) final override;
 
-	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) final override;
+	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
 
-	void applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
+	virtual void postRemove() final override;
 
-	void postRemove() final override;
+	virtual void setStacks(float damage) final override;
+
+	virtual float getStacks() const final override;
 
 	virtual ~USwarmStatus() = default;
 };
