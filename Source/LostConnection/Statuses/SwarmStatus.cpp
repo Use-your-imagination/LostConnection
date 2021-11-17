@@ -7,6 +7,11 @@ FString USwarmStatus::getStatusName() const
 	return "Swarm";
 }
 
+bool USwarmStatus::increaseStacksCondition(float damage) const
+{
+	return damage * limitDamageToStacksCoefficient > stacks;
+}
+
 void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -43,7 +48,9 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 		if (swarm)
 		{
-			swarm->setStacks(inflictor->getInflictorDamage());
+			swarm->increaseStacks(inflictor->getInflictorDamage());
+
+			target->setUnderStatusIntVariable(this->getStatusCountKey(), FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
 
 			return;
 		}
@@ -70,16 +77,14 @@ void USwarmStatus::postRemove()
 	target->setUnderStatusIntVariable(this->getStatusCountKey(), 0);
 }
 
-void USwarmStatus::setStacks(float damage)
+float USwarmStatus::getDamageToStacksCoefficient() const
 {
-	if (damage * limitDamageToStacksCoefficient <= stacks)
-	{
-		return;
-	}
+	return damageToStacksCoefficient;
+}
 
-	stacks += damage * damageToStacksCoefficient;
-
-	target->setUnderStatusIntVariable(this->getStatusCountKey(), FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
+float& USwarmStatus::getStacks()
+{
+	return stacks;
 }
 
 float USwarmStatus::getStacks() const

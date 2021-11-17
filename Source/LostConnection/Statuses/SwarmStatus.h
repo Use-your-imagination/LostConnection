@@ -17,6 +17,8 @@ class LOSTCONNECTION_API USwarmStatus :
 private:
 	virtual FString getStatusName() const final override;
 
+	virtual bool increaseStacksCondition(float damage) const final override;
+
 private:
 	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float poisonDamageCoefficient;
@@ -36,10 +38,10 @@ private:
 	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float percentsPerSatellite;
 
-	UPROPERTY(Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float poisonDamage;
 
-	UPROPERTY(Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float stacks;
 
 private:
@@ -56,7 +58,9 @@ public:
 
 	virtual void postRemove() final override;
 
-	virtual void setStacks(float damage) final override;
+	virtual float getDamageToStacksCoefficient() const final override;
+
+	virtual float& getStacks() final override;
 
 	virtual float getStacks() const final override;
 

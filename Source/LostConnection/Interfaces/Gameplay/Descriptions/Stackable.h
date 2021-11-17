@@ -8,7 +8,7 @@
 
 #include "Stackable.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType)
 class UStackable : public UInterface
 {
 	GENERATED_BODY()
@@ -18,10 +18,23 @@ class LOSTCONNECTION_API IStackable
 {
 	GENERATED_BODY()
 
+protected:
+	virtual float calculateStacks(float damage) const;
+
+	virtual bool increaseStacksCondition(float damage) const;
+
+	virtual bool decreaseStacksCondition(float damage) const;
+
 public:
 	IStackable() = default;
 
-	virtual void setStacks(float damage) = 0;
+	virtual void increaseStacks(float damage);
+
+	virtual void decreaseStacks(float damage);
+
+	virtual float getDamageToStacksCoefficient() const = 0;
+
+	virtual float& getStacks() = 0;
 
 	virtual float getStacks() const = 0;
 };

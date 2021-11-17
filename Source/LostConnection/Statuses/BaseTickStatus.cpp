@@ -19,6 +19,12 @@ void UBaseTickStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(UBaseTickStatus, currentTickPeriod);
 }
 
+UBaseTickStatus::UBaseTickStatus() :
+	currentTickPeriod(tickPeriod)
+{
+
+}
+
 void UBaseTickStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
 	UNiagaraFunctionLibrary::SpawnSystemAttached(onApplyEffect, target->getMeshComponent(), NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true, true, ENCPoolMethod::AutoRelease);
