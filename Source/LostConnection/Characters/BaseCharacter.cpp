@@ -540,12 +540,34 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 
 void ABaseCharacter::spawnApplyStatus_Implementation(UNiagaraSystem* applyStatusVFX, const FHitResult& hit)
 {
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), applyStatusVFX, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+	UNiagaraFunctionLibrary::SpawnSystemAttached
+	(
+		applyStatusVFX,
+		this->getMeshComponent(),
+		NAME_None,
+		GetActorTransform().InverseTransformPosition(hit.Location),
+		FRotator::ZeroRotator,
+		EAttachLocation::Type::KeepRelativeOffset,
+		true,
+		true,
+		ENCPoolMethod::AutoRelease
+	);
 }
 
 void ABaseCharacter::spawnApplyEffect_Implementation(UNiagaraSystem* applyEffectVFX, const FHitResult& hit)
 {
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), applyEffectVFX, hit.Location, FRotator::ZeroRotator, FVector::OneVector, true, true, ENCPoolMethod::AutoRelease);
+	UNiagaraFunctionLibrary::SpawnSystemAttached
+	(
+		applyEffectVFX,
+		this->getMeshComponent(),
+		NAME_None,
+		GetActorTransform().InverseTransformPosition(hit.Location),
+		FRotator::ZeroRotator,
+		EAttachLocation::Type::KeepRelativeOffset,
+		true,
+		true,
+		ENCPoolMethod::AutoRelease
+	);
 }
 
 void ABaseCharacter::takeStatusDamage_Implementation(float damage)
