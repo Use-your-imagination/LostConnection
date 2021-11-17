@@ -545,9 +545,9 @@ void ABaseCharacter::spawnApplyStatus_Implementation(UNiagaraSystem* applyStatus
 		applyStatusVFX,
 		this->getMeshComponent(),
 		NAME_None,
-		GetActorTransform().InverseTransformPosition(hit.Location),
+		hit.Location,
 		FRotator::ZeroRotator,
-		EAttachLocation::Type::KeepRelativeOffset,
+		EAttachLocation::Type::KeepWorldPosition,
 		true,
 		true,
 		ENCPoolMethod::AutoRelease
@@ -561,9 +561,9 @@ void ABaseCharacter::spawnApplyEffect_Implementation(UNiagaraSystem* applyEffect
 		applyEffectVFX,
 		this->getMeshComponent(),
 		NAME_None,
-		GetActorTransform().InverseTransformPosition(hit.Location),
+		hit.Location,
 		FRotator::ZeroRotator,
-		EAttachLocation::Type::KeepRelativeOffset,
+		EAttachLocation::Type::KeepWorldPosition,
 		true,
 		true,
 		ENCPoolMethod::AutoRelease
