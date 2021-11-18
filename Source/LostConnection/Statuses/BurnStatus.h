@@ -22,7 +22,7 @@ private:
 	float damageToDamagePerStackCoefficient;
 	
 	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float damageToStacksCoefficient;
+	float damageToReduceStacksCoefficient;
 
 	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float damageToInitalStacksCoefficient;

@@ -14,7 +14,7 @@ void UBurnStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(UBurnStatus, damageToDamagePerStackCoefficient);
 
-	DOREPLIFETIME(UBurnStatus, damageToStacksCoefficient);
+	DOREPLIFETIME(UBurnStatus, damageToReduceStacksCoefficient);
 
 	DOREPLIFETIME(UBurnStatus, damageToInitalStacksCoefficient);
 
@@ -77,7 +77,7 @@ bool UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 
 float UBurnStatus::getDamageToStacksCoefficient() const
 {
-	return damageToStacksCoefficient;
+	return damageToReduceStacksCoefficient;
 }
 
 float& UBurnStatus::getStacks()
