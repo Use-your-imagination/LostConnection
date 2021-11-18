@@ -77,11 +77,6 @@ bool USwarmStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	return true;
 }
 
-void USwarmStatus::postRemove()
-{
-	target->setUnderStatusIntVariable(this->getStatusCountKey(), 0);
-}
-
 float USwarmStatus::getDamageToStacksCoefficient() const
 {
 	return damageToStacksCoefficient;

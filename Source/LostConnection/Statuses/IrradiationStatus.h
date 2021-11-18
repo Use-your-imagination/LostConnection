@@ -14,6 +14,8 @@ class LOSTCONNECTION_API UIrradiationStatus : public UBaseImpactStatus
 private:
 	virtual FString getStatusName() const final override;
 
+	virtual SIZE_T getActiveStatusesCount() const final override;
+
 public:
 	UIrradiationStatus() = default;
 

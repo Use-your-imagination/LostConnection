@@ -605,9 +605,7 @@ void ABaseCharacter::inflictorImpactAction(const TScriptInterface<IStatusInflict
 
 		if (trigger)
 		{
-			trigger->applyEffect(this, hit);
-
-			if (trigger->getIsOnceTriggered())
+			if (trigger->applyEffect(this, hit) && trigger->getIsOnceTriggered())
 			{
 				statusesToRemove.Add(trigger);
 			}

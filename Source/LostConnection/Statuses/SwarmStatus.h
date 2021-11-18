@@ -56,8 +56,6 @@ public:
 
 	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
 
-	virtual void postRemove() final override;
-
 	virtual float getDamageToStacksCoefficient() const final override;
 
 	virtual float& getStacks() final override;

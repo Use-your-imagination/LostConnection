@@ -4,7 +4,6 @@
 
 #include "UObject/NoExportTypes.h"
 #include "Net/UnrealNetwork.h"
-#include "UObject/WeakInterfacePtr.h"
 #include "NiagaraSystem.h"
 
 #include "Interfaces/Gameplay/Descriptions/StatusInflictor.h"
@@ -54,7 +53,8 @@ protected:
 
 	class IStatusReceiver* target;
 
-	TWeakInterfacePtr<IStatusInflictor> inflictor;
+	typeOfDamage inflictorDamageType;
+	float inflictorDamage;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)

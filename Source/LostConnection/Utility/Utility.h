@@ -21,6 +21,8 @@ public:
 
 	static ALostConnectionPlayerState* getPlayerState(APawn* pawn);
 
+	static SIZE_T countStatuses(const class IStatusReceiver* target, UClass* statusStaticClass);
+
 	template<typename T>
 	static bool checkChanceProc(const T& chance);
 

@@ -33,9 +33,10 @@ FString UBaseStatus::getStatusName() const
 
 void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	this->inflictor = static_cast<IStatusInflictor*>(inflictor.GetInterface());
-
 	this->target = static_cast<IStatusReceiver*>(target.GetInterface());
+
+	inflictorDamage = inflictor->getInflictorDamage();
+	inflictorDamageType = inflictor->getDamageType();
 
 	target->addStatus(this);
 
@@ -53,7 +54,7 @@ bool UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 
 void UBaseStatus::postRemove()
 {
-	PURE_VIRTUAL(UBaseStatus::postRemove);
+	target->setUnderStatusIntVariable(this->getStatusCountKey(), 0);
 }
 
 bool UBaseStatus::Tick(float DeltaTime)
