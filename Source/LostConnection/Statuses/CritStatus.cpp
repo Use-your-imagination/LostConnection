@@ -19,8 +19,13 @@ void UCritStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UCritStatus, multiplierPerStatus);
 }
 
-void UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
+	if (!Super::applyEffect(target, hit))
+	{
+		return false;
+	}
+
 	float resultMultiplier = damageMultiplier;
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
@@ -33,6 +38,8 @@ void UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	}
 
 	target->takeStatusDamage(inflictor->getInflictorDamage() * resultMultiplier);
+
+	return true;
 }
 
 void UCritStatus::postRemove()

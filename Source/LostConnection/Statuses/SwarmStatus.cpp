@@ -65,11 +65,16 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 	target->setUnderStatusIntVariable("StatusCount", 1);
 }
 
-void USwarmStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool USwarmStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
-	Super::applyEffect(target, hit);
+	if (!Super::applyEffect(target, hit))
+	{
+		return false;
+	}
 
 	target->takeStatusDamage(poisonDamage);
+
+	return true;
 }
 
 void USwarmStatus::postRemove()

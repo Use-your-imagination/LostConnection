@@ -27,7 +27,7 @@ protected:
 public:
 	UBaseTickStatus();
 
-	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
 	virtual bool Tick(float DeltaTime) override;
 

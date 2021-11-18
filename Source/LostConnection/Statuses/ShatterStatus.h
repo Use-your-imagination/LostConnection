@@ -24,7 +24,7 @@ protected:
 public:
 	UShatterStatus() = default;
 
-	void applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
 	virtual ~UShatterStatus() = default;
 };

@@ -44,9 +44,11 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 	target->setUnderStatusIntVariable(this->getStatusCountKey(), 1);
 }
 
-void UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
 	target->spawnApplyEffect(onApplyEffect, hit);
+
+	return true;
 }
 
 void UBaseStatus::postRemove()

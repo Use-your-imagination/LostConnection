@@ -69,7 +69,7 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void applyStatus(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
 
-	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit);
+	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit);
 
 	virtual void postRemove();
 

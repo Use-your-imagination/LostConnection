@@ -56,9 +56,12 @@ void UBurnStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 	}
 }
 
-void UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
-	Super::applyEffect(target, hit);
+	if (!Super::applyEffect(target, hit))
+	{
+		return false;
+	}
 
 	target->takeStatusDamage(damagePerStack * stacksPerTick);
 
@@ -66,8 +69,10 @@ void UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 
 	if (stacks <= 0)
 	{
-		const_cast<TArray<UBaseStatus*>&>(target->getStatuses()).Remove(this);
+		return false;
 	}
+
+	return true;
 }
 
 float UBurnStatus::getDamageToStacksCoefficient() const

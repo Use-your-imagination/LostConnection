@@ -15,11 +15,16 @@ void UShatterStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(UShatterStatus, reservedDamage);
 }
 
-void UShatterStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UShatterStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
-	Super::applyEffect(target, hit);
+	if (!Super::applyEffect(target, hit))
+	{
+		return false;
+	}
 
 	ABaseCharacter* character = Cast<ABaseCharacter>(target);
 
 	character->takeDamage(reservedDamage);
+
+	return true;
 }
