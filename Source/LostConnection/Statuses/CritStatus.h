@@ -21,13 +21,18 @@ private:
 	float damageMultiplier;
 
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float multiplierPerStatus;
+	float damageToMutliplierCoefficient;
+
+	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float multiplier;
 
 private:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:
 	UCritStatus() = default;
+
+	virtual float getMultiplier() const final;
 
 	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
 

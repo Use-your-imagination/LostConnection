@@ -1,5 +1,7 @@
 #include "CritStatus.h"
 
+#include "Algo/Accumulate.h"
+
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 #include "Utility/Utility.h"
 
@@ -19,7 +21,12 @@ void UCritStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(UCritStatus, damageMultiplier);
 
-	DOREPLIFETIME(UCritStatus, multiplierPerStatus);
+	DOREPLIFETIME(UCritStatus, damageToMutliplierCoefficient);
+}
+
+float UCritStatus::getMultiplier() const
+{
+	return multiplier;
 }
 
 bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
@@ -29,17 +36,24 @@ bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 		return false;
 	}
 
-	float resultMultiplier = damageMultiplier;
+	// TODO: fix
+	multiplier = inflictorDamage * damageToMutliplierCoefficient;
+
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
-	for (const auto& status : statuses)
-	{
-		if (Cast<UCritStatus>(status))
+	float resultMultiplier = Algo::Accumulate(statuses, damageMultiplier, [](float currentValue, const UBaseStatus* status)
 		{
-			resultMultiplier += multiplierPerStatus;
-		}
-	}
+			const UCritStatus* crit = Cast<UCritStatus>(status);
 
+			if (crit)
+			{
+				return currentValue + crit->getMultiplier();
+			}
+
+			return currentValue;
+		});
+
+	// TODO: fix
 	target->takeStatusDamage(inflictorDamage * resultMultiplier);
 
 	return true;
