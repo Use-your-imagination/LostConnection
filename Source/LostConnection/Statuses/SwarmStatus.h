@@ -3,21 +3,16 @@
 #include "CoreMinimal.h"
 
 #include "BaseTickStatus.h"
-#include "Interfaces/Gameplay/Descriptions/Stackable.h"
 
 #include "SwarmStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API USwarmStatus : 
-	public UBaseTickStatus,
-	public IStackable
+class LOSTCONNECTION_API USwarmStatus : public UBaseTickStatus
 {
 	GENERATED_BODY()
 	
 private:
 	virtual FString getStatusName() const final override;
-
-	virtual bool increaseStacksCondition(float damage) const final override;
 
 private:
 	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -55,12 +50,6 @@ public:
 	virtual void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) final override;
 
 	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
-
-	virtual float getDamageToStacksCoefficient() const final override;
-
-	virtual float& getStacks() final override;
-
-	virtual float getStacks() const final override;
 
 	virtual ~USwarmStatus() = default;
 };

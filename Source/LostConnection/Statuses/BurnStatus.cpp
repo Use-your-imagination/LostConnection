@@ -31,17 +31,17 @@ void UBurnStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 
 	if (Utility::isTargetAlreadyUnderStatus<UBurnStatus>(target))
 	{
-		float decreaseStacks = FMath::Min(this->calculateStacks(damage), stacks);
+		// TODO: calculate damage of remaining damage
 
-		target->takeStatusDamage(damagePerStack * decreaseStacks);
+		// TODO: deal damage
 
-		if (decreaseStacks == stacks)
+		// TODO: remove status if remaining damage <= 0
 		{
 			const_cast<TArray<UBaseStatus*>&>(target->getStatuses()).Remove(this);
 		}
-		else
+		// else
 		{
-			this->decreaseStacks(damage);
+			// TODO: deal damage, decrease remaining damage
 		}
 	}
 	else
@@ -73,19 +73,4 @@ bool UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	}
 
 	return true;
-}
-
-float UBurnStatus::getDamageToStacksCoefficient() const
-{
-	return damageToReduceStacksCoefficient;
-}
-
-float& UBurnStatus::getStacks()
-{
-	return stacks;
-}
-
-float UBurnStatus::getStacks() const
-{
-	return stacks;
 }
