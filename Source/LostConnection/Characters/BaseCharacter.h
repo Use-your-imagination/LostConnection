@@ -273,6 +273,10 @@ public:
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
 
+	virtual float getTotalLifePercentDealt(float damage) const final override;
+
+	virtual float getHealthPercentDealt(float damage) const final override;
+
 	virtual void inflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
 
 	virtual USkeletalMeshComponent* getMeshComponent() final override;
