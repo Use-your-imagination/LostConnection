@@ -21,7 +21,7 @@ private:
 	float damageMultiplier;
 
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float damageMultiplierPerTotalLifePool;
+	float damageMultiplierPerTotalLifePercentPool;
 
 	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float multiplier;

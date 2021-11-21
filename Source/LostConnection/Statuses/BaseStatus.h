@@ -17,10 +17,10 @@ enum class typeOfDamage : uint8
 {
 	none = 0 UMETA(DisplayName = "None"),
 	physical = 1 UMETA(DisplayName = "Physical"),
-	cold = 2 UMETA(DisplayName = "Cold"),
-	nanite = 3 UMETA(DisplayName = "Nanite"),
-	fire = 4 UMETA(DisplayName = "Fire"),
-	electricity = 5 UMETA(DisplayName = "Electricity")
+	nanite = 2 UMETA(DisplayName = "Nanite"),
+	fire = 3 UMETA(DisplayName = "Fire"),
+	electricity = 4 UMETA(DisplayName = "Electricity"),
+	radiation = 5 UMETA(DisplayName = "Radiation")
 };
 
 UCLASS(BlueprintType, Blueprintable, DefaultToInstanced)
@@ -74,6 +74,8 @@ public:
 	virtual void postRemove();
 
 	virtual bool Tick(float DeltaTime);
+
+	virtual void refreshDuration() final;
 
 	virtual UNiagaraSystem* getOnApplyStatus() final;
 

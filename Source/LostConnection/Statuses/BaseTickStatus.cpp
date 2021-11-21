@@ -25,13 +25,6 @@ UBaseTickStatus::UBaseTickStatus() :
 
 }
 
-bool UBaseTickStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
-{
-	target->spawnApplyEffect(onApplyEffect, hit);
-
-	return true;
-}
-
 bool UBaseTickStatus::Tick(float DeltaTime)
 {
 	bool result = Super::Tick(DeltaTime);

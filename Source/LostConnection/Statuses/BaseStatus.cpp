@@ -69,6 +69,11 @@ bool UBaseStatus::Tick(float DeltaTime)
 	return true;
 }
 
+void UBaseStatus::refreshDuration()
+{
+	currentDuration = 0.0f;
+}
+
 UNiagaraSystem* UBaseStatus::getOnApplyStatus()
 {
 	return onApplyStatus;
