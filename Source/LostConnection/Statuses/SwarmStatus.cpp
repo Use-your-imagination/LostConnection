@@ -2,6 +2,8 @@
 
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
 
+#pragma warning(disable: 4458)
+
 FString USwarmStatus::getStatusName() const
 {
 	return "Swarm";
@@ -11,26 +13,23 @@ void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(USwarmStatus, poisonDamageCoefficient);
+	DOREPLIFETIME(USwarmStatus, baseThreshold);
 
-	DOREPLIFETIME(USwarmStatus, damageToStacksCoefficient);
-
-	DOREPLIFETIME(USwarmStatus, limitDamageToStacksCoefficient);
-
-	DOREPLIFETIME(USwarmStatus, stacksToThresholdCoefficient);
-
-	DOREPLIFETIME(USwarmStatus, rampUpCoefficient);
-
+	DOREPLIFETIME(USwarmStatus, thresholdPerTotalLifePercentPool);
+	
 	DOREPLIFETIME(USwarmStatus, percentsPerSatellite);
 
-	DOREPLIFETIME(USwarmStatus, poisonDamage);
+	DOREPLIFETIME(USwarmStatus, threshold);
+}
 
-	DOREPLIFETIME(USwarmStatus, stacks);
+void USwarmStatus::increaseThreshold(float inflictorDamage)
+{
+	threshold += target->getTotalLifePercentDealt(inflictorDamage) * thresholdPerTotalLifePercentPool;
 }
 
 float USwarmStatus::getThreshold() const
 {
-	return (1.0f - rampUpCoefficient / (rampUpCoefficient + stacks * stacksToThresholdCoefficient)) * 100.0f;
+	return threshold;
 }
 
 void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
@@ -43,7 +42,11 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 		if (swarm)
 		{
-			swarm->setStacks(inflictor->getInflictorDamage());
+			swarm->increaseThreshold(inflictorDamage);
+			
+			swarm->refreshDuration();
+
+			target->setUnderStatusIntVariable(this->getStatusCountKey(), FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
 
 			return;
 		}
@@ -51,38 +54,7 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 	Super::applyStatus_Implementation(inflictor, target, hit);
 
-	poisonDamage = inflictor->getInflictorDamage() * poisonDamageCoefficient;
-
 	target->applySwarmStatus(this);
 
 	target->setUnderStatusIntVariable("StatusCount", 1);
-}
-
-void USwarmStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
-{
-	Super::applyEffect(target, hit);
-
-	target->takeStatusDamage(poisonDamage);
-}
-
-void USwarmStatus::postRemove()
-{
-	target->setUnderStatusIntVariable(this->getStatusCountKey(), 0);
-}
-
-void USwarmStatus::setStacks(float damage)
-{
-	if (damage * limitDamageToStacksCoefficient <= stacks)
-	{
-		return;
-	}
-
-	stacks += damage * damageToStacksCoefficient;
-
-	target->setUnderStatusIntVariable(this->getStatusCountKey(), FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
-}
-
-float USwarmStatus::getStacks() const
-{
-	return stacks;
 }

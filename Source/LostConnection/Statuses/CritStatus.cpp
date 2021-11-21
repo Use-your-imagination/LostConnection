@@ -1,13 +1,18 @@
 #include "CritStatus.h"
 
-#include "Algo/Count.h"
+#include "Algo/Accumulate.h"
 
 #include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
-#include "Characters/BaseCharacter.h"
+#include "Utility/Utility.h"
 
 FString UCritStatus::getStatusName() const
 {
 	return "Crit";
+}
+
+SIZE_T UCritStatus::getActiveStatusesCount() const
+{
+	return Utility::countStatuses(target, StaticClass());
 }
 
 void UCritStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -16,32 +21,38 @@ void UCritStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(UCritStatus, damageMultiplier);
 
-	DOREPLIFETIME(UCritStatus, multiplierPerStatus);
+	DOREPLIFETIME(UCritStatus, damageMultiplierPerTotalLifePercentPool);
 }
 
-void UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+float UCritStatus::getMultiplier() const
 {
-	float resultMultiplier = damageMultiplier;
-	const TArray<UBaseStatus*>& statuses = target->getStatuses();
+	return multiplier;
+}
 
-	for (const auto& status : statuses)
+bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+{
+	if (!Super::applyEffect(target, hit))
 	{
-		if (Cast<UCritStatus>(status))
-		{
-			resultMultiplier += multiplierPerStatus;
-		}
+		return false;
 	}
 
-	target->takeStatusDamage(inflictor->getInflictorDamage() * resultMultiplier);
-}
-
-void UCritStatus::postRemove()
-{
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
-	target->setUnderStatusIntVariable
-	(
-		this->getStatusCountKey(),
-		Algo::CountIf(statuses, [](const UBaseStatus* status) { return static_cast<bool>(Cast<UCritStatus>(status)); })
-	);
+	float resultMultiplier = Algo::Accumulate(statuses, damageMultiplier, [](float currentValue, const UBaseStatus* status)
+		{
+			const UCritStatus* crit = Cast<UCritStatus>(status);
+
+			if (crit)
+			{
+				return currentValue + crit->getMultiplier();
+			}
+
+			return currentValue;
+		});
+
+	target->takeStatusDamage(inflictorDamage * resultMultiplier);
+
+	multiplier = target->getTotalLifePercentDealt(inflictorDamage) * damageMultiplierPerTotalLifePercentPool;
+
+	return true;
 }

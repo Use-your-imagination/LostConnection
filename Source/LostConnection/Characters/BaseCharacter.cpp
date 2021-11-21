@@ -423,6 +423,12 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 
 		if (newPercentHealth <= swarm->getThreshold())
 		{
+			FHitResult hit;
+
+			hit.Location = GetActorLocation();
+
+			swarm->applyEffect(this, hit);
+
 			currentHealth = 0.0f;
 
 			return;
@@ -595,6 +601,19 @@ const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
 	return statuses;
 }
 
+float ABaseCharacter::getTotalLifePercentDealt(float damage) const
+{
+	// TODO: add shields
+	float pool = health;
+
+	return (1.0f - (pool - damage) / pool) * 100.0f;
+}
+
+float ABaseCharacter::getHealthPercentDealt(float damage) const
+{
+	return (1.0f - (health - damage) / health) * 100.0f;
+}
+
 void ABaseCharacter::inflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
 {
 	static TArray<UBaseStatus*> statusesToRemove;
@@ -605,9 +624,7 @@ void ABaseCharacter::inflictorImpactAction(const TScriptInterface<IStatusInflict
 
 		if (trigger)
 		{
-			trigger->applyEffect(this, hit);
-
-			if (trigger->getIsOnceTriggered())
+			if (trigger->applyEffect(this, hit) && trigger->getIsOnceTriggered())
 			{
 				statusesToRemove.Add(trigger);
 			}

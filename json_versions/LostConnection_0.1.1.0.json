@@ -1,4 +1,13 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.1.1.0"
+  "projectVersion": "0.1.1.0",
+  "Gameplay": {
+    "type": "category",
+    "Statuses": {
+      "type": "item",
+      "notes": [
+        "Added crit and swarm statuses."
+      ]
+    }
+  }
 }

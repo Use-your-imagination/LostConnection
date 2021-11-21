@@ -14,12 +14,17 @@ class LOSTCONNECTION_API UCritStatus : public UBaseImpactStatus
 private:
 	virtual FString getStatusName() const final override;
 
+	virtual SIZE_T getActiveStatusesCount() const final override;
+
 private:
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float damageMultiplier;
 
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float multiplierPerStatus;
+	float damageMultiplierPerTotalLifePercentPool;
+
+	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float multiplier;
 
 private:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -27,9 +32,9 @@ private:
 public:
 	UCritStatus() = default;
 
-	void applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
+	virtual float getMultiplier() const final;
 
-	void postRemove() final override;
+	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
 
 	virtual ~UCritStatus() = default;
 };

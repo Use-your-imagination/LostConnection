@@ -39,6 +39,10 @@ public:
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const = 0;
 
+	virtual float getTotalLifePercentDealt(float damage) const = 0;
+
+	virtual float getHealthPercentDealt(float damage) const = 0;
+
 	virtual USkeletalMeshComponent* getMeshComponent() = 0;
 
 	virtual UCapsuleComponent* getCapsuleComponent() = 0;

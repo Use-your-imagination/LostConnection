@@ -25,9 +25,7 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:
-	UBaseTickStatus() = default;
-
-	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+	UBaseTickStatus();
 
 	virtual bool Tick(float DeltaTime) override;
 

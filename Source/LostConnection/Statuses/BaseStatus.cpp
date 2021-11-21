@@ -33,9 +33,10 @@ FString UBaseStatus::getStatusName() const
 
 void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	this->inflictor = static_cast<IStatusInflictor*>(inflictor.GetInterface());
-
 	this->target = static_cast<IStatusReceiver*>(target.GetInterface());
+
+	inflictorDamage = inflictor->getInflictorDamage();
+	inflictorDamageType = inflictor->getDamageType();
 
 	target->addStatus(this);
 
@@ -44,14 +45,16 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 	target->setUnderStatusIntVariable(this->getStatusCountKey(), 1);
 }
 
-void UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
 	target->spawnApplyEffect(onApplyEffect, hit);
+
+	return true;
 }
 
 void UBaseStatus::postRemove()
 {
-	PURE_VIRTUAL(UBaseStatus::postRemove);
+	target->setUnderStatusIntVariable(this->getStatusCountKey(), 0);
 }
 
 bool UBaseStatus::Tick(float DeltaTime)
@@ -64,6 +67,11 @@ bool UBaseStatus::Tick(float DeltaTime)
 	}
 
 	return true;
+}
+
+void UBaseStatus::refreshDuration()
+{
+	currentDuration = 0.0f;
 }
 
 UNiagaraSystem* UBaseStatus::getOnApplyStatus()

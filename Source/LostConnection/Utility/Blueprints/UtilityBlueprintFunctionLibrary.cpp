@@ -1,6 +1,6 @@
 #include "UtilityBlueprintFunctionLibrary.h"
 
-#include <algorithm>
+#include "Algo/AnyOf.h"
 
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/Pawn.h"
@@ -101,5 +101,5 @@ bool UUtilityBlueprintFunctionLibrary::isAnyAnimationActive(const TScriptInterfa
 	UAnimInstance* animInstance = Cast<ABaseCharacter>(caster.GetObject())->GetMesh()->GetAnimInstance();
 	const TArray<UAnimMontage*>& animations = caster->getAbilitiesAnimations();
 	
-	return std::any_of(animations.begin(), animations.end(), [&animInstance](const UAnimMontage* montage) { return animInstance->Montage_IsPlaying(montage); });
+	return Algo::AnyOf(animations, [&animInstance](const UAnimMontage* montage) { return animInstance->Montage_IsPlaying(montage); });
 }

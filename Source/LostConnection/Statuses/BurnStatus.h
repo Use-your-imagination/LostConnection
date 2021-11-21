@@ -16,7 +16,22 @@ private:
 
 private:
 	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float damage;
+	float damageToDamagePerStackCoefficient;
+	
+	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float damageToReduceStacksCoefficient;
+
+	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float damageToInitalStacksCoefficient;
+
+	UPROPERTY(Category = Burn, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float damagePerStack;
+
+	UPROPERTY(Category = Burn, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float stacks;
+
+	UPROPERTY(Category = Burn, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float stacksPerTick;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -24,7 +39,9 @@ protected:
 public:
 	UBurnStatus() = default;
 
-	virtual void applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
+	virtual void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) final override;
+
+	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
 
 	virtual ~UBurnStatus() = default;
 };
