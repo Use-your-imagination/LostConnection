@@ -551,8 +551,6 @@ ABaseDrone::ABaseDrone() :
 	AOE(100.0f),
 	castPoint(100.0f)
 {
-	health = 1000.0f;
-	currentHealth = 1000.0f;
 	isAlly = true;
 
 	spareAmmo[static_cast<size_t>(ammoTypes::small)] = 720;

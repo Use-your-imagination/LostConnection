@@ -20,7 +20,7 @@ private:
 
 private:
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float damageMultiplier;
+	float damageMultiplierPercent;
 
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float damageMultiplierPerTotalLifePercentPool;
