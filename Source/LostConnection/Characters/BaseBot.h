@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Use-your-imagination
+
 #pragma once
 
 #include "CoreMinimal.h"

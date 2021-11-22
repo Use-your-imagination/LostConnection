@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Use-your-imagination
+
 #include "LostConnectionPlayerState.h"
 
 void ALostConnectionPlayerState::runMulticastReliable_Implementation(AActor* caller, const FName& methodName)

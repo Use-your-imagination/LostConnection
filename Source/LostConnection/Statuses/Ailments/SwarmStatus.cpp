@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Use-your-imagination
+
 #include "SwarmStatus.h"
 
 #include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"

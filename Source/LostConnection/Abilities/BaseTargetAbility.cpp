@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Use-your-imagination
+
 #include "BaseTargetAbility.h"
 
 #include "Characters/BaseCharacter.h"

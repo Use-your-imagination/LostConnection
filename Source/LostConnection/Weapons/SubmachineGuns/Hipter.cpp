@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Use-your-imagination
+
 #include "Hipter.h"
 
 #include "Ammo/Bullets/Bullet.h"

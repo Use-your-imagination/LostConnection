@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Use-your-imagination
+
 #include "SN4K3ThirdAbility.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"

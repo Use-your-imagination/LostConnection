@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Use-your-imagination
+
 #include "TimersUtility.h"
 
 #pragma warning(disable: 4458)
