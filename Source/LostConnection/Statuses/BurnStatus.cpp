@@ -12,48 +12,18 @@ void UBurnStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UBurnStatus, damageToDamagePerStackCoefficient);
+	DOREPLIFETIME(UBurnStatus, burnDamageCoefficient);
 
-	DOREPLIFETIME(UBurnStatus, damageToReduceStacksCoefficient);
+	DOREPLIFETIME(UBurnStatus, additionalFireCrushingHitChance);
 
-	DOREPLIFETIME(UBurnStatus, damageToInitalStacksCoefficient);
-
-	DOREPLIFETIME(UBurnStatus, damagePerStack);
-
-	DOREPLIFETIME(UBurnStatus, stacks);
-
-	DOREPLIFETIME(UBurnStatus, stacksPerTick);
+	DOREPLIFETIME(UBurnStatus, damage);
 }
 
 void UBurnStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	float damage = inflictor->getInflictorDamage();
+	Super::applyStatus_Implementation(inflictor, target, hit);
 
-	if (Utility::isTargetAlreadyUnderStatus<UBurnStatus>(target))
-	{
-		// TODO: calculate damage of remaining damage
-
-		// TODO: deal damage
-
-		// TODO: remove status if remaining damage <= 0
-		{
-			const_cast<TArray<UBaseStatus*>&>(target->getStatuses()).Remove(this);
-		}
-		// else
-		{
-			// TODO: deal damage, decrease remaining damage
-		}
-	}
-	else
-	{
-		Super::applyStatus_Implementation(inflictor, target, hit);
-
-		damagePerStack = damage * damageToDamagePerStackCoefficient;
-
-		stacks = damage * damageToInitalStacksCoefficient;
-
-		stacksPerTick = stacks / duration;
-	}
+	damage = (inflictorDamage * burnDamageCoefficient) / (duration / tickPeriod);
 }
 
 bool UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
@@ -63,14 +33,7 @@ bool UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 		return false;
 	}
 
-	target->takeStatusDamage(damagePerStack * stacksPerTick);
-
-	stacks -= stacksPerTick;
-
-	if (stacks <= 0)
-	{
-		return false;
-	}
+	target->takeStatusDamage(damage);
 
 	return true;
 }
