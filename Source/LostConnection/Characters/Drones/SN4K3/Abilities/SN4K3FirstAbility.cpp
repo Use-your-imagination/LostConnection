@@ -50,21 +50,16 @@ void USN4K3FirstAbility::useAbility()
 	UCapsuleComponent* capsule = drone->GetCapsuleComponent();
 	UCameraComponent* camera = drone->GetFollowCamera();
 	bool isFalling = drone->GetMovementComponent()->IsFalling();
+	FVector offset = camera->GetComponentRotation().Vector();
 
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
-	if ((camera->GetComponentRotation().Pitch > 15.0f && !isFalling) || isFalling)
+	if (!((camera->GetComponentRotation().Pitch > 15.0f && !isFalling) || isFalling))
 	{
-		drone->AddActorWorldOffset(camera->GetComponentRotation().Vector() * distance, true);
+		offset.Z = 0.0f;
 	}
-	else
-	{
-		FVector tem = camera->GetComponentRotation().Vector();
 
-		tem.Z = 0.0f;
-
-		drone->AddActorWorldOffset(tem * distance, true);
-	}
+	drone->AddActorWorldOffset(offset * distance, true);
 
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 
