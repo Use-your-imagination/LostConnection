@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-#include "BaseTriggerStatus.h"
+#include "Statuses/BaseTriggerStatus.h"
 
 #include "ArcingCurrentStatus.generated.h"
 

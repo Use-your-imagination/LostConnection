@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-#include "BaseStatus.h"
+#include "Statuses/BaseStatus.h"
 
 #include "SwarmStatus.generated.h"
 

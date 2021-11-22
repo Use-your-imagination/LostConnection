@@ -2,7 +2,7 @@
 
 #include "Characters/BaseDrone.h"
 #include "Engine/LostConnectionGameState.h"
-#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
 #include "Utility.h"
 
 void InitializationUtility::initAbilityId(const FString& abilityClassName, abilitySlot& id)

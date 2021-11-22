@@ -2,7 +2,7 @@
 
 #include "NiagaraFunctionLibrary.h"
 
-#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
 #include "Characters/BaseCharacter.h"
 #include "Utility/Utility.h"
 #include "Engine/LostConnectionGameState.h"

@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 
 #include "Abilities/BaseAbility.h"
-#include "Interfaces/Gameplay/Descriptions/StatusInflictor.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/StatusInflictor.h"
 
 #include "SN4K3FirstAbility.generated.h"
 

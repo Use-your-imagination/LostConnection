@@ -1,29 +1,27 @@
+// Copyright (c) 2021 Use-your-imagination
+
 #pragma once
 
 #include "CoreMinimal.h"
 
 #include "UObject/Interface.h"
 
-#include "StatusInflictor.generated.h"
-
-enum class typeOfDamage : uint8;
+#include "DamageInflictor.generated.h"
 
 UINTERFACE(MinimalAPI)
-class UStatusInflictor : public UInterface
+class UDamageInflictor : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IStatusInflictor
+class LOSTCONNECTION_API IDamageInflictor
 {
 	GENERATED_BODY()
 
 public:
-	IStatusInflictor() = default;
+	IDamageInflictor() = default;
 
 	virtual float getInflictorDamage() const = 0;
-
-	virtual typeOfDamage getDamageType() const = 0;
 
 	virtual bool getCrushingHitProc() const = 0;
 };

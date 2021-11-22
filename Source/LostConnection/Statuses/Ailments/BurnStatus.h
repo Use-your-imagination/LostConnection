@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-#include "BaseTickStatus.h"
+#include "Statuses/BaseTickStatus.h"
 
 #include "BurnStatus.generated.h"
 

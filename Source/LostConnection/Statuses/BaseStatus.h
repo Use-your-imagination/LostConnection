@@ -6,7 +6,7 @@
 #include "Net/UnrealNetwork.h"
 #include "NiagaraSystem.h"
 
-#include "Interfaces/Gameplay/Descriptions/StatusInflictor.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/StatusInflictor.h"
 
 #include "BaseStatus.generated.h"
 

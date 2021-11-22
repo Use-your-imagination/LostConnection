@@ -2,21 +2,20 @@
 
 #include "CoreMinimal.h"
 
-#include "UObject/Interface.h"
-#include "Components/CapsuleComponent.h"
 #include "NiagaraComponent.h"
 
+#include "Interfaces/Gameplay/Descriptions/Base/DamageReceiver.h"
 #include "Statuses/BaseStatus.h"
 
 #include "StatusReceiver.generated.h"
 
 UINTERFACE(MinimalAPI)
-class UStatusReceiver : public UInterface
+class UStatusReceiver : public UDamageReceiver
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IStatusReceiver
+class LOSTCONNECTION_API IStatusReceiver : public IDamageReceiver
 {
 	GENERATED_BODY()
 
@@ -27,8 +26,6 @@ public:
 
 	virtual void spawnApplyEffect(UNiagaraSystem* applyEffectVFX, const FHitResult& hit) = 0;
 
-	virtual void takeStatusDamage(float damage) = 0;
-
 	virtual void addStatus(UBaseStatus* status) = 0;
 
 	virtual void applySwarmStatus(class USwarmStatus* swarm) = 0;
@@ -38,12 +35,4 @@ public:
 	virtual void setUnderStatusIntVariable(const FString& key, int32 value) = 0;
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const = 0;
-
-	virtual float getTotalLifePercentDealt(float damage) const = 0;
-
-	virtual float getHealthPercentDealt(float damage) const = 0;
-
-	virtual USkeletalMeshComponent* getMeshComponent() = 0;
-
-	virtual UCapsuleComponent* getCapsuleComponent() = 0;
 };

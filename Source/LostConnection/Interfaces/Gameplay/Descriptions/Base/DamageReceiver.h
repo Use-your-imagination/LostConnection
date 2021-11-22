@@ -1,0 +1,34 @@
+// Copyright (c) 2021 Use-your-imagination
+
+#pragma once
+
+#include "CoreMinimal.h"
+
+#include "UObject/Interface.h"
+#include "Components/CapsuleComponent.h"
+
+#include "DamageReceiver.generated.h"
+
+UINTERFACE(MinimalAPI)
+class UDamageReceiver : public UInterface
+{
+	GENERATED_BODY()
+};
+
+class LOSTCONNECTION_API IDamageReceiver
+{
+	GENERATED_BODY()
+
+public:
+	IDamageReceiver() = default;
+
+	virtual void takeDamage(float damage) = 0;
+
+	virtual float getTotalLifePercentDealt(float damage) const = 0;
+
+	virtual float getHealthPercentDealt(float damage) const = 0;
+
+	virtual USkeletalMeshComponent* getMeshComponent() = 0;
+
+	virtual UCapsuleComponent* getCapsuleComponent() = 0;
+};

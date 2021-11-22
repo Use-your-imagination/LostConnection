@@ -2,7 +2,7 @@
 
 #include "Algo/Accumulate.h"
 
-#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
 #include "Utility/Utility.h"
 
 FString UCritStatus::getStatusName() const
@@ -50,7 +50,7 @@ bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 			return currentValue;
 		});
 
-	target->takeStatusDamage(inflictorDamage * resultMultiplier);
+	target->takeDamage(inflictorDamage * resultMultiplier);
 
 	multiplier = target->getTotalLifePercentDealt(inflictorDamage) * damageMultiplierPerTotalLifePercentPool;
 

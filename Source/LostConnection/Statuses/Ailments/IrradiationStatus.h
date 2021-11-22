@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-#include "BaseImpactStatus.h"
+#include "Statuses/BaseImpactStatus.h"
 
 #include "IrradiationStatus.generated.h"
 

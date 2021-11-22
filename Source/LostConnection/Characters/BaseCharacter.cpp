@@ -10,7 +10,7 @@
 #include "UObject/ConstructorHelpers.h"
 
 #include "Statuses/BaseTriggerStatus.h"
-#include "Statuses/SwarmStatus.h"
+#include "Statuses/Ailments/SwarmStatus.h"
 #include "Utility/InitializationUtility.h"
 #include "BaseBot.h"
 
@@ -394,11 +394,11 @@ void ABaseCharacter::restoreHealth(float amount)
 	}
 }
 
-void ABaseCharacter::takeDamage(float amount)
+void ABaseCharacter::takeDamage(float damage)
 {
 	float tem = this->getCurrentHealth();
 
-	tem -= amount;
+	tem -= damage;
 
 	if (tem < 0.0f)
 	{
@@ -574,11 +574,6 @@ void ABaseCharacter::spawnApplyEffect_Implementation(UNiagaraSystem* applyEffect
 		true,
 		ENCPoolMethod::AutoRelease
 	);
-}
-
-void ABaseCharacter::takeStatusDamage_Implementation(float damage)
-{
-	this->takeDamage(damage);
 }
 
 void ABaseCharacter::addStatus(UBaseStatus* status)

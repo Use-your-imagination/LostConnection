@@ -2,7 +2,7 @@
 
 #include "Algo/Count.h"
 
-#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
 
 ALostConnectionGameState* Utility::getGameState(APawn* pawn)
 {

@@ -1,6 +1,6 @@
 #include "BurnStatus.h"
 
-#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
 #include "Utility/Utility.h"
 
 FString UBurnStatus::getStatusName() const
@@ -33,7 +33,7 @@ bool UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 		return false;
 	}
 
-	target->takeStatusDamage(damage);
+	target->takeDamage(damage);
 
 	return true;
 }

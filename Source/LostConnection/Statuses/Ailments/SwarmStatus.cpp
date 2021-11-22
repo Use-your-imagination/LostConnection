@@ -1,6 +1,6 @@
 #include "SwarmStatus.h"
 
-#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
 
 #pragma warning(disable: 4458)
 

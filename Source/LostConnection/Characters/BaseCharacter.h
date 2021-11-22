@@ -17,7 +17,7 @@
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
 #include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
 #include "Interfaces/Gameplay/AnimatedActions/Death.h"
-#include "Interfaces/Gameplay/Descriptions/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -200,7 +200,7 @@ public:
 	virtual void restoreHealth(float amount) final;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void takeDamage(float amount) final;
+	virtual void takeDamage(float damage) override final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setHealth(float newHealth) final;
@@ -260,9 +260,6 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void spawnApplyEffect(UNiagaraSystem* applyEffectVFX, const FHitResult& hit) final override;
-
-	UFUNCTION(Server, Reliable)
-	virtual void takeStatusDamage(float damage) final override;
 
 	virtual void addStatus(class UBaseStatus* status) final override;
 
