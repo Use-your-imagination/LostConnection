@@ -57,7 +57,7 @@ float UCritStatus::getInflictorDamage() const
 
 			if (crit)
 			{
-				return currentValue + crit->getMultiplier();
+				return currentValue + crit->getCritMultiplier();
 			}
 
 			return currentValue;
