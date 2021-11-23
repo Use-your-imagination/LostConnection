@@ -24,6 +24,8 @@ void UCritStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UCritStatus, damageMultiplierPercent);
 
 	DOREPLIFETIME(UCritStatus, damageMultiplierPerTotalLifePercentPool);
+
+	DOREPLIFETIME(UCritStatus, multiplier);
 }
 
 float UCritStatus::getMultiplier() const
