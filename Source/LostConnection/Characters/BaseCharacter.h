@@ -202,7 +202,7 @@ public:
 	virtual void restoreHealth(float amount) final;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void takeDamage(float damage) override final;
+	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) override final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setHealth(float newHealth) final;

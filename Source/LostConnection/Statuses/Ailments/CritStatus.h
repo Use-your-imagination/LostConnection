@@ -5,11 +5,14 @@
 #include "CoreMinimal.h"
 
 #include "Statuses/BaseImpactStatus.h"
+#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 
 #include "CritStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UCritStatus : public UBaseImpactStatus
+class LOSTCONNECTION_API UCritStatus : 
+	public UBaseImpactStatus,
+	public IDamageInflictor
 {
 	GENERATED_BODY()
 
@@ -37,6 +40,8 @@ public:
 	virtual float getMultiplier() const final;
 
 	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
+
+	virtual float getInflictorDamage() const final override;
 
 	virtual ~UCritStatus() = default;
 };

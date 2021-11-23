@@ -35,7 +35,12 @@ bool UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 		return false;
 	}
 
-	target->takeDamage(damage);
+	target->takeDamage(this);
 
 	return true;
+}
+
+float UBurnStatus::getInflictorDamage() const
+{
+	return damage;
 }

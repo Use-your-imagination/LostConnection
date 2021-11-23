@@ -5,11 +5,14 @@
 #include "CoreMinimal.h"
 
 #include "Statuses/BaseTickStatus.h"
+#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 
 #include "BurnStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UBurnStatus : public UBaseTickStatus
+class LOSTCONNECTION_API UBurnStatus :
+	public UBaseTickStatus,
+	public IDamageInflictor
 {
 	GENERATED_BODY()
 	
@@ -35,6 +38,8 @@ public:
 	virtual void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) final override;
 
 	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
+
+	virtual float getInflictorDamage() const final override;
 
 	virtual ~UBurnStatus() = default;
 };

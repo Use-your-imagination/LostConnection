@@ -22,7 +22,7 @@ class LOSTCONNECTION_API IDamageReceiver
 public:
 	IDamageReceiver() = default;
 
-	virtual void takeDamage(float damage) = 0;
+	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) = 0;
 
 	virtual float getTotalLifePercentDealt(float damage) const = 0;
 

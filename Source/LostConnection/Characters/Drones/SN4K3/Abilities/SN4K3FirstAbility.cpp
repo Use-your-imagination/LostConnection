@@ -37,7 +37,7 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 	hit.Component = target->getMeshComponent();
 	hit.Location = target->GetActorLocation();
 
-	target->takeDamage(damage);
+	target->takeDamage(this);
 
 	target->inflictorImpactAction(this, hit);
 

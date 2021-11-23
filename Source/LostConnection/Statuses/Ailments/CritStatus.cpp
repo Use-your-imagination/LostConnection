@@ -38,6 +38,15 @@ bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 		return false;
 	}
 
+	target->takeDamage(this);
+
+	multiplier = target->getTotalLifePercentDealt(inflictorDamage) * damageMultiplierPerTotalLifePercentPool;
+
+	return true;
+}
+
+float UCritStatus::getInflictorDamage() const
+{
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
 	float resultMultiplier = Algo::Accumulate(statuses, damageMultiplierPercent, [](float currentValue, const UBaseStatus* status)
@@ -52,9 +61,5 @@ bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 			return currentValue;
 		});
 
-	target->takeDamage(inflictorDamage * (resultMultiplier / 100.0f));
-
-	multiplier = target->getTotalLifePercentDealt(inflictorDamage) * damageMultiplierPerTotalLifePercentPool;
-
-	return true;
+	return inflictorDamage * (resultMultiplier / 100.0f);
 }

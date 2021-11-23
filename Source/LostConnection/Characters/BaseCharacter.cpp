@@ -15,6 +15,7 @@
 #include "Statuses/Ailments/SwarmStatus.h"
 #include "Utility/InitializationUtility.h"
 #include "BaseBot.h"
+#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 
 #include "Utility/MultiplayerUtility.h"
 
@@ -396,11 +397,11 @@ void ABaseCharacter::restoreHealth(float amount)
 	}
 }
 
-void ABaseCharacter::takeDamage(float damage)
+void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
 {
 	float tem = this->getCurrentHealth();
 
-	tem -= damage;
+	tem -= inflictor->getInflictorDamage();
 
 	if (tem < 0.0f)
 	{
@@ -540,7 +541,7 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 {
 	if (isAlly != ammo->getIsAlly())
 	{
-		this->takeDamage(ammo->getDamage());
+		this->takeDamage(ammo);
 
 		this->inflictorImpactAction(ammo, hit);
 	}
