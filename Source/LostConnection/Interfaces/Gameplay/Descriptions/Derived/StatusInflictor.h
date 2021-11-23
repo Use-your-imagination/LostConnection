@@ -24,4 +24,6 @@ public:
 	IStatusInflictor() = default;
 
 	virtual typeOfDamage getDamageType() const = 0;
+
+	virtual bool getCrushingHitProc() const = 0;
 };

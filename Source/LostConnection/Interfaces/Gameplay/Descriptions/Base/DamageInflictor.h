@@ -22,6 +22,4 @@ public:
 	IDamageInflictor() = default;
 
 	virtual float getInflictorDamage() const = 0;
-
-	virtual bool getCrushingHitProc() const = 0;
 };
