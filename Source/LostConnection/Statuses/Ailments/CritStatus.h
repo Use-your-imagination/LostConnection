@@ -29,7 +29,7 @@ private:
 	float damageMultiplierPerTotalLifePercentPool;
 
 	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float multiplier;
+	float critMultiplier;
 
 private:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -37,7 +37,7 @@ private:
 public:
 	UCritStatus() = default;
 
-	virtual float getMultiplier() const final;
+	virtual float getCritMultiplier() const final;
 
 	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
 

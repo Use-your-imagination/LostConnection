@@ -25,12 +25,12 @@ void UCritStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(UCritStatus, damageMultiplierPerTotalLifePercentPool);
 
-	DOREPLIFETIME(UCritStatus, multiplier);
+	DOREPLIFETIME(UCritStatus, critMultiplier);
 }
 
-float UCritStatus::getMultiplier() const
+float UCritStatus::getCritMultiplier() const
 {
-	return multiplier;
+	return critMultiplier;
 }
 
 bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
@@ -42,7 +42,7 @@ bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 
 	target->takeDamage(this);
 
-	multiplier = target->getTotalLifePercentDealt(inflictorDamage) * damageMultiplierPerTotalLifePercentPool;
+	critMultiplier = target->getTotalLifePercentDealt(inflictorDamage) * damageMultiplierPerTotalLifePercentPool;
 
 	return true;
 }
