@@ -20,7 +20,7 @@ void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(USN4K3FirstAbility, distance);
 }
 
-USN4K3FirstAbility::USN4K3FirstAbility() : 
+USN4K3FirstAbility::USN4K3FirstAbility() :
 	damage(375.0f),
 	distance(1200.0f)
 {
@@ -39,7 +39,7 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 
 	target->takeDamage(this);
 
-	target->inflictorImpactAction(this, hit);
+	target->statusInflictorImpactAction(this, hit);
 
 	ICaster::Execute_applyFirstAbilityEvent(Cast<UObject>(caster), target);
 }
@@ -76,7 +76,12 @@ typeOfDamage USN4K3FirstAbility::getDamageType() const
 	return typeOfDamage::nanite;
 }
 
-bool USN4K3FirstAbility::getCrushingHitProc() const
+float USN4K3FirstAbility::getCrushingHitChance() const
 {
-	return Utility::checkChanceProc(Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter());
+	return Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter();
+}
+
+float USN4K3FirstAbility::getAdditionalCrushingHitChance() const
+{
+	return 0.0f;
 }

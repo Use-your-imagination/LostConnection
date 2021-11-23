@@ -32,7 +32,7 @@ public:
 
 	virtual void applySwarmStatus(class USwarmStatus* swarm) = 0;
 
-	virtual void inflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) = 0;
+	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) = 0;
 
 	virtual void setUnderStatusIntVariable(const FString& key, int32 value) = 0;
 

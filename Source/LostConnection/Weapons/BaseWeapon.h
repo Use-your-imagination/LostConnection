@@ -88,6 +88,9 @@ protected:
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	float crushingHitChance;
 
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float additionalCrushingHitChance;
+
 	UClass* ammoClass;
 
 public:
@@ -146,6 +149,8 @@ public:
 	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
 
 	virtual float getCrushingHitChance() const final;
+
+	virtual float getAdditionalCrushingHitChance() const final;
 
 	virtual ~UBaseWeapon() = default;
 };

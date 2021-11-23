@@ -37,7 +37,9 @@ public:
 
 	typeOfDamage getDamageType() const override;
 
-	bool getCrushingHitProc() const override;
+	float getCrushingHitChance() const override;
+
+	float getAdditionalCrushingHitChance() const override;
 
 	~USN4K3FirstAbility() = default;
 };

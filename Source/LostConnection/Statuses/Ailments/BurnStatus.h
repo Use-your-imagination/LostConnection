@@ -35,6 +35,8 @@ protected:
 public:
 	UBurnStatus() = default;
 
+	virtual float getAdditionalFireCrushingHitChance() const final;
+
 	virtual void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) final override;
 
 	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;

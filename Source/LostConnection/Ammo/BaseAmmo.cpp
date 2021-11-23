@@ -165,6 +165,8 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 	ownerCharacter = weapon->getOwnerCharacter();
 
 	crushingHitChance = weapon->getCrushingHitChance();
+
+	additionalCrushingHitChance = weapon->getAdditionalCrushingHitChance();
 }
 
 UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
@@ -187,6 +189,16 @@ const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwnerCharacter() const
 	return ownerCharacter;
 }
 
+void ABaseAmmo::setCrushingHitChance_Implementation(float newCrushingHitChance)
+{
+	crushingHitChance = newCrushingHitChance;
+}
+
+void ABaseAmmo::setAdditionalCrushingHitChance_Implementation(float newAdditionalCrushingHitChance)
+{
+	additionalCrushingHitChance = newAdditionalCrushingHitChance;
+}
+
 float ABaseAmmo::getInflictorDamage() const
 {
 	return damage;
@@ -197,7 +209,12 @@ typeOfDamage ABaseAmmo::getDamageType() const
 	return damageType;
 }
 
-bool ABaseAmmo::getCrushingHitProc() const
+float ABaseAmmo::getCrushingHitChance() const
 {
-	return Utility::checkChanceProc(crushingHitChance);
+	return crushingHitChance;
+}
+
+float ABaseAmmo::getAdditionalCrushingHitChance() const
+{
+	return additionalCrushingHitChance;
 }

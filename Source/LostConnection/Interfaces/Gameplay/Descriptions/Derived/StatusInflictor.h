@@ -23,7 +23,15 @@ class LOSTCONNECTION_API IStatusInflictor : public IDamageInflictor
 public:
 	IStatusInflictor() = default;
 
+	virtual void setCrushingHitChance(float crushingHitChance);
+
+	virtual void setAdditionalCrushingHitChance(float additionalCrushingHitChance);
+
 	virtual typeOfDamage getDamageType() const = 0;
 
-	virtual bool getCrushingHitProc() const = 0;
+	virtual float getCrushingHitChance() const = 0;
+
+	virtual float getAdditionalCrushingHitChance() const = 0;
+
+	virtual bool getCrushingHitProc() const;
 };

@@ -400,8 +400,8 @@ void ABaseCharacter::restoreHealth(float amount)
 void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
 {
 	float tem = this->getCurrentHealth();
-
-	tem -= inflictor->getInflictorDamage();
+	
+	tem -= inflictor->getInflictorDamage() + inflictor->getAdditionalDamage();
 
 	if (tem < 0.0f)
 	{
@@ -543,7 +543,7 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 	{
 		this->takeDamage(ammo);
 
-		this->inflictorImpactAction(ammo, hit);
+		this->statusInflictorImpactAction(ammo, hit);
 	}
 }
 
@@ -612,7 +612,7 @@ float ABaseCharacter::getHealthPercentDealt(float damage) const
 	return (1.0f - (health - damage) / health) * 100.0f;
 }
 
-void ABaseCharacter::inflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
+void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
 {
 	static TArray<UBaseStatus*> statusesToRemove;
 

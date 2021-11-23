@@ -21,6 +21,11 @@ void UBurnStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBurnStatus, damage);
 }
 
+float UBurnStatus::getAdditionalFireCrushingHitChance() const
+{
+	return additionalFireCrushingHitChance;
+}
+
 void UBurnStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	Super::applyStatus_Implementation(inflictor, target, hit);

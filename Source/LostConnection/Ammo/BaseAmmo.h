@@ -52,6 +52,7 @@ protected:
 	typeOfDamage damageType;
 	bool isAlly;
 	float crushingHitChance;
+	float additionalCrushingHitChance;
 
 public:
 	ABaseAmmo();
@@ -68,11 +69,19 @@ public:
 
 	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
 
+	UFUNCTION(Server, Reliable)
+	virtual void setCrushingHitChance(float newCrushingHitChance) final override;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setAdditionalCrushingHitChance(float newAdditionalCrushingHitChance) final override;
+
 	virtual float getInflictorDamage() const final override;
 
 	virtual typeOfDamage getDamageType() const final override;
 
-	virtual bool getCrushingHitProc() const override;
+	virtual float getCrushingHitChance() const final override;
+
+	virtual float getAdditionalCrushingHitChance() const final override;
 
 	virtual ~ABaseAmmo() = default;
 };
