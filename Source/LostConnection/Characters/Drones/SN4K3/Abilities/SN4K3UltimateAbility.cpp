@@ -22,12 +22,8 @@ void USN4K3UltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(USN4K3UltimateAbility, currentAbilityDuration);
 }
 
-USN4K3UltimateAbility::USN4K3UltimateAbility() :
-	abilityDuration(15.0f),
-	currentAbilityDuration(0.0f)
+USN4K3UltimateAbility::USN4K3UltimateAbility()
 {
-	cooldown = 60.0f;
-
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
 

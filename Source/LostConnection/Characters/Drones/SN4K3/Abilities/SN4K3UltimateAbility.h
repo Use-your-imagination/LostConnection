@@ -14,17 +14,17 @@ class LOSTCONNECTION_API USN4K3UltimateAbility : public UBaseUltimateAbility
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = "SN4K3|Ultimate ability", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	bool isUltimateAbilityUsed;
-
-	UPROPERTY(Category = "SN4K3|Ultimate ability", EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float abilityDuration;
 
-	UPROPERTY(Category = "SN4K3|Ultimate ability", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float currentAbilityDuration;
-
-	UPROPERTY(Category = "SN4K3|Ultimate ability", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* returnAnimation;
+
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	bool isUltimateAbilityUsed;
+
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float currentAbilityDuration;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

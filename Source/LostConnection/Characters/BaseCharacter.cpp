@@ -10,6 +10,7 @@
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "NiagaraFunctionLibrary.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Algo/ForEach.h"
 
 #include "Statuses/BaseTriggerStatus.h"
 #include "Statuses/Ailments/SwarmStatus.h"
@@ -44,13 +45,20 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!isDead && currentHealth <= 0.0f)
+	if (!isDead && currentHealth == 0.0f)
 	{
 		if (HasAuthority())
 		{
 			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
 
 			isDead = true;
+
+			Algo::ForEachIf
+			(
+				deathEvents,
+				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
+				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
+			);
 		}
 	}
 
@@ -527,6 +535,11 @@ int ABaseCharacter::getWeaponCount() const
 	return result;
 }
 
+const TWeakObjectPtr<USwarmStatus>& ABaseCharacter::getSwarm() const
+{
+	return swarm;
+}
+
 float ABaseCharacter::getFlatDamageReduction_Implementation() const
 {
 	return 200.0f;
@@ -655,4 +668,19 @@ USkeletalMeshComponent* ABaseCharacter::getMeshComponent()
 UCapsuleComponent* ABaseCharacter::getCapsuleComponent()
 {
 	return GetCapsuleComponent();
+}
+
+void ABaseCharacter::attachDeathEvent(IOnDeathEvent* event)
+{
+	deathEvents.Add(event);
+}
+
+void ABaseCharacter::detachDeathEvent(IOnDeathEvent* event)
+{
+	deathEvents.Remove(event);
+}
+
+const TArray<TWeakInterfacePtr<IOnDeathEvent>>& ABaseCharacter::getDeathEvents() const
+{
+	return deathEvents;
 }

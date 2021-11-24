@@ -20,6 +20,7 @@
 #include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
 #include "Interfaces/Gameplay/AnimatedActions/Death.h"
 #include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -31,7 +32,8 @@ class LOSTCONNECTION_API ABaseCharacter :
 	public IShoot,
 	public IMovementActions,
 	public IDeath,
-	public IStatusReceiver
+	public IStatusReceiver,
+	public IDeathEventsHolder
 {
 	GENERATED_BODY()
 
@@ -68,16 +70,16 @@ protected:
 	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float sprintMovementSpeed;
 
-	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Properties, Replicated, BlueprintReadOnly)
 	bool isAlly;
 
-	UPROPERTY(Category = Properties, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Properties, Replicated, BlueprintReadOnly)
 	bool isDead;
 
-	UPROPERTY(Category = AmmoSettings, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = AmmoSettings, Replicated, BlueprintReadOnly)
 	TArray<int32> spareAmmo;
 
-	UPROPERTY(Category = "Physical Constraints", EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Category = PhysicalConstraints, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FName> physicsBones;
 
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
@@ -85,32 +87,34 @@ protected:
 
 	TWeakObjectPtr<class USwarmStatus> swarm;
 
+	TArray<TWeakInterfacePtr<IOnDeathEvent>> deathEvents;
+
 #pragma region BlueprintFunctionLibrary
-	UPROPERTY(Category = Reloading, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Reloading, BlueprintReadWrite)
 	bool isReloading;
 
-	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Inputs, BlueprintReadWrite)
 	bool jumpHold;
 
-	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Inputs, BlueprintReadWrite)
 	bool sprintHold;
 
-	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Inputs, BlueprintReadWrite)
 	bool crouchHold;
 
-	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Inputs, BlueprintReadWrite)
 	bool primaryHold;
 
-	UPROPERTY(Category = Materials, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Materials, BlueprintReadWrite)
 	UMaterialInstanceDynamic* characterMaterial;
 
-	UPROPERTY(Category = Death, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Death, BlueprintReadWrite)
 	UTextureRenderTarget2D* deathMaskRenderTexture;
 
-	UPROPERTY(Category = Death, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Death, BlueprintReadWrite)
 	FTimerHandle deathUpdateHandle;
 
-	UPROPERTY(Category = Shoot, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Shoot, BlueprintReadWrite)
 	FTimerHandle shootUpdateHandle;
 #pragma endregion
 
@@ -251,6 +255,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual int getWeaponCount() const;
 
+	virtual const TWeakObjectPtr<class USwarmStatus>& getSwarm() const final;
+
 	virtual float getFlatDamageReduction_Implementation() const override;
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
@@ -281,6 +287,12 @@ public:
 	virtual USkeletalMeshComponent* getMeshComponent() final override;
 
 	virtual UCapsuleComponent* getCapsuleComponent() final override;
+
+	virtual void attachDeathEvent(IOnDeathEvent* event) final override;
+
+	virtual void detachDeathEvent(IOnDeathEvent* event) final override;
+
+	virtual const TArray<TWeakInterfacePtr<IOnDeathEvent>>& getDeathEvents() const final override;
 
 	virtual ~ABaseCharacter() = default;
 };

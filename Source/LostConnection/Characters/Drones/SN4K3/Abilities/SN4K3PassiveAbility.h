@@ -21,7 +21,7 @@ private:
 	};
 
 private:
-	UPROPERTY(Category = "SN4K3|Passive ability", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 naniteMeter;
 
 	float lastTimeAbilityUsed;
