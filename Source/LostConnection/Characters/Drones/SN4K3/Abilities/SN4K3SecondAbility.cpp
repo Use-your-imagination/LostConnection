@@ -2,12 +2,16 @@
 
 #include "SN4K3SecondAbility.h"
 
+#include "Kismet/KismetMathLibrary.h"
+
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Utility/InitializationUtility.h"
 #include "SN4K3PassiveAbility.h"
 #include "Statuses/Ailments/SwarmStatus.h"
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
+
+#pragma warning(disable: 4701)
 
 void USN4K3SecondAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -16,6 +20,10 @@ void USN4K3SecondAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME(USN4K3SecondAbility, distance);
 
 	DOREPLIFETIME(USN4K3SecondAbility, thresholdedHealthHeal);
+
+	DOREPLIFETIME(USN4K3SecondAbility, maxHealDistance);
+
+	DOREPLIFETIME(USN4K3SecondAbility, linearDecreaseHealDistance);
 }
 
 USN4K3SecondAbility::USN4K3SecondAbility() :
@@ -75,7 +83,25 @@ void USN4K3SecondAbility::deathEventAction()
 
 	if (swarm.IsValid())
 	{
-		Cast<ASN4K3>(caster)->restoreHealth(swarm->getThreshold() * (thresholdedHealthHeal / 100.0f));
+		ASN4K3* drone = Cast<ASN4K3>(caster);
+		float distance = (target->GetActorLocation() - drone->GetActorLocation()).Size();
+		float distanceCofficient;
+		float health = (swarm->getThreshold() * (thresholdedHealthHeal / 100.0f) * Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->getNaniteMeter());
+
+		if (UKismetMathLibrary::InRange_FloatFloat(distance, maxHealDistance.X, maxHealDistance.Y))
+		{
+			distance = 1.0f;
+		}
+		else if (UKismetMathLibrary::InRange_FloatFloat(distance, linearDecreaseHealDistance.X, linearDecreaseHealDistance.Y))
+		{
+			distanceCofficient = UKismetMathLibrary::NormalizeToRange(distance, linearDecreaseHealDistance.X, linearDecreaseHealDistance.Y);
+		}
+		else
+		{
+			distanceCofficient = 0.0f;
+		}
+
+		drone->restoreHealth(health * distanceCofficient);
 	}
 }
 
