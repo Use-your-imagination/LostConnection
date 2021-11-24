@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 
-#include "Components/SphereComponent.h"
-
 #include "WorldPlaceables/DroppedObject.h"
 #include "Characters/Drones/SN4K3/Abilities/SN4K3ThirdAbility.h"
 

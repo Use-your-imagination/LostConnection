@@ -17,9 +17,9 @@ class LOSTCONNECTION_API UBurnStatus :
 	GENERATED_BODY()
 	
 private:
-	virtual FString getStatusName() const final override;
+	FString getStatusName() const override;
 
-	virtual int32 calculateUnderStatusEffect() const final override;
+	int32 calculateUnderStatusEffect() const override;
 
 private:
 	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -37,13 +37,13 @@ protected:
 public:
 	UBurnStatus() = default;
 
-	virtual float getAdditionalFireCrushingHitChance() const final;
+	float getAdditionalFireCrushingHitChance() const;
 
-	virtual void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) final override;
+	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
-	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
+	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
-	virtual float getInflictorDamage() const final override;
+	float getInflictorDamage() const override;
 
 	virtual ~UBurnStatus() = default;
 };

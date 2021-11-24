@@ -17,9 +17,9 @@ class LOSTCONNECTION_API UCritStatus :
 	GENERATED_BODY()
 
 private:
-	virtual FString getStatusName() const final override;
+	FString getStatusName() const override;
 
-	virtual SIZE_T getActiveStatusesCount() const final override;
+	SIZE_T getActiveStatusesCount() const override;
 
 private:
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -37,11 +37,11 @@ private:
 public:
 	UCritStatus() = default;
 
-	virtual float getCritMultiplier() const final;
+	float getCritMultiplier() const;
 
-	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) final override;
+	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
-	virtual float getInflictorDamage() const final override;
+	float getInflictorDamage() const override;
 
 	virtual ~UCritStatus() = default;
 };

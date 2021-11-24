@@ -14,9 +14,9 @@ class LOSTCONNECTION_API USwarmStatus : public UBaseStatus
 	GENERATED_BODY()
 	
 private:
-	virtual FString getStatusName() const final override;
+	FString getStatusName() const override;
 
-	virtual int32 calculateUnderStatusEffect() const final override;
+	int32 calculateUnderStatusEffect() const override;
 
 private:
 	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -37,11 +37,11 @@ private:
 public:
 	USwarmStatus() = default;
 
-	virtual void increaseThreshold(float inflictorDamage) final;
+	void increaseThreshold(float inflictorDamage);
 
-	virtual float getThreshold() const;
+	float getThreshold() const;
 
-	virtual void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) final override;
+	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
 	virtual ~USwarmStatus() = default;
 };

@@ -9,15 +9,46 @@
 #include "ArcingCurrentStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UArcingCurrentStatus : public UBaseTriggerStatus
+class LOSTCONNECTION_API UArcingCurrentStatus :
+	public UBaseTriggerStatus,
+	public IDamageInflictor
 {
 	GENERATED_BODY()
 	
 private:
-	virtual FString getStatusName() const final override;
+	FString getStatusName() const override;
+
+	int32 calculateUnderStatusEffect() const override;
+
+private:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+private:
+	UPROPERTY(Category = "Arcing current", EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float damageConvertPercent;
+
+	UPROPERTY(Category = "Arcing current", EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float damageConvertPercentPerTotalLifePercentPool;
+
+	UPROPERTY(Category = "Arcing current", EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float radius;
+
+	UPROPERTY(Category = "Arcing current", EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float underStatusValueConversionCoefficient;
+
+	UPROPERTY(Category = "Arcing current", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float damageConversion;
 
 public:
 	UArcingCurrentStatus() = default;
+
+	void increaseDamageConversion(float damage);
+
+	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
+
+	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+
+	float getInflictorDamage() const override;
 
 	virtual ~UArcingCurrentStatus() = default;
 };
