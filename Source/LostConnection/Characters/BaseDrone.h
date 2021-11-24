@@ -105,49 +105,49 @@ protected:
 	TArray<UAnimMontage*> abilitiesAnimations;
 
 #pragma region BlueprintFunctionLibrary
-	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Inputs, BlueprintReadWrite)
 	bool secondaryHold;
 
-	UPROPERTY(Category = Inputs, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Inputs, BlueprintReadWrite)
 	bool weaponSelectorHold;
 
-	UPROPERTY(Category = WeaponSelector, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = WeaponSelector, BlueprintReadWrite)
 	int32 selectedWeaponId;
 
-	UPROPERTY(Category = WeaponSelector, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = WeaponSelector, BlueprintReadWrite)
 	FVector inputDimensions;
 
-	UPROPERTY(Category = Zoom, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Zoom, BlueprintReadWrite)
 	bool zooming;
 
-	UPROPERTY(Category = Zoom, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Zoom, BlueprintReadWrite)
 	bool zoomBlocked;
 
-	UPROPERTY(Category = Zoom, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Zoom, BlueprintReadWrite)
 	FTimerHandle zoomUpdateHandle;
 
-	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
 	bool wallrun;
 
-	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
 	bool wallrunBlocked;
 
-	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
 	FVector currentWallNormal;
 
-	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
 	FRotator wallrunForward;
 
-	UPROPERTY(Category = Wallrun, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
 	FTimerHandle wallrunUpdateHandle;
 
-	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Slide, BlueprintReadWrite)
 	bool isSlideCooldown;
 
-	UPROPERTY(Category = Slide, VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Slide, BlueprintReadWrite)
 	FTimerHandle slideActivityHandle;
 
-	UPROPERTY(Category = Slide, VisibleAnywhere, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Slide, Replicated, BlueprintReadOnly)
 	float slideCooldown;
 #pragma endregion
 
@@ -171,10 +171,10 @@ public:
 	virtual void setSlideCooldown(float newSlideCooldown) final;
 #pragma endregion
 
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Camera, BlueprintReadOnly)
 	float BaseTurnRate;
 
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Camera, BlueprintReadOnly)
 	float BaseLookUpRate;
 
 protected:
