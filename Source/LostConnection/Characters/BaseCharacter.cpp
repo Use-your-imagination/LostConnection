@@ -49,16 +49,16 @@ void ABaseCharacter::Tick(float DeltaTime)
 	{
 		if (HasAuthority())
 		{
-			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
-
-			isDead = true;
-
 			Algo::ForEachIf
 			(
 				deathEvents,
 				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
 				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
 			);
+
+			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
+
+			isDead = true;
 		}
 	}
 

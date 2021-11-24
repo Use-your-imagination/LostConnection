@@ -49,7 +49,7 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 		if (swarm)
 		{
-			swarm->increaseThreshold(this);
+			swarm->increaseThreshold(StaticCast<IStatusInflictor*>(inflictor.GetInterface()));
 			
 			swarm->refreshDuration();
 
