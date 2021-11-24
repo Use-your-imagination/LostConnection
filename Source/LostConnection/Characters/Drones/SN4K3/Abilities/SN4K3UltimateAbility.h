@@ -36,6 +36,10 @@ public:
 
 	UAnimMontage* getReturnAnimation() const;
 
+	float getAbilityDuration() const;
+
+	float getCurrentAbilityDuration() const;
+
 	void applyAbility(class ABaseCharacter* target) override;
 
 	void useAbility() override;

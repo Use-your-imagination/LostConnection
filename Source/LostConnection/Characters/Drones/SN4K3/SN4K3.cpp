@@ -89,8 +89,9 @@ bool ASN4K3::checkUltimateAbilityCast() const
 {
 	USN4K3UltimateAbility* ability = Cast<USN4K3UltimateAbility>(ultimateAbility);
 	bool used = ability->getIsUltimateAbilityUsed();
-	
-	if (used)
+	float castAnimationTime = ability->getReturnAnimation()->GetPlayLength() * (this->getCastPoint() / 100.0f);
+
+	if (used && (ability->getCurrentAbilityDuration() + castAnimationTime < ability->getAbilityDuration()))
 	{
 		MultiplayerUtility::runOnServerReliableWithMulticast(const_cast<ASN4K3*>(this), "playUltimateReturnAnimation");
 

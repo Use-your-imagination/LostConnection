@@ -32,6 +32,16 @@ UAnimMontage* USN4K3UltimateAbility::getReturnAnimation() const
 	return returnAnimation;
 }
 
+float USN4K3UltimateAbility::getAbilityDuration() const
+{
+	return abilityDuration;
+}
+
+float USN4K3UltimateAbility::getCurrentAbilityDuration() const
+{
+	return currentAbilityDuration;
+}
+
 void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 {
 	ASN4K3* drone = Cast<ASN4K3>(target);
