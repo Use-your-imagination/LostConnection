@@ -29,9 +29,9 @@ void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(USwarmStatus, threshold);
 }
 
-void USwarmStatus::increaseThreshold(float inflictorDamage)
+void USwarmStatus::increaseThreshold(IDamageInflictor* inflictor)
 {
-	threshold += target->getTotalLifePercentDealt(inflictorDamage) * thresholdPerTotalLifePercentPool;
+	threshold += target->getTotalLifePercentDealt(inflictor) * thresholdPerTotalLifePercentPool;
 }
 
 float USwarmStatus::getThreshold() const
@@ -49,7 +49,7 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 		if (swarm)
 		{
-			swarm->increaseThreshold(inflictorDamage);
+			swarm->increaseThreshold(this);
 			
 			swarm->refreshDuration();
 
@@ -62,4 +62,9 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 	Super::applyStatus_Implementation(inflictor, target, hit);
 
 	target->applySwarmStatus(this);
+}
+
+float USwarmStatus::getInflictorDamage() const
+{
+	return inflictorDamage;
 }

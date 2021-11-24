@@ -33,9 +33,9 @@ void UArcingCurrentStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME(UArcingCurrentStatus, damageConversion);
 }
 
-void UArcingCurrentStatus::increaseDamageConversion(float damage)
+void UArcingCurrentStatus::increaseDamageConversion(IDamageInflictor* inflictor)
 {
-	damageConversion += target->getTotalLifePercentDealt(damage) * damageConvertPercentPerTotalLifePercentPool;
+	damageConversion += target->getTotalLifePercentDealt(inflictor) * damageConvertPercentPerTotalLifePercentPool;
 }
 
 void UArcingCurrentStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
@@ -50,7 +50,7 @@ void UArcingCurrentStatus::applyStatus_Implementation(const TScriptInterface<ISt
 
 			if (arcing)
 			{
-				arcing->increaseDamageConversion(inflictorDamage);
+				arcing->increaseDamageConversion(this);
 
 				target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
 			}

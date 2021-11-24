@@ -5,11 +5,14 @@
 #include "CoreMinimal.h"
 
 #include "Statuses/BaseStatus.h"
+#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 
 #include "SwarmStatus.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API USwarmStatus : public UBaseStatus
+class LOSTCONNECTION_API USwarmStatus :
+	public UBaseStatus,
+	public IDamageInflictor
 {
 	GENERATED_BODY()
 	
@@ -37,11 +40,13 @@ private:
 public:
 	USwarmStatus() = default;
 
-	void increaseThreshold(float inflictorDamage);
+	void increaseThreshold(IDamageInflictor* inflictor);
 
 	float getThreshold() const;
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
+
+	float getInflictorDamage() const override;
 
 	virtual ~USwarmStatus() = default;
 };

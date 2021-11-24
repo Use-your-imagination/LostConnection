@@ -42,7 +42,7 @@ private:
 public:
 	UArcingCurrentStatus() = default;
 
-	void increaseDamageConversion(float damage);
+	void increaseDamageConversion(IDamageInflictor* inflictor);
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 

@@ -42,7 +42,7 @@ bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 
 	target->takeDamage(this);
 
-	critMultiplier = target->getTotalLifePercentDealt(inflictorDamage) * damageMultiplierPerTotalLifePercentPool;
+	critMultiplier = target->getTotalLifePercentDealt(this) * damageMultiplierPerTotalLifePercentPool;
 
 	return true;
 }

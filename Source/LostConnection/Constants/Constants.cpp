@@ -2,7 +2,9 @@
 
 #include "Constants.h"
 
+const FString UConstants::projectVersion = "0.1.2.0";
+
 FText UConstants::getProjectVersion()
 {
-	return FText::FromString(TEXT("0.1.1.0"));
+	return FText::FromString(UConstants::projectVersion);
 }

@@ -599,16 +599,19 @@ const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
 	return statuses;
 }
 
-float ABaseCharacter::getTotalLifePercentDealt(float damage) const
+float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) const
 {
 	// TODO: add shields
 	float pool = health;
+	float damage = inflictor->getInflictorDamage() + inflictor->getAdditionalDamage();
 
 	return (1.0f - (pool - damage) / pool) * 100.0f;
 }
 
-float ABaseCharacter::getHealthPercentDealt(float damage) const
+float ABaseCharacter::getHealthPercentDealt(IDamageInflictor* inflictor) const
 {
+	float damage = inflictor->getInflictorDamage() + inflictor->getAdditionalDamage();
+
 	return (1.0f - (health - damage) / health) * 100.0f;
 }
 

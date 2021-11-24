@@ -12,6 +12,9 @@ UCLASS()
 class LOSTCONNECTION_API UConstants : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
+
+public:
+	static const FString projectVersion;
 	
 public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)

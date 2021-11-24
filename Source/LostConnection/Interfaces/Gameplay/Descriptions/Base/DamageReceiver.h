@@ -24,9 +24,9 @@ public:
 
 	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) = 0;
 
-	virtual float getTotalLifePercentDealt(float damage) const = 0;
+	virtual float getTotalLifePercentDealt(class IDamageInflictor* inflictor) const = 0;
 
-	virtual float getHealthPercentDealt(float damage) const = 0;
+	virtual float getHealthPercentDealt(class IDamageInflictor* inflictor) const = 0;
 
 	virtual USkeletalMeshComponent* getMeshComponent() = 0;
 
