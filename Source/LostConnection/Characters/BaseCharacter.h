@@ -287,5 +287,5 @@ public:
 
 inline bool ABaseCharacter::isWeaponEquipped() const
 {
-	return static_cast<bool>(currentWeapon);
+	return StaticCast<bool>(currentWeapon);
 }

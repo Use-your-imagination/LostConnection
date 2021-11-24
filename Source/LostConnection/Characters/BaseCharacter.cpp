@@ -222,7 +222,7 @@ void ABaseCharacter::reloadLogic()
 		return;
 	}
 
-	int32& ammoCount = spareAmmo[static_cast<size_t>(currentWeapon->getAmmoType())];
+	int32& ammoCount = spareAmmo[StaticCast<size_t>(currentWeapon->getAmmoType())];
 
 	if (!ammoCount)
 	{
@@ -317,7 +317,7 @@ ABaseCharacter::ABaseCharacter() :
 
 	spareAmmo.Init(0, 4);
 
-	spareAmmo[static_cast<size_t>(ammoTypes::defaultType)] = 9999;
+	spareAmmo[StaticCast<size_t>(ammoTypes::defaultType)] = 9999;
 
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 
@@ -500,7 +500,7 @@ bool ABaseCharacter::getIsDead() const
 
 int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
 {
-	return spareAmmo[static_cast<size_t>(type)];
+	return spareAmmo[StaticCast<size_t>(type)];
 }
 
 bool ABaseCharacter::getIsReloading() const
@@ -522,7 +522,7 @@ int ABaseCharacter::getWeaponCount() const
 {
 	int result = 0;
 
-	result += static_cast<bool>(defaultWeaponSlot);
+	result += StaticCast<bool>(defaultWeaponSlot);
 
 	return result;
 }

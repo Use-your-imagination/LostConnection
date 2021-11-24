@@ -19,6 +19,8 @@ class LOSTCONNECTION_API UBurnStatus :
 private:
 	virtual FString getStatusName() const final override;
 
+	virtual int32 calculateUnderStatusEffect() const final override;
+
 private:
 	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float burnDamageCoefficient;

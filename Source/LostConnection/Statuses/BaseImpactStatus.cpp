@@ -18,7 +18,7 @@ void UBaseImpactStatus::applyStatus_Implementation(const TScriptInterface<IStatu
 {
 	Super::applyStatus_Implementation(inflictor, target, hit);
 
-	this->applyEffect(static_cast<IStatusReceiver*>(target.GetInterface()), hit);
+	this->applyEffect(StaticCast<IStatusReceiver*>(target.GetInterface()), hit);
 }
 
 void UBaseImpactStatus::postRemove()

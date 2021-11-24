@@ -16,6 +16,8 @@ class LOSTCONNECTION_API USwarmStatus : public UBaseStatus
 private:
 	virtual FString getStatusName() const final override;
 
+	virtual int32 calculateUnderStatusEffect() const final override;
+
 private:
 	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float baseThreshold;

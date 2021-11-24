@@ -33,9 +33,14 @@ FString UBaseStatus::getStatusName() const
 	PURE_VIRTUAL(UBaseStatus::getStatusName, return "";);
 }
 
+int32 UBaseStatus::calculateUnderStatusEffect() const
+{
+	return 1;
+}
+
 void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	this->target = static_cast<IStatusReceiver*>(target.GetInterface());
+	this->target = StaticCast<IStatusReceiver*>(target.GetInterface());
 
 	inflictorDamage = inflictor->getInflictorDamage();
 	inflictorDamageType = inflictor->getDamageType();
@@ -44,7 +49,7 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 
 	target->spawnApplyStatus(onApplyStatus, hit);
 
-	target->setUnderStatusIntVariable(this->getStatusCountKey(), 1);
+	target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
 }
 
 bool UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)

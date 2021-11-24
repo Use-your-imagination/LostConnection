@@ -11,6 +11,11 @@ FString USwarmStatus::getStatusName() const
 	return "Swarm";
 }
 
+int32 USwarmStatus::calculateUnderStatusEffect() const
+{
+	return FMath::Max<int32>(1, StaticCast<int32>(this->getThreshold() / percentsPerSatellite));
+}
+
 void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -48,7 +53,7 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 			
 			swarm->refreshDuration();
 
-			target->setUnderStatusIntVariable(this->getStatusCountKey(), FMath::Max<int32>(1, static_cast<int32>(this->getThreshold() / percentsPerSatellite)));
+			target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
 
 			return;
 		}
@@ -57,6 +62,4 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 	Super::applyStatus_Implementation(inflictor, target, hit);
 
 	target->applySwarmStatus(this);
-
-	target->setUnderStatusIntVariable("StatusCount", 1);
 }

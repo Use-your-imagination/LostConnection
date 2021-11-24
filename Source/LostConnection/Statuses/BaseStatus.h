@@ -40,6 +40,8 @@ protected:
 
 	virtual FString getStatusName() const;
 
+	virtual int32 calculateUnderStatusEffect() const;
+
 protected:
 	UPROPERTY(Category = Statuses, EditDefaultsOnly, BlueprintReadOnly)
 	FText name;

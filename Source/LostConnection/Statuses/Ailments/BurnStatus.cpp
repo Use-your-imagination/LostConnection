@@ -10,6 +10,11 @@ FString UBurnStatus::getStatusName() const
 	return "Burn";
 }
 
+int32 UBurnStatus::calculateUnderStatusEffect() const
+{
+	return Utility::countStatuses(target, StaticClass());
+}
+
 void UBurnStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

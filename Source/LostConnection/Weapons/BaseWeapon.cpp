@@ -155,7 +155,7 @@ void UBaseWeapon::alternativeMode()
 
 void UBaseWeapon::updateTimeBetweenShots_Implementation()
 {
-	timeBetweenShots = 1.0f / static_cast<float>(roundsPerSecond);
+	timeBetweenShots = 1.0f / StaticCast<float>(roundsPerSecond);
 }
 
 void UBaseWeapon::Tick(float DeltaTime)
