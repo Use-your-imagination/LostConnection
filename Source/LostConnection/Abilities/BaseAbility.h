@@ -98,7 +98,7 @@ public:
 
 	virtual abilitySlot getId() const final;
 
-	virtual class ICaster* getCaster() final;
+	virtual class ICaster* getCaster() const final;
 
 	virtual ~UBaseAbility() = default;
 };

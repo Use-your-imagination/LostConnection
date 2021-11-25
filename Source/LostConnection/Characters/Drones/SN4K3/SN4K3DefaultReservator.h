@@ -1,0 +1,42 @@
+// Copyright (c) 2021 Use-your-imagination
+
+#pragma once
+
+#include "CoreMinimal.h"
+
+#include "UObject/NoExportTypes.h"
+
+#include "Interfaces/Gameplay/Descriptions/Sockets/Reservator.h"
+
+#include "SN4K3DefaultReservator.generated.h"
+
+UCLASS(BlueprintType, DefaultToInstanced)
+class LOSTCONNECTION_API USN4K3DefaultReservator : 
+	public UObject,
+	public IReservator
+{
+	GENERATED_BODY()
+
+private:
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float healthReservePercent;
+
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float naniteAdditionalDamagePercent;
+
+private:
+	virtual bool IsSupportedForNetworking() const final override;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
+public:
+	USN4K3DefaultReservator() = default;
+
+	void useSocketItem(class ABaseCharacter* target) override;
+
+	void reserve(class ABaseCharacter* target) override;
+
+	void restoreReserved(class ABaseCharacter* target) override;
+
+	virtual ~USN4K3DefaultReservator() = default;
+};

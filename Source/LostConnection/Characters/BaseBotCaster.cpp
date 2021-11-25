@@ -271,32 +271,32 @@ float ABaseBotCaster::getCastPoint() const
 	return castPoint;
 }
 
-UBaseAbility* ABaseBotCaster::getCurrentAbility()
+UBaseAbility* ABaseBotCaster::getCurrentAbility() const
 {
 	return currentAbility;
 }
 
-UBasePassiveAbility* ABaseBotCaster::getPassiveAbility()
+UBasePassiveAbility* ABaseBotCaster::getPassiveAbility() const
 {
 	return passiveAbility;
 }
 
-UBaseAbility* ABaseBotCaster::getFirstAbility()
+UBaseAbility* ABaseBotCaster::getFirstAbility() const
 {
 	return firstAbility;
 }
 
-UBaseAbility* ABaseBotCaster::getSecondAbility()
+UBaseAbility* ABaseBotCaster::getSecondAbility() const
 {
 	return secondAbility;
 }
 
-UBaseAbility* ABaseBotCaster::getThirdAbility()
+UBaseAbility* ABaseBotCaster::getThirdAbility() const
 {
 	return thirdAbility;
 }
 
-UBaseUltimateAbility* ABaseBotCaster::getUltimateAbility()
+UBaseUltimateAbility* ABaseBotCaster::getUltimateAbility() const
 {
 	return ultimateAbility;
 }

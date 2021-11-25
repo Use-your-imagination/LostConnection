@@ -6,22 +6,22 @@
 
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 
-#include "StatusInflictor.generated.h"
+#include "AilmentInflictor.generated.h"
 
 enum class typeOfDamage : uint8;
 
 UINTERFACE(MinimalAPI)
-class UStatusInflictor : public UDamageInflictor
+class UAilmentInflictor : public UDamageInflictor
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IStatusInflictor : public IDamageInflictor
+class LOSTCONNECTION_API IAilmentInflictor : public IDamageInflictor
 {
 	GENERATED_BODY()
 
 public:
-	IStatusInflictor() = default;
+	IAilmentInflictor() = default;
 
 	virtual void setCrushingHitChance(float crushingHitChance);
 

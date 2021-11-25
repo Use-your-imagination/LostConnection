@@ -266,9 +266,9 @@ public:
 	UFUNCTION()
 	virtual void action() final;
 
-	virtual UBaseWeapon* getFirstWeapon() final;
+	virtual UBaseWeapon* getPrimaryWeapon() final;
 
-	virtual UBaseWeapon* getSecondWeapon() final;
+	virtual UBaseWeapon* getSecondaryWeapon() final;
 
 	virtual USpringArmComponent* GetCameraOffset() const final;
 
@@ -329,17 +329,21 @@ public:
 
 	virtual float getCastPoint() const final;
 
-	virtual UBaseAbility* getCurrentAbility() final override; 
+	virtual int getWeaponCount() const override;
 
-	virtual UBasePassiveAbility* getPassiveAbility() final override;
+	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const override;
 
-	virtual UBaseAbility* getFirstAbility() final override;
+	virtual UBaseAbility* getCurrentAbility() const final override; 
 
-	virtual UBaseAbility* getSecondAbility() final override;
+	virtual UBasePassiveAbility* getPassiveAbility() const final override;
 
-	virtual UBaseAbility* getThirdAbility() final override;
+	virtual UBaseAbility* getFirstAbility() const final override;
 
-	virtual UBaseUltimateAbility* getUltimateAbility() final override;
+	virtual UBaseAbility* getSecondAbility() const final override;
+
+	virtual UBaseAbility* getThirdAbility() const final override;
+
+	virtual UBaseUltimateAbility* getUltimateAbility() const final override;
 
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 

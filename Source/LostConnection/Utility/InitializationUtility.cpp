@@ -4,7 +4,7 @@
 
 #include "Characters/BaseDrone.h"
 #include "Engine/LostConnectionGameState.h"
-#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
 #include "Utility.h"
 
 void InitializationUtility::initAbilityId(const FString& abilityClassName, abilitySlot& id)
@@ -31,7 +31,7 @@ void InitializationUtility::initAbilityId(const FString& abilityClassName, abili
 	}
 }
 
-UBaseStatus* InitializationUtility::createDefaultStatus(typeOfDamage type, IStatusReceiver* target)
+UBaseStatus* InitializationUtility::createDefaultStatus(typeOfDamage type, IAilmentReceiver* target)
 {
 	APawn* pawn = Cast<APawn>(target->_getUObject());
 

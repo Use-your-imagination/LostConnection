@@ -409,7 +409,7 @@ void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflic
 {
 	float tem = this->getCurrentHealth();
 	
-	tem -= inflictor->getInflictorDamage() + inflictor->getAdditionalDamage();
+	tem -= inflictor->getInflictorDamage() + inflictor->getAdditionalInflictorDamage();
 
 	if (tem < 0.0f)
 	{
@@ -540,6 +540,16 @@ const TWeakObjectPtr<USwarmStatus>& ABaseCharacter::getSwarm() const
 	return swarm;
 }
 
+TArray<TWeakObjectPtr<UBaseWeapon>> ABaseCharacter::getWeapons() const
+{
+	if (defaultWeaponSlot)
+	{
+		return TArray<TWeakObjectPtr<UBaseWeapon>> { defaultWeaponSlot };
+	}
+
+	return TArray<TWeakObjectPtr<UBaseWeapon>>();
+}
+
 float ABaseCharacter::getFlatDamageReduction_Implementation() const
 {
 	return 200.0f;
@@ -616,19 +626,19 @@ float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) cons
 {
 	// TODO: add shields
 	float pool = health;
-	float damage = inflictor->getInflictorDamage() + inflictor->getAdditionalDamage();
+	float damage = inflictor->getInflictorDamage() + inflictor->getAdditionalInflictorDamage();
 
 	return (1.0f - (pool - damage) / pool) * 100.0f;
 }
 
 float ABaseCharacter::getHealthPercentDealt(IDamageInflictor* inflictor) const
 {
-	float damage = inflictor->getInflictorDamage() + inflictor->getAdditionalDamage();
+	float damage = inflictor->getInflictorDamage() + inflictor->getAdditionalInflictorDamage();
 
 	return (1.0f - (health - damage) / health) * 100.0f;
 }
 
-void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
+void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IAilmentInflictor>& inflictor, const FHitResult& hit)
 {
 	static TArray<UBaseStatus*> statusesToRemove;
 

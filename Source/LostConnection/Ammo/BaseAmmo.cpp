@@ -160,6 +160,8 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 {
 	damage = weapon->getDamage();
 
+	additionalDamage = weapon->getAdditionalDamage();
+
 	damageType = weapon->getDamageType();
 
 	ownerCharacter = weapon->getOwnerCharacter();
@@ -174,11 +176,6 @@ UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
 	return mesh;
 }
 
-float ABaseAmmo::getDamage() const
-{
-	return damage;
-}
-
 bool ABaseAmmo::getIsAlly() const
 {
 	return isAlly;
@@ -187,6 +184,16 @@ bool ABaseAmmo::getIsAlly() const
 const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwnerCharacter() const
 {
 	return ownerCharacter;
+}
+
+void ABaseAmmo::setInflictorDamage_Implementation(float newDamage)
+{
+	damage = newDamage;
+}
+
+void ABaseAmmo::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+{
+	additionalDamage = newAdditionalDamage;
 }
 
 void ABaseAmmo::setCrushingHitChance_Implementation(float newCrushingHitChance)
@@ -202,6 +209,11 @@ void ABaseAmmo::setAdditionalCrushingHitChance_Implementation(float newAdditiona
 float ABaseAmmo::getInflictorDamage() const
 {
 	return damage;
+}
+
+float ABaseAmmo::getAdditionalInflictorDamage() const
+{
+	return additionalDamage;
 }
 
 typeOfDamage ABaseAmmo::getDamageType() const

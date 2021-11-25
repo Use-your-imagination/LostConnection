@@ -2,7 +2,7 @@
 
 #include "BurnStatus.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
 #include "Utility/Utility.h"
 
 FString UBurnStatus::getStatusName() const
@@ -24,6 +24,8 @@ void UBurnStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBurnStatus, additionalFireCrushingHitChance);
 
 	DOREPLIFETIME(UBurnStatus, damage);
+
+	DOREPLIFETIME(UBurnStatus, additionalDamage);
 }
 
 float UBurnStatus::getAdditionalFireCrushingHitChance() const
@@ -31,14 +33,14 @@ float UBurnStatus::getAdditionalFireCrushingHitChance() const
 	return additionalFireCrushingHitChance;
 }
 
-void UBurnStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
+void UBurnStatus::applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<IAilmentReceiver>& target, const FHitResult& hit)
 {
 	Super::applyStatus_Implementation(inflictor, target, hit);
 
 	damage = (inflictorDamage * burnDamageCoefficient) / (duration / tickPeriod);
 }
 
-bool UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UBurnStatus::applyEffect(IAilmentReceiver* target, const FHitResult& hit)
 {
 	if (!Super::applyEffect(target, hit))
 	{
@@ -50,7 +52,22 @@ bool UBurnStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	return true;
 }
 
+void UBurnStatus::setInflictorDamage_Implementation(float newDamage)
+{
+	damage = newDamage;
+}
+
+void UBurnStatus::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+{
+	additionalDamage = newAdditionalDamage;
+}
+
 float UBurnStatus::getInflictorDamage() const
 {
 	return damage;
+}
+
+float UBurnStatus::getAdditionalInflictorDamage() const
+{
+	return additionalDamage;
 }

@@ -2,7 +2,7 @@
 
 #include "SwarmStatus.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
 
 #pragma warning(disable: 4458)
 
@@ -27,6 +27,8 @@ void USwarmStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(USwarmStatus, percentsPerSatellite);
 
 	DOREPLIFETIME(USwarmStatus, threshold);
+
+	DOREPLIFETIME(USwarmStatus, additionalDamage);
 }
 
 void USwarmStatus::increaseThreshold(IDamageInflictor* inflictor)
@@ -39,7 +41,7 @@ float USwarmStatus::getThreshold() const
 	return threshold;
 }
 
-void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
+void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<IAilmentReceiver>& target, const FHitResult& hit)
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
@@ -49,7 +51,7 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 		if (swarm)
 		{
-			swarm->increaseThreshold(StaticCast<IStatusInflictor*>(inflictor.GetInterface()));
+			swarm->increaseThreshold(StaticCast<IAilmentInflictor*>(inflictor.GetInterface()));
 			
 			swarm->refreshDuration();
 
@@ -64,7 +66,22 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 	target->applySwarmStatus(this);
 }
 
+void USwarmStatus::setInflictorDamage_Implementation(float newDamage)
+{
+	inflictorDamage = newDamage;
+}
+
+void USwarmStatus::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+{
+	additionalDamage = newAdditionalDamage;
+}
+
 float USwarmStatus::getInflictorDamage() const
 {
 	return inflictorDamage;
+}
+
+float USwarmStatus::getAdditionalInflictorDamage() const
+{
+	return additionalDamage;
 }

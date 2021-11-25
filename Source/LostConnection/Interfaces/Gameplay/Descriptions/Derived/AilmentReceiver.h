@@ -9,20 +9,20 @@
 #include "Interfaces/Gameplay/Descriptions/Base/DamageReceiver.h"
 #include "Statuses/BaseStatus.h"
 
-#include "StatusReceiver.generated.h"
+#include "AilmentReceiver.generated.h"
 
 UINTERFACE(MinimalAPI)
-class UStatusReceiver : public UDamageReceiver
+class UAilmentReceiver : public UDamageReceiver
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IStatusReceiver : public IDamageReceiver
+class LOSTCONNECTION_API IAilmentReceiver : public IDamageReceiver
 {
 	GENERATED_BODY()
 
 public:
-	IStatusReceiver() = default;
+	IAilmentReceiver() = default;
 
 	virtual void spawnApplyStatus(UNiagaraSystem* applyStatusVFX, const FHitResult& hit) = 0;
 
@@ -32,7 +32,7 @@ public:
 
 	virtual void applySwarmStatus(class USwarmStatus* swarm) = 0;
 
-	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) = 0;
+	virtual void statusInflictorImpactAction(const TScriptInterface<class IAilmentInflictor>& inflictor, const FHitResult& hit) = 0;
 
 	virtual void setUnderStatusIntVariable(const FString& key, int32 value) = 0;
 

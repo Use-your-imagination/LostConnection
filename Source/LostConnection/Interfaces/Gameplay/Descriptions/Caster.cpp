@@ -69,3 +69,41 @@ void ICaster::cancelCurrentAbilityAnimation()
 		bot->setCurrentAbility(nullptr);
 	}
 }
+
+TArray<TWeakObjectPtr<UBaseAbility>> ICaster::getAbilities() const
+{
+	TArray<TWeakObjectPtr<UBaseAbility>> result;
+
+	UBaseAbility* passive = this->getPassiveAbility();
+	UBaseAbility* first = this->getFirstAbility();
+	UBaseAbility* second = this->getSecondAbility();
+	UBaseAbility* third = this->getThirdAbility();
+	UBaseAbility* ultimate =this->getUltimateAbility();
+
+	if (passive)
+	{
+		result.Add(passive);
+	}
+
+	if (first)
+	{
+		result.Add(first);
+	}
+
+	if (second)
+	{
+		result.Add(second);
+	}
+
+	if (third)
+	{
+		result.Add(third);
+	}
+
+	if (ultimate)
+	{
+		result.Add(ultimate);
+	}
+
+	return result;
+}

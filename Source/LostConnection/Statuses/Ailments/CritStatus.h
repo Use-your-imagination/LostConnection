@@ -31,6 +31,9 @@ private:
 	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float critMultiplier;
 
+	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float additionalDamage;
+
 private:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
@@ -39,9 +42,17 @@ public:
 
 	float getCritMultiplier() const;
 
-	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+	bool applyEffect(class IAilmentReceiver* target, const FHitResult& hit) override;
+
+	UFUNCTION(Server, Reliable)
+	void setInflictorDamage(float newDamage) override;
+
+	UFUNCTION(Server, Reliable)
+	void setAdditionalInflictorDamage(float newAdditionalDamage) override;
 
 	float getInflictorDamage() const override;
+
+	float getAdditionalInflictorDamage() const override;
 
 	virtual ~UCritStatus() = default;
 };

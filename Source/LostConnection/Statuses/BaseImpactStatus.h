@@ -21,7 +21,7 @@ protected:
 public:
 	UBaseImpactStatus() = default;
 
-	virtual void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
+	virtual void applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<class IAilmentReceiver>& target, const FHitResult& hit) override;
 
 	virtual void postRemove() final;
 

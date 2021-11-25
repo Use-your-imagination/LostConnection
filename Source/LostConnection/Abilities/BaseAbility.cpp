@@ -107,7 +107,7 @@ abilitySlot UBaseAbility::getId() const
 	return id;
 }
 
-ICaster* UBaseAbility::getCaster()
+ICaster* UBaseAbility::getCaster() const
 {
 	return caster;
 }

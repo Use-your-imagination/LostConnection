@@ -19,7 +19,7 @@
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
 #include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
 #include "Interfaces/Gameplay/AnimatedActions/Death.h"
-#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
 
 #include "BaseCharacter.generated.h"
@@ -32,7 +32,7 @@ class LOSTCONNECTION_API ABaseCharacter :
 	public IShoot,
 	public IMovementActions,
 	public IDeath,
-	public IStatusReceiver,
+	public IAilmentReceiver,
 	public IDeathEventsHolder
 {
 	GENERATED_BODY()
@@ -257,6 +257,8 @@ public:
 
 	virtual const TWeakObjectPtr<class USwarmStatus>& getSwarm() const final;
 
+	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const;
+
 	virtual float getFlatDamageReduction_Implementation() const override;
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
@@ -282,7 +284,7 @@ public:
 
 	virtual float getHealthPercentDealt(class IDamageInflictor* inflictor) const final override;
 
-	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
+	virtual void statusInflictorImpactAction(const TScriptInterface<class IAilmentInflictor>& inflictor, const FHitResult& hit) final override;
 
 	virtual USkeletalMeshComponent* getMeshComponent() final override;
 

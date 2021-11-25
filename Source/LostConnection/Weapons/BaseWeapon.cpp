@@ -30,6 +30,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(UBaseWeapon, damage);
 
+	DOREPLIFETIME(UBaseWeapon, additionalDamage);
+
 	DOREPLIFETIME(UBaseWeapon, currentMagazineSize);
 
 	DOREPLIFETIME(UBaseWeapon, magazineSize);
@@ -196,6 +198,11 @@ void UBaseWeapon::setDamage_Implementation(float newDamage)
 	damage = newDamage;
 }
 
+void UBaseWeapon::setAdditionalDamage_Implementation(float newAdditionalDamage)
+{
+	additionalDamage = newAdditionalDamage;
+}
+
 void UBaseWeapon::setCurrentMagazineSize_Implementation(int newCurrentMagazineSize)
 {
 	currentMagazineSize = newCurrentMagazineSize;
@@ -234,6 +241,11 @@ typeOfDamage UBaseWeapon::getDamageType() const
 float UBaseWeapon::getDamage() const
 {
 	return damage;
+}
+
+float UBaseWeapon::getAdditionalDamage() const
+{
+	return additionalDamage;
 }
 
 int UBaseWeapon::getCurrentMagazineSize() const

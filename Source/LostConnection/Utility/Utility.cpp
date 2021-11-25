@@ -4,7 +4,7 @@
 
 #include "Algo/Count.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
 
 ALostConnectionGameState* Utility::getGameState(APawn* pawn)
 {
@@ -16,7 +16,7 @@ ALostConnectionPlayerState* Utility::getPlayerState(APawn* pawn)
 	return pawn->GetController()->GetPlayerState<ALostConnectionPlayerState>();
 }
 
-SIZE_T Utility::countStatuses(const IStatusReceiver* target, UClass* statusStaticClass)
+SIZE_T Utility::countStatuses(const IAilmentReceiver* target, UClass* statusStaticClass)
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 

@@ -31,6 +31,9 @@ private:
 	UPROPERTY(Category = Burn, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float damage;
 
+	UPROPERTY(Category = Burn, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float additionalDamage;
+
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -39,11 +42,19 @@ public:
 
 	float getAdditionalFireCrushingHitChance() const;
 
-	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
+	void applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<class IAilmentReceiver>& target, const FHitResult& hit) override;
 
-	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+	bool applyEffect(class IAilmentReceiver* target, const FHitResult& hit) override;
+
+	UFUNCTION(Server, Reliable)
+	void setInflictorDamage(float newDamage) override;
+
+	UFUNCTION(Server, Reliable)
+	void setAdditionalInflictorDamage(float newAdditionalDamage) override;
 
 	float getInflictorDamage() const override;
+
+	float getAdditionalInflictorDamage() const override;
 
 	virtual ~UBurnStatus() = default;
 };

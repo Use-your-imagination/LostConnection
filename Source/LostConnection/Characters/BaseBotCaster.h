@@ -144,17 +144,17 @@ public:
 
 	virtual float getCastPoint() const final;
 
-	virtual UBaseAbility* getCurrentAbility() final override;
+	virtual UBaseAbility* getCurrentAbility() const final override;
 
-	virtual UBasePassiveAbility* getPassiveAbility() final override;
+	virtual UBasePassiveAbility* getPassiveAbility() const final override;
 
-	virtual UBaseAbility* getFirstAbility() final override;
+	virtual UBaseAbility* getFirstAbility() const final override;
 
-	virtual UBaseAbility* getSecondAbility() final override;
+	virtual UBaseAbility* getSecondAbility() const final override;
 
-	virtual UBaseAbility* getThirdAbility() final override;
+	virtual UBaseAbility* getThirdAbility() const final override;
 
-	virtual UBaseUltimateAbility* getUltimateAbility() final override;
+	virtual UBaseUltimateAbility* getUltimateAbility() const final override;
 
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 

@@ -8,7 +8,7 @@
 #include "Net/UnrealNetwork.h"
 #include "NiagaraSystem.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/StatusInflictor.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/AilmentInflictor.h"
 
 #include "BaseStatus.generated.h"
 
@@ -55,7 +55,7 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	float currentDuration;
 
-	class IStatusReceiver* target;
+	class IAilmentReceiver* target;
 
 	typeOfDamage inflictorDamageType;
 	float inflictorDamage;
@@ -71,9 +71,9 @@ public:
 	UBaseStatus() = default;
 
 	UFUNCTION(Server, Reliable)
-	virtual void applyStatus(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
+	virtual void applyStatus(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<class IAilmentReceiver>& target, const FHitResult& hit);
 
-	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit);
+	virtual bool applyEffect(class IAilmentReceiver* target, const FHitResult& hit);
 
 	virtual void postRemove();
 

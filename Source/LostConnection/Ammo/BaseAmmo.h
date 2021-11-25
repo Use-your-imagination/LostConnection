@@ -15,7 +15,7 @@
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API ABaseAmmo :
 	public APawn,
-	public IStatusInflictor
+	public IAilmentInflictor
 {
 	GENERATED_BODY()
 
@@ -49,6 +49,7 @@ protected:
 
 	AActor* lastTarget;
 	float damage;
+	float additionalDamage;
 	typeOfDamage damageType;
 	bool isAlly;
 	float crushingHitChance;
@@ -63,11 +64,15 @@ public:
 
 	virtual UStaticMeshComponent* getAmmoMeshComponent() const final;
 
-	virtual float getDamage() const final;
-
 	virtual bool getIsAlly() const final;
 
 	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setInflictorDamage(float newDamage) final override;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setAdditionalInflictorDamage(float newAdditionalDamage) final override;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setCrushingHitChance(float newCrushingHitChance) final override;
@@ -76,6 +81,8 @@ public:
 	virtual void setAdditionalCrushingHitChance(float newAdditionalCrushingHitChance) final override;
 
 	virtual float getInflictorDamage() const final override;
+
+	virtual float getAdditionalInflictorDamage() const final override;
 
 	virtual typeOfDamage getDamageType() const final override;
 

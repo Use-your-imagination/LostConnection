@@ -68,6 +68,9 @@ protected:
 	float damage;
 
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float additionalDamage;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	int currentMagazineSize;
 
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
@@ -118,6 +121,9 @@ public:
 	virtual void setDamage(float newDamage) final;
 
 	UFUNCTION(Server, Reliable)
+	virtual void setAdditionalDamage(float newAdditionalDamage) final;
+
+	UFUNCTION(Server, Reliable)
 	virtual void setCurrentMagazineSize(int newCurrentMagazineSize) final;
 
 	UFUNCTION(Server, Reliable)
@@ -135,6 +141,8 @@ public:
 	virtual typeOfDamage getDamageType() const final;
 
 	virtual float getDamage() const final;
+
+	virtual float getAdditionalDamage() const final;
 
 	virtual int getCurrentMagazineSize() const final;
 

@@ -42,9 +42,9 @@ void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
 
 	if (drone)
 	{
-		weapons.Add(drone->getFirstWeapon());
+		weapons.Add(drone->getPrimaryWeapon());
 
-		weapons.Add(drone->getSecondWeapon());
+		weapons.Add(drone->getSecondaryWeapon());
 	}
 
 	for (auto& i : weapons)
@@ -68,40 +68,12 @@ bool USN4K3ThirdAbility::getIsFlagExist() const
 
 void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
 {
-	float health;
-	float currentHealth = target->getCurrentHealth();
-	
-	target->setHealth(target->getHealth() * 0.5f);
-
-	health = target->getHealth();
-
-	if (health < currentHealth)
+	if (reservator.IsValid())
 	{
-		target->setCurrentHealth(health);
+		reservator->useSocketItem(target);
+
+		ICaster::Execute_applyThirdAbilityEvent(Cast<UObject>(caster), target);
 	}
-
-	TArray<UBaseWeapon*> weapons;
-
-	weapons.Add(target->getDefaultWeapon());
-
-	ABaseDrone* drone = Cast<ABaseDrone>(target);
-
-	if (drone)
-	{
-		weapons.Add(drone->getFirstWeapon());
-
-		weapons.Add(drone->getSecondWeapon());
-	}
-
-	for (auto& i : weapons)
-	{
-		if (i)
-		{
-			i->setDamage(i->getDamage() * 1.5f);
-		}
-	}
-
-	ICaster::Execute_applyThirdAbilityEvent(Cast<UObject>(caster), target);
 }
 
 void USN4K3ThirdAbility::useAbility()
@@ -126,4 +98,19 @@ void USN4K3ThirdAbility::useAbility()
 	isFlagExist = true;
 
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
+}
+
+void USN4K3ThirdAbility::insert(const TScriptInterface<ISocketItem>& socketItem)
+{
+	reservator = StaticCast<IReservator*>(socketItem.GetInterface());
+}
+
+void USN4K3ThirdAbility::extract()
+{
+	reservator.Reset();
+}
+
+ISocketItem* USN4K3ThirdAbility::getSocketItem() const
+{
+	return reservator.IsValid() ? reservator.Get() : nullptr;
 }

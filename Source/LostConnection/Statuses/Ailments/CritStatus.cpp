@@ -4,7 +4,7 @@
 
 #include "Algo/Accumulate.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
 #include "Utility/Utility.h"
 
 FString UCritStatus::getStatusName() const
@@ -26,6 +26,8 @@ void UCritStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UCritStatus, damageMultiplierPerTotalLifePercentPool);
 
 	DOREPLIFETIME(UCritStatus, critMultiplier);
+
+	DOREPLIFETIME(UCritStatus, additionalDamage);
 }
 
 float UCritStatus::getCritMultiplier() const
@@ -33,7 +35,7 @@ float UCritStatus::getCritMultiplier() const
 	return critMultiplier;
 }
 
-bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UCritStatus::applyEffect(IAilmentReceiver* target, const FHitResult& hit)
 {
 	if (!Super::applyEffect(target, hit))
 	{
@@ -45,6 +47,16 @@ bool UCritStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	critMultiplier = target->getTotalLifePercentDealt(this) * damageMultiplierPerTotalLifePercentPool;
 
 	return true;
+}
+
+void UCritStatus::setInflictorDamage_Implementation(float newDamage)
+{
+	inflictorDamage = newDamage;
+}
+
+void UCritStatus::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+{
+	additionalDamage = newAdditionalDamage;
 }
 
 float UCritStatus::getInflictorDamage() const
@@ -64,4 +76,9 @@ float UCritStatus::getInflictorDamage() const
 		});
 
 	return inflictorDamage * (resultMultiplier / 100.0f);
+}
+
+float UCritStatus::getAdditionalInflictorDamage() const
+{
+	return additionalDamage;
 }

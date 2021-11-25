@@ -71,17 +71,19 @@ public:
 
 	virtual float getCastPoint() const = 0;
 
-	virtual UBaseAbility* getCurrentAbility() = 0;
+	virtual UBaseAbility* getCurrentAbility() const = 0;
 
-	virtual UBasePassiveAbility* getPassiveAbility() = 0;
+	virtual UBasePassiveAbility* getPassiveAbility() const = 0;
 
-	virtual UBaseAbility* getFirstAbility() = 0;
+	virtual UBaseAbility* getFirstAbility() const = 0;
 
-	virtual UBaseAbility* getSecondAbility() = 0;
+	virtual UBaseAbility* getSecondAbility() const = 0;
 
-	virtual UBaseAbility* getThirdAbility() = 0;
+	virtual UBaseAbility* getThirdAbility() const = 0;
 
-	virtual UBaseUltimateAbility* getUltimateAbility() = 0;
+	virtual UBaseUltimateAbility* getUltimateAbility() const = 0;
+
+	virtual TArray<TWeakObjectPtr<UBaseAbility>> getAbilities() const;
 
 	UFUNCTION()
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const;

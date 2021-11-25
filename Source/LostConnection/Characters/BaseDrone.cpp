@@ -773,12 +773,12 @@ void ABaseDrone::action()
 	}
 }
 
-UBaseWeapon* ABaseDrone::getFirstWeapon()
+UBaseWeapon* ABaseDrone::getPrimaryWeapon()
 {
 	return primaryWeaponSlot;
 }
 
-UBaseWeapon* ABaseDrone::getSecondWeapon()
+UBaseWeapon* ABaseDrone::getSecondaryWeapon()
 {
 	return secondaryWeaponSlot;
 }
@@ -924,32 +924,60 @@ float ABaseDrone::getCastPoint() const
 	return castPoint;
 }
 
-UBaseAbility* ABaseDrone::getCurrentAbility()
+int ABaseDrone::getWeaponCount() const
+{
+	int result = Super::getWeaponCount();
+
+	result += StaticCast<bool>(primaryWeaponSlot);
+
+	result += StaticCast<bool>(secondaryWeaponSlot);
+
+	return result;
+}
+
+TArray<TWeakObjectPtr<UBaseWeapon>> ABaseDrone::getWeapons() const
+{
+	TArray<TWeakObjectPtr<UBaseWeapon>> weapons = Super::getWeapons();
+
+	if (primaryWeaponSlot)
+	{
+		weapons.Add(primaryWeaponSlot);
+	}
+
+	if (secondaryWeaponSlot)
+	{
+		weapons.Add(secondaryWeaponSlot);
+	}
+
+	return weapons;
+}
+
+UBaseAbility* ABaseDrone::getCurrentAbility() const
 {
 	return currentAbility;
 }
 
-UBasePassiveAbility* ABaseDrone::getPassiveAbility()
+UBasePassiveAbility* ABaseDrone::getPassiveAbility() const
 {
 	return passiveAbility;
 }
 
-UBaseAbility* ABaseDrone::getFirstAbility()
+UBaseAbility* ABaseDrone::getFirstAbility() const
 {
 	return firstAbility;
 }
 
-UBaseAbility* ABaseDrone::getSecondAbility()
+UBaseAbility* ABaseDrone::getSecondAbility() const
 {
 	return secondAbility;
 }
 
-UBaseAbility* ABaseDrone::getThirdAbility()
+UBaseAbility* ABaseDrone::getThirdAbility() const
 {
 	return thirdAbility;
 }
 
-UBaseUltimateAbility* ABaseDrone::getUltimateAbility()
+UBaseUltimateAbility* ABaseDrone::getUltimateAbility() const
 {
 	return ultimateAbility;
 }

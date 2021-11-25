@@ -66,9 +66,24 @@ void USN4K3FirstAbility::useAbility()
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }
 
+void USN4K3FirstAbility::setInflictorDamage_Implementation(float newDamage)
+{
+	damage = newDamage;
+}
+
+void USN4K3FirstAbility::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+{
+	additionalDamage = newAdditionalDamage;
+}
+
 float USN4K3FirstAbility::getInflictorDamage() const
 {
 	return damage;
+}
+
+float USN4K3FirstAbility::getAdditionalInflictorDamage() const
+{
+	return additionalDamage;
 }
 
 typeOfDamage USN4K3FirstAbility::getDamageType() const

@@ -5,7 +5,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "Characters/BaseCharacter.h"
-#include "Interfaces/Gameplay/Descriptions/Derived/StatusReceiver.h"
+#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
 #include "Utility/Utility.h"
 
 FString UArcingCurrentStatus::getStatusName() const
@@ -31,6 +31,8 @@ void UArcingCurrentStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME(UArcingCurrentStatus, underStatusValueConversionCoefficient);
 
 	DOREPLIFETIME(UArcingCurrentStatus, damageConversion);
+
+	DOREPLIFETIME(UArcingCurrentStatus, additionalDamage);
 }
 
 void UArcingCurrentStatus::increaseDamageConversion(IDamageInflictor* inflictor)
@@ -38,7 +40,7 @@ void UArcingCurrentStatus::increaseDamageConversion(IDamageInflictor* inflictor)
 	damageConversion += target->getTotalLifePercentDealt(inflictor) * damageConvertPercentPerTotalLifePercentPool;
 }
 
-void UArcingCurrentStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
+void UArcingCurrentStatus::applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<IAilmentReceiver>& target, const FHitResult& hit)
 {
 	if (Utility::isTargetAlreadyUnderStatus<UArcingCurrentStatus>(target))
 	{
@@ -61,10 +63,10 @@ void UArcingCurrentStatus::applyStatus_Implementation(const TScriptInterface<ISt
 		Super::applyStatus_Implementation(inflictor, target, hit);
 	}
 
-	this->applyEffect(StaticCast<IStatusReceiver*>(target.GetInterface()), hit);
+	this->applyEffect(StaticCast<IAilmentReceiver*>(target.GetInterface()), hit);
 }
 
-bool UArcingCurrentStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UArcingCurrentStatus::applyEffect(IAilmentReceiver* target, const FHitResult& hit)
 {
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
 
@@ -85,7 +87,22 @@ bool UArcingCurrentStatus::applyEffect(IStatusReceiver* target, const FHitResult
 	return true;
 }
 
+void UArcingCurrentStatus::setInflictorDamage_Implementation(float newDamage)
+{
+	inflictorDamage = newDamage;
+}
+
+void UArcingCurrentStatus::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+{
+	additionalDamage = newAdditionalDamage;
+}
+
 float UArcingCurrentStatus::getInflictorDamage() const
 {
 	return inflictorDamage * (damageConversion / 100.0f);
+}
+
+float UArcingCurrentStatus::getAdditionalInflictorDamage() const
+{
+	return additionalDamage;
 }
