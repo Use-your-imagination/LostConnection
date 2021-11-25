@@ -17,7 +17,7 @@ class LOSTCONNECTION_API USN4K3SecondAbility :
 	GENERATED_BODY()
 
 private:
-	class ABaseCharacter* target;
+	TWeakObjectPtr<class ABaseCharacter> target;
 	
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float distance;
@@ -36,6 +36,8 @@ private:
 
 public:
 	USN4K3SecondAbility();
+
+	void setTarget(class ABaseCharacter* target);
 
 	float getDistance() const;
 

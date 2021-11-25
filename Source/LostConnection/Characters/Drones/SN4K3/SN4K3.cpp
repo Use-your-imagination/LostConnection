@@ -66,12 +66,21 @@ bool ASN4K3::checkSecondAbilityCast() const
 	FHitResult hit;
 	UWorld* world = this->GetWorld();
 	ABaseCharacter* target = nullptr;
+	USN4K3SecondAbility* ability = Cast<USN4K3SecondAbility>(secondAbility);
+	FCollisionQueryParams ignoreParameters;
 
-	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace() + (Cast<USN4K3SecondAbility>(secondAbility)->getDistance() * this->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Camera);
+	ignoreParameters.AddIgnoredActor(this);
+
+	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace() + (ability->getDistance() * this->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Camera, ignoreParameters);
 
 	target = Cast<ABaseCharacter>(hit.Actor);
 
 	result &= target && !target->getIsAlly();
+
+	if (result)
+	{
+		ability->setTarget(target);
+	}
 
 	return result;
 }

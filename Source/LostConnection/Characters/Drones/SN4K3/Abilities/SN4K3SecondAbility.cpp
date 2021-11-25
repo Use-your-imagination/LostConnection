@@ -32,12 +32,7 @@ USN4K3SecondAbility::USN4K3SecondAbility() :
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
-float USN4K3SecondAbility::getDistance() const
-{
-	return distance;
-}
-
-void USN4K3SecondAbility::applyAbility(ABaseCharacter* target)
+void USN4K3SecondAbility::setTarget(ABaseCharacter* target)
 {
 	IDeathEventsHolder* holder = this->getDeathEventsHolder();
 
@@ -48,33 +43,27 @@ void USN4K3SecondAbility::applyAbility(ABaseCharacter* target)
 		holder->detachDeathEvent(this);
 	}
 
-	Cast<IDeathEventsHolder>(target)->attachDeathEvent(this);
+	if (this->target.IsValid())
+	{
+		Cast<IDeathEventsHolder>(target)->attachDeathEvent(this);
+	}
+}
 
+float USN4K3SecondAbility::getDistance() const
+{
+	return distance;
+}
+
+void USN4K3SecondAbility::applyAbility(ABaseCharacter* target)
+{
 	ICaster::Execute_applySecondAbilityEvent(Cast<UObject>(caster), target);
 }
 
 void USN4K3SecondAbility::useAbility()
 {
-	ASN4K3* drone = Cast<ASN4K3>(caster);
-	FHitResult hit;
-	UWorld* world = drone->GetWorld();
-	ABaseCharacter* target = nullptr;
-	FCollisionQueryParams ignoreParameters;
+	this->applyAbility(target.Get());
 
-	ignoreParameters.AddIgnoredActor(drone);
-
-	world->LineTraceSingleByChannel(hit, drone->getStartActionLineTrace(), drone->getEndActionLineTrace() + (distance * drone->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Camera, ignoreParameters);
-
-	target = Cast<ABaseCharacter>(hit.Actor);
-
-	if (!target || target->getIsAlly())
-	{
-		return;
-	}
-
-	this->applyAbility(target);
-
-	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
+	Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->resetLastTimeAbilityUsed();
 }
 
 void USN4K3SecondAbility::deathEventAction()
@@ -86,11 +75,11 @@ void USN4K3SecondAbility::deathEventAction()
 		ASN4K3* drone = Cast<ASN4K3>(caster);
 		float distance = (target->GetActorLocation() - drone->GetActorLocation()).Size();
 		float distanceCofficient;
-		float health = (swarm->getThreshold() * (thresholdedHealthHeal / 100.0f) * Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->getNaniteMeter());
+		float health = swarm->getThreshold() * (thresholdedHealthHeal / 100.0f) * Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->getNaniteMeter();
 
 		if (UKismetMathLibrary::InRange_FloatFloat(distance, maxHealDistance.X, maxHealDistance.Y))
 		{
-			distance = 1.0f;
+			distanceCofficient = 1.0f;
 		}
 		else if (UKismetMathLibrary::InRange_FloatFloat(distance, linearDecreaseHealDistance.X, linearDecreaseHealDistance.Y))
 		{
@@ -107,5 +96,5 @@ void USN4K3SecondAbility::deathEventAction()
 
 IDeathEventsHolder* USN4K3SecondAbility::getDeathEventsHolder() const
 {
-	return Cast<IDeathEventsHolder>(target);
+	return target.IsValid() ? Cast<IDeathEventsHolder>(target) : nullptr;
 }
