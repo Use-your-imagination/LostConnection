@@ -8,11 +8,11 @@
 
 ALostConnectionGameState::ALostConnectionGameState()
 {
-	static ConstructorHelpers::FClassFinder<UBaseStatus> crit(TEXT("/Game/Statuses/BP_CritStatus"));
-	static ConstructorHelpers::FClassFinder<UBaseStatus> swarm(TEXT("/Game/Statuses/BP_SwarmStatus"));
-	static ConstructorHelpers::FClassFinder<UBaseStatus> burn(TEXT("/Game/Statuses/BP_BurnStatus"));
-	static ConstructorHelpers::FClassFinder<UBaseStatus> arcingCurrent(TEXT("/Game/Statuses/BP_ArcingCurrentStatus"));
-	static ConstructorHelpers::FClassFinder<UBaseStatus> irradiation(TEXT("/Game/Statuses/BP_IrradiationStatus"));
+	static ConstructorHelpers::FClassFinder<UBaseStatus> crit(TEXT("/Game/Statuses/Ailments/BP_CritStatus"));
+	static ConstructorHelpers::FClassFinder<UBaseStatus> swarm(TEXT("/Game/Statuses/Ailments/BP_SwarmStatus"));
+	static ConstructorHelpers::FClassFinder<UBaseStatus> burn(TEXT("/Game/Statuses/Ailments/BP_BurnStatus"));
+	static ConstructorHelpers::FClassFinder<UBaseStatus> arcingCurrent(TEXT("/Game/Statuses/Ailments/BP_ArcingCurrentStatus"));
+	static ConstructorHelpers::FClassFinder<UBaseStatus> irradiation(TEXT("/Game/Statuses/Ailments/BP_IrradiationStatus"));
 
 	statuses.Add(typeOfDamage::physical, crit.Class);
 	statuses.Add(typeOfDamage::nanite, swarm.Class);

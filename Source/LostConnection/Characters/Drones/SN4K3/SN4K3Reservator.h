@@ -8,10 +8,10 @@
 
 #include "Interfaces/Gameplay/Descriptions/Sockets/Reservator.h"
 
-#include "SN4K3DefaultReservator.generated.h"
+#include "SN4K3Reservator.generated.h"
 
-UCLASS(BlueprintType, DefaultToInstanced)
-class LOSTCONNECTION_API USN4K3DefaultReservator : 
+UCLASS(BlueprintType, Blueprintable, DefaultToInstanced)
+class LOSTCONNECTION_API USN4K3Reservator : 
 	public UObject,
 	public IReservator
 {
@@ -30,7 +30,7 @@ private:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:
-	USN4K3DefaultReservator() = default;
+	USN4K3Reservator() = default;
 
 	void useSocketItem(class ABaseCharacter* target) override;
 
@@ -38,5 +38,5 @@ public:
 
 	void restoreReserved(class ABaseCharacter* target) override;
 
-	virtual ~USN4K3DefaultReservator() = default;
+	virtual ~USN4K3Reservator() = default;
 };

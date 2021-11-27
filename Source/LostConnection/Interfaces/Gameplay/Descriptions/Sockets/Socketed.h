@@ -11,7 +11,7 @@
 
 #include "Socketed.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType, MinimalAPI)
 class USocketed : public UInterface
 {
 	GENERATED_BODY()

@@ -110,6 +110,10 @@ public:
 
 	virtual void Tick(float DeltaTime);
 
+	virtual void increaseAdditionalDamage(float amount) final;
+	
+	virtual void decreaseAdditionalDamage(float amount) final;
+
 	virtual void setWorld(UWorld* world) final;
 
 	virtual void setOwnerCharacter(class ABaseCharacter* ownerCharacter) final;

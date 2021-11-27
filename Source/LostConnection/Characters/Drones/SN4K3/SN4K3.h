@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Characters/BaseDrone.h"
+#include "SN4K3Reservator.h"
 
 #include "SN4K3.generated.h"
 
@@ -17,6 +18,18 @@ class LOSTCONNECTION_API ASN4K3 : public ABaseDrone
 
 private:
 	class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder;
+
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UObject* thirdAbilityReservator;
+
+	static UClass* defaultThirdAbilityReservator;
+
+private:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+	void PostInitializeComponents() override;
 
 private:
 	UFUNCTION()

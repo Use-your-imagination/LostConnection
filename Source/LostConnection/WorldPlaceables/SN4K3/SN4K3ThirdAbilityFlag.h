@@ -16,7 +16,6 @@ class LOSTCONNECTION_API ASN4K3ThirdAbilityFlag : public ADroppedObject
 
 private:
 	USN4K3ThirdAbility* ability;
-	TSet<AActor*> targets;
 	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes;
 
 	float lifetime;

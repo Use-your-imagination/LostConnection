@@ -8,7 +8,7 @@
 
 #include "SocketItem.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType, MinimalAPI)
 class USocketItem : public UInterface
 {
 	GENERATED_BODY()

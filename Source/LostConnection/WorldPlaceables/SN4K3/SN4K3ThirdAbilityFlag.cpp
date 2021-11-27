@@ -26,36 +26,14 @@ void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
 
 			UKismetSystemLibrary::SphereOverlapActors(GetWorld(), mesh->GetComponentLocation(), radius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
 
-			TSet<AActor*> possibleTargets(std::move(tem));
-			TSet<AActor*> removeAbilityEffectTargets = targets.Difference(possibleTargets);
-
-			for (auto& i : possibleTargets)
+			for (auto& i : tem)
 			{
-				ABaseCharacter* target = Cast<ABaseCharacter>(i);
-
-				if (targets.Contains(target))
-				{
-					continue;
-				}
-
-				ability->applyAbility(target);
-			}
-
-			targets = std::move(possibleTargets);
-
-			for (auto& i : removeAbilityEffectTargets)
-			{
-				ability->removeAbilityEffect(Cast<ABaseCharacter>(i));
+				ability->applyAbility(Cast<ABaseCharacter>(i));
 			}
 		}
 
 		if (lifetime <= 0.0f)
 		{
-			for (auto& i : targets)
-			{
-				ability->removeAbilityEffect(Cast<ABaseCharacter>(Cast<ABaseCharacter>(i)));
-			}
-
 			ability->setIsFlagExist(false);
 
 			Destroy();

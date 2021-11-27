@@ -4,6 +4,7 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 #include "Abilities/SN4K3PassiveAbility.h"
 #include "Abilities/SN4K3FirstAbility.h"
@@ -12,6 +13,36 @@
 #include "Abilities/SN4K3UltimateAbility.h"
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 #include "Utility/MultiplayerUtility.h"
+
+UClass* ASN4K3::defaultThirdAbilityReservator = nullptr;
+
+void ASN4K3::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASN4K3, thirdAbilityReservator);
+}
+
+bool ASN4K3::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(thirdAbilityReservator, *Bunch, *RepFlags);
+
+	return wroteSomething;
+}
+
+void ASN4K3::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (HasAuthority())
+	{
+		thirdAbilityReservator = NewObject<USN4K3Reservator>(this, defaultThirdAbilityReservator);
+
+		Cast<USN4K3ThirdAbility>(thirdAbility)->insert(thirdAbilityReservator);
+	}
+}
 
 void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -27,6 +58,8 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 
 ASN4K3::ASN4K3()
 {
+	static ConstructorHelpers::FClassFinder<USN4K3Reservator> defaultThirdAbilityReservatorFinder(TEXT("/Game/Drones/SN4K3/BP_SN4K3Reservator"));
+
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);
 
 	spareAmmo[StaticCast<size_t>(ammoTypes::large)] = 120;
@@ -37,6 +70,8 @@ ASN4K3::ASN4K3()
 	secondAbility = CreateDefaultSubobject<USN4K3SecondAbility>(TEXT("SecondAbility"));
 	thirdAbility = CreateDefaultSubobject<USN4K3ThirdAbility>(TEXT("ThirdAbility"));
 	ultimateAbility = CreateDefaultSubobject<USN4K3UltimateAbility>(TEXT("UltimateAbility"));
+
+	defaultThirdAbilityReservator = defaultThirdAbilityReservatorFinder.Class;
 
 	passiveAbility->setCaster(this);
 	firstAbility->setCaster(this);
@@ -89,7 +124,14 @@ bool ASN4K3::checkThirdAbilityCast() const
 {
 	bool result = ABaseDrone::checkThirdAbilityCast();
 
-	result &= !Cast<USN4K3ThirdAbility>(thirdAbility)->getIsFlagExist();
+	UE_LOG(LogTemp, Warning, L"exists: %d", StaticCast<bool>(thirdAbilityReservator));
+
+	if (thirdAbilityReservator)
+	{
+		UE_LOG(LogTemp, Warning, L"valid: %d", thirdAbilityReservator->IsValidLowLevelFast());
+	}
+
+	result &= thirdAbilityReservator && thirdAbilityReservator->IsValidLowLevelFast() && !Cast<USN4K3ThirdAbility>(thirdAbility)->getIsFlagExist();
 
 	return result;
 }

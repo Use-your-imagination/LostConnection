@@ -178,6 +178,16 @@ void UBaseWeapon::Tick(float DeltaTime)
 	}
 }
 
+void UBaseWeapon::increaseAdditionalDamage(float amount)
+{
+	additionalDamage += amount;
+}
+
+void UBaseWeapon::decreaseAdditionalDamage(float amount)
+{
+	additionalDamage -= amount;
+}
+
 void UBaseWeapon::setWorld(UWorld* world)
 {
 	this->world = world;
