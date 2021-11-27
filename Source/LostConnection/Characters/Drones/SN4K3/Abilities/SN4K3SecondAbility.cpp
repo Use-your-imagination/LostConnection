@@ -24,6 +24,8 @@ void USN4K3SecondAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME(USN4K3SecondAbility, maxHealDistance);
 
 	DOREPLIFETIME(USN4K3SecondAbility, linearDecreaseHealDistance);
+
+	DOREPLIFETIME(USN4K3SecondAbility, naniteMeterCoefficient);
 }
 
 USN4K3SecondAbility::USN4K3SecondAbility() :
@@ -56,6 +58,8 @@ float USN4K3SecondAbility::getDistance() const
 
 void USN4K3SecondAbility::applyAbility(ABaseCharacter* target)
 {
+	naniteMeterCoefficient = StaticCast<float>(Cast<USN4K3PassiveAbility>(caster->getPassiveAbility())->getNaniteMeter()) / 50.0f;
+
 	ICaster::Execute_applySecondAbilityEvent(Cast<UObject>(caster), target);
 }
 
@@ -75,7 +79,7 @@ void USN4K3SecondAbility::deathEventAction()
 		ASN4K3* drone = Cast<ASN4K3>(caster);
 		float distance = (target->GetActorLocation() - drone->GetActorLocation()).Size();
 		float distanceCofficient;
-		float health = swarm->getThreshold() * (thresholdedHealthHeal / 100.0f) * Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->getNaniteMeter();
+		float health = target->getHealth() * (swarm->getThreshold() / 100.0f) * (naniteMeterCoefficient * thresholdedHealthHeal / 100.0f);
 
 		if (UKismetMathLibrary::InRange_FloatFloat(distance, maxHealDistance.X, maxHealDistance.Y))
 		{
@@ -83,7 +87,7 @@ void USN4K3SecondAbility::deathEventAction()
 		}
 		else if (UKismetMathLibrary::InRange_FloatFloat(distance, linearDecreaseHealDistance.X, linearDecreaseHealDistance.Y))
 		{
-			distanceCofficient = UKismetMathLibrary::NormalizeToRange(distance, linearDecreaseHealDistance.X, linearDecreaseHealDistance.Y);
+			distanceCofficient = 1.0f - UKismetMathLibrary::NormalizeToRange(distance, linearDecreaseHealDistance.X, linearDecreaseHealDistance.Y);
 		}
 		else
 		{

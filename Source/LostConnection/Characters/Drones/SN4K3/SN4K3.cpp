@@ -124,13 +124,6 @@ bool ASN4K3::checkThirdAbilityCast() const
 {
 	bool result = ABaseDrone::checkThirdAbilityCast();
 
-	UE_LOG(LogTemp, Warning, L"exists: %d", StaticCast<bool>(thirdAbilityReservator));
-
-	if (thirdAbilityReservator)
-	{
-		UE_LOG(LogTemp, Warning, L"valid: %d", thirdAbilityReservator->IsValidLowLevelFast());
-	}
-
 	result &= thirdAbilityReservator && thirdAbilityReservator->IsValidLowLevelFast() && !Cast<USN4K3ThirdAbility>(thirdAbility)->getIsFlagExist();
 
 	return result;

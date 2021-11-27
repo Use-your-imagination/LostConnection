@@ -64,6 +64,8 @@ void USwarmStatus::applyStatus_Implementation(const TScriptInterface<IAilmentInf
 	Super::applyStatus_Implementation(inflictor, target, hit);
 
 	target->applySwarmStatus(this);
+
+	threshold = baseThreshold;
 }
 
 void USwarmStatus::setInflictorDamage_Implementation(float newDamage)

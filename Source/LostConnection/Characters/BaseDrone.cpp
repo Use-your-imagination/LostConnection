@@ -668,8 +668,6 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 {
 	if (!weaponToEquip)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Purple, L"Empty");
-
 		return;
 	}
 
