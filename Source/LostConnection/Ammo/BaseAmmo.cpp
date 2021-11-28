@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Weapons/BaseWeapon.h"
+#include "FakeAmmo.h"
 #include "Characters/BaseDrone.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Utility/Utility.h"
@@ -90,7 +91,9 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 		movement->Velocity = FVector(0.0f);
 
-		// tracer->Deactivate();
+		fakeAmmo->deactivateTracer();
+
+		fakeAmmo->Destroy();
 
 		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(
@@ -146,13 +149,22 @@ ABaseAmmo::ABaseAmmo()
 	onHitAsset = onHitFinder.Object;
 }
 
-void ABaseAmmo::launch(ABaseCharacter* character)
+void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character)
 {
+	if (!character.IsValid())
+	{
+		return;
+	}
+
 	isAlly = character->getIsAlly();
 
 	FinishSpawning({}, true);
 
-	movement->Velocity = mesh->GetForwardVector() * movement->InitialSpeed;
+	fakeAmmo = Utility::getGameState(character.Get())->spawn<AFakeAmmo>(GetActorTransform());
+
+	fakeAmmo->copyAmmo(this);
+
+	fakeAmmo->FinishSpawning({}, true);
 }
 
 void ABaseAmmo::copyProperties(UBaseWeapon* weapon)

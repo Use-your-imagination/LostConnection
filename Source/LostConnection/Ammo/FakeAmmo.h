@@ -23,13 +23,13 @@ private:
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 private:
-	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* mesh;
 
-	UPROPERTY(Category = Movement, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Movement, VisibleAnywhere, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* movement;
 
-	UPROPERTY(Category = Particles, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNiagaraComponent* tracer;
 
 	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -39,6 +39,8 @@ public:
 	AFakeAmmo();
 	
 	void copyAmmo(ABaseAmmo* ammo);
+
+	void deactivateTracer();
 
 	~AFakeAmmo() = default;
 };

@@ -47,6 +47,9 @@ protected:
 	UPROPERTY(Category = Particles, BlueprintReadOnly)
 	UNiagaraSystem* onHitAsset;
 
+	UPROPERTY()
+	class AFakeAmmo* fakeAmmo;
+
 	AActor* lastTarget;
 	float damage;
 	float additionalDamage;
@@ -58,7 +61,7 @@ protected:
 public:
 	ABaseAmmo();
 
-	virtual void launch(class ABaseCharacter* character) final;
+	virtual void launch(const TWeakObjectPtr<class ABaseCharacter>& character) final;
 
 	virtual void copyProperties(class UBaseWeapon* weapon);
 

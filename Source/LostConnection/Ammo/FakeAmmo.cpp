@@ -32,6 +32,8 @@ AFakeAmmo::AFakeAmmo()
 
 	SetRootComponent(mesh);
 
+	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
 	movement->SetUpdatedComponent(mesh);
 
 	movement->ProjectileGravityScale = 0.0f;
@@ -51,4 +53,9 @@ void AFakeAmmo::copyAmmo(ABaseAmmo* ammo)
 	tracer->SetAsset(ammo->tracerAsset);
 
 	brokenAmmoMesh = ammo->brokenAmmoMesh;
+}
+
+void AFakeAmmo::deactivateTracer()
+{
+	tracer->Deactivate();
 }

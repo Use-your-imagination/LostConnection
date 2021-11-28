@@ -113,7 +113,7 @@ void UBaseWeapon::shoot()
 
 		launchedAmmo->getAmmoMeshComponent()->AddRelativeRotation({ pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
-		launchedAmmo->launch(ownerCharacter.Get());
+		launchedAmmo->launch(ownerCharacter);
 
 		currentMagazineSize -= ammoCost;
 
