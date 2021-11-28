@@ -90,7 +90,7 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 		movement->Velocity = FVector(0.0f);
 
-		tracer->Deactivate();
+		// tracer->Deactivate();
 
 		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(
@@ -115,7 +115,6 @@ ABaseAmmo::ABaseAmmo()
 	PrimaryActorTick.bCanEverTick = false;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
-	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
 	NetUpdateFrequency = 60;
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletTracer.NPSBulletTracer'"));
@@ -131,6 +130,8 @@ ABaseAmmo::ABaseAmmo()
 
 	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::onBeginOverlap);
 
+	mesh->SetVisibility(false, true);
+
 	movement->SetUpdatedComponent(mesh);
 
 	movement->ProjectileGravityScale = 0.0f;
@@ -140,11 +141,9 @@ ABaseAmmo::ABaseAmmo()
 	movement->InitialSpeed = 5200.0f;
 	movement->MaxSpeed = 5200.0f;
 
-	tracer->SetAsset(tracerFinder.Object);
+	tracerAsset = tracerFinder.Object;
 
 	onHitAsset = onHitFinder.Object;
-
-	tracer->SetupAttachment(mesh);
 }
 
 void ABaseAmmo::launch(ABaseCharacter* character)

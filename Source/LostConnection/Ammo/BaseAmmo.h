@@ -39,7 +39,7 @@ protected:
 	UProjectileMovementComponent* movement;
 	
 	UPROPERTY(Category = Particles, BlueprintReadOnly)
-	UNiagaraComponent* tracer;
+	UNiagaraSystem* tracerAsset;
 
 	UPROPERTY(Category = Components, BlueprintReadOnly)
 	UStaticMesh* brokenAmmoMesh;
@@ -91,4 +91,6 @@ public:
 	virtual float getAdditionalCrushingHitChance() const final override;
 
 	virtual ~ABaseAmmo() = default;
+
+	friend class AFakeAmmo;
 };

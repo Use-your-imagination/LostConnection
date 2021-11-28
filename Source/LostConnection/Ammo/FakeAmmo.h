@@ -1,0 +1,44 @@
+// Copyright (c) 2021 Use-your-imagination
+
+#pragma once
+
+#include "CoreMinimal.h"
+
+#include "GameFramework/Pawn.h"
+#include "NiagaraComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+
+#include "BaseAmmo.h"
+
+#include "FakeAmmo.generated.h"
+
+UCLASS()
+class LOSTCONNECTION_API AFakeAmmo : public APawn
+{
+	GENERATED_BODY()
+
+private:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+private:
+	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* mesh;
+
+	UPROPERTY(Category = Movement, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UProjectileMovementComponent* movement;
+
+	UPROPERTY(Category = Particles, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UNiagaraComponent* tracer;
+
+	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UStaticMesh* brokenAmmoMesh;
+
+public:	
+	AFakeAmmo();
+	
+	void copyAmmo(ABaseAmmo* ammo);
+
+	~AFakeAmmo() = default;
+};
