@@ -94,6 +94,9 @@ protected:
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	float additionalCrushingHitChance;
 
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float length;
+
 	UClass* ammoClass;
 
 public:

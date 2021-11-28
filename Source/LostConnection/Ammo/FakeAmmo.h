@@ -42,5 +42,7 @@ public:
 
 	void deactivateTracer();
 
+	UStaticMeshComponent* getFakeAmmoMeshComponent() const;
+
 	~AFakeAmmo() = default;
 };

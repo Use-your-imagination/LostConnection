@@ -12,6 +12,7 @@
 #include "Engine/LostConnectionGameState.h"
 #include "Characters/BaseDrone.h"
 #include "Characters/BaseBot.h"
+#include "Constants/Constants.h"
 
 #pragma warning(disable: 4458)
 
@@ -47,6 +48,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseWeapon, crushingHitChance);
 
 	DOREPLIFETIME(UBaseWeapon, additionalCrushingHitChance);
+
+	DOREPLIFETIME(UBaseWeapon, length);
 }
 
 void UBaseWeapon::shoot()
@@ -67,53 +70,53 @@ void UBaseWeapon::shoot()
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		ABaseAmmo* launchedAmmo = Utility::getGameState(ownerCharacter.Get())->spawn<ABaseAmmo>(ammoClass, FTransform(ownerCharacter->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")));
-
-		launchedAmmo->copyProperties(this);
-
-		FHitResult hit;
-		FRotator resultRotation;
+		FVector weaponBarrelLocation = ownerCharacter->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel");
+		FTransform ammoTransform;
+		FTransform fakeAmmoTransform;
 		ABaseDrone* drone = Cast<ABaseDrone>(ownerCharacter.Get());
 
 		if (drone)
 		{
-			// Tracer limit
-			static constexpr float distance = 20000.0f;
+			UCameraComponent* camera = drone->GetFollowCamera();
 
-			FVector start = drone->getStartActionLineTrace();
-			FVector end = start + drone->GetFollowCamera()->GetComponentRotation().Vector() * distance;
+			ammoTransform = FTransform
+			(
+				camera->GetForwardVector().ToOrientationRotator(),
+				camera->GetComponentLocation() + (drone->GetCameraOffset()->TargetArmLength + length) * camera->GetForwardVector()
+			);
 			
-			if (drone->GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility))
-			{
-				resultRotation = (hit.Location - drone->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")).ToOrientationRotator();
-			}
-			else
-			{
-				resultRotation = ((drone->GetFollowCamera()->GetComponentRotation().Vector() * distance) - drone->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel")).ToOrientationRotator();
-			}
+			fakeAmmoTransform = FTransform
+			(
+				((ammoTransform.GetLocation() + UConstants::shootDistance * camera->GetForwardVector()) - weaponBarrelLocation).ToOrientationRotator(),
+				weaponBarrelLocation
+			);
 		}
 		else
 		{
 			ABaseBot* bot = Cast<ABaseBot>(ownerCharacter.Get());
 			AAIController* controller = bot->GetController<AAIController>();
 			ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"));
-
+			
 			if (target && target->IsValidLowLevelFast())
 			{
-				FVector targetLocation = target->GetActorLocation();
+				ammoTransform = FTransform
+				(
+					(target->GetActorLocation() - bot->GetActorLocation()).ToOrientationRotator(),
+					weaponBarrelLocation
+				);
 
-				resultRotation = (targetLocation - bot->GetActorLocation()).ToOrientationRotator();
+				fakeAmmoTransform = ammoTransform;
 			}
 		}
 
-		launchedAmmo->getAmmoMeshComponent()->SetWorldRotation(resultRotation);
+		ABaseAmmo* launchedAmmo = Utility::getGameState(ownerCharacter.Get())->spawn<ABaseAmmo>(ammoClass, ammoTransform);
+
+		launchedAmmo->copyProperties(this);
 
 		float pitch = FMath::RandRange(-spreadDistance, spreadDistance);
 		float yaw = FMath::Tan(FMath::Acos(pitch / spreadDistance)) * pitch;
 
-		launchedAmmo->getAmmoMeshComponent()->AddRelativeRotation({ pitch, FMath::RandRange(-yaw, yaw), 0.0f });
-
-		launchedAmmo->launch(ownerCharacter);
+		launchedAmmo->launch(ownerCharacter, fakeAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
 		currentMagazineSize -= ammoCost;
 
@@ -126,7 +129,8 @@ void UBaseWeapon::shoot()
 }
 
 UBaseWeapon::UBaseWeapon() :
-	ammoCost(1)
+	ammoCost(1),
+	length(100.0f)
 {
 
 }

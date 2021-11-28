@@ -61,7 +61,7 @@ protected:
 public:
 	ABaseAmmo();
 
-	virtual void launch(const TWeakObjectPtr<class ABaseCharacter>& character) final;
+	virtual void launch(const TWeakObjectPtr<class ABaseCharacter>& character, const FTransform& fakeAmmoTransform, const FRotator& spread) final;
 
 	virtual void copyProperties(class UBaseWeapon* weapon);
 

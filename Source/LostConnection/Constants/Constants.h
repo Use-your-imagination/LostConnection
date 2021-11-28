@@ -15,6 +15,8 @@ class LOSTCONNECTION_API UConstants : public UBlueprintFunctionLibrary
 
 public:
 	static const FString projectVersion;
+
+	static constexpr float shootDistance = 20000.0f;
 	
 public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)

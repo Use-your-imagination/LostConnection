@@ -59,3 +59,8 @@ void AFakeAmmo::deactivateTracer()
 {
 	tracer->Deactivate();
 }
+
+UStaticMeshComponent* AFakeAmmo::getFakeAmmoMeshComponent() const
+{
+	return mesh;
+}

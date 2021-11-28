@@ -149,7 +149,7 @@ ABaseAmmo::ABaseAmmo()
 	onHitAsset = onHitFinder.Object;
 }
 
-void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character)
+void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& fakeAmmoTransform, const FRotator& spread)
 {
 	if (!character.IsValid())
 	{
@@ -158,11 +158,15 @@ void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character)
 
 	isAlly = character->getIsAlly();
 
+	mesh->AddRelativeRotation(spread);
+
 	FinishSpawning({}, true);
 
-	fakeAmmo = Utility::getGameState(character.Get())->spawn<AFakeAmmo>(GetActorTransform());
+	fakeAmmo = Utility::getGameState(character.Get())->spawn<AFakeAmmo>(fakeAmmoTransform);
 
 	fakeAmmo->copyAmmo(this);
+
+	fakeAmmo->getFakeAmmoMeshComponent()->AddRelativeRotation(spread);
 
 	fakeAmmo->FinishSpawning({}, true);
 }
