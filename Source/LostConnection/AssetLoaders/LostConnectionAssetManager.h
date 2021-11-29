@@ -14,7 +14,7 @@ class LOSTCONNECTION_API ULostConnectionAssetManager : public UAssetManager
 	GENERATED_BODY()
 	
 public:
-	ULostConnectionAssetManager() = default;
+	ULostConnectionAssetManager();
 
 	~ULostConnectionAssetManager() = default;
 };
