@@ -1,4 +1,34 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.1.2.0"
+  "projectVersion": "0.1.2.0",
+  "Gameplay": {
+    "type": "category",
+    "Statuses": {
+      "type": "item",
+      "notes": [
+        "Adde burn and arcing current statuses"
+      ]
+    },
+    "Shooting": {
+      "type": "item",
+      "notes": [
+        "Rework shooting"
+      ]
+    },
+    "SN4K3": {
+      "type": "item",
+      "notes": [
+        "Added 2 and 3 abilities implementation"
+      ]
+    }
+  },
+  "UI": {
+    "type": "category",
+    "Main menu": {
+      "type": "item",
+      "notes": [
+        "New main menu"
+      ]
+    }
+  }
 }
