@@ -90,7 +90,7 @@ void ASN4K3::setUltimatePlaceholder(ASN4K3UltimateAbilityPlaceholder* ultimatePl
 	this->ultimatePlaceholder = ultimatePlaceholder;
 }
 
-ASN4K3UltimateAbilityPlaceholder* ASN4K3::getUltimatePlaceholder()
+const TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder>& ASN4K3::getUltimatePlaceholder() const
 {
 	return ultimatePlaceholder;
 }

@@ -17,7 +17,7 @@ class LOSTCONNECTION_API ASN4K3 : public ABaseDrone
 	GENERATED_BODY()
 
 private:
-	class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder;
+	TWeakObjectPtr<class ASN4K3UltimateAbilityPlaceholder> ultimatePlaceholder;
 
 	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UObject* thirdAbilityReservator;
@@ -43,7 +43,7 @@ public:
 
 	void setUltimatePlaceholder(class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceHolder);
 
-	class ASN4K3UltimateAbilityPlaceholder* getUltimatePlaceholder();
+	const TWeakObjectPtr<class ASN4K3UltimateAbilityPlaceholder>& getUltimatePlaceholder() const;
 
 	virtual bool checkSecondAbilityCast() const override;
 

@@ -91,9 +91,12 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 		movement->Velocity = FVector(0.0f);
 
-		fakeAmmo->deactivateTracer();
+		if (fakeAmmo->IsValidLowLevelFast())
+		{
+			fakeAmmo->deactivateTracer();
 
-		fakeAmmo->Destroy();
+			fakeAmmo->Destroy();
+		}
 
 		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(

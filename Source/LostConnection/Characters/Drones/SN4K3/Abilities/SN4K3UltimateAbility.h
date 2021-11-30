@@ -26,6 +26,9 @@ private:
 	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float currentAbilityDuration;
 
+	UPROPERTY(Category = SN4K3, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	FVector ultimatePlaceholderLocation;
+
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

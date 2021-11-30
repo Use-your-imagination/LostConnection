@@ -45,7 +45,7 @@ float USN4K3UltimateAbility::getCurrentAbilityDuration() const
 void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 {
 	ASN4K3* drone = Cast<ASN4K3>(target);
-	ASN4K3UltimateAbilityPlaceholder* placeholder = drone->getUltimatePlaceholder();
+	const TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder>& placeholder = drone->getUltimatePlaceholder();
 	FVector returnPosition;
 
 	drone->GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
@@ -58,14 +58,21 @@ void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 	}
 	else
 	{
-		returnPosition = placeholder->GetActorLocation();
+		returnPosition = ultimatePlaceholderLocation;
+
+		ultimatePlaceholderLocation = FVector::ZeroVector;
 	}
 
 	currentAbilityDuration = 0.0f;
 
 	drone->setUltimatePlaceholder(nullptr);
 
-	placeholder->Destroy();
+	if (placeholder.IsValid())
+	{
+		placeholder->Destroy();
+
+		ultimatePlaceholderLocation = FVector::ZeroVector;
+	}
 
 	drone->SetActorLocation(returnPosition);
 
@@ -106,6 +113,8 @@ void USN4K3UltimateAbility::useAbility()
 	placeholder->setAbility(this);
 
 	placeholder->FinishSpawning({}, true);
+
+	ultimatePlaceholderLocation = placeholder->GetActorLocation();
 
 	drone->setUltimatePlaceholder(placeholder);
 
