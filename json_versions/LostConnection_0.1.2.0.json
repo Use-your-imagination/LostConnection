@@ -29,6 +29,12 @@
       "notes": [
         "New main menu"
       ]
+    },
+    "Health bars": {
+      "type": "item",
+      "notes": [
+        "All AI now have health bars above their heads"
+      ]
     }
   }
 }
