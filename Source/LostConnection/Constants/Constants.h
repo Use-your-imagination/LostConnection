@@ -21,4 +21,7 @@ public:
 public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static FText getProjectVersion();
+
+	UFUNCTION(Category = AssetManager, BlueprintCallable, BlueprintPure)
+	static class ULostConnectionAssetManager* getAssetManager();
 };
