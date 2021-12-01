@@ -212,7 +212,7 @@ public:
 	virtual void setHealth(float newHealth) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setCurrentHealth(float newCurrentHealth) final;
+	virtual void setCurrentHealth(float newCurrentHealth);
 
 	UFUNCTION(Server, Reliable)
 	virtual void setDefaultMovementSpeed(float speed);

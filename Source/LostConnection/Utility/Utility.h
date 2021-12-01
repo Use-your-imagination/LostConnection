@@ -25,6 +25,8 @@ public:
 
 	static SIZE_T countStatuses(const class IAilmentReceiver* target, UClass* statusStaticClass);
 
+	static FText getFTextFromFloat(float value);
+
 	template<typename T>
 	static bool checkChanceProc(const T& chance);
 

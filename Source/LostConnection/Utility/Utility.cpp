@@ -22,3 +22,43 @@ SIZE_T Utility::countStatuses(const IAilmentReceiver* target, UClass* statusStat
 
 	return Algo::CountIf(statuses, [&statusStaticClass](const class UBaseStatus* status) { return status->StaticClass()->IsChildOf(statusStaticClass); });
 }
+
+FText Utility::getFTextFromFloat(float value)
+{
+	static constexpr size_t digits = 3;
+
+	FString stringValue = FString::Printf(TEXT("%.0f"), value);
+	FString thousandSymbol = FText::FromStringTable("/Game/Text/Common.Common", "ThousandSymbol").ToString();
+	
+	if (!(stringValue.Len() >= digits * 2 || stringValue.Len() <= digits))
+	{
+		stringValue.InsertAt(stringValue.Len() % digits, '.');
+
+		while (true)
+		{
+			stringValue.MidInline(0, stringValue.Len() - 1);
+
+			TCHAR last = stringValue[stringValue.Len() - 1];
+
+			if (last == TCHAR('0') || last == TCHAR('.'))
+			{
+				continue;
+			}
+
+			if (stringValue.Len() <= digits + 1)
+			{
+				break;
+			}
+		}
+
+		stringValue += thousandSymbol;
+	}
+	else if (stringValue.Len() >= digits * 2)
+	{
+		stringValue.MidInline(0, digits);
+
+		stringValue += thousandSymbol;
+	}
+	
+	return FText::FromString(MoveTemp(stringValue));
+}

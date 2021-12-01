@@ -9,7 +9,7 @@
 
 void InitializationUtility::initAbilityId(const FString& abilityClassName, abilitySlot& id)
 {
-	if (abilityClassName.Find(L"Passive") != INDEX_NONE)
+	if (abilityClassName.Find("Passive") != INDEX_NONE)
 	{
 		id = abilitySlot::passiveAbility;
 	}
