@@ -65,14 +65,14 @@ void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 
 	currentAbilityDuration = 0.0f;
 
-	drone->setUltimatePlaceholder(nullptr);
-
 	if (placeholder.IsValid())
 	{
 		placeholder->Destroy();
 
 		ultimatePlaceholderLocation = FVector::ZeroVector;
 	}
+
+	drone->setUltimatePlaceholder(nullptr);
 
 	drone->SetActorLocation(returnPosition);
 
