@@ -528,8 +528,6 @@ ABaseDrone::ABaseDrone() :
 {
 	isAlly = true;
 
-	spareAmmo[StaticCast<size_t>(ammoTypes::small)] = 720;
-
 	BaseTurnRate = 45.0f;
 	BaseLookUpRate = 45.0f;
 
