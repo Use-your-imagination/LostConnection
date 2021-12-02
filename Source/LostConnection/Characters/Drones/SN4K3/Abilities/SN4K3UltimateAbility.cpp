@@ -108,7 +108,7 @@ void USN4K3UltimateAbility::useAbility()
 
 	currentCooldown = cooldown;
 
-	ASN4K3UltimateAbilityPlaceholder* placeholder = Utility::getGameState(drone)->spawn<ASN4K3UltimateAbilityPlaceholder>(FTransform(drone->GetMesh()->GetComponentRotation(), std::move(tem)));
+	ASN4K3UltimateAbilityPlaceholder* placeholder = Utility::getGameState(drone)->spawn<ASN4K3UltimateAbilityPlaceholder>(FTransform(drone->GetMesh()->GetComponentRotation(), MoveTemp(tem)));
 
 	placeholder->setAbility(this);
 

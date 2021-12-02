@@ -9,9 +9,9 @@ FPrimaryAssetId UStatusesDataAsset::getPrimaryAssetId()
 	return FPrimaryAssetId(FPrimaryAssetType("Statuses"), "Statuses");
 }
 
-const TArray<TSoftClassPtr<UBaseStatus>>& UStatusesDataAsset::getAilments() const
+const UClass* UStatusesDataAsset::operator [] (typeOfDamage damageType) const
 {
-	return ailments;
+	return ailments[damageType].Get();
 }
 
 FPrimaryAssetId UStatusesDataAsset::GetPrimaryAssetId() const

@@ -8,6 +8,8 @@
 
 #include "StatusesDataAsset.generated.h"
 
+enum class typeOfDamage : uint8;
+
 UCLASS()
 class LOSTCONNECTION_API UStatusesDataAsset : public UPrimaryDataAsset
 {
@@ -15,7 +17,7 @@ class LOSTCONNECTION_API UStatusesDataAsset : public UPrimaryDataAsset
 	
 private:
 	UPROPERTY(Category = Ailments, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<TSoftClassPtr<class UBaseStatus>> ailments;
+	TMap<typeOfDamage, TSoftClassPtr<class UBaseStatus>> ailments;
 
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
@@ -23,7 +25,7 @@ public:
 public:
 	UStatusesDataAsset() = default;
 
-	const TArray<TSoftClassPtr<class UBaseStatus>>& getAilments() const;
+	const UClass* operator [] (typeOfDamage damageType) const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

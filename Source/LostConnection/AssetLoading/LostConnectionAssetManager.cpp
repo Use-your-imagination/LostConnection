@@ -6,6 +6,11 @@
 
 #include "Statuses/BaseStatus.h"
 
+ULostConnectionAssetManager& ULostConnectionAssetManager::get()
+{
+	return StaticCast<ULostConnectionAssetManager&>(UAssetManager::Get());
+}
+
 void ULostConnectionAssetManager::loadStatuses()
 {
 	FStreamableDelegate delegate;
@@ -19,9 +24,13 @@ void ULostConnectionAssetManager::loadStatuses()
 				return;
 			}
 
-			const auto& values = Cast<UStatusesDataAsset>(statuses->GetLoadedAsset())->getAilments();
-
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, L"Loaded");
 		});
 
 	statuses = LoadPrimaryAsset(UStatusesDataAsset::getPrimaryAssetId(), {}, delegate);
+}
+
+const UClass* ULostConnectionAssetManager::operator [] (typeOfDamage damageType) const
+{
+	return (*GetPrimaryAssetObject<UStatusesDataAsset>(UStatusesDataAsset::getPrimaryAssetId()))[damageType];
 }

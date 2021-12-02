@@ -14,14 +14,9 @@ UCLASS()
 class LOSTCONNECTION_API ALostConnectionGameState : public AGameStateBase
 {
 	GENERATED_BODY()
-	
-private:
-	TMap<typeOfDamage, UClass*> statuses;
 
 public:
-	ALostConnectionGameState();
-
-	UClass* getDefaultStatus(typeOfDamage damageType) const;
+	ALostConnectionGameState() = default;
 
 	/// @brief Spawn actor deferred
 	/// @tparam T 

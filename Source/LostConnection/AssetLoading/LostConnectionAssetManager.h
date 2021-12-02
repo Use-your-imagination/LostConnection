@@ -22,10 +22,15 @@ private:
 	TSharedPtr<FStreamableHandle> statuses;
 
 public:
+	static ULostConnectionAssetManager& get();
+
+public:
 	ULostConnectionAssetManager() = default;
 
 	UFUNCTION(BlueprintCallable)
 	void loadStatuses();
+
+	const UClass* operator [] (typeOfDamage damageType) const;
 
 	~ULostConnectionAssetManager() = default;
 };

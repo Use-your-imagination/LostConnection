@@ -6,6 +6,7 @@
 #include "Engine/LostConnectionGameState.h"
 #include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
 #include "Utility.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 
 void InitializationUtility::initAbilityId(const FString& abilityClassName, abilitySlot& id)
 {
@@ -31,9 +32,7 @@ void InitializationUtility::initAbilityId(const FString& abilityClassName, abili
 	}
 }
 
-UBaseStatus* InitializationUtility::createDefaultStatus(typeOfDamage type, IAilmentReceiver* target)
+UBaseStatus* InitializationUtility::createDefaultStatus(typeOfDamage damageType, IAilmentReceiver* target)
 {
-	APawn* pawn = Cast<APawn>(target->_getUObject());
-
-	return NewObject<UBaseStatus>(pawn, Utility::getGameState(pawn)->getDefaultStatus(type));
+	return NewObject<UBaseStatus>(target->_getUObject(), ULostConnectionAssetManager::get()[damageType]);
 }
