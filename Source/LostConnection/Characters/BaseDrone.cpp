@@ -219,31 +219,6 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(ABaseDrone, slideCooldown);
 }
 
-void ABaseDrone::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-
-	if (HasAuthority())
-	{
-		UWorld* world = GetWorld();
-
-		if (world)
-		{
-			// defaultWeaponSlot = NewObject<UGauss>(this);
-			// 
-			// defaultWeaponSlot->setWorld(world);
-			// 
-			// defaultWeaponSlot->setOwnerCharacter(this);
-			// 
-			// primaryWeaponSlot = NewObject<UHipter>(this);
-			// 
-			// primaryWeaponSlot->setWorld(world);
-			// 
-			// primaryWeaponSlot->setOwnerCharacter(this);
-		}
-	}
-}
-
 bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
@@ -614,14 +589,34 @@ void ABaseDrone::resetShoot()
 	MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseShoot");
 }
 
-void ABaseDrone::changeToFirstWeapon_Implementation()
+void ABaseDrone::setPrimaryWeapon_Implementation(const UClass* primaryWeapon)
+{
+	if (!primaryWeapon->IsChildOf(UBaseWeapon::StaticClass()))
+	{
+		return;
+	}
+
+	primaryWeaponSlot = NewObject<UBaseWeapon>(this, primaryWeapon);
+}
+
+void ABaseDrone::setSecondaryWeapon_Implementation(const UClass* secondaryWeapon)
+{
+	if (!secondaryWeapon->IsChildOf(UBaseWeapon::StaticClass()))
+	{
+		return;
+	}
+
+	secondaryWeaponSlot = NewObject<UBaseWeapon>(this, secondaryWeapon);
+}
+
+void ABaseDrone::changeToPrimaryWeapon_Implementation()
 {
 	currentWeapon = primaryWeaponSlot;
 
-	this->updateWeaponMesh();
+		this->updateWeaponMesh();
 }
 
-void ABaseDrone::changeToSecondWeapon_Implementation()
+void ABaseDrone::changeToSecondaryWeapon_Implementation()
 {
 	currentWeapon = secondaryWeaponSlot;
 
@@ -666,7 +661,7 @@ void ABaseDrone::dropWeapon()
 
 void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 {
-	if (!weaponToEquip)
+	if (!weaponToEquip && !weaponToEquip->IsValidLowLevelFast())
 	{
 		return;
 	}
@@ -681,7 +676,7 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 			primaryWeaponSlot = weapon;
 
-			this->changeToFirstWeapon();
+			this->changeToPrimaryWeapon();
 		}
 		else if (currentWeapon == secondaryWeaponSlot)
 		{
@@ -689,7 +684,7 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 			secondaryWeaponSlot = weapon;
 
-			this->changeToSecondWeapon();
+			this->changeToSecondaryWeapon();
 		}
 		else
 		{
@@ -709,13 +704,13 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 		{
 			primaryWeaponSlot = weapon;
 
-			this->changeToFirstWeapon();
+			this->changeToPrimaryWeapon();
 		}
 		else if (!secondaryWeaponSlot)
 		{
 			secondaryWeaponSlot = weapon;
 
-			this->changeToSecondWeapon();
+			this->changeToSecondaryWeapon();
 		}
 	}
 
@@ -726,15 +721,15 @@ void ABaseDrone::changeWeapon()
 {
 	if (currentWeapon == primaryWeaponSlot)
 	{
-		this->changeToSecondWeapon();
+		this->changeToSecondaryWeapon();
 	}
 	else if (currentWeapon == secondaryWeaponSlot)
 	{
-		this->changeToFirstWeapon();
+		this->changeToPrimaryWeapon();
 	}
 	else
 	{
-		this->changeToFirstWeapon();
+		this->changeToPrimaryWeapon();
 	}
 }
 

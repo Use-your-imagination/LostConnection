@@ -37,6 +37,8 @@ public:
 public:
 	UDronesPreviewDataAsset() = default;
 
+	TArray<const FDronePreview*> getDronesPreview() const;
+
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 
 	~UDronesPreviewDataAsset() = default;

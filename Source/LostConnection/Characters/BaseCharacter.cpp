@@ -405,20 +405,14 @@ void ABaseCharacter::restoreHealth(float amount)
 	}
 }
 
-void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
+void ABaseCharacter::setDefaultWeapon_Implementation(const UClass* defaultWeapon)
 {
-	float tem = this->getCurrentHealth();
-	
-	tem -= inflictor->getInflictorDamage() + inflictor->getAdditionalInflictorDamage();
+	if (!defaultWeapon->IsChildOf(UBaseWeapon::StaticClass()))
+	{
+		return;
+	}
 
-	if (tem < 0.0f)
-	{
-		this->setCurrentHealth(0.0f);
-	}
-	else
-	{
-		this->setCurrentHealth(tem);
-	}
+	defaultWeaponSlot = NewObject<UBaseWeapon>(this, defaultWeapon);
 }
 
 void ABaseCharacter::setHealth_Implementation(float newHealth)
@@ -548,6 +542,22 @@ TArray<TWeakObjectPtr<UBaseWeapon>> ABaseCharacter::getWeapons() const
 	}
 
 	return TArray<TWeakObjectPtr<UBaseWeapon>>();
+}
+
+void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
+{
+	float tem = this->getCurrentHealth();
+
+	tem -= inflictor->getInflictorDamage() + inflictor->getAdditionalInflictorDamage();
+
+	if (tem < 0.0f)
+	{
+		this->setCurrentHealth(0.0f);
+	}
+	else
+	{
+		this->setCurrentHealth(tem);
+	}
 }
 
 float ABaseCharacter::getFlatDamageReduction_Implementation() const

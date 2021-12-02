@@ -5,6 +5,7 @@
 #include "NiagaraFunctionLibrary.h"
 
 #include "Statuses/BaseStatus.h"
+#include "Weapons/BaseWeapon.h"
 
 ULostConnectionAssetManager& ULostConnectionAssetManager::get()
 {
@@ -70,5 +71,21 @@ void ULostConnectionAssetManager::loadDronesPreview()
 
 const UClass* ULostConnectionAssetManager::operator [] (typeOfDamage damageType) const
 {
-	return (*GetPrimaryAssetObject<UStatusesDataAsset>(UStatusesDataAsset::getPrimaryAssetId()))[damageType];
+	UStatusesDataAsset& asset = *GetPrimaryAssetObject<UStatusesDataAsset>(UStatusesDataAsset::getPrimaryAssetId());
+
+	return asset[damageType];
+}
+
+const UClass* ULostConnectionAssetManager::getWeaponClass(const TSubclassOf<UBaseWeapon>& weapon) const
+{
+	UWeaponsDataAsset& asset = *GetPrimaryAssetObject<UWeaponsDataAsset>(UWeaponsDataAsset::getPrimaryAssetId());
+
+	return asset[weapon];
+}
+
+TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() const
+{
+	UDronesPreviewDataAsset& asset = *GetPrimaryAssetObject<UDronesPreviewDataAsset>(UDronesPreviewDataAsset::getPrimaryAssetId());
+
+	return asset.getDronesPreview();
 }

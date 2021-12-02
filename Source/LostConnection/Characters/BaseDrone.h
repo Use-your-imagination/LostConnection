@@ -180,8 +180,6 @@ public:
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	virtual void PostInitializeComponents() override;
-
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	UFUNCTION()
@@ -243,10 +241,16 @@ public:
 	virtual void resetShoot() final override;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void changeToFirstWeapon() final;
+	virtual void setPrimaryWeapon(const UClass* primaryWeapon) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void changeToSecondWeapon() final;
+	virtual void setSecondaryWeapon(const UClass* secondaryWeapon) final;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void changeToPrimaryWeapon() final;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void changeToSecondaryWeapon() final;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void pickupAmmo(ammoTypes type, int32 count) final;

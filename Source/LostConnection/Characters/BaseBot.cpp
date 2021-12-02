@@ -24,27 +24,6 @@ void ABaseBot::BeginPlay()
 	healthBar->AddElement(healthBarMaterial, nullptr, false, 10.0f, 40.0f, nullptr);
 
 	healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
-
-	if (HasAuthority())
-	{
-		UWorld* world = GetWorld();
-
-		if (world)
-		{
-			// defaultWeaponSlot = NewObject<UGauss>(this);
-			// 
-			// defaultWeaponSlot->setWorld(world);
-			// 
-			// defaultWeaponSlot->setOwnerCharacter(this);
-		}
-
-		// this->changeToDefaultWeapon();
-	}
-}
-
-void ABaseBot::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
 }
 
 void ABaseBot::deathLogic()

@@ -35,8 +35,6 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	virtual void PostInitializeComponents() override;
-
 protected:
 	virtual void deathLogic() override;
 

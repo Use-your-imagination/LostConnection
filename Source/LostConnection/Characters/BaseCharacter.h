@@ -205,8 +205,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void restoreHealth(float amount) final;
 
-	UFUNCTION(BlueprintCallable)
-	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) override final;
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void setDefaultWeapon(const UClass* defaultWeapon) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setHealth(float newHealth) final;
@@ -258,6 +258,9 @@ public:
 	virtual const TWeakObjectPtr<class USwarmStatus>& getSwarm() const final;
 
 	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) override final;
 
 	virtual float getFlatDamageReduction_Implementation() const override;
 
