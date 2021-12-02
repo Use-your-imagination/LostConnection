@@ -31,14 +31,14 @@ void ABaseBot::BeginPlay()
 
 		if (world)
 		{
-			defaultWeaponSlot = NewObject<UGauss>(this);
-
-			defaultWeaponSlot->setWorld(world);
-
-			defaultWeaponSlot->setOwnerCharacter(this);
+			// defaultWeaponSlot = NewObject<UGauss>(this);
+			// 
+			// defaultWeaponSlot->setWorld(world);
+			// 
+			// defaultWeaponSlot->setOwnerCharacter(this);
 		}
 
-		this->changeToDefaultWeapon();
+		// this->changeToDefaultWeapon();
 	}
 }
 

@@ -109,7 +109,7 @@ void UBaseWeapon::shoot()
 			}
 		}
 
-		ABaseAmmo* launchedAmmo = Utility::getGameState(ownerCharacter.Get())->spawn<ABaseAmmo>(ammoClass, ammoTransform);
+		ABaseAmmo* launchedAmmo = Utility::getGameState(ownerCharacter.Get())->spawn<ABaseAmmo>(ammoClass.Get(), ammoTransform);
 
 		launchedAmmo->copyProperties(this);
 
@@ -284,7 +284,7 @@ weaponTypes UBaseWeapon::getWeaponType() const
 
 UClass* UBaseWeapon::getAnimationBlueprint() const
 {
-	return animationBlueprint;
+	return animationBlueprint.Get();
 }
 
 const TWeakObjectPtr<ABaseCharacter>& UBaseWeapon::getOwnerCharacter() const

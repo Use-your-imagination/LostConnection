@@ -229,17 +229,17 @@ void ABaseDrone::PostInitializeComponents()
 
 		if (world)
 		{
-			defaultWeaponSlot = NewObject<UGauss>(this);
-
-			defaultWeaponSlot->setWorld(world);
-
-			defaultWeaponSlot->setOwnerCharacter(this);
-
-			primaryWeaponSlot = NewObject<UHipter>(this);
-
-			primaryWeaponSlot->setWorld(world);
-
-			primaryWeaponSlot->setOwnerCharacter(this);
+			// defaultWeaponSlot = NewObject<UGauss>(this);
+			// 
+			// defaultWeaponSlot->setWorld(world);
+			// 
+			// defaultWeaponSlot->setOwnerCharacter(this);
+			// 
+			// primaryWeaponSlot = NewObject<UHipter>(this);
+			// 
+			// primaryWeaponSlot->setWorld(world);
+			// 
+			// primaryWeaponSlot->setOwnerCharacter(this);
 		}
 	}
 }

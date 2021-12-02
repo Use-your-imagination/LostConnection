@@ -20,6 +20,8 @@ private:
 
 private:
 	TSharedPtr<FStreamableHandle> statuses;
+	TSharedPtr<FStreamableHandle> weapons;
+	TSharedPtr<FStreamableHandle> dronesPreview;
 
 public:
 	static ULostConnectionAssetManager& get();
@@ -29,6 +31,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void loadStatuses();
+
+	UFUNCTION(BlueprintCallable)
+	void loadWeapons();
+
+	UFUNCTION(BlueprintCallable)
+	void loadDronesPreview();
 
 	const UClass* operator [] (typeOfDamage damageType) const;
 

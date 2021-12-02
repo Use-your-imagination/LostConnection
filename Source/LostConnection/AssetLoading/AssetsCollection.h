@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 
 #include "DataAssets/StatusesDataAsset.h"
+#include "DataAssets/DronesPreviewDataAsset.h"
+#include "DataAssets/WeaponsDataAsset.h"
 
 class LOSTCONNECTION_API AssetsCollection
 {

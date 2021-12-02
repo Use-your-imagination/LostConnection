@@ -5,6 +5,8 @@
 AssetsCollection::AssetsCollection()
 {
 	loadData.Add(AssetsCollection::getCreationData<UStatusesDataAsset>());
+	loadData.Add(AssetsCollection::getCreationData<UDronesPreviewDataAsset>());
+	loadData.Add(AssetsCollection::getCreationData<UWeaponsDataAsset>());
 }
 
 AssetsCollection& AssetsCollection::get()

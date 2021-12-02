@@ -29,7 +29,7 @@ enum class ammoTypes : uint8
 	defaultType = 3 UMETA(DisplayName = "Default ammo")
 };
 
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API UBaseWeapon : public UObject
 {
 	GENERATED_BODY()
@@ -49,22 +49,22 @@ protected:
 	virtual void shoot();
 
 protected:
-	UPROPERTY(Category = Components, BlueprintReadOnly)
+	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
 	USkeletalMesh* mesh;
 
-	UPROPERTY(Category = Components, BlueprintReadOnly)
+	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
 	UStaticMesh* magazineMesh;
 
-	UPROPERTY()
-	UClass* animationBlueprint;
+	UPROPERTY(Category = Animations, EditDefaultsOnly)
+	TSubclassOf<UAnimInstance> animationBlueprint;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	ammoTypes ammoType;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	typeOfDamage damageType;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float damage;
 
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
@@ -73,31 +73,32 @@ protected:
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	int currentMagazineSize;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	int magazineSize;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	int ammoCost;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	int roundsPerSecond;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	weaponTypes weaponType;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float spreadDistance;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float crushingHitChance;
 
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	float additionalCrushingHitChance;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float length;
 
-	UClass* ammoClass;
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<ABaseAmmo> ammoClass;
 
 public:
 	UBaseWeapon();

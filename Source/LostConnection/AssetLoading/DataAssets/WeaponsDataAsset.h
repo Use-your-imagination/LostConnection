@@ -1,0 +1,29 @@
+// Copyright (c) 2021 Use-your-imagination
+
+#pragma once
+
+#include "CoreMinimal.h"
+
+#include "Engine/DataAsset.h"
+
+#include "WeaponsDataAsset.generated.h"
+
+UCLASS(Blueprintable)
+class LOSTCONNECTION_API UWeaponsDataAsset : public UPrimaryDataAsset
+{
+	GENERATED_BODY()
+
+private:
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<TSoftClassPtr<class UBaseWeapon>> weapons;
+
+public:
+	static FPrimaryAssetId getPrimaryAssetId();
+
+public:
+	UWeaponsDataAsset() = default;
+
+	FPrimaryAssetId GetPrimaryAssetId() const override;
+
+	~UWeaponsDataAsset() = default;
+};
