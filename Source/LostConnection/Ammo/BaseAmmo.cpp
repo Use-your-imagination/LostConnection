@@ -152,9 +152,9 @@ ABaseAmmo::ABaseAmmo()
 	onHitAsset = onHitFinder.Object;
 }
 
-void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& fakeAmmoTransform, const FRotator& spread)
+void ABaseAmmo::launch_Implementation(ABaseCharacter* character, const FTransform& fakeAmmoTransform, const FRotator& spread)
 {
-	if (!character.IsValid())
+	if (!character || !character->IsValidLowLevel())
 	{
 		return;
 	}
@@ -165,7 +165,7 @@ void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FT
 
 	FinishSpawning({}, true);
 
-	fakeAmmo = Utility::getGameState(character.Get())->spawn<AFakeAmmo>(fakeAmmoTransform);
+	fakeAmmo = Utility::getGameState(character)->spawn<AFakeAmmo>(fakeAmmoTransform);
 
 	fakeAmmo->copyAmmo(this);
 

@@ -23,7 +23,7 @@ public:
 public:
 	UWeaponsDataAsset() = default;
 
-	const UClass* operator [] (const TSubclassOf<class UBaseWeapon>& weapon) const;
+	TSubclassOf<class UBaseWeapon> operator [] (const TSubclassOf<class UBaseWeapon>& weapon) const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

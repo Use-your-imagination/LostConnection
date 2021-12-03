@@ -39,8 +39,6 @@ ABaseBot::ABaseBot()
 	
 	isAlly = false;
 
-	spareAmmo.Init(9999, 4);
-
 	healthBar = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("HealthBar"));
 	healthBarText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("HealthBarText"));
 	

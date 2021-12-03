@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerInput.h"
+#include "Algo/Find.h"
 
 #include "Engine/LostConnectionPlayerState.h"
 #include "Engine/LostConnectionGameState.h"
@@ -587,24 +588,22 @@ void ABaseDrone::resetShoot()
 	MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseShoot");
 }
 
-void ABaseDrone::setPrimaryWeapon_Implementation(const UClass* primaryWeapon)
+void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primaryWeapon)
 {
-	if (!primaryWeapon->IsChildOf(UBaseWeapon::StaticClass()))
-	{
-		return;
-	}
+	primaryWeaponSlot = NewObject<UBaseWeapon>(this, primaryWeapon.Get());
 
-	primaryWeaponSlot = NewObject<UBaseWeapon>(this, primaryWeapon);
+	primaryWeaponSlot->setOwnerCharacter(this);
+
+	primaryWeaponSlot->updateTimeBetweenShots();
 }
 
-void ABaseDrone::setSecondaryWeapon_Implementation(const UClass* secondaryWeapon)
+void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> secondaryWeapon)
 {
-	if (!secondaryWeapon->IsChildOf(UBaseWeapon::StaticClass()))
-	{
-		return;
-	}
+	secondaryWeaponSlot = NewObject<UBaseWeapon>(this, secondaryWeapon.Get());
 
-	secondaryWeaponSlot = NewObject<UBaseWeapon>(this, secondaryWeapon);
+	secondaryWeaponSlot->setOwnerCharacter(this);
+
+	secondaryWeaponSlot->updateTimeBetweenShots();
 }
 
 void ABaseDrone::changeToPrimaryWeapon_Implementation()
@@ -621,12 +620,14 @@ void ABaseDrone::changeToSecondaryWeapon_Implementation()
 	this->updateWeaponMesh();
 }
 
-void ABaseDrone::pickupAmmo(ammoTypes type, int32 count)
+void ABaseDrone::pickupAmmo_Implementation(ammoTypes type, int32 count)
 {
-	spareAmmo[StaticCast<size_t>(type)] += count;
+	Algo::FindByPredicate(spareAmmoReplication, [&type](FAmmoData& data) { return data.ammoType == type; })->ammoCount += count;
+
+	this->onSpareAmmoChanged();
 }
 
-void ABaseDrone::dropWeapon()
+void ABaseDrone::dropWeapon_Implementation()
 {
 	if (!currentWeapon || currentWeapon == defaultWeaponSlot)
 	{
@@ -642,6 +643,8 @@ void ABaseDrone::dropWeapon()
 	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), spawnPoint);
 
 	droppedWeapon->setWeapon(currentWeapon);
+
+	currentWeapon->setOwnerCharacter(nullptr);
 
 	if (currentWeapon && currentWeapon == primaryWeaponSlot)
 	{
@@ -665,6 +668,10 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 	}
 
 	UBaseWeapon* weapon = weaponToEquip->getWeapon();
+
+	weapon->setOwnerCharacter(this);
+
+	weapon->updateTimeBetweenShots();
 
 	if (currentWeapon)
 	{

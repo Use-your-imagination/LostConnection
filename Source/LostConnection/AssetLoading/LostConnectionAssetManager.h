@@ -41,7 +41,7 @@ public:
 	const UClass* operator [] (typeOfDamage damageType) const;
 
 	UFUNCTION(BlueprintCallable)
-	const UClass* getWeaponClass(const TSubclassOf<class UBaseWeapon>& weapon) const;
+	TSubclassOf<class UBaseWeapon> getWeaponClass(TSubclassOf<class UBaseWeapon> weapon) const;
 
 	TArray<const FDronePreview*> getDronesPreview() const;
 

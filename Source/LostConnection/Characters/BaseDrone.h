@@ -241,10 +241,10 @@ public:
 	virtual void resetShoot() final override;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setPrimaryWeapon(const UClass* primaryWeapon) final;
+	virtual void setPrimaryWeapon(TSubclassOf<UBaseWeapon> primaryWeapon) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setSecondaryWeapon(const UClass* secondaryWeapon) final;
+	virtual void setSecondaryWeapon(TSubclassOf<UBaseWeapon> secondaryWeapon) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void changeToPrimaryWeapon() final;
@@ -252,10 +252,10 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void changeToSecondaryWeapon() final;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void pickupAmmo(ammoTypes type, int32 count) final;
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	virtual void dropWeapon() final;
 
 	UFUNCTION(Server, Reliable)

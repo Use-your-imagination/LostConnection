@@ -116,7 +116,7 @@ void UBaseWeapon::shoot()
 		float pitch = FMath::RandRange(-spreadDistance, spreadDistance);
 		float yaw = FMath::Tan(FMath::Acos(pitch / spreadDistance)) * pitch;
 
-		launchedAmmo->launch(ownerCharacter, fakeAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
+		launchedAmmo->launch(ownerCharacter.Get(), fakeAmmoTransform, {pitch, FMath::RandRange(-yaw, yaw), 0.0f});
 
 		currentMagazineSize -= ammoCost;
 
@@ -132,7 +132,7 @@ UBaseWeapon::UBaseWeapon() :
 	ammoCost(1),
 	length(100.0f)
 {
-	currentMagazineSize = magazineSize;
+	
 }
 
 void UBaseWeapon::startShoot()
@@ -140,7 +140,7 @@ void UBaseWeapon::startShoot()
 	isShooting = true;
 }
 
-void UBaseWeapon::resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+void UBaseWeapon::resetShoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
 {
 	isShooting = false;
 
@@ -192,12 +192,7 @@ void UBaseWeapon::decreaseAdditionalDamage(float amount)
 	additionalDamage -= amount;
 }
 
-void UBaseWeapon::setWorld(UWorld* world)
-{
-	this->world = world;
-}
-
-void UBaseWeapon::setOwnerCharacter(ABaseCharacter* ownerCharacter)
+void UBaseWeapon::setOwnerCharacter_Implementation(ABaseCharacter* ownerCharacter)
 {
 	this->ownerCharacter = ownerCharacter;
 }

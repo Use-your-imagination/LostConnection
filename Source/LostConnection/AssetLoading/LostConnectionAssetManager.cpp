@@ -76,7 +76,7 @@ const UClass* ULostConnectionAssetManager::operator [] (typeOfDamage damageType)
 	return asset[damageType];
 }
 
-const UClass* ULostConnectionAssetManager::getWeaponClass(const TSubclassOf<UBaseWeapon>& weapon) const
+TSubclassOf<UBaseWeapon> ULostConnectionAssetManager::getWeaponClass(TSubclassOf<UBaseWeapon> weapon) const
 {
 	UWeaponsDataAsset& asset = *GetPrimaryAssetObject<UWeaponsDataAsset>(UWeaponsDataAsset::getPrimaryAssetId());
 

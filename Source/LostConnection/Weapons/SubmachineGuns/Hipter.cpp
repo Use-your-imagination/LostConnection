@@ -2,7 +2,8 @@
 
 #include "Hipter.h"
 
-UHipter::UHipter()
+UHipter::UHipter() : 
+	UBaseWeapon::UBaseWeapon()
 {
 	this->updateTimeBetweenShots();
 }

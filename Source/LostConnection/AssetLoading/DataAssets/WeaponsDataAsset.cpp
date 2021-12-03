@@ -9,9 +9,9 @@ FPrimaryAssetId UWeaponsDataAsset::getPrimaryAssetId()
 	return FPrimaryAssetId(FPrimaryAssetType("Weapons"), "Weapons");
 }
 
-const UClass* UWeaponsDataAsset::operator [] (const TSubclassOf<UBaseWeapon>& weapon) const
+TSubclassOf<UBaseWeapon> UWeaponsDataAsset::operator [] (const TSubclassOf<UBaseWeapon>& weapon) const
 {
-	const UClass* result = nullptr;
+	TSubclassOf<UBaseWeapon> result = nullptr;
 
 	for (const auto& i : weapons)
 	{

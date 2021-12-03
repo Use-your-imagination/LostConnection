@@ -62,9 +62,6 @@ ASN4K3::ASN4K3()
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);
 
-	spareAmmo[StaticCast<size_t>(ammoTypes::large)] = 120;
-	spareAmmo[StaticCast<size_t>(ammoTypes::energy)] = 180;
-
 	passiveAbility = CreateDefaultSubobject<USN4K3PassiveAbility>(TEXT("PassiveAbility"));
 	firstAbility = CreateDefaultSubobject<USN4K3FirstAbility>(TEXT("FirstAbility"));
 	secondAbility = CreateDefaultSubobject<USN4K3SecondAbility>(TEXT("SecondAbility"));

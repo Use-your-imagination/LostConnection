@@ -24,7 +24,24 @@
 
 #include "BaseCharacter.generated.h"
 
-UCLASS(BlueprintType, DefaultToInstanced)
+USTRUCT()
+struct FAmmoData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY()
+	ammoTypes ammoType;
+
+	UPROPERTY()
+	int32 ammoCount;
+
+	FAmmoData() = default;
+
+	FAmmoData(ammoTypes ammoType, int32 ammoCount);
+};
+
+UCLASS(BlueprintType)
 class LOSTCONNECTION_API ABaseCharacter :
 	public ACharacter,
 	public IShotThrough,
@@ -70,14 +87,17 @@ protected:
 	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float sprintMovementSpeed;
 
-	UPROPERTY(Category = Properties, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Properties, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	bool isAlly;
 
 	UPROPERTY(Category = Properties, Replicated, BlueprintReadOnly)
 	bool isDead;
 
-	UPROPERTY(Category = AmmoSettings, Replicated, BlueprintReadOnly)
-	TArray<int32> spareAmmo;
+	UPROPERTY(Category = AmmoSettings, EditDefaultsOnly, BlueprintReadOnly)
+	TMap<ammoTypes, int32> spareAmmo;
+
+	UPROPERTY(ReplicatedUsing = onSpareAmmoChanged)
+	TArray<FAmmoData> spareAmmoReplication;
 
 	UPROPERTY(Category = PhysicalConstraints, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FName> physicsBones;
@@ -126,9 +146,12 @@ protected:
 	void shootTimerUpdate();
 #pragma endregion
 
-private:
+protected:
 	UFUNCTION()
 	void onCurrentWeaponChange();
+
+	UFUNCTION()
+	void onSpareAmmoChanged();
 
 protected:
 	virtual void BeginPlay() override;
@@ -206,7 +229,7 @@ public:
 	virtual void restoreHealth(float amount) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setDefaultWeapon(const UClass* defaultWeapon) final;
+	virtual void setDefaultWeapon(TSubclassOf<UBaseWeapon> defaultWeapon) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setHealth(float newHealth) final;

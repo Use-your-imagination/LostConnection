@@ -2,8 +2,6 @@
 
 #include "BaseCharacter.h"
 
-#include <algorithm>
-
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -11,6 +9,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Algo/ForEach.h"
+#include "Algo/Find.h"
 
 #include "Statuses/BaseTriggerStatus.h"
 #include "Statuses/Ailments/SwarmStatus.h"
@@ -22,7 +21,12 @@
 
 #pragma warning(disable: 4458)
 
-using namespace std;
+FAmmoData::FAmmoData(ammoTypes ammoType, int32 ammoCount) :
+	ammoType(ammoType),
+	ammoCount(ammoCount)
+{
+
+}
 
 void ABaseCharacter::BeginPlay()
 {
@@ -37,6 +41,14 @@ void ABaseCharacter::BeginPlay()
 			timers = NewObject<UTimersUtility>(this);
 
 			timers->setWorld(world);
+
+			spareAmmoReplication =
+			{
+				FAmmoData(ammoTypes::large, spareAmmo[ammoTypes::large]),
+				FAmmoData(ammoTypes::small, spareAmmo[ammoTypes::small]),
+				FAmmoData(ammoTypes::energy, spareAmmo[ammoTypes::energy]),
+				FAmmoData(ammoTypes::defaultType, 9999)
+			};
 		}
 	}
 }
@@ -106,7 +118,7 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ABaseCharacter, isDead);
 
-	DOREPLIFETIME(ABaseCharacter, spareAmmo);
+	DOREPLIFETIME(ABaseCharacter, spareAmmoReplication);
 
 	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
@@ -148,6 +160,14 @@ void ABaseCharacter::shootTimerUpdate_Implementation()
 void ABaseCharacter::onCurrentWeaponChange()
 {
 	this->updateWeaponMesh();
+}
+
+void ABaseCharacter::onSpareAmmoChanged()
+{
+	for (const auto& i : spareAmmoReplication)
+	{
+		spareAmmo[i.ammoType] = i.ammoCount;
+	}
 }
 
 void ABaseCharacter::updateWeaponMesh()
@@ -224,26 +244,29 @@ void ABaseCharacter::reloadLogic()
 
 	int currentMagazineSize = currentWeapon->getCurrentMagazineSize();
 	int magazineSize = currentWeapon->getMagazineSize();
+	ammoTypes ammoType = currentWeapon->getAmmoType();
 
 	if (currentMagazineSize == magazineSize)
 	{
 		return;
 	}
 
-	int32& ammoCount = spareAmmo[StaticCast<size_t>(currentWeapon->getAmmoType())];
+	int32& ammoCount = Algo::FindByPredicate(spareAmmoReplication, [&ammoType](FAmmoData& data) { return data.ammoType == ammoType; })->ammoCount;
 
 	if (!ammoCount)
 	{
 		return;
 	}
 
-	int reloadedAmmoRequire = min(magazineSize - currentMagazineSize, ammoCount);
+	int reloadedAmmoRequire = FMath::Min(magazineSize - currentMagazineSize, ammoCount);
 
 	currentWeapon->setCurrentMagazineSize(currentMagazineSize + reloadedAmmoRequire);
 
 	if (ammoCount != 9999)
 	{
 		ammoCount -= reloadedAmmoRequire;
+
+		this->onSpareAmmoChanged();
 	}
 }
 
@@ -300,12 +323,7 @@ void ABaseCharacter::resetShootLogic()
 {
 	if (currentWeapon)
 	{
-		UWorld* world = GetWorld();
-
-		if (world)
-		{
-			currentWeapon->resetShoot(world, currentWeaponMesh, this);
-		}
+		currentWeapon->resetShoot(currentWeaponMesh, this);
 	}
 }
 
@@ -323,9 +341,13 @@ ABaseCharacter::ABaseCharacter() :
 	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = 60;
 
-	spareAmmo.Init(0, 4);
-
-	spareAmmo[StaticCast<size_t>(ammoTypes::defaultType)] = 9999;
+	spareAmmo =
+	{
+		{ ammoTypes::large, 0 },
+		{ ammoTypes::small, 0 },
+		{ ammoTypes::energy, 0 },
+		{ ammoTypes::defaultType, 9999 }
+	};
 
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 
@@ -405,14 +427,13 @@ void ABaseCharacter::restoreHealth(float amount)
 	}
 }
 
-void ABaseCharacter::setDefaultWeapon_Implementation(const UClass* defaultWeapon)
+void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> defaultWeapon)
 {
-	if (!defaultWeapon->IsChildOf(UBaseWeapon::StaticClass()))
-	{
-		return;
-	}
+	defaultWeaponSlot = NewObject<UBaseWeapon>(this, defaultWeapon.Get());
 
-	defaultWeaponSlot = NewObject<UBaseWeapon>(this, defaultWeapon);
+	defaultWeaponSlot->setOwnerCharacter(this);
+
+	defaultWeaponSlot->updateTimeBetweenShots();
 }
 
 void ABaseCharacter::setHealth_Implementation(float newHealth)
@@ -502,7 +523,7 @@ bool ABaseCharacter::getIsDead() const
 
 int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
 {
-	return spareAmmo[StaticCast<size_t>(type)];
+	return spareAmmo[type];
 }
 
 bool ABaseCharacter::getIsReloading() const

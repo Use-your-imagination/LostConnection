@@ -35,7 +35,6 @@ class LOSTCONNECTION_API UBaseWeapon : public UObject
 	GENERATED_BODY()
 		
 private:
-	UWorld* world;
 	TWeakObjectPtr<class ABaseCharacter> ownerCharacter;
 	float timeBetweenShots;
 	float currentTimeBetweenShots;
@@ -70,7 +69,7 @@ protected:
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	float additionalDamage;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	int currentMagazineSize;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
@@ -105,11 +104,11 @@ public:
 
 	virtual void startShoot() final;
 
-	virtual void resetShoot(UWorld* world, USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character) final;
+	virtual void resetShoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character) final;
 
 	virtual void alternativeMode();
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void updateTimeBetweenShots() final;
 
 	virtual void Tick(float DeltaTime);
@@ -118,8 +117,7 @@ public:
 	
 	virtual void decreaseAdditionalDamage(float amount) final;
 
-	virtual void setWorld(UWorld* world) final;
-
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setOwnerCharacter(class ABaseCharacter* ownerCharacter) final;
 
 	UFUNCTION(Server, Reliable)
