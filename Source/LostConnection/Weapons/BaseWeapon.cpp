@@ -132,7 +132,7 @@ UBaseWeapon::UBaseWeapon() :
 	ammoCost(1),
 	length(100.0f)
 {
-	currentMagazine = magazineSize;
+	currentMagazineSize = magazineSize;
 }
 
 void UBaseWeapon::startShoot()
