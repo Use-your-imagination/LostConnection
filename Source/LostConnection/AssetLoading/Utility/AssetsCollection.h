@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 
-#include "DataAssets/StatusesDataAsset.h"
-#include "DataAssets/DronesPreviewDataAsset.h"
-#include "DataAssets/WeaponsDataAsset.h"
+#include "AssetLoading/DataAssets/StatusesDataAsset.h"
+#include "AssetLoading/DataAssets/DronesPreviewDataAsset.h"
+#include "AssetLoading/DataAssets/WeaponsDataAsset.h"
 
 class LOSTCONNECTION_API AssetsCollection
 {

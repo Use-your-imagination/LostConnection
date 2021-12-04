@@ -6,7 +6,7 @@
 
 #include "Engine/AssetManager.h"
 
-#include "AssetsCollection.h"
+#include "Utility/AssetsCollection.h"
 
 #include "LostConnectionAssetManager.generated.h"
 
@@ -23,20 +23,23 @@ private:
 	TSharedPtr<FStreamableHandle> weapons;
 	TSharedPtr<FStreamableHandle> dronesPreview;
 
+private:
+	static void startLatent(UObject* worldContext, const FLatentActionInfo& info, const TSharedPtr<FStreamableHandle>& handle);
+
 public:
 	static ULostConnectionAssetManager& get();
 
 public:
 	ULostConnectionAssetManager() = default;
 
-	UFUNCTION(BlueprintCallable)
-	void loadStatuses();
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	void loadStatuses(UObject* worldContext, FLatentActionInfo info);
 
-	UFUNCTION(BlueprintCallable)
-	void loadWeapons();
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	void loadWeapons(UObject* worldContext, FLatentActionInfo info);
 
-	UFUNCTION(BlueprintCallable)
-	void loadDronesPreview();
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	void loadDronesPreview(UObject* worldContext, FLatentActionInfo info);
 
 	const UClass* operator [] (typeOfDamage damageType) const;
 

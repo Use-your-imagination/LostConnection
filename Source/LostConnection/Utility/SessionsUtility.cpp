@@ -2,18 +2,18 @@
 
 #include "SessionsUtility.h"
 
-void USessionsUtility::getFindedSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, TEnumAsByte<executionOutputs>& branches)
+void USessionsUtility::getFindedSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, EExecutionOutputs& branches)
 {
 	auto it = sessionResult.OnlineResult.Session.SessionSettings.Settings.Find("ServerName");
 
 	if (it)
 	{
-		branches = executionOutputs::Success;
+		branches = EExecutionOutputs::Success;
 
 		sessionName = it->Data.ToString();
 	}
 	else
 	{
-		branches = executionOutputs::Fail;
+		branches = EExecutionOutputs::Fail;
 	}
 }

@@ -3,19 +3,39 @@
 #include "LostConnectionAssetManager.h"
 
 #include "NiagaraFunctionLibrary.h"
+#include "Utility/LoadAssetsDelayAction.h"
 
 #include "Statuses/BaseStatus.h"
 #include "Weapons/BaseWeapon.h"
+
+void ULostConnectionAssetManager::startLatent(UObject* worldContext, const FLatentActionInfo& info, const TSharedPtr<FStreamableHandle>& handle)
+{
+	UWorld* world = GEngine->GetWorldFromContextObject(worldContext, EGetWorldErrorMode::ReturnNull);
+
+	if (world)
+	{
+		FLatentActionManager& manager = world->GetLatentActionManager();
+
+		if (!manager.FindExistingAction<FLoadAssetsDelayAction>(info.CallbackTarget, info.UUID))
+		{
+			manager.AddNewAction(info.CallbackTarget, info.UUID, new FLoadAssetsDelayAction(handle, info));
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Cyan, L"Can't get world");
+	}
+}
 
 ULostConnectionAssetManager& ULostConnectionAssetManager::get()
 {
 	return StaticCast<ULostConnectionAssetManager&>(UAssetManager::Get());
 }
 
-void ULostConnectionAssetManager::loadStatuses()
+void ULostConnectionAssetManager::loadStatuses(UObject* worldContext, FLatentActionInfo info)
 {
 	FStreamableDelegate delegate;
-	
+
 	delegate.BindLambda([this]()
 		{
 			if (!statuses.IsValid())
@@ -29,15 +49,17 @@ void ULostConnectionAssetManager::loadStatuses()
 		});
 
 	statuses = LoadPrimaryAsset(UStatusesDataAsset::getPrimaryAssetId(), {}, delegate);
+
+	this->startLatent(worldContext, info, statuses);
 }
 
-void ULostConnectionAssetManager::loadWeapons()
+void ULostConnectionAssetManager::loadWeapons(UObject* worldContext, FLatentActionInfo info)
 {
 	FStreamableDelegate delegate;
 
 	delegate.BindLambda([this]()
 		{
-			if (!statuses.IsValid())
+			if (!weapons.IsValid())
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Purple, L"Can't load weapons");
 
@@ -48,15 +70,17 @@ void ULostConnectionAssetManager::loadWeapons()
 		});
 
 	weapons = LoadPrimaryAsset(UWeaponsDataAsset::getPrimaryAssetId(), {}, delegate);
+
+	this->startLatent(worldContext, info, weapons);
 }
 
-void ULostConnectionAssetManager::loadDronesPreview()
+void ULostConnectionAssetManager::loadDronesPreview(UObject* worldContext, FLatentActionInfo info)
 {
 	FStreamableDelegate delegate;
 
 	delegate.BindLambda([this]()
 		{
-			if (!statuses.IsValid())
+			if (!dronesPreview.IsValid())
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Purple, L"Can't load drones preview");
 
@@ -67,6 +91,8 @@ void ULostConnectionAssetManager::loadDronesPreview()
 		});
 
 	dronesPreview = LoadPrimaryAsset(UDronesPreviewDataAsset::getPrimaryAssetId(), {}, delegate);
+
+	this->startLatent(worldContext, info, dronesPreview);
 }
 
 const UClass* ULostConnectionAssetManager::operator [] (typeOfDamage damageType) const

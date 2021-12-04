@@ -11,7 +11,7 @@
 #include "SessionsUtility.generated.h"
 
 UENUM(BlueprintType)
-enum executionOutputs
+enum class EExecutionOutputs : uint8
 {
 	Success UMETA(DisplayName = "Success"),
 	Fail UMETA(DisplayName = "Fail")
@@ -23,6 +23,6 @@ class USessionsUtility : public UOnlineBlueprintCallProxyBase
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Online|Session", Meta = (ExpandEnumAsExecs = "branches"))
-	static void getFindedSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, TEnumAsByte<executionOutputs>& branches);
+	UFUNCTION(BlueprintCallable, Category = "Online|Session", Meta = (ExpandEnumAsExecs = branches))
+	static void getFindedSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, EExecutionOutputs& branches);
 };
