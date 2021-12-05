@@ -32,19 +32,40 @@ ULostConnectionAssetManager& ULostConnectionAssetManager::get()
 	return StaticCast<ULostConnectionAssetManager&>(UAssetManager::Get());
 }
 
-void ULostConnectionAssetManager::loadStatuses(UObject* worldContext, FLatentActionInfo info)
+bool ULostConnectionAssetManager::loadStatuses(UObject* worldContext, FLatentActionInfo info)
 {
+	if (this->isAssetAlreadyLoaded<UStatusesDataAsset>())
+	{
+		return true;
+	}
+
 	this->latentLoadAsset<UStatusesDataAsset>(worldContext, info);
+
+	return false;
 }
 
-void ULostConnectionAssetManager::loadWeapons(UObject* worldContext, FLatentActionInfo info)
+bool ULostConnectionAssetManager::loadWeapons(UObject* worldContext, FLatentActionInfo info)
 {
+	if (this->isAssetAlreadyLoaded<UWeaponsDataAsset>())
+	{
+		return true;
+	}
+
 	this->latentLoadAsset<UWeaponsDataAsset>(worldContext, info);
+
+	return false;
 }
 
-void ULostConnectionAssetManager::loadDronesPreview(UObject* worldContext, FLatentActionInfo info)
+bool ULostConnectionAssetManager::loadDronesPreview(UObject* worldContext, FLatentActionInfo info)
 {
+	if (this->isAssetAlreadyLoaded<UDronesPreviewDataAsset>())
+	{
+		return true;
+	}
+
 	this->latentLoadAsset<UDronesPreviewDataAsset>(worldContext, info);
+
+	return false;
 }
 
 void ULostConnectionAssetManager::unloadDronesPreview()

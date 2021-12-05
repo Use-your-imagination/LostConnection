@@ -31,6 +31,9 @@ private:
 	template<typename T>
 	void latentLoadAsset(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
 
+	template<typename T>
+	bool isAssetAlreadyLoaded();
+
 private:
 	static void startLatent(UObject* worldContext, const FLatentActionInfo& info, const TSharedPtr<FStreamableHandle>& handle);
 
@@ -41,13 +44,13 @@ public:
 	ULostConnectionAssetManager() = default;
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
-	void loadStatuses(UObject* worldContext, FLatentActionInfo info);
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadStatuses(UObject* worldContext, FLatentActionInfo info);
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
-	void loadWeapons(UObject* worldContext, FLatentActionInfo info);
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadWeapons(UObject* worldContext, FLatentActionInfo info);
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
-	void loadDronesPreview(UObject* worldContext, FLatentActionInfo info);
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadDronesPreview(UObject* worldContext, FLatentActionInfo info);
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	void unloadDronesPreview();
@@ -86,4 +89,10 @@ void ULostConnectionAssetManager::latentLoadAsset(UObject* worldContext, const F
 	TSharedPtr<FStreamableHandle>& asset = this->loadAsset<T>();
 
 	this->startLatent(worldContext, info, asset);
+}
+
+template<typename T>
+bool ULostConnectionAssetManager::isAssetAlreadyLoaded()
+{
+	return handles.Contains(T::StaticClass()->GetFName());
 }
