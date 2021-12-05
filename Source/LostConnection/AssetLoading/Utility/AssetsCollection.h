@@ -8,6 +8,8 @@
 #include "AssetLoading/DataAssets/DronesPreviewDataAsset.h"
 #include "AssetLoading/DataAssets/WeaponsDataAsset.h"
 
+#include "AssetLoading/DataAssets/Acts/RuinedCityActDataAsset.h"
+
 class LOSTCONNECTION_API AssetsCollection
 {
 private:

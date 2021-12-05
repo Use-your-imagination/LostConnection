@@ -3,8 +3,9 @@
 #include "LostConnectionAssetManager.h"
 
 #include "NiagaraFunctionLibrary.h"
-#include "Utility/LoadAssetsDelayAction.h"
+#include "Engine/LevelStreamingDynamic.h"
 
+#include "Utility/LoadAssetsDelayAction.h"
 #include "Statuses/BaseStatus.h"
 #include "Weapons/BaseWeapon.h"
 
@@ -34,47 +35,22 @@ ULostConnectionAssetManager& ULostConnectionAssetManager::get()
 
 bool ULostConnectionAssetManager::loadStatuses(UObject* worldContext, FLatentActionInfo info)
 {
-	if (this->isAssetAlreadyLoaded<UStatusesDataAsset>())
-	{
-		return true;
-	}
-
-	this->latentLoadAsset<UStatusesDataAsset>(worldContext, info);
-
-	return false;
+	return this->latentLoadAsset<UStatusesDataAsset>(worldContext, info);
 }
 
 bool ULostConnectionAssetManager::loadWeapons(UObject* worldContext, FLatentActionInfo info)
 {
-	if (this->isAssetAlreadyLoaded<UWeaponsDataAsset>())
-	{
-		return true;
-	}
-
-	this->latentLoadAsset<UWeaponsDataAsset>(worldContext, info);
-
-	return false;
+	return this->latentLoadAsset<UWeaponsDataAsset>(worldContext, info);
 }
 
 bool ULostConnectionAssetManager::loadDronesPreview(UObject* worldContext, FLatentActionInfo info)
 {
-	if (this->isAssetAlreadyLoaded<UDronesPreviewDataAsset>())
-	{
-		return true;
-	}
-
-	this->latentLoadAsset<UDronesPreviewDataAsset>(worldContext, info);
-
-	return false;
+	return this->latentLoadAsset<UDronesPreviewDataAsset>(worldContext, info);
 }
 
 void ULostConnectionAssetManager::unloadDronesPreview()
 {
-	UnloadPrimaryAsset(UDronesPreviewDataAsset::getPrimaryAssetId());
-
-	this->getHandle<UDronesPreviewDataAsset>().Reset();
-
-	handles.Remove(UDronesPreviewDataAsset::StaticClass()->GetFName());
+	this->unloadAsset<UDronesPreviewDataAsset>();
 }
 
 TMap<FName, float> ULostConnectionAssetManager::getLoadingState() const
@@ -117,4 +93,28 @@ TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() con
 	UDronesPreviewDataAsset& asset = *GetPrimaryAssetObject<UDronesPreviewDataAsset>(UDronesPreviewDataAsset::getPrimaryAssetId());
 
 	return asset.getDronesPreview();
+}
+
+bool ULostConnectionAssetManager::loadRuinedCityAct(UObject* worldContext, FLatentActionInfo info)
+{
+	FStreamableDelegate delegate;
+
+	delegate.BindLambda([this]()
+		{
+			auto& handle = this->getHandle<URuinedCityActDataAsset>();
+
+			if (handle.IsValid())
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Orange, L"Fail");
+			}
+
+			GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Orange, L"Success");
+		});
+
+	return this->latentLoadAsset<URuinedCityActDataAsset>(worldContext, info, delegate);
+}
+
+void ULostConnectionAssetManager::unloadRuinedCityAct()
+{
+	this->unloadAsset<URuinedCityActDataAsset>();
 }

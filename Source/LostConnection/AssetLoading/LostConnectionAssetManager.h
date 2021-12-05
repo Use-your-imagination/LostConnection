@@ -26,10 +26,13 @@ private:
 	TSharedPtr<FStreamableHandle>& loadAsset(FStreamableDelegate delegate = FStreamableDelegate());
 
 	template<typename T>
+	void unloadAsset();
+
+	template<typename T>
 	TSharedPtr<FStreamableHandle>& getHandle();
 
 	template<typename T>
-	void latentLoadAsset(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
+	bool latentLoadAsset(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
 
 	template<typename T>
 	bool isAssetAlreadyLoaded();
@@ -69,6 +72,13 @@ public:
 	TArray<const FDronePreview*> getDronesPreview() const;
 
 	~ULostConnectionAssetManager() = default;
+
+public:
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadRuinedCityAct(UObject* worldContext, FLatentActionInfo info);
+
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	void unloadRuinedCityAct();
 };
 
 template<typename T>
@@ -78,17 +88,39 @@ TSharedPtr<FStreamableHandle>& ULostConnectionAssetManager::loadAsset(FStreamabl
 }
 
 template<typename T>
+void ULostConnectionAssetManager::unloadAsset()
+{
+	if (!this->isAssetAlreadyLoaded<T>())
+	{
+		return;
+	}
+
+	UnloadPrimaryAsset(T::getPrimaryAssetId());
+
+	this->getHandle<T>().Reset();
+
+	handles.Remove(T::StaticClass()->GetFName());
+}
+
+template<typename T>
 TSharedPtr<FStreamableHandle>& ULostConnectionAssetManager::getHandle()
 {
 	return handles[T::StaticClass()->GetFName()];
 }
 
 template<typename T>
-void ULostConnectionAssetManager::latentLoadAsset(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate)
+bool ULostConnectionAssetManager::latentLoadAsset(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate)
 {
+	if (this->isAssetAlreadyLoaded<T>())
+	{
+		return true;
+	}
+
 	TSharedPtr<FStreamableHandle>& asset = this->loadAsset<T>();
 
 	this->startLatent(worldContext, info, asset);
+
+	return false;
 }
 
 template<typename T>
