@@ -590,6 +590,13 @@ void ABaseDrone::resetShoot()
 
 void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primaryWeapon)
 {
+	if (!primaryWeapon)
+	{
+		UE_LOG(LogTemp, Warning, L"Primary weapon is null");
+
+		return;
+	}
+
 	primaryWeaponSlot = NewObject<UBaseWeapon>(this, primaryWeapon.Get());
 
 	primaryWeaponSlot->setOwnerCharacter(this);
@@ -599,6 +606,13 @@ void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primar
 
 void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> secondaryWeapon)
 {
+	if (!secondaryWeapon)
+	{
+		UE_LOG(LogTemp, Warning, L"Secondary weapon is null");
+
+		return;
+	}
+
 	secondaryWeaponSlot = NewObject<UBaseWeapon>(this, secondaryWeapon.Get());
 
 	secondaryWeaponSlot->setOwnerCharacter(this);

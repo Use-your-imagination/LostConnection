@@ -18,6 +18,8 @@ void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(USN4K3FirstAbility, damage);
 
 	DOREPLIFETIME(USN4K3FirstAbility, distance);
+
+	DOREPLIFETIME(USN4K3FirstAbility, additionalDamage);
 }
 
 USN4K3FirstAbility::USN4K3FirstAbility() :

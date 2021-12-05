@@ -15,7 +15,7 @@ class LOSTCONNECTION_API UWeaponsDataAsset : public UPrimaryDataAsset
 
 private:
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<TSoftClassPtr<class UBaseWeapon>> weapons;
+	TArray<TSubclassOf<class UBaseWeapon>> weapons;
 
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
@@ -24,6 +24,8 @@ public:
 	UWeaponsDataAsset() = default;
 
 	TSubclassOf<class UBaseWeapon> operator [] (const TSubclassOf<class UBaseWeapon>& weapon) const;
+
+	const TArray<TSubclassOf<class UBaseWeapon>>& getWeapons() const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

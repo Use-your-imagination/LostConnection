@@ -2,6 +2,8 @@
 
 #include "WeaponsDataAsset.h"
 
+#include "Kismet/KismetMathLibrary.h"
+
 #include "Weapons/BaseWeapon.h"
 
 FPrimaryAssetId UWeaponsDataAsset::getPrimaryAssetId()
@@ -11,19 +13,20 @@ FPrimaryAssetId UWeaponsDataAsset::getPrimaryAssetId()
 
 TSubclassOf<UBaseWeapon> UWeaponsDataAsset::operator [] (const TSubclassOf<UBaseWeapon>& weapon) const
 {
-	TSubclassOf<UBaseWeapon> result = nullptr;
-
 	for (const auto& i : weapons)
 	{
-		if (i->IsChildOf(weapon.Get()))
+		if (UKismetMathLibrary::ClassIsChildOf(i, weapon))
 		{
-			result = i.Get();
-
-			break;
+			return i;
 		}
 	}
 
-	return result;
+	return nullptr;
+}
+
+const TArray<TSubclassOf<UBaseWeapon>>& UWeaponsDataAsset::getWeapons() const
+{
+	return weapons;
 }
 
 FPrimaryAssetId UWeaponsDataAsset::GetPrimaryAssetId() const

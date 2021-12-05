@@ -429,6 +429,13 @@ void ABaseCharacter::restoreHealth(float amount)
 
 void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> defaultWeapon)
 {
+	if (!defaultWeapon)
+	{
+		UE_LOG(LogTemp, Warning, L"Default weapon is null");
+
+		return;
+	}
+
 	defaultWeaponSlot = NewObject<UBaseWeapon>(this, defaultWeapon.Get());
 
 	defaultWeaponSlot->setOwnerCharacter(this);

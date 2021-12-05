@@ -34,65 +34,40 @@ ULostConnectionAssetManager& ULostConnectionAssetManager::get()
 
 void ULostConnectionAssetManager::loadStatuses(UObject* worldContext, FLatentActionInfo info)
 {
-	FStreamableDelegate delegate;
-
-	delegate.BindLambda([this]()
-		{
-			if (!statuses.IsValid())
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Purple, L"Can't load statuses");
-
-				return;
-			}
-
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, L"Statuses loaded");
-		});
-
-	statuses = LoadPrimaryAsset(UStatusesDataAsset::getPrimaryAssetId(), {}, delegate);
-
-	this->startLatent(worldContext, info, statuses);
+	this->latentLoadAsset<UStatusesDataAsset>(worldContext, info);
 }
 
 void ULostConnectionAssetManager::loadWeapons(UObject* worldContext, FLatentActionInfo info)
 {
-	FStreamableDelegate delegate;
-
-	delegate.BindLambda([this]()
-		{
-			if (!weapons.IsValid())
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Purple, L"Can't load weapons");
-
-				return;
-			}
-
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, L"Weapons loaded");
-		});
-
-	weapons = LoadPrimaryAsset(UWeaponsDataAsset::getPrimaryAssetId(), {}, delegate);
-
-	this->startLatent(worldContext, info, weapons);
+	this->latentLoadAsset<UWeaponsDataAsset>(worldContext, info);
 }
 
 void ULostConnectionAssetManager::loadDronesPreview(UObject* worldContext, FLatentActionInfo info)
 {
-	FStreamableDelegate delegate;
+	this->latentLoadAsset<UDronesPreviewDataAsset>(worldContext, info);
+}
 
-	delegate.BindLambda([this]()
-		{
-			if (!dronesPreview.IsValid())
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Purple, L"Can't load drones preview");
+void ULostConnectionAssetManager::unloadDronesPreview()
+{
+	UnloadPrimaryAsset(UDronesPreviewDataAsset::getPrimaryAssetId());
 
-				return;
-			}
+	this->getHandle<UDronesPreviewDataAsset>().Reset();
 
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, L"Drones preview loaded");
-		});
+	handles.Remove(UDronesPreviewDataAsset::StaticClass()->GetFName());
+}
 
-	dronesPreview = LoadPrimaryAsset(UDronesPreviewDataAsset::getPrimaryAssetId(), {}, delegate);
+TMap<FName, float> ULostConnectionAssetManager::getLoadingState() const
+{
+	TMap<FName, float> result;
 
-	this->startLatent(worldContext, info, dronesPreview);
+	result.Reserve(handles.Num());
+
+	for (const auto& i : handles)
+	{
+		result.Add(i.Key, i.Value->GetProgress());
+	}
+
+	return result;
 }
 
 const UClass* ULostConnectionAssetManager::operator [] (typeOfDamage damageType) const
@@ -107,6 +82,13 @@ TSubclassOf<UBaseWeapon> ULostConnectionAssetManager::getWeaponClass(TSubclassOf
 	UWeaponsDataAsset& asset = *GetPrimaryAssetObject<UWeaponsDataAsset>(UWeaponsDataAsset::getPrimaryAssetId());
 
 	return asset[weapon];
+}
+
+const TArray<TSubclassOf<UBaseWeapon>>& ULostConnectionAssetManager::getWeapons() const
+{
+	UWeaponsDataAsset& asset = *GetPrimaryAssetObject<UWeaponsDataAsset>(UWeaponsDataAsset::getPrimaryAssetId());
+
+	return asset.getWeapons();
 }
 
 TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() const
