@@ -97,21 +97,7 @@ TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() con
 
 bool ULostConnectionAssetManager::loadRuinedCityAct(UObject* worldContext, FLatentActionInfo info)
 {
-	FStreamableDelegate delegate;
-
-	delegate.BindLambda([this]()
-		{
-			auto& handle = this->getHandle<URuinedCityActDataAsset>();
-
-			if (handle.IsValid())
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Orange, L"Fail");
-			}
-
-			GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Orange, L"Success");
-		});
-
-	return this->latentLoadAsset<URuinedCityActDataAsset>(worldContext, info, delegate);
+	return this->latentLoadAsset<URuinedCityActDataAsset>(worldContext, info);
 }
 
 void ULostConnectionAssetManager::unloadRuinedCityAct()
