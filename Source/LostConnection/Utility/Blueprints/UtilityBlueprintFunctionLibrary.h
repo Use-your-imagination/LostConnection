@@ -26,4 +26,7 @@ public:
 
 	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
 	static bool isAnyAnimationActive(const TScriptInterface<class ICaster>& caster);
+
+	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
+	static bool allOfFloat(const TArray<float>& values, float compareValue);
 };

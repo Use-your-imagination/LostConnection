@@ -22,9 +22,6 @@ private:
 	UPROPERTY(Category = "Debug|Spawn", EditAnywhere, Meta = (DisplayAfter = "location"))
 	uint16 count;
 
-	UPROPERTY(Category = LevelLoading, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	FString levelName;
-
 protected:
 	void BeginPlay() override;
 

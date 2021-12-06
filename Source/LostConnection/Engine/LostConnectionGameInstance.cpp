@@ -131,3 +131,13 @@ void ULostConnectionGameInstance::loadNextAct(const FString& levelName)
 		world->ServerTravel(levelName + options, true);
 	}
 }
+
+void ULostConnectionGameInstance::setNextLevelName(const FString& newNextLevelName)
+{
+	nextLevelName = newNextLevelName;
+}
+
+const FString& ULostConnectionGameInstance::getNextLevelName() const
+{
+	return nextLevelName;
+}

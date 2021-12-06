@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/PlayerState.h"
+#include "Net/UnrealNetwork.h"
 
 #include "LostConnectionPlayerState.generated.h"
+
+#pragma warning(disable: 4458)
 
 UCLASS()
 class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
@@ -21,8 +24,6 @@ private:
 	void runMulticastUnreliable(AActor* caller, const FName& methodName);
 
 public:
-	ALostConnectionPlayerState() = default;
-
 	UFUNCTION(Server, Reliable)
 	void runOnServerReliableWithMulticast(AActor* caller, const FName& methodName);
 

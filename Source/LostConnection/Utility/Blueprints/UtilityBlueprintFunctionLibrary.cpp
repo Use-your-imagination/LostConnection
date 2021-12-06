@@ -3,6 +3,7 @@
 #include "UtilityBlueprintFunctionLibrary.h"
 
 #include "Algo/AnyOf.h"
+#include "Algo/AllOf.h"
 
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/Pawn.h"
@@ -104,4 +105,9 @@ bool UUtilityBlueprintFunctionLibrary::isAnyAnimationActive(const TScriptInterfa
 	const TArray<UAnimMontage*>& animations = caster->getAbilitiesAnimations();
 	
 	return Algo::AnyOf(animations, [&animInstance](const UAnimMontage* montage) { return animInstance->Montage_IsPlaying(montage); });
+}
+
+bool UUtilityBlueprintFunctionLibrary::allOfFloat(const TArray<float>& values, float compareValue)
+{
+	return Algo::AllOf(values, [&compareValue](float value) { return value == compareValue; });
 }
