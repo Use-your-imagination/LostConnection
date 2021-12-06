@@ -16,6 +16,7 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 {
 	if (wasSuccessful)
 	{
+		static const FString options = "?listen?bIsLanMatch=1";
 		APlayerController* controller = GetFirstLocalPlayerController();
 		FString levelName;
 
@@ -25,7 +26,12 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 
 		sessionSettings->Get(SETTING_MAPNAME, levelName);
 
-		UGameplayStatics::OpenLevel(GetWorld(), FName(levelName), true, "?listen?bIsLanMatch=1");
+		UWorld* world = GetWorld();
+
+		if (world)
+		{
+			world->ServerTravel(levelName + options, true);
+		}
 	}
 }
 
