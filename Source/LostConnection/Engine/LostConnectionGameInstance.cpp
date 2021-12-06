@@ -17,12 +17,15 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 	if (wasSuccessful)
 	{
 		APlayerController* controller = GetFirstLocalPlayerController();
+		FString levelName;
 
 		controller->SetInputMode(FInputModeGameOnly());
 
 		controller->SetShowMouseCursor(false);
 
-		UGameplayStatics::OpenLevel(GetWorld(), "LostConnectionMap", true, "?listen?bIsLanMatch=1");
+		sessionSettings->Get(SETTING_MAPNAME, levelName);
+
+		UGameplayStatics::OpenLevel(GetWorld(), FName(levelName), true, "?listen?bIsLanMatch=1");
 	}
 }
 
@@ -69,8 +72,6 @@ void ULostConnectionGameInstance::Init()
 			sessionSettings->NumPrivateConnections = 0;
 			sessionSettings->bAllowJoinInProgress = true;
 			sessionSettings->bAllowJoinViaPresence = true;
-
-			sessionSettings->Set(SETTING_MAPNAME, FString("LostConnectionMap"), EOnlineDataAdvertisementType::Type::ViaOnlineService);	
 		}
 	}
 }
@@ -86,14 +87,11 @@ void ULostConnectionGameInstance::initSearchSession()
 	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 }
 
-ULostConnectionGameInstance::ULostConnectionGameInstance(const FObjectInitializer& objectInitializer)
-{
-
-}
-
-void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName)
+void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const FString& levelName)
 {
 	sessionSettings->Set("ServerName", sessionName.ToString(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
+	
+	sessionSettings->Set(SETTING_MAPNAME, levelName, EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
 	session->CreateSession(*userId, sessionName, *sessionSettings);
 }
@@ -107,9 +105,9 @@ void ULostConnectionGameInstance::findLocalSessions(TSharedPtr<const FUniqueNetI
 	session->FindSessions(*userId, searchSession.ToSharedRef());
 }
 
-void ULostConnectionGameInstance::createSession(FName sessionName)
+void ULostConnectionGameInstance::createSession(FName sessionName, const FString& levelName)
 {
-	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionName);
+	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionName, levelName);
 }
 
 void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)

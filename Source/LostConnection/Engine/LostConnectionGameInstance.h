@@ -37,14 +37,14 @@ private:
 	void initSearchSession();
 
 public:
-	ULostConnectionGameInstance(const FObjectInitializer& objectInitializer);
+	ULostConnectionGameInstance() = default;
 
-	void hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName);
+	void hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const FString& levelName);
 
 	void findLocalSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
 
 	UFUNCTION(BlueprintCallable)
-	void createSession(FName sessionName);
+	void createSession(FName sessionName, const FString& levelName);
 
 	UFUNCTION(BlueprintCallable)
 	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
