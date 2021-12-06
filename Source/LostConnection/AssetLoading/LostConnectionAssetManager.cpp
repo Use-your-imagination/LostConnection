@@ -88,6 +88,11 @@ const TArray<TSubclassOf<UBaseWeapon>>& ULostConnectionAssetManager::getWeapons(
 	return asset.getWeapons();
 }
 
+const UBaseActDataAsset& ULostConnectionAssetManager::getCurrentAct() const
+{
+	return *GetPrimaryAssetObject<UBaseActDataAsset>(currentActId);
+}
+
 TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() const
 {
 	UDronesPreviewDataAsset& asset = *GetPrimaryAssetObject<UDronesPreviewDataAsset>(UDronesPreviewDataAsset::getPrimaryAssetId());
@@ -97,10 +102,10 @@ TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() con
 
 bool ULostConnectionAssetManager::loadRuinedCityAct(UObject* worldContext, FLatentActionInfo info)
 {
-	return this->latentLoadAsset<URuinedCityActDataAsset>(worldContext, info);
+	return this->latentLoadAct<URuinedCityActDataAsset>(worldContext, info);
 }
 
 void ULostConnectionAssetManager::unloadRuinedCityAct()
 {
-	this->unloadAsset<URuinedCityActDataAsset>();
+	this->unloadAct<URuinedCityActDataAsset>();
 }

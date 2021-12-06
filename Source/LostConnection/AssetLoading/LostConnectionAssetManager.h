@@ -20,6 +20,7 @@ private:
 
 private:
 	TMap<FName, TSharedPtr<FStreamableHandle>> handles;
+	FPrimaryAssetId currentActId;
 
 private:
 	template<typename T>
@@ -29,10 +30,16 @@ private:
 	void unloadAsset();
 
 	template<typename T>
+	void unloadAct();
+
+	template<typename T>
 	TSharedPtr<FStreamableHandle>& getHandle();
 
 	template<typename T>
 	bool latentLoadAsset(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
+
+	template<typename T>
+	bool latentLoadAct(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
 
 	template<typename T>
 	bool isAssetAlreadyLoaded();
@@ -69,6 +76,8 @@ public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	const TArray<TSubclassOf<class UBaseWeapon>>& getWeapons() const;
 
+	const UBaseActDataAsset& getCurrentAct() const;
+
 	TArray<const FDronePreview*> getDronesPreview() const;
 
 	~ULostConnectionAssetManager() = default;
@@ -103,6 +112,23 @@ void ULostConnectionAssetManager::unloadAsset()
 }
 
 template<typename T>
+void ULostConnectionAssetManager::unloadAct()
+{
+	if (!this->isAssetAlreadyLoaded<T>())
+	{
+		return;
+	}
+
+	UnloadPrimaryAsset(T::getPrimaryAssetId());
+
+	this->getHandle<T>().Reset();
+
+	handles.Remove(T::StaticClass()->GetFName());
+
+	currentActId = FPrimaryAssetId();
+}
+
+template<typename T>
 TSharedPtr<FStreamableHandle>& ULostConnectionAssetManager::getHandle()
 {
 	return handles[T::StaticClass()->GetFName()];
@@ -117,6 +143,23 @@ bool ULostConnectionAssetManager::latentLoadAsset(UObject* worldContext, const F
 	}
 
 	TSharedPtr<FStreamableHandle>& asset = this->loadAsset<T>();
+
+	this->startLatent(worldContext, info, asset);
+
+	return false;
+}
+
+template<typename T>
+bool ULostConnectionAssetManager::latentLoadAct(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate)
+{
+	if (this->isAssetAlreadyLoaded<T>())
+	{
+		return true;
+	}
+
+	TSharedPtr<FStreamableHandle>& asset = this->loadAsset<T>();
+
+	currentActId = T::getPrimaryAssetId();
 
 	this->startLatent(worldContext, info, asset);
 
