@@ -5,6 +5,8 @@
 void ALevelCreationWaypoint::BeginPlay()
 {
 	Super::BeginPlay();
+
+	isUsed = false;
 }
 
 ALevelCreationWaypoint::ALevelCreationWaypoint()
@@ -14,4 +16,14 @@ ALevelCreationWaypoint::ALevelCreationWaypoint()
 	arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 
 	arrow->SetArrowColor(FLinearColor::Red);
+}
+
+void ALevelCreationWaypoint::use()
+{
+	isUsed = true;
+}
+
+bool ALevelCreationWaypoint::getIsUsed() const
+{
+	return isUsed;
 }

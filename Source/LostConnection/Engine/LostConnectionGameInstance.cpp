@@ -4,6 +4,8 @@
 
 #include "Kismet/GameplayStatics.h"
 
+const FString ULostConnectionGameInstance::options = "?listen?bIsLanMatch=1";
+
 void ULostConnectionGameInstance::onCreateSession(FName sessionName, bool wasSuccessful)
 {
 	if (wasSuccessful)
@@ -16,7 +18,6 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 {
 	if (wasSuccessful)
 	{
-		static const FString options = "?listen?bIsLanMatch=1";
 		APlayerController* controller = GetFirstLocalPlayerController();
 		FString levelName;
 
@@ -119,4 +120,14 @@ void ULostConnectionGameInstance::createSession(FName sessionName, const FString
 void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
 {
 	this->findLocalSessions(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionsData, widget);
+}
+
+void ULostConnectionGameInstance::loadNextAct(const FString& levelName)
+{
+	UWorld* world = GetWorld();
+
+	if (world)
+	{
+		world->ServerTravel(levelName + options, true);
+	}
 }

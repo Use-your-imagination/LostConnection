@@ -18,11 +18,17 @@ private:
 	UPROPERTY(Category = Components, VisibleAnywhere, Meta = (AllowPrivateAccess = "true"))
 	UArrowComponent* arrow;
 
+	bool isUsed;
+
 private:
 	void BeginPlay() override;
 
 public:
 	ALevelCreationWaypoint();
 
-	~ALevelCreationWaypoint() = default;
+	void use();
+
+	bool getIsUsed() const;
+
+	virtual ~ALevelCreationWaypoint() = default;
 };

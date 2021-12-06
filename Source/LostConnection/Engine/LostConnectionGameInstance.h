@@ -26,6 +26,9 @@ private:
 	void onFindSessions(bool wasSuccessful, TArray<FBlueprintSessionResult>* sessionsData, TScriptInterface<IInitSessions> widget);
 
 private:
+	static const FString options;
+
+private:
 	IOnlineSubsystem* subsystem;
 	IOnlineSessionPtr session;
 	TSharedPtr<FOnlineSessionSettings> sessionSettings;
@@ -48,4 +51,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
+
+	UFUNCTION(BlueprintCallable)
+	void loadNextAct(const FString& levelName);
 };
