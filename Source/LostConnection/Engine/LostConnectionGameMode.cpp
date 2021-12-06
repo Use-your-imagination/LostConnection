@@ -36,6 +36,8 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	PlayerStateClass = defaultPlayerStateClassFinder.Class;
 	GameStateClass = ALostConnectionGameState::StaticClass();
 
+	levelName = "RuinedCity_01";
+
 	defaultAI = defaultAIClassFinder.Class;
 }
 

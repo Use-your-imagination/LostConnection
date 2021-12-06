@@ -53,4 +53,6 @@ void ALostConnectionGameState::startRoomLoading()
 	const TSoftObjectPtr<UWorld>& room = rooms[FMath::RandRange(0, rooms.Num() - 1)];
 	
 	this->loadRoom(room, waypoint->GetActorLocation(), waypoint->GetActorRotation());
+
+	waypoint->Destroy();
 }
