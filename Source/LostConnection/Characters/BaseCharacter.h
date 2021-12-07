@@ -36,9 +36,7 @@ public:
 	UPROPERTY()
 	int32 ammoCount;
 
-	FAmmoData() = default;
-
-	FAmmoData(ammoTypes ammoType, int32 ammoCount);
+	FAmmoData(ammoTypes ammoType = ammoTypes::large, int32 ammoCount = 0);
 };
 
 UCLASS(BlueprintType)

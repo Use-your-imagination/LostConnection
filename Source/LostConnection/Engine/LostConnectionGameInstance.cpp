@@ -20,19 +20,14 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 	{
 		APlayerController* controller = GetFirstLocalPlayerController();
 		FString levelName;
-
+		
 		controller->SetInputMode(FInputModeGameOnly());
 
 		controller->SetShowMouseCursor(false);
 
 		sessionSettings->Get(SETTING_MAPNAME, levelName);
 
-		UWorld* world = GetWorld();
-
-		if (world)
-		{
-			world->ServerTravel(levelName + options, true);
-		}
+		GetWorld()->ServerTravel(levelName + options, true);
 	}
 }
 
@@ -71,7 +66,7 @@ void ULostConnectionGameInstance::Init()
 			session->OnStartSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onStartSession);
 
 			sessionSettings = MakeShareable(new FOnlineSessionSettings());
-			
+
 			sessionSettings->bIsLANMatch = true;
 			sessionSettings->bUsesPresence = true;
 			sessionSettings->bShouldAdvertise = true;
@@ -97,7 +92,7 @@ void ULostConnectionGameInstance::initSearchSession()
 void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const FString& levelName)
 {
 	sessionSettings->Set("ServerName", sessionName.ToString(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
-	
+
 	sessionSettings->Set(SETTING_MAPNAME, levelName, EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
 	session->CreateSession(*userId, sessionName, *sessionSettings);
@@ -124,10 +119,5 @@ void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& 
 
 void ULostConnectionGameInstance::loadNextLevel(TSoftObjectPtr<UWorld> nextLevel)
 {
-	UWorld* world = GetWorld();
-
-	if (world)
-	{
-		world->ServerTravel(nextLevel.GetAssetName() + options, true);
-	}
+	GetWorld()->ServerTravel(nextLevel.GetAssetName() + options, true);
 }
