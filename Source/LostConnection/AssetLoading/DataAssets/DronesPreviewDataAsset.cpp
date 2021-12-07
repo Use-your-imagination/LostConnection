@@ -2,6 +2,12 @@
 
 #include "DronesPreviewDataAsset.h"
 
+FDronePreview::FDronePreview() :
+	mesh(USkeletalMesh::StaticClass()->GetDefaultObject<USkeletalMesh>())
+{
+
+}
+
 FPrimaryAssetId UDronesPreviewDataAsset::getPrimaryAssetId()
 {
 	return FPrimaryAssetId(FPrimaryAssetType("DronesPreview"), "DronesPreview");

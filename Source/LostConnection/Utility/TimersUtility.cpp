@@ -41,7 +41,10 @@ void UTimersUtility::clear()
 		{
 			for (auto& timer : timers)
 			{
-				manager->ClearTimer(timer);
+				if (timer.IsValid())
+				{
+					manager->ClearTimer(timer);
+				}
 			}
 
 			timers.Empty();

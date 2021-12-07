@@ -24,6 +24,22 @@ void ALostConnectionGameMode::BeginPlay()
 	}
 }
 
+void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList)
+{
+	Super::GetSeamlessTravelActorList(bToTransition, ActorList);
+
+	ActorList.Reserve(GameState->PlayerArray.Num());
+
+	ActorList.Append(GameState->PlayerArray);
+
+	if (bToTransition)
+	{
+		ActorList.Add(this);
+
+		ActorList.Add(GameState);
+	}
+}
+
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
 	static ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/Drones/SN4K3/BP_SN4K3"));

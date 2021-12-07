@@ -20,6 +20,8 @@ public:
 
 	UPROPERTY(Category = Animations, EditDefaultsOnly)
 	TSubclassOf<UAnimInstance> animationBlueprint;
+
+	FDronePreview();
 };
 
 UCLASS(Blueprintable)

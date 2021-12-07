@@ -23,12 +23,13 @@ private:
 	uint16 count;
 
 protected:
-	void BeginPlay() override;
+	virtual void BeginPlay() override;
+
+	virtual void GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList) override;
 
 public:
 	ALostConnectionGameMode();
 
 	UFUNCTION(Category = "Debug|Spawn", Server, Reliable, CallInEditor, Meta = (DisplayAfter = "count"))
 	void spawnAI() const;
-
 };
