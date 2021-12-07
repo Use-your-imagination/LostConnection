@@ -35,10 +35,6 @@ private:
 	TSharedPtr<FOnlineSessionSearch> searchSession;
 
 private:
-	UPROPERTY(Category = LevelLoading, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	FString nextLevelName;
-
-private:
 	void Init() override;
 
 	void initSearchSession();
@@ -57,10 +53,5 @@ public:
 	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
 
 	UFUNCTION(Category = LevelLoading, BlueprintCallable)
-	void loadNextAct(const FString& levelName);
-
-	UFUNCTION(Category = LevelLoading, BlueprintCallable)
-	void setNextLevelName(const FString& newNextLevelName);
-
-	const FString& getNextLevelName() const;
+	void loadNextLevel(TSoftObjectPtr<UWorld> nextLevel);
 };

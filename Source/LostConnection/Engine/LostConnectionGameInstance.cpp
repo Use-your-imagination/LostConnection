@@ -122,22 +122,12 @@ void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& 
 	this->findLocalSessions(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionsData, widget);
 }
 
-void ULostConnectionGameInstance::loadNextAct(const FString& levelName)
+void ULostConnectionGameInstance::loadNextLevel(TSoftObjectPtr<UWorld> nextLevel)
 {
 	UWorld* world = GetWorld();
 
 	if (world)
 	{
-		world->ServerTravel(levelName + options, true);
+		world->ServerTravel(nextLevel.GetAssetName() + options, true);
 	}
-}
-
-void ULostConnectionGameInstance::setNextLevelName(const FString& newNextLevelName)
-{
-	nextLevelName = newNextLevelName;
-}
-
-const FString& ULostConnectionGameInstance::getNextLevelName() const
-{
-	return nextLevelName;
 }
