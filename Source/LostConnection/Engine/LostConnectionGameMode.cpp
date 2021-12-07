@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerState.h"
 
 #include "LostConnectionGameState.h"
+#include "LostConnectionPlayerController.h"
 
 #pragma warning(disable: 4458)
 
@@ -27,12 +28,12 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 {
 	static ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/Drones/SN4K3/BP_SN4K3"));
 	static ConstructorHelpers::FClassFinder<APawn> defaultAIClassFinder(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
-	static ConstructorHelpers::FClassFinder<APlayerController> defaultPlayerControllerClassFinder(TEXT("/Game/Engine/PlayerControllers/BP_LostConnectionPlayerController"));
-	static ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/PlayerStates/BP_LostConnectionPlayerState"));
+	static ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerState"));
 	
 	count = 1;
+	bUseSeamlessTravel = true;
 	DefaultPawnClass = defaultPawnClassFinder.Class;
-	PlayerControllerClass = defaultPlayerControllerClassFinder.Class;
+	PlayerControllerClass = ALostConnectionPlayerController::StaticClass();
 	PlayerStateClass = defaultPlayerStateClassFinder.Class;
 	GameStateClass = ALostConnectionGameState::StaticClass();
 
