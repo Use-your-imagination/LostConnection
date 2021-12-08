@@ -4,7 +4,7 @@
 
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-const FString UConstants::projectVersion = "0.1.3.0";
+const FString UConstants::projectVersion = "0.1.4.0";
 
 FText UConstants::getProjectVersion()
 {
