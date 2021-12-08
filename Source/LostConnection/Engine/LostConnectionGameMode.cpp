@@ -14,8 +14,6 @@
 void ALostConnectionGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	spawner.spawn(GetWorld(), 5);
 }
 
 void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList)
@@ -47,7 +45,7 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	GameStateClass = ALostConnectionGameState::StaticClass();
 }
 
-void ALostConnectionGameMode::spawnAI(int32 count) const
+void ALostConnectionGameMode::spawnAI_Implementation(int32 count) const
 {
 	spawner.spawn(GetWorld(), count);
 }

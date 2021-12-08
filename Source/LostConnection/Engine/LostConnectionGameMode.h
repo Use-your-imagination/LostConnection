@@ -26,5 +26,6 @@ protected:
 public:
 	ALostConnectionGameMode();
 
+	UFUNCTION(Category = AI, Server, Reliable, BlueprintCallable)
 	void spawnAI(int32 count) const;
 };

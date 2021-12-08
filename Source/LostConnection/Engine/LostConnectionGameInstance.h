@@ -42,12 +42,12 @@ private:
 public:
 	ULostConnectionGameInstance() = default;
 
-	void hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const FString& levelName);
+	void hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const TSoftObjectPtr<UWorld>& level);
 
 	void findLocalSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
-	void createSession(FName sessionName, const FString& levelName);
+	void createSession(FName sessionName, TSoftObjectPtr<UWorld> level);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
 	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);

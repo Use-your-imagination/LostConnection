@@ -89,11 +89,11 @@ void ULostConnectionGameInstance::initSearchSession()
 	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 }
 
-void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const FString& levelName)
+void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const TSoftObjectPtr<UWorld>& level)
 {
 	sessionSettings->Set("ServerName", sessionName.ToString(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
-	sessionSettings->Set(SETTING_MAPNAME, levelName, EOnlineDataAdvertisementType::Type::ViaOnlineService);
+	sessionSettings->Set(SETTING_MAPNAME, level.GetAssetName(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
 	session->CreateSession(*userId, sessionName, *sessionSettings);
 }
@@ -107,9 +107,9 @@ void ULostConnectionGameInstance::findLocalSessions(TSharedPtr<const FUniqueNetI
 	session->FindSessions(*userId, searchSession.ToSharedRef());
 }
 
-void ULostConnectionGameInstance::createSession(FName sessionName, const FString& levelName)
+void ULostConnectionGameInstance::createSession(FName sessionName, TSoftObjectPtr<UWorld> level)
 {
-	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionName, levelName);
+	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionName, level);
 }
 
 void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
