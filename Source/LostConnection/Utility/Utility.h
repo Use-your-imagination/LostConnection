@@ -23,7 +23,7 @@ public:
 
 	static ALostConnectionPlayerState* getPlayerState(APawn* pawn);
 
-	static SIZE_T countStatuses(const class IAilmentReceiver* target, UClass* statusStaticClass);
+	static SIZE_T countStatuses(const class IAilmentReceiver* target, const TSubclassOf<class UBaseStatus>& statusClass);
 
 	static FText getFTextFromFloat(float value);
 
@@ -35,6 +35,9 @@ public:
 
 	template<typename StatusT>
 	static bool isTargetAlreadyUnderStatus(const TScriptInterface<class IAilmentReceiver>& target);
+
+	template<typename T>
+	static const T& getRandomValueFromArray(const TArray<T>& values);
 };
 
 template<typename T>
@@ -55,4 +58,12 @@ template<typename StatusT>
 bool Utility::isTargetAlreadyUnderStatus(const TScriptInterface<class IAilmentReceiver>& target)
 {
 	return Utility::isTargetAlreadyUnderStatus<StatusT>(StaticCast<class IAilmentReceiver*>(target.GetInterface()));
+}
+
+template<typename T>
+const T& Utility::getRandomValueFromArray(const TArray<T>& values)
+{
+	check(values.Num() != 0);
+
+	return values[FMath::RandRange(0, values.Num() - 1)];
 }

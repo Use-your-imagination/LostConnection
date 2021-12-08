@@ -70,16 +70,16 @@ protected:
 	float additionalDamage;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	int currentMagazineSize;
+	int32 currentMagazineSize;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	int magazineSize;
+	int32 magazineSize;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	int ammoCost;
+	int32 ammoCost;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	int roundsPerSecond;
+	int32 roundsPerSecond;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	weaponTypes weaponType;
@@ -130,10 +130,10 @@ public:
 	virtual void setAdditionalDamage(float newAdditionalDamage) final;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setCurrentMagazineSize(int newCurrentMagazineSize) final;
+	virtual void setCurrentMagazineSize(int32 newCurrentMagazineSize) final;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setRateOfFire(int newRoundsPerSecond) final;
+	virtual void setRateOfFire(int32 newRoundsPerSecond) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setWeaponType(weaponTypes newWeaponType) final;
@@ -150,11 +150,11 @@ public:
 
 	virtual float getAdditionalDamage() const final;
 
-	virtual int getCurrentMagazineSize() const final;
+	virtual int32 getCurrentMagazineSize() const final;
 
-	virtual int getMagazineSize() const final;
+	virtual int32 getMagazineSize() const final;
 
-	virtual int getRoundsPerSecond() const final;
+	virtual int32 getRoundsPerSecond() const final;
 
 	virtual weaponTypes getWeaponType() const final;
 

@@ -8,6 +8,7 @@
 
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "WorldPlaceables/Utility/LevelCreationWaypoint.h"
+#include "Utility/Utility.h"
 
 void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -50,7 +51,7 @@ void ALostConnectionGameState::startRoomLoading()
 		rooms = MoveTemp(usedRooms);
 	}
 
-	const TSoftObjectPtr<UWorld>& room = rooms[FMath::RandRange(0, rooms.Num() - 1)];
+	const TSoftObjectPtr<UWorld>& room = Utility::getRandomValueFromArray(rooms);
 	
 	this->loadRoom(room, waypoint->GetActorLocation(), waypoint->GetActorRotation());
 

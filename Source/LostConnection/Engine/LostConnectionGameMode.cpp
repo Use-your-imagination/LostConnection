@@ -11,19 +11,6 @@
 
 #pragma warning(disable: 4458)
 
-void ALostConnectionGameMode::BeginPlay()
-{
-	Super::BeginPlay();
-
-	for (size_t i = 0; i < 3; i++)
-	{
-		FVector location(FMath::RandRange(-11000.0f, -5900.0f), FMath::RandRange(0.0f, 1000.0f), FMath::RandRange(131.0f, 1650.0f));
-		FRotator rotation(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
-
-		GetWorld()->SpawnActor(defaultAI, &location, &rotation);
-	}
-}
-
 void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList)
 {
 	Super::GetSeamlessTravelActorList(bToTransition, ActorList);
@@ -46,27 +33,9 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	static ConstructorHelpers::FClassFinder<APawn> defaultAIClassFinder(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
 	static ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerState"));
 	
-	count = 1;
 	bUseSeamlessTravel = true;
 	DefaultPawnClass = defaultPawnClassFinder.Class;
 	PlayerControllerClass = ALostConnectionPlayerController::StaticClass();
 	PlayerStateClass = defaultPlayerStateClassFinder.Class;
 	GameStateClass = ALostConnectionGameState::StaticClass();
-
-	defaultAI = defaultAIClassFinder.Class;
-}
-
-void ALostConnectionGameMode::spawnAI_Implementation() const
-{
-	FActorSpawnParameters parameters;
-
-	parameters.bNoFail = true;
-	parameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
-	for (size_t i = 0; i < count; i++)
-	{
-		FRotator rotation(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
-
-		GetWorld()->SpawnActor(defaultAI, &location, &rotation, parameters);
-	}
 }

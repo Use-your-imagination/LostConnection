@@ -273,7 +273,7 @@ public:
 	virtual UBaseWeapon* getCurrentWeapon() final;
 
 	UFUNCTION(BlueprintCallable)
-	virtual int getWeaponCount() const;
+	virtual int32 getWeaponCount() const;
 
 	virtual const TWeakObjectPtr<class USwarmStatus>& getSwarm() const final;
 
