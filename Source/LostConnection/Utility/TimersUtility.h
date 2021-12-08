@@ -4,40 +4,37 @@
 
 #include "CoreMinimal.h"
 
-#include "UObject/Object.h"
-
-#include "TimersUtility.generated.h"
-
-/**
- * 
- */
-UCLASS()
-class LOSTCONNECTION_API UTimersUtility : public UObject
+struct timerData
 {
-	GENERATED_BODY()
-
-private:
-	UPROPERTY()
-	TArray<FTimerHandle> timers;
-
-	UWorld* world;
+	TFunction<void()> timer;
+	float rate;
+	bool loop;
+	float firstDelay;
+	float currentTime;
 
 public:
-	UTimersUtility();
+	timerData(const TFunction<void()>& timer, float rate, bool loop = true, float firstDelay = 0.0f);
+
+	~timerData() = default;
+};
+
+class LOSTCONNECTION_API TimersUtility
+{
+private:
+	TArray<timerData> timers;
+
+public:
+	TimersUtility() = default;
 
 	void addTimer(const TFunction<void()>& function, float rate, bool loop = true, float firstDelay = 0.0f);
 
-	void removeTimer(size_t index);
+	void removeTimer(int32 index);
 
-	size_t size() const;
+	int32 size() const;
 
-	void clear();
+	void processTimers(float DeltaTime);
 
-	void setWorld(UWorld* world);
+	const timerData& operator [] (int32 index) const;
 
-	const FTimerHandle& operator [] (size_t index) const;
-
-	FTimerHandle& operator [] (size_t index);
-
-	~UTimersUtility();
+	~TimersUtility() = default;
 };

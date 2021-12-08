@@ -38,10 +38,6 @@ void ABaseCharacter::BeginPlay()
 	{
 		if (HasAuthority())
 		{
-			timers = NewObject<UTimersUtility>(this);
-
-			timers->setWorld(world);
-
 			spareAmmoReplication =
 			{
 				FAmmoData(ammoTypes::large, spareAmmo[ammoTypes::large]),
@@ -99,6 +95,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 		}
 
 		statusesToRemove.Empty();
+
+		timers.processTimers(DeltaTime);
 	}
 }
 
@@ -328,7 +326,6 @@ void ABaseCharacter::resetShootLogic()
 }
 
 ABaseCharacter::ABaseCharacter() :
-	timers(nullptr),
 	defaultMovementSpeed(450.0f),
 	sprintMovementSpeed(575.0f),
 	isDead(false)

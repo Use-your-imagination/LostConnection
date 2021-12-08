@@ -231,8 +231,6 @@ protected:
 	UFUNCTION()
 	virtual void releaseWeaponSelector() final;
 
-	virtual void deathLogic() override;
-
 public:
 	ABaseDrone();
 

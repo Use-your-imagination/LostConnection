@@ -345,14 +345,11 @@ void ABaseDrone::BeginPlay()
 	{
 		if (HasAuthority())
 		{
-			timers->addTimer([this]()
+			timers.addTimer([this]()
 				{
-					if (IsValidLowLevelFast())
+					if (currentEnergy != energy)
 					{
-						if (currentEnergy != energy)
-						{
-							ICaster::Execute_setCurrentEnergy(this, currentEnergy + energyRestorationPerSecond);
-						}
+						ICaster::Execute_setCurrentEnergy(this, currentEnergy + energyRestorationPerSecond);
 					}
 				}, 1.0f);
 		}
@@ -506,14 +503,6 @@ void ABaseDrone::releaseWeaponSelector()
 	IInputActions::Execute_releaseWeaponSelectorAction(this);
 }
 
-void ABaseDrone::deathLogic()
-{
-	if (timers)
-	{
-		timers->clear();
-	}
-}
-
 ABaseDrone::ABaseDrone() :
 	primaryWeaponSlot(nullptr),
 	secondaryWeaponSlot(nullptr),
@@ -624,7 +613,7 @@ void ABaseDrone::changeToPrimaryWeapon_Implementation()
 {
 	currentWeapon = primaryWeaponSlot;
 
-		this->updateWeaponMesh();
+	this->updateWeaponMesh();
 }
 
 void ABaseDrone::changeToSecondaryWeapon_Implementation()

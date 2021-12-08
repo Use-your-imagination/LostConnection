@@ -69,8 +69,7 @@ protected:
 	UBaseWeapon* defaultWeaponSlot;
 
 protected:
-	UPROPERTY()
-	UTimersUtility* timers;
+	TimersUtility timers;
 
 protected:
 	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
