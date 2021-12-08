@@ -14,20 +14,20 @@ class LOSTCONNECTION_API UBaseActDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(Category = "Levels|StartingLocations", EditDefaultsOnly)
+	UPROPERTY(Category = Levels, EditDefaultsOnly)
 	TArray<TSoftObjectPtr<UWorld>> startingLocations;
 
-	UPROPERTY(Category = "Levels|Rooms", EditDefaultsOnly)
+	UPROPERTY(Category = Levels, EditDefaultsOnly)
 	TArray<TSoftObjectPtr<UWorld>> rooms;
 
-	UPROPERTY(Category = "Levels|SecretRooms", EditDefaultsOnly)
+	UPROPERTY(Category = Levels, EditDefaultsOnly)
 	TArray<TSoftObjectPtr<UWorld>> secretRooms;
 
-	UPROPERTY(Category = "Levels|Warehouses", EditDefaultsOnly)
+	UPROPERTY(Category = Levels, EditDefaultsOnly)
 	TArray<TSoftObjectPtr<UWorld>> warehouses;
 
-	UPROPERTY(Category = "Levels|BossRooms", EditDefaultsOnly)
-	TArray<TSoftObjectPtr<UWorld>> bossRoom;
+	UPROPERTY(Category = Levels, EditDefaultsOnly)
+	TArray<TSoftObjectPtr<UWorld>> bossRooms;
 
 	UPROPERTY(Category = AI, EditDefaultsOnly)
 	TArray<TSubclassOf<class ABaseBot>> bots;

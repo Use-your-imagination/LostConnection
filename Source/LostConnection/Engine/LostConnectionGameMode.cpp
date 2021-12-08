@@ -11,6 +11,13 @@
 
 #pragma warning(disable: 4458)
 
+void ALostConnectionGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	spawner.spawn(GetWorld(), 5);
+}
+
 void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList)
 {
 	Super::GetSeamlessTravelActorList(bToTransition, ActorList);
@@ -38,4 +45,9 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	PlayerControllerClass = ALostConnectionPlayerController::StaticClass();
 	PlayerStateClass = defaultPlayerStateClassFinder.Class;
 	GameStateClass = ALostConnectionGameState::StaticClass();
+}
+
+void ALostConnectionGameMode::spawnAI(int32 count) const
+{
+	spawner.spawn(GetWorld(), count);
 }

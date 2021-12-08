@@ -67,6 +67,19 @@ TMap<FName, float> ULostConnectionAssetManager::getLoadingState() const
 	return result;
 }
 
+float ULostConnectionAssetManager::getCurrentPercentLoading() const
+{
+	float allAssets = handles.Num();
+	float current = 0.0f;
+
+	for (const auto& i : handles)
+	{
+		current += i.Value->GetProgress();
+	}
+
+	return (current / allAssets) * 100.0f;
+}
+
 const UClass* ULostConnectionAssetManager::operator [] (typeOfDamage damageType) const
 {
 	UStatusesDataAsset& asset = *GetPrimaryAssetObject<UStatusesDataAsset>(UStatusesDataAsset::getPrimaryAssetId());

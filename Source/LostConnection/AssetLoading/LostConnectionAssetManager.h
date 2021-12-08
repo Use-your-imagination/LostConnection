@@ -68,6 +68,9 @@ public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	TMap<FName, float> getLoadingState() const;
 
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	float getCurrentPercentLoading() const;
+
 	const UClass* operator [] (typeOfDamage damageType) const;
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
