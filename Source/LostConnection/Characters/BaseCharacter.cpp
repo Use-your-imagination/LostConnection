@@ -240,8 +240,8 @@ void ABaseCharacter::reloadLogic()
 		return;
 	}
 
-	int currentMagazineSize = currentWeapon->getCurrentMagazineSize();
-	int magazineSize = currentWeapon->getMagazineSize();
+	int32 currentMagazineSize = currentWeapon->getCurrentMagazineSize();
+	int32 magazineSize = currentWeapon->getMagazineSize();
 	ammoTypes ammoType = currentWeapon->getAmmoType();
 
 	if (currentMagazineSize == magazineSize)
@@ -256,7 +256,7 @@ void ABaseCharacter::reloadLogic()
 		return;
 	}
 
-	int reloadedAmmoRequire = FMath::Min(magazineSize - currentMagazineSize, ammoCount);
+	int32 reloadedAmmoRequire = FMath::Min(magazineSize - currentMagazineSize, ammoCount);
 
 	currentWeapon->setCurrentMagazineSize(currentMagazineSize + reloadedAmmoRequire);
 
@@ -545,9 +545,9 @@ UBaseWeapon* ABaseCharacter::getCurrentWeapon()
 	return currentWeapon;
 }
 
-int ABaseCharacter::getWeaponCount() const
+int32 ABaseCharacter::getWeaponCount() const
 {
-	int result = 0;
+	int32 result = 0;
 
 	result += StaticCast<bool>(defaultWeaponSlot);
 

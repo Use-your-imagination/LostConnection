@@ -331,7 +331,7 @@ public:
 
 	virtual float getCastPoint() const final;
 
-	virtual int getWeaponCount() const override;
+	virtual int32 getWeaponCount() const override;
 
 	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const override;
 

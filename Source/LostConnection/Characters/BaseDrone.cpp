@@ -925,9 +925,9 @@ float ABaseDrone::getCastPoint() const
 	return castPoint;
 }
 
-int ABaseDrone::getWeaponCount() const
+int32 ABaseDrone::getWeaponCount() const
 {
-	int result = Super::getWeaponCount();
+	int32 result = Super::getWeaponCount();
 
 	result += StaticCast<bool>(primaryWeaponSlot);
 

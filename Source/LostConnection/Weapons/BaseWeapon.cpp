@@ -212,12 +212,12 @@ void UBaseWeapon::setAdditionalDamage_Implementation(float newAdditionalDamage)
 	additionalDamage = newAdditionalDamage;
 }
 
-void UBaseWeapon::setCurrentMagazineSize_Implementation(int newCurrentMagazineSize)
+void UBaseWeapon::setCurrentMagazineSize_Implementation(int32 newCurrentMagazineSize)
 {
 	currentMagazineSize = newCurrentMagazineSize;
 }
 
-void UBaseWeapon::setRateOfFire_Implementation(int newRoundsPerSecond)
+void UBaseWeapon::setRateOfFire_Implementation(int32 newRoundsPerSecond)
 {
 	roundsPerSecond = newRoundsPerSecond;
 }
@@ -257,17 +257,17 @@ float UBaseWeapon::getAdditionalDamage() const
 	return additionalDamage;
 }
 
-int UBaseWeapon::getCurrentMagazineSize() const
+int32 UBaseWeapon::getCurrentMagazineSize() const
 {
 	return currentMagazineSize;
 }
 
-int UBaseWeapon::getMagazineSize() const
+int32 UBaseWeapon::getMagazineSize() const
 {
 	return magazineSize;
 }
 
-int UBaseWeapon::getRoundsPerSecond() const
+int32 UBaseWeapon::getRoundsPerSecond() const
 {
 	return roundsPerSecond;
 }
