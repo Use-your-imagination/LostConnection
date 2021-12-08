@@ -1,4 +1,39 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.1.3.0"
+  "projectVersion": "0.1.3.0",
+  "Gameplay": {
+    "type": "category",
+    "AI spawning": {
+      "type": "item",
+      "notes": [
+        "Now AI respawning after each clearing"
+      ]
+    },
+    "Room loading": {
+      "type": "item",
+      "notes": [
+        "Added room loading",
+        "Temporary not available"
+      ]
+    }
+  },
+  "Maps": {
+    "type": "category",
+    "Ruined City": {
+      "type": "item",
+      "notes": [
+        "Add new maps to our first act named Ruined City",
+        "Now available only one map"
+      ]
+    }
+  },
+  "UI": {
+    "type": "category",
+    "Main menu": {
+      "type": "item",
+      "notes": [
+        "Updated main menu visual"
+      ]
+    }
+  }
 }
