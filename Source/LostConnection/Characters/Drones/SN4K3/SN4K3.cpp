@@ -14,8 +14,6 @@
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 #include "Utility/MultiplayerUtility.h"
 
-UClass* ASN4K3::defaultThirdAbilityReservator = nullptr;
-
 void ASN4K3::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -32,13 +30,13 @@ bool ASN4K3::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FRepl
 	return wroteSomething;
 }
 
-void ASN4K3::PostInitializeComponents()
+void ASN4K3::BeginPlay()
 {
-	Super::PostInitializeComponents();
+	Super::BeginPlay();
 
 	if (HasAuthority())
 	{
-		thirdAbilityReservator = NewObject<USN4K3Reservator>(this, defaultThirdAbilityReservator);
+		thirdAbilityReservator = NewObject<USN4K3Reservator>(this, ULostConnectionAssetManager::get().getStatuses().getDefaultSN4K3Reservator());
 
 		Cast<USN4K3ThirdAbility>(thirdAbility)->insert(thirdAbilityReservator);
 	}
@@ -58,8 +56,6 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 
 ASN4K3::ASN4K3()
 {
-	static ConstructorHelpers::FClassFinder<USN4K3Reservator> defaultThirdAbilityReservatorFinder(TEXT("/Game/Drones/SN4K3/BP_SN4K3Reservator"));
-
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);
 
 	passiveAbility = CreateDefaultSubobject<USN4K3PassiveAbility>(TEXT("PassiveAbility"));
@@ -67,8 +63,6 @@ ASN4K3::ASN4K3()
 	secondAbility = CreateDefaultSubobject<USN4K3SecondAbility>(TEXT("SecondAbility"));
 	thirdAbility = CreateDefaultSubobject<USN4K3ThirdAbility>(TEXT("ThirdAbility"));
 	ultimateAbility = CreateDefaultSubobject<USN4K3UltimateAbility>(TEXT("UltimateAbility"));
-
-	defaultThirdAbilityReservator = defaultThirdAbilityReservatorFinder.Class;
 
 	passiveAbility->setCaster(this);
 	firstAbility->setCaster(this);

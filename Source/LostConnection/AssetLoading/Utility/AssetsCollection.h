@@ -13,11 +13,11 @@
 class LOSTCONNECTION_API AssetsCollection
 {
 private:
-	TMap<UClass*, FPrimaryAssetId> loadData;
+	TMap<TSubclassOf<UPrimaryDataAsset>, FPrimaryAssetId> loadData;
 
 private:
 	template<typename DataAssetT>
-	static TPair<UClass*, FPrimaryAssetId> getCreationData();
+	static TPair<TSubclassOf<UPrimaryDataAsset>, FPrimaryAssetId> getCreationData();
 
 private:
 	AssetsCollection();
@@ -35,11 +35,11 @@ private:
 public:
 	static AssetsCollection& get();
 
-	const FPrimaryAssetId& operator [] (UClass* dataAsset) const;
+	const FPrimaryAssetId& operator [] (const TSubclassOf<UPrimaryDataAsset>& dataAsset) const;
 };
 
 template<typename DataAssetT>
-TPair<UClass*, FPrimaryAssetId> AssetsCollection::getCreationData()
+TPair<TSubclassOf<UPrimaryDataAsset>, FPrimaryAssetId> AssetsCollection::getCreationData()
 {
-	return TPair<UClass*, FPrimaryAssetId>{ DataAssetT::StaticClass(), DataAssetT::getPrimaryAssetId() };
+	return TPair<TSubclassOf<UPrimaryDataAsset>, FPrimaryAssetId>{ DataAssetT::StaticClass(), DataAssetT::getPrimaryAssetId() };
 }

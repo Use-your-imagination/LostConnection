@@ -17,7 +17,7 @@ AssetsCollection& AssetsCollection::get()
 	return instance;
 }
 
-const FPrimaryAssetId& AssetsCollection::operator [] (UClass* dataAsset) const
+const FPrimaryAssetId& AssetsCollection::operator [] (const TSubclassOf<UPrimaryDataAsset>& dataAsset) const
 {
 	return loadData[dataAsset];
 }

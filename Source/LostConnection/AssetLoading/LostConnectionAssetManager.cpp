@@ -101,6 +101,11 @@ const TArray<TSubclassOf<UBaseWeapon>>& ULostConnectionAssetManager::getWeapons(
 	return asset.getWeapons();
 }
 
+const UStatusesDataAsset& ULostConnectionAssetManager::getStatuses() const
+{
+	return *GetPrimaryAssetObject<UStatusesDataAsset>(assets[UStatusesDataAsset::StaticClass()]);
+}
+
 const UBaseActDataAsset& ULostConnectionAssetManager::getCurrentAct() const
 {
 	return *GetPrimaryAssetObject<UBaseActDataAsset>(currentActId);

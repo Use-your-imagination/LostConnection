@@ -9,9 +9,14 @@ FPrimaryAssetId UStatusesDataAsset::getPrimaryAssetId()
 	return FPrimaryAssetId(FPrimaryAssetType("Statuses"), "Statuses");
 }
 
-const UClass* UStatusesDataAsset::operator [] (typeOfDamage damageType) const
+const TSubclassOf<UBaseStatus>& UStatusesDataAsset::operator [] (typeOfDamage damageType) const
 {
-	return ailments[damageType].Get();
+	return ailments[damageType];
+}
+
+const UClass* UStatusesDataAsset::getDefaultSN4K3Reservator() const
+{
+	return SN4K3Reservator;
 }
 
 FPrimaryAssetId UStatusesDataAsset::GetPrimaryAssetId() const

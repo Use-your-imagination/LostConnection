@@ -79,6 +79,8 @@ public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	const TArray<TSubclassOf<class UBaseWeapon>>& getWeapons() const;
 
+	const UStatusesDataAsset& getStatuses() const;
+
 	const UBaseActDataAsset& getCurrentAct() const;
 
 	TArray<const FDronePreview*> getDronesPreview() const;

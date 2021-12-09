@@ -22,14 +22,12 @@ private:
 	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UObject* thirdAbilityReservator;
 
-	static UClass* defaultThirdAbilityReservator;
-
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	void PostInitializeComponents() override;
+	void BeginPlay() override;
 
 private:
 	UFUNCTION()
