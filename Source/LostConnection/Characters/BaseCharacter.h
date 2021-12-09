@@ -14,6 +14,7 @@
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Utility/TimersUtility.h"
 #include "Utility/Utility.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Interfaces/Gameplay/Actions/MovementActions.h"
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"

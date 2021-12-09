@@ -11,15 +11,8 @@
 
 #pragma warning(disable: 4458)
 
-void ALostConnectionGameMode::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList)
 {
-	Super::GetSeamlessTravelActorList(bToTransition, ActorList);
-
 	ActorList.Reserve(GameState->PlayerArray.Num());
 
 	ActorList.Append(GameState->PlayerArray);
@@ -30,6 +23,8 @@ void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TAr
 
 		ActorList.Add(GameState);
 	}
+
+	Super::GetSeamlessTravelActorList(bToTransition, ActorList);
 }
 
 ALostConnectionGameMode::ALostConnectionGameMode()

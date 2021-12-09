@@ -339,20 +339,21 @@ void ABaseDrone::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UWorld* world = GetWorld();
-
-	if (world)
+	if (HasAuthority())
 	{
-		if (HasAuthority())
-		{
-			timers.addTimer([this]()
+		timers.addTimer([this]()
+			{
+				if (currentEnergy != energy)
 				{
-					if (currentEnergy != energy)
-					{
-						ICaster::Execute_setCurrentEnergy(this, currentEnergy + energyRestorationPerSecond);
-					}
-				}, 1.0f);
-		}
+					ICaster::Execute_setCurrentEnergy(this, currentEnergy + energyRestorationPerSecond);
+				}
+			}, 1.0f);
+
+		ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+
+		this->setPrimaryWeapon(manager.getWeaponClass(UHipter::StaticClass()));
+
+		this->setDefaultWeapon(manager.getWeaponClass(UGauss::StaticClass()));
 	}
 }
 

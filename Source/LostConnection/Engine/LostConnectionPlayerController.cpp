@@ -4,9 +4,9 @@
 
 void ALostConnectionPlayerController::GetSeamlessTravelActorList(bool bToEntry, TArray<AActor*>& ActorList)
 {
-	Super::GetSeamlessTravelActorList(bToEntry, ActorList);
-
 	ActorList.Add(GetPawn());
+
+	Super::GetSeamlessTravelActorList(bToEntry, ActorList);
 }
 
 ALostConnectionPlayerController::ALostConnectionPlayerController()

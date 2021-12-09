@@ -7,7 +7,6 @@
 #include "Engine/Font.h"
 
 #include "Utility/Utility.h"
-
 #include "Weapons/Pistols/Gauss.h"
 
 void ABaseBot::Tick(float DeltaTime)
@@ -24,6 +23,13 @@ void ABaseBot::BeginPlay()
 	healthBar->AddElement(healthBarMaterial, nullptr, false, 10.0f, 40.0f, nullptr);
 
 	healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
+
+	if (HasAuthority())
+	{
+		this->setDefaultWeapon(ULostConnectionAssetManager::get().getWeaponClass(UGauss::StaticClass()));
+
+		this->changeToDefaultWeapon();
+	}
 }
 
 void ABaseBot::deathLogic()

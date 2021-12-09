@@ -19,8 +19,6 @@ private:
 	AISpawner& spawner = AISpawner::get();
 
 protected:
-	virtual void BeginPlay() override;
-
 	virtual void GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList) override;
 
 public:

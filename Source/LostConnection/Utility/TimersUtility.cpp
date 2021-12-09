@@ -4,6 +4,7 @@
 
 #include "Async/ParallelFor.h"
 #include "Algo/ForEach.h"
+#include "Algo/RemoveIf.h"
 
 #pragma warning(disable: 4458)
 
@@ -34,7 +35,7 @@ int32 TimersUtility::size() const
 
 void TimersUtility::processTimers(float DeltaTime)
 {
-	TArray<TFunction<void()>*> timersToInvoke;
+	TArray<timerData*> timersToInvoke;
 	auto body = [this, &DeltaTime, &timersToInvoke](int32 index)
 	{
 		timerData& timer = timers[index];
@@ -68,7 +69,7 @@ void TimersUtility::processTimers(float DeltaTime)
 
 		if (isInvoke)
 		{
-			timersToInvoke[index] = &timer.timer;
+			timersToInvoke[index] = &timer;
 		}
 	};
 
@@ -79,8 +80,17 @@ void TimersUtility::processTimers(float DeltaTime)
 	Algo::ForEachIf
 	(
 		timersToInvoke,
-		[](TFunction<void()>* timer) { return StaticCast<bool>(timer); },
-		[](TFunction<void()>* timer) { (*timer)(); }
+		[](timerData* timer) { return StaticCast<bool>(timer); },
+		[](timerData* timer) { timer->timer(); }
+	);
+
+	Algo::StableRemoveIf
+	(
+		timersToInvoke,
+		[](timerData* timer)
+		{
+			return timer && !timer->loop;
+		}
 	);
 }
 
