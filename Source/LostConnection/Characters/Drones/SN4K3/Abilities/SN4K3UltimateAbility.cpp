@@ -76,6 +76,8 @@ void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 
 	drone->SetActorLocation(returnPosition);
 
+	isUltimateAbilityUsed = !isUltimateAbilityUsed;
+
 	ICaster::Execute_applyUltimateAbilityEvent(Cast<UObject>(caster), target);
 }
 
@@ -85,8 +87,6 @@ void USN4K3UltimateAbility::useAbility()
 
 	if (isUltimateAbilityUsed)
 	{
-		isUltimateAbilityUsed = false;
-
 		this->applyAbility(drone);
 
 		return;
