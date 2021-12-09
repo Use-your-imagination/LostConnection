@@ -9,6 +9,13 @@
 #include "Utility/Utility.h"
 #include "Weapons/Pistols/Gauss.h"
 
+void ABaseBot::updateHealthBar_Implementation(float updatedCurrentHealth, float maxHealth)
+{
+	healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), (updatedCurrentHealth / maxHealth) * 100.0f);
+
+	healthBarText->SetText(Utility::getFTextFromFloat(updatedCurrentHealth));
+}
+
 void ABaseBot::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -68,7 +75,5 @@ void ABaseBot::setCurrentHealth_Implementation(float newCurrentHealth)
 {
 	Super::setCurrentHealth_Implementation(newCurrentHealth);
 
-	healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), (currentHealth / health) * 100.0f);
-
-	healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
+	this->updateHealthBar(currentHealth, health);
 }
