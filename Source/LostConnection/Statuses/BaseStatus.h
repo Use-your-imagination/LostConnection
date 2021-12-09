@@ -8,24 +8,13 @@
 #include "Net/UnrealNetwork.h"
 #include "NiagaraSystem.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentInflictor.h"
+#include "Interfaces/Gameplay/Statuses/Base/StatusInflictor.h"
 
 #include "BaseStatus.generated.h"
 
 #pragma warning(disable: 4458)
 
-UENUM(BlueprintType)
-enum class typeOfDamage : uint8
-{
-	none = 0 UMETA(DisplayName = "None"),
-	physical = 1 UMETA(DisplayName = "Physical"),
-	nanite = 2 UMETA(DisplayName = "Nanite"),
-	fire = 3 UMETA(DisplayName = "Fire"),
-	electricity = 4 UMETA(DisplayName = "Electricity"),
-	radiation = 5 UMETA(DisplayName = "Radiation")
-};
-
-UCLASS(BlueprintType, Blueprintable, DefaultToInstanced)
+UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API UBaseStatus : public UObject
 {
 	GENERATED_BODY()
@@ -55,9 +44,7 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	float currentDuration;
 
-	class IAilmentReceiver* target;
-
-	typeOfDamage inflictorDamageType;
+	class IStatusReceiver* target;
 	float inflictorDamage;
 
 protected:
@@ -71,9 +58,9 @@ public:
 	UBaseStatus() = default;
 
 	UFUNCTION(Server, Reliable)
-	virtual void applyStatus(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<class IAilmentReceiver>& target, const FHitResult& hit);
+	virtual void applyStatus(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
 
-	virtual bool applyEffect(class IAilmentReceiver* target, const FHitResult& hit);
+	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit);
 
 	virtual void postRemove();
 

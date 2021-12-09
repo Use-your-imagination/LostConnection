@@ -5,14 +5,15 @@
 #include "CoreMinimal.h"
 
 #include "Statuses/BaseStatus.h"
-#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "Interfaces/Gameplay/Statuses/Ailment.h"
 
-#include "SwarmStatus.generated.h"
+#include "SwarmAilment.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API USwarmStatus :
+class LOSTCONNECTION_API USwarmAilment :
 	public UBaseStatus,
-	public IDamageInflictor
+	public IDamageInflictor,
+	public IAilment
 {
 	GENERATED_BODY()
 	
@@ -41,13 +42,13 @@ private:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	USwarmStatus() = default;
+	USwarmAilment() = default;
 
 	void increaseThreshold(IDamageInflictor* inflictor);
 
 	float getThreshold() const;
 
-	void applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<class IAilmentReceiver>& target, const FHitResult& hit) override;
+	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
 	UFUNCTION(Server, Reliable)
 	void setInflictorDamage(float newDamage) override;
@@ -59,5 +60,7 @@ public:
 
 	float getAdditionalInflictorDamage() const override;
 
-	virtual ~USwarmStatus() = default;
+	typeOfDamage getAilmentDamageType() const override;
+
+	virtual ~USwarmAilment() = default;
 };

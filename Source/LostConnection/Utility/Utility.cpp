@@ -5,7 +5,7 @@
 #include "Algo/Count.h"
 #include "Kismet/KismetMathLibrary.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
+#include "Interfaces/Gameplay/Statuses/Base/StatusReceiver.h"
 #include "Statuses/BaseStatus.h"
 
 ALostConnectionGameState* Utility::getGameState(APawn* pawn)
@@ -18,7 +18,7 @@ ALostConnectionPlayerState* Utility::getPlayerState(APawn* pawn)
 	return pawn->GetController()->GetPlayerState<ALostConnectionPlayerState>();
 }
 
-SIZE_T Utility::countStatuses(const IAilmentReceiver* target, const TSubclassOf<UBaseStatus>& statusClass)
+SIZE_T Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<UBaseStatus>& statusClass)
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 

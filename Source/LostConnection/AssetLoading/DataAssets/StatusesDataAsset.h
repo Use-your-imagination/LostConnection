@@ -5,10 +5,9 @@
 #include "CoreMinimal.h"
 
 #include "Engine/DataAsset.h"
+#include "Interfaces/Gameplay/Statuses/Ailment.h"
 
 #include "StatusesDataAsset.generated.h"
-
-enum class typeOfDamage : uint8;
 
 UCLASS()
 class LOSTCONNECTION_API UStatusesDataAsset : public UPrimaryDataAsset

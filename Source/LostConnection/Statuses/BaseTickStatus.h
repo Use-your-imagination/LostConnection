@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "Statuses/BaseStatus.h"
+#include "BaseStatus.h"
 
 #include "BaseTickStatus.generated.h"
 

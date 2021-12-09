@@ -5,14 +5,15 @@
 #include "CoreMinimal.h"
 
 #include "Statuses/BaseImpactStatus.h"
-#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "Interfaces/Gameplay/Statuses/Ailment.h"
 
-#include "CritStatus.generated.h"
+#include "CritAilment.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UCritStatus : 
+class LOSTCONNECTION_API UCritAilment : 
 	public UBaseImpactStatus,
-	public IDamageInflictor
+	public IDamageInflictor,
+	public IAilment
 {
 	GENERATED_BODY()
 
@@ -38,11 +39,13 @@ private:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:
-	UCritStatus() = default;
+	UCritAilment() = default;
 
 	float getCritMultiplier() const;
 
-	bool applyEffect(class IAilmentReceiver* target, const FHitResult& hit) override;
+	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
+
+	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
 	UFUNCTION(Server, Reliable)
 	void setInflictorDamage(float newDamage) override;
@@ -54,5 +57,7 @@ public:
 
 	float getAdditionalInflictorDamage() const override;
 
-	virtual ~UCritStatus() = default;
+	typeOfDamage getAilmentDamageType() const override;
+
+	virtual ~UCritAilment() = default;
 };

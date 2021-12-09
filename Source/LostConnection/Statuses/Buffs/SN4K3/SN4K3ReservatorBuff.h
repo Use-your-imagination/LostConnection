@@ -5,11 +5,14 @@
 #include "CoreMinimal.h"
 
 #include "Statuses/BaseStatus.h"
+#include "Interfaces/Gameplay/Statuses/Buff.h"
 
 #include "SN4K3ReservatorBuff.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API USN4K3ReservatorBuff : public UBaseStatus
+class LOSTCONNECTION_API USN4K3ReservatorBuff :
+	public UBaseStatus,
+	public IBuff
 {
 	GENERATED_BODY()
 
@@ -37,9 +40,9 @@ public:
 
 	void setNaniteAdditionalDamagePercent(float naniteAdditionalDamagePercent);
 
-	void applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<class IAilmentReceiver>& target, const FHitResult& hit) override;
+	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
-	bool applyEffect(IAilmentReceiver* target, const FHitResult& hit) override;
+	bool applyEffect(IStatusReceiver* target, const FHitResult& hit) override;
 
 	void postRemove() override;
 

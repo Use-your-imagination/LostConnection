@@ -4,19 +4,18 @@
 
 #include "CoreMinimal.h"
 
-#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "StatusInflictor.h"
+#include "Interfaces/Gameplay/Statuses/Ailment.h"
 
 #include "AilmentInflictor.generated.h"
 
-enum class typeOfDamage : uint8;
-
 UINTERFACE(MinimalAPI)
-class UAilmentInflictor : public UDamageInflictor
+class UAilmentInflictor : public UStatusInflictor
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IAilmentInflictor : public IDamageInflictor
+class LOSTCONNECTION_API IAilmentInflictor : public IStatusInflictor
 {
 	GENERATED_BODY()
 

@@ -8,7 +8,7 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Utility/InitializationUtility.h"
 #include "SN4K3PassiveAbility.h"
-#include "Statuses/Ailments/SwarmStatus.h"
+#include "Statuses/Ailments/SwarmAilment.h"
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
 
 #pragma warning(disable: 4701)
@@ -72,7 +72,7 @@ void USN4K3SecondAbility::useAbility()
 
 void USN4K3SecondAbility::deathEventAction()
 {
-	TWeakObjectPtr<USwarmStatus> swarm = target->getSwarm();
+	TWeakObjectPtr<USwarmAilment> swarm = target->getSwarm();
 
 	if (swarm.IsValid())
 	{

@@ -6,6 +6,8 @@
 
 #include "Abilities/BaseAbility.h"
 #include "Statuses/BaseStatus.h"
+#include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
+#include "Interfaces/Gameplay/Statuses/Ailment.h"
 
 class LOSTCONNECTION_API InitializationUtility
 {
@@ -17,5 +19,5 @@ public:
 public:
 	static void initAbilityId(const FString& abilityClassName, abilitySlot& id);
 
-	static UBaseStatus* createDefaultStatus(typeOfDamage damageType, class IAilmentReceiver* target);
+	static UBaseStatus* createDefaultStatus(typeOfDamage damageType, IAilmentReceiver* target);
 };

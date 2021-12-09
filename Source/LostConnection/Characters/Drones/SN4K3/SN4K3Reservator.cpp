@@ -3,7 +3,6 @@
 #include "SN4K3Reservator.h"
 
 #include "Characters/BaseDrone.h"
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentInflictor.h"
 #include "Statuses/Buffs/SN4K3/SN4K3ReservatorBuff.h"
 
 bool USN4K3Reservator::IsSupportedForNetworking() const

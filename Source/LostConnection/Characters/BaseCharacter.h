@@ -20,7 +20,7 @@
 #include "Interfaces/Gameplay/AnimatedActions/Reload.h"
 #include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
 #include "Interfaces/Gameplay/AnimatedActions/Death.h"
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
+#include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
 
 #include "BaseCharacter.generated.h"
@@ -103,7 +103,7 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	TArray<UBaseStatus*> statuses;
 
-	TWeakObjectPtr<class USwarmStatus> swarm;
+	TWeakObjectPtr<class USwarmAilment> swarm;
 
 	TArray<TWeakInterfacePtr<IOnDeathEvent>> deathEvents;
 
@@ -276,7 +276,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual int32 getWeaponCount() const;
 
-	virtual const TWeakObjectPtr<class USwarmStatus>& getSwarm() const final;
+	virtual const TWeakObjectPtr<class USwarmAilment>& getSwarm() const final;
 
 	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const;
 
@@ -297,7 +297,7 @@ public:
 
 	virtual void addStatus(class UBaseStatus* status) final override;
 
-	virtual void applySwarmStatus(class USwarmStatus* swarm) final override;
+	virtual void applySwarmAilment(class USwarmAilment* swarm) final override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void setUnderStatusIntVariable(const FString& key, int32 value) final override;
@@ -308,7 +308,7 @@ public:
 
 	virtual float getHealthPercentDealt(class IDamageInflictor* inflictor) const final override;
 
-	virtual void statusInflictorImpactAction(const TScriptInterface<class IAilmentInflictor>& inflictor, const FHitResult& hit) final override;
+	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
 
 	virtual USkeletalMeshComponent* getMeshComponent() final override;
 

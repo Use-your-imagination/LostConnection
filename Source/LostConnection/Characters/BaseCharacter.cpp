@@ -12,7 +12,7 @@
 #include "Algo/Find.h"
 
 #include "Statuses/BaseTriggerStatus.h"
-#include "Statuses/Ailments/SwarmStatus.h"
+#include "Statuses/Ailments/SwarmAilment.h"
 #include "Utility/InitializationUtility.h"
 #include "BaseBot.h"
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
@@ -435,7 +435,7 @@ void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> de
 
 	defaultWeaponSlot = NewObject<UBaseWeapon>(this, defaultWeapon.Get());
 
-	defaultWeaponSlot->setOwnerCharacter(this);
+	defaultWeaponSlot->setOwner(this);
 
 	defaultWeaponSlot->updateTimeBetweenShots();
 }
@@ -554,7 +554,7 @@ int32 ABaseCharacter::getWeaponCount() const
 	return result;
 }
 
-const TWeakObjectPtr<USwarmStatus>& ABaseCharacter::getSwarm() const
+const TWeakObjectPtr<USwarmAilment>& ABaseCharacter::getSwarm() const
 {
 	return swarm;
 }
@@ -642,7 +642,7 @@ void ABaseCharacter::addStatus(UBaseStatus* status)
 	statuses.Add(status);
 }
 
-void ABaseCharacter::applySwarmStatus(USwarmStatus* swarm)
+void ABaseCharacter::applySwarmAilment(USwarmAilment* swarm)
 {
 	this->swarm = swarm;
 }
@@ -673,7 +673,7 @@ float ABaseCharacter::getHealthPercentDealt(IDamageInflictor* inflictor) const
 	return (1.0f - (health - damage) / health) * 100.0f;
 }
 
-void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IAilmentInflictor>& inflictor, const FHitResult& hit)
+void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
 {
 	static TArray<UBaseStatus*> statusesToRemove;
 
@@ -697,12 +697,17 @@ void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IAilment
 		statusToRemove->postRemove();
 	}
 
-	if ((hit.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(hit.PhysMaterial.Get()) == EPhysicalSurface::SurfaceType1) || inflictor->getCrushingHitProc())
-	{
-		InitializationUtility::createDefaultStatus(inflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
-	}
-
 	statusesToRemove.Empty();
+
+	if (inflictor->_getUObject()->Implements<UAilmentInflictor>())
+	{
+		IAilmentInflictor* ailmentInflictor = StaticCast<IAilmentInflictor*>(inflictor.GetInterface());
+
+		if ((hit.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(hit.PhysMaterial.Get()) == EPhysicalSurface::SurfaceType1) || ailmentInflictor->getCrushingHitProc())
+		{
+			InitializationUtility::createDefaultStatus(ailmentInflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
+		}
+	}
 }
 
 USkeletalMeshComponent* ABaseCharacter::getMeshComponent()

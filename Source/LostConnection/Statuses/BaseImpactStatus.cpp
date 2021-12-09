@@ -2,7 +2,7 @@
 
 #include "BaseImpactStatus.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
+#include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
 
 FString UBaseImpactStatus::getStatusName() const
 {
@@ -14,11 +14,11 @@ SIZE_T UBaseImpactStatus::getActiveStatusesCount() const
 	PURE_VIRTUAL(UBaseImpactStatus::getActiveStatusesCount, return 0;);
 }
 
-void UBaseImpactStatus::applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<IAilmentReceiver>& target, const FHitResult& hit)
+void UBaseImpactStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	Super::applyStatus_Implementation(inflictor, target, hit);
 
-	this->applyEffect(StaticCast<IAilmentReceiver*>(target.GetInterface()), hit);
+	this->applyEffect(StaticCast<IStatusReceiver*>(target.GetInterface()), hit);
 }
 
 void UBaseImpactStatus::postRemove()

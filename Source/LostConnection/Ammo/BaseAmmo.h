@@ -8,7 +8,7 @@
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-#include "Statuses/BaseStatus.h"
+#include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
 
 #include "BaseAmmo.generated.h"
 

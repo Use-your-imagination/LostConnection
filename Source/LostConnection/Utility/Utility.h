@@ -23,7 +23,7 @@ public:
 
 	static ALostConnectionPlayerState* getPlayerState(APawn* pawn);
 
-	static SIZE_T countStatuses(const class IAilmentReceiver* target, const TSubclassOf<class UBaseStatus>& statusClass);
+	static SIZE_T countStatuses(const class IStatusReceiver* target, const TSubclassOf<class UBaseStatus>& statusClass);
 
 	static FText getFTextFromFloat(float value);
 
@@ -31,10 +31,10 @@ public:
 	static bool checkChanceProc(const T& chance);
 
 	template<typename StatusT>
-	static bool isTargetAlreadyUnderStatus(class IAilmentReceiver* target);
+	static bool isTargetAlreadyUnderStatus(class IStatusReceiver* target);
 
 	template<typename StatusT>
-	static bool isTargetAlreadyUnderStatus(const TScriptInterface<class IAilmentReceiver>& target);
+	static bool isTargetAlreadyUnderStatus(const TScriptInterface<class IStatusReceiver>& target);
 
 	template<typename T>
 	static const T& getRandomValueFromArray(const TArray<T>& values);
@@ -47,7 +47,7 @@ bool Utility::checkChanceProc(const T& chance)
 }
 
 template<typename StatusT>
-bool Utility::isTargetAlreadyUnderStatus(class IAilmentReceiver* target)
+bool Utility::isTargetAlreadyUnderStatus(class IStatusReceiver* target)
 {
 	const TArray<class UBaseStatus*>& statuses = target->getStatuses();
 
@@ -55,9 +55,9 @@ bool Utility::isTargetAlreadyUnderStatus(class IAilmentReceiver* target)
 }
 
 template<typename StatusT>
-bool Utility::isTargetAlreadyUnderStatus(const TScriptInterface<class IAilmentReceiver>& target)
+bool Utility::isTargetAlreadyUnderStatus(const TScriptInterface<class IStatusReceiver>& target)
 {
-	return Utility::isTargetAlreadyUnderStatus<StatusT>(StaticCast<class IAilmentReceiver*>(target.GetInterface()));
+	return Utility::isTargetAlreadyUnderStatus<StatusT>(StaticCast<class IStatusReceiver*>(target.GetInterface()));
 }
 
 template<typename T>

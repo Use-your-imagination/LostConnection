@@ -4,7 +4,6 @@
 
 #include "Characters/BaseDrone.h"
 #include "Engine/LostConnectionGameState.h"
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
 #include "Utility.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 

@@ -11,6 +11,8 @@
 
 #include "BaseWeapon.generated.h"
 
+#pragma warning(disable: 4458)
+
 UENUM(BlueprintType)
 enum class weaponTypes : uint8
 {
@@ -35,7 +37,7 @@ class LOSTCONNECTION_API UBaseWeapon : public UObject
 	GENERATED_BODY()
 		
 private:
-	TWeakObjectPtr<class ABaseCharacter> ownerCharacter;
+	TWeakObjectPtr<class ABaseCharacter> owner;
 	float timeBetweenShots;
 	float currentTimeBetweenShots;
 	bool isShooting;
@@ -118,7 +120,7 @@ public:
 	virtual void decreaseAdditionalDamage(float amount) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setOwnerCharacter(class ABaseCharacter* ownerCharacter) final;
+	virtual void setOwner(class ABaseCharacter* owner) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setAmmoType(ammoTypes newAmmoType) final;
@@ -160,7 +162,7 @@ public:
 
 	virtual UClass* getAnimationBlueprint() const final;
 
-	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
+	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwner() const final;
 
 	virtual float getCrushingHitChance() const final;
 

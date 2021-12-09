@@ -4,7 +4,7 @@
 
 #include "NiagaraFunctionLibrary.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
+#include "Interfaces/Gameplay/Statuses/Base/StatusReceiver.h"
 #include "Characters/BaseCharacter.h"
 
 FString UBaseTickStatus::getStatusName() const

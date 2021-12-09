@@ -3,7 +3,7 @@
 #include "SN4K3ReservatorBuff.h"
 
 #include "Characters/BaseCharacter.h"
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
+#include "Interfaces/Gameplay/Statuses/Base/StatusReceiver.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Utility/Utility.h"
 
@@ -40,7 +40,7 @@ void USN4K3ReservatorBuff::setNaniteAdditionalDamagePercent(float naniteAddition
 	this->naniteAdditionalDamagePercent = naniteAdditionalDamagePercent;
 }
 
-void USN4K3ReservatorBuff::applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<IAilmentReceiver>& target, const FHitResult& hit)
+void USN4K3ReservatorBuff::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	if (Utility::isTargetAlreadyUnderStatus<USN4K3ReservatorBuff>(target))
 	{
@@ -58,7 +58,7 @@ void USN4K3ReservatorBuff::applyStatus_Implementation(const TScriptInterface<IAi
 	}
 }
 
-bool USN4K3ReservatorBuff::applyEffect(IAilmentReceiver* target, const FHitResult& hit)
+bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
 	ABaseCharacter* character = Cast<ABaseCharacter>(target);
 	float newHealth = character->getHealth() * (healthReservePercent / 100.0f);

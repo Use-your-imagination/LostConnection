@@ -5,14 +5,15 @@
 #include "CoreMinimal.h"
 
 #include "Statuses/BaseTickStatus.h"
-#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "Interfaces/Gameplay/Statuses/Ailment.h"
 
-#include "BurnStatus.generated.h"
+#include "BurnAilment.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UBurnStatus :
+class LOSTCONNECTION_API UBurnAilment :
 	public UBaseTickStatus,
-	public IDamageInflictor
+	public IDamageInflictor,
+	public IAilment
 {
 	GENERATED_BODY()
 	
@@ -38,13 +39,13 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	UBurnStatus() = default;
+	UBurnAilment() = default;
 
 	float getAdditionalFireCrushingHitChance() const;
 
-	void applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<class IAilmentReceiver>& target, const FHitResult& hit) override;
+	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
-	bool applyEffect(class IAilmentReceiver* target, const FHitResult& hit) override;
+	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
 	UFUNCTION(Server, Reliable)
 	void setInflictorDamage(float newDamage) override;
@@ -56,5 +57,7 @@ public:
 
 	float getAdditionalInflictorDamage() const override;
 
-	virtual ~UBurnStatus() = default;
+	typeOfDamage getAilmentDamageType() const override;
+
+	virtual ~UBurnAilment() = default;
 };

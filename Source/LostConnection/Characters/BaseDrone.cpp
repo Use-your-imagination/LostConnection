@@ -589,7 +589,7 @@ void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primar
 
 	primaryWeaponSlot = NewObject<UBaseWeapon>(this, primaryWeapon.Get());
 
-	primaryWeaponSlot->setOwnerCharacter(this);
+	primaryWeaponSlot->setOwner(this);
 
 	primaryWeaponSlot->updateTimeBetweenShots();
 }
@@ -605,7 +605,7 @@ void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> seco
 
 	secondaryWeaponSlot = NewObject<UBaseWeapon>(this, secondaryWeapon.Get());
 
-	secondaryWeaponSlot->setOwnerCharacter(this);
+	secondaryWeaponSlot->setOwner(this);
 
 	secondaryWeaponSlot->updateTimeBetweenShots();
 }
@@ -648,7 +648,7 @@ void ABaseDrone::dropWeapon_Implementation()
 
 	droppedWeapon->setWeapon(currentWeapon);
 
-	currentWeapon->setOwnerCharacter(nullptr);
+	currentWeapon->setOwner(nullptr);
 
 	if (currentWeapon && currentWeapon == primaryWeaponSlot)
 	{
@@ -673,7 +673,7 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 	UBaseWeapon* weapon = weaponToEquip->getWeapon();
 
-	weapon->setOwnerCharacter(this);
+	weapon->setOwner(this);
 
 	weapon->updateTimeBetweenShots();
 

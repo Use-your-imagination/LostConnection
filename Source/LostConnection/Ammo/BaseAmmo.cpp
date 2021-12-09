@@ -182,7 +182,7 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 
 	damageType = weapon->getDamageType();
 
-	ownerCharacter = weapon->getOwnerCharacter();
+	ownerCharacter = weapon->getOwner();
 
 	crushingHitChance = weapon->getCrushingHitChance();
 

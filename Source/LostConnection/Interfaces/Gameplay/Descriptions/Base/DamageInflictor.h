@@ -27,7 +27,7 @@ public:
 
 	virtual void setInflictorDamage(float damage) = 0;
 
-	virtual void setAdditionalInflictorDamage(float damage) = 0;
+	virtual void setAdditionalInflictorDamage(float additionalDamage) = 0;
 
 	virtual float getInflictorDamage() const = 0;
 

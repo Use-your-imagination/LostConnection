@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Abilities/BaseAbility.h"
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentInflictor.h"
+#include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
 
 #include "SN4K3FirstAbility.generated.h"
 

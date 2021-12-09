@@ -4,7 +4,7 @@
 
 #include "NiagaraFunctionLibrary.h"
 
-#include "Interfaces/Gameplay/Descriptions/Derived/AilmentReceiver.h"
+#include "Interfaces/Gameplay/Statuses/Base/StatusReceiver.h"
 #include "Characters/BaseCharacter.h"
 #include "Utility/Utility.h"
 #include "Engine/LostConnectionGameState.h"
@@ -38,12 +38,11 @@ int32 UBaseStatus::calculateUnderStatusEffect() const
 	return 1;
 }
 
-void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<IAilmentReceiver>& target, const FHitResult& hit)
+void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	this->target = StaticCast<IAilmentReceiver*>(target.GetInterface());
+	this->target = StaticCast<IStatusReceiver*>(target.GetInterface());
 
 	inflictorDamage = inflictor->getInflictorDamage();
-	inflictorDamageType = inflictor->getDamageType();
 
 	target->addStatus(this);
 
@@ -52,7 +51,7 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IAilmentInfl
 	target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
 }
 
-bool UBaseStatus::applyEffect(IAilmentReceiver* target, const FHitResult& hit)
+bool UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
 	target->spawnApplyEffect(onApplyEffect, hit);
 

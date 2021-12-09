@@ -5,13 +5,15 @@
 #include "CoreMinimal.h"
 
 #include "Statuses/BaseTriggerStatus.h"
+#include "Interfaces/Gameplay/Statuses/Ailment.h"
 
-#include "ArcingCurrentStatus.generated.h"
+#include "ArcingCurrentAilment.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UArcingCurrentStatus :
+class LOSTCONNECTION_API UArcingCurrentAilment :
 	public UBaseTriggerStatus,
-	public IDamageInflictor
+	public IDamageInflictor,
+	public IAilment
 {
 	GENERATED_BODY()
 	
@@ -43,13 +45,13 @@ private:
 	float additionalDamage;
 
 public:
-	UArcingCurrentStatus() = default;
+	UArcingCurrentAilment() = default;
 
 	void increaseDamageConversion(IDamageInflictor* inflictor);
 
-	void applyStatus_Implementation(const TScriptInterface<IAilmentInflictor>& inflictor, const TScriptInterface<class IAilmentReceiver>& target, const FHitResult& hit) override;
+	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
-	bool applyEffect(class IAilmentReceiver* target, const FHitResult& hit) override;
+	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
 	UFUNCTION(Server, Reliable)
 	void setInflictorDamage(float newDamage) override;
@@ -61,5 +63,7 @@ public:
 
 	float getAdditionalInflictorDamage() const override;
 
-	virtual ~UArcingCurrentStatus() = default;
+	typeOfDamage getAilmentDamageType() const override;
+
+	virtual ~UArcingCurrentAilment() = default;
 };
