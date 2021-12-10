@@ -30,9 +30,8 @@ protected:
 	UPROPERTY()
 	UMaterialInstance* baseHealthBarMaterial;
 
-private:
-	UFUNCTION(NetMulticast, Reliable)
-	void updateHealthBar(float updatedCurrentHealth, float maxHealth);
+protected:
+	virtual void onCurrentHealthChanged() override;
 
 protected:
 	virtual void Tick(float DeltaTime) override;
@@ -44,8 +43,6 @@ protected:
 
 public:
 	ABaseBot();
-
-	virtual void setCurrentHealth_Implementation(float newCurrentHealth) override;
 
 	virtual ~ABaseBot() = default;
 };

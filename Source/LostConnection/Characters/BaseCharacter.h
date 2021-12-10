@@ -76,7 +76,7 @@ protected:
 	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float health;
 
-	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, EditDefaultsOnly, ReplicatedUsing = onCurrentHealthChanged, BlueprintReadOnly)
 	float currentHealth;
 
 	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
@@ -150,6 +150,9 @@ protected:
 
 	UFUNCTION()
 	void onSpareAmmoChanged();
+
+	UFUNCTION()
+	virtual void onCurrentHealthChanged();
 
 protected:
 	virtual void BeginPlay() override;
@@ -233,13 +236,13 @@ public:
 	virtual void setHealth(float newHealth) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setCurrentHealth(float newCurrentHealth);
+	virtual void setCurrentHealth(float newCurrentHealth) final;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setDefaultMovementSpeed(float speed);
+	virtual void setDefaultMovementSpeed(float speed) final;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setSprintMovementSpeed(float speed);
+	virtual void setSprintMovementSpeed(float speed) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setIsAlly(bool newIsAlly) final;

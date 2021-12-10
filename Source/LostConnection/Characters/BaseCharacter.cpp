@@ -168,6 +168,11 @@ void ABaseCharacter::onSpareAmmoChanged()
 	}
 }
 
+void ABaseCharacter::onCurrentHealthChanged()
+{
+	
+}
+
 void ABaseCharacter::updateWeaponMesh()
 {
 	if (currentWeapon)
@@ -464,8 +469,10 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 			return;
 		}
 	}
-
+	
 	currentHealth = newCurrentHealth;
+
+	this->onCurrentHealthChanged();
 }
 
 void ABaseCharacter::setDefaultMovementSpeed_Implementation(float speed)
