@@ -204,12 +204,12 @@ const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwnerCharacter() const
 	return ownerCharacter;
 }
 
-void ABaseAmmo::setInflictorDamage_Implementation(float newDamage)
+void ABaseAmmo::setBaseDamage_Implementation(float newDamage)
 {
 	damage = newDamage;
 }
 
-void ABaseAmmo::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+void ABaseAmmo::setAdditionalDamage_Implementation(float newAdditionalDamage)
 {
 	additionalDamage = newAdditionalDamage;
 }

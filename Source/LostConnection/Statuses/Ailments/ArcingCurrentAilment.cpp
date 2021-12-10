@@ -93,12 +93,12 @@ bool UArcingCurrentAilment::applyEffect(IStatusReceiver* target, const FHitResul
 	return true;
 }
 
-void UArcingCurrentAilment::setInflictorDamage_Implementation(float newDamage)
+void UArcingCurrentAilment::setBaseDamage_Implementation(float newDamage)
 {
 	inflictorDamage = newDamage;
 }
 
-void UArcingCurrentAilment::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+void UArcingCurrentAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
 {
 	additionalDamage = newAdditionalDamage;
 }

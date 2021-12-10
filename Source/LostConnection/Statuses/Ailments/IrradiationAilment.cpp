@@ -25,12 +25,12 @@ void UIrradiationAilment::applyStatus_Implementation(const TScriptInterface<ISta
 	Super::applyStatus_Implementation(inflictor, target, hit);
 }
 
-void UIrradiationAilment::setInflictorDamage_Implementation(float newDamage)
+void UIrradiationAilment::setBaseDamage_Implementation(float newDamage)
 {
 	damage = newDamage;
 }
 
-void UIrradiationAilment::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+void UIrradiationAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
 {
 	newAdditionalDamage = newAdditionalDamage;
 }

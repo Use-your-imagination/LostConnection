@@ -74,12 +74,12 @@ void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInf
 	threshold = baseThreshold;
 }
 
-void USwarmAilment::setInflictorDamage_Implementation(float newDamage)
+void USwarmAilment::setBaseDamage_Implementation(float newDamage)
 {
 	inflictorDamage = newDamage;
 }
 
-void USwarmAilment::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+void USwarmAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
 {
 	additionalDamage = newAdditionalDamage;
 }

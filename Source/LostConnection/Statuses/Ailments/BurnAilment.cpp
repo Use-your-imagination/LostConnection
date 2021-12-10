@@ -58,12 +58,12 @@ bool UBurnAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	return true;
 }
 
-void UBurnAilment::setInflictorDamage_Implementation(float newDamage)
+void UBurnAilment::setBaseDamage_Implementation(float newDamage)
 {
 	damage = newDamage;
 }
 
-void UBurnAilment::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+void UBurnAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
 {
 	additionalDamage = newAdditionalDamage;
 }

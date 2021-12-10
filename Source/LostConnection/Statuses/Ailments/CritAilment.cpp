@@ -60,12 +60,12 @@ bool UCritAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	return true;
 }
 
-void UCritAilment::setInflictorDamage_Implementation(float newDamage)
+void UCritAilment::setBaseDamage_Implementation(float newDamage)
 {
 	inflictorDamage = newDamage;
 }
 
-void UCritAilment::setAdditionalInflictorDamage_Implementation(float newAdditionalDamage)
+void UCritAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
 {
 	additionalDamage = newAdditionalDamage;
 }

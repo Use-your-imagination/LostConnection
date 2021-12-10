@@ -24,5 +24,5 @@ void IDamageInflictor::decreaseAdditionalDamage(float amount)
 
 float IDamageInflictor::getTotalDamage() const
 {
-
+	return 0.0f;
 }
