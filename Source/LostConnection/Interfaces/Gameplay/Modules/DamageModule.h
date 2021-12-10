@@ -6,18 +6,19 @@
 
 #include "UObject/Interface.h"
 
-#include "Module.generated.h"
+#include "DamageModule.generated.h"
 
+// This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UModule : public UInterface
+class UDamageModule : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IModule
+class LOSTCONNECTION_API IDamageModule
 {
 	GENERATED_BODY()
 
 public:
-	IModule() = default;
+	IDamageModule() = default;
 };

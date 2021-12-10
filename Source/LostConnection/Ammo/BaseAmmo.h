@@ -12,6 +12,8 @@
 
 #include "BaseAmmo.generated.h"
 
+#pragma warning(disable: 4458)
+
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API ABaseAmmo :
 	public APawn,
@@ -20,7 +22,7 @@ class LOSTCONNECTION_API ABaseAmmo :
 	GENERATED_BODY()
 
 private:
-	TWeakObjectPtr<class ABaseCharacter> ownerCharacter;
+	TWeakObjectPtr<class ABaseCharacter> owner;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -70,7 +72,7 @@ public:
 
 	virtual bool getIsAlly() const final;
 
-	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
+	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwner() const final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setBaseDamage(float newDamage) final override;

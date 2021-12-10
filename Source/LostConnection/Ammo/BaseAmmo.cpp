@@ -182,7 +182,7 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 
 	damageType = weapon->getDamageType();
 
-	ownerCharacter = weapon->getOwner();
+	owner = weapon->getOwner();
 
 	crushingHitChance = weapon->getCrushingHitChance();
 
@@ -199,9 +199,9 @@ bool ABaseAmmo::getIsAlly() const
 	return isAlly;
 }
 
-const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwnerCharacter() const
+const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwner() const
 {
-	return ownerCharacter;
+	return owner;
 }
 
 void ABaseAmmo::setBaseDamage_Implementation(float newDamage)
