@@ -2,6 +2,8 @@
 
 #include "LostConnectionPlayerController.h"
 
+#include "Constants/Constants.h"
+
 void ALostConnectionPlayerController::GetSeamlessTravelActorList(bool bToEntry, TArray<AActor*>& ActorList)
 {
 	ActorList.Add(GetPawn());
@@ -11,5 +13,5 @@ void ALostConnectionPlayerController::GetSeamlessTravelActorList(bool bToEntry, 
 
 ALostConnectionPlayerController::ALostConnectionPlayerController()
 {
-	NetUpdateFrequency = 60;
+	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }

@@ -16,6 +16,7 @@
 #include "Utility/InitializationUtility.h"
 #include "BaseBot.h"
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "Constants/Constants.h"
 
 #include "Utility/MultiplayerUtility.h"
 
@@ -337,11 +338,12 @@ ABaseCharacter::ABaseCharacter() :
 {
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_SatusState.NPS_SatusState'"));
 
+	PrimaryActorTick.bCanEverTick = true;
+
+	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
+
 	USkeletalMeshComponent* mesh = GetMesh();
 	UCharacterMovementComponent* movement = GetCharacterMovement();
-
-	PrimaryActorTick.bCanEverTick = true;
-	NetUpdateFrequency = 60;
 
 	spareAmmo =
 	{

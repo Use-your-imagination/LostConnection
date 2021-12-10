@@ -5,6 +5,8 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/ActorChannel.h"
 
+#include "Constants/Constants.h"
+
 void AFakeAmmo::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -22,13 +24,14 @@ bool AFakeAmmo::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FR
 }
 
 AFakeAmmo::AFakeAmmo()
-{
+{	
 	PrimaryActorTick.bCanEverTick = false;
+
+	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
-	NetUpdateFrequency = 60;
 
 	SetRootComponent(mesh);
 

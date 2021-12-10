@@ -11,6 +11,7 @@
 #include "Characters/BaseDrone.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Utility/Utility.h"
+#include "Constants/Constants.h"
 
 #pragma warning(disable: 4458)
 
@@ -118,13 +119,15 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 ABaseAmmo::ABaseAmmo()
 {
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletTracer.NPSBulletTracer'"));
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> onHitFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletOnHit.NPSBulletOnHit'"));
+
 	PrimaryActorTick.bCanEverTick = false;
+
+	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
-	NetUpdateFrequency = 60;
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletTracer.NPSBulletTracer'"));
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> onHitFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletOnHit.NPSBulletOnHit'"));
 
 	SetRootComponent(mesh);
 

@@ -17,6 +17,9 @@ public:
 	static const FString projectVersion;
 
 	static constexpr float shootDistance = 20000.0f;
+
+	static constexpr int32 actorNetUpdateFrequency = 30;
+	static constexpr int32 minNetUpdateFrequency = 1;
 	
 public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)

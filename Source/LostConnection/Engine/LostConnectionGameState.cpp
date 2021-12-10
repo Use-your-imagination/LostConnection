@@ -9,6 +9,7 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "WorldPlaceables/Utility/LevelCreationWaypoint.h"
 #include "Utility/Utility.h"
+#include "Constants/Constants.h"
 
 void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -24,7 +25,7 @@ void ALostConnectionGameState::loadRoom(const TSoftObjectPtr<UWorld>& room, FVec
 
 ALostConnectionGameState::ALostConnectionGameState()
 {
-	NetUpdateFrequency = 1;
+	NetUpdateFrequency = UConstants::minNetUpdateFrequency;
 }
 
 void ALostConnectionGameState::startRoomLoading()
