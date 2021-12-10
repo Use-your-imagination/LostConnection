@@ -42,7 +42,7 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 {
 	this->target = StaticCast<IStatusReceiver*>(target.GetInterface());
 
-	inflictorDamage = inflictor->getInflictorDamage();
+	inflictorDamage = inflictor->getBaseDamage();
 
 	target->addStatus(this);
 

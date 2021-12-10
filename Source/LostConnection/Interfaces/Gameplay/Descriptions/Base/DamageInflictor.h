@@ -21,15 +21,21 @@ class LOSTCONNECTION_API IDamageInflictor
 public:
 	IDamageInflictor() = default;
 
-	virtual void increaseAdditionalInflictorDamage(float amount);
+	virtual void increaseBaseDamage(float amount);
 
-	virtual void decreaseAdditionalInflictorDamage(float amount);
+	virtual void decreaseBaseDamage(float amount);
 
-	virtual void setInflictorDamage(float damage) = 0;
+	virtual void increaseAdditionalDamage(float amount);
 
-	virtual void setAdditionalInflictorDamage(float additionalDamage) = 0;
+	virtual void decreaseAdditionalDamage(float amount);
 
-	virtual float getInflictorDamage() const = 0;
+	virtual void setBaseDamage(float damage) = 0;
 
-	virtual float getAdditionalInflictorDamage() const = 0;
+	virtual void setAdditionalDamage(float additionalDamage) = 0;
+
+	virtual float getTotalDamage() const;
+
+	virtual float getBaseDamage() const = 0;
+
+	virtual float getAdditionalDamage() const = 0;
 };

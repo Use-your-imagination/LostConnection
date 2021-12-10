@@ -2,12 +2,27 @@
 
 #include "DamageInflictor.h"
 
-void IDamageInflictor::increaseAdditionalInflictorDamage(float amount)
+void IDamageInflictor::increaseBaseDamage(float amount)
 {
-	this->setAdditionalInflictorDamage(this->getAdditionalInflictorDamage() + amount);
+	this->setBaseDamage(this->getBaseDamage() + amount);
 }
 
-void IDamageInflictor::decreaseAdditionalInflictorDamage(float amount)
+void IDamageInflictor::decreaseBaseDamage(float amount)
 {
-	this->setAdditionalInflictorDamage(this->getAdditionalInflictorDamage() - amount);
+	this->setBaseDamage(this->getBaseDamage() - amount);
+}
+
+void IDamageInflictor::increaseAdditionalDamage(float amount)
+{
+	this->setAdditionalDamage(this->getAdditionalDamage() + amount);
+}
+
+void IDamageInflictor::decreaseAdditionalDamage(float amount)
+{
+	this->setAdditionalDamage(this->getAdditionalDamage() - amount);
+}
+
+float IDamageInflictor::getTotalDamage() const
+{
+
 }

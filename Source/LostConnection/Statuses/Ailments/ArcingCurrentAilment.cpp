@@ -103,12 +103,12 @@ void UArcingCurrentAilment::setAdditionalInflictorDamage_Implementation(float ne
 	additionalDamage = newAdditionalDamage;
 }
 
-float UArcingCurrentAilment::getInflictorDamage() const
+float UArcingCurrentAilment::getBaseDamage() const
 {
 	return inflictorDamage * (damageConversion / 100.0f);
 }
 
-float UArcingCurrentAilment::getAdditionalInflictorDamage() const
+float UArcingCurrentAilment::getAdditionalDamage() const
 {
 	return additionalDamage;
 }

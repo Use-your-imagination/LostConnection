@@ -32,14 +32,14 @@ public:
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
 	UFUNCTION(Server, Reliable)
-	void setInflictorDamage(float newDamage) override;
+	void setBaseDamage(float newDamage) override;
 
 	UFUNCTION(Server, Reliable)
-	void setAdditionalInflictorDamage(float newAdditionalDamage) override;
+	void setAdditionalDamage(float newAdditionalDamage) override;
 
-	float getInflictorDamage() const override;
+	float getBaseDamage() const override;
 
-	float getAdditionalInflictorDamage() const override;
+	float getAdditionalDamage() const override;
 
 	typeOfDamage getAilmentDamageType() const override;
 

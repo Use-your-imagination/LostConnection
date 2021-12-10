@@ -84,12 +84,12 @@ void USwarmAilment::setAdditionalInflictorDamage_Implementation(float newAdditio
 	additionalDamage = newAdditionalDamage;
 }
 
-float USwarmAilment::getInflictorDamage() const
+float USwarmAilment::getBaseDamage() const
 {
 	return inflictorDamage;
 }
 
-float USwarmAilment::getAdditionalInflictorDamage() const
+float USwarmAilment::getAdditionalDamage() const
 {
 	return additionalDamage;
 }

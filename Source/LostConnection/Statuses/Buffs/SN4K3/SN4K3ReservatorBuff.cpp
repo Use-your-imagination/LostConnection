@@ -102,14 +102,14 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 
 				if (inflictor && (inflictor->getDamageType() == typeOfDamage::nanite))
 				{
-					float additionalDamage = inflictor->getInflictorDamage() * (naniteAdditionalDamagePercent / 100.0f);
+					float additionalDamage = inflictor->getBaseDamage() * (naniteAdditionalDamagePercent / 100.0f);
 					FSimpleDelegate reset;
 
-					reset.BindLambda([inflictor, additionalDamage]() { inflictor->decreaseAdditionalInflictorDamage(additionalDamage); });
+					reset.BindLambda([inflictor, additionalDamage]() { inflictor->decreaseAdditionalDamage(additionalDamage); });
 
 					additionalNaniteDamage.Add(ability, MoveTemp(reset));
 
-					inflictor->setAdditionalInflictorDamage(inflictor->getAdditionalInflictorDamage() + additionalDamage);
+					inflictor->setAdditionalDamage(inflictor->getAdditionalDamage() + additionalDamage);
 				}
 			}
 		}

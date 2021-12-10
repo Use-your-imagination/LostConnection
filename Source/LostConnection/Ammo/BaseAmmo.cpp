@@ -224,12 +224,12 @@ void ABaseAmmo::setAdditionalCrushingHitChance_Implementation(float newAdditiona
 	additionalCrushingHitChance = newAdditionalCrushingHitChance;
 }
 
-float ABaseAmmo::getInflictorDamage() const
+float ABaseAmmo::getBaseDamage() const
 {
 	return damage;
 }
 
-float ABaseAmmo::getAdditionalInflictorDamage() const
+float ABaseAmmo::getAdditionalDamage() const
 {
 	return additionalDamage;
 }

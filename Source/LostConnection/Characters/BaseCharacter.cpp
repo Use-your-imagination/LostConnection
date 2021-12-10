@@ -580,7 +580,7 @@ void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflic
 {
 	float tem = this->getCurrentHealth();
 
-	tem -= inflictor->getInflictorDamage() + inflictor->getAdditionalInflictorDamage();
+	tem -= inflictor->getBaseDamage() + inflictor->getAdditionalDamage();
 
 	if (tem < 0.0f)
 	{
@@ -668,14 +668,14 @@ float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) cons
 {
 	// TODO: add shields
 	float pool = health;
-	float damage = inflictor->getInflictorDamage() + inflictor->getAdditionalInflictorDamage();
+	float damage = inflictor->getBaseDamage() + inflictor->getAdditionalDamage();
 
 	return (1.0f - (pool - damage) / pool) * 100.0f;
 }
 
 float ABaseCharacter::getHealthPercentDealt(IDamageInflictor* inflictor) const
 {
-	float damage = inflictor->getInflictorDamage() + inflictor->getAdditionalInflictorDamage();
+	float damage = inflictor->getBaseDamage() + inflictor->getAdditionalDamage();
 
 	return (1.0f - (health - damage) / health) * 100.0f;
 }

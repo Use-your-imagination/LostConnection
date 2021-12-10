@@ -35,12 +35,12 @@ void UIrradiationAilment::setAdditionalInflictorDamage_Implementation(float newA
 	newAdditionalDamage = newAdditionalDamage;
 }
 
-float UIrradiationAilment::getInflictorDamage() const
+float UIrradiationAilment::getBaseDamage() const
 {
 	return damage;
 }
 
-float UIrradiationAilment::getAdditionalInflictorDamage() const
+float UIrradiationAilment::getAdditionalDamage() const
 {
 	return additionalDamage;
 }

@@ -68,12 +68,12 @@ void UBurnAilment::setAdditionalInflictorDamage_Implementation(float newAddition
 	additionalDamage = newAdditionalDamage;
 }
 
-float UBurnAilment::getInflictorDamage() const
+float UBurnAilment::getBaseDamage() const
 {
 	return damage;
 }
 
-float UBurnAilment::getAdditionalInflictorDamage() const
+float UBurnAilment::getAdditionalDamage() const
 {
 	return additionalDamage;
 }

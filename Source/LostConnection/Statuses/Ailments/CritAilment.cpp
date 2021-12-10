@@ -70,7 +70,7 @@ void UCritAilment::setAdditionalInflictorDamage_Implementation(float newAddition
 	additionalDamage = newAdditionalDamage;
 }
 
-float UCritAilment::getInflictorDamage() const
+float UCritAilment::getBaseDamage() const
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
@@ -89,7 +89,7 @@ float UCritAilment::getInflictorDamage() const
 	return inflictorDamage * (resultMultiplier / 100.0f);
 }
 
-float UCritAilment::getAdditionalInflictorDamage() const
+float UCritAilment::getAdditionalDamage() const
 {
 	return additionalDamage;
 }

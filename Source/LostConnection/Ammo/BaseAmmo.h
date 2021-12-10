@@ -73,10 +73,10 @@ public:
 	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwnerCharacter() const final;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setInflictorDamage(float newDamage) final override;
+	virtual void setBaseDamage(float newDamage) final override;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setAdditionalInflictorDamage(float newAdditionalDamage) final override;
+	virtual void setAdditionalDamage(float newAdditionalDamage) final override;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setCrushingHitChance(float newCrushingHitChance) final override;
@@ -84,9 +84,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void setAdditionalCrushingHitChance(float newAdditionalCrushingHitChance) final override;
 
-	virtual float getInflictorDamage() const final override;
+	virtual float getBaseDamage() const final override;
 
-	virtual float getAdditionalInflictorDamage() const final override;
+	virtual float getAdditionalDamage() const final override;
 
 	virtual typeOfDamage getDamageType() const final override;
 

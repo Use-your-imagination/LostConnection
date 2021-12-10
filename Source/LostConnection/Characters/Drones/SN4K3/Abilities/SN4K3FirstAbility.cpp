@@ -78,12 +78,12 @@ void USN4K3FirstAbility::setAdditionalInflictorDamage_Implementation(float newAd
 	additionalDamage = newAdditionalDamage;
 }
 
-float USN4K3FirstAbility::getInflictorDamage() const
+float USN4K3FirstAbility::getBaseDamage() const
 {
 	return damage;
 }
 
-float USN4K3FirstAbility::getAdditionalInflictorDamage() const
+float USN4K3FirstAbility::getAdditionalDamage() const
 {
 	return additionalDamage;
 }
