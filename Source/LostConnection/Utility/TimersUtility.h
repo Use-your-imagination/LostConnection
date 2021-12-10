@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-struct timerData
+struct LOSTCONNECTION_API timerData
 {
 	TFunction<void()> timer;
 	float rate;
@@ -29,6 +29,8 @@ public:
 	void addTimer(const TFunction<void()>& function, float rate, bool loop = true, float firstDelay = 0.0f);
 
 	void removeTimer(int32 index);
+
+	void removeTimer(const timerData& timer);
 
 	int32 size() const;
 

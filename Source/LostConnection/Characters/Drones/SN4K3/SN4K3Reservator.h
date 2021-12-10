@@ -10,7 +10,7 @@
 
 #include "SN4K3Reservator.generated.h"
 
-UCLASS(BlueprintType, Blueprintable, DefaultToInstanced)
+UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API USN4K3Reservator : 
 	public UObject,
 	public IReservator

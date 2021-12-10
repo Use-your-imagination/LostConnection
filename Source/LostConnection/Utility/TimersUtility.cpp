@@ -28,6 +28,11 @@ void TimersUtility::removeTimer(int32 index)
 	timers.RemoveAt(index);
 }
 
+void TimersUtility::removeTimer(const timerData& timer)
+{
+	timers.Remove(timer);
+}
+
 int32 TimersUtility::size() const
 {
 	return timers.Num();
