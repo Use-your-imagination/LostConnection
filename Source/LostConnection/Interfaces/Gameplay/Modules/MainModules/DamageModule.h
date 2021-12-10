@@ -4,18 +4,17 @@
 
 #include "CoreMinimal.h"
 
-#include "UObject/Interface.h"
+#include "MainModule.h"
 
 #include "DamageModule.generated.h"
 
-// This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UDamageModule : public UInterface
+class UDamageModule : public UMainModule
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IDamageModule
+class LOSTCONNECTION_API IDamageModule : public IMainModule
 {
 	GENERATED_BODY()
 
