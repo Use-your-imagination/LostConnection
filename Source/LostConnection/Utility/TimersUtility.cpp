@@ -28,11 +28,6 @@ void TimersUtility::removeTimer(int32 index)
 	timers.RemoveAt(index);
 }
 
-void TimersUtility::removeTimer(const timerData& timer)
-{
-	timers.Remove(timer);
-}
-
 int32 TimersUtility::size() const
 {
 	return timers.Num();
@@ -89,12 +84,16 @@ void TimersUtility::processTimers(float DeltaTime)
 		[](timerData* timer) { timer->timer(); }
 	);
 
-	Algo::ForEachIf
-	(
-		timersToInvoke,
-		[](timerData* timer) { return timer && !timer->loop; },
-		[this](timerData* timer) { timers.Remove(*timer); }
-	);
+	for (int32 i = 0; i < timersToInvoke.Num(); i++)
+	{
+		if ((timersToInvoke[i] && !timersToInvoke[i]->loop) && (timersToInvoke[i] == &timers[i]))
+		{
+			timers.RemoveAt(i);
+			timersToInvoke.RemoveAt(i);
+
+			i--;
+		}
+	}
 }
 
 const timerData& TimersUtility::operator[](int32 index) const

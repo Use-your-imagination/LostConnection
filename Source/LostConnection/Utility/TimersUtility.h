@@ -30,8 +30,6 @@ public:
 
 	void removeTimer(int32 index);
 
-	void removeTimer(const timerData& timer);
-
 	int32 size() const;
 
 	void processTimers(float DeltaTime);
