@@ -84,13 +84,11 @@ void TimersUtility::processTimers(float DeltaTime)
 		[](timerData* timer) { timer->timer(); }
 	);
 
-	Algo::StableRemoveIf
+	Algo::ForEachIf
 	(
 		timersToInvoke,
-		[](timerData* timer)
-		{
-			return timer && !timer->loop;
-		}
+		[](timerData* timer) { return timer && !timer->loop; },
+		[this](timerData* timer) { timers.Remove(*timer); }
 	);
 }
 
