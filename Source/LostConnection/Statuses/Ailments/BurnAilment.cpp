@@ -25,8 +25,6 @@ void UBurnAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(UBurnAilment, additionalFireCrushingHitChance);
 
 	DOREPLIFETIME(UBurnAilment, damage);
-
-	DOREPLIFETIME(UBurnAilment, additionalDamage);
 }
 
 float UBurnAilment::getAdditionalFireCrushingHitChance() const
@@ -63,19 +61,29 @@ void UBurnAilment::setBaseDamage_Implementation(float newDamage)
 	damage = newDamage;
 }
 
-void UBurnAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	additionalDamage = newAdditionalDamage;
-}
-
 float UBurnAilment::getBaseDamage() const
 {
 	return damage;
 }
 
+float UBurnAilment::getAddedDamage() const
+{
+	return 0.0f;
+}
+
+TArray<float> UBurnAilment::getIncreasedDamageCoefficients() const
+{
+	return {};
+}
+
+TArray<float> UBurnAilment::getMoreDamageCoefficients() const
+{
+	return {};
+}
+
 float UBurnAilment::getAdditionalDamage() const
 {
-	return additionalDamage;
+	return 0.0f;
 }
 
 typeOfDamage UBurnAilment::getAilmentDamageType() const

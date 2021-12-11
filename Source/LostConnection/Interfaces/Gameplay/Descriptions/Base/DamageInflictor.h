@@ -25,17 +25,17 @@ public:
 
 	virtual void decreaseBaseDamage(float amount);
 
-	virtual void increaseAdditionalDamage(float amount);
-
-	virtual void decreaseAdditionalDamage(float amount);
-
 	virtual void setBaseDamage(float damage) = 0;
 
-	virtual void setAdditionalDamage(float additionalDamage) = 0;
-
-	virtual float getTotalDamage() const;
+	virtual float calculateTotalDamage() const;
 
 	virtual float getBaseDamage() const = 0;
+
+	virtual float getAddedDamage() const = 0;
+
+	virtual TArray<float> getIncreasedDamageCoefficients() const = 0;
+
+	virtual TArray<float> getMoreDamageCoefficients() const = 0;
 
 	virtual float getAdditionalDamage() const = 0;
 };

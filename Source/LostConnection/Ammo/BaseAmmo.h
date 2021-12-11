@@ -54,6 +54,9 @@ protected:
 
 	AActor* lastTarget;
 	float damage;
+	float addedDamage;
+	TArray<float> increasedDamage;
+	TArray<float> moreDamage;
 	float additionalDamage;
 	typeOfDamage damageType;
 	bool isAlly;
@@ -78,9 +81,6 @@ public:
 	virtual void setBaseDamage(float newDamage) final override;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setAdditionalDamage(float newAdditionalDamage) final override;
-
-	UFUNCTION(Server, Reliable)
 	virtual void setCrushingHitChance(float newCrushingHitChance) final override;
 
 	UFUNCTION(Server, Reliable)
@@ -88,7 +88,13 @@ public:
 
 	virtual float getBaseDamage() const final override;
 
-	virtual float getAdditionalDamage() const final override;
+	virtual float getAddedDamage() const override;
+
+	virtual TArray<float> getIncreasedDamageCoefficients() const override;
+
+	virtual TArray<float> getMoreDamageCoefficients() const override;
+
+	virtual float getAdditionalDamage() const override;
 
 	virtual typeOfDamage getDamageType() const final override;
 

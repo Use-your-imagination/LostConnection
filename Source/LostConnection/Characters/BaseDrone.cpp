@@ -805,6 +805,16 @@ void ABaseDrone::releaseShoot_Implementation()
 
 }
 
+void ABaseDrone::addMainModule(IMainModule* module)
+{
+	mainModules.Add(module->_getUObject());
+}
+
+void ABaseDrone::addWeaponModule(IWeaponModule* module)
+{
+	weaponModules.Add(module->_getUObject());
+}
+
 float ABaseDrone::getFlatDamageReduction_Implementation() const
 {
 	return 10.0f;
@@ -987,6 +997,16 @@ UBaseUltimateAbility* ABaseDrone::getUltimateAbility() const
 const TArray<UAnimMontage*>& ABaseDrone::getAbilitiesAnimations() const
 {
 	return abilitiesAnimations;
+}
+
+const TArray<UObject*>& ABaseDrone::getMainModules() const
+{
+	return mainModules;
+}
+
+const TArray<UObject*>& ABaseDrone::getWeaponModules() const
+{
+	return weaponModules;
 }
 
 #pragma region PassiveAbility

@@ -580,9 +580,7 @@ TArray<TWeakObjectPtr<UBaseWeapon>> ABaseCharacter::getWeapons() const
 
 void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
 {
-	float tem = this->getCurrentHealth();
-
-	tem -= inflictor->getBaseDamage() + inflictor->getAdditionalDamage();
+	float tem = currentHealth - inflictor->calculateTotalDamage();
 
 	if (tem < 0.0f)
 	{
@@ -670,16 +668,13 @@ float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) cons
 {
 	// TODO: add shields
 	float pool = health;
-	float damage = inflictor->getBaseDamage() + inflictor->getAdditionalDamage();
-
-	return (1.0f - (pool - damage) / pool) * 100.0f;
+	
+	return (1.0f - (pool - inflictor->calculateTotalDamage()) / pool) * 100.0f;
 }
 
 float ABaseCharacter::getHealthPercentDealt(IDamageInflictor* inflictor) const
 {
-	float damage = inflictor->getBaseDamage() + inflictor->getAdditionalDamage();
-
-	return (1.0f - (health - damage) / health) * 100.0f;
+	return (1.0f - (health - inflictor->calculateTotalDamage()) / health) * 100.0f;
 }
 
 void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)

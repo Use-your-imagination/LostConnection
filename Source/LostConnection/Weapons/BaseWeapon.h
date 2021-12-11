@@ -68,9 +68,6 @@ protected:
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float damage;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	float additionalDamage;
-
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	int32 currentMagazineSize;
 
@@ -115,10 +112,6 @@ public:
 
 	virtual void Tick(float DeltaTime);
 
-	virtual void increaseAdditionalDamage(float amount) final;
-	
-	virtual void decreaseAdditionalDamage(float amount) final;
-
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setOwner(class ABaseCharacter* owner) final;
 
@@ -126,10 +119,7 @@ public:
 	virtual void setAmmoType(ammoTypes newAmmoType) final;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setDamage(float newDamage) final;
-
-	UFUNCTION(Server, Reliable)
-	virtual void setAdditionalDamage(float newAdditionalDamage) final;
+	virtual void setBaseDamage(float newDamage) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setCurrentMagazineSize(int32 newCurrentMagazineSize) final;
@@ -148,9 +138,7 @@ public:
 
 	virtual typeOfDamage getDamageType() const final;
 
-	virtual float getDamage() const final;
-
-	virtual float getAdditionalDamage() const final;
+	virtual float getBaseDamage() const final;
 
 	virtual int32 getCurrentMagazineSize() const final;
 

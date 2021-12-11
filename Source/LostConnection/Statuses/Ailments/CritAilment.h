@@ -32,11 +32,8 @@ private:
 	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float critMultiplier;
 
-	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float additionalDamage;
-
 private:
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:
 	UCritAilment() = default;
@@ -50,10 +47,13 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setBaseDamage(float newDamage) override;
 
-	UFUNCTION(Server, Reliable)
-	void setAdditionalDamage(float newAdditionalDamage) override;
-
 	float getBaseDamage() const override;
+
+	float getAddedDamage() const override;
+
+	TArray<float> getIncreasedDamageCoefficients() const override;
+
+	TArray<float> getMoreDamageCoefficients() const override;
 
 	float getAdditionalDamage() const override;
 

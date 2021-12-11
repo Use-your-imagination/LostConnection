@@ -23,12 +23,10 @@ void USwarmAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	DOREPLIFETIME(USwarmAilment, baseThreshold);
 
 	DOREPLIFETIME(USwarmAilment, thresholdPerTotalLifePercentPool);
-	
+
 	DOREPLIFETIME(USwarmAilment, percentsPerSatellite);
 
 	DOREPLIFETIME(USwarmAilment, threshold);
-
-	DOREPLIFETIME(USwarmAilment, additionalDamage);
 }
 
 void USwarmAilment::increaseThreshold(IDamageInflictor* inflictor)
@@ -50,7 +48,7 @@ void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInf
 
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 	IAilmentReceiver* ailmentReceiver = StaticCast<IAilmentReceiver*>(target.GetInterface());
-	
+
 	for (const auto& status : statuses)
 	{
 		USwarmAilment* swarm = Cast<USwarmAilment>(status);
@@ -58,7 +56,7 @@ void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInf
 		if (swarm)
 		{
 			swarm->increaseThreshold(StaticCast<IStatusInflictor*>(inflictor.GetInterface()));
-			
+
 			swarm->refreshDuration();
 
 			target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
@@ -79,19 +77,29 @@ void USwarmAilment::setBaseDamage_Implementation(float newDamage)
 	inflictorDamage = newDamage;
 }
 
-void USwarmAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	additionalDamage = newAdditionalDamage;
-}
-
 float USwarmAilment::getBaseDamage() const
 {
 	return inflictorDamage;
 }
 
+float USwarmAilment::getAddedDamage() const
+{
+	return 0.0f;
+}
+
+TArray<float> USwarmAilment::getIncreasedDamageCoefficients() const
+{
+	return {};
+}
+
+TArray<float> USwarmAilment::getMoreDamageCoefficients() const
+{
+	return {};
+}
+
 float USwarmAilment::getAdditionalDamage() const
 {
-	return additionalDamage;
+	return 0.0f;
 }
 
 typeOfDamage USwarmAilment::getAilmentDamageType() const

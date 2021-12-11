@@ -6,6 +6,8 @@
 
 #include "UObject/Interface.h"
 
+#include "Interfaces/Gameplay/Modules/WeaponModules/WeaponModule.h"
+
 #include "WeaponModulesHolder.generated.h"
 
 UINTERFACE(MinimalAPI)
@@ -20,6 +22,8 @@ class LOSTCONNECTION_API IWeaponModulesHolder
 
 public:
 	IWeaponModulesHolder() = default;
+
+	virtual void addWeaponModule(IWeaponModule* module) = 0;
 
 	/// @brief 
 	/// @return Array of IMainModule

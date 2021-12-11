@@ -31,8 +31,6 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(UBaseWeapon, damage);
 
-	DOREPLIFETIME(UBaseWeapon, additionalDamage);
-
 	DOREPLIFETIME(UBaseWeapon, currentMagazineSize);
 
 	DOREPLIFETIME(UBaseWeapon, magazineSize);
@@ -182,16 +180,6 @@ void UBaseWeapon::Tick(float DeltaTime)
 	}
 }
 
-void UBaseWeapon::increaseAdditionalDamage(float amount)
-{
-	additionalDamage += amount;
-}
-
-void UBaseWeapon::decreaseAdditionalDamage(float amount)
-{
-	additionalDamage -= amount;
-}
-
 void UBaseWeapon::setOwner_Implementation(ABaseCharacter* owner)
 {
 	this->owner = owner;
@@ -202,14 +190,9 @@ void UBaseWeapon::setAmmoType_Implementation(ammoTypes newAmmoType)
 	ammoType = newAmmoType;
 }
 
-void UBaseWeapon::setDamage_Implementation(float newDamage)
+void UBaseWeapon::setBaseDamage_Implementation(float newDamage)
 {
 	damage = newDamage;
-}
-
-void UBaseWeapon::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	additionalDamage = newAdditionalDamage;
 }
 
 void UBaseWeapon::setCurrentMagazineSize_Implementation(int32 newCurrentMagazineSize)
@@ -247,14 +230,9 @@ typeOfDamage UBaseWeapon::getDamageType() const
 	return damageType;
 }
 
-float UBaseWeapon::getDamage() const
+float UBaseWeapon::getBaseDamage() const
 {
 	return damage;
-}
-
-float UBaseWeapon::getAdditionalDamage() const
-{
-	return additionalDamage;
 }
 
 int32 UBaseWeapon::getCurrentMagazineSize() const

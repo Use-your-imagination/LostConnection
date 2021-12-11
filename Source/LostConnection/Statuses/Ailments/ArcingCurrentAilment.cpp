@@ -32,8 +32,6 @@ void UArcingCurrentAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(UArcingCurrentAilment, underStatusValueConversionCoefficient);
 
 	DOREPLIFETIME(UArcingCurrentAilment, damageConversion);
-
-	DOREPLIFETIME(UArcingCurrentAilment, additionalDamage);
 }
 
 void UArcingCurrentAilment::increaseDamageConversion(IDamageInflictor* inflictor)
@@ -98,19 +96,29 @@ void UArcingCurrentAilment::setBaseDamage_Implementation(float newDamage)
 	inflictorDamage = newDamage;
 }
 
-void UArcingCurrentAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	additionalDamage = newAdditionalDamage;
-}
-
 float UArcingCurrentAilment::getBaseDamage() const
 {
 	return inflictorDamage * (damageConversion / 100.0f);
 }
 
+float UArcingCurrentAilment::getAddedDamage() const
+{
+	return 0.0f;
+}
+
+TArray<float> UArcingCurrentAilment::getIncreasedDamageCoefficients() const
+{
+	return {};
+}
+
+TArray<float> UArcingCurrentAilment::getMoreDamageCoefficients() const
+{
+	return {};
+}
+
 float UArcingCurrentAilment::getAdditionalDamage() const
 {
-	return additionalDamage;
+	return 0.0f;
 }
 
 typeOfDamage UArcingCurrentAilment::getAilmentDamageType() const

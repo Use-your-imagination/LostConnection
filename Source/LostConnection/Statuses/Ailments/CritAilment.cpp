@@ -27,8 +27,6 @@ void UCritAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(UCritAilment, damageMultiplierPerTotalLifePercentPool);
 
 	DOREPLIFETIME(UCritAilment, critMultiplier);
-
-	DOREPLIFETIME(UCritAilment, additionalDamage);
 }
 
 float UCritAilment::getCritMultiplier() const
@@ -65,11 +63,6 @@ void UCritAilment::setBaseDamage_Implementation(float newDamage)
 	inflictorDamage = newDamage;
 }
 
-void UCritAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	additionalDamage = newAdditionalDamage;
-}
-
 float UCritAilment::getBaseDamage() const
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
@@ -89,9 +82,24 @@ float UCritAilment::getBaseDamage() const
 	return inflictorDamage * (resultMultiplier / 100.0f);
 }
 
+float UCritAilment::getAddedDamage() const
+{
+	return 0.0f;
+}
+
+TArray<float> UCritAilment::getIncreasedDamageCoefficients() const
+{
+	return {};
+}
+
+TArray<float> UCritAilment::getMoreDamageCoefficients() const
+{
+	return {};
+}
+
 float UCritAilment::getAdditionalDamage() const
 {
-	return additionalDamage;
+	return 0.0f;
 }
 
 typeOfDamage UCritAilment::getAilmentDamageType() const

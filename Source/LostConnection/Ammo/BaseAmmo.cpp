@@ -12,6 +12,8 @@
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Utility/Utility.h"
 #include "Constants/Constants.h"
+#include "Interfaces/Gameplay/Modules/MainModules/DamageModule.h"
+#include "Interfaces/Gameplay/Modules/WeaponModules/WeaponDamageModule.h"
 
 #pragma warning(disable: 4458)
 
@@ -179,17 +181,54 @@ void ABaseAmmo::launch_Implementation(ABaseCharacter* character, const FTransfor
 
 void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 {
-	damage = weapon->getDamage();
-
-	additionalDamage = weapon->getAdditionalDamage();
+	damage = weapon->getBaseDamage();
 
 	damageType = weapon->getDamageType();
-
-	owner = weapon->getOwner();
 
 	crushingHitChance = weapon->getCrushingHitChance();
 
 	additionalCrushingHitChance = weapon->getAdditionalCrushingHitChance();
+
+	owner = weapon->getOwner();
+
+	if (owner.IsValid())
+	{
+		if (owner->Implements<IMainModulesHolder>())
+		{
+			const TArray<UObject*>& modules = StaticCast<IMainModulesHolder*>(owner.Get())->getMainModules();
+
+			for (const auto& module : modules)
+			{
+				if (module->Implements<IDamageModule>())
+				{
+					IDamageModule* damageModule = StaticCast<IDamageModule*>(module);
+
+					addedDamage += damageModule->getAddedDamage();
+					increasedDamage.Add(damageModule->getIncreasedDamage());
+					moreDamage.Add(damageModule->getMoreDamage());
+					additionalDamage += damageModule->getAdditionalDamage();
+				}
+			}
+		}
+
+		if (owner->Implements<IWeaponModulesHolder>())
+		{
+			const TArray<UObject*>& modules = StaticCast<IWeaponModulesHolder*>(owner.Get())->getWeaponModules();
+
+			for (const auto& module : modules)
+			{
+				if (module->Implements<IWeaponDamageModule>())
+				{
+					IWeaponDamageModule* weaponDamageModule = StaticCast<IWeaponDamageModule*>(module);
+
+					addedDamage += weaponDamageModule->getAddedDamage();
+					increasedDamage.Add(weaponDamageModule->getIncreasedDamage());
+					moreDamage.Add(weaponDamageModule->getMoreDamage());
+					additionalDamage += weaponDamageModule->getAdditionalDamage();
+				}
+			}
+		}
+	}
 }
 
 UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
@@ -230,6 +269,21 @@ void ABaseAmmo::setAdditionalCrushingHitChance_Implementation(float newAdditiona
 float ABaseAmmo::getBaseDamage() const
 {
 	return damage;
+}
+
+float ABaseAmmo::getAddedDamage() const
+{
+	return 0.0f;
+}
+
+TArray<float> ABaseAmmo::getIncreasedDamageCoefficients() const
+{
+	return {};
+}
+
+TArray<float> ABaseAmmo::getMoreDamageCoefficients() const
+{
+	return {};
 }
 
 float ABaseAmmo::getAdditionalDamage() const

@@ -15,6 +15,13 @@ SIZE_T UIrradiationAilment::getActiveStatusesCount() const
 	return Utility::countStatuses(target, StaticClass());
 }
 
+void UIrradiationAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UIrradiationAilment, damage);
+}
+
 void UIrradiationAilment::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	if (!target->_getUObject()->Implements<UAilmentReceiver>())
@@ -30,19 +37,29 @@ void UIrradiationAilment::setBaseDamage_Implementation(float newDamage)
 	damage = newDamage;
 }
 
-void UIrradiationAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	newAdditionalDamage = newAdditionalDamage;
-}
-
 float UIrradiationAilment::getBaseDamage() const
 {
 	return damage;
 }
 
+float UIrradiationAilment::getAddedDamage() const
+{
+	return 0.0f;
+}
+
+TArray<float> UIrradiationAilment::getIncreasedDamageCoefficients() const
+{
+	return {};
+}
+
+TArray<float> UIrradiationAilment::getMoreDamageCoefficients() const
+{
+	return {};
+}
+
 float UIrradiationAilment::getAdditionalDamage() const
 {
-	return additionalDamage;
+	return 0.0f;
 }
 
 typeOfDamage UIrradiationAilment::getAilmentDamageType() const

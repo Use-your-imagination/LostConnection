@@ -2,6 +2,8 @@
 
 #include "DamageInflictor.h"
 
+#include "Algo/Accumulate.h"
+
 void IDamageInflictor::increaseBaseDamage(float amount)
 {
 	this->setBaseDamage(this->getBaseDamage() + amount);
@@ -12,17 +14,13 @@ void IDamageInflictor::decreaseBaseDamage(float amount)
 	this->setBaseDamage(this->getBaseDamage() - amount);
 }
 
-void IDamageInflictor::increaseAdditionalDamage(float amount)
+float IDamageInflictor::calculateTotalDamage() const
 {
-	this->setAdditionalDamage(this->getAdditionalDamage() + amount);
-}
+	TArray<float> increasedDamageCoefficients = this->getIncreasedDamageCoefficients();
+	TArray<float> moreDamageCoefficients = this->getMoreDamageCoefficients();
 
-void IDamageInflictor::decreaseAdditionalDamage(float amount)
-{
-	this->setAdditionalDamage(this->getAdditionalDamage() - amount);
-}
-
-float IDamageInflictor::getTotalDamage() const
-{
-	return 0.0f;
+	return (this->getBaseDamage() + this->getAddedDamage()) *
+		Algo::Accumulate(increasedDamageCoefficients, 1.0f) *
+		Algo::Accumulate(moreDamageCoefficients, 1.0f, [](float currentValue, float nextValue) { return currentValue * (1.0f + nextValue); }) +
+		this->getAdditionalDamage();
 }

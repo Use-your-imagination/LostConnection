@@ -13,6 +13,8 @@
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Interfaces/Gameplay/Actions/InputActions.h"
+#include "Interfaces/Gameplay/Modules/Holders/MainModulesHolder.h"
+#include "Interfaces/Gameplay/Modules/Holders/WeaponModulesHolder.h"
 
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbilityCast.h"
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbilityCast.h"
@@ -26,12 +28,14 @@ UCLASS()
 class LOSTCONNECTION_API ABaseDrone :
 	public ABaseCharacter,
 	public ICaster,
-	public IInputActions,
 	public IPassiveAbilityCast,
 	public IFirstAbilityCast,
 	public ISecondAbilityCast,
 	public IThirdAbilityCast,
-	public IUltimateAbilityCast
+	public IUltimateAbilityCast,
+	public IInputActions,
+	public IMainModulesHolder,
+	public IWeaponModulesHolder
 {
 	GENERATED_BODY()
 
@@ -103,6 +107,12 @@ protected:
 
 	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<UAnimMontage*> abilitiesAnimations;
+
+	UPROPERTY(Category = Modules, Replicated, BlueprintReadOnly)
+	TArray<UObject*> mainModules;
+
+	UPROPERTY(Category = Modules, Replicated, BlueprintReadOnly)
+	TArray<UObject*> weaponModules;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, BlueprintReadWrite)
@@ -288,6 +298,10 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void releaseShoot();
 
+	virtual void addMainModule(IMainModule* module) override;
+
+	virtual void addWeaponModule(IWeaponModule* module) override;
+
 	virtual float getFlatDamageReduction_Implementation() const override;
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
@@ -348,6 +362,10 @@ public:
 	virtual UBaseUltimateAbility* getUltimateAbility() const final override;
 
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
+
+	virtual const TArray<UObject*>& getMainModules() const final override;
+
+	virtual const TArray<UObject*>& getWeaponModules() const final override;
 
 #pragma region PassiveAbility
 	virtual void castPassiveAbilityVisual() override;

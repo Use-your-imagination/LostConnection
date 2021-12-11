@@ -18,13 +18,16 @@ class LOSTCONNECTION_API UIrradiationAilment :
 	GENERATED_BODY()
 	
 private:
+	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float damage;
-	float additionalDamage;
 
 private:
 	FString getStatusName() const override;
 
 	SIZE_T getActiveStatusesCount() const override;
+
+private:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	UIrradiationAilment() = default;
@@ -34,10 +37,13 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setBaseDamage(float newDamage) override;
 
-	UFUNCTION(Server, Reliable)
-	void setAdditionalDamage(float newAdditionalDamage) override;
-
 	float getBaseDamage() const override;
+
+	float getAddedDamage() const override;
+
+	TArray<float> getIncreasedDamageCoefficients() const override;
+
+	TArray<float> getMoreDamageCoefficients() const override;
 
 	float getAdditionalDamage() const override;
 

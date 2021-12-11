@@ -6,6 +6,8 @@
 
 #include "UObject/Interface.h"
 
+#include "Interfaces/Gameplay/Modules/MainModules/MainModule.h"
+
 #include "MainModulesHolder.generated.h"
 
 UINTERFACE(MinimalAPI)
@@ -20,6 +22,8 @@ class LOSTCONNECTION_API IMainModulesHolder
 
 public:
 	IMainModulesHolder() = default;
+
+	virtual void addMainModule(IMainModule* module) = 0;
 
 	/// @brief 
 	/// @return Array of IMainModule

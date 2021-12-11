@@ -20,4 +20,12 @@ class LOSTCONNECTION_API IWeaponDamageModule : public IWeaponModule
 
 public:
 	IWeaponDamageModule() = default;
+
+	virtual float getAddedDamage() const = 0;
+
+	virtual float getIncreasedDamage() const = 0;
+
+	virtual float getMoreDamage() const = 0;
+
+	virtual float getAdditionalDamage() const = 0;
 };
