@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "WeaponModule.h"
+#include "Interfaces/Gameplay/Statuses/Ailment.h"
 
 #include "WeaponDamageModule.generated.h"
 
@@ -28,4 +29,6 @@ public:
 	virtual float getMoreDamage() const = 0;
 
 	virtual float getAdditionalDamage() const = 0;
+	
+	virtual typeOfDamage getDamageType() const;
 };

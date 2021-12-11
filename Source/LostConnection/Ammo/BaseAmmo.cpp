@@ -193,15 +193,20 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 
 	if (owner.IsValid())
 	{
-		if (owner->Implements<IMainModulesHolder>())
+		if (owner->Implements<UMainModulesHolder>())
 		{
-			const TArray<UObject*>& modules = StaticCast<IMainModulesHolder*>(owner.Get())->getMainModules();
+			const TArray<UObject*>& modules = Cast<IMainModulesHolder>(owner.Get())->getMainModules();
 
 			for (const auto& module : modules)
 			{
-				if (module->Implements<IDamageModule>())
+				if (module->Implements<UDamageModule>())
 				{
-					IDamageModule* damageModule = StaticCast<IDamageModule*>(module);
+					const IDamageModule* damageModule = Cast<const IDamageModule>(module);
+
+					if (damageModule->getDamageType() != damageType)
+					{
+						continue;
+					}
 
 					addedDamage += damageModule->getAddedDamage();
 					increasedDamage.Add(damageModule->getIncreasedDamage());
@@ -211,15 +216,20 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 			}
 		}
 
-		if (owner->Implements<IWeaponModulesHolder>())
+		if (owner->Implements<UWeaponModulesHolder>())
 		{
-			const TArray<UObject*>& modules = StaticCast<IWeaponModulesHolder*>(owner.Get())->getWeaponModules();
+			const TArray<UObject*>& modules = Cast<IWeaponModulesHolder>(owner.Get())->getWeaponModules();
 
 			for (const auto& module : modules)
 			{
-				if (module->Implements<IWeaponDamageModule>())
+				if (module->Implements<UWeaponDamageModule>())
 				{
-					IWeaponDamageModule* weaponDamageModule = StaticCast<IWeaponDamageModule*>(module);
+					const IWeaponDamageModule* weaponDamageModule = Cast<const IWeaponDamageModule>(module);
+
+					if (weaponDamageModule->getDamageType() != damageType)
+					{
+						continue;
+					}
 
 					addedDamage += weaponDamageModule->getAddedDamage();
 					increasedDamage.Add(weaponDamageModule->getIncreasedDamage());
@@ -249,11 +259,6 @@ const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwner() const
 void ABaseAmmo::setBaseDamage_Implementation(float newDamage)
 {
 	damage = newDamage;
-}
-
-void ABaseAmmo::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	additionalDamage = newAdditionalDamage;
 }
 
 void ABaseAmmo::setCrushingHitChance_Implementation(float newCrushingHitChance)

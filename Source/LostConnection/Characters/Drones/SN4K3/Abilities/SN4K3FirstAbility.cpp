@@ -18,8 +18,6 @@ void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(USN4K3FirstAbility, damage);
 
 	DOREPLIFETIME(USN4K3FirstAbility, distance);
-
-	DOREPLIFETIME(USN4K3FirstAbility, additionalDamage);
 }
 
 USN4K3FirstAbility::USN4K3FirstAbility() :
@@ -73,19 +71,29 @@ void USN4K3FirstAbility::setBaseDamage_Implementation(float newDamage)
 	damage = newDamage;
 }
 
-void USN4K3FirstAbility::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	additionalDamage = newAdditionalDamage;
-}
-
 float USN4K3FirstAbility::getBaseDamage() const
 {
 	return damage;
 }
 
+float USN4K3FirstAbility::getAddedDamage() const
+{
+	return 0.0f;
+}
+
+TArray<float> USN4K3FirstAbility::getIncreasedDamageCoefficients() const
+{
+	return {};
+}
+
+TArray<float> USN4K3FirstAbility::getMoreDamageCoefficients() const
+{
+	return {};
+}
+
 float USN4K3FirstAbility::getAdditionalDamage() const
 {
-	return additionalDamage;
+	return 0.0f;
 }
 
 typeOfDamage USN4K3FirstAbility::getDamageType() const

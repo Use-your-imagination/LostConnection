@@ -51,7 +51,7 @@ void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
 	{
 		if (i)
 		{
-			i->setDamage(i->getDamage() * 2.0f / 3.0f);
+			i->setBaseDamage(i->getBaseDamage() * 2.0f / 3.0f);
 		}
 	}
 }

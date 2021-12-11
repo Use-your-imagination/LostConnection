@@ -79,14 +79,14 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 	{
 		if (weapon.IsValid() && (weapon->getDamageType() == typeOfDamage::nanite))
 		{
-			float additionalDamage = weapon->getDamage() * (naniteAdditionalDamagePercent / 100.0f);
+			float increasedBaseDamage = weapon->getBaseDamage() * (naniteAdditionalDamagePercent / 100.0f);
 			FSimpleDelegate reset;
 
-			reset.BindLambda([weapon, additionalDamage]() { weapon->decreaseAdditionalDamage(additionalDamage); });
+			reset.BindLambda([weapon, increasedBaseDamage]() { weapon->setBaseDamage(weapon->getBaseDamage() - increasedBaseDamage); });
 
 			additionalNaniteDamage.Add(weapon, MoveTemp(reset));
 
-			weapon->setAdditionalDamage(weapon->getAdditionalDamage() + additionalDamage);
+			weapon->setBaseDamage(weapon->getBaseDamage() + increasedBaseDamage);
 		}
 	}
 
@@ -102,14 +102,14 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 
 				if (inflictor && (inflictor->getDamageType() == typeOfDamage::nanite))
 				{
-					float additionalDamage = inflictor->getBaseDamage() * (naniteAdditionalDamagePercent / 100.0f);
+					float increasedBaseDamage = inflictor->getBaseDamage() * (naniteAdditionalDamagePercent / 100.0f);
 					FSimpleDelegate reset;
 
-					reset.BindLambda([inflictor, additionalDamage]() { inflictor->decreaseAdditionalDamage(additionalDamage); });
+					reset.BindLambda([inflictor, increasedBaseDamage]() { inflictor->setBaseDamage(inflictor->getBaseDamage() - increasedBaseDamage); });
 
 					additionalNaniteDamage.Add(ability, MoveTemp(reset));
 
-					inflictor->setAdditionalDamage(inflictor->getAdditionalDamage() + additionalDamage);
+					inflictor->setBaseDamage(inflictor->getAdditionalDamage() + increasedBaseDamage);
 				}
 			}
 		}

@@ -23,9 +23,6 @@ private:
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float distance;
 
-	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float additionalDamage;
-
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -39,10 +36,13 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setBaseDamage(float newDamage) override;
 
-	UFUNCTION(Server, Reliable)
-	void setAdditionalDamage(float newAdditionalDamage) override;
-
 	float getBaseDamage() const override;
+
+	float getAddedDamage() const override;
+
+	TArray<float> getIncreasedDamageCoefficients() const override;
+
+	TArray<float> getMoreDamageCoefficients() const override;
 
 	float getAdditionalDamage() const override;
 

@@ -9,7 +9,7 @@ void ALostConnectionPlayerState::runMulticastReliable_Implementation(AActor* cal
 		return;
 	}
 
-	TDelegate<void()> delegate;
+	FSimpleDelegate delegate;
 
 	delegate.BindUFunction(caller, methodName);
 
@@ -23,7 +23,7 @@ void ALostConnectionPlayerState::runMulticastUnreliable_Implementation(AActor* c
 		return;
 	}
 
-	TDelegate<void()> delegate;
+	FSimpleDelegate delegate;
 
 	delegate.BindUFunction(caller, methodName);
 
@@ -47,7 +47,7 @@ void ALostConnectionPlayerState::runOnServerReliable_Implementation(AActor* call
 		return;
 	}
 
-	TDelegate<void()> delegate;
+	FSimpleDelegate delegate;
 
 	delegate.BindUFunction(caller, methodName);
 
@@ -61,7 +61,7 @@ void ALostConnectionPlayerState::runOnServerUnreliable_Implementation(AActor* ca
 		return;
 	}
 
-	TDelegate<void()> delegate;
+	FSimpleDelegate delegate;
 
 	delegate.BindUFunction(caller, methodName);
 
