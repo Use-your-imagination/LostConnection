@@ -218,6 +218,10 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(ABaseDrone, secondaryWeaponSlot);
 
 	DOREPLIFETIME(ABaseDrone, slideCooldown);
+
+	DOREPLIFETIME(ABaseDrone, mainModules);
+
+	DOREPLIFETIME(ABaseDrone, weaponModules);
 }
 
 bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
