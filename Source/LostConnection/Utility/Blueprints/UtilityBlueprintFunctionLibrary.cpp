@@ -12,6 +12,7 @@
 #include "Characters/BaseDrone.h"
 #include "Characters/BaseBotCaster.h"
 #include "Utility/MultiplayerUtility.h"
+#include "Engine/LostConnectionGameState.h"
 
 FString UUtilityBlueprintFunctionLibrary::firstSymbolToUpperCase(const FString& string)
 {
@@ -110,4 +111,17 @@ bool UUtilityBlueprintFunctionLibrary::isAnyAnimationActive(const TScriptInterfa
 bool UUtilityBlueprintFunctionLibrary::allOfFloat(const TArray<float>& values, float compareValue)
 {
 	return Algo::AllOf(values, [&compareValue](float value) { return value == compareValue; });
+}
+
+ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo(ALostConnectionGameState* gameState, FCallbackDelegate onBeginLoadCallback, FCallbackDelegate onEndLoadCallback)
+{
+	ALoadingScreenInfo* info = gameState->spawn<ALoadingScreenInfo>({});
+
+	info->setOnBeginLoadCallback(MoveTemp(onBeginLoadCallback));
+
+	info->setOnEndLoadCallback(MoveTemp(onEndLoadCallback));
+
+	info->FinishSpawning({}, true);
+
+	return info;
 }

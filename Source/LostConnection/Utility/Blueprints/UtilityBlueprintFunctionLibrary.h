@@ -7,6 +7,8 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UObject/ScriptInterface.h"
 
+#include "Engine/LoadingScreenInfo.h"
+
 #include "UtilityBlueprintFunctionLibrary.generated.h"
 
 UCLASS()
@@ -29,4 +31,7 @@ public:
 
 	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
 	static bool allOfFloat(const TArray<float>& values, float compareValue);
+
+	UFUNCTION(Category = "Utility|LoadingScreen", BlueprintCallable)
+	static ALoadingScreenInfo* createLoadingScreenInfo(class ALostConnectionGameState* gameState, FCallbackDelegate onBeginLoadCallback, FCallbackDelegate onEndLoadCallback);
 };

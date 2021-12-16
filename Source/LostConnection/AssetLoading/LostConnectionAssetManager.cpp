@@ -28,11 +28,6 @@ void ULostConnectionAssetManager::startLatent(UObject* worldContext, const FLate
 	}
 }
 
-ULostConnectionAssetManager& ULostConnectionAssetManager::get()
-{
-	return StaticCast<ULostConnectionAssetManager&>(UAssetManager::Get());
-}
-
 bool ULostConnectionAssetManager::loadStatuses(UObject* worldContext, FLatentActionInfo info)
 {
 	return this->latentLoadAsset<UStatusesDataAsset>(worldContext, info);

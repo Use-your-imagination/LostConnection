@@ -21,6 +21,7 @@ public class LostConnection : ModuleRules
             "InputCore",
             "Slate",
             "SlateCore",
+            "UMG",
             "Niagara",
             "OnlineSubsystem",
             "OnlineSubsystemUtils",

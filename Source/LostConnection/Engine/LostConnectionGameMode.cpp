@@ -44,3 +44,13 @@ void ALostConnectionGameMode::spawnAI_Implementation(int32 count) const
 {
 	spawner.spawn(GetWorld(), count);
 }
+
+void ALostConnectionGameMode::PostSeamlessTravel()
+{
+	Super::PostSeamlessTravel();
+}
+
+void ALostConnectionGameMode::HandleSeamlessTravelPlayer(AController*& controller)
+{
+	Super::HandleSeamlessTravelPlayer(controller);
+}

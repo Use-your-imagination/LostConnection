@@ -26,4 +26,8 @@ public:
 
 	UFUNCTION(Category = AI, Server, Reliable, BlueprintCallable)
 	void spawnAI(int32 count) const;
+
+	virtual void PostSeamlessTravel() override;
+
+	virtual void HandleSeamlessTravelPlayer(AController*& controller) override;
 };

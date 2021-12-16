@@ -95,6 +95,11 @@ public:
 	void unloadRuinedCityAct();
 };
 
+inline ULostConnectionAssetManager& ULostConnectionAssetManager::get()
+{
+	return StaticCast<ULostConnectionAssetManager&>(UAssetManager::Get());
+}
+
 template<typename T>
 TSharedPtr<FStreamableHandle>& ULostConnectionAssetManager::loadAsset(FStreamableDelegate delegate)
 {
