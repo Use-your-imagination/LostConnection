@@ -32,6 +32,9 @@ public:
 	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
 	static bool allOfFloat(const TArray<float>& values, float compareValue);
 
+	UFUNCTION(Category = "Utility|AssetManager", BlueprintCallable, BlueprintPure)
+	static class ULostConnectionAssetManager* getAssetManager();
+
 	UFUNCTION(Category = "Utility|LoadingScreen", BlueprintCallable)
 	static ALoadingScreenInfo* createLoadingScreenInfo(class ALostConnectionGameState* gameState, FCallbackDelegate onBeginLoadCallback, FCallbackDelegate onEndLoadCallback);
 };
