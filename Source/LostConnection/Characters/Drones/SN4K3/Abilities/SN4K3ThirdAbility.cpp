@@ -30,32 +30,6 @@ USN4K3ThirdAbility::USN4K3ThirdAbility() :
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
-void USN4K3ThirdAbility::removeAbilityEffect(ABaseCharacter* target)
-{
-	target->setHealth(target->getHealth() * 2);
-
-	TArray<UBaseWeapon*> weapons;
-
-	weapons.Add(target->getDefaultWeapon());
-
-	ABaseDrone* drone = Cast<ABaseDrone>(target);
-
-	if (drone)
-	{
-		weapons.Add(drone->getPrimaryWeapon());
-
-		weapons.Add(drone->getSecondaryWeapon());
-	}
-
-	for (auto& i : weapons)
-	{
-		if (i)
-		{
-			i->setBaseDamage(i->getBaseDamage() * 2.0f / 3.0f);
-		}
-	}
-}
-
 void USN4K3ThirdAbility::setIsFlagExist(bool isFlagExist)
 {
 	this->isFlagExist = isFlagExist;

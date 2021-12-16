@@ -79,6 +79,9 @@ protected:
 	UPROPERTY(Category = Stats, EditDefaultsOnly, ReplicatedUsing = onCurrentHealthChanged, BlueprintReadOnly)
 	float currentHealth;
 
+	UPROPERTY(Category = Stats, Replicated, BlueprintReadOnly)
+	float reservedHealth;
+
 	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float defaultMovementSpeed;
 
@@ -238,6 +241,9 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setCurrentHealth(float newCurrentHealth) final;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void setReservedHealth(float newReservedHealth) final;
+
 	UFUNCTION(Server, Reliable)
 	virtual void setDefaultMovementSpeed(float speed) final;
 
@@ -255,6 +261,8 @@ public:
 	virtual float getHealth() const final;
 
 	virtual float getCurrentHealth() const final;
+
+	virtual float getReservedHealth() const final;
 
 	virtual float getDefaultMovementSpeed() const final;
 

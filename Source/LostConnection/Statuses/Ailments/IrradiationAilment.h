@@ -21,6 +21,12 @@ private:
 	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float damage;
 
+	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<float> increasedDamageCoefficients;
+
+	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<float> moreDamageCoefficients;
+
 private:
 	FString getStatusName() const override;
 
@@ -34,18 +40,32 @@ public:
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
+	void appendIncreasedDamageCoefficient(float coefficient) override;
+
+	void removeIncreasedDamageCoefficient(float coefficient) override;
+
+	void appendMoreDamageCoefficient(float coefficient) override;
+
+	void removeMoreDamageCoefficient(float coefficient) override;
+
 	UFUNCTION(Server, Reliable)
 	void setBaseDamage(float newDamage) override;
+
+	UFUNCTION(Server, Reliable)
+	void setAddedDamage(float newAddedDamage) override;
+
+	UFUNCTION(Server, Reliable)
+	void setAdditionalDamage(float newAdditionalDamage) override;
 
 	float getBaseDamage() const override;
 
 	float getAddedDamage() const override;
 
+	float getAdditionalDamage() const override;
+
 	TArray<float> getIncreasedDamageCoefficients() const override;
 
 	TArray<float> getMoreDamageCoefficients() const override;
-
-	float getAdditionalDamage() const override;
 
 	typeOfDamage getAilmentDamageType() const override;
 

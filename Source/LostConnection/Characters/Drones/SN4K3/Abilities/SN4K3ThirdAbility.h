@@ -27,7 +27,7 @@ private:
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float period;
 
-	TWeakInterfacePtr<IReservator> reservator;
+	TWeakInterfacePtr<ISocketItem> reservator;
 
 	bool isFlagExist;
 
@@ -37,8 +37,6 @@ private:
 public:
 	USN4K3ThirdAbility();
 
-	void removeAbilityEffect(class ABaseCharacter* target);
-	
 	void setIsFlagExist(bool isFlagExist);
 
 	bool getIsFlagExist() const;

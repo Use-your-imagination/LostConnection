@@ -11,7 +11,7 @@
 
 void ABaseBot::onCurrentHealthChanged()
 {
-	healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), (currentHealth / health) * 100.0f);
+	healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
 
 	healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
 }

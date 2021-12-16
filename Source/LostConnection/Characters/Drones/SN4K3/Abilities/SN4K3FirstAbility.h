@@ -23,6 +23,18 @@ private:
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float distance;
 
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float addedDamage;
+
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float additionalDamage;
+
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<float> increasedDamageCoefficients;
+
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<float> moreDamageCoefficients;
+
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -33,18 +45,32 @@ public:
 
 	void useAbility() override;
 
+	virtual void appendIncreasedDamageCoefficient(float coefficient) final override;
+
+	virtual void removeIncreasedDamageCoefficient(float coefficient) final override;
+
+	virtual void appendMoreDamageCoefficient(float coefficient) final override;
+
+	virtual void removeMoreDamageCoefficient(float coefficient) final override;
+
 	UFUNCTION(Server, Reliable)
 	void setBaseDamage(float newDamage) override;
+
+	UFUNCTION(Server, Reliable)
+	void setAddedDamage(float newAddedDamage) override;
+
+	UFUNCTION(Server, Reliable)
+	void setAdditionalDamage(float newAdditionalDamage) override;
 
 	float getBaseDamage() const override;
 
 	float getAddedDamage() const override;
 
+	float getAdditionalDamage() const override;
+
 	TArray<float> getIncreasedDamageCoefficients() const override;
 
 	TArray<float> getMoreDamageCoefficients() const override;
-
-	float getAdditionalDamage() const override;
 
 	typeOfDamage getDamageType() const override;
 

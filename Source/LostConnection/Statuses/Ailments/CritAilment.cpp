@@ -27,6 +27,10 @@ void UCritAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(UCritAilment, damageMultiplierPerTotalLifePercentPool);
 
 	DOREPLIFETIME(UCritAilment, critMultiplier);
+
+	DOREPLIFETIME(UCritAilment, increasedDamageCoefficients);
+
+	DOREPLIFETIME(UCritAilment, moreDamageCoefficients);
 }
 
 float UCritAilment::getCritMultiplier() const
@@ -58,9 +62,39 @@ bool UCritAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	return true;
 }
 
+void UCritAilment::appendIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Add(coefficient);
+}
+
+void UCritAilment::removeIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Remove(coefficient);
+}
+
+void UCritAilment::appendMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Add(coefficient);
+}
+
+void UCritAilment::removeMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Remove(coefficient);
+}
+
 void UCritAilment::setBaseDamage_Implementation(float newDamage)
 {
 	inflictorDamage = newDamage;
+}
+
+void UCritAilment::setAddedDamage_Implementation(float newAddedDamage)
+{
+	inflictorAddedDamage = newAddedDamage;
+}
+
+void UCritAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
+{
+	inflictorAdditionalDamage = newAdditionalDamage;
 }
 
 float UCritAilment::getBaseDamage() const
@@ -79,12 +113,17 @@ float UCritAilment::getBaseDamage() const
 			return currentValue;
 		});
 
-	return inflictorDamage * (resultMultiplier / 100.0f);
+	return inflictorDamage * Utility::fromPercent(resultMultiplier);
 }
 
 float UCritAilment::getAddedDamage() const
 {
-	return 0.0f;
+	return inflictorAddedDamage;
+}
+
+float UCritAilment::getAdditionalDamage() const
+{
+	return inflictorAdditionalDamage;
 }
 
 TArray<float> UCritAilment::getIncreasedDamageCoefficients() const
@@ -95,11 +134,6 @@ TArray<float> UCritAilment::getIncreasedDamageCoefficients() const
 TArray<float> UCritAilment::getMoreDamageCoefficients() const
 {
 	return {};
-}
-
-float UCritAilment::getAdditionalDamage() const
-{
-	return 0.0f;
 }
 
 typeOfDamage UCritAilment::getAilmentDamageType() const

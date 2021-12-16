@@ -31,7 +31,7 @@ FText Utility::getFTextFromFloat(float value)
 
 	FString stringValue = FString::Printf(TEXT("%.0f"), value);
 	FString thousandSymbol = FText::FromStringTable("/Game/Text/Common.Common", "ThousandSymbol").ToString();
-	
+
 	if (!(stringValue.Len() >= digits * 2 || stringValue.Len() <= digits))
 	{
 		stringValue.InsertAt(stringValue.Len() % digits, '.');
@@ -61,6 +61,6 @@ FText Utility::getFTextFromFloat(float value)
 
 		stringValue += thousandSymbol;
 	}
-	
+
 	return FText::FromString(MoveTemp(stringValue));
 }

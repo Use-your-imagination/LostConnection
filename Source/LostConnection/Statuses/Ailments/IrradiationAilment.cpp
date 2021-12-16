@@ -20,6 +20,10 @@ void UIrradiationAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UIrradiationAilment, damage);
+	
+	DOREPLIFETIME(UIrradiationAilment, increasedDamageCoefficients);
+
+	DOREPLIFETIME(UIrradiationAilment, moreDamageCoefficients);
 }
 
 void UIrradiationAilment::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
@@ -32,9 +36,39 @@ void UIrradiationAilment::applyStatus_Implementation(const TScriptInterface<ISta
 	Super::applyStatus_Implementation(inflictor, target, hit);
 }
 
+void UIrradiationAilment::appendIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Add(coefficient);
+}
+
+void UIrradiationAilment::removeIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Remove(coefficient);
+}
+
+void UIrradiationAilment::appendMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Add(coefficient);
+}
+
+void UIrradiationAilment::removeMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Remove(coefficient);
+}
+
 void UIrradiationAilment::setBaseDamage_Implementation(float newDamage)
 {
 	damage = newDamage;
+}
+
+void UIrradiationAilment::setAddedDamage_Implementation(float newAddedDamage)
+{
+	inflictorAddedDamage = newAddedDamage;
+}
+
+void UIrradiationAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
+{
+	inflictorAdditionalDamage = newAdditionalDamage;
 }
 
 float UIrradiationAilment::getBaseDamage() const
@@ -44,7 +78,12 @@ float UIrradiationAilment::getBaseDamage() const
 
 float UIrradiationAilment::getAddedDamage() const
 {
-	return 0.0f;
+	return inflictorAddedDamage;
+}
+
+float UIrradiationAilment::getAdditionalDamage() const
+{
+	return inflictorAdditionalDamage;
 }
 
 TArray<float> UIrradiationAilment::getIncreasedDamageCoefficients() const
@@ -55,11 +94,6 @@ TArray<float> UIrradiationAilment::getIncreasedDamageCoefficients() const
 TArray<float> UIrradiationAilment::getMoreDamageCoefficients() const
 {
 	return {};
-}
-
-float UIrradiationAilment::getAdditionalDamage() const
-{
-	return 0.0f;
 }
 
 typeOfDamage UIrradiationAilment::getAilmentDamageType() const

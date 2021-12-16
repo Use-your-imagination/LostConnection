@@ -10,6 +10,7 @@
 #include "SN4K3PassiveAbility.h"
 #include "Statuses/Ailments/SwarmAilment.h"
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
+#include "Utility/Utility.h"
 
 #pragma warning(disable: 4701)
 
@@ -79,7 +80,7 @@ void USN4K3SecondAbility::deathEventAction()
 		ASN4K3* drone = Cast<ASN4K3>(caster);
 		float distance = (target->GetActorLocation() - drone->GetActorLocation()).Size();
 		float distanceCofficient;
-		float health = target->getHealth() * (swarm->getThreshold() / 100.0f) * (naniteMeterCoefficient * thresholdedHealthHeal / 100.0f);
+		float health = target->getHealth() * Utility::fromPercent(swarm->getThreshold()) * (naniteMeterCoefficient * Utility::fromPercent(thresholdedHealthHeal));
 
 		if (UKismetMathLibrary::InRange_FloatFloat(distance, maxHealDistance.X, maxHealDistance.Y))
 		{

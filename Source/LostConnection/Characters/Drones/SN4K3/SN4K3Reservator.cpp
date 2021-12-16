@@ -16,26 +16,28 @@ void USN4K3Reservator::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(USN4K3Reservator, healthReservePercent);
 
-	DOREPLIFETIME(USN4K3Reservator, naniteAdditionalDamagePercent);
+	DOREPLIFETIME(USN4K3Reservator, naniteIcreasedDamage);
+
+	DOREPLIFETIME(USN4K3Reservator, reservedHealth);
 }
 
 void USN4K3Reservator::useSocketItem(ABaseCharacter* target)
 {
 	USN4K3ReservatorBuff* reservator = NewObject<USN4K3ReservatorBuff>(target);
 	
-	reservator->setHealthReservePercent(healthReservePercent);
-
-	reservator->setNaniteAdditionalDamagePercent(naniteAdditionalDamagePercent);
+	reservator->setNaniteIncreasedDamage(naniteIcreasedDamage);
 	
 	reservator->applyStatus(nullptr, target, FHitResult());
 }
 
 void USN4K3Reservator::reserve(ABaseCharacter* target)
 {
-	
+	reservedHealth = target->getHealth() * Utility::fromPercent(healthReservePercent);
+
+	target->setReservedHealth(reservedHealth);
 }
 
 void USN4K3Reservator::restoreReserved(ABaseCharacter* target)
 {
-	
+	target->setReservedHealth(target->getReservedHealth() - reservedHealth);
 }

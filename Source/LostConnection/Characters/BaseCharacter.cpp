@@ -17,6 +17,7 @@
 #include "BaseBot.h"
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 #include "Constants/Constants.h"
+#include "Utility/Utility.h"
 
 #include "Utility/MultiplayerUtility.h"
 
@@ -108,6 +109,8 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, health);
 
 	DOREPLIFETIME(ABaseCharacter, currentHealth);
+
+	DOREPLIFETIME(ABaseCharacter, reservedHealth);
 
 	DOREPLIFETIME(ABaseCharacter, defaultMovementSpeed);
 
@@ -456,7 +459,7 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 {
 	if (swarm.IsValid())
 	{
-		float newPercentHealth = newCurrentHealth / health * 100.0f;
+		float newPercentHealth = Utility::toPercent(newCurrentHealth / health);
 
 		if (newPercentHealth <= swarm->getThreshold())
 		{
@@ -475,6 +478,18 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 	currentHealth = newCurrentHealth;
 
 	this->onCurrentHealthChanged();
+}
+
+void ABaseCharacter::setReservedHealth_Implementation(float newReservedHealth)
+{
+	reservedHealth = newReservedHealth;
+
+	float maxCurrentHealth = health - reservedHealth;
+
+	if (currentHealth > maxCurrentHealth)
+	{
+		this->setCurrentHealth(maxCurrentHealth);
+	}
 }
 
 void ABaseCharacter::setDefaultMovementSpeed_Implementation(float speed)
@@ -512,6 +527,11 @@ float ABaseCharacter::getHealth() const
 float ABaseCharacter::getCurrentHealth() const
 {
 	return currentHealth;
+}
+
+float ABaseCharacter::getReservedHealth() const
+{
+	return reservedHealth;
 }
 
 float ABaseCharacter::getDefaultMovementSpeed() const
@@ -669,12 +689,12 @@ float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) cons
 	// TODO: add shields
 	float pool = health;
 	
-	return (1.0f - (pool - inflictor->calculateTotalDamage()) / pool) * 100.0f;
+	return Utility::toPercent(1.0f - (pool - inflictor->calculateTotalDamage()) / pool);
 }
 
 float ABaseCharacter::getHealthPercentDealt(IDamageInflictor* inflictor) const
 {
-	return (1.0f - (health - inflictor->calculateTotalDamage()) / health) * 100.0f;
+	return Utility::toPercent(1.0f - (health - inflictor->calculateTotalDamage()) / health);
 }
 
 void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)

@@ -8,6 +8,7 @@
 #include "Utility/LoadAssetsDelayAction.h"
 #include "Statuses/BaseStatus.h"
 #include "Weapons/BaseWeapon.h"
+#include "Utility/Utility.h"
 
 void ULostConnectionAssetManager::startLatent(UObject* worldContext, const FLatentActionInfo& info, const TSharedPtr<FStreamableHandle>& handle)
 {
@@ -72,7 +73,7 @@ float ULostConnectionAssetManager::getCurrentPercentLoading() const
 		current += i.Value->GetProgress();
 	}
 
-	return (current / allAssets) * 100.0f;
+	return Utility::toPercent(current / allAssets);
 }
 
 const UClass* ULostConnectionAssetManager::operator [] (typeOfDamage damageType) const

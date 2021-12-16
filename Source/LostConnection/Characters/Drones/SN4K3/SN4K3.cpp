@@ -13,6 +13,7 @@
 #include "Abilities/SN4K3UltimateAbility.h"
 #include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 #include "Utility/MultiplayerUtility.h"
+#include "Utility/Utility.h"
 
 void ASN4K3::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -73,7 +74,7 @@ ASN4K3::ASN4K3()
 
 void ASN4K3::playUltimateReturnAnimation()
 {
-	GetMesh()->GetAnimInstance()->Montage_Play(Cast<USN4K3UltimateAbility>(ultimateAbility)->getReturnAnimation(), this->getCastPoint() / 100.0f);
+	GetMesh()->GetAnimInstance()->Montage_Play(Cast<USN4K3UltimateAbility>(ultimateAbility)->getReturnAnimation(), Utility::fromPercent(this->getCastPoint()));
 }
 
 void ASN4K3::setUltimatePlaceholder(ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder)
@@ -124,7 +125,7 @@ bool ASN4K3::checkUltimateAbilityCast() const
 {
 	USN4K3UltimateAbility* ability = Cast<USN4K3UltimateAbility>(ultimateAbility);
 	bool used = ability->getIsUltimateAbilityUsed();
-	float castAnimationTime = ability->getReturnAnimation()->GetPlayLength() * (this->getCastPoint() / 100.0f);
+	float castAnimationTime = ability->getReturnAnimation()->GetPlayLength() * Utility::fromPercent(this->getCastPoint());
 
 	if (used && (ability->getCurrentAbilityDuration() + castAnimationTime < ability->getAbilityDuration()))
 	{

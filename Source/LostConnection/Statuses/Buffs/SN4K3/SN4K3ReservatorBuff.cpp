@@ -18,11 +18,7 @@ void USN4K3ReservatorBuff::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(USN4K3ReservatorBuff, healthReservePercent);
-
-	DOREPLIFETIME(USN4K3ReservatorBuff, naniteAdditionalDamagePercent);
-
-	DOREPLIFETIME(USN4K3ReservatorBuff, reservedHealth);
+	DOREPLIFETIME(USN4K3ReservatorBuff, naniteIncreasedDamage);
 }
 
 USN4K3ReservatorBuff::USN4K3ReservatorBuff()
@@ -30,14 +26,9 @@ USN4K3ReservatorBuff::USN4K3ReservatorBuff()
 	duration = 8.0f;
 }
 
-void USN4K3ReservatorBuff::setHealthReservePercent(float healthReservePercent)
+void USN4K3ReservatorBuff::setNaniteIncreasedDamage(float naniteIncreasedDamage)
 {
-	this->healthReservePercent = healthReservePercent;
-}
-
-void USN4K3ReservatorBuff::setNaniteAdditionalDamagePercent(float naniteAdditionalDamagePercent)
-{
-	this->naniteAdditionalDamagePercent = naniteAdditionalDamagePercent;
+	this->naniteIncreasedDamage = naniteIncreasedDamage;
 }
 
 void USN4K3ReservatorBuff::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
@@ -61,17 +52,7 @@ void USN4K3ReservatorBuff::applyStatus_Implementation(const TScriptInterface<ISt
 bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
 	ABaseCharacter* character = Cast<ABaseCharacter>(target);
-	float newHealth = character->getHealth() * (healthReservePercent / 100.0f);
-
-	reservedHealth = character->getHealth() - newHealth;
-
-	character->setHealth(newHealth);
-
-	if (character->getCurrentHealth() > newHealth)
-	{
-		character->setCurrentHealth(newHealth);
-	}
-
+	
 	TArray<TWeakObjectPtr<UBaseWeapon>> weapons = character->getWeapons();
 	ICaster* caster = Cast<ICaster>(character);
 
@@ -79,14 +60,13 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 	{
 		if (weapon.IsValid() && (weapon->getDamageType() == typeOfDamage::nanite))
 		{
-			float increasedBaseDamage = weapon->getBaseDamage() * (naniteAdditionalDamagePercent / 100.0f);
 			FSimpleDelegate reset;
 
-			reset.BindLambda([weapon, increasedBaseDamage]() { weapon->setBaseDamage(weapon->getBaseDamage() - increasedBaseDamage); });
+			reset.BindLambda([this, weapon]() { weapon->removeIncreasedDamageCoefficient(naniteIncreasedDamage); });
 
 			additionalNaniteDamage.Add(weapon, MoveTemp(reset));
 
-			weapon->setBaseDamage(weapon->getBaseDamage() + increasedBaseDamage);
+			weapon->appendIncreasedDamageCoefficient(naniteIncreasedDamage);
 		}
 	}
 
@@ -102,14 +82,13 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 
 				if (inflictor && (inflictor->getDamageType() == typeOfDamage::nanite))
 				{
-					float increasedBaseDamage = inflictor->getBaseDamage() * (naniteAdditionalDamagePercent / 100.0f);
 					FSimpleDelegate reset;
 
-					reset.BindLambda([inflictor, increasedBaseDamage]() { inflictor->setBaseDamage(inflictor->getBaseDamage() - increasedBaseDamage); });
+					reset.BindLambda([this, inflictor]() { inflictor->removeIncreasedDamageCoefficient(naniteIncreasedDamage); });
 
 					additionalNaniteDamage.Add(ability, MoveTemp(reset));
 
-					inflictor->setBaseDamage(inflictor->getAdditionalDamage() + increasedBaseDamage);
+					inflictor->removeIncreasedDamageCoefficient(naniteIncreasedDamage);
 				}
 			}
 		}
@@ -121,8 +100,6 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 void USN4K3ReservatorBuff::postRemove()
 {
 	ABaseCharacter* character = Cast<ABaseCharacter>(target);
-
-	character->setHealth(character->getHealth() + reservedHealth);
 
 	for (const auto& data : additionalNaniteDamage)
 	{

@@ -68,6 +68,24 @@ protected:
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float damage;
 
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float addedDamage;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float increasedDamage;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float moreDamage;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float additionalDamage;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	TArray<float> increasedDamageCoefficients;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	TArray<float> moreDamageCoefficients;
+
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	int32 currentMagazineSize;
 
@@ -112,6 +130,14 @@ public:
 
 	virtual void Tick(float DeltaTime);
 
+	virtual void appendIncreasedDamageCoefficient(float coefficient) final;
+
+	virtual void removeIncreasedDamageCoefficient(float coefficient) final;
+
+	virtual void appendMoreDamageCoefficient(float coefficient) final;
+
+	virtual void removeMoreDamageCoefficient(float coefficient) final;
+
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setOwner(class ABaseCharacter* owner) final;
 
@@ -120,6 +146,18 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	virtual void setBaseDamage(float newDamage) final;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setAddedDamage(float newAddedDamage) final;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setIncreasedDamage( float newIncreasedDamage) final;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setMoreDamage( float newMoreDamage) final;
+
+	UFUNCTION(Server, Reliable)
+	virtual void setAdditionalDamage(float newAdditionalDamage) final;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setCurrentMagazineSize(int32 newCurrentMagazineSize) final;
@@ -139,6 +177,14 @@ public:
 	virtual typeOfDamage getDamageType() const final;
 
 	virtual float getBaseDamage() const final;
+
+	virtual float getAddedDamage() const final;
+
+	virtual float getIncreasedDamage() const final;
+	
+	virtual float getMoreDamage() const final;
+	
+	virtual float getAdditionalDamage() const final;
 
 	virtual int32 getCurrentMagazineSize() const final;
 

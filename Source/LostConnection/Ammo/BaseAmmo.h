@@ -55,8 +55,8 @@ protected:
 	AActor* lastTarget;
 	float damage;
 	float addedDamage;
-	TArray<float> increasedDamage;
-	TArray<float> moreDamage;
+	TArray<float> increasedDamageCoefficients;
+	TArray<float> moreDamageCoefficients;
 	float additionalDamage;
 	typeOfDamage damageType;
 	bool isAlly;
@@ -77,8 +77,19 @@ public:
 
 	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwner() const final;
 
-	UFUNCTION(Server, Reliable)
-	virtual void setBaseDamage(float newDamage) final override;
+	virtual void appendIncreasedDamageCoefficient(float coefficient) final override;
+
+	virtual void removeIncreasedDamageCoefficient(float coefficient) final override;
+
+	virtual void appendMoreDamageCoefficient(float coefficient) final override;
+
+	virtual void removeMoreDamageCoefficient(float coefficient) final override;
+
+	virtual void setBaseDamage(float damage) final override;
+
+	virtual void setAddedDamage(float addedDamage) final override;
+	
+	virtual void setAdditionalDamage(float additionalDamage) final override;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setCrushingHitChance(float newCrushingHitChance) final override;
@@ -90,11 +101,11 @@ public:
 
 	virtual float getAddedDamage() const override;
 
+	virtual float getAdditionalDamage() const override;
+
 	virtual TArray<float> getIncreasedDamageCoefficients() const override;
 
 	virtual TArray<float> getMoreDamageCoefficients() const override;
-
-	virtual float getAdditionalDamage() const override;
 
 	virtual typeOfDamage getDamageType() const final override;
 

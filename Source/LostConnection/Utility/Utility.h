@@ -27,6 +27,10 @@ public:
 
 	static FText getFTextFromFloat(float value);
 
+	static float toPercent(float coefficient);
+
+	static float fromPercent(float percent);
+
 	template<typename T>
 	static bool checkChanceProc(const T& chance);
 
@@ -39,6 +43,16 @@ public:
 	template<typename T>
 	static const T& getRandomValueFromArray(const TArray<T>& values);
 };
+
+inline float Utility::toPercent(float coefficient)
+{
+	return coefficient * 100.0f;
+}
+
+inline float Utility::fromPercent(float percent)
+{
+	return percent / 100.0f;
+}
 
 template<typename T>
 bool Utility::checkChanceProc(const T& chance)

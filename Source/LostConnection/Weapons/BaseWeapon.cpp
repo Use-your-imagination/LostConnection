@@ -31,6 +31,14 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(UBaseWeapon, damage);
 
+	DOREPLIFETIME(UBaseWeapon, addedDamage);
+
+	DOREPLIFETIME(UBaseWeapon, additionalDamage);
+
+	DOREPLIFETIME(UBaseWeapon, increasedDamageCoefficients);
+
+	DOREPLIFETIME(UBaseWeapon, moreDamageCoefficients);
+
 	DOREPLIFETIME(UBaseWeapon, currentMagazineSize);
 
 	DOREPLIFETIME(UBaseWeapon, magazineSize);
@@ -82,7 +90,7 @@ void UBaseWeapon::shoot()
 				camera->GetForwardVector().ToOrientationRotator(),
 				camera->GetComponentLocation() + (drone->GetCameraOffset()->TargetArmLength + length) * camera->GetForwardVector()
 			);
-			
+
 			fakeAmmoTransform = FTransform
 			(
 				((ammoTransform.GetLocation() + UConstants::shootDistance * camera->GetForwardVector()) - weaponBarrelLocation).ToOrientationRotator(),
@@ -94,7 +102,7 @@ void UBaseWeapon::shoot()
 			ABaseBot* bot = Cast<ABaseBot>(owner.Get());
 			AAIController* controller = bot->GetController<AAIController>();
 			ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"));
-			
+
 			if (target && target->IsValidLowLevelFast())
 			{
 				ammoTransform = FTransform
@@ -114,7 +122,7 @@ void UBaseWeapon::shoot()
 		float pitch = FMath::RandRange(-spreadDistance, spreadDistance);
 		float yaw = FMath::Tan(FMath::Acos(pitch / spreadDistance)) * pitch;
 
-		launchedAmmo->launch(owner.Get(), fakeAmmoTransform, {pitch, FMath::RandRange(-yaw, yaw), 0.0f});
+		launchedAmmo->launch(owner.Get(), fakeAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
 		currentMagazineSize -= ammoCost;
 
@@ -130,7 +138,7 @@ UBaseWeapon::UBaseWeapon() :
 	ammoCost(1),
 	length(100.0f)
 {
-	
+
 }
 
 void UBaseWeapon::startShoot()
@@ -180,6 +188,26 @@ void UBaseWeapon::Tick(float DeltaTime)
 	}
 }
 
+void UBaseWeapon::appendIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Add(coefficient);
+}
+
+void UBaseWeapon::removeIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Remove(coefficient);
+}
+
+void UBaseWeapon::appendMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Add(coefficient);
+}
+
+void UBaseWeapon::removeMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Remove(coefficient);
+}
+
 void UBaseWeapon::setOwner_Implementation(ABaseCharacter* owner)
 {
 	this->owner = owner;
@@ -193,6 +221,26 @@ void UBaseWeapon::setAmmoType_Implementation(ammoTypes newAmmoType)
 void UBaseWeapon::setBaseDamage_Implementation(float newDamage)
 {
 	damage = newDamage;
+}
+
+void UBaseWeapon::setAddedDamage_Implementation(float newAddedDamage)
+{
+	addedDamage = newAddedDamage;
+}
+
+void UBaseWeapon::setIncreasedDamage_Implementation(float newIncreasedDamage)
+{
+	increasedDamage = newIncreasedDamage;
+}
+
+void UBaseWeapon::setMoreDamage_Implementation(float newMoreDamage)
+{
+	moreDamage = newMoreDamage;
+}
+
+void UBaseWeapon::setAdditionalDamage_Implementation(float newAdditionalDamage)
+{
+	additionalDamage = newAdditionalDamage;
 }
 
 void UBaseWeapon::setCurrentMagazineSize_Implementation(int32 newCurrentMagazineSize)
@@ -233,6 +281,26 @@ typeOfDamage UBaseWeapon::getDamageType() const
 float UBaseWeapon::getBaseDamage() const
 {
 	return damage;
+}
+
+float UBaseWeapon::getAddedDamage() const
+{
+	return addedDamage;
+}
+
+float UBaseWeapon::getIncreasedDamage() const
+{
+	return increasedDamage;
+}
+
+float UBaseWeapon::getMoreDamage() const
+{
+	return moreDamage;
+}
+
+float UBaseWeapon::getAdditionalDamage() const
+{
+	return additionalDamage;
 }
 
 int32 UBaseWeapon::getCurrentMagazineSize() const

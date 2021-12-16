@@ -183,6 +183,10 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 {
 	damage = weapon->getBaseDamage();
 
+	addedDamage = weapon->getAddedDamage();
+
+	additionalDamage = weapon->getAdditionalDamage();
+
 	damageType = weapon->getDamageType();
 
 	crushingHitChance = weapon->getCrushingHitChance();
@@ -209,8 +213,8 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 					}
 
 					addedDamage += damageModule->getAddedDamage();
-					increasedDamage.Add(damageModule->getIncreasedDamage());
-					moreDamage.Add(damageModule->getMoreDamage());
+					increasedDamageCoefficients.Add(damageModule->getIncreasedDamage());
+					moreDamageCoefficients.Add(damageModule->getMoreDamage());
 					additionalDamage += damageModule->getAdditionalDamage();
 				}
 			}
@@ -232,8 +236,8 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 					}
 
 					addedDamage += weaponDamageModule->getAddedDamage();
-					increasedDamage.Add(weaponDamageModule->getIncreasedDamage());
-					moreDamage.Add(weaponDamageModule->getMoreDamage());
+					increasedDamageCoefficients.Add(weaponDamageModule->getIncreasedDamage());
+					moreDamageCoefficients.Add(weaponDamageModule->getMoreDamage());
 					additionalDamage += weaponDamageModule->getAdditionalDamage();
 				}
 			}
@@ -256,9 +260,39 @@ const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwner() const
 	return owner;
 }
 
-void ABaseAmmo::setBaseDamage_Implementation(float newDamage)
+void ABaseAmmo::appendIncreasedDamageCoefficient(float coefficient)
 {
-	damage = newDamage;
+	increasedDamageCoefficients.Add(coefficient);
+}
+
+void ABaseAmmo::removeIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Remove(coefficient);
+}
+
+void ABaseAmmo::appendMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Add(coefficient);
+}
+
+void ABaseAmmo::removeMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Remove(coefficient);
+}
+
+void ABaseAmmo::setBaseDamage(float damage)
+{
+	damage = damage;
+}
+
+void ABaseAmmo::setAddedDamage(float addedDamage)
+{
+	this->addedDamage = addedDamage;
+}
+
+void ABaseAmmo::setAdditionalDamage(float additionalDamage)
+{
+	this->additionalDamage = additionalDamage;
 }
 
 void ABaseAmmo::setCrushingHitChance_Implementation(float newCrushingHitChance)
@@ -281,6 +315,11 @@ float ABaseAmmo::getAddedDamage() const
 	return 0.0f;
 }
 
+float ABaseAmmo::getAdditionalDamage() const
+{
+	return additionalDamage;
+}
+
 TArray<float> ABaseAmmo::getIncreasedDamageCoefficients() const
 {
 	return {};
@@ -289,11 +328,6 @@ TArray<float> ABaseAmmo::getIncreasedDamageCoefficients() const
 TArray<float> ABaseAmmo::getMoreDamageCoefficients() const
 {
 	return {};
-}
-
-float ABaseAmmo::getAdditionalDamage() const
-{
-	return additionalDamage;
 }
 
 typeOfDamage ABaseAmmo::getDamageType() const

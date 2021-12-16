@@ -25,6 +25,10 @@ void UBurnAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(UBurnAilment, additionalFireCrushingHitChance);
 
 	DOREPLIFETIME(UBurnAilment, damage);
+
+	DOREPLIFETIME(UBurnAilment, increasedDamageCoefficients);
+
+	DOREPLIFETIME(UBurnAilment, moreDamageCoefficients);
 }
 
 float UBurnAilment::getAdditionalFireCrushingHitChance() const
@@ -56,9 +60,39 @@ bool UBurnAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	return true;
 }
 
+void UBurnAilment::appendIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Add(coefficient);
+}
+
+void UBurnAilment::removeIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Remove(coefficient);
+}
+
+void UBurnAilment::appendMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Add(coefficient);
+}
+
+void UBurnAilment::removeMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Remove(coefficient);
+}
+
 void UBurnAilment::setBaseDamage_Implementation(float newDamage)
 {
 	damage = newDamage;
+}
+
+void UBurnAilment::setAddedDamage_Implementation(float newAddedDamage)
+{
+	inflictorAddedDamage = newAddedDamage;
+}
+
+void UBurnAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
+{
+	inflictorAdditionalDamage = newAdditionalDamage;
 }
 
 float UBurnAilment::getBaseDamage() const
@@ -68,7 +102,12 @@ float UBurnAilment::getBaseDamage() const
 
 float UBurnAilment::getAddedDamage() const
 {
-	return 0.0f;
+	return inflictorAddedDamage;
+}
+
+float UBurnAilment::getAdditionalDamage() const
+{
+	return inflictorAdditionalDamage;
 }
 
 TArray<float> UBurnAilment::getIncreasedDamageCoefficients() const
@@ -79,11 +118,6 @@ TArray<float> UBurnAilment::getIncreasedDamageCoefficients() const
 TArray<float> UBurnAilment::getMoreDamageCoefficients() const
 {
 	return {};
-}
-
-float UBurnAilment::getAdditionalDamage() const
-{
-	return 0.0f;
 }
 
 typeOfDamage UBurnAilment::getAilmentDamageType() const

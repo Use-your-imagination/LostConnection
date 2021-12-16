@@ -18,6 +18,14 @@ void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(USN4K3FirstAbility, damage);
 
 	DOREPLIFETIME(USN4K3FirstAbility, distance);
+
+	DOREPLIFETIME(USN4K3FirstAbility, addedDamage);
+
+	DOREPLIFETIME(USN4K3FirstAbility, additionalDamage);
+	
+	DOREPLIFETIME(USN4K3FirstAbility, increasedDamageCoefficients);
+
+	DOREPLIFETIME(USN4K3FirstAbility, moreDamageCoefficients);
 }
 
 USN4K3FirstAbility::USN4K3FirstAbility() :
@@ -66,9 +74,39 @@ void USN4K3FirstAbility::useAbility()
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }
 
+void USN4K3FirstAbility::appendIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Add(coefficient);
+}
+
+void USN4K3FirstAbility::removeIncreasedDamageCoefficient(float coefficient)
+{
+	increasedDamageCoefficients.Remove(coefficient);
+}
+
+void USN4K3FirstAbility::appendMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Add(coefficient);
+}
+
+void USN4K3FirstAbility::removeMoreDamageCoefficient(float coefficient)
+{
+	moreDamageCoefficients.Remove(coefficient);
+}
+
 void USN4K3FirstAbility::setBaseDamage_Implementation(float newDamage)
 {
 	damage = newDamage;
+}
+
+void USN4K3FirstAbility::setAddedDamage_Implementation(float newAddedDamage)
+{
+	addedDamage = newAddedDamage;
+}
+
+void USN4K3FirstAbility::setAdditionalDamage_Implementation(float newAdditionalDamage)
+{
+	additionalDamage = newAdditionalDamage;
 }
 
 float USN4K3FirstAbility::getBaseDamage() const
@@ -78,22 +116,22 @@ float USN4K3FirstAbility::getBaseDamage() const
 
 float USN4K3FirstAbility::getAddedDamage() const
 {
-	return 0.0f;
-}
-
-TArray<float> USN4K3FirstAbility::getIncreasedDamageCoefficients() const
-{
-	return {};
-}
-
-TArray<float> USN4K3FirstAbility::getMoreDamageCoefficients() const
-{
-	return {};
+	return addedDamage;
 }
 
 float USN4K3FirstAbility::getAdditionalDamage() const
 {
-	return 0.0f;
+	return additionalDamage;
+}
+
+TArray<float> USN4K3FirstAbility::getIncreasedDamageCoefficients() const
+{
+	return increasedDamageCoefficients;
+}
+
+TArray<float> USN4K3FirstAbility::getMoreDamageCoefficients() const
+{
+	return moreDamageCoefficients;
 }
 
 typeOfDamage USN4K3FirstAbility::getDamageType() const

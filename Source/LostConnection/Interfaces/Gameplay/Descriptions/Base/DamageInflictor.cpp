@@ -4,16 +4,6 @@
 
 #include "Algo/Accumulate.h"
 
-void IDamageInflictor::increaseBaseDamage(float amount)
-{
-	this->setBaseDamage(this->getBaseDamage() + amount);
-}
-
-void IDamageInflictor::decreaseBaseDamage(float amount)
-{
-	this->setBaseDamage(this->getBaseDamage() - amount);
-}
-
 float IDamageInflictor::calculateTotalDamage() const
 {
 	TArray<float> increasedDamageCoefficients = this->getIncreasedDamageCoefficients();

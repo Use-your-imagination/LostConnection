@@ -22,7 +22,10 @@ private:
 	float healthReservePercent;
 
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float naniteAdditionalDamagePercent;
+	float naniteIcreasedDamage;
+
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float reservedHealth;
 
 private:
 	virtual bool IsSupportedForNetworking() const final override;

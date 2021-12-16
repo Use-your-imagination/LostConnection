@@ -46,6 +46,8 @@ protected:
 
 	class IStatusReceiver* target;
 	float inflictorDamage;
+	float inflictorAddedDamage;
+	float inflictorAdditionalDamage;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
