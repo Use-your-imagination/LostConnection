@@ -1,4 +1,28 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.1.4.0"
+  "projectVersion": "0.1.4.0",
+  "UI": {
+    "type": "category",
+    "Loading screen": {
+      "type": "item",
+      "notes": [
+        "Add loading screen"
+      ]
+    },
+    "Main menu": {
+      "type": "item",
+      "notes": [
+        "Remove loading percent in the upper right corner"
+      ]
+    }
+  },
+  "Network": {
+    "type": "category",
+    "Network tick rate": {
+      "type": "item",
+      "notes": [
+        "Decrease network tick rate to 30 ticks per second"
+      ]
+    }
+  }
 }
