@@ -47,7 +47,17 @@ void ALoadingScreenInfo::setOnBeginLoadCallback(FCallbackDelegate&& onBeginLoadC
 	this->onBeginLoadCallback = MoveTemp(onBeginLoadCallback);
 }
 
+void ALoadingScreenInfo::setOnBeginLoadCallback(const FCallbackDelegate& onBeginLoadCallback)
+{
+	this->onBeginLoadCallback = onBeginLoadCallback;
+}
+
 void ALoadingScreenInfo::setOnEndLoadCallback(FCallbackDelegate&& onEndLoadCallback)
 {
 	this->onEndLoadCallback = MoveTemp(onEndLoadCallback);
+}
+
+void ALoadingScreenInfo::setOnEndLoadCallback(const FCallbackDelegate& onEndLoadCallback)
+{
+	this->onEndLoadCallback = onEndLoadCallback;
 }

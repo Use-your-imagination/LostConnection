@@ -6,6 +6,7 @@
 
 #include "Characters/BaseCharacter.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
+#include "Constants/Constants.h"
 
 #pragma warning(disable: 4458)
 
@@ -28,7 +29,12 @@ void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
 
 			for (auto& i : tem)
 			{
-				ability->applyAbility(Cast<ABaseCharacter>(i));
+				ABaseCharacter* character = Cast<ABaseCharacter>(i);
+
+				if (character->getIsAlly())
+				{
+					ability->applyAbility(character);
+				}
 			}
 		}
 
@@ -44,6 +50,8 @@ void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
 ASN4K3ThirdAbilityFlag::ASN4K3ThirdAbilityFlag()
 {
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> flagMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/SN4K3/Abilities/Third/Meshes/Flag.Flag'"));
+
+	NetUpdateFrequency = UConstants::minNetUpdateFrequency;
 
 	mesh->SetSkeletalMesh(flagMeshFinder.Object);
 

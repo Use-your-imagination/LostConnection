@@ -24,7 +24,7 @@ public:
 	FDronePreview();
 };
 
-UCLASS(Blueprintable)
+UCLASS(BlueprintType)
 class LOSTCONNECTION_API UDronesPreviewDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()

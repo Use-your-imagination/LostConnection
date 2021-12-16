@@ -35,6 +35,6 @@ public:
 	UFUNCTION(Category = "Utility|AssetManager", BlueprintCallable, BlueprintPure)
 	static class ULostConnectionAssetManager* getAssetManager();
 
-	UFUNCTION(Category = "Utility|LoadingScreen", BlueprintCallable)
-	static ALoadingScreenInfo* createLoadingScreenInfo(class ALostConnectionGameState* gameState, FCallbackDelegate onBeginLoadCallback, FCallbackDelegate onEndLoadCallback);
+	UFUNCTION(Category = "Utility|LoadingScreen", BlueprintCallable, Meta = (AutoCreateRefTerm = "onBeginLoadCallback, onEndLoadCallback"))
+	static ALoadingScreenInfo* createLoadingScreenInfo(class ALostConnectionGameState* gameState, const FCallbackDelegate& onBeginLoadCallback, const FCallbackDelegate& onEndLoadCallback);
 };

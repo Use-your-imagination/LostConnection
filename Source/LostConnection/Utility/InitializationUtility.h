@@ -19,5 +19,5 @@ public:
 public:
 	static void initAbilityId(const FString& abilityClassName, abilitySlot& id);
 
-	static UBaseStatus* createDefaultStatus(typeOfDamage damageType, IAilmentReceiver* target);
+	static UBaseStatus* createDefaultAilment(typeOfDamage damageType, IAilmentReceiver* target);
 };

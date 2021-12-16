@@ -31,9 +31,9 @@ public:
 
 	virtual void setBaseDamage(float damage) = 0;
 
-	virtual void setAddedDamage(float damage) = 0;
+	virtual void setAddedDamage(float addedDamage) = 0;
 
-	virtual void setAdditionalDamage(float damage) = 0;
+	virtual void setAdditionalDamage(float additionalDamage) = 0;
 
 	virtual float calculateTotalDamage() const;
 

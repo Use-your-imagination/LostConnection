@@ -31,7 +31,7 @@ void InitializationUtility::initAbilityId(const FString& abilityClassName, abili
 	}
 }
 
-UBaseStatus* InitializationUtility::createDefaultStatus(typeOfDamage damageType, IAilmentReceiver* target)
+UBaseStatus* InitializationUtility::createDefaultAilment(typeOfDamage damageType, IAilmentReceiver* target)
 {
 	return NewObject<UBaseStatus>(target->_getUObject(), ULostConnectionAssetManager::get()[damageType]);
 }

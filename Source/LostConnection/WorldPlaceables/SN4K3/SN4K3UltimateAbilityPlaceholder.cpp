@@ -3,12 +3,15 @@
 #include "SN4K3UltimateAbilityPlaceholder.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
+#include "Constants/Constants.h"
 #include "Ammo/BaseAmmo.h"
 
 ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 {
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/SN4K3/SN4K3Mesh.SN4K3Mesh'"));
 	static ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Drones/SN4K3/AnimBP_SN4K3_UltReplica"));
+
+	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 
 	mesh->SetSkeletalMesh(meshFinder.Object);
 
@@ -32,16 +35,6 @@ void ASN4K3UltimateAbilityPlaceholder::setAbility(USN4K3UltimateAbility* ability
 	this->ability = ability;
 }
 
-float ASN4K3UltimateAbilityPlaceholder::getFlatDamageReduction_Implementation() const
-{
-	return 0.0f;
-}
-
-float ASN4K3UltimateAbilityPlaceholder::getPercentageDamageReduction_Implementation() const
-{
-	return 0.0;
-}
-
 void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit)
 {
 	ASN4K3* drone = Cast<ASN4K3>(ability->getCaster());
@@ -52,4 +45,15 @@ void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(ABaseAmmo* am
 	}
 
 	ability->applyAbility(drone);
+}
+
+
+float ASN4K3UltimateAbilityPlaceholder::getFlatDamageReduction_Implementation() const
+{
+	return 0.0f;
+}
+
+float ASN4K3UltimateAbilityPlaceholder::getPercentageDamageReduction_Implementation() const
+{
+	return 10.0;
 }

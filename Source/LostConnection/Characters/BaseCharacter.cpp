@@ -465,6 +465,8 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 		{
 			FHitResult hit;
 
+			hit.Actor = this;
+			hit.Component = GetMesh();
 			hit.Location = GetActorLocation();
 
 			swarm->applyEffect(this, hit);
@@ -729,7 +731,7 @@ void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusI
 
 		if ((hit.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(hit.PhysMaterial.Get()) == EPhysicalSurface::SurfaceType1) || ailmentInflictor->getCrushingHitProc())
 		{
-			InitializationUtility::createDefaultStatus(ailmentInflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
+			InitializationUtility::createDefaultAilment(ailmentInflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
 		}
 	}
 }

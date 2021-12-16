@@ -25,11 +25,11 @@ public:
 
 	void setAbility(USN4K3UltimateAbility* ability);
 
+	void impactAction_Implementation(class ABaseAmmo* ammo, const FHitResult& hit) override;
+
 	float getFlatDamageReduction_Implementation() const override;
 
 	float getPercentageDamageReduction_Implementation() const override;
-
-	void impactAction_Implementation(class ABaseAmmo* ammo, const FHitResult& hit) override;
 
 	~ASN4K3UltimateAbilityPlaceholder() = default;
 };

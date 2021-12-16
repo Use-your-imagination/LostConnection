@@ -8,7 +8,7 @@
 
 #include "WeaponsDataAsset.generated.h"
 
-UCLASS(Blueprintable)
+UCLASS(BlueprintType)
 class LOSTCONNECTION_API UWeaponsDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()

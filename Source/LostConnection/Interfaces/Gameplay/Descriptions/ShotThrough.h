@@ -14,9 +14,6 @@ class UShotThrough : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class LOSTCONNECTION_API IShotThrough
 {
 	GENERATED_BODY()

@@ -32,7 +32,11 @@ public:
 
 	void setOnBeginLoadCallback(FCallbackDelegate&& onBeginLoadCallback);
 
+	void setOnBeginLoadCallback(const FCallbackDelegate& onBeginLoadCallback);
+
 	void setOnEndLoadCallback(FCallbackDelegate&& onEndLoadCallback);
+
+	void setOnEndLoadCallback(const FCallbackDelegate& onEndLoadCallback);
 
 	~ALoadingScreenInfo() = default;
 };

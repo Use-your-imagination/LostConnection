@@ -119,13 +119,13 @@ ULostConnectionAssetManager* UUtilityBlueprintFunctionLibrary::getAssetManager()
 	return &StaticCast<ULostConnectionAssetManager&>(UAssetManager::Get());
 }
 
-ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo(ALostConnectionGameState* gameState, FCallbackDelegate onBeginLoadCallback, FCallbackDelegate onEndLoadCallback)
+ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo(ALostConnectionGameState* gameState, const FCallbackDelegate& onBeginLoadCallback, const FCallbackDelegate& onEndLoadCallback)
 {
 	ALoadingScreenInfo* info = gameState->spawn<ALoadingScreenInfo>({});
 
-	info->setOnBeginLoadCallback(MoveTemp(onBeginLoadCallback));
+	info->setOnBeginLoadCallback(onBeginLoadCallback);
 
-	info->setOnEndLoadCallback(MoveTemp(onEndLoadCallback));
+	info->setOnEndLoadCallback(onEndLoadCallback);
 
 	info->FinishSpawning({}, true);
 

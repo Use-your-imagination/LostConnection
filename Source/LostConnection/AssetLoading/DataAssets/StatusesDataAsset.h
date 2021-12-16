@@ -9,7 +9,7 @@
 
 #include "StatusesDataAsset.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class LOSTCONNECTION_API UStatusesDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
