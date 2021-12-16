@@ -27,7 +27,7 @@ private:
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float period;
 
-	TWeakInterfacePtr<ISocketItem> reservator;
+	TWeakInterfacePtr<ISocketItem> socketItem;
 
 	bool isFlagExist;
 

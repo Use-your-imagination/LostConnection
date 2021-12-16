@@ -8,6 +8,7 @@
 #include "WorldPlaceables/SN4K3/SN4K3ThirdAbilityFlag.h"
 #include "Engine/LostConnectionGameState.h"
 #include "SN4K3PassiveAbility.h"
+#include "Characters/Drones/SN4K3/SN4K3Reservator.h"
 
 #pragma warning(disable: 4458)
 
@@ -42,22 +43,36 @@ bool USN4K3ThirdAbility::getIsFlagExist() const
 
 void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
 {
-	if (reservator.IsValid())
+	if (!socketItem.IsValid())
 	{
-		reservator->useSocketItem(target);
-
-		ICaster::Execute_applyThirdAbilityEvent(Cast<UObject>(caster), target);
+		return;
 	}
+
+	socketItem->useSocketItem(target);
+
+	ICaster::Execute_applyThirdAbilityEvent(Cast<UObject>(caster), target);
 }
 
 void USN4K3ThirdAbility::useAbility()
 {
+	if (!socketItem.IsValid())
+	{
+		return;
+	}
+
 	ASN4K3* drone = Cast<ASN4K3>(caster);
 	FVector tem = drone->GetActorForwardVector() * 200;
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
 
-	ASN4K3ThirdAbilityFlag* flag = Utility::getGameState(drone)->spawn<ASN4K3ThirdAbilityFlag>({drone->GetActorRotation(), tem + drone->GetActorLocation()});
+	USN4K3Reservator* defaultReservator = Cast<USN4K3Reservator>(socketItem.GetObject());
+
+	if (defaultReservator)
+	{
+		defaultReservator->setBuffDuration(period);
+	}
+
+	ASN4K3ThirdAbilityFlag* flag = Utility::getGameState(drone)->spawn<ASN4K3ThirdAbilityFlag>({ drone->GetActorRotation(), tem + drone->GetActorLocation() });
 
 	flag->setLifetime(lifetime);
 
@@ -76,15 +91,15 @@ void USN4K3ThirdAbility::useAbility()
 
 void USN4K3ThirdAbility::insert(const TScriptInterface<ISocketItem>& socketItem)
 {
-	reservator = StaticCast<IReservator*>(socketItem.GetInterface());
+	this->socketItem = StaticCast<IReservator*>(socketItem.GetInterface());
 }
 
 void USN4K3ThirdAbility::extract()
 {
-	reservator.Reset();
+	socketItem.Reset();
 }
 
 ISocketItem* USN4K3ThirdAbility::getSocketItem() const
 {
-	return reservator.IsValid() ? reservator.Get() : nullptr;
+	return socketItem.IsValid() ? socketItem.Get() : nullptr;
 }

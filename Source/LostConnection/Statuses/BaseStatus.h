@@ -70,6 +70,8 @@ public:
 
 	virtual void refreshDuration() final;
 
+	virtual void setDuration(float duration) final;
+
 	virtual UNiagaraSystem* getOnApplyStatus() final;
 
 	virtual UNiagaraSystem* getOnApplyEffect() final;

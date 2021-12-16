@@ -27,6 +27,8 @@ private:
 	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float reservedHealth;
 
+	float buffDuration;
+
 private:
 	virtual bool IsSupportedForNetworking() const final override;
 
@@ -34,6 +36,8 @@ private:
 	
 public:
 	USN4K3Reservator() = default;
+
+	void setBuffDuration(float buffDuration);
 
 	void useSocketItem(class ABaseCharacter* target) override;
 

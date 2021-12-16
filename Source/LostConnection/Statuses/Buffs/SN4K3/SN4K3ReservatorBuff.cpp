@@ -21,11 +21,6 @@ void USN4K3ReservatorBuff::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME(USN4K3ReservatorBuff, naniteIncreasedDamage);
 }
 
-USN4K3ReservatorBuff::USN4K3ReservatorBuff()
-{
-	duration = 8.0f;
-}
-
 void USN4K3ReservatorBuff::setNaniteIncreasedDamage(float naniteIncreasedDamage)
 {
 	this->naniteIncreasedDamage = naniteIncreasedDamage;

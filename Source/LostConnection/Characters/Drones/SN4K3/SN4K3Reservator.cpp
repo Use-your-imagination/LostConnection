@@ -21,11 +21,18 @@ void USN4K3Reservator::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(USN4K3Reservator, reservedHealth);
 }
 
+void USN4K3Reservator::setBuffDuration(float buffDuration)
+{
+	this->buffDuration = buffDuration;
+}
+
 void USN4K3Reservator::useSocketItem(ABaseCharacter* target)
 {
 	USN4K3ReservatorBuff* reservator = NewObject<USN4K3ReservatorBuff>(target);
 	
 	reservator->setNaniteIncreasedDamage(naniteIcreasedDamage);
+
+	reservator->setDuration(buffDuration);
 	
 	reservator->applyStatus(nullptr, target, FHitResult());
 }

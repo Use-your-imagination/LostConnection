@@ -28,7 +28,7 @@ private:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	USN4K3ReservatorBuff();
+	USN4K3ReservatorBuff() = default;
 
 	void setNaniteIncreasedDamage(float naniteIncreasedDamage);
 

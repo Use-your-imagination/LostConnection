@@ -9,6 +9,8 @@
 #include "Utility/Utility.h"
 #include "Engine/LostConnectionGameState.h"
 
+#pragma warning(disable: 4458)
+
 FString UBaseStatus::getStatusCountKey() const
 {
 	return this->getStatusName() + "Count";
@@ -82,6 +84,11 @@ bool UBaseStatus::Tick(float DeltaTime)
 void UBaseStatus::refreshDuration()
 {
 	currentDuration = 0.0f;
+}
+
+void UBaseStatus::setDuration(float duration)
+{
+	this->duration = duration;
 }
 
 UNiagaraSystem* UBaseStatus::getOnApplyStatus()
