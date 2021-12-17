@@ -59,6 +59,7 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 private:
+	UFUNCTION()
 	void explode();
 
 	UFUNCTION()
@@ -66,6 +67,9 @@ private:
 
 public:	
 	ASN4K3PassiveAbilityHead();
+
+	UFUNCTION(Category = Input, BlueprintNativeEvent)
+	void speedup();
 
 	virtual void Tick(float DeltaTime) override;
 

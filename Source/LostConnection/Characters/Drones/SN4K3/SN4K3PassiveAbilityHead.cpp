@@ -9,10 +9,20 @@
 #include "Characters/BaseCharacter.h"
 #include "Utility/InitializationUtility.h"
 #include "Ammo/BaseAmmo.h"
+#include "Utility/MultiplayerUtility.h"
 
 void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	check(PlayerInputComponent);
+
+	FInputActionBinding pressExplosion("Shoot", IE_Pressed);
+	FInputActionBinding pressSprint("Zoom", IE_Pressed);
+
+	pressExplosion.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "explode"); });
+	pressSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "speedup"); });
+
+	PlayerInputComponent->AddActionBinding(pressExplosion);
+	PlayerInputComponent->AddActionBinding(pressSprint);
 }
 
 void ASN4K3PassiveAbilityHead::BeginPlay()
@@ -44,7 +54,7 @@ void ASN4K3PassiveAbilityHead::explode()
 
 	// TODO: add list of affected actors to player state, if killed by swarm then resurrect SN4K3
 
-	GetPlayerState<ALostConnectionPlayerState>()->runOnServerReliableWithMulticast(this, "explodeVFX");
+	MultiplayerUtility::runOnServerReliableWithMulticast(this, "explodeVFX");
 
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), mesh->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
 
@@ -104,6 +114,11 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead()
 	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
 
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+}
+
+void ASN4K3PassiveAbilityHead::speedup_Implementation()
+{
+
 }
 
 void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
