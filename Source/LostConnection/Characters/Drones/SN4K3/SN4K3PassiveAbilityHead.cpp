@@ -25,11 +25,6 @@ void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* Player
 	PlayerInputComponent->AddActionBinding(pressSprint);
 }
 
-void ASN4K3PassiveAbilityHead::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void ASN4K3PassiveAbilityHead::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -47,6 +42,15 @@ void ASN4K3PassiveAbilityHead::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, moreDamageCoefficients);
 }
 
+bool ASN4K3PassiveAbilityHead::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(movement, *Bunch, *RepFlags);
+
+	return wroteSomething;
+}
+
 void ASN4K3PassiveAbilityHead::explode()
 {
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
@@ -54,7 +58,7 @@ void ASN4K3PassiveAbilityHead::explode()
 
 	// TODO: add list of affected actors to player state, if killed by swarm then resurrect SN4K3
 
-	MultiplayerUtility::runOnServerReliableWithMulticast(this, "explodeVFX");
+	this->explodeVFX();
 
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), mesh->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
 
@@ -100,6 +104,7 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead()
 
 	capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	movement = CreateDefaultSubobject<UCharacterMovementComponent>(TEXT("Movement"));
 
 	SetRootComponent(capsule);
 
@@ -107,13 +112,15 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead()
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
-	mesh->SetGenerateOverlapEvents(true);
-
-	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Ignore);
 
 	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
 
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+
+	movement->SetUpdatedComponent(capsule);
+
+	movement->SetIsReplicated(true);
 }
 
 void ASN4K3PassiveAbilityHead::speedup_Implementation()
@@ -124,26 +131,6 @@ void ASN4K3PassiveAbilityHead::speedup_Implementation()
 void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-}
-
-void ASN4K3PassiveAbilityHead::impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit)
-{
-	if (!ammo->getIsAlly())
-	{
-		this->explode();
-
-		Destroy();
-	}
-}
-
-float ASN4K3PassiveAbilityHead::getFlatDamageReduction_Implementation() const
-{
-	return 0.0f;
-}
-
-float ASN4K3PassiveAbilityHead::getPercentageDamageReduction_Implementation() const
-{
-	return 10.0f;
 }
 
 typeOfDamage ASN4K3PassiveAbilityHead::getDamageType() const
