@@ -114,6 +114,36 @@ TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() con
 	return asset.getDronesPreview();
 }
 
+TArray<const UBaseDroneDataAsset*> ULostConnectionAssetManager::getDrones() const
+{
+	TArray<const UBaseDroneDataAsset*> drones;
+
+	for (const auto& handle : handles)
+	{
+		if (handle.Value.IsValid() && handle.Value->HasLoadCompleted())
+		{
+			UBaseDroneDataAsset* asset = Cast<UBaseDroneDataAsset>(handle.Value->GetLoadedAsset());
+
+			if (asset)
+			{
+				drones.Add(asset);
+			}
+		}
+	}
+
+	return drones;
+}
+
+bool ULostConnectionAssetManager::loadSN4K3Drone(UObject* worldContext, FLatentActionInfo info)
+{
+	return this->latentLoadAsset<USN4K3DataAsset>(worldContext, info);
+}
+
+void ULostConnectionAssetManager::unloadSN4K3Drone()
+{
+	this->unloadAsset<USN4K3DataAsset>();
+}
+
 bool ULostConnectionAssetManager::loadRuinedCityAct(UObject* worldContext, FLatentActionInfo info)
 {
 	return this->latentLoadAct<URuinedCityActDataAsset>(worldContext, info);

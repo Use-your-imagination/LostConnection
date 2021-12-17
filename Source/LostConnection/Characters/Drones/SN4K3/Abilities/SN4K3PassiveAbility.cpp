@@ -8,6 +8,7 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Utility/InitializationUtility.h"
 #include "SN4K3UltimateAbility.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 
 void USN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -40,14 +41,18 @@ int32 USN4K3PassiveAbility::getNaniteMeter() const
 
 void USN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 {
-	// TODO: second part
+	ASN4K3PassiveAbilityHead* head = target->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3PassiveAbilityHead>(headClass, target->GetActorTransform());
+
+	head->FinishSpawning({}, true);
+
+	target->GetController()->Possess(head);
 
 	ICaster::Execute_applyPassiveAbilityEvent(Cast<UObject>(caster), target);
 }
 
 void USN4K3PassiveAbility::useAbility()
 {
-	
+	this->applyAbility(Cast<ASN4K3>(caster));
 }
 
 void USN4K3PassiveAbility::Tick(float DeltaTime)

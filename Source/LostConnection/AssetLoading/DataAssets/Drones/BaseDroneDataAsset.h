@@ -13,8 +13,19 @@ class LOSTCONNECTION_API UBaseDroneDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(Category = Drone, EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class ABaseDrone> drone;
+
+protected:
+	static FPrimaryAssetType getPrimaryAssetType();
+
 public:
 	UBaseDroneDataAsset() = default;
+
+	const TSubclassOf<class ABaseDrone>& getDrone() const;
+
+	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
 
 	virtual ~UBaseDroneDataAsset() = default;
 };

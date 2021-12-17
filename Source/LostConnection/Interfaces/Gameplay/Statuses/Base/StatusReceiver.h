@@ -22,9 +22,7 @@ class LOSTCONNECTION_API IStatusReceiver : public IDamageReceiver
 public:
 	IStatusReceiver() = default;
 
-	virtual void spawnApplyStatus(UNiagaraSystem* applyStatusVFX, const FHitResult& hit) = 0;
-
-	virtual void spawnApplyEffect(UNiagaraSystem* applyEffectVFX, const FHitResult& hit) = 0;
+	virtual void spawnStatusVFX(UNiagaraSystem* statusVFX, const FHitResult& hit) = 0;
 
 	virtual void addStatus(UBaseStatus* status) = 0;
 

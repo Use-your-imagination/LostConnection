@@ -3,6 +3,7 @@
 #include "SN4K3PassiveAbilityHead.h"
 
 #include "Kismet/KismetSystemLibrary.h"
+#include "NiagaraFunctionLibrary.h"
 
 #include "Constants/Constants.h"
 #include "Characters/BaseCharacter.h"
@@ -34,6 +35,51 @@ void ASN4K3PassiveAbilityHead::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, increasedDamageCoefficients);
 
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, moreDamageCoefficients);
+}
+
+void ASN4K3PassiveAbilityHead::explode()
+{
+	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
+	TArray<AActor*> tem;
+
+	// TODO: add list of affected actors to player state, if killed by swarm then resurrect SN4K3
+
+	GetPlayerState<ALostConnectionPlayerState>()->runOnServerReliableWithMulticast(this, "explodeVFX");
+
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), mesh->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
+
+	for (auto& i : tem)
+	{
+		ABaseCharacter* character = Cast<ABaseCharacter>(i);
+
+		if (!character->getIsAlly())
+		{
+			FHitResult characterHit;
+
+			characterHit.Actor = character;
+			characterHit.Component = character->GetMesh();
+			characterHit.Location = character->GetActorLocation();
+
+			character->takeDamage(this);
+
+			character->statusInflictorImpactAction(this, characterHit);
+		}
+	}
+}
+
+void ASN4K3PassiveAbilityHead::explodeVFX()
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation
+	(
+		GetWorld(),
+		explosionParticles,
+		mesh->GetComponentLocation(),
+		FRotator::ZeroRotator,
+		FVector::OneVector,
+		true,
+		true,
+		ENCPoolMethod::AutoRelease
+	);
 }
 
 ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead()
@@ -69,28 +115,7 @@ void ASN4K3PassiveAbilityHead::impactAction_Implementation(ABaseAmmo* ammo, cons
 {
 	if (!ammo->getIsAlly())
 	{
-		static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
-		TArray<AActor*> tem;
-
-		// TODO: add list of affected actors to player state, if killed by swarm then resurrect SN4K3
-
-		UKismetSystemLibrary::SphereOverlapActors(GetWorld(), mesh->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
-
-		for (auto& i : tem)
-		{
-			ABaseCharacter* character = Cast<ABaseCharacter>(i);
-
-			if (!character->getIsAlly())
-			{
-				FHitResult characterHit;
-
-				characterHit.Actor = character;
-				characterHit.Component = character->GetMesh();
-				characterHit.Location = character->GetActorLocation();
-
-				InitializationUtility::createDefaultAilment(this->getDamageType(), character)->applyStatus(this, character, characterHit);
-			}
-		}
+		this->explode();
 
 		Destroy();
 	}

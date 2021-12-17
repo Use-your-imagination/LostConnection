@@ -301,10 +301,7 @@ public:
 	virtual void impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void spawnApplyStatus(UNiagaraSystem* applyStatusVFX, const FHitResult& hit) final override;
-
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void spawnApplyEffect(UNiagaraSystem* applyEffectVFX, const FHitResult& hit) final override;
+	virtual void spawnStatusVFX(UNiagaraSystem* statusVFX, const FHitResult& hit) final override;
 
 	virtual void addStatus(class UBaseStatus* status) final override;
 

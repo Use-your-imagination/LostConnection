@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Abilities/BasePassiveAbility.h"
+#include "Characters/Drones/SN4K3/SN4K3PassiveAbilityHead.h"
 
 #include "SN4K3PassiveAbility.generated.h"
 
@@ -23,6 +24,9 @@ private:
 private:
 	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 naniteMeter;
+
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ASN4K3PassiveAbilityHead> headClass;
 
 	float lastTimeAbilityUsed;
 

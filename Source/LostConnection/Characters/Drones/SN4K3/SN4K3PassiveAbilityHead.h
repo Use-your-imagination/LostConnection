@@ -8,13 +8,14 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/PlayerInput.h"
 #include "Net/UnrealNetwork.h"
+#include "NiagaraSystem.h"
 
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
 
 #include "SN4K3PassiveAbilityHead.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API ASN4K3PassiveAbilityHead :
 	public APawn,
 	public IShotThrough,
@@ -28,6 +29,9 @@ private:
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* mesh;
+
+	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UNiagaraSystem* explosionParticles;
 
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float naniteExplosionDamage;
@@ -53,6 +57,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+private:
+	void explode();
+
+	UFUNCTION()
+	void explodeVFX();
 
 public:	
 	ASN4K3PassiveAbilityHead();

@@ -85,7 +85,16 @@ public:
 
 	TArray<const FDronePreview*> getDronesPreview() const;
 
+	TArray<const UBaseDroneDataAsset*> getDrones() const;
+
 	~ULostConnectionAssetManager() = default;
+
+public:
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadSN4K3Drone(UObject* worldContext, FLatentActionInfo info);
+
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	void unloadSN4K3Drone();
 
 public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))

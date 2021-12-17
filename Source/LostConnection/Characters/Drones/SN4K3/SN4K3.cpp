@@ -55,6 +55,11 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 	firstAbility->applyAbility(target);
 }
 
+void ASN4K3::deathLogic()
+{
+	passiveAbility->useAbility();
+}
+
 ASN4K3::ASN4K3()
 {
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);

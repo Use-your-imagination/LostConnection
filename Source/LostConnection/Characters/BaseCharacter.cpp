@@ -634,27 +634,11 @@ void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResu
 	}
 }
 
-void ABaseCharacter::spawnApplyStatus_Implementation(UNiagaraSystem* applyStatusVFX, const FHitResult& hit)
+void ABaseCharacter::spawnStatusVFX_Implementation(UNiagaraSystem* statusVFX, const FHitResult& hit)
 {
 	UNiagaraFunctionLibrary::SpawnSystemAttached
 	(
-		applyStatusVFX,
-		this->getMeshComponent(),
-		NAME_None,
-		hit.Location,
-		FRotator::ZeroRotator,
-		EAttachLocation::Type::KeepWorldPosition,
-		true,
-		true,
-		ENCPoolMethod::AutoRelease
-	);
-}
-
-void ABaseCharacter::spawnApplyEffect_Implementation(UNiagaraSystem* applyEffectVFX, const FHitResult& hit)
-{
-	UNiagaraFunctionLibrary::SpawnSystemAttached
-	(
-		applyEffectVFX,
+		statusVFX,
 		this->getMeshComponent(),
 		NAME_None,
 		hit.Location,
