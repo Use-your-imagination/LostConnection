@@ -546,16 +546,6 @@ float ABaseCharacter::getSprintMovementSpeed() const
 	return sprintMovementSpeed;
 }
 
-bool ABaseCharacter::getIsAlly() const
-{
-	return isAlly;
-}
-
-bool ABaseCharacter::getIsDead() const
-{
-	return isDead;
-}
-
 int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
 {
 	return spareAmmo[type];
@@ -614,16 +604,6 @@ void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflic
 	}
 }
 
-float ABaseCharacter::getFlatDamageReduction_Implementation() const
-{
-	return 200.0f;
-}
-
-float ABaseCharacter::getPercentageDamageReduction_Implementation() const
-{
-	return 25.0f;
-}
-
 void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit)
 {
 	if (isAlly != ammo->getIsAlly())
@@ -668,6 +648,26 @@ void ABaseCharacter::setUnderStatusIntVariable_Implementation(const FString& key
 const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
 {
 	return statuses;
+}
+
+bool ABaseCharacter::getIsAlly() const
+{
+	return isAlly;
+}
+
+bool ABaseCharacter::getIsDead() const
+{
+	return isDead;
+}
+
+float ABaseCharacter::getFlatDamageReduction_Implementation() const
+{
+	return 200.0f;
+}
+
+float ABaseCharacter::getPercentageDamageReduction_Implementation() const
+{
+	return 25.0f;
 }
 
 float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) const

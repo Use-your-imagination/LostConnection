@@ -72,12 +72,6 @@ protected:
 	float addedDamage;
 
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	float increasedDamage;
-
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	float moreDamage;
-
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	float additionalDamage;
 
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
@@ -151,12 +145,6 @@ public:
 	virtual void setAddedDamage(float newAddedDamage) final;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setIncreasedDamage( float newIncreasedDamage) final;
-
-	UFUNCTION(Server, Reliable)
-	virtual void setMoreDamage( float newMoreDamage) final;
-
-	UFUNCTION(Server, Reliable)
 	virtual void setAdditionalDamage(float newAdditionalDamage) final;
 
 	UFUNCTION(Server, Reliable)
@@ -180,10 +168,6 @@ public:
 
 	virtual float getAddedDamage() const final;
 
-	virtual float getIncreasedDamage() const final;
-	
-	virtual float getMoreDamage() const final;
-	
 	virtual float getAdditionalDamage() const final;
 
 	virtual int32 getCurrentMagazineSize() const final;

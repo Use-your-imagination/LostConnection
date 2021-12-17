@@ -228,16 +228,6 @@ void UBaseWeapon::setAddedDamage_Implementation(float newAddedDamage)
 	addedDamage = newAddedDamage;
 }
 
-void UBaseWeapon::setIncreasedDamage_Implementation(float newIncreasedDamage)
-{
-	increasedDamage = newIncreasedDamage;
-}
-
-void UBaseWeapon::setMoreDamage_Implementation(float newMoreDamage)
-{
-	moreDamage = newMoreDamage;
-}
-
 void UBaseWeapon::setAdditionalDamage_Implementation(float newAdditionalDamage)
 {
 	additionalDamage = newAdditionalDamage;
@@ -286,16 +276,6 @@ float UBaseWeapon::getBaseDamage() const
 float UBaseWeapon::getAddedDamage() const
 {
 	return addedDamage;
-}
-
-float UBaseWeapon::getIncreasedDamage() const
-{
-	return increasedDamage;
-}
-
-float UBaseWeapon::getMoreDamage() const
-{
-	return moreDamage;
 }
 
 float UBaseWeapon::getAdditionalDamage() const

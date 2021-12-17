@@ -52,14 +52,14 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 
 	target->addStatus(this);
 
-	target->spawnApplyStatus(onApplyStatus, hit);
+	target->spawnStatusVFX(onApplyStatus, hit);
 
 	target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
 }
 
 bool UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 {
-	target->spawnApplyEffect(onApplyEffect, hit);
+	target->spawnStatusVFX(onApplyEffect, hit);
 
 	return true;
 }

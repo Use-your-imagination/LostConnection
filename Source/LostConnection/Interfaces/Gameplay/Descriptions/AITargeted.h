@@ -1,0 +1,29 @@
+// Copyright (c) 2021 Use-your-imagination
+
+#pragma once
+
+#include "CoreMinimal.h"
+
+#include "UObject/Interface.h"
+
+#include "AITargeted.generated.h"
+
+UINTERFACE(BlueprintType, Meta = (CannotImplementInterfaceInBlueprint))
+class UAITargeted : public UInterface
+{
+	GENERATED_BODY()
+};
+
+class LOSTCONNECTION_API IAITargeted
+{
+	GENERATED_BODY()
+
+public:
+	IAITargeted() = default;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool getIsAlly() const = 0;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool getIsDead() const = 0;
+};

@@ -22,6 +22,7 @@
 #include "Interfaces/Gameplay/AnimatedActions/Death.h"
 #include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
+#include "Interfaces/Gameplay/Descriptions/AITargeted.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -49,7 +50,8 @@ class LOSTCONNECTION_API ABaseCharacter :
 	public IMovementActions,
 	public IDeath,
 	public IAilmentReceiver,
-	public IDeathEventsHolder
+	public IDeathEventsHolder,
+	public IAITargeted
 {
 	GENERATED_BODY()
 
@@ -268,10 +270,6 @@ public:
 
 	virtual float getSprintMovementSpeed() const final;
 
-	virtual bool getIsAlly() const final;
-
-	virtual bool getIsDead() const final;
-
 	UFUNCTION(BlueprintCallable)
 	virtual int32 getSpareAmmo(ammoTypes type) const final;
 
@@ -292,11 +290,7 @@ public:
 	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) override final;
-
-	virtual float getFlatDamageReduction_Implementation() const override;
-
-	virtual float getPercentageDamageReduction_Implementation() const override;
+	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) final override;
 
 	virtual void impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit) override;
 
@@ -311,6 +305,14 @@ public:
 	virtual void setUnderStatusIntVariable(const FString& key, int32 value) final override;
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
+
+	virtual bool getIsAlly() const final override;
+
+	virtual bool getIsDead() const final override;
+
+	virtual float getFlatDamageReduction_Implementation() const override;
+
+	virtual float getPercentageDamageReduction_Implementation() const override;
 
 	virtual float getTotalLifePercentDealt(class IDamageInflictor* inflictor) const final override;
 
