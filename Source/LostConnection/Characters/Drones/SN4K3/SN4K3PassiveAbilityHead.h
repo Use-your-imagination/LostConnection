@@ -27,7 +27,7 @@ private:
 	UCapsuleComponent* capsule;
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* mesh;
+	USkeletalMeshComponent* mesh;
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"))
 	UCharacterMovementComponent* movement;
