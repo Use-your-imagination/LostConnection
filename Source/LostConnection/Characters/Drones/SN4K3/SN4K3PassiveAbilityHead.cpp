@@ -122,7 +122,7 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 
 	capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
-	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	movement = CreateDefaultSubobject<UCharacterMovementComponent>(TEXT("Movement"));
 
 	SetRootComponent(capsule);
