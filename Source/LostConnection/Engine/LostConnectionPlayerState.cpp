@@ -2,68 +2,19 @@
 
 #include "LostConnectionPlayerState.h"
 
-void ALostConnectionPlayerState::runMulticastReliable_Implementation(AActor* caller, const FName& methodName)
+void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	if (!caller)
-	{
-		return;
-	}
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	FSimpleDelegate delegate;
-
-	delegate.BindUFunction(caller, methodName);
-
-	delegate.Execute();
+	DOREPLIFETIME(ALostConnectionPlayerState, currentUI);
 }
 
-void ALostConnectionPlayerState::runMulticastUnreliable_Implementation(AActor* caller, const FName& methodName)
+void ALostConnectionPlayerState::setCurrentUI_Implementation(UUserWidget* widget)
 {
-	if (!caller)
-	{
-		return;
-	}
-
-	FSimpleDelegate delegate;
-
-	delegate.BindUFunction(caller, methodName);
-
-	delegate.Execute();
+	currentUI = widget;
 }
 
-void ALostConnectionPlayerState::runOnServerReliableWithMulticast_Implementation(AActor* caller, const FName& methodName)
+UUserWidget* ALostConnectionPlayerState::getCurrentUI() const
 {
-	this->runMulticastReliable(caller, methodName);
-}
-
-void ALostConnectionPlayerState::runOnServerUnreliableWithMulticast_Implementation(AActor* caller, const FName& methodName)
-{
-	this->runMulticastUnreliable(caller, methodName);
-}
-
-void ALostConnectionPlayerState::runOnServerReliable_Implementation(AActor* caller, const FName& methodName)
-{
-	if (!caller)
-	{
-		return;
-	}
-
-	FSimpleDelegate delegate;
-
-	delegate.BindUFunction(caller, methodName);
-
-	delegate.Execute();
-}
-
-void ALostConnectionPlayerState::runOnServerUnreliable_Implementation(AActor* caller, const FName& methodName)
-{
-	if (!caller)
-	{
-		return;
-	}
-
-	FSimpleDelegate delegate;
-
-	delegate.BindUFunction(caller, methodName);
-
-	delegate.Execute();
+	return currentUI;
 }

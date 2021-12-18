@@ -6,6 +6,7 @@
 
 #include "GameFramework/PlayerState.h"
 #include "Net/UnrealNetwork.h"
+#include "Blueprint/UserWidget.h"
 
 #include "LostConnectionPlayerState.generated.h"
 
@@ -16,23 +17,20 @@ class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 
-private:
-	UFUNCTION(NetMulticast, Reliable)
-	void runMulticastReliable(AActor* caller, const FName& methodName);
+protected:
+	UPROPERTY(Category = UI, Replicated, BlueprintReadOnly)
+	UUserWidget* currentUI;
 
-	UFUNCTION(NetMulticast, Unreliable)
-	void runMulticastUnreliable(AActor* caller, const FName& methodName);
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	UFUNCTION(Server, Reliable)
-	void runOnServerReliableWithMulticast(AActor* caller, const FName& methodName);
+	ALostConnectionPlayerState() = default;
 
-	UFUNCTION(Server, Unreliable)
-	void runOnServerUnreliableWithMulticast(AActor* caller, const FName& methodName);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void setCurrentUI(UUserWidget* widget);
 
-	UFUNCTION(Server, Reliable)
-	void runOnServerReliable(AActor* caller, const FName& methodName);
+	UUserWidget* getCurrentUI() const;
 
-	UFUNCTION(Server, Unreliable)
-	void runOnServerUnreliable(AActor* caller, const FName& methodName);
+	virtual ~ALostConnectionPlayerState() = default;
 };
