@@ -53,6 +53,12 @@ private:
 	UPROPERTY(Category = DamageInflictor, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<float> moreDamageCoefficients;
 
+	UPROPERTY(Category = Cooldown, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float cooldown;
+
+	UPROPERTY(Category = Cooldown, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float currentCooldown;
+
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
@@ -61,7 +67,6 @@ protected:
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 private:
-	UFUNCTION()
 	void explode();
 
 	void explodeVFX();
@@ -69,7 +74,7 @@ private:
 public:	
 	ASN4K3PassiveAbilityHead();
 
-	UFUNCTION(Category = Input, BlueprintNativeEvent)
+	UFUNCTION(Category = RBM, BlueprintNativeEvent)
 	void speedup();
 
 	virtual void Tick(float DeltaTime) override;

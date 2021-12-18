@@ -41,6 +41,10 @@ void ASN4K3PassiveAbilityHead::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, increasedDamageCoefficients);
 
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, moreDamageCoefficients);
+
+	DOREPLIFETIME(ASN4K3PassiveAbilityHead, cooldown);
+
+	DOREPLIFETIME(ASN4K3PassiveAbilityHead, currentCooldown);
 }
 
 bool ASN4K3PassiveAbilityHead::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -54,6 +58,11 @@ bool ASN4K3PassiveAbilityHead::ReplicateSubobjects(UActorChannel* Channel, FOutB
 
 void ASN4K3PassiveAbilityHead::explode()
 {
+	if (currentCooldown != 0.0f)
+	{
+		return;
+	}
+
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
 	TArray<AActor*> tem;
 
@@ -73,6 +82,8 @@ void ASN4K3PassiveAbilityHead::explode()
 			characterHit.Component = character->GetMesh();
 			characterHit.Location = character->GetActorLocation();
 
+			// TODO: Expire event
+
 			USN4K3ResurrectDeathEvent* resurrect = NewObject<USN4K3ResurrectDeathEvent>(character);
 
 			resurrect->initDeathEvent(character);
@@ -84,6 +95,8 @@ void ASN4K3PassiveAbilityHead::explode()
 			character->statusInflictorImpactAction(this, characterHit);
 		}
 	}
+
+	currentCooldown = cooldown;
 }
 
 void ASN4K3PassiveAbilityHead::explodeVFX()
@@ -101,7 +114,8 @@ void ASN4K3PassiveAbilityHead::explodeVFX()
 	);
 }
 
-ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead()
+ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
+	currentCooldown(0.0f)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -136,6 +150,14 @@ void ASN4K3PassiveAbilityHead::speedup_Implementation()
 void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (HasAuthority())
+	{
+		if (currentCooldown != 0.0f)
+		{
+			currentCooldown = FMath::Max(0.0f, currentCooldown - DeltaTime);
+		}
+	}
 }
 
 typeOfDamage ASN4K3PassiveAbilityHead::getDamageType() const
