@@ -31,6 +31,8 @@ public:
 
 	static float fromPercent(float percent);
 
+	static TSubclassOf<class ABaseDrone> findDrone(const TArray<const class UBaseDroneDataAsset*>& drones, const TSubclassOf<class ABaseDrone>& drone);
+
 	template<typename T>
 	static bool checkChanceProc(const T& chance);
 

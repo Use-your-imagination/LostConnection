@@ -35,18 +35,18 @@ USN4K3SecondAbility::USN4K3SecondAbility() :
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
-void USN4K3SecondAbility::setTarget(ABaseCharacter* target)
+void USN4K3SecondAbility::initDeathEvent(IDeathEventsHolder* holder)
 {
-	IDeathEventsHolder* holder = this->getDeathEventsHolder();
+	IDeathEventsHolder* currentHolder = this->getDeathEventsHolder();
 
-	this->target = target;
-
-	if (holder)
+	if (currentHolder)
 	{
-		holder->detachDeathEvent(this);
+		currentHolder->detachDeathEvent(this);
 	}
 
-	if (this->target.IsValid())
+	target = Cast<ABaseCharacter>(holder);
+
+	if (target.IsValid())
 	{
 		Cast<IDeathEventsHolder>(target)->attachDeathEvent(this);
 	}

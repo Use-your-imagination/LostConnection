@@ -21,6 +21,8 @@ class LOSTCONNECTION_API IOnDeathEvent
 public:
 	IOnDeathEvent() = default;
 
+	virtual void initDeathEvent(class IDeathEventsHolder* holder) = 0;
+
 	virtual void deathEventAction() = 0;
 
 	virtual class IDeathEventsHolder* getDeathEventsHolder() const = 0;

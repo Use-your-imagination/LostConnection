@@ -76,7 +76,7 @@ float ULostConnectionAssetManager::getCurrentPercentLoading() const
 	return Utility::toPercent(current / allAssets);
 }
 
-const UClass* ULostConnectionAssetManager::operator [] (typeOfDamage damageType) const
+const TSubclassOf<UBaseStatus>& ULostConnectionAssetManager::operator [] (typeOfDamage damageType) const
 {
 	UStatusesDataAsset& asset = *GetPrimaryAssetObject<UStatusesDataAsset>(UStatusesDataAsset::getPrimaryAssetId());
 

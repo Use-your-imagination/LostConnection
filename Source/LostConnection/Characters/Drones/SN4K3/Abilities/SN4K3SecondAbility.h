@@ -40,7 +40,7 @@ private:
 public:
 	USN4K3SecondAbility();
 
-	void setTarget(class ABaseCharacter* target);
+	void initDeathEvent(class IDeathEventsHolder* holder) override;
 
 	float getDistance() const;
 

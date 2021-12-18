@@ -58,6 +58,10 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 void ASN4K3::deathLogic()
 {
 	passiveAbility->useAbility();
+
+	// TODO: Fix UI after destroy
+
+	// Destroy();
 }
 
 ASN4K3::ASN4K3()
@@ -111,7 +115,7 @@ bool ASN4K3::checkSecondAbilityCast() const
 
 	if (result)
 	{
-		ability->setTarget(target);
+		ability->initDeathEvent(target);
 	}
 
 	return result;

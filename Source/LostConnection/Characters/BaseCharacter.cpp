@@ -672,7 +672,7 @@ float ABaseCharacter::getPercentageDamageReduction_Implementation() const
 
 float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) const
 {
-	// TODO: add shields
+	// TODO: Add shields
 	float pool = health;
 	
 	return Utility::toPercent(1.0f - (pool - inflictor->calculateTotalDamage()) / pool);

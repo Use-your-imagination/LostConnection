@@ -71,7 +71,7 @@ public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	float getCurrentPercentLoading() const;
 
-	const UClass* operator [] (typeOfDamage damageType) const;
+	const TSubclassOf<class UBaseStatus>& operator [] (typeOfDamage damageType) const;
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	TSubclassOf<class UBaseWeapon> getWeaponClass(TSubclassOf<class UBaseWeapon> weapon) const;

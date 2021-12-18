@@ -10,6 +10,7 @@
 #include "Utility/InitializationUtility.h"
 #include "Ammo/BaseAmmo.h"
 #include "Utility/MultiplayerUtility.h"
+#include "SN4K3ResurrectDeathEvent.h"
 
 void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -18,8 +19,8 @@ void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* Player
 	FInputActionBinding pressExplosion("Shoot", IE_Pressed);
 	FInputActionBinding pressSprint("Zoom", IE_Pressed);
 
-	pressExplosion.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "explode"); });
-	pressSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "speedup"); });
+	pressExplosion.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "explode"); });
+	pressSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "speedup"); });
 
 	PlayerInputComponent->AddActionBinding(pressExplosion);
 	PlayerInputComponent->AddActionBinding(pressSprint);
@@ -56,8 +57,6 @@ void ASN4K3PassiveAbilityHead::explode()
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
 	TArray<AActor*> tem;
 
-	// TODO: add list of affected actors to player state, if killed by swarm then resurrect SN4K3
-
 	this->explodeVFX();
 
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), mesh->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
@@ -73,6 +72,12 @@ void ASN4K3PassiveAbilityHead::explode()
 			characterHit.Actor = character;
 			characterHit.Component = character->GetMesh();
 			characterHit.Location = character->GetActorLocation();
+
+			USN4K3ResurrectDeathEvent* resurrect = NewObject<USN4K3ResurrectDeathEvent>(character);
+
+			resurrect->initDeathEvent(character);
+
+			resurrect->initHead(this);
 
 			character->takeDamage(this);
 

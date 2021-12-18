@@ -11,7 +11,7 @@
 class LOSTCONNECTION_API FLoadAssetsDelayAction : public FPendingLatentAction
 {
 private:
-	const TSharedPtr<FStreamableHandle>& handle;
+	TSharedPtr<FStreamableHandle> handle;
 	FName executionFunction;
 	int32 outputLink;
 	FWeakObjectPtr callbackTarget;

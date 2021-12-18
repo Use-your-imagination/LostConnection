@@ -7,6 +7,8 @@
 
 #include "Interfaces/Gameplay/Statuses/Base/StatusReceiver.h"
 #include "Statuses/BaseStatus.h"
+#include "Characters/BaseDrone.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 
 ALostConnectionGameState* Utility::getGameState(APawn* pawn)
 {
@@ -63,4 +65,23 @@ FText Utility::getFTextFromFloat(float value)
 	}
 
 	return FText::FromString(MoveTemp(stringValue));
+}
+
+TSubclassOf<ABaseDrone> Utility::findDrone(const TArray<const UBaseDroneDataAsset*>& drones, const TSubclassOf<ABaseDrone>& drone)
+{
+	TSubclassOf<ABaseDrone> result;
+
+	for (const auto& i : drones)
+	{
+		const auto& tem = i->getDrone();
+
+		if (UKismetMathLibrary::ClassIsChildOf(tem, drone))
+		{
+			result = tem;
+
+			break;
+		}
+	}
+
+	return result;
 }

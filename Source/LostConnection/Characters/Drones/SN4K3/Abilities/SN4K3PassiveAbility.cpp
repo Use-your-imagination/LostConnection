@@ -8,7 +8,6 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Utility/InitializationUtility.h"
 #include "SN4K3UltimateAbility.h"
-#include "AssetLoading/LostConnectionAssetManager.h"
 
 void USN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
