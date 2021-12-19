@@ -7,6 +7,7 @@
 #include "Engine/DataAsset.h"
 #include "Blueprint/UserWidget.h"
 #include "Materials/Material.h"
+#include "UI/LostConnectionUI.h"
 
 #include "UIDataAsset.generated.h"
 
@@ -17,7 +18,7 @@ class LOSTCONNECTION_API UUIDataAsset : public UPrimaryDataAsset
 	
 private:
 	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UUserWidget> defaultUI;
+	TSubclassOf<ULostConnectionUI> defaultUI;
 
 	UPROPERTY(Category = Materials, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UMaterial* baseWeaponSelectorMaterial;
@@ -28,7 +29,7 @@ public:
 public:
 	UUIDataAsset() = default;
 
-	const TSubclassOf<UUserWidget>& getDefaultUI() const;
+	const TSubclassOf<ULostConnectionUI>& getDefaultUI() const;
 
 	UMaterial* getBaseWeaponSelectorMaterial() const;
 

@@ -32,20 +32,15 @@ void USN4K3ResurrectDeathEvent::deathEventAction()
 		return;
 	}
 
-	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(head.Get());
-	TSubclassOf<ABaseDrone> droneClass = Utility::findDroneClass(manager.getDrones(), ASN4K3::StaticClass());
-	UUserWidget* defaultUI = NewObject<UUserWidget>(playerState, manager.getUI()->getDefaultUI());
+	TSubclassOf<ABaseDrone> droneClass = Utility::findDroneClass(ULostConnectionAssetManager::get().getDrones(), ASN4K3::StaticClass());
+
+	Utility::getPlayerState(head.Get())->getCurrentUI()->RemoveFromViewport();
 
 	ASN4K3* drone = head->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3>(droneClass, head->GetActorTransform());
 
-	drone->FinishSpawning({}, true);
-
-	playerState->getCurrentUI()->RemoveFromViewport();
-
-	playerState->setCurrentUI(defaultUI)->AddToViewport();;
-
 	head->GetController()->Possess(drone);
+
+	drone->FinishSpawning({}, true);
 
 	head->Destroy();
 }

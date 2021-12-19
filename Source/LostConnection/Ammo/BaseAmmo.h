@@ -25,11 +25,6 @@ private:
 	TWeakObjectPtr<class ABaseCharacter> owner;
 
 protected:
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
-
-protected:
 	UFUNCTION()
 	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -37,7 +32,7 @@ protected:
 	UPROPERTY(Category = Components, BlueprintReadOnly)
 	UStaticMeshComponent* mesh;
 
-	UPROPERTY(Category = Movement, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Movement, BlueprintReadOnly)
 	UProjectileMovementComponent* movement;
 	
 	UPROPERTY(Category = Particles, BlueprintReadOnly)

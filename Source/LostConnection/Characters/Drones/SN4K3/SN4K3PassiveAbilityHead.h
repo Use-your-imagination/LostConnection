@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Pawn.h"
-#include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/PlayerInput.h"
 #include "Net/UnrealNetwork.h"
 #include "NiagaraSystem.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 #include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
 
@@ -24,13 +24,13 @@ class LOSTCONNECTION_API ASN4K3PassiveAbilityHead :
 
 private:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UCapsuleComponent* capsule;
+	USphereComponent* sphere;
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* mesh;
 
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"))
-	UCharacterMovementComponent* movement;
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UFloatingPawnMovement* movement;
 
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* explosionParticles;
@@ -64,8 +64,6 @@ protected:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
-
 private:
 	UFUNCTION()
 	void explode();
@@ -75,8 +73,10 @@ private:
 public:	
 	ASN4K3PassiveAbilityHead();
 
-	UFUNCTION(Category = RBM, BlueprintNativeEvent)
+	UFUNCTION(Category = RBM, BlueprintNativeEvent, BlueprintCallable)
 	void speedup();
+
+	virtual UPawnMovementComponent* GetMovementComponent() const final override;
 
 	virtual void Tick(float DeltaTime) override;
 

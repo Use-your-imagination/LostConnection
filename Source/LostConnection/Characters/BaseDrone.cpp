@@ -343,6 +343,13 @@ void ABaseDrone::BeginPlay()
 {
 	Super::BeginPlay();
 
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, ULostConnectionAssetManager::get().getUI()->getDefaultUI());
+
+	defaultUI->init(this);
+
+	playerState->setCurrentUI(defaultUI)->AddToViewport();
+
 	if (HasAuthority())
 	{
 		timers.addTimer([this]()

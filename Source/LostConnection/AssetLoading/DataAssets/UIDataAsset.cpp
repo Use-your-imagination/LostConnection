@@ -8,7 +8,7 @@ FPrimaryAssetId UUIDataAsset::getPrimaryAssetId()
 	return FPrimaryAssetId(FPrimaryAssetType("UI"), "UI");
 }
 
-const TSubclassOf<UUserWidget>& UUIDataAsset::getDefaultUI() const
+const TSubclassOf<ULostConnectionUI>& UUIDataAsset::getDefaultUI() const
 {
 	return defaultUI;
 }

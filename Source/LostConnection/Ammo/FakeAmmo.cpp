@@ -7,22 +7,6 @@
 
 #include "Constants/Constants.h"
 
-void AFakeAmmo::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(AFakeAmmo, movement);
-}
-
-bool AFakeAmmo::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(movement, *Bunch, *RepFlags);
-
-	return wroteSomething;
-}
-
 AFakeAmmo::AFakeAmmo()
 {	
 	PrimaryActorTick.bCanEverTick = false;

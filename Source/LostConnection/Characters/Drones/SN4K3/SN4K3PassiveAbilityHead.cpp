@@ -47,15 +47,6 @@ void ASN4K3PassiveAbilityHead::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, currentCooldown);
 }
 
-bool ASN4K3PassiveAbilityHead::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(movement, *Bunch, *RepFlags);
-
-	return wroteSomething;
-}
-
 void ASN4K3PassiveAbilityHead::explode()
 {
 	if (currentCooldown != 0.0f)
@@ -121,23 +112,23 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 
-	capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	movement = CreateDefaultSubobject<UCharacterMovementComponent>(TEXT("Movement"));
+	movement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("Movement"));
+	
+	SetRootComponent(sphere);
 
-	SetRootComponent(capsule);
-
-	mesh->SetupAttachment(capsule);
-
+	mesh->SetupAttachment(sphere);
+	
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-
+	
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Ignore);
-
+	
 	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
-
+	
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
-	movement->SetUpdatedComponent(capsule);
+	movement->SetUpdatedComponent(sphere);
 
 	movement->SetIsReplicated(true);
 }
@@ -145,6 +136,11 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 void ASN4K3PassiveAbilityHead::speedup_Implementation()
 {
 
+}
+
+UPawnMovementComponent* ASN4K3PassiveAbilityHead::GetMovementComponent() const
+{
+	return movement;
 }
 
 void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
