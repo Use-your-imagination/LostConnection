@@ -68,7 +68,7 @@ void ASN4K3::deathLogic()
 
 	passiveAbility->useAbility();
 
-	Destroy();
+	// Destroy();
 }
 
 ASN4K3::ASN4K3()
