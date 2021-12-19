@@ -44,6 +44,11 @@ bool ULostConnectionAssetManager::loadDronesPreview(UObject* worldContext, FLate
 	return this->latentLoadAsset<UDronesPreviewDataAsset>(worldContext, info);
 }
 
+bool ULostConnectionAssetManager::loadUI(UObject* worldContext, FLatentActionInfo info)
+{
+	return this->latentLoadAsset<UUIDataAsset>(worldContext, info);
+}
+
 void ULostConnectionAssetManager::unloadDronesPreview()
 {
 	this->unloadAsset<UDronesPreviewDataAsset>();
@@ -95,6 +100,11 @@ const TArray<TSubclassOf<UBaseWeapon>>& ULostConnectionAssetManager::getWeapons(
 	UWeaponsDataAsset& asset = *GetPrimaryAssetObject<UWeaponsDataAsset>(UWeaponsDataAsset::getPrimaryAssetId());
 
 	return asset.getWeapons();
+}
+
+UUIDataAsset* ULostConnectionAssetManager::getUI() const
+{
+	return GetPrimaryAssetObject<UUIDataAsset>(assets[UUIDataAsset::StaticClass()]);
 }
 
 const UStatusesDataAsset& ULostConnectionAssetManager::getStatuses() const

@@ -67,7 +67,7 @@ FText Utility::getFTextFromFloat(float value)
 	return FText::FromString(MoveTemp(stringValue));
 }
 
-TSubclassOf<ABaseDrone> Utility::findDrone(const TArray<const UBaseDroneDataAsset*>& drones, const TSubclassOf<ABaseDrone>& drone)
+TSubclassOf<ABaseDrone> Utility::findDroneClass(const TArray<const UBaseDroneDataAsset*>& drones, const TSubclassOf<ABaseDrone>& drone)
 {
 	TSubclassOf<ABaseDrone> result;
 

@@ -62,6 +62,9 @@ public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
 	UPARAM(DisplayName = IsAlreadyLoaded) bool loadDronesPreview(UObject* worldContext, FLatentActionInfo info);
 
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadUI(UObject* worldContext, FLatentActionInfo info);
+
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	void unloadDronesPreview();
 
@@ -79,6 +82,9 @@ public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	const TArray<TSubclassOf<class UBaseWeapon>>& getWeapons() const;
 
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	UUIDataAsset* getUI() const;
+
 	const UStatusesDataAsset& getStatuses() const;
 
 	const UBaseActDataAsset& getCurrentAct() const;
@@ -89,19 +95,23 @@ public:
 
 	~ULostConnectionAssetManager() = default;
 
+#pragma region Drones
 public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
 	UPARAM(DisplayName = IsAlreadyLoaded) bool loadSN4K3Drone(UObject* worldContext, FLatentActionInfo info);
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	void unloadSN4K3Drone();
+#pragma endregion
 
+#pragma region Acts
 public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
 	UPARAM(DisplayName = IsAlreadyLoaded) bool loadRuinedCityAct(UObject* worldContext, FLatentActionInfo info);
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	void unloadRuinedCityAct();
+#pragma endregion
 };
 
 inline ULostConnectionAssetManager& ULostConnectionAssetManager::get()

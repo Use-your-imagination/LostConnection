@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 
 #include "Algo/AnyOf.h"
-
 #include "GameFramework/Pawn.h"
 
 #include "Engine/LostConnectionGameState.h"
@@ -31,7 +30,7 @@ public:
 
 	static float fromPercent(float percent);
 
-	static TSubclassOf<class ABaseDrone> findDrone(const TArray<const class UBaseDroneDataAsset*>& drones, const TSubclassOf<class ABaseDrone>& drone);
+	static TSubclassOf<class ABaseDrone> findDroneClass(const TArray<const class UBaseDroneDataAsset*>& drones, const TSubclassOf<class ABaseDrone>& drone);
 
 	template<typename T>
 	static bool checkChanceProc(const T& chance);
@@ -44,6 +43,9 @@ public:
 
 	template<typename T>
 	static const T& getRandomValueFromArray(const TArray<T>& values);
+
+	template<typename T>
+	static const T* findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones);
 };
 
 inline float Utility::toPercent(float coefficient)
@@ -82,4 +84,22 @@ const T& Utility::getRandomValueFromArray(const TArray<T>& values)
 	check(values.Num() != 0);
 
 	return values[FMath::RandRange(0, values.Num() - 1)];
+}
+
+template<typename T>
+static const T* Utility::findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones)
+{
+	TSubclassOf<class UBaseDroneDataAsset> data = T::StaticClass();
+
+	for (const auto& i : drones)
+	{
+		const T* tem = Cast<const T>(i);
+
+		if (tem)
+		{
+			return tem;
+		}
+	}
+
+	return nullptr;
 }

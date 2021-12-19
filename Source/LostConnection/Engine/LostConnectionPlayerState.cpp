@@ -5,13 +5,13 @@
 void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ALostConnectionPlayerState, currentUI);
 }
 
-void ALostConnectionPlayerState::setCurrentUI_Implementation(UUserWidget* widget)
+UUserWidget* ALostConnectionPlayerState::setCurrentUI(UUserWidget* widget)
 {
 	currentUI = widget;
+
+	return currentUI;
 }
 
 UUserWidget* ALostConnectionPlayerState::getCurrentUI() const

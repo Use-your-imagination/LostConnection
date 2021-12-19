@@ -67,6 +67,7 @@ protected:
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 private:
+	UFUNCTION()
 	void explode();
 
 	void explodeVFX();

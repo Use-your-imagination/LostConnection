@@ -32,18 +32,18 @@ void USN4K3ResurrectDeathEvent::deathEventAction()
 		return;
 	}
 
-	TSubclassOf<ABaseDrone> droneClass = Utility::findDrone(ULostConnectionAssetManager::get().getDrones(), ASN4K3::StaticClass());
-
-	if (!droneClass)
-	{
-		UE_LOG(LogTemp, Error, L"Can't find drone class");
-
-		return;
-	}
+	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(head.Get());
+	TSubclassOf<ABaseDrone> droneClass = Utility::findDroneClass(manager.getDrones(), ASN4K3::StaticClass());
+	UUserWidget* defaultUI = NewObject<UUserWidget>(playerState, manager.getUI()->getDefaultUI());
 
 	ASN4K3* drone = head->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3>(droneClass, head->GetActorTransform());
 
 	drone->FinishSpawning({}, true);
+
+	playerState->getCurrentUI()->RemoveFromViewport();
+
+	playerState->setCurrentUI(defaultUI)->AddToViewport();;
 
 	head->GetController()->Possess(drone);
 

@@ -18,7 +18,7 @@ class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Category = UI, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = UI, BlueprintReadOnly)
 	UUserWidget* currentUI;
 
 protected:
@@ -27,8 +27,8 @@ protected:
 public:
 	ALostConnectionPlayerState() = default;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void setCurrentUI(UUserWidget* widget);
+	UFUNCTION(BlueprintCallable)
+	UUserWidget* setCurrentUI(UUserWidget* widget);
 
 	UUserWidget* getCurrentUI() const;
 
