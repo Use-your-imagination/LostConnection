@@ -59,18 +59,22 @@ private:
 	UPROPERTY(Category = Cooldown, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float currentCooldown;
 
+	bool isExploded;
+
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 private:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void explode();
 
 	void explodeVFX();
 
-public:	
+	void destroyHead();
+
+public:
 	ASN4K3PassiveAbilityHead();
 
 	UFUNCTION(Category = RBM, BlueprintNativeEvent, BlueprintCallable)

@@ -8,6 +8,7 @@ AssetsCollection::AssetsCollection()
 	loadData.Add(AssetsCollection::getCreationData<UDronesPreviewDataAsset>());
 	loadData.Add(AssetsCollection::getCreationData<UWeaponsDataAsset>());
 	loadData.Add(AssetsCollection::getCreationData<UUIDataAsset>());
+	loadData.Add(AssetsCollection::getCreationData<UDefaultsDataAsset>());
 
 	loadData.Add(AssetsCollection::getCreationData<USN4K3DataAsset>());
 

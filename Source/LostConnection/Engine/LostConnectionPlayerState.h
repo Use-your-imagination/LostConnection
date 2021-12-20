@@ -25,7 +25,7 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	ALostConnectionPlayerState() = default;
+	ALostConnectionPlayerState();
 
 	UFUNCTION(BlueprintCallable)
 	UUserWidget* setCurrentUI(UUserWidget* widget);

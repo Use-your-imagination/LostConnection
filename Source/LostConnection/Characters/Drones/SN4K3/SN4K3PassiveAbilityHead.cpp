@@ -11,6 +11,8 @@
 #include "Ammo/BaseAmmo.h"
 #include "Utility/MultiplayerUtility.h"
 #include "SN4K3ResurrectDeathEvent.h"
+#include "WorldPlaceables/DeathPlaceholder.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 
 void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -88,6 +90,8 @@ void ASN4K3PassiveAbilityHead::explode()
 	}
 
 	currentCooldown = cooldown;
+
+	isExploded = true;
 }
 
 void ASN4K3PassiveAbilityHead::explodeVFX()
@@ -105,8 +109,22 @@ void ASN4K3PassiveAbilityHead::explodeVFX()
 	);
 }
 
+void ASN4K3PassiveAbilityHead::destroyHead()
+{
+	Utility::getPlayerState(this)->getCurrentUI()->RemoveFromViewport();
+
+	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(ULostConnectionAssetManager::get().getDefaults().getDeathPlaceholder(), {});
+
+	GetController()->Possess(placeholder);
+
+	placeholder->FinishSpawning({ FRotator::ZeroRotator, GetActorLocation() });
+
+	Destroy();
+}
+
 ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
-	currentCooldown(0.0f)
+	currentCooldown(0.0f),
+	isExploded(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -115,17 +133,19 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 	sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	movement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("Movement"));
-	
+
 	SetRootComponent(sphere);
 
 	mesh->SetupAttachment(sphere);
-	
+
+	mesh->SetGenerateOverlapEvents(true);
+
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-	
+
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Ignore);
-	
+
 	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
-	
+
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
 	movement->SetUpdatedComponent(sphere);
@@ -149,6 +169,13 @@ void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
+		if (isExploded)
+		{
+			this->destroyHead();
+
+			return;
+		}
+
 		if (currentCooldown != 0.0f)
 		{
 			currentCooldown = FMath::Max(0.0f, currentCooldown - DeltaTime);

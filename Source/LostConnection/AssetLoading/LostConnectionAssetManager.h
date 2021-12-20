@@ -65,6 +65,9 @@ public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
 	UPARAM(DisplayName = IsAlreadyLoaded) bool loadUI(UObject* worldContext, FLatentActionInfo info);
 
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadDefaults(UObject* worldContext, FLatentActionInfo info);
+
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	void unloadDronesPreview();
 
@@ -82,12 +85,13 @@ public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	const TArray<TSubclassOf<class UBaseWeapon>>& getWeapons() const;
 
-	UFUNCTION(Category = AssetLoading, BlueprintCallable)
-	UUIDataAsset* getUI() const;
-
 	const UStatusesDataAsset& getStatuses() const;
 
 	const UBaseActDataAsset& getCurrentAct() const;
+
+	const UUIDataAsset& getUI() const;
+
+	const UDefaultsDataAsset& getDefaults() const;
 
 	TArray<const FDronePreview*> getDronesPreview() const;
 

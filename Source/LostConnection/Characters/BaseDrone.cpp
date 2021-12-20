@@ -344,7 +344,7 @@ void ABaseDrone::BeginPlay()
 	Super::BeginPlay();
 
 	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, ULostConnectionAssetManager::get().getUI()->getDefaultUI());
+	ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, ULostConnectionAssetManager::get().getUI().getDefaultUI());
 
 	defaultUI->init(this);
 
