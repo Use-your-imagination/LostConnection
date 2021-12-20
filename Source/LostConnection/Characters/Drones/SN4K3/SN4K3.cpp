@@ -103,9 +103,24 @@ const TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder>& ASN4K3::getUltimatePlace
 	return ultimatePlaceholder;
 }
 
+bool ASN4K3::checkPassiveAbilityCast() const
+{
+	if (!Super::checkPassiveAbilityCast())
+	{
+		return false;
+	}
+
+	return Cast<USN4K3PassiveAbility>(passiveAbility)->isUsable();
+}
+
 bool ASN4K3::checkSecondAbilityCast() const
 {
-	bool result = ABaseDrone::checkSecondAbilityCast();
+	if (!Super::checkSecondAbilityCast())
+	{
+		return false;
+	}
+
+	bool result = false;
 	FHitResult hit;
 	UWorld* world = this->GetWorld();
 	ABaseCharacter* target = nullptr;
@@ -130,11 +145,12 @@ bool ASN4K3::checkSecondAbilityCast() const
 
 bool ASN4K3::checkThirdAbilityCast() const
 {
-	bool result = ABaseDrone::checkThirdAbilityCast();
+	if (!Super::checkThirdAbilityCast())
+	{
+		return false;
+	}
 
-	result &= thirdAbilityReservator && thirdAbilityReservator->IsValidLowLevelFast() && !Cast<USN4K3ThirdAbility>(thirdAbility)->getIsFlagExist();
-
-	return result;
+	return thirdAbilityReservator && thirdAbilityReservator->IsValidLowLevelFast() && !Cast<USN4K3ThirdAbility>(thirdAbility)->getIsFlagExist();
 }
 
 bool ASN4K3::checkUltimateAbilityCast() const
@@ -150,5 +166,5 @@ bool ASN4K3::checkUltimateAbilityCast() const
 		return false;
 	}
 
-	return ABaseDrone::checkUltimateAbilityCast();
+	return Super::checkUltimateAbilityCast();
 }

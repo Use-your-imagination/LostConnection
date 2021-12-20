@@ -46,6 +46,9 @@ public:
 
 	template<typename T>
 	static const T* findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones);
+
+	template<typename T>
+	static void processCooldown(T* cooldownableObject, float DeltaTime);
 };
 
 inline float Utility::toPercent(float coefficient)
@@ -87,7 +90,7 @@ const T& Utility::getRandomValueFromArray(const TArray<T>& values)
 }
 
 template<typename T>
-static const T* Utility::findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones)
+const T* Utility::findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones)
 {
 	TSubclassOf<class UBaseDroneDataAsset> data = T::StaticClass();
 
@@ -102,4 +105,15 @@ static const T* Utility::findDroneAsset(const TArray<const class UBaseDroneDataA
 	}
 
 	return nullptr;
+}
+
+template<typename T>
+inline void Utility::processCooldown(T* cooldownableObject, float DeltaTime)
+{
+	class ICooldownable* tem = Cast<class ICooldownable>(cooldownableObject);
+
+	if (tem)
+	{
+		tem->processCooldown(DeltaTime);
+	}
 }

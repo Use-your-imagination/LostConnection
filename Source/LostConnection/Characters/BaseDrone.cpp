@@ -384,18 +384,9 @@ void ABaseDrone::Tick(float DeltaTime)
 			secondaryWeaponSlot->Tick(DeltaTime);
 		}
 
-		if (slideCooldown > 0.0f)
+		if (slideCooldown != 0.0f)
 		{
-			float tem = slideCooldown - DeltaTime;
-
-			if (tem < 0.0)
-			{
-				slideCooldown = 0.0f;
-			}
-			else
-			{
-				slideCooldown = tem;
-			}
+			slideCooldown = FMath::Max(0.0f, slideCooldown - DeltaTime);
 		}
 
 		passiveAbility->Tick(DeltaTime);
@@ -403,6 +394,12 @@ void ABaseDrone::Tick(float DeltaTime)
 		secondAbility->Tick(DeltaTime);
 		thirdAbility->Tick(DeltaTime);
 		ultimateAbility->Tick(DeltaTime);
+
+		Utility::processCooldown(passiveAbility, DeltaTime);
+		Utility::processCooldown(firstAbility, DeltaTime);
+		Utility::processCooldown(secondAbility, DeltaTime);
+		Utility::processCooldown(thirdAbility, DeltaTime);
+		Utility::processCooldown(ultimateAbility, DeltaTime);
 	}
 }
 

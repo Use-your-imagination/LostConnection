@@ -43,19 +43,10 @@ void ASN4K3PassiveAbilityHead::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, increasedDamageCoefficients);
 
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, moreDamageCoefficients);
-
-	DOREPLIFETIME(ASN4K3PassiveAbilityHead, cooldown);
-
-	DOREPLIFETIME(ASN4K3PassiveAbilityHead, currentCooldown);
 }
 
 void ASN4K3PassiveAbilityHead::explode()
 {
-	if (currentCooldown != 0.0f)
-	{
-		return;
-	}
-
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
 	TArray<AActor*> tem;
 
@@ -89,8 +80,6 @@ void ASN4K3PassiveAbilityHead::explode()
 		}
 	}
 
-	currentCooldown = cooldown;
-
 	isExploded = true;
 }
 
@@ -123,7 +112,6 @@ void ASN4K3PassiveAbilityHead::destroyHead()
 }
 
 ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
-	currentCooldown(0.0f),
 	isExploded(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -174,11 +162,6 @@ void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
 			this->destroyHead();
 
 			return;
-		}
-
-		if (currentCooldown != 0.0f)
-		{
-			currentCooldown = FMath::Max(0.0f, currentCooldown - DeltaTime);
 		}
 	}
 }

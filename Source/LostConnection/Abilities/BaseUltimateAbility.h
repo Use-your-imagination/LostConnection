@@ -5,11 +5,14 @@
 #include "CoreMinimal.h"
 
 #include "BaseAbility.h"
+#include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
 
 #include "BaseUltimateAbility.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UBaseUltimateAbility : public UBaseAbility
+class LOSTCONNECTION_API UBaseUltimateAbility : 
+	public UBaseAbility,
+	public ICooldownable
 {
 	GENERATED_BODY()
 	
@@ -26,15 +29,13 @@ protected:
 public:
 	UBaseUltimateAbility();
 
-	virtual float getCooldown() const final;
-
-	virtual float getCurrentCooldown() const final;
-
 	virtual void applyAbility(class ABaseCharacter* target) override;
 
 	virtual void useAbility() override;
 
-	virtual void Tick(float DeltaTime) override;
+	virtual float getCooldown() const final override;
+
+	virtual float& getCurrentCooldown() final override;
 
 	virtual ~UBaseUltimateAbility() = default;
 };

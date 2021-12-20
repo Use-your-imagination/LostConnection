@@ -18,16 +18,6 @@ UBaseUltimateAbility::UBaseUltimateAbility()
 
 }
 
-float UBaseUltimateAbility::getCooldown() const
-{
-	return cooldown;
-}
-
-float UBaseUltimateAbility::getCurrentCooldown() const
-{
-	return currentCooldown;
-}
-
 void UBaseUltimateAbility::applyAbility(ABaseCharacter* target)
 {
 	PURE_VIRTUAL(UBaseUltimateAbility::applyAbility)
@@ -35,20 +25,15 @@ void UBaseUltimateAbility::applyAbility(ABaseCharacter* target)
 
 void UBaseUltimateAbility::useAbility()
 {
-	currentCooldown = cooldown;
+	this->startCooldown();
 }
 
-void UBaseUltimateAbility::Tick(float DeltaTime)
+float UBaseUltimateAbility::getCooldown() const
 {
-	Super::Tick(DeltaTime);
+	return cooldown;
+}
 
-	if (currentCooldown > 0.0f)
-	{
-		currentCooldown -= DeltaTime;
-
-		if (currentCooldown < 0.0f)
-		{
-			currentCooldown = 0.0f;
-		}
-	}
+float& UBaseUltimateAbility::getCurrentCooldown()
+{
+	return currentCooldown;
 }

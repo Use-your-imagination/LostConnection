@@ -46,6 +46,8 @@ public:
 
 	const TWeakObjectPtr<class ASN4K3UltimateAbilityPlaceholder>& getUltimatePlaceholder() const;
 
+	virtual bool checkPassiveAbilityCast() const override;
+
 	virtual bool checkSecondAbilityCast() const override;
 
 	virtual bool checkThirdAbilityCast() const override;

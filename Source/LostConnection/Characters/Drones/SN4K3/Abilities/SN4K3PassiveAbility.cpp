@@ -95,3 +95,13 @@ void USN4K3PassiveAbility::Tick(float DeltaTime)
 		break;
 	}
 }
+
+float USN4K3PassiveAbility::getCooldown() const
+{
+	return cooldown;
+}
+
+float& USN4K3PassiveAbility::getCurrentCooldown()
+{
+	return currentCooldown;
+}

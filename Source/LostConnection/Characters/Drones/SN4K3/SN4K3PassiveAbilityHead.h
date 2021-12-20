@@ -53,12 +53,6 @@ private:
 	UPROPERTY(Category = DamageInflictor, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<float> moreDamageCoefficients;
 
-	UPROPERTY(Category = Cooldown, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float cooldown;
-
-	UPROPERTY(Category = Cooldown, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float currentCooldown;
-
 	bool isExploded;
 
 protected:
