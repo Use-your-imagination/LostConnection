@@ -13,8 +13,6 @@
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Interfaces/Gameplay/Actions/InputActions.h"
-#include "Interfaces/Gameplay/Modules/Holders/MainModulesHolder.h"
-#include "Interfaces/Gameplay/Modules/Holders/WeaponModulesHolder.h"
 
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbilityCast.h"
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbilityCast.h"
@@ -45,12 +43,6 @@ protected:
 
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
 	UCameraComponent* FollowCamera;
-
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	UBaseWeapon* primaryWeaponSlot;
-
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	UBaseWeapon* secondaryWeaponSlot;
 
 private:
 	virtual TArray<FInputActionBinding> initInputs();
@@ -107,12 +99,6 @@ protected:
 
 	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<UAnimMontage*> abilitiesAnimations;
-
-	UPROPERTY(Category = Modules, Replicated, BlueprintReadOnly)
-	TArray<UObject*> mainModules;
-
-	UPROPERTY(Category = Modules, Replicated, BlueprintReadOnly)
-	TArray<UObject*> weaponModules;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, BlueprintReadWrite)
@@ -278,8 +264,10 @@ public:
 	UFUNCTION()
 	virtual void action() final;
 
+	UFUNCTION(Category = Weapons, BlueprintCallable)
 	virtual UBaseWeapon* getPrimaryWeapon() final;
 
+	UFUNCTION(Category = Weapons, BlueprintCallable)
 	virtual UBaseWeapon* getSecondaryWeapon() final;
 
 	virtual USpringArmComponent* GetCameraOffset() const final;
@@ -363,8 +351,10 @@ public:
 
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 
+	UFUNCTION(Category = Modules, BlueprintCallable)
 	virtual const TArray<UObject*>& getMainModules() const final override;
 
+	UFUNCTION(Category = Modules, BlueprintCallable)
 	virtual const TArray<UObject*>& getWeaponModules() const final override;
 
 #pragma region PassiveAbility

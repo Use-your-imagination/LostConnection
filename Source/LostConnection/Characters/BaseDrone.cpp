@@ -9,7 +9,6 @@
 #include "GameFramework/PlayerInput.h"
 #include "Algo/Find.h"
 
-#include "Engine/LostConnectionPlayerState.h"
 #include "Engine/LostConnectionGameState.h"
 #include "Weapons/SubmachineGuns/Hipter.h"
 #include "Weapons/Pistols/Gauss.h"
@@ -213,24 +212,12 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(ABaseDrone, ultimateAbility);
 
-	DOREPLIFETIME(ABaseDrone, primaryWeaponSlot);
-
-	DOREPLIFETIME(ABaseDrone, secondaryWeaponSlot);
-
 	DOREPLIFETIME(ABaseDrone, slideCooldown);
-
-	DOREPLIFETIME(ABaseDrone, mainModules);
-
-	DOREPLIFETIME(ABaseDrone, weaponModules);
 }
 
 bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(primaryWeaponSlot, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(secondaryWeaponSlot, *Bunch, *RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
 
@@ -374,14 +361,18 @@ void ABaseDrone::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
-		if (primaryWeaponSlot)
+		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+		UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();
+		UBaseWeapon* secondaryWeapon = playerState->getSecondaryWeapon();
+
+		if (primaryWeapon)
 		{
-			primaryWeaponSlot->Tick(DeltaTime);
+			primaryWeapon->Tick(DeltaTime);
 		}
 
-		if (secondaryWeaponSlot)
+		if (secondaryWeapon)
 		{
-			secondaryWeaponSlot->Tick(DeltaTime);
+			secondaryWeapon->Tick(DeltaTime);
 		}
 
 		if (slideCooldown != 0.0f)
@@ -513,8 +504,6 @@ void ABaseDrone::releaseWeaponSelector()
 }
 
 ABaseDrone::ABaseDrone() :
-	primaryWeaponSlot(nullptr),
-	secondaryWeaponSlot(nullptr),
 	energy(1000.0f),
 	currentEnergy(1000.0f),
 	energyRestorationPerSecond(5.0f),
@@ -590,44 +579,50 @@ void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primar
 {
 	if (!primaryWeapon)
 	{
-		UE_LOG(LogTemp, Warning, L"Primary weapon is null");
+		UE_LOG(LogTemp, Error, L"Primary weapon is null");
 
 		return;
 	}
 
-	primaryWeaponSlot = NewObject<UBaseWeapon>(this, primaryWeapon.Get());
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, primaryWeapon);
 
-	primaryWeaponSlot->setOwner(this);
+	weapon->setOwner(this);
 
-	primaryWeaponSlot->updateTimeBetweenShots();
+	weapon->updateTimeBetweenShots();
+
+	playerState->setPrimaryWeapon(weapon);
 }
 
 void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> secondaryWeapon)
 {
 	if (!secondaryWeapon)
 	{
-		UE_LOG(LogTemp, Warning, L"Secondary weapon is null");
+		UE_LOG(LogTemp, Error, L"Secondary weapon is null");
 
 		return;
 	}
 
-	secondaryWeaponSlot = NewObject<UBaseWeapon>(this, secondaryWeapon.Get());
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, secondaryWeapon);
 
-	secondaryWeaponSlot->setOwner(this);
+	weapon->setOwner(this);
 
-	secondaryWeaponSlot->updateTimeBetweenShots();
+	weapon->updateTimeBetweenShots();
+
+	playerState->setSecondaryWeapon(weapon);
 }
 
 void ABaseDrone::changeToPrimaryWeapon_Implementation()
 {
-	currentWeapon = primaryWeaponSlot;
+	currentWeapon = Utility::getPlayerState(this)->getPrimaryWeapon();
 
 	this->updateWeaponMesh();
 }
 
 void ABaseDrone::changeToSecondaryWeapon_Implementation()
 {
-	currentWeapon = secondaryWeaponSlot;
+	currentWeapon = Utility::getPlayerState(this)->getSecondaryWeapon();
 
 	this->updateWeaponMesh();
 }
@@ -641,7 +636,12 @@ void ABaseDrone::pickupAmmo_Implementation(ammoTypes type, int32 count)
 
 void ABaseDrone::dropWeapon_Implementation()
 {
-	if (!currentWeapon || currentWeapon == defaultWeaponSlot)
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();
+	UBaseWeapon* secondaryWeapon = playerState->getSecondaryWeapon();
+	UBaseWeapon* defaultWeapon = playerState->getDefaultWeapon();
+
+	if (!currentWeapon || currentWeapon == defaultWeapon)
 	{
 		return;
 	}
@@ -658,13 +658,13 @@ void ABaseDrone::dropWeapon_Implementation()
 
 	currentWeapon->setOwner(nullptr);
 
-	if (currentWeapon && currentWeapon == primaryWeaponSlot)
+	if (currentWeapon && currentWeapon == primaryWeapon)
 	{
-		currentWeapon = primaryWeaponSlot = nullptr;
+		currentWeapon = primaryWeapon = nullptr;
 	}
-	else if (currentWeapon && currentWeapon == secondaryWeaponSlot)
+	else if (currentWeapon && currentWeapon == secondaryWeapon)
 	{
-		currentWeapon = secondaryWeaponSlot = nullptr;
+		currentWeapon = secondaryWeapon = nullptr;
 	}
 
 	this->updateWeaponMesh();
@@ -674,6 +674,11 @@ void ABaseDrone::dropWeapon_Implementation()
 
 void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 {
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();
+	UBaseWeapon* secondaryWeapon = playerState->getSecondaryWeapon();
+	UBaseWeapon* defaultWeapon = playerState->getDefaultWeapon();
+
 	if (!weaponToEquip && !weaponToEquip->IsValidLowLevelFast())
 	{
 		return;
@@ -687,45 +692,45 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 	if (currentWeapon)
 	{
-		if (currentWeapon == primaryWeaponSlot)
+		if (currentWeapon == primaryWeapon)
 		{
 			this->dropWeapon();
 
-			primaryWeaponSlot = weapon;
+			playerState->setPrimaryWeapon(weapon);
 
 			this->changeToPrimaryWeapon();
 		}
-		else if (currentWeapon == secondaryWeaponSlot)
+		else if (currentWeapon == secondaryWeapon)
 		{
 			this->dropWeapon();
 
-			secondaryWeaponSlot = weapon;
+			playerState->setSecondaryWeapon(weapon);
 
 			this->changeToSecondaryWeapon();
 		}
 		else
 		{
-			if (!primaryWeaponSlot)
+			if (!primaryWeapon)
 			{
-				primaryWeaponSlot = weapon;
+				playerState->setPrimaryWeapon(weapon);
 			}
-			else if (!secondaryWeaponSlot)
+			else if (!secondaryWeapon)
 			{
-				secondaryWeaponSlot = weapon;
+				playerState->setSecondaryWeapon(secondaryWeapon);
 			}
 		}
 	}
 	else
 	{
-		if (!primaryWeaponSlot)
+		if (!primaryWeapon)
 		{
-			primaryWeaponSlot = weapon;
+			playerState->setPrimaryWeapon(weapon);
 
 			this->changeToPrimaryWeapon();
 		}
-		else if (!secondaryWeaponSlot)
+		else if (!secondaryWeapon)
 		{
-			secondaryWeaponSlot = weapon;
+			playerState->setSecondaryWeapon(weapon);
 
 			this->changeToSecondaryWeapon();
 		}
@@ -736,11 +741,13 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 void ABaseDrone::changeWeapon()
 {
-	if (currentWeapon == primaryWeaponSlot)
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+
+	if (currentWeapon == playerState->getPrimaryWeapon())
 	{
 		this->changeToSecondaryWeapon();
 	}
-	else if (currentWeapon == secondaryWeaponSlot)
+	else if (currentWeapon == playerState->getSecondaryWeapon())
 	{
 		this->changeToPrimaryWeapon();
 	}
@@ -785,12 +792,12 @@ void ABaseDrone::action()
 
 UBaseWeapon* ABaseDrone::getPrimaryWeapon()
 {
-	return primaryWeaponSlot;
+	return Utility::getPlayerState(this)->getPrimaryWeapon();
 }
 
 UBaseWeapon* ABaseDrone::getSecondaryWeapon()
 {
-	return secondaryWeaponSlot;
+	return Utility::getPlayerState(this)->getSecondaryWeapon();
 }
 
 FVector ABaseDrone::getStartActionLineTrace() const
@@ -815,12 +822,12 @@ void ABaseDrone::releaseShoot_Implementation()
 
 void ABaseDrone::addMainModule(IMainModule* module)
 {
-	mainModules.Add(module->_getUObject());
+	Utility::getPlayerState(this)->addMainModule(module);
 }
 
 void ABaseDrone::addWeaponModule(IWeaponModule* module)
 {
-	weaponModules.Add(module->_getUObject());
+	Utility::getPlayerState(this)->addWeaponModule(module);
 }
 
 float ABaseDrone::getFlatDamageReduction_Implementation() const
@@ -947,10 +954,11 @@ float ABaseDrone::getCastPoint() const
 int32 ABaseDrone::getWeaponCount() const
 {
 	int32 result = Super::getWeaponCount();
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 
-	result += StaticCast<bool>(primaryWeaponSlot);
+	result += StaticCast<bool>(playerState->getPrimaryWeapon());
 
-	result += StaticCast<bool>(secondaryWeaponSlot);
+	result += StaticCast<bool>(playerState->getSecondaryWeapon());
 
 	return result;
 }
@@ -958,15 +966,18 @@ int32 ABaseDrone::getWeaponCount() const
 TArray<TWeakObjectPtr<UBaseWeapon>> ABaseDrone::getWeapons() const
 {
 	TArray<TWeakObjectPtr<UBaseWeapon>> weapons = Super::getWeapons();
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();
+	UBaseWeapon* secondaryWeapon = playerState->getSecondaryWeapon();
 
-	if (primaryWeaponSlot)
+	if (primaryWeapon)
 	{
-		weapons.Add(primaryWeaponSlot);
+		weapons.Add(primaryWeapon);
 	}
 
-	if (secondaryWeaponSlot)
+	if (secondaryWeapon)
 	{
-		weapons.Add(secondaryWeaponSlot);
+		weapons.Add(secondaryWeapon);
 	}
 
 	return weapons;
@@ -1009,12 +1020,12 @@ const TArray<UAnimMontage*>& ABaseDrone::getAbilitiesAnimations() const
 
 const TArray<UObject*>& ABaseDrone::getMainModules() const
 {
-	return mainModules;
+	return Utility::getPlayerState(this)->getMainModules();
 }
 
 const TArray<UObject*>& ABaseDrone::getWeaponModules() const
 {
-	return weaponModules;
+	return Utility::getPlayerState(this)->getWeaponModules();
 }
 
 #pragma region PassiveAbility

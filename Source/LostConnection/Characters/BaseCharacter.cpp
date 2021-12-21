@@ -76,9 +76,11 @@ void ABaseCharacter::Tick(float DeltaTime)
 	{
 		static TArray<UBaseStatus*> statusesToRemove;
 
-		if (defaultWeaponSlot)
+		UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
+
+		if (defaultWeapon)
 		{
-			defaultWeaponSlot->Tick(DeltaTime);
+			defaultWeapon->Tick(DeltaTime);
 		}
 
 		for (auto& status : statuses)
@@ -124,8 +126,6 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
-	DOREPLIFETIME(ABaseCharacter, defaultWeaponSlot);
-
 	DOREPLIFETIME(ABaseCharacter, statuses);
 }
 
@@ -134,8 +134,6 @@ bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(currentWeapon, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(defaultWeaponSlot, *Bunch, *RepFlags);
 
 	return wroteSomething;
 }
@@ -413,7 +411,7 @@ void ABaseCharacter::resetShoot()
 
 void ABaseCharacter::changeToDefaultWeapon_Implementation()
 {
-	currentWeapon = defaultWeaponSlot;
+	currentWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
 
 	this->updateWeaponMesh();
 }
@@ -443,11 +441,14 @@ void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> de
 		return;
 	}
 
-	defaultWeaponSlot = NewObject<UBaseWeapon>(this, defaultWeapon.Get());
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, defaultWeapon);
 
-	defaultWeaponSlot->setOwner(this);
+	weapon->setOwner(this);
 
-	defaultWeaponSlot->updateTimeBetweenShots();
+	weapon->updateTimeBetweenShots();
+
+	playerState->setSecondaryWeapon(weapon);
 }
 
 void ABaseCharacter::setHealth_Implementation(float newHealth)
@@ -518,7 +519,7 @@ void ABaseCharacter::setIsDead_Implementation(bool newIsDead)
 
 UBaseWeapon* ABaseCharacter::getDefaultWeapon()
 {
-	return defaultWeaponSlot;
+	return Utility::getPlayerState(this)->getDefaultWeapon();
 }
 
 float ABaseCharacter::getHealth() const
@@ -568,11 +569,7 @@ UBaseWeapon* ABaseCharacter::getCurrentWeapon()
 
 int32 ABaseCharacter::getWeaponCount() const
 {
-	int32 result = 0;
-
-	result += StaticCast<bool>(defaultWeaponSlot);
-
-	return result;
+	return StaticCast<bool>(Utility::getPlayerState(this)->getDefaultWeapon());
 }
 
 const TWeakObjectPtr<USwarmAilment>& ABaseCharacter::getSwarm() const
@@ -582,9 +579,11 @@ const TWeakObjectPtr<USwarmAilment>& ABaseCharacter::getSwarm() const
 
 TArray<TWeakObjectPtr<UBaseWeapon>> ABaseCharacter::getWeapons() const
 {
-	if (defaultWeaponSlot)
+	UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
+
+	if (defaultWeapon)
 	{
-		return TArray<TWeakObjectPtr<UBaseWeapon>> { defaultWeaponSlot };
+		return TArray<TWeakObjectPtr<UBaseWeapon>> { defaultWeapon };
 	}
 
 	return TArray<TWeakObjectPtr<UBaseWeapon>>();

@@ -10,16 +10,6 @@
 #include "Characters/BaseDrone.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-ALostConnectionGameState* Utility::getGameState(APawn* pawn)
-{
-	return pawn->GetWorld()->GetGameState<ALostConnectionGameState>();
-}
-
-ALostConnectionPlayerState* Utility::getPlayerState(APawn* pawn)
-{
-	return pawn->GetController()->GetPlayerState<ALostConnectionPlayerState>();
-}
-
 SIZE_T Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<UBaseStatus>& statusClass)
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();

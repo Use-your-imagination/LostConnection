@@ -10,7 +10,7 @@
 #include "Engine/ActorChannel.h"
 #include "Net/DataBunch.h"
 
-#include "Weapons/BaseWeapon.h"
+#include "Engine/LostConnectionPlayerState.h"
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Utility/TimersUtility.h"
 #include "Utility/Utility.h"
@@ -67,9 +67,6 @@ protected:
 
 	UPROPERTY(Category = Weapons, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
 	UBaseWeapon* currentWeapon;
-
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	UBaseWeapon* defaultWeaponSlot;
 
 protected:
 	TimersUtility timers;
@@ -258,6 +255,7 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void setIsDead(bool newIsDead) final;
 
+	UFUNCTION(Category = Weapons, BlueprintCallable)
 	virtual UBaseWeapon* getDefaultWeapon() final;
 
 	virtual float getHealth() const final;

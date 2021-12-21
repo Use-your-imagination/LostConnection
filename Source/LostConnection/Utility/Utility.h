@@ -18,9 +18,9 @@ public:
 	~Utility() = default;
 
 public:
-	static ALostConnectionGameState* getGameState(APawn* pawn);
+	static ALostConnectionGameState* getGameState(const APawn* pawn);
 
-	static ALostConnectionPlayerState* getPlayerState(APawn* pawn);
+	static ALostConnectionPlayerState* getPlayerState(const APawn* pawn);
 
 	static SIZE_T countStatuses(const class IStatusReceiver* target, const TSubclassOf<class UBaseStatus>& statusClass);
 
@@ -50,6 +50,16 @@ public:
 	template<typename T>
 	static void processCooldown(T* cooldownableObject, float DeltaTime);
 };
+
+inline ALostConnectionGameState* Utility::getGameState(const APawn* pawn)
+{
+	return pawn->GetWorld()->GetGameState<ALostConnectionGameState>();
+}
+
+inline ALostConnectionPlayerState* Utility::getPlayerState(const APawn* pawn)
+{
+	return pawn->GetController()->GetPlayerState<ALostConnectionPlayerState>();
+}
 
 inline float Utility::toPercent(float coefficient)
 {
