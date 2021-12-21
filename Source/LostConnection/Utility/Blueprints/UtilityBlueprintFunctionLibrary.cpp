@@ -131,3 +131,21 @@ ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo(AL
 
 	return info;
 }
+
+ABaseDrone* UUtilityBlueprintFunctionLibrary::spawnDrone(TSubclassOf<ABaseDrone> droneClass, const FTransform& transform, APlayerController* controller, UObject* worldContext)
+{
+	UWorld* world = GEngine->GetWorldFromContextObject(worldContext, EGetWorldErrorMode::ReturnNull);
+
+	if (world)
+	{
+		ABaseDrone* drone = world->SpawnActorDeferred<ABaseDrone>(droneClass, {});
+
+		controller->Possess(drone);
+
+		drone->FinishSpawning(transform);
+
+		return drone;
+	}
+
+	return nullptr;
+}

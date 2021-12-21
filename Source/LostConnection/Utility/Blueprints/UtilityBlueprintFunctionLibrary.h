@@ -37,4 +37,7 @@ public:
 
 	UFUNCTION(Category = "Utility|LoadingScreen", BlueprintCallable, Meta = (AutoCreateRefTerm = "onBeginLoadCallback, onEndLoadCallback"))
 	static ALoadingScreenInfo* createLoadingScreenInfo(class ALostConnectionGameState* gameState, const FCallbackDelegate& onBeginLoadCallback, const FCallbackDelegate& onEndLoadCallback);
+
+	UFUNCTION(Category = "Utility|Spawning", BlueprintCallable)
+	static class ABaseDrone* spawnDrone(TSubclassOf<class ABaseDrone> droneClass, const FTransform& transform, APlayerController* controller, UObject* worldContext);
 };
