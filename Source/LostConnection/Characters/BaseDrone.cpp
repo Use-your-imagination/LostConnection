@@ -359,7 +359,7 @@ void ABaseDrone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (HasAuthority())
+	if (HasAuthority() && GetController())
 	{
 		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 		UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();

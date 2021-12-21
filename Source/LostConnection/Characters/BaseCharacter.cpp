@@ -72,7 +72,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 		}
 	}
 
-	if (HasAuthority())
+	if (HasAuthority() && GetController())
 	{
 		static TArray<UBaseStatus*> statusesToRemove;
 
@@ -448,7 +448,7 @@ void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> de
 
 	weapon->updateTimeBetweenShots();
 
-	playerState->setSecondaryWeapon(weapon);
+	playerState->setDefaultWeapon(weapon);
 }
 
 void ABaseCharacter::setHealth_Implementation(float newHealth)
