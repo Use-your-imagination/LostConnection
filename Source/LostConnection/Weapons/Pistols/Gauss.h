@@ -14,7 +14,7 @@ class LOSTCONNECTION_API UGauss : public UBaseWeapon
 	GENERATED_BODY()
 
 public:
-	UGauss();
+	UGauss() = default;
 
 	~UGauss() = default;
 };

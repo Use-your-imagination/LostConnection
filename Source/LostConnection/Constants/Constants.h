@@ -21,6 +21,13 @@ public:
 	static constexpr int32 actorNetUpdateFrequency = 30;
 	static constexpr int32 minNetUpdateFrequency = 1;
 	
+	static constexpr int32 defaultSmallAmmoMaxCount = 700;
+	static constexpr int32 defaultLargeAmmoMaxCount = 240;
+	static constexpr int32 defaultEnergyAmmoMaxCount = 50;
+
+	/// @brief Convert max ammo count to default ammo count
+	static constexpr float conversionAmmoCoefficient = 0.15f;
+
 public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static FText getProjectVersion();

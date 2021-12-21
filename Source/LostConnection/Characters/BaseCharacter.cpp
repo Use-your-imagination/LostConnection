@@ -51,6 +51,12 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
 	DOREPLIFETIME(ABaseCharacter, statuses);
+
+	DOREPLIFETIME(ABaseCharacter, maxSmallAmmoCount);
+
+	DOREPLIFETIME(ABaseCharacter, maxLargeAmmoCount);
+
+	DOREPLIFETIME(ABaseCharacter, maxEnergyAmmoCount);
 }
 
 bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -83,9 +89,9 @@ void ABaseCharacter::BeginPlay()
 		{
 			spareAmmo =
 			{
-				FAmmoData(ammoTypes::large, this->getDefaultLargeAmmo()),
-				FAmmoData(ammoTypes::small, this->getDefaultSmallAmmo()),
-				FAmmoData(ammoTypes::energy, this->getDefaultEnergyAmmo()),
+				FAmmoData(ammoTypes::small, defaultSmallAmmoCount),
+				FAmmoData(ammoTypes::large, defaultLargeAmmoCount),
+				FAmmoData(ammoTypes::energy, defaultEnergyAmmoCount),
 				FAmmoData(ammoTypes::defaultType, 9999)
 			};
 		}
@@ -249,7 +255,16 @@ void ABaseCharacter::deathVisual()
 
 void ABaseCharacter::deathLogic()
 {
+	if (!GetController())
+	{
+		return;
+	}
 
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+
+	this->returnAmmoToSpare(playerState->getPrimaryWeapon());
+
+	this->returnAmmoToSpare(playerState->getSecondaryWeapon());
 }
 
 void ABaseCharacter::runDeathLogic_Implementation()
@@ -268,25 +283,16 @@ void ABaseCharacter::resetShootLogic()
 	}
 }
 
-int32 ABaseCharacter::getDefaultLargeAmmo() const
-{
-	return 180;
-}
-
-int32 ABaseCharacter::getDefaultSmallAmmo() const
-{
-	return 720;
-}
-
-int32 ABaseCharacter::getDefaultEnergyAmmo() const
-{
-	return 90;
-}
-
 ABaseCharacter::ABaseCharacter() :
 	defaultMovementSpeed(450.0f),
 	sprintMovementSpeed(575.0f),
-	isDead(false)
+	isDead(false),
+	maxSmallAmmoCount(UConstants::defaultSmallAmmoMaxCount),
+	maxLargeAmmoCount(UConstants::defaultLargeAmmoMaxCount),
+	maxEnergyAmmoCount(UConstants::defaultEnergyAmmoMaxCount),
+	defaultSmallAmmoCount(maxSmallAmmoCount* UConstants::conversionAmmoCoefficient),
+	defaultLargeAmmoCount(maxLargeAmmoCount* UConstants::conversionAmmoCoefficient),
+	defaultEnergyAmmoCount(maxEnergyAmmoCount* UConstants::conversionAmmoCoefficient)
 {
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_SatusState.NPS_SatusState'"));
 
@@ -373,6 +379,56 @@ void ABaseCharacter::restoreHealth(float amount)
 	{
 		this->setCurrentHealth(tem);
 	}
+}
+
+void ABaseCharacter::returnAmmoToSpare(UBaseWeapon* weapon)
+{
+	if (!weapon || !GetController())
+	{
+		return;
+	}
+
+	ammoTypes ammoType = weapon->getAmmoType();
+
+	if (ammoType == ammoTypes::defaultType)
+	{
+		return;
+	}
+
+	TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
+	int32& currentWeaponSpareAmmo = Algo::FindByPredicate(spareAmmo, [&ammoType](FAmmoData& data) { return data.ammoType == ammoType; })->ammoCount;
+	int32 maxCount = 0;
+
+	switch (ammoType)
+	{
+	case ammoTypes::small:
+		maxCount = maxSmallAmmoCount;
+
+		break;
+
+	case ammoTypes::large:
+		maxCount = maxLargeAmmoCount;
+
+		break;
+
+	case ammoTypes::energy:
+		maxCount = maxEnergyAmmoCount;
+
+		break;
+	}
+
+	int32 tem = FMath::Min(maxCount, currentWeaponSpareAmmo + weapon->getCurrentMagazineSize());
+
+	if (tem == maxCount)
+	{
+		weapon->setCurrentMagazineSize(currentWeaponSpareAmmo + weapon->getCurrentMagazineSize() - maxCount);
+	}
+	else
+	{
+		weapon->setCurrentMagazineSize(0);
+	}
+
+	currentWeaponSpareAmmo = tem;
 }
 
 void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> defaultWeapon)

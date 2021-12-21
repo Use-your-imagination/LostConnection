@@ -25,8 +25,8 @@ enum class weaponTypes : uint8
 UENUM(BlueprintType)
 enum class ammoTypes : uint8
 {
-	large = 0 UMETA(DisplayName = "Large ammo"),
-	small = 1 UMETA(DisplayName = "Small ammo"),
+	small = 0 UMETA(DisplayName = "Small ammo"),
+	large = 1 UMETA(DisplayName = "Large ammo"),
 	energy = 2 UMETA(DisplayName = "Energy ammo"),
 	defaultType = 3 UMETA(DisplayName = "Default ammo")
 };
@@ -185,6 +185,8 @@ public:
 	virtual float getCrushingHitChance() const final;
 
 	virtual float getAdditionalCrushingHitChance() const final;
+
+	virtual float getLength() const final;
 
 	virtual ~UBaseWeapon() = default;
 };

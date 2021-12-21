@@ -135,6 +135,7 @@ void UBaseWeapon::shoot()
 }
 
 UBaseWeapon::UBaseWeapon() :
+	currentMagazineSize(0),
 	ammoCost(1),
 	length(100.0f)
 {
@@ -321,4 +322,9 @@ float UBaseWeapon::getCrushingHitChance() const
 float UBaseWeapon::getAdditionalCrushingHitChance() const
 {
 	return additionalCrushingHitChance;
+}
+
+float UBaseWeapon::getLength() const
+{
+	return length;
 }

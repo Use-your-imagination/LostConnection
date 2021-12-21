@@ -650,19 +650,19 @@ void ABaseDrone::dropWeapon_Implementation()
 
 	location.Z -= GetMesh()->SkeletalMesh->GetImportedBounds().BoxExtent.Z / 2;
 
-	FTransform spawnPoint(currentWeaponMesh->GetComponentRotation(), location + 100.0f * GetActorForwardVector());
+	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), { currentWeaponMesh->GetComponentRotation(), location + currentWeapon->getLength() * GetActorForwardVector()});
 
-	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), spawnPoint);
+	this->returnAmmoToSpare(currentWeapon);
 
 	droppedWeapon->setWeapon(currentWeapon);
 
 	currentWeapon->setOwner(nullptr);
 
-	if (currentWeapon && currentWeapon == primaryWeapon)
+	if (currentWeapon == primaryWeapon)
 	{
 		currentWeapon = primaryWeapon = nullptr;
 	}
-	else if (currentWeapon && currentWeapon == secondaryWeapon)
+	else if (currentWeapon == secondaryWeapon)
 	{
 		currentWeapon = secondaryWeapon = nullptr;
 	}

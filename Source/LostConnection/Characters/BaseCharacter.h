@@ -78,6 +78,24 @@ protected:
 	UPROPERTY(Category = Properties, Replicated, BlueprintReadOnly)
 	bool isDead;
 
+	UPROPERTY(Category = Defaults, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	int32 maxSmallAmmoCount;
+
+	UPROPERTY(Category = Defaults, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	int32 maxLargeAmmoCount;
+
+	UPROPERTY(Category = Defaults, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	int32 maxEnergyAmmoCount;
+
+	UPROPERTY(Category = Defaults, EditDefaultsOnly, BlueprintReadOnly)
+	int32 defaultSmallAmmoCount;
+
+	UPROPERTY(Category = Defaults, EditDefaultsOnly, BlueprintReadOnly)
+	int32 defaultLargeAmmoCount;
+
+	UPROPERTY(Category = Defaults, EditDefaultsOnly, BlueprintReadOnly)
+	int32 defaultEnergyAmmoCount;
+
 	UPROPERTY(Category = PhysicalConstraints, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FName> physicsBones;
 
@@ -180,13 +198,6 @@ protected:
 	UFUNCTION()
 	void resetShootLogic();
 
-protected:
-	virtual int32 getDefaultLargeAmmo() const;
-
-	virtual int32 getDefaultSmallAmmo() const;
-
-	virtual int32 getDefaultEnergyAmmo() const;
-
 public:	
 	ABaseCharacter();
 
@@ -210,6 +221,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void restoreHealth(float amount) final;
+
+	virtual void returnAmmoToSpare(UBaseWeapon* weapon) final;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setDefaultWeapon(TSubclassOf<UBaseWeapon> defaultWeapon) final;
