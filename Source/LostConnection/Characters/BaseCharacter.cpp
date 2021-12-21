@@ -30,80 +30,6 @@ FAmmoData::FAmmoData(ammoTypes ammoType, int32 ammoCount) :
 
 }
 
-void ABaseCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-
-	UWorld* world = GetWorld();
-
-	if (world)
-	{
-		if (HasAuthority())
-		{
-			spareAmmoReplication =
-			{
-				FAmmoData(ammoTypes::large, spareAmmo[ammoTypes::large]),
-				FAmmoData(ammoTypes::small, spareAmmo[ammoTypes::small]),
-				FAmmoData(ammoTypes::energy, spareAmmo[ammoTypes::energy]),
-				FAmmoData(ammoTypes::defaultType, 9999)
-			};
-		}
-	}
-}
-
-void ABaseCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (!isDead && currentHealth == 0.0f)
-	{
-		if (HasAuthority())
-		{
-			Algo::ForEachIf
-			(
-				deathEvents,
-				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
-				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
-			);
-
-			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
-
-			isDead = true;
-		}
-	}
-
-	if (HasAuthority() && GetController())
-	{
-		static TArray<UBaseStatus*> statusesToRemove;
-
-		UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
-
-		if (defaultWeapon)
-		{
-			defaultWeapon->Tick(DeltaTime);
-		}
-
-		for (auto& status : statuses)
-		{
-			if (!status->Tick(DeltaTime))
-			{
-				statusesToRemove.Add(status);
-			}
-		}
-
-		for (const auto& statusToRemove : statusesToRemove)
-		{
-			statuses.Remove(statusToRemove);
-
-			statusToRemove->postRemove();
-		}
-
-		statusesToRemove.Empty();
-
-		timers.processTimers(DeltaTime);
-	}
-}
-
 void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -121,8 +47,6 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, isAlly);
 
 	DOREPLIFETIME(ABaseCharacter, isDead);
-
-	DOREPLIFETIME(ABaseCharacter, spareAmmoReplication);
 
 	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
@@ -147,6 +71,27 @@ void ABaseCharacter::PostInitializeComponents()
 	deathMaskRenderTexture->InitCustomFormat(256, 256, EPixelFormat::PF_G16, false);
 }
 
+void ABaseCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (HasAuthority())
+	{
+		TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
+
+		if (!spareAmmo.Num())
+		{
+			spareAmmo =
+			{
+				FAmmoData(ammoTypes::large, this->getDefaultLargeAmmo()),
+				FAmmoData(ammoTypes::small, this->getDefaultSmallAmmo()),
+				FAmmoData(ammoTypes::energy, this->getDefaultEnergyAmmo()),
+				FAmmoData(ammoTypes::defaultType, 9999)
+			};
+		}
+	}
+}
+
 void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
 {
 
@@ -162,17 +107,9 @@ void ABaseCharacter::onCurrentWeaponChange()
 	this->updateWeaponMesh();
 }
 
-void ABaseCharacter::onSpareAmmoChanged()
-{
-	for (const auto& i : spareAmmoReplication)
-	{
-		spareAmmo[i.ammoType] = i.ammoCount;
-	}
-}
-
 void ABaseCharacter::onCurrentHealthChanged()
 {
-	
+
 }
 
 void ABaseCharacter::updateWeaponMesh()
@@ -256,7 +193,8 @@ void ABaseCharacter::reloadLogic()
 		return;
 	}
 
-	int32& ammoCount = Algo::FindByPredicate(spareAmmoReplication, [&ammoType](FAmmoData& data) { return data.ammoType == ammoType; })->ammoCount;
+	TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
+	int32& ammoCount = Algo::FindByPredicate(spareAmmo, [&ammoType](FAmmoData& data) { return data.ammoType == ammoType; })->ammoCount;
 
 	if (!ammoCount)
 	{
@@ -270,8 +208,6 @@ void ABaseCharacter::reloadLogic()
 	if (ammoCount != 9999)
 	{
 		ammoCount -= reloadedAmmoRequire;
-
-		this->onSpareAmmoChanged();
 	}
 }
 
@@ -332,6 +268,21 @@ void ABaseCharacter::resetShootLogic()
 	}
 }
 
+int32 ABaseCharacter::getDefaultLargeAmmo() const
+{
+	return 180;
+}
+
+int32 ABaseCharacter::getDefaultSmallAmmo() const
+{
+	return 720;
+}
+
+int32 ABaseCharacter::getDefaultEnergyAmmo() const
+{
+	return 90;
+}
+
 ABaseCharacter::ABaseCharacter() :
 	defaultMovementSpeed(450.0f),
 	sprintMovementSpeed(575.0f),
@@ -345,14 +296,6 @@ ABaseCharacter::ABaseCharacter() :
 
 	USkeletalMeshComponent* mesh = GetMesh();
 	UCharacterMovementComponent* movement = GetCharacterMovement();
-
-	spareAmmo =
-	{
-		{ ammoTypes::large, 0 },
-		{ ammoTypes::small, 0 },
-		{ ammoTypes::energy, 0 },
-		{ ammoTypes::defaultType, 9999 }
-	};
 
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 
@@ -477,7 +420,7 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 			return;
 		}
 	}
-	
+
 	currentHealth = newCurrentHealth;
 
 	this->onCurrentHealthChanged();
@@ -547,11 +490,6 @@ float ABaseCharacter::getSprintMovementSpeed() const
 	return sprintMovementSpeed;
 }
 
-int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
-{
-	return spareAmmo[type];
-}
-
 bool ABaseCharacter::getIsReloading() const
 {
 	return isReloading;
@@ -587,6 +525,59 @@ TArray<TWeakObjectPtr<UBaseWeapon>> ABaseCharacter::getWeapons() const
 	}
 
 	return TArray<TWeakObjectPtr<UBaseWeapon>>();
+}
+
+void ABaseCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (!isDead && currentHealth == 0.0f)
+	{
+		if (HasAuthority())
+		{
+			Algo::ForEachIf
+			(
+				deathEvents,
+				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
+				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
+			);
+
+			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
+
+			isDead = true;
+		}
+	}
+
+	if (HasAuthority() && GetController())
+	{
+		static TArray<UBaseStatus*> statusesToRemove;
+
+		UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
+
+		if (defaultWeapon)
+		{
+			defaultWeapon->Tick(DeltaTime);
+		}
+
+		for (auto& status : statuses)
+		{
+			if (!status->Tick(DeltaTime))
+			{
+				statusesToRemove.Add(status);
+			}
+		}
+
+		for (const auto& statusToRemove : statusesToRemove)
+		{
+			statuses.Remove(statusToRemove);
+
+			statusToRemove->postRemove();
+		}
+
+		statusesToRemove.Empty();
+
+		timers.processTimers(DeltaTime);
+	}
 }
 
 void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
@@ -673,7 +664,7 @@ float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) cons
 {
 	// TODO: Add shields
 	float pool = health;
-	
+
 	return Utility::toPercent(1.0f - (pool - inflictor->calculateTotalDamage()) / pool);
 }
 

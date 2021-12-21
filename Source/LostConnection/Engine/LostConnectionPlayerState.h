@@ -17,6 +17,21 @@
 
 #pragma warning(disable: 4458)
 
+USTRUCT()
+struct FAmmoData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY()
+	ammoTypes ammoType;
+
+	UPROPERTY()
+	int32 ammoCount;
+
+	FAmmoData(ammoTypes ammoType = ammoTypes::large, int32 ammoCount = 0);
+};
+
 UCLASS()
 class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 {
@@ -40,6 +55,9 @@ protected:
 
 	UPROPERTY(Replicated)
 	TArray<UObject*> weaponModules;
+
+	UPROPERTY(Replicated)
+	TArray<FAmmoData> spareAmmo;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -67,6 +85,11 @@ public:
 
 	virtual const TArray<UObject*>& getWeaponModules() const final;
 
+	UFUNCTION(BlueprintCallable)
+	virtual int32 getSpareAmmo(ammoTypes type) const final;
+
+	virtual TArray<FAmmoData>& getSpareAmmoArray() final;
+
 public:
 	ALostConnectionPlayerState();
 
@@ -91,4 +114,17 @@ inline UBaseWeapon* ALostConnectionPlayerState::getSecondaryWeapon() const
 inline UBaseWeapon* ALostConnectionPlayerState::getDefaultWeapon() const
 {
 	return defaultWeapon;
+}
+
+inline int32 ALostConnectionPlayerState::getSpareAmmo(ammoTypes type) const
+{
+	for (const auto& data : spareAmmo)
+	{
+		if (data.ammoType == type)
+		{
+			return data.ammoCount;
+		}
+	}
+
+	return 0;
 }

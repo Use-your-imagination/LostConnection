@@ -26,21 +26,6 @@
 
 #include "BaseCharacter.generated.h"
 
-USTRUCT()
-struct FAmmoData
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY()
-	ammoTypes ammoType;
-
-	UPROPERTY()
-	int32 ammoCount;
-
-	FAmmoData(ammoTypes ammoType = ammoTypes::large, int32 ammoCount = 0);
-};
-
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API ABaseCharacter :
 	public ACharacter,
@@ -92,12 +77,6 @@ protected:
 
 	UPROPERTY(Category = Properties, Replicated, BlueprintReadOnly)
 	bool isDead;
-
-	UPROPERTY(Category = AmmoSettings, EditDefaultsOnly, BlueprintReadOnly)
-	TMap<ammoTypes, int32> spareAmmo;
-
-	UPROPERTY(ReplicatedUsing = onSpareAmmoChanged)
-	TArray<FAmmoData> spareAmmoReplication;
 
 	UPROPERTY(Category = PhysicalConstraints, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FName> physicsBones;
@@ -151,15 +130,7 @@ protected:
 	void onCurrentWeaponChange();
 
 	UFUNCTION()
-	void onSpareAmmoChanged();
-
-	UFUNCTION()
 	virtual void onCurrentHealthChanged();
-
-protected:
-	virtual void BeginPlay() override;
-
-	virtual void Tick(float DeltaTime) override;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -167,6 +138,8 @@ protected:
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	virtual void PostInitializeComponents() override;
+
+	virtual void BeginPlay() override;
 
 protected:
 	virtual void updateWeaponMesh() final;
@@ -206,6 +179,13 @@ protected:
 
 	UFUNCTION()
 	void resetShootLogic();
+
+protected:
+	virtual int32 getDefaultLargeAmmo() const;
+
+	virtual int32 getDefaultSmallAmmo() const;
+
+	virtual int32 getDefaultEnergyAmmo() const;
 
 public:	
 	ABaseCharacter();
@@ -287,6 +267,8 @@ public:
 
 	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const;
 
+	virtual void Tick(float DeltaTime) override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) final override;
 
@@ -330,6 +312,16 @@ public:
 
 	virtual ~ABaseCharacter() = default;
 };
+
+inline int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
+{
+	if (!GetController())
+	{
+		return 0;
+	}
+
+	return Utility::getPlayerState(this)->getSpareAmmo(type);
+}
 
 inline bool ABaseCharacter::isWeaponEquipped() const
 {

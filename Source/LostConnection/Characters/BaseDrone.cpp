@@ -629,9 +629,9 @@ void ABaseDrone::changeToSecondaryWeapon_Implementation()
 
 void ABaseDrone::pickupAmmo_Implementation(ammoTypes type, int32 count)
 {
-	Algo::FindByPredicate(spareAmmoReplication, [&type](FAmmoData& data) { return data.ammoType == type; })->ammoCount += count;
+	TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
 
-	this->onSpareAmmoChanged();
+	Algo::FindByPredicate(spareAmmo, [&type](FAmmoData& data) { return data.ammoType == type; })->ammoCount += count;
 }
 
 void ABaseDrone::dropWeapon_Implementation()

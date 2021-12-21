@@ -17,6 +17,8 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME(ALostConnectionPlayerState, mainModules);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, weaponModules);
+
+	DOREPLIFETIME(ALostConnectionPlayerState, spareAmmo);
 }
 
 bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -65,6 +67,11 @@ const TArray<UObject*>& ALostConnectionPlayerState::getMainModules() const
 const TArray<UObject*>& ALostConnectionPlayerState::getWeaponModules() const
 {
 	return weaponModules;
+}
+
+TArray<FAmmoData>& ALostConnectionPlayerState::getSpareAmmoArray()
+{
+	return spareAmmo;
 }
 
 ALostConnectionPlayerState::ALostConnectionPlayerState()
