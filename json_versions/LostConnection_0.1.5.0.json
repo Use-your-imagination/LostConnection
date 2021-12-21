@@ -1,4 +1,13 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.1.5.0"
+  "projectVersion": "0.1.5.0",
+  "Drones": {
+    "type": "category",
+    "SN4K3": {
+      "type": "item",
+      "notes": [
+        "Add passive second part implementation"
+      ]
+    }
+  }
 }
