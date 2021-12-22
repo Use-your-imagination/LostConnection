@@ -58,8 +58,6 @@ ABaseBot::ABaseBot()
 	
 	isAlly = false;
 
-	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
-
 	healthBar = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("HealthBar"));
 	healthBarTextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("healthBarTextRender"));
 	

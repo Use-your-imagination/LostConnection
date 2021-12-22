@@ -23,13 +23,6 @@
 
 #pragma warning(disable: 4458)
 
-FAmmoData::FAmmoData(ammoTypes ammoType, int32 ammoCount) :
-	ammoType(ammoType),
-	ammoCount(ammoCount)
-{
-
-}
-
 void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -304,6 +297,7 @@ ABaseCharacter::ABaseCharacter() :
 	UCharacterMovementComponent* movement = GetCharacterMovement();
 
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
 	mesh->SetGenerateOverlapEvents(true);
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);

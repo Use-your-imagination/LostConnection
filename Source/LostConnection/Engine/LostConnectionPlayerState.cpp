@@ -4,6 +4,13 @@
 
 #include "Constants/Constants.h"
 
+FAmmoData::FAmmoData(ammoTypes ammoType, int32 ammoCount) :
+	ammoType(ammoType),
+	ammoCount(ammoCount)
+{
+
+}
+
 void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

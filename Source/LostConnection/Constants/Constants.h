@@ -26,7 +26,7 @@ public:
 	static constexpr int32 defaultEnergyAmmoMaxCount = 50;
 
 	/// @brief Convert max ammo count to default ammo count
-	static constexpr float conversionAmmoCoefficient = 0.4f;
+	static constexpr float conversionAmmoCoefficient = 1.0f;
 
 	static constexpr float showHealthBarDistance = 5000.0f;
 
