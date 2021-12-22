@@ -9,6 +9,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 
 #include "BaseCharacter.h"
+#include "Utility/Utility.h"
 
 #include "BaseBot.generated.h"
 
@@ -22,7 +23,7 @@ protected:
 	UMaterialBillboardComponent* healthBar;
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
-	UTextRenderComponent* healthBarText;
+	UTextRenderComponent* healthBarTextRender;
 
 	UPROPERTY(Category = DynamicMaterials, BlueprintReadOnly)
 	UMaterialInstanceDynamic* healthBarMaterial;
@@ -44,5 +45,37 @@ protected:
 public:
 	ABaseBot();
 
+	virtual void updateHealthBar() final;
+
+	virtual void setHealthBarVisibility(bool isVisible) final;
+
+	virtual UMaterialBillboardComponent* getHealthBar() const;
+
+	virtual UTextRenderComponent* getHealthBarTextRender() const;
+
 	virtual ~ABaseBot() = default;
 };
+
+inline void ABaseBot::updateHealthBar()
+{
+	healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
+
+	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
+}
+
+inline void ABaseBot::setHealthBarVisibility(bool isVisible)
+{
+	healthBar->SetVisibility(isVisible);
+
+	healthBarTextRender->SetVisibility(isVisible);
+}
+
+inline UMaterialBillboardComponent* ABaseBot::getHealthBar() const
+{
+	return healthBar;
+}
+
+inline UTextRenderComponent* ABaseBot::getHealthBarTextRender() const
+{
+	return healthBarTextRender;
+}

@@ -13,6 +13,8 @@
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Interfaces/Gameplay/Actions/InputActions.h"
+#include "Constants/Constants.h"
+#include "BaseBot.h"
 
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbilityCast.h"
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbilityCast.h"
@@ -100,6 +102,8 @@ protected:
 	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<UAnimMontage*> abilitiesAnimations;
 
+	TWeakObjectPtr<class ABaseBot> lastHealthBarTraceTarget;
+
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, BlueprintReadWrite)
 	bool secondaryHold;
@@ -173,6 +177,9 @@ public:
 	UPROPERTY(Category = Camera, BlueprintReadOnly)
 	float BaseLookUpRate;
 
+private:
+	virtual void showBotHealthBar() final;
+
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -226,6 +233,9 @@ protected:
 
 	UFUNCTION()
 	virtual void releaseWeaponSelector() final;
+
+protected:
+	virtual void restoreEnergy(float amount) final;
 
 public:
 	ABaseDrone();
@@ -403,4 +413,34 @@ inline USpringArmComponent* ABaseDrone::GetCameraOffset() const
 inline UCameraComponent* ABaseDrone::GetFollowCamera() const
 {
 	return FollowCamera;
+}
+
+inline void ABaseDrone::showBotHealthBar()
+{
+	FCollisionQueryParams ignoreParameters;
+	FHitResult hit;
+	FVector start = FollowCamera->GetComponentLocation();
+	FVector end = start + FollowCamera->GetForwardVector() * UConstants::showHealthBarDistance;
+
+	ignoreParameters.AddIgnoredActor(this);
+
+	GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility, ignoreParameters);
+
+	ABaseBot* bot = Cast<ABaseBot>(hit.Actor);
+
+	if (lastHealthBarTraceTarget.IsValid() && hit.Actor != lastHealthBarTraceTarget)
+	{
+		lastHealthBarTraceTarget->setHealthBarVisibility(false);
+	}
+
+	if (!hit.Actor.IsValid() || !bot)
+	{
+		return;
+	}
+
+	lastHealthBarTraceTarget = bot;
+
+	lastHealthBarTraceTarget->updateHealthBar();
+
+	lastHealthBarTraceTarget->setHealthBarVisibility(true);
 }

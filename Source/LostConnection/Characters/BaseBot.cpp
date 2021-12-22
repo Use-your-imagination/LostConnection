@@ -6,26 +6,19 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/Font.h"
 
-#include "Utility/Utility.h"
 #include "Weapons/Pistols/Gauss.h"
 
 void ABaseBot::onCurrentHealthChanged()
 {
 	if (currentHealth != health)
 	{
-		healthBar->SetVisibility(true);
+		this->setHealthBarVisibility(true);
 
-		healthBarText->SetVisibility(true);
-
-		healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
-
-		healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
+		this->updateHealthBar();
 	}
 	else
 	{
-		healthBar->SetVisibility(false);
-
-		healthBarText->SetVisibility(false);
+		this->setHealthBarVisibility(false);
 	}
 }
 
@@ -42,7 +35,7 @@ void ABaseBot::BeginPlay()
 
 	healthBar->AddElement(healthBarMaterial, nullptr, false, 10.0f, 40.0f, nullptr);
 
-	healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
+	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
 
 	if (HasAuthority())
 	{
@@ -68,24 +61,24 @@ ABaseBot::ABaseBot()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
 	healthBar = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("HealthBar"));
-	healthBarText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("HealthBarText"));
+	healthBarTextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("healthBarTextRender"));
 	
 	healthBar->SetupAttachment(GetMesh());
 
-	healthBarText->SetupAttachment(healthBar);
+	healthBarTextRender->SetupAttachment(healthBar);
 
 	healthBar->AddRelativeLocation(FVector(0.0f, 0.0f, 187.0f));
 
-	healthBarText->SetTextMaterial(textMaterialFinder.Object);
+	healthBarTextRender->SetTextMaterial(textMaterialFinder.Object);
 
-	healthBarText->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
-	healthBarText->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
-	healthBarText->SetTextRenderColor(FColor::White);
-	healthBarText->SetFont(textFontFinder.Object);
+	healthBarTextRender->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+	healthBarTextRender->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
+	healthBarTextRender->SetTextRenderColor(FColor::White);
+	healthBarTextRender->SetFont(textFontFinder.Object);
 
 	baseHealthBarMaterial = healthBarBaseMaterialFinder.Object;
 
 	healthBar->SetVisibility(false);
 
-	healthBarText->SetVisibility(false);
+	healthBarTextRender->SetVisibility(false);
 }

@@ -343,7 +343,7 @@ void ABaseDrone::BeginPlay()
 			{
 				if (currentEnergy != energy)
 				{
-					ICaster::Execute_setCurrentEnergy(this, currentEnergy + energyRestorationPerSecond);
+					this->restoreEnergy(energyRestorationPerSecond);
 				}
 			}, 1.0f);
 
@@ -392,6 +392,8 @@ void ABaseDrone::Tick(float DeltaTime)
 		Utility::processCooldown(thirdAbility, DeltaTime);
 		Utility::processCooldown(ultimateAbility, DeltaTime);
 	}
+
+	this->showBotHealthBar();
 }
 
 void ABaseDrone::MoveForward(float Value)
@@ -501,6 +503,11 @@ void ABaseDrone::releaseWeaponSelector()
 	weaponSelectorHold = false;
 
 	IInputActions::Execute_releaseWeaponSelectorAction(this);
+}
+
+void ABaseDrone::restoreEnergy(float amount)
+{
+	energy = FMath::Max(energy, currentEnergy + amount);
 }
 
 ABaseDrone::ABaseDrone() :

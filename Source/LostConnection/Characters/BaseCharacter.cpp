@@ -606,8 +606,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	if (HasAuthority() && GetController())
 	{
-		static TArray<UBaseStatus*> statusesToRemove;
-
+		TArray<UBaseStatus*> statusesToRemove;
 		UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
 
 		if (defaultWeapon)
@@ -731,7 +730,7 @@ float ABaseCharacter::getHealthPercentDealt(IDamageInflictor* inflictor) const
 
 void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
 {
-	static TArray<UBaseStatus*> statusesToRemove;
+	TArray<UBaseStatus*> statusesToRemove;
 
 	for (auto& status : statuses)
 	{

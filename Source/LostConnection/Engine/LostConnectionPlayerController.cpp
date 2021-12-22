@@ -14,6 +14,4 @@ void ALostConnectionPlayerController::GetSeamlessTravelActorList(bool bToEntry, 
 ALostConnectionPlayerController::ALostConnectionPlayerController()
 {
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
-
-	bEnableMouseOverEvents = true;
 }
