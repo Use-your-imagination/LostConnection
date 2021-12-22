@@ -1,4 +1,10 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.1.6.0"
+  "projectVersion": "0.1.6.0",
+  "Maps": {
+    "type": "category"
+  },
+  "UI": {
+    "type": "category"
+  }
 }

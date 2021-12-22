@@ -9,5 +9,16 @@
         "Add passive second part implementation"
       ]
     }
+  },
+  "UI": {
+    "type": "category",
+    "Health bars": {
+      "type": "item",
+      "notes": [
+        "Now bots health bars hidden by default",
+        "If bot has less health than max health bar become visible",
+        "If you target bot health bar become visible"
+      ]
+    }
   }
 }
