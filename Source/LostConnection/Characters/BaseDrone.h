@@ -430,7 +430,10 @@ inline void ABaseDrone::showBotHealthBar()
 
 	if (lastHealthBarTraceTarget.IsValid() && hit.Actor != lastHealthBarTraceTarget)
 	{
-		lastHealthBarTraceTarget->setHealthBarVisibility(false);
+		if (lastHealthBarTraceTarget->getCurrentHealth() == lastHealthBarTraceTarget->getHealth())
+		{
+			lastHealthBarTraceTarget->setHealthBarVisibility(false);
+		}
 	}
 
 	if (!hit.Actor.IsValid() || !bot)

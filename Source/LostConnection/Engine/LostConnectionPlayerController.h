@@ -18,4 +18,6 @@ protected:
 
 public:
 	ALostConnectionPlayerController();
+
+	virtual ~ALostConnectionPlayerController() = default;
 };

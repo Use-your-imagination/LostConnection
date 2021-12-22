@@ -74,6 +74,12 @@ public:
 	UFUNCTION(Category = RBM, BlueprintNativeEvent, BlueprintCallable)
 	void speedup();
 
+	UFUNCTION(Category = Checks, BlueprintNativeEvent, BlueprintCallable)
+	bool checkExplode();
+
+	UFUNCTION(Category = Checks, BlueprintNativeEvent, BlueprintCallable)
+	bool checkSpeedup();
+
 	virtual UPawnMovementComponent* GetMovementComponent() const final override;
 
 	virtual void Tick(float DeltaTime) override;

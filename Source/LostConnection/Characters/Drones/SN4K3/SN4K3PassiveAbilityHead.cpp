@@ -21,8 +21,25 @@ void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* Player
 	FInputActionBinding pressExplosion("Shoot", IE_Pressed);
 	FInputActionBinding pressSprint("Zoom", IE_Pressed);
 
-	pressExplosion.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "explode"); });
-	pressSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "speedup"); });
+	pressExplosion.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() 
+		{
+			if (!this->checkExplode())
+			{
+				return;
+			}
+
+			MultiplayerUtility::runOnServerReliable(this, "explode");
+		});
+
+	pressSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() 
+		{
+			if (!this->checkSpeedup())
+			{
+				return;
+			}
+
+			MultiplayerUtility::runOnServerReliable(this, "speedup");
+		});
 
 	PlayerInputComponent->AddActionBinding(pressExplosion);
 	PlayerInputComponent->AddActionBinding(pressSprint);
@@ -144,6 +161,16 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 void ASN4K3PassiveAbilityHead::speedup_Implementation()
 {
 
+}
+
+bool ASN4K3PassiveAbilityHead::checkExplode_Implementation()
+{
+	return true;
+}
+
+bool ASN4K3PassiveAbilityHead::checkSpeedup_Implementation()
+{
+	return true;
 }
 
 UPawnMovementComponent* ASN4K3PassiveAbilityHead::GetMovementComponent() const

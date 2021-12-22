@@ -32,10 +32,12 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	static ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/Drones/SN4K3/BP_SN4K3"));
 	static ConstructorHelpers::FClassFinder<APawn> defaultAIClassFinder(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
 	static ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerState"));
+	static ConstructorHelpers::FClassFinder<APlayerController> defaultPlayerControllerClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerController"));
 	
 	bUseSeamlessTravel = true;
+
 	DefaultPawnClass = defaultPawnClassFinder.Class;
-	PlayerControllerClass = ALostConnectionPlayerController::StaticClass();
+	PlayerControllerClass = defaultPlayerControllerClassFinder.Class;
 	PlayerStateClass = defaultPlayerStateClassFinder.Class;
 	GameStateClass = ALostConnectionGameState::StaticClass();
 }
