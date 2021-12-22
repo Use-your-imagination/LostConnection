@@ -11,9 +11,22 @@
 
 void ABaseBot::onCurrentHealthChanged()
 {
-	healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
+	if (currentHealth != health)
+	{
+		healthBar->SetVisibility(true);
 
-	healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
+		healthBarText->SetVisibility(true);
+
+		healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
+
+		healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
+	}
+	else
+	{
+		healthBar->SetVisibility(false);
+
+		healthBarText->SetVisibility(false);
+	}
 }
 
 void ABaseBot::Tick(float DeltaTime)
@@ -52,6 +65,8 @@ ABaseBot::ABaseBot()
 	
 	isAlly = false;
 
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+
 	healthBar = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("HealthBar"));
 	healthBarText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("HealthBarText"));
 	
@@ -69,4 +84,8 @@ ABaseBot::ABaseBot()
 	healthBarText->SetFont(textFontFinder.Object);
 
 	baseHealthBarMaterial = healthBarBaseMaterialFinder.Object;
+
+	healthBar->SetVisibility(false);
+
+	healthBarText->SetVisibility(false);
 }
