@@ -17,11 +17,6 @@ void ICooldownable::processCooldown(float DeltaTime)
 	}
 }
 
-bool ICooldownable::isUsable() const
-{
-	return const_cast<ICooldownable*>(this)->getCurrentCooldown() == 0.0f;
-}
-
 void ICooldownable::resetCooldown()
 {
 	this->getCurrentCooldown() = 0.0f;
