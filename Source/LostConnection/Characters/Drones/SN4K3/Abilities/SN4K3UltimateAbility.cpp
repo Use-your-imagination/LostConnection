@@ -133,8 +133,6 @@ void USN4K3UltimateAbility::Tick(float DeltaTime)
 
 		if (currentAbilityDuration >= abilityDuration)
 		{
-			isUltimateAbilityUsed = false;
-
 			this->applyAbility(drone);
 		}
 	}
