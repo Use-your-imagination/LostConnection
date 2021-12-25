@@ -8,6 +8,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/ActorChannel.h"
 #include "Blueprint/UserWidget.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 #include "Weapons/BaseWeapon.h"
 #include "Interfaces/Gameplay/Modules/Holders/MainModulesHolder.h"
@@ -41,6 +42,9 @@ protected:
 	UPROPERTY(Category = UI, BlueprintReadOnly)
 	UUserWidget* currentUI;
 
+	UPROPERTY(Category = UI, BlueprintReadOnly)
+	UMaterialInstanceDynamic* selectorMaterial;
+
 	UPROPERTY(Replicated)
 	UBaseWeapon* primaryWeapon;
 
@@ -63,6 +67,8 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+	virtual void BeginPlay() override;
 
 public:
 	virtual void addMainModule(IMainModule* module) final;

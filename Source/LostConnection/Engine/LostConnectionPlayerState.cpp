@@ -3,6 +3,7 @@
 #include "LostConnectionPlayerState.h"
 
 #include "Constants/Constants.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 
 FAmmoData::FAmmoData(ammoTypes ammoType, int32 ammoCount) :
 	ammoType(ammoType),
@@ -39,6 +40,13 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 	wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
 
 	return wroteSomething;
+}
+
+void ALostConnectionPlayerState::BeginPlay()
+{
+	Super::BeginPlay();
+
+	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
 }
 
 void ALostConnectionPlayerState::addMainModule(IMainModule* module)
