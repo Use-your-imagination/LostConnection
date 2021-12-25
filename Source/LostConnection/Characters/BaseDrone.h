@@ -178,7 +178,7 @@ public:
 	float BaseLookUpRate;
 
 private:
-	virtual void showBotHealthBar() final;
+	void showBotHealthBar();
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -204,91 +204,87 @@ protected:
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void MoveForward(float Value) final;
+	void MoveForward(float Value);
 
-	virtual void MoveRight(float Value) final;
+	void MoveRight(float Value);
 
-	virtual void TurnAtRate(float Rate) final;
+	void TurnAtRate(float Rate);
 
-	virtual void LookUpAtRate(float Rate) final;
+	void LookUpAtRate(float Rate);
 
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
 	UFUNCTION()
-	virtual void pressCrouch() final;
+	void pressCrouch();
 
 	UFUNCTION()
-	virtual void releaseCrouch() final;
+	void releaseCrouch();
 
 	UFUNCTION()
-	virtual void pressZoom() final;
+	void pressZoom();
 
 	UFUNCTION()
-	virtual void releaseZoom() final;
+	void releaseZoom();
 
 	UFUNCTION()
-	virtual void pressWeaponSelector() final;
+	void pressWeaponSelector();
 
 	UFUNCTION()
-	virtual void releaseWeaponSelector() final;
+	void releaseWeaponSelector();
 
 protected:
-	virtual void restoreEnergy(float amount) final;
+	void restoreEnergy(float amount);
 
 public:
 	ABaseDrone();
 
-	virtual void shoot() final override;
-
-	virtual void resetShoot() final override;
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void setPrimaryWeapon(TSubclassOf<UBaseWeapon> primaryWeapon);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setPrimaryWeapon(TSubclassOf<UBaseWeapon> primaryWeapon) final;
+	void setSecondaryWeapon(TSubclassOf<UBaseWeapon> secondaryWeapon);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setSecondaryWeapon(TSubclassOf<UBaseWeapon> secondaryWeapon) final;
+	void changeToPrimaryWeapon();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void changeToPrimaryWeapon() final;
+	void changeToSecondaryWeapon();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void changeToSecondaryWeapon() final;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void pickupAmmo(ammoTypes type, int32 count) final;
+	void pickupAmmo(ammoTypes type, int32 count);
 
 	UFUNCTION(Server, Reliable)
-	virtual void dropWeapon() final;
+	void dropWeapon();
 
 	UFUNCTION(Server, Reliable)
-	virtual void pickupWeapon(ADroppedWeapon* weaponToEquip) final;
+	void pickupWeapon(ADroppedWeapon* weaponToEquip);
 
 	UFUNCTION()
-	virtual void changeWeapon() final;
+	void changeWeapon();
 
 	UFUNCTION()
-	virtual void alternativeWeaponMode() final;
+	void alternativeWeaponMode();
 
 	UFUNCTION()
-	virtual void action() final;
+	void action();
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
-	virtual UBaseWeapon* getPrimaryWeapon() final;
+	UBaseWeapon* getPrimaryWeapon();
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
-	virtual UBaseWeapon* getSecondaryWeapon() final;
+	UBaseWeapon* getSecondaryWeapon();
 
-	virtual USpringArmComponent* GetCameraOffset() const final;
+	USpringArmComponent* GetCameraOffset() const;
 
-	virtual UCameraComponent* GetFollowCamera() const final;
-
-	UFUNCTION(BlueprintCallable)
-	virtual FVector getStartActionLineTrace() const final;
+	UCameraComponent* GetFollowCamera() const;
 
 	UFUNCTION(BlueprintCallable)
-	virtual FVector getEndActionLineTrace() const final;
+	FVector getStartActionLineTrace() const;
+
+	UFUNCTION(BlueprintCallable)
+	FVector getEndActionLineTrace() const;
 
 	UFUNCTION(BlueprintNativeEvent)
 	void pressShoot();
@@ -296,9 +292,16 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void releaseShoot();
 
-	virtual void addMainModule(IMainModule* module) override;
+	virtual void shoot() final override;
 
-	virtual void addWeaponModule(IWeaponModule* module) override;
+	virtual void resetShoot() final override;
+
+	UFUNCTION(Category = Abilities, BlueprintCallable)
+	TArray<UBaseAbility*> getDroneAbilities() const;
+
+	virtual void addMainModule(IMainModule* module) final override;
+
+	virtual void addWeaponModule(IWeaponModule* module) final override;
 
 	virtual float getFlatDamageReduction_Implementation() const override;
 
@@ -312,15 +315,15 @@ public:
 
 	virtual void setCooldownReduction_Implementation(float newCooldownReduction) final override;
 
-	virtual void setDuration_Implementation(float newDuration) final;
+	virtual void setDuration_Implementation(float newDuration) final override;
 
-	virtual void setPower_Implementation(float newPower) final;
+	virtual void setPower_Implementation(float newPower) final override;
 	
-	virtual void setEnergyEfficiency_Implementation(float newEnergyEfficiency) final;
+	virtual void setEnergyEfficiency_Implementation(float newEnergyEfficiency) final override;
 	
-	virtual void setAOE_Implementation(float newAOE) final;
+	virtual void setAOE_Implementation(float newAOE) final override;
 	
-	virtual void setCastPoint_Implementation(float newCastPoint) final;
+	virtual void setCastPoint_Implementation(float newCastPoint) final override;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setCurrentAbility(UBaseAbility* ability) final override;
@@ -333,15 +336,15 @@ public:
 
 	virtual float getCooldownReduction() const final override;
 
-	virtual float getDuration() const final;
+	virtual float getDuration() const final override;
 
-	virtual float getPower() const final;
+	virtual float getPower() const final override;
 
-	virtual float getEnergyEfficiency() const final;
+	virtual float getEnergyEfficiency() const final override;
 
-	virtual float getAOE() const final;
+	virtual float getAOE() const final override;
 
-	virtual float getCastPoint() const final;
+	virtual float getCastPoint() const final override;
 
 	virtual int32 getWeaponCount() const override;
 
@@ -357,7 +360,7 @@ public:
 
 	virtual UBaseAbility* getThirdAbility() const final override;
 
-	virtual UBaseUltimateAbility* getUltimateAbility() const final override;
+	UBaseUltimateAbility* getUltimateAbility() const final override;
 
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 

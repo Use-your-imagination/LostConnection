@@ -568,20 +568,6 @@ ABaseDrone::ABaseDrone() :
 #pragma endregion
 }
 
-void ABaseDrone::shoot()
-{
-	ABaseCharacter::shoot();
-
-	this->pressShoot();
-}
-
-void ABaseDrone::resetShoot()
-{
-	ABaseCharacter::resetShoot();
-
-	MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseShoot");
-}
-
 void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primaryWeapon)
 {
 	if (!primaryWeapon)
@@ -825,6 +811,32 @@ void ABaseDrone::pressShoot_Implementation()
 void ABaseDrone::releaseShoot_Implementation()
 {
 
+}
+
+void ABaseDrone::shoot()
+{
+	ABaseCharacter::shoot();
+
+	this->pressShoot();
+}
+
+void ABaseDrone::resetShoot()
+{
+	ABaseCharacter::resetShoot();
+
+	MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseShoot");
+}
+
+TArray<UBaseAbility*> ABaseDrone::getDroneAbilities() const
+{
+	return
+	{
+		passiveAbility,
+		firstAbility,
+		secondAbility,
+		thirdAbility,
+		ultimateAbility
+	};
 }
 
 void ABaseDrone::addMainModule(IMainModule* module)

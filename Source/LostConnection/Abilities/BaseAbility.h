@@ -27,14 +27,17 @@ class LOSTCONNECTION_API UBaseAbility : public UObject
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Category = AbilityStat, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	float cost;
-
 	UPROPERTY(Category = AbilityDescription, EditDefaultsOnly, BlueprintReadOnly)
 	FText name;
 
 	UPROPERTY(Category = AbilityDescription, EditDefaultsOnly, BlueprintReadOnly)
 	FText description;
+
+	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly)
+	UTexture2D* icon;
+
+	UPROPERTY(Category = AbilityStat, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	float cost;
 
 	UPROPERTY(Category = AbilityState, EditDefaultsOnly, BlueprintReadOnly)
 	bool isCancelable;
