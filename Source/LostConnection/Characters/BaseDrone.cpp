@@ -375,7 +375,7 @@ void ABaseDrone::Tick(float DeltaTime)
 			secondaryWeapon->Tick(DeltaTime);
 		}
 
-		if (slideCooldown != 0.0f)
+		if (slideCooldown)
 		{
 			slideCooldown = FMath::Max(0.0f, slideCooldown - DeltaTime);
 		}

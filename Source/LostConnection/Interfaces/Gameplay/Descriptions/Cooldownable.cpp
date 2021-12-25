@@ -11,7 +11,7 @@ void ICooldownable::processCooldown(float DeltaTime)
 {
 	float& currentCooldown = this->getCurrentCooldown();
 
-	if (currentCooldown != 0.0f)
+	if (currentCooldown)
 	{
 		currentCooldown = FMath::Max(0.0f, currentCooldown - DeltaTime);
 	}

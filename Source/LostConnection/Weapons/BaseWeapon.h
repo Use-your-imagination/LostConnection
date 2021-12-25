@@ -47,7 +47,7 @@ protected:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	virtual void shoot();
+	void shoot();
 
 protected:
 	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
@@ -67,18 +67,6 @@ protected:
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float damage;
-
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	float addedDamage;
-
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	float additionalDamage;
-
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	TArray<float> increasedDamageCoefficients;
-
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	TArray<float> moreDamageCoefficients;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	int32 currentMagazineSize;
@@ -101,92 +89,119 @@ protected:
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float crushingHitChance;
 
-	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	float additionalCrushingHitChance;
-
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float length;
 
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<ABaseAmmo> ammoClass;
 
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, BlueprintReadOnly)
+	float drawback;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float addedDamage;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float additionalDamage;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	TArray<float> increasedDamageCoefficients;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	TArray<float> moreDamageCoefficients;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float additionalCrushingHitChance;
+
+	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
+	float currentAccuracyMultiplier;
+
+private:
+	UFUNCTION(Category = Weapons, BlueprintCallable, Meta = (AllowPrivateAccess = "true"))
+	float calculateSpreadDistance() const;
+
 public:
 	UBaseWeapon();
 
-	virtual void startShoot() final;
+	void startShoot();
 
-	virtual void resetShoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character) final;
+	void resetShoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
 
-	virtual void alternativeMode();
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void updateTimeBetweenShots() final;
-
-	virtual void Tick(float DeltaTime);
-
-	virtual void appendIncreasedDamageCoefficient(float coefficient) final;
-
-	virtual void removeIncreasedDamageCoefficient(float coefficient) final;
-
-	virtual void appendMoreDamageCoefficient(float coefficient) final;
-
-	virtual void removeMoreDamageCoefficient(float coefficient) final;
+	void alternativeMode();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setOwner(class ABaseCharacter* owner) final;
+	void updateTimeBetweenShots();
+
+	void Tick(float DeltaTime);
+
+	void appendIncreasedDamageCoefficient(float coefficient);
+
+	void removeIncreasedDamageCoefficient(float coefficient);
+
+	void appendMoreDamageCoefficient(float coefficient);
+
+	void removeMoreDamageCoefficient(float coefficient);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void setOwner(class ABaseCharacter* owner);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setAmmoType(ammoTypes newAmmoType) final;
+	void setAmmoType(ammoTypes newAmmoType);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setBaseDamage(float newDamage) final;
+	void setBaseDamage(float newDamage);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setAddedDamage(float newAddedDamage) final;
+	void setAddedDamage(float newAddedDamage);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setAdditionalDamage(float newAdditionalDamage) final;
+	void setAdditionalDamage(float newAdditionalDamage);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setCurrentMagazineSize(int32 newCurrentMagazineSize) final;
+	void setCurrentMagazineSize(int32 newCurrentMagazineSize);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setRateOfFire(int32 newRoundsPerSecond) final;
+	void setRateOfFire(int32 newRoundsPerSecond);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setWeaponType(weaponTypes newWeaponType) final;
+	void setWeaponType(weaponTypes newWeaponType);
 
-	virtual USkeletalMesh* getWeaponMesh() const final;
+	USkeletalMesh* getWeaponMesh() const;
 
-	virtual UStaticMesh* getMagazineMesh() const final;
+	UStaticMesh* getMagazineMesh() const;
 
-	virtual ammoTypes getAmmoType() const final;
+	ammoTypes getAmmoType() const;
 
-	virtual typeOfDamage getDamageType() const final;
+	typeOfDamage getDamageType() const;
 
-	virtual float getBaseDamage() const final;
+	float getBaseDamage() const;
 
-	virtual float getAddedDamage() const final;
+	float getAddedDamage() const;
 
-	virtual float getAdditionalDamage() const final;
+	float getAdditionalDamage() const;
 
-	virtual int32 getCurrentMagazineSize() const final;
+	int32 getCurrentMagazineSize() const;
 
-	virtual int32 getMagazineSize() const final;
+	int32 getMagazineSize() const;
 
-	virtual int32 getRoundsPerSecond() const final;
+	int32 getRoundsPerSecond() const;
 
-	virtual weaponTypes getWeaponType() const final;
+	weaponTypes getWeaponType() const;
 
-	virtual UClass* getAnimationBlueprint() const final;
+	UClass* getAnimationBlueprint() const;
 
-	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwner() const final;
+	const TWeakObjectPtr<class ABaseCharacter>& getOwner() const;
 
-	virtual float getCrushingHitChance() const final;
+	float getCrushingHitChance() const;
 
-	virtual float getAdditionalCrushingHitChance() const final;
+	float getAdditionalCrushingHitChance() const;
 
-	virtual float getLength() const final;
+	float getLength() const;
 
 	virtual ~UBaseWeapon() = default;
 };
+
+inline float UBaseWeapon::calculateSpreadDistance() const
+{
+	return spreadDistance * (1.0f / (1.0f - currentAccuracyMultiplier));
+}

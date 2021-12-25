@@ -56,6 +56,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseWeapon, additionalCrushingHitChance);
 
 	DOREPLIFETIME(UBaseWeapon, length);
+
+	DOREPLIFETIME(UBaseWeapon, currentAccuracyMultiplier);
 }
 
 void UBaseWeapon::shoot()
@@ -80,6 +82,7 @@ void UBaseWeapon::shoot()
 		FTransform ammoTransform;
 		FTransform fakeAmmoTransform;
 		ABaseDrone* drone = Cast<ABaseDrone>(owner.Get());
+		float currentSpreadDistance = this->calculateSpreadDistance();
 
 		if (drone)
 		{
@@ -119,14 +122,16 @@ void UBaseWeapon::shoot()
 
 		launchedAmmo->copyProperties(this);
 
-		float pitch = FMath::RandRange(-spreadDistance, spreadDistance);
-		float yaw = FMath::Tan(FMath::Acos(pitch / spreadDistance)) * pitch;
+		float pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);
+		float yaw = FMath::Tan(FMath::Acos(pitch / currentSpreadDistance)) * pitch;
 
 		launchedAmmo->launch(owner.Get(), fakeAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
 		currentMagazineSize -= ammoCost;
 
 		currentTimeBetweenShots = timeBetweenShots;
+
+		currentAccuracyMultiplier += drawback;
 	}
 	else
 	{
@@ -173,15 +178,14 @@ void UBaseWeapon::updateTimeBetweenShots_Implementation()
 
 void UBaseWeapon::Tick(float DeltaTime)
 {
-	if (currentTimeBetweenShots > 0.0f)
-	{
-		currentTimeBetweenShots -= DeltaTime;
+	static float constexpr decreaseAccuracyMultiplier = 0.95f;
 
-		if (currentTimeBetweenShots < 0.0f)
-		{
-			currentTimeBetweenShots = 0.0f;
-		}
+	if (currentTimeBetweenShots)
+	{
+		currentTimeBetweenShots = FMath::Max(0.0f, currentTimeBetweenShots - DeltaTime);
 	}
+
+	currentAccuracyMultiplier *= decreaseAccuracyMultiplier;
 
 	if (isShooting && !currentTimeBetweenShots)
 	{
