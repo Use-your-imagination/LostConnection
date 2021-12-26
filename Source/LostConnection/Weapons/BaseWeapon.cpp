@@ -185,7 +185,7 @@ void UBaseWeapon::Tick(float DeltaTime)
 		currentTimeBetweenShots = FMath::Max(0.0f, currentTimeBetweenShots - DeltaTime);
 	}
 
-	currentAccuracyMultiplier *= decreaseAccuracyMultiplier;
+	currentAccuracyMultiplier = FMath::Max(1.0f, currentAccuracyMultiplier * decreaseAccuracyMultiplier);
 
 	if (isShooting && !currentTimeBetweenShots)
 	{

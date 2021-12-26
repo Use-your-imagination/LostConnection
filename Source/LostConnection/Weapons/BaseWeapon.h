@@ -203,5 +203,5 @@ public:
 
 inline float UBaseWeapon::calculateSpreadDistance() const
 {
-	return spreadDistance * (1.0f / (1.0f - currentAccuracyMultiplier));
+	return spreadDistance * currentAccuracyMultiplier;
 }
