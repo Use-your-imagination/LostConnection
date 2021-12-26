@@ -2,9 +2,21 @@
   "projectName": "LostConnection",
   "projectVersion": "0.1.6.0",
   "Maps": {
-    "type": "category"
+    "type": "category",
+    "New map": {
+      "type": "item",
+      "notes": [
+        "Added new map"
+      ]
+    }
   },
   "UI": {
-    "type": "category"
+    "type": "category",
+    "Passive ability": {
+      "type": "item",
+      "notes": [
+        "Added passive ability slot"
+      ]
+    }
   }
 }
