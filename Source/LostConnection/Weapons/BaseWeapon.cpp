@@ -118,7 +118,7 @@ void UBaseWeapon::shoot()
 			}
 		}
 
-		ABaseAmmo* launchedAmmo = Utility::getGameState(owner.Get())->spawn<ABaseAmmo>(ammoClass.Get(), ammoTransform);
+		ABaseAmmo* launchedAmmo = Utility::getGameState(owner.Get())->spawn<ABaseAmmo>(ammoClass, ammoTransform);
 
 		launchedAmmo->copyProperties(this);
 

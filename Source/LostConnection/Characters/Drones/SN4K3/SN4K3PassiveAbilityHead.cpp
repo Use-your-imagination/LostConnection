@@ -13,6 +13,7 @@
 #include "SN4K3ResurrectDeathEvent.h"
 #include "WorldPlaceables/DeathPlaceholder.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
+#include "Statuses/Ailments/SwarmAilment.h"
 
 void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -21,7 +22,7 @@ void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* Player
 	FInputActionBinding pressExplosion("Shoot", IE_Pressed);
 	FInputActionBinding pressSprint("Zoom", IE_Pressed);
 
-	pressExplosion.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() 
+	pressExplosion.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
 		{
 			if (!this->checkExplode())
 			{
@@ -31,7 +32,7 @@ void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* Player
 			MultiplayerUtility::runOnServerReliable(this, "explode");
 		});
 
-	pressSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() 
+	pressSprint.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
 		{
 			if (!this->checkSpeedup())
 			{
@@ -83,8 +84,6 @@ void ASN4K3PassiveAbilityHead::explode()
 			characterHit.Component = character->GetMesh();
 			characterHit.Location = character->GetActorLocation();
 
-			// TODO: Expire event
-
 			USN4K3ResurrectDeathEvent* resurrect = NewObject<USN4K3ResurrectDeathEvent>(character);
 
 			resurrect->initDeathEvent(character);
@@ -94,6 +93,17 @@ void ASN4K3PassiveAbilityHead::explode()
 			character->takeDamage(this);
 
 			character->statusInflictorImpactAction(this, characterHit);
+
+			character->getTimers().addTimer
+			(
+				[character, resurrect]()
+				{
+					character->detachDeathEvent(resurrect);
+				},
+				0.0f,
+				false,
+				character->getSwarm()->getRemainingDuration()
+			);
 		}
 	}
 

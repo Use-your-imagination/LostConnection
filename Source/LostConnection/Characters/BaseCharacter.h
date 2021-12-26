@@ -104,7 +104,7 @@ protected:
 
 	TWeakObjectPtr<class USwarmAilment> swarm;
 
-	TArray<TWeakInterfacePtr<IOnDeathEvent>> deathEvents;
+	TArray<IOnDeathEvent*> deathEvents;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Reloading, BlueprintReadWrite)
@@ -160,7 +160,7 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	virtual void updateWeaponMesh() final;
+	void updateWeaponMesh();
 
 	UFUNCTION()
 	virtual void holdSprint();
@@ -208,77 +208,79 @@ public:
 	virtual void resetShoot();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runShootLogic() final;
+	void runShootLogic();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runDeathLogic() final;
+	void runDeathLogic();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void runReloadLogic() final;
+	void runReloadLogic();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void changeToDefaultWeapon() final;
+	void changeToDefaultWeapon();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void restoreHealth(float amount) final;
+	void restoreHealth(float amount);
 
-	virtual void returnAmmoToSpare(UBaseWeapon* weapon) final;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setDefaultWeapon(TSubclassOf<UBaseWeapon> defaultWeapon) final;
+	void returnAmmoToSpare(UBaseWeapon* weapon);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setHealth(float newHealth) final;
+	void setDefaultWeapon(TSubclassOf<UBaseWeapon> defaultWeapon);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setCurrentHealth(float newCurrentHealth) final;
+	void setHealth(float newHealth);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setReservedHealth(float newReservedHealth) final;
+	void setCurrentHealth(float newCurrentHealth);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void setReservedHealth(float newReservedHealth);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setDefaultMovementSpeed(float speed) final;
+	void setDefaultMovementSpeed(float speed);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setSprintMovementSpeed(float speed) final;
+	void setSprintMovementSpeed(float speed);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setIsAlly(bool newIsAlly) final;
+	void setIsAlly(bool newIsAlly);
 
 	UFUNCTION(Server, Reliable)
-	virtual void setIsDead(bool newIsDead) final;
+	void setIsDead(bool newIsDead);
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
-	virtual UBaseWeapon* getDefaultWeapon() final;
+	UBaseWeapon* getDefaultWeapon();
 
-	virtual float getHealth() const final;
+	float getHealth() const;
 
-	virtual float getCurrentHealth() const final;
+	float getCurrentHealth() const;
 
-	virtual float getReservedHealth() const final;
+	float getReservedHealth() const;
 
-	virtual float getDefaultMovementSpeed() const final;
+	float getDefaultMovementSpeed() const;
 
-	virtual float getSprintMovementSpeed() const final;
-
-	UFUNCTION(BlueprintCallable)
-	virtual int32 getSpareAmmo(ammoTypes type) const final;
-
-	virtual bool getIsReloading() const final;
+	float getSprintMovementSpeed() const;
 
 	UFUNCTION(BlueprintCallable)
-	virtual bool isWeaponEquipped() const final;
+	int32 getSpareAmmo(ammoTypes type) const;
 
-	virtual USkeletalMeshComponent* getCurrentWeaponMeshComponent() const final;
+	bool getIsReloading() const;
 
-	virtual UBaseWeapon* getCurrentWeapon() final;
+	UFUNCTION(BlueprintCallable)
+	bool isWeaponEquipped() const;
+
+	USkeletalMeshComponent* getCurrentWeaponMeshComponent() const;
+
+	UBaseWeapon* getCurrentWeapon() const;
 
 	UFUNCTION(BlueprintCallable)
 	virtual int32 getWeaponCount() const;
 
-	virtual const TWeakObjectPtr<class USwarmAilment>& getSwarm() const final;
+	const TWeakObjectPtr<class USwarmAilment>& getSwarm() const;
 
 	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const;
+
+	TimersUtility& getTimers();
 
 	virtual void Tick(float DeltaTime) override;
 
@@ -293,6 +295,10 @@ public:
 	virtual void addStatus(class UBaseStatus* status) final override;
 
 	virtual void applySwarmAilment(class USwarmAilment* swarm) final override;
+
+	virtual void attachDeathEvent(IOnDeathEvent* event) final override;
+
+	virtual void detachDeathEvent(IOnDeathEvent* event) final override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void setUnderStatusIntVariable(const FString& key, int32 value) final override;
@@ -317,11 +323,7 @@ public:
 
 	virtual UCapsuleComponent* getCapsuleComponent() final override;
 
-	virtual void attachDeathEvent(IOnDeathEvent* event) final override;
-
-	virtual void detachDeathEvent(IOnDeathEvent* event) final override;
-
-	virtual const TArray<TWeakInterfacePtr<IOnDeathEvent>>& getDeathEvents() const final override;
+	virtual const TArray<IOnDeathEvent*>& getDeathEvents() const final override;
 
 	virtual ~ABaseCharacter() = default;
 };

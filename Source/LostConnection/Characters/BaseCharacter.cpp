@@ -550,7 +550,7 @@ USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMeshComponent() const
 	return currentWeaponMesh;
 }
 
-UBaseWeapon* ABaseCharacter::getCurrentWeapon()
+UBaseWeapon* ABaseCharacter::getCurrentWeapon() const
 {
 	return currentWeapon;
 }
@@ -575,6 +575,11 @@ TArray<TWeakObjectPtr<UBaseWeapon>> ABaseCharacter::getWeapons() const
 	}
 
 	return TArray<TWeakObjectPtr<UBaseWeapon>>();
+}
+
+TimersUtility& ABaseCharacter::getTimers()
+{
+	return timers;
 }
 
 void ABaseCharacter::Tick(float DeltaTime)
@@ -679,6 +684,16 @@ void ABaseCharacter::applySwarmAilment(USwarmAilment* swarm)
 	this->swarm = swarm;
 }
 
+void ABaseCharacter::attachDeathEvent(IOnDeathEvent* event)
+{
+	deathEvents.Add(event);
+}
+
+void ABaseCharacter::detachDeathEvent(IOnDeathEvent* event)
+{
+	deathEvents.Remove(event);
+}
+
 void ABaseCharacter::setUnderStatusIntVariable_Implementation(const FString& key, int32 value)
 {
 	underStatusComponent->SetNiagaraVariableInt(key, value);
@@ -769,17 +784,7 @@ UCapsuleComponent* ABaseCharacter::getCapsuleComponent()
 	return GetCapsuleComponent();
 }
 
-void ABaseCharacter::attachDeathEvent(IOnDeathEvent* event)
-{
-	deathEvents.Add(event);
-}
-
-void ABaseCharacter::detachDeathEvent(IOnDeathEvent* event)
-{
-	deathEvents.Remove(event);
-}
-
-const TArray<TWeakInterfacePtr<IOnDeathEvent>>& ABaseCharacter::getDeathEvents() const
+const TArray<IOnDeathEvent*>& ABaseCharacter::getDeathEvents() const
 {
 	return deathEvents;
 }

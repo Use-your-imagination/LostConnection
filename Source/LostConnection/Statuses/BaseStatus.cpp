@@ -91,12 +91,22 @@ void UBaseStatus::setDuration(float duration)
 	this->duration = duration;
 }
 
-UNiagaraSystem* UBaseStatus::getOnApplyStatus()
+UNiagaraSystem* UBaseStatus::getOnApplyStatus() const
 {
 	return onApplyStatus;
 }
 
-UNiagaraSystem* UBaseStatus::getOnApplyEffect()
+UNiagaraSystem* UBaseStatus::getOnApplyEffect() const
 {
 	return onApplyEffect;
+}
+
+float UBaseStatus::getCurrentDuration() const
+{
+	return currentDuration;
+}
+
+float UBaseStatus::getRemainingDuration() const
+{
+	return duration - currentDuration;
 }

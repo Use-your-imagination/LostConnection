@@ -28,5 +28,5 @@ public:
 
 	virtual void notifyDeathEvents() const;
 
-	virtual const TArray<TWeakInterfacePtr<IOnDeathEvent>>& getDeathEvents() const = 0;
+	virtual const TArray<IOnDeathEvent*>& getDeathEvents() const = 0;
 };

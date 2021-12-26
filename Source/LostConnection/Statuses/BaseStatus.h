@@ -20,7 +20,7 @@ class LOSTCONNECTION_API UBaseStatus : public UObject
 	GENERATED_BODY()
 
 protected:
-	virtual FString getStatusCountKey() const final;
+	FString getStatusCountKey() const;
 
 protected:
 	virtual bool IsSupportedForNetworking() const final override;
@@ -68,13 +68,17 @@ public:
 
 	virtual bool Tick(float DeltaTime);
 
-	virtual void refreshDuration() final;
+	void refreshDuration();
 
-	virtual void setDuration(float duration) final;
+	void setDuration(float duration);
 
-	virtual UNiagaraSystem* getOnApplyStatus() final;
+	UNiagaraSystem* getOnApplyStatus() const;
 
-	virtual UNiagaraSystem* getOnApplyEffect() final;
+	UNiagaraSystem* getOnApplyEffect() const;
+
+	float getCurrentDuration() const;
+
+	float getRemainingDuration() const;
 
 	virtual ~UBaseStatus() = default;
 };

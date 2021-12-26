@@ -4,13 +4,10 @@
 
 void IDeathEventsHolder::notifyDeathEvents() const
 {
-	const TArray<TWeakInterfacePtr<IOnDeathEvent>>& events = this->getDeathEvents();
+	const TArray<IOnDeathEvent*>& events = this->getDeathEvents();
 
 	for (const auto& event : events)
 	{
-		if (event.IsValid())
-		{
-			event->deathEventAction();
-		}
+		event->deathEventAction();
 	}
 }
