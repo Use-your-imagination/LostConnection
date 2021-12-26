@@ -20,8 +20,8 @@ class LOSTCONNECTION_API USN4K3PassiveAbility :
 private:
 	enum class directionTypes
 	{
-		up,
-		down
+		increase,
+		decrease
 	};
 
 private:

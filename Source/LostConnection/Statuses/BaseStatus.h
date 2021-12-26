@@ -9,13 +9,14 @@
 #include "NiagaraSystem.h"
 
 #include "Interfaces/Gameplay/Statuses/Base/StatusInflictor.h"
+#include "Network/BaseNetworkObject.h"
 
 #include "BaseStatus.generated.h"
 
 #pragma warning(disable: 4458)
 
 UCLASS(BlueprintType, Blueprintable)
-class LOSTCONNECTION_API UBaseStatus : public UObject
+class LOSTCONNECTION_API UBaseStatus : public UBaseNetworkObject
 {
 	GENERATED_BODY()
 
@@ -23,8 +24,6 @@ protected:
 	FString getStatusCountKey() const;
 
 protected:
-	virtual bool IsSupportedForNetworking() const final override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual FString getStatusName() const;

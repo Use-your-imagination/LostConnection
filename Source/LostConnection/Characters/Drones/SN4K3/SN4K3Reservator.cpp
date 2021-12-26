@@ -5,11 +5,6 @@
 #include "Characters/BaseDrone.h"
 #include "Statuses/Buffs/SN4K3/SN4K3ReservatorBuff.h"
 
-bool USN4K3Reservator::IsSupportedForNetworking() const
-{
-	return true;
-}
-
 void USN4K3Reservator::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

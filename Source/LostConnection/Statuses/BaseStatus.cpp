@@ -16,11 +16,6 @@ FString UBaseStatus::getStatusCountKey() const
 	return this->getStatusName() + "Count";
 }
 
-bool UBaseStatus::IsSupportedForNetworking() const
-{
-	return true;
-}
-
 void UBaseStatus::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

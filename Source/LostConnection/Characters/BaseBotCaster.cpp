@@ -53,6 +53,31 @@ bool ABaseBotCaster::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 
 	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
+	if (passiveAbility)
+	{
+		wroteSomething |= passiveAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	if (firstAbility)
+	{
+		wroteSomething |= firstAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	if (secondAbility)
+	{
+		wroteSomething |= secondAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	if (thirdAbility)
+	{
+		wroteSomething |= thirdAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	if (ultimateAbility)
+	{
+		wroteSomething |= ultimateAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
 	return wroteSomething;
 }
 
@@ -153,6 +178,19 @@ bool ABaseBotCaster::checkUltimateAbilityCast() const
 void ABaseBotCaster::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (HasAuthority())
+	{
+		passiveAbility->initAbility();
+
+		firstAbility->initAbility();
+
+		secondAbility->initAbility();
+
+		thirdAbility->initAbility();
+
+		ultimateAbility->initAbility();
+	}
 }
 
 ABaseBotCaster::ABaseBotCaster()

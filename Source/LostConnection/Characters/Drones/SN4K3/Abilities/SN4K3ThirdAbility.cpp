@@ -9,6 +9,7 @@
 #include "Engine/LostConnectionGameState.h"
 #include "SN4K3PassiveAbility.h"
 #include "Characters/Drones/SN4K3/SN4K3Reservator.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 
 #pragma warning(disable: 4458)
 
@@ -21,6 +22,8 @@ void USN4K3ThirdAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(USN4K3ThirdAbility, radius);
 
 	DOREPLIFETIME(USN4K3ThirdAbility, period);
+
+	DOREPLIFETIME(USN4K3ThirdAbility, socketItem);
 }
 
 USN4K3ThirdAbility::USN4K3ThirdAbility() :
@@ -43,19 +46,19 @@ bool USN4K3ThirdAbility::getIsFlagExist() const
 
 void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
 {
-	if (!socketItem.IsValid())
+	if (!IsValid(socketItem))
 	{
 		return;
 	}
 
-	socketItem->useSocketItem(target);
+	Cast<ISocketItem>(socketItem)->useSocketItem(target);
 
 	ICaster::Execute_applyThirdAbilityEvent(Cast<UObject>(caster), target);
 }
 
 void USN4K3ThirdAbility::useAbility()
 {
-	if (!socketItem.IsValid())
+	if (!IsValid(socketItem))
 	{
 		return;
 	}
@@ -65,7 +68,7 @@ void USN4K3ThirdAbility::useAbility()
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
 
-	USN4K3Reservator* defaultReservator = Cast<USN4K3Reservator>(socketItem.GetObject());
+	USN4K3Reservator* defaultReservator = Cast<USN4K3Reservator>(socketItem);
 
 	if (defaultReservator)
 	{
@@ -89,17 +92,38 @@ void USN4K3ThirdAbility::useAbility()
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }
 
+void USN4K3ThirdAbility::initAbility()
+{
+	Super::initAbility();
+
+	socketItem = NewObject<USN4K3Reservator>(this, ULostConnectionAssetManager::get().getStatuses().getDefaultSN4K3Reservator());
+}
+
 void USN4K3ThirdAbility::insert(const TScriptInterface<ISocketItem>& socketItem)
 {
-	this->socketItem = StaticCast<IReservator*>(socketItem.GetInterface());
+	this->socketItem = Cast<UBaseNetworkObject>(socketItem->_getUObject());
 }
 
 void USN4K3ThirdAbility::extract()
 {
-	socketItem.Reset();
+	socketItem = nullptr;
+}
+
+bool USN4K3ThirdAbility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(socketItem, *Bunch, *RepFlags);
+
+	if (socketItem)
+	{
+		wroteSomething |= socketItem->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	return wroteSomething;
 }
 
 ISocketItem* USN4K3ThirdAbility::getSocketItem() const
 {
-	return socketItem.IsValid() ? socketItem.Get() : nullptr;
+	return Cast<ISocketItem>(socketItem);
 }

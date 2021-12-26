@@ -18,7 +18,7 @@ void USN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 
 USN4K3PassiveAbility::USN4K3PassiveAbility() :
 	lastTimeAbilityUsed(0.0f),
-	type(directionTypes::up)
+	type(directionTypes::increase)
 {
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
@@ -70,23 +70,23 @@ void USN4K3PassiveAbility::Tick(float DeltaTime)
 
 	if (lastTimeAbilityUsed < coeff)
 	{
-		type = directionTypes::up;
+		type = directionTypes::increase;
 	}
 	else
 	{
-		type = directionTypes::down;
+		type = directionTypes::decrease;
 	}
 
 	lastTimeAbilityUsed += FApp::GetDeltaTime();
 
 	switch (type)
 	{
-	case directionTypes::up:
+	case directionTypes::increase:
 		naniteMeter = FMath::Clamp(FMath::LogX(10, lastTimeAbilityUsed / coeff) / 2.0f + 1.0f, 0.5f, 1.0f) * 100;
 
 		break;
 
-	case directionTypes::down:
+	case directionTypes::decrease:
 		naniteMeter = FMath::Clamp((FMath::Pow((lastTimeAbilityUsed - coeff) / 2.0f, 4) * -1 + 1.25f), 0.0f, 1.0f) * 100;
 
 		break;

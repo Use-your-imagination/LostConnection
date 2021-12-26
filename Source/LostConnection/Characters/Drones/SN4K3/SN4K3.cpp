@@ -16,34 +16,6 @@
 #include "Utility/Utility.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-void ASN4K3::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ASN4K3, thirdAbilityReservator);
-}
-
-bool ASN4K3::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(thirdAbilityReservator, *Bunch, *RepFlags);
-
-	return wroteSomething;
-}
-
-void ASN4K3::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (HasAuthority())
-	{
-		thirdAbilityReservator = NewObject<USN4K3Reservator>(this, ULostConnectionAssetManager::get().getStatuses().getDefaultSN4K3Reservator());
-
-		Cast<USN4K3ThirdAbility>(thirdAbility)->insert(thirdAbilityReservator);
-	}
-}
-
 void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ABaseCharacter* target = Cast<ABaseCharacter>(OtherActor);
@@ -122,7 +94,7 @@ bool ASN4K3::checkSecondAbilityCast() const
 		return false;
 	}
 
-	bool result = false;
+	bool result;
 	FHitResult hit;
 	UWorld* world = this->GetWorld();
 	ABaseCharacter* target = nullptr;
@@ -135,7 +107,7 @@ bool ASN4K3::checkSecondAbilityCast() const
 
 	target = Cast<ABaseCharacter>(hit.Actor);
 
-	result &= target && !target->getIsAlly();
+	result = target && !target->getIsAlly();
 
 	if (result)
 	{
@@ -152,7 +124,9 @@ bool ASN4K3::checkThirdAbilityCast() const
 		return false;
 	}
 
-	return thirdAbilityReservator && thirdAbilityReservator->IsValidLowLevelFast() && !Cast<USN4K3ThirdAbility>(thirdAbility)->getIsFlagExist();
+	USN4K3ThirdAbility* ability = Cast<USN4K3ThirdAbility>(thirdAbility);
+
+	return IsValid(ability) && !ability->getIsFlagExist();
 }
 
 bool ASN4K3::checkUltimateAbilityCast() const

@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
 
+#include "Network/BaseNetworkObject.h"
 #include "Ammo/BaseAmmo.h"
 
 #include "BaseWeapon.generated.h"
@@ -32,7 +33,7 @@ enum class ammoTypes : uint8
 };
 
 UCLASS(BlueprintType, Blueprintable)
-class LOSTCONNECTION_API UBaseWeapon : public UObject
+class LOSTCONNECTION_API UBaseWeapon : public UBaseNetworkObject
 {
 	GENERATED_BODY()
 		
@@ -43,8 +44,6 @@ private:
 	bool isShooting;
 
 protected:
-	virtual bool IsSupportedForNetworking() const final override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	void shoot();

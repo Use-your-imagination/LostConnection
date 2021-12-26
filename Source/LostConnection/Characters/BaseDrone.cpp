@@ -229,6 +229,16 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 
 	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
+	wroteSomething |= passiveAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= firstAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= secondAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= thirdAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= ultimateAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
 	return wroteSomething;
 }
 
@@ -352,6 +362,16 @@ void ABaseDrone::BeginPlay()
 		this->setPrimaryWeapon(manager.getWeaponClass(UHipter::StaticClass()));
 
 		this->setDefaultWeapon(manager.getWeaponClass(UGauss::StaticClass()));
+
+		passiveAbility->initAbility();
+		
+		firstAbility->initAbility();
+		
+		secondAbility->initAbility();
+		
+		thirdAbility->initAbility();
+		
+		ultimateAbility->initAbility();
 	}
 }
 

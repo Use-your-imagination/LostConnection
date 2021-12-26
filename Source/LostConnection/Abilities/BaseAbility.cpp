@@ -7,11 +7,6 @@
 
 #pragma warning(disable: 4458)
 
-bool UBaseAbility::IsSupportedForNetworking() const
-{
-	return true;
-}
-
 void UBaseAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -38,6 +33,11 @@ void UBaseAbility::useAbility()
 }
 
 void UBaseAbility::Tick(float DeltaTime)
+{
+
+}
+
+void UBaseAbility::initAbility()
 {
 
 }

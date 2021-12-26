@@ -29,6 +29,11 @@ bool ADroppedWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 
 	wroteSomething |= Channel->ReplicateSubobject(weapon, *Bunch, *RepFlags);
 
+	if (IsValid(weapon))
+	{
+		wroteSomething |= weapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
 	return wroteSomething;
 }
 

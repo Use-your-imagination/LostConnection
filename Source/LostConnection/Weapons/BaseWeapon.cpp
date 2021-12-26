@@ -16,11 +16,6 @@
 
 #pragma warning(disable: 4458)
 
-bool UBaseWeapon::IsSupportedForNetworking() const
-{
-	return true;
-}
-
 void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

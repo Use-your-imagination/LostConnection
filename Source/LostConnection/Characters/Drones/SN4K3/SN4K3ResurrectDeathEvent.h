@@ -8,6 +8,7 @@
 #include "UObject/WeakInterfacePtr.h"
 
 #include "Interfaces/Gameplay/Descriptions/Observers/GameplayEvents/OnDeathEvent.h"
+#include "Network/BaseNetworkObject.h"
 
 #include "SN4K3ResurrectDeathEvent.generated.h"
 
@@ -15,7 +16,7 @@
 
 UCLASS()
 class LOSTCONNECTION_API USN4K3ResurrectDeathEvent :
-	public UObject,
+	public UBaseNetworkObject,
 	public IOnDeathEvent
 {
 	GENERATED_BODY()

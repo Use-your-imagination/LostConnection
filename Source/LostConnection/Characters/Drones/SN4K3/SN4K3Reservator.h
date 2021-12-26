@@ -4,15 +4,14 @@
 
 #include "CoreMinimal.h"
 
-#include "UObject/NoExportTypes.h"
-
+#include "Network/BaseNetworkObject.h"
 #include "Interfaces/Gameplay/Descriptions/Sockets/Reservator.h"
 
 #include "SN4K3Reservator.generated.h"
 
 UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API USN4K3Reservator : 
-	public UObject,
+	public UBaseNetworkObject,
 	public IReservator
 {
 	GENERATED_BODY()
@@ -30,8 +29,6 @@ private:
 	float buffDuration;
 
 private:
-	virtual bool IsSupportedForNetworking() const final override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 public:

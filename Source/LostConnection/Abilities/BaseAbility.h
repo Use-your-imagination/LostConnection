@@ -6,7 +6,8 @@
 
 #include "UObject/Object.h"
 #include "Animation/AnimMontage.h"
-#include "Net/UnrealNetwork.h"
+
+#include "Network/BaseNetworkObject.h"
 
 #include "BaseAbility.generated.h"
 
@@ -21,8 +22,8 @@ enum class abilitySlot : uint8
 	ultimateAbility = 5 UMETA(DisplayName = "Ultimate ability")
 };
 
-UCLASS(BlueprintType, DefaultToInstanced)
-class LOSTCONNECTION_API UBaseAbility : public UObject
+UCLASS(DefaultToInstanced)
+class LOSTCONNECTION_API UBaseAbility : public UBaseNetworkObject
 {
 	GENERATED_BODY()
 
@@ -59,8 +60,6 @@ protected:
 	class ICaster* caster;
 
 protected:
-	virtual bool IsSupportedForNetworking() const final override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
@@ -71,6 +70,8 @@ public:
 	virtual void useAbility();
 
 	virtual void Tick(float DeltaTime);
+
+	virtual void initAbility();
 
 	UFUNCTION(Server, Reliable)
 	virtual void setCost(float newCost) final;
