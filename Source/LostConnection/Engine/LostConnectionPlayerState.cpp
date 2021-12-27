@@ -42,21 +42,21 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(primaryWeapon, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(secondaryWeapon, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
-
 	if (primaryWeapon)
 	{
+		wroteSomething |= Channel->ReplicateSubobject(primaryWeapon, *Bunch, *RepFlags);
+
 		wroteSomething |= primaryWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
 	if (secondaryWeapon)
 	{
+		wroteSomething |= Channel->ReplicateSubobject(secondaryWeapon, *Bunch, *RepFlags);
+
 		wroteSomething |= secondaryWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
+
+	wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
 
 	wroteSomething |= defaultWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 

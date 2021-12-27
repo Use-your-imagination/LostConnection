@@ -5,11 +5,12 @@
 #include "GameFramework/InputSettings.h"
 
 #include "Characters/BaseDrone.h"
+#include "Constants/Constants.h"
 
-FString IActionable::getActionMessage() const
+FText IActionable::getActionMessage() const
 {
 	TArray<FInputActionKeyMapping> actionKey;
 	GetDefault<UInputSettings>()->GetActionMappingByName("Action", actionKey);
 
-	return FText::FormatNamed(FText::FromStringTable("/Game/Text/Actions.Actions", "DefaultActionMessage"), TEXT("ActionHotkey"), actionKey[0].Key.GetDisplayName()).ToString();
+	return FText::FormatNamed(FText::FromStringTable(UConstants::actionStringTablePath, UConstants::defaultActionMessageKey), UConstants::actionHotkey, actionKey[0].Key.GetDisplayName());
 }

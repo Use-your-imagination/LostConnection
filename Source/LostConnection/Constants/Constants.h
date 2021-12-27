@@ -31,6 +31,11 @@ public:
 	static constexpr float showHealthBarDistance = 5000.0f;
 
 public:
+	static const FName actionStringTablePath;
+	static const FString defaultActionMessageKey;
+	static const FString actionHotkey;
+
+public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static FText getProjectVersion();
 };

@@ -18,5 +18,14 @@
         "Added passive ability slot"
       ]
     }
+  },
+  "Global": {
+    "type": "category",
+    "Graphics": {
+      "type": "item",
+      "notes": [
+        "Added Shader Model 5.0 support"
+      ]
+    }
   }
 }

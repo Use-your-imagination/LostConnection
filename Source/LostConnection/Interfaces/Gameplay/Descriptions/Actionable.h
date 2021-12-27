@@ -25,5 +25,5 @@ public:
 	virtual void action(class ABaseDrone* player) = 0;
 
 	UFUNCTION(BlueprintCallable)
-	virtual FString getActionMessage() const;
+	virtual FText getActionMessage() const;
 };

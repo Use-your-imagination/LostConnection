@@ -27,10 +27,10 @@ bool ADroppedWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(weapon, *Bunch, *RepFlags);
-
 	if (IsValid(weapon))
 	{
+		wroteSomething |= Channel->ReplicateSubobject(weapon, *Bunch, *RepFlags);
+
 		wroteSomething |= weapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 

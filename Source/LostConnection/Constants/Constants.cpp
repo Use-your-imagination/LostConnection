@@ -4,6 +4,12 @@
 
 const FString UConstants::projectVersion = "0.1.6.0";
 
+const FName UConstants::actionStringTablePath = "/Game/Text/Actions.Actions";
+
+const FString UConstants::defaultActionMessageKey = "DefaultActionMessage";
+
+const FString UConstants::actionHotkey = "ActionHotkey";
+
 FText UConstants::getProjectVersion()
 {
 	return FText::FromString(UConstants::projectVersion);

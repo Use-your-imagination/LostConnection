@@ -43,38 +43,38 @@ bool ABaseBotCaster::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(secondAbility, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(thirdAbility, *Bunch, *RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
-
 	if (passiveAbility)
 	{
 		wroteSomething |= passiveAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+		wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
 	}
 
 	if (firstAbility)
 	{
+		wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
+
 		wroteSomething |= firstAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
 	if (secondAbility)
 	{
+		wroteSomething |= Channel->ReplicateSubobject(secondAbility, *Bunch, *RepFlags);
+
 		wroteSomething |= secondAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
 	if (thirdAbility)
 	{
+		wroteSomething |= Channel->ReplicateSubobject(thirdAbility, *Bunch, *RepFlags);
+
 		wroteSomething |= thirdAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
 	if (ultimateAbility)
 	{
+		wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
+
 		wroteSomething |= ultimateAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
