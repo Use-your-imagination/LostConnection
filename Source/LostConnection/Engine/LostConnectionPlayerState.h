@@ -11,8 +11,10 @@
 #include "Materials/MaterialInstanceDynamic.h"
 
 #include "Weapons/BaseWeapon.h"
+#include "Abilities/BaseAbility.h"
 #include "Interfaces/Gameplay/Modules/Holders/MainModulesHolder.h"
 #include "Interfaces/Gameplay/Modules/Holders/WeaponModulesHolder.h"
+#include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
 
 #include "LostConnectionPlayerState.generated.h"
 
@@ -25,12 +27,27 @@ struct FAmmoData
 
 public:
 	UPROPERTY()
-	ammoTypes ammoType;
-
-	UPROPERTY()
 	int32 ammoCount;
 
-	FAmmoData(ammoTypes ammoType = ammoTypes::large, int32 ammoCount = 0);
+	UPROPERTY()
+	ammoTypes ammoType;
+
+	FAmmoData(ammoTypes ammoType = ammoTypes::small, int32 ammoCount = 0);
+};
+
+USTRUCT()
+struct FCooldownableAbilitiesData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY()
+	float remainingCooldown;
+	
+	UPROPERTY()
+	abilitySlot slot;
+
+	FCooldownableAbilitiesData(abilitySlot slot = abilitySlot::empty, float remainingCooldown = 0.0f);
 };
 
 UCLASS()
@@ -55,13 +72,17 @@ protected:
 	UBaseWeapon* defaultWeapon;
 
 	UPROPERTY(Replicated)
-	TArray<UObject*> mainModules;
+	TArray<UNetworkObject*> mainModules;
 
 	UPROPERTY(Replicated)
-	TArray<UObject*> weaponModules;
+	TArray<UNetworkObject*> weaponModules;
 
 	UPROPERTY(Replicated)
 	TArray<FAmmoData> spareAmmo;
+
+protected:
+	UPROPERTY(Replicated)
+	TArray<FCooldownableAbilitiesData> cooldownableAbilities;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -71,38 +92,44 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	virtual void addMainModule(IMainModule* module) final;
+	void addMainModule(IMainModule* module);
 
-	virtual void addWeaponModule(IWeaponModule* module) final;
+	void addWeaponModule(IWeaponModule* module);
 
-	virtual void setPrimaryWeapon(UBaseWeapon* primaryWeapon) final;
+	void addCooldownableAbility(abilitySlot slot, ICooldownable* cooldownable);
 
-	virtual void setSecondaryWeapon(UBaseWeapon* secondaryWeapon) final;
+	void setPrimaryWeapon(UBaseWeapon* primaryWeapon);
 
-	virtual void setDefaultWeapon(UBaseWeapon* defaultWeapon) final;
+	void setSecondaryWeapon(UBaseWeapon* secondaryWeapon);
 
-	virtual UBaseWeapon* getPrimaryWeapon() const final;
+	void setDefaultWeapon(UBaseWeapon* defaultWeapon);
 
-	virtual UBaseWeapon* getSecondaryWeapon() const final;
+	UBaseWeapon* getPrimaryWeapon() const;
 
-	virtual UBaseWeapon* getDefaultWeapon() const final;
+	UBaseWeapon* getSecondaryWeapon() const;
 
-	virtual const TArray<UObject*>& getMainModules() const final;
+	UBaseWeapon* getDefaultWeapon() const;
 
-	virtual const TArray<UObject*>& getWeaponModules() const final;
+	const TArray<UNetworkObject*>& getMainModules() const;
+
+	const TArray<UNetworkObject*>& getWeaponModules() const;
 
 	UFUNCTION(BlueprintCallable)
-	virtual int32 getSpareAmmo(ammoTypes type) const final;
+	int32 getSpareAmmo(ammoTypes type) const;
 
-	virtual TArray<FAmmoData>& getSpareAmmoArray() final;
+	TArray<FAmmoData>& getSpareAmmoArray();
+
+	const TArray<FCooldownableAbilitiesData>& getCooldownableAbilities() const;
 
 public:
 	ALostConnectionPlayerState();
 
 	UFUNCTION(BlueprintCallable)
-	virtual UUserWidget* setCurrentUI(UUserWidget* widget) final;
+	UUserWidget* setCurrentUI(UUserWidget* widget);
 
-	virtual UUserWidget* getCurrentUI() const final;
+	UUserWidget* getCurrentUI() const;
+
+	virtual void Tick(float DeltaTime) override;
 
 	virtual ~ALostConnectionPlayerState() = default;
 };

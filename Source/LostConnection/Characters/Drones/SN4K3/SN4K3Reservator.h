@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 
-#include "Network/BaseNetworkObject.h"
+#include "Network/NetworkObject.h"
 #include "Interfaces/Gameplay/Descriptions/Sockets/Reservator.h"
 
 #include "SN4K3Reservator.generated.h"
 
 UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API USN4K3Reservator : 
-	public UBaseNetworkObject,
+	public UNetworkObject,
 	public IReservator
 {
 	GENERATED_BODY()

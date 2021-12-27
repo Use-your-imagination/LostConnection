@@ -7,7 +7,7 @@
 #include "UObject/Object.h"
 #include "Animation/AnimMontage.h"
 
-#include "Network/BaseNetworkObject.h"
+#include "Network/NetworkObject.h"
 
 #include "BaseAbility.generated.h"
 
@@ -23,7 +23,7 @@ enum class abilitySlot : uint8
 };
 
 UCLASS(DefaultToInstanced)
-class LOSTCONNECTION_API UBaseAbility : public UBaseNetworkObject
+class LOSTCONNECTION_API UBaseAbility : public UNetworkObject
 {
 	GENERATED_BODY()
 

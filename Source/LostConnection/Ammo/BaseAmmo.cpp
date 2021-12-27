@@ -183,7 +183,7 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 	{
 		if (owner->Implements<UMainModulesHolder>())
 		{
-			const TArray<UObject*>& modules = Cast<IMainModulesHolder>(owner.Get())->getMainModules();
+			const TArray<UNetworkObject*>& modules = Cast<IMainModulesHolder>(owner.Get())->getMainModules();
 
 			for (const auto& module : modules)
 			{
@@ -206,7 +206,7 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 
 		if (owner->Implements<UWeaponModulesHolder>())
 		{
-			const TArray<UObject*>& modules = Cast<IWeaponModulesHolder>(owner.Get())->getWeaponModules();
+			const TArray<UNetworkObject*>& modules = Cast<IWeaponModulesHolder>(owner.Get())->getWeaponModules();
 
 			for (const auto& module : modules)
 			{

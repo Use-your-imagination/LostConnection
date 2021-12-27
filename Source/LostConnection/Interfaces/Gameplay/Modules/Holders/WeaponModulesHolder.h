@@ -7,10 +7,11 @@
 #include "UObject/Interface.h"
 
 #include "Interfaces/Gameplay/Modules/WeaponModules/WeaponModule.h"
+#include "Network/NetworkObject.h"
 
 #include "WeaponModulesHolder.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType, MinimalAPI)
 class UWeaponModulesHolder : public UInterface
 {
 	GENERATED_BODY()
@@ -27,5 +28,5 @@ public:
 
 	/// @brief 
 	/// @return Array of IMainModule
-	virtual const TArray<UObject*>& getWeaponModules() const = 0;
+	virtual const TArray<UNetworkObject*>& getWeaponModules() const = 0;
 };

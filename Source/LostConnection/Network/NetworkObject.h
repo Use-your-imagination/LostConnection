@@ -7,10 +7,10 @@
 #include "UObject/NoExportTypes.h"
 #include "Net/UnrealNetwork.h"
 
-#include "BaseNetworkObject.generated.h"
+#include "NetworkObject.generated.h"
 
 UCLASS(BlueprintType)
-class LOSTCONNECTION_API UBaseNetworkObject : public UObject
+class LOSTCONNECTION_API UNetworkObject : public UObject
 {
 	GENERATED_BODY()
 	
@@ -18,9 +18,9 @@ private:
 	virtual bool IsSupportedForNetworking() const final override;
 
 public:
-	UBaseNetworkObject() = default;
+	UNetworkObject() = default;
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags);
 
-	virtual ~UBaseNetworkObject() = default;
+	virtual ~UNetworkObject() = default;
 };

@@ -101,7 +101,7 @@ void USN4K3ThirdAbility::initAbility()
 
 void USN4K3ThirdAbility::insert(const TScriptInterface<ISocketItem>& socketItem)
 {
-	this->socketItem = Cast<UBaseNetworkObject>(socketItem->_getUObject());
+	this->socketItem = Cast<UNetworkObject>(socketItem->_getUObject());
 }
 
 void USN4K3ThirdAbility::extract()

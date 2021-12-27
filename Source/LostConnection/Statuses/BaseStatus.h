@@ -9,14 +9,14 @@
 #include "NiagaraSystem.h"
 
 #include "Interfaces/Gameplay/Statuses/Base/StatusInflictor.h"
-#include "Network/BaseNetworkObject.h"
+#include "Network/NetworkObject.h"
 
 #include "BaseStatus.generated.h"
 
 #pragma warning(disable: 4458)
 
 UCLASS(BlueprintType, Blueprintable)
-class LOSTCONNECTION_API UBaseStatus : public UBaseNetworkObject
+class LOSTCONNECTION_API UBaseStatus : public UNetworkObject
 {
 	GENERATED_BODY()
 

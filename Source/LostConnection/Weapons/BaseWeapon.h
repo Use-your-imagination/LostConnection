@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
 
-#include "Network/BaseNetworkObject.h"
+#include "Network/NetworkObject.h"
 #include "Ammo/BaseAmmo.h"
 
 #include "BaseWeapon.generated.h"
@@ -33,7 +33,7 @@ enum class ammoTypes : uint8
 };
 
 UCLASS(BlueprintType, Blueprintable)
-class LOSTCONNECTION_API UBaseWeapon : public UBaseNetworkObject
+class LOSTCONNECTION_API UBaseWeapon : public UNetworkObject
 {
 	GENERATED_BODY()
 		

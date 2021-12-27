@@ -7,10 +7,11 @@
 #include "UObject/Interface.h"
 
 #include "Interfaces/Gameplay/Modules/MainModules/MainModule.h"
+#include "Network/NetworkObject.h"
 
 #include "MainModulesHolder.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType, MinimalAPI)
 class UMainModulesHolder : public UInterface
 {
 	GENERATED_BODY()
@@ -27,5 +28,5 @@ public:
 
 	/// @brief 
 	/// @return Array of IMainModule
-	virtual const TArray<UObject*>& getMainModules() const = 0;
+	virtual const TArray<UNetworkObject*>& getMainModules() const = 0;
 };

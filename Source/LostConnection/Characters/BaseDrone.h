@@ -102,6 +102,9 @@ protected:
 	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<UAnimMontage*> abilitiesAnimations;
 
+	UPROPERTY(Category = Death, EditDefaultsOnly, BlueprintReadOnly)
+	bool isFullyDestruction;
+
 	TWeakObjectPtr<class ABaseBot> lastHealthBarTraceTarget;
 
 #pragma region BlueprintFunctionLibrary
@@ -212,6 +215,9 @@ protected:
 
 	void LookUpAtRate(float Rate);
 
+private:
+	void restoreAbilitiesCooldown();
+
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
@@ -236,6 +242,12 @@ protected:
 
 protected:
 	void restoreEnergy(float amount);
+
+	void destroyDrone(ALostConnectionPlayerState* playerState);
+
+	void saveCurrentAbilitiesCooldown(ALostConnectionPlayerState* playerState);
+
+	virtual void deathLogic() override;
 
 public:
 	ABaseDrone();
@@ -365,10 +377,10 @@ public:
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 
 	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual const TArray<UObject*>& getMainModules() const final override;
+	virtual const TArray<UNetworkObject*>& getMainModules() const final override;
 
 	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual const TArray<UObject*>& getWeaponModules() const final override;
+	virtual const TArray<UNetworkObject*>& getWeaponModules() const final override;
 
 #pragma region PassiveAbility
 	virtual void castPassiveAbilityVisual() override;

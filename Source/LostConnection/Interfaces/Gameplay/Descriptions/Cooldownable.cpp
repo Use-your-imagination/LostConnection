@@ -2,9 +2,16 @@
 
 #include "Cooldownable.h"
 
-void ICooldownable::startCooldown()
+void ICooldownable::startCooldown(float startCooldown)
 {
-	this->getCurrentCooldown() = this->getCooldown();
+	if (startCooldown)
+	{
+		this->getCurrentCooldown() = startCooldown;
+	}
+	else
+	{
+		this->getCurrentCooldown() = this->getCooldown();
+	}
 }
 
 void ICooldownable::processCooldown(float DeltaTime)

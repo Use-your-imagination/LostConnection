@@ -29,7 +29,7 @@ private:
 	float period;
 
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UBaseNetworkObject* socketItem;
+	UNetworkObject* socketItem;
 
 	bool isFlagExist;
 

@@ -30,19 +30,30 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 
 void ASN4K3::deathLogic()
 {
-	Super::deathLogic();
+	if (this->checkPassiveAbilityCast())
+	{
+		Cast<USN4K3PassiveAbility>(passiveAbility)->startCooldown();
 
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
-	UUserWidget* headUI = NewObject<UUserWidget>(playerState, data->getHeadUI());
+		Super::deathLogic();
 
-	playerState->getCurrentUI()->RemoveFromViewport();
+		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+		const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
+		UUserWidget* headUI = NewObject<UUserWidget>(playerState, data->getHeadUI());
 
-	playerState->setCurrentUI(headUI)->AddToViewport();
+		playerState->getCurrentUI()->RemoveFromViewport();
 
-	passiveAbility->useAbility();
+		playerState->setCurrentUI(headUI)->AddToViewport();
 
-	Destroy();
+		passiveAbility->useAbility();
+
+		Destroy();
+	}
+	else
+	{
+		isFullyDestruction = true;
+
+		Super::deathLogic();
+	}
 }
 
 ASN4K3::ASN4K3()

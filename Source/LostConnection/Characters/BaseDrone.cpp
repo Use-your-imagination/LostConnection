@@ -14,6 +14,7 @@
 #include "Weapons/Pistols/Gauss.h"
 #include "Utility/MultiplayerUtility.h"
 #include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
+#include "WorldPlaceables/DeathPlaceholder.h"
 
 #pragma warning(disable: 4458)
 
@@ -364,14 +365,16 @@ void ABaseDrone::BeginPlay()
 		this->setDefaultWeapon(manager.getWeaponClass(UGauss::StaticClass()));
 
 		passiveAbility->initAbility();
-		
+
 		firstAbility->initAbility();
-		
+
 		secondAbility->initAbility();
-		
+
 		thirdAbility->initAbility();
-		
+
 		ultimateAbility->initAbility();
+
+		this->restoreAbilitiesCooldown();
 	}
 }
 
@@ -457,6 +460,42 @@ void ABaseDrone::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+void ABaseDrone::restoreAbilitiesCooldown()
+{
+	const TArray<FCooldownableAbilitiesData>& abilities = Utility::getPlayerState(this)->getCooldownableAbilities();
+
+	for (const auto& data : abilities)
+	{
+		switch (data.slot)
+		{
+		case abilitySlot::passiveAbility:
+			Cast<ICooldownable>(passiveAbility)->startCooldown(data.remainingCooldown);
+
+
+			break;
+		case abilitySlot::firstAbility:
+			Cast<ICooldownable>(firstAbility)->startCooldown(data.remainingCooldown);
+
+			break;
+
+		case abilitySlot::secondAbility:
+			Cast<ICooldownable>(secondAbility)->startCooldown(data.remainingCooldown);
+
+			break;
+
+		case abilitySlot::thirdAbility:
+			Cast<ICooldownable>(thirdAbility)->startCooldown(data.remainingCooldown);
+
+			break;
+
+		case abilitySlot::ultimateAbility:
+			Cast<ICooldownable>(ultimateAbility)->startCooldown(data.remainingCooldown);
+
+			break;
+		}
+	}
+}
+
 void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
@@ -530,6 +569,58 @@ void ABaseDrone::restoreEnergy(float amount)
 	energy = FMath::Max(energy, currentEnergy + amount);
 }
 
+void ABaseDrone::destroyDrone(ALostConnectionPlayerState* playerState)
+{
+	playerState->getCurrentUI()->RemoveFromViewport();
+
+	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(ULostConnectionAssetManager::get().getDefaults().getDeathPlaceholder(), {});
+
+	GetController()->Possess(placeholder);
+
+	placeholder->FinishSpawning({ FRotator::ZeroRotator, GetActorLocation() });
+
+	Destroy();
+}
+
+void ABaseDrone::saveCurrentAbilitiesCooldown(ALostConnectionPlayerState* playerState)
+{
+	if (ICooldownable* cooldownable = Cast<ICooldownable>(passiveAbility))
+	{
+		playerState->addCooldownableAbility(abilitySlot::passiveAbility, cooldownable);
+	}
+
+	if (ICooldownable* cooldownable = Cast<ICooldownable>(firstAbility))
+	{
+		playerState->addCooldownableAbility(abilitySlot::firstAbility, cooldownable);
+	}
+
+	if (ICooldownable* cooldownable = Cast<ICooldownable>(secondAbility))
+	{
+		playerState->addCooldownableAbility(abilitySlot::secondAbility, cooldownable);
+	}
+
+	if (ICooldownable* cooldownable = Cast<ICooldownable>(thirdAbility))
+	{
+		playerState->addCooldownableAbility(abilitySlot::thirdAbility, cooldownable);
+	}
+
+	playerState->addCooldownableAbility(abilitySlot::ultimateAbility, ultimateAbility);
+}
+
+void ABaseDrone::deathLogic()
+{
+	Super::deathLogic();
+
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+
+	this->saveCurrentAbilitiesCooldown(playerState);
+
+	if (isFullyDestruction)
+	{
+		this->destroyDrone(playerState);
+	}
+}
+
 ABaseDrone::ABaseDrone() :
 	energy(1000.0f),
 	currentEnergy(1000.0f),
@@ -539,7 +630,8 @@ ABaseDrone::ABaseDrone() :
 	power(100.0f),
 	energyEfficiency(100.0f),
 	AOE(100.0f),
-	castPoint(100.0f)
+	castPoint(100.0f),
+	isFullyDestruction(true)
 {
 	isAlly = true;
 
@@ -663,7 +755,7 @@ void ABaseDrone::dropWeapon_Implementation()
 
 	location.Z -= GetMesh()->SkeletalMesh->GetImportedBounds().BoxExtent.Z / 2;
 
-	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), { currentWeaponMesh->GetComponentRotation(), location + currentWeapon->getLength() * GetActorForwardVector()});
+	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), { currentWeaponMesh->GetComponentRotation(), location + currentWeapon->getLength() * GetActorForwardVector() });
 
 	this->returnAmmoToSpare(currentWeapon);
 
@@ -1057,12 +1149,12 @@ const TArray<UAnimMontage*>& ABaseDrone::getAbilitiesAnimations() const
 	return abilitiesAnimations;
 }
 
-const TArray<UObject*>& ABaseDrone::getMainModules() const
+const TArray<UNetworkObject*>& ABaseDrone::getMainModules() const
 {
 	return Utility::getPlayerState(this)->getMainModules();
 }
 
-const TArray<UObject*>& ABaseDrone::getWeaponModules() const
+const TArray<UNetworkObject*>& ABaseDrone::getWeaponModules() const
 {
 	return Utility::getPlayerState(this)->getWeaponModules();
 }
