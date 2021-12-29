@@ -337,7 +337,7 @@ public:
 	
 	virtual void setCastPoint_Implementation(float newCastPoint) final override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	virtual void setCurrentAbility(UBaseAbility* ability) final override;
 
 	virtual float getEnergy() const final override;

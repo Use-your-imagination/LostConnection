@@ -1023,7 +1023,7 @@ void ABaseDrone::setCastPoint_Implementation(float newCastPoint)
 	castPoint = newCastPoint;
 }
 
-void ABaseDrone::setCurrentAbility_Implementation(UBaseAbility* ability)
+void ABaseDrone::setCurrentAbility(UBaseAbility* ability)
 {
 	if (ability)
 	{

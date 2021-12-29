@@ -250,7 +250,7 @@ void ABaseBotCaster::setCastPoint_Implementation(float newCastPoint)
 	castPoint = newCastPoint;
 }
 
-void ABaseBotCaster::setCurrentAbility_Implementation(UBaseAbility* ability)
+void ABaseBotCaster::setCurrentAbility(UBaseAbility* ability)
 {
 	if (ability)
 	{
