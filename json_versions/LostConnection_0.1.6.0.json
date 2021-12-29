@@ -33,5 +33,14 @@
         "Added Shader Model 5.0 support"
       ]
     }
+  },
+  "Gameplay": {
+    "type": "category",
+    "Accuracy": {
+      "type": "item",
+      "notes": [
+        "Added new accuracy system"
+      ]
+    }
   }
 }
