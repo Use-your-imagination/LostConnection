@@ -566,7 +566,7 @@ void ABaseDrone::releaseWeaponSelector()
 
 void ABaseDrone::restoreEnergy(float amount)
 {
-	energy = FMath::Max(energy, currentEnergy + amount);
+	currentEnergy = FMath::Min(energy, currentEnergy + amount);
 }
 
 void ABaseDrone::destroyDrone(ALostConnectionPlayerState* playerState)
