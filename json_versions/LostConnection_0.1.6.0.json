@@ -15,7 +15,13 @@
     "Passive ability": {
       "type": "item",
       "notes": [
-        "Added passive ability slot"
+        "Added passive ability icon"
+      ]
+    },
+    "HUD": {
+      "type": "item",
+      "notes": [
+        "Added new HUD"
       ]
     }
   },
