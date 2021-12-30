@@ -249,6 +249,8 @@ protected:
 
 	void saveCurrentAbilitiesCooldown(ALostConnectionPlayerState* playerState);
 
+	void saveCurrentWeaponsCooldown(ALostConnectionPlayerState* playerState);
+
 	virtual void deathLogic() override;
 
 public:

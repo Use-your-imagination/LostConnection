@@ -20,6 +20,9 @@ private:
 	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ULostConnectionUI> defaultUI;
 
+	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> defaultDeathUI;
+
 	UPROPERTY(Category = Materials, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UMaterial* baseWeaponSelectorMaterial;
 
@@ -30,6 +33,8 @@ public:
 	UUIDataAsset() = default;
 
 	const TSubclassOf<ULostConnectionUI>& getDefaultUI() const;
+
+	const TSubclassOf<UUserWidget>& getDefaultDeathUI() const;
 
 	UMaterial* getBaseWeaponSelectorMaterial() const;
 

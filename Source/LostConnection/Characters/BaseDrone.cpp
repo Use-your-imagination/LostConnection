@@ -615,9 +615,13 @@ void ABaseDrone::restoreEnergy(float amount)
 
 void ABaseDrone::destroyDrone(ALostConnectionPlayerState* playerState)
 {
+	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+
 	playerState->getCurrentUI()->RemoveFromViewport();
 
-	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(ULostConnectionAssetManager::get().getDefaults().getDeathPlaceholder(), {});
+	playerState->setCurrentUI(NewObject<UUserWidget>(playerState, manager.getUI().getDefaultDeathUI()))->AddToViewport();
+
+	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
 
 	GetController()->Possess(placeholder);
 
@@ -651,6 +655,34 @@ void ABaseDrone::saveCurrentAbilitiesCooldown(ALostConnectionPlayerState* player
 	playerState->addCooldownableAbility(abilitySlot::ultimateAbility, ultimateAbility);
 }
 
+void ABaseDrone::saveCurrentWeaponsCooldown(ALostConnectionPlayerState* playerState)
+{
+	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getPrimaryWeapon()))
+	{
+		playerState->addCooldownableWeapon(weaponSlotTypes::primaryWeaponSlot, cooldownable);
+	}
+
+	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getSecondaryWeapon()))
+	{
+		playerState->addCooldownableWeapon(weaponSlotTypes::secondaryWeaponSlot, cooldownable);
+	}
+
+	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getDefaultWeapon()))
+	{
+		playerState->addCooldownableWeapon(weaponSlotTypes::defaultWeaponSlot, cooldownable);
+	}
+
+	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getFirstInactiveWeapon()))
+	{
+		playerState->addCooldownableWeapon(weaponSlotTypes::firstInactiveWeaponSlot, cooldownable);
+	}
+
+	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getSecondInactiveWeapon()))
+	{
+		playerState->addCooldownableWeapon(weaponSlotTypes::secondInactiveWeaponSlot, cooldownable);
+	}
+}
+
 void ABaseDrone::deathLogic()
 {
 	Super::deathLogic();
@@ -658,6 +690,8 @@ void ABaseDrone::deathLogic()
 	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 
 	this->saveCurrentAbilitiesCooldown(playerState);
+
+	this->saveCurrentWeaponsCooldown(playerState);
 
 	if (isFullyDestruction)
 	{
