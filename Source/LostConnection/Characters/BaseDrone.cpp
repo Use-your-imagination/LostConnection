@@ -20,6 +20,12 @@
 
 using namespace std;
 
+template<typename T>
+static void setCooldown(T* cooldownableObject, float newCooldown = 0.0f)
+{
+	Cast<ICooldownable>(cooldownableObject)->startCooldown(newCooldown);
+}
+
 TArray<FInputActionBinding> ABaseDrone::initInputs()
 {
 	TArray<FInputActionBinding> result;
@@ -375,6 +381,8 @@ void ABaseDrone::BeginPlay()
 		ultimateAbility->initAbility();
 
 		this->restoreAbilitiesCooldown();
+
+		this->restoreWeaponsCooldown();
 	}
 }
 
@@ -469,27 +477,63 @@ void ABaseDrone::restoreAbilitiesCooldown()
 		switch (data.slot)
 		{
 		case abilitySlot::passiveAbility:
-			Cast<ICooldownable>(passiveAbility)->startCooldown(data.remainingCooldown);
-
+			setCooldown(passiveAbility, data.remainingCooldown);
 
 			break;
+
 		case abilitySlot::firstAbility:
-			Cast<ICooldownable>(firstAbility)->startCooldown(data.remainingCooldown);
+			setCooldown(firstAbility, data.remainingCooldown);
 
 			break;
 
 		case abilitySlot::secondAbility:
-			Cast<ICooldownable>(secondAbility)->startCooldown(data.remainingCooldown);
+			setCooldown(secondAbility, data.remainingCooldown);
 
 			break;
 
 		case abilitySlot::thirdAbility:
-			Cast<ICooldownable>(thirdAbility)->startCooldown(data.remainingCooldown);
+			setCooldown(thirdAbility, data.remainingCooldown);
 
 			break;
 
 		case abilitySlot::ultimateAbility:
-			Cast<ICooldownable>(ultimateAbility)->startCooldown(data.remainingCooldown);
+			setCooldown(ultimateAbility, data.remainingCooldown);
+
+			break;
+		}
+	}
+}
+
+void ABaseDrone::restoreWeaponsCooldown()
+{
+	const TArray<FCooldownableWeaponsData>& weapons = Utility::getPlayerState(this)->getCooldownableWeapons();
+
+	for (const auto& data : weapons)
+	{
+		switch (data.slot)
+		{
+		case weaponSlotTypes::primaryWeaponSlot:
+			setCooldown(this->getPrimaryWeapon(), data.remainingCooldown);
+
+			break;
+
+		case weaponSlotTypes::secondaryWeaponSlot:
+			setCooldown(this->getSecondaryWeapon(), data.remainingCooldown);
+
+			break;
+
+		case weaponSlotTypes::defaultWeaponSlot:
+			setCooldown(this->getDefaultWeapon(), data.remainingCooldown);
+
+			break;
+
+		case weaponSlotTypes::firstInactiveWeaponSlot:
+			setCooldown(this->getFirstInactiveWeapon(), data.remainingCooldown);
+
+			break;
+
+		case weaponSlotTypes::secondInactiveWeaponSlot:
+			setCooldown(this->getSecondInactiveWeapon(), data.remainingCooldown);
 
 			break;
 		}
@@ -893,16 +937,6 @@ void ABaseDrone::action()
 	{
 		object->action(this);
 	}
-}
-
-UBaseWeapon* ABaseDrone::getPrimaryWeapon()
-{
-	return Utility::getPlayerState(this)->getPrimaryWeapon();
-}
-
-UBaseWeapon* ABaseDrone::getSecondaryWeapon()
-{
-	return Utility::getPlayerState(this)->getSecondaryWeapon();
 }
 
 FVector ABaseDrone::getStartActionLineTrace() const
