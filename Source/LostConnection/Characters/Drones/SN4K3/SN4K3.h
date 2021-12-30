@@ -16,9 +16,6 @@ class LOSTCONNECTION_API ASN4K3 : public ABaseDrone
 	GENERATED_BODY()
 
 private:
-	TWeakObjectPtr<class ASN4K3UltimateAbilityPlaceholder> ultimatePlaceholder;
-
-private:
 	UFUNCTION()
 	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -30,10 +27,6 @@ public:
 
 	UFUNCTION()
 	void playUltimateReturnAnimation();
-
-	void setUltimatePlaceholder(class ASN4K3UltimateAbilityPlaceholder* ultimatePlaceHolder);
-
-	const TWeakObjectPtr<class ASN4K3UltimateAbilityPlaceholder>& getUltimatePlaceholder() const;
 
 	virtual bool checkPassiveAbilityCast() const override;
 

@@ -29,6 +29,8 @@ private:
 	UPROPERTY(Category = SN4K3, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	FVector ultimatePlaceholderLocation;
 
+	TWeakObjectPtr<class ASN4K3UltimateAbilityPlaceholder> ultimatePlaceholder;
+
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -42,6 +44,8 @@ public:
 	float getAbilityDuration() const;
 
 	float getCurrentAbilityDuration() const;
+
+	const TWeakObjectPtr<class ASN4K3UltimateAbilityPlaceholder>& getUltimatePlaceholder() const;
 
 	void applyAbility(class ABaseCharacter* target) override;
 
