@@ -4,6 +4,7 @@
 
 #include "NiagaraFunctionLibrary.h"
 #include "Engine/LevelStreamingDynamic.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 #include "Utility/LoadAssetsDelayAction.h"
 #include "Statuses/BaseStatus.h"
@@ -12,51 +13,132 @@
 
 void ULostConnectionAssetManager::startLatent(UObject* worldContext, const FLatentActionInfo& info, const TSharedPtr<FStreamableHandle>& handle)
 {
-	UWorld* world = GEngine->GetWorldFromContextObject(worldContext, EGetWorldErrorMode::ReturnNull);
+	FLatentActionManager& manager = GEngine->GetWorldFromContextObject(worldContext, EGetWorldErrorMode::Assert)->GetLatentActionManager();
 
-	if (world)
+	if (!manager.FindExistingAction<FLoadAssetsDelayAction>(info.CallbackTarget, info.UUID))
 	{
-		FLatentActionManager& manager = world->GetLatentActionManager();
+		manager.AddNewAction(info.CallbackTarget, info.UUID, new FLoadAssetsDelayAction(handle, info));
+	}
+}
 
-		if (!manager.FindExistingAction<FLoadAssetsDelayAction>(info.CallbackTarget, info.UUID))
-		{
-			manager.AddNewAction(info.CallbackTarget, info.UUID, new FLoadAssetsDelayAction(handle, info));
-		}
-	}
-	else
+TSharedPtr<FStreamableHandle>& ULostConnectionAssetManager::loadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset, FStreamableDelegate delegate)
+{
+	return handles.Add(dataAsset.Get()->GetFName(), LoadPrimaryAsset(assets[dataAsset], {}, delegate));
+}
+
+bool ULostConnectionAssetManager::latentLoadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset, UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate)
+{
+	if (this->isAssetAlreadyLoaded(dataAsset))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Cyan, L"Can't get world");
+		return true;
 	}
+
+	TSharedPtr<FStreamableHandle>& asset = this->loadAsset(dataAsset);
+
+	this->startLatent(worldContext, info, asset);
+
+	return false;
+}
+
+bool ULostConnectionAssetManager::latentLoadAct(const TSubclassOf<UBaseActDataAsset>& dataAsset, UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate)
+{
+	if (this->isAssetAlreadyLoaded(dataAsset))
+	{
+		return true;
+	}
+
+	TSharedPtr<FStreamableHandle>& asset = this->loadAsset(dataAsset);
+
+	currentActId = assets[dataAsset];
+
+	this->startLatent(worldContext, info, asset);
+
+	return false;
+}
+
+void ULostConnectionAssetManager::unloadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset)
+{
+	if (!this->isAssetAlreadyLoaded(dataAsset))
+	{
+		return;
+	}
+
+	UnloadPrimaryAsset(assets[dataAsset]);
+
+	this->getHandle(dataAsset).Reset();
+
+	handles.Remove(dataAsset.Get()->GetFName());
+}
+
+bool ULostConnectionAssetManager::isAssetAlreadyLoaded(const TSubclassOf<UPrimaryDataAsset>& dataAsset) const
+{
+	return handles.Contains(dataAsset.Get()->GetFName());
+}
+
+TSharedPtr<FStreamableHandle>& ULostConnectionAssetManager::getHandle(const TSubclassOf<UPrimaryDataAsset>& dataAsset)
+{
+	return handles[dataAsset.Get()->GetFName()];
 }
 
 bool ULostConnectionAssetManager::loadStatuses(UObject* worldContext, FLatentActionInfo info)
 {
-	return this->latentLoadAsset<UStatusesDataAsset>(worldContext, info);
+	return this->latentLoadAsset(UStatusesDataAsset::StaticClass(), worldContext, info);
 }
 
 bool ULostConnectionAssetManager::loadWeapons(UObject* worldContext, FLatentActionInfo info)
 {
-	return this->latentLoadAsset<UWeaponsDataAsset>(worldContext, info);
+	return this->latentLoadAsset(UWeaponsDataAsset::StaticClass(), worldContext, info);
 }
 
 bool ULostConnectionAssetManager::loadDronesPreview(UObject* worldContext, FLatentActionInfo info)
 {
-	return this->latentLoadAsset<UDronesPreviewDataAsset>(worldContext, info);
+	return this->latentLoadAsset(UDronesPreviewDataAsset::StaticClass(), worldContext, info);
 }
 
 bool ULostConnectionAssetManager::loadUI(UObject* worldContext, FLatentActionInfo info)
 {
-	return this->latentLoadAsset<UUIDataAsset>(worldContext, info);
+	return this->latentLoadAsset(UUIDataAsset::StaticClass(), worldContext, info);
 }
 
 bool ULostConnectionAssetManager::loadDefaults(UObject* worldContext, FLatentActionInfo info)
 {
-	return this->latentLoadAsset<UDefaultsDataAsset>(worldContext, info);
+	return this->latentLoadAsset(UDefaultsDataAsset::StaticClass(), worldContext, info);
+}
+
+bool ULostConnectionAssetManager::loadDrone(TSubclassOf<UBaseDroneDataAsset> droneAsset, UObject* worldContext, FLatentActionInfo info)
+{
+	return this->latentLoadAsset(droneAsset, worldContext, info);
+}
+
+bool ULostConnectionAssetManager::loadAct(TSubclassOf<UBaseActDataAsset> actAsset, UObject* worldContext, FLatentActionInfo info)
+{
+	return this->latentLoadAct(actAsset, worldContext, info);
 }
 
 void ULostConnectionAssetManager::unloadDronesPreview()
 {
-	this->unloadAsset<UDronesPreviewDataAsset>();
+	this->unloadAsset(UDronesPreviewDataAsset::StaticClass());
+}
+
+void ULostConnectionAssetManager::unloadDrone(TSubclassOf<UBaseDroneDataAsset> droneAsset)
+{
+	this->unloadAsset(droneAsset);
+}
+
+void ULostConnectionAssetManager::unloadAct(TSubclassOf<UBaseActDataAsset> actAsset)
+{
+	if (!this->isAssetAlreadyLoaded(actAsset))
+	{
+		return;
+	}
+
+	UnloadPrimaryAsset(assets[actAsset]);
+
+	this->getHandle(actAsset).Reset();
+
+	handles.Remove(actAsset.Get()->GetFName());
+
+	currentActId = FPrimaryAssetId();
 }
 
 TMap<FName, float> ULostConnectionAssetManager::getLoadingState() const
@@ -174,24 +256,4 @@ FPrimaryAssetId ULostConnectionAssetManager::GetPrimaryAssetIdForObject(UObject*
 	}
 
 	return result;
-}
-
-bool ULostConnectionAssetManager::loadSN4K3Drone(UObject* worldContext, FLatentActionInfo info)
-{
-	return this->latentLoadAsset<USN4K3DataAsset>(worldContext, info);
-}
-
-void ULostConnectionAssetManager::unloadSN4K3Drone()
-{
-	this->unloadAsset<USN4K3DataAsset>();
-}
-
-bool ULostConnectionAssetManager::loadRuinedCityAct(UObject* worldContext, FLatentActionInfo info)
-{
-	return this->latentLoadAct<URuinedCityActDataAsset>(worldContext, info);
-}
-
-void ULostConnectionAssetManager::unloadRuinedCityAct()
-{
-	this->unloadAct<URuinedCityActDataAsset>();
 }
