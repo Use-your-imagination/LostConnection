@@ -100,6 +100,8 @@ public:
 
 	TArray<const UBaseDroneDataAsset*> getDrones() const;
 
+	virtual FPrimaryAssetId GetPrimaryAssetIdForObject(UObject* object) const override;
+
 	~ULostConnectionAssetManager() = default;
 
 #pragma region Drones

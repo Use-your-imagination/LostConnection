@@ -159,6 +159,23 @@ TArray<const UBaseDroneDataAsset*> ULostConnectionAssetManager::getDrones() cons
 	return drones;
 }
 
+FPrimaryAssetId ULostConnectionAssetManager::GetPrimaryAssetIdForObject(UObject* object) const
+{
+	FPrimaryAssetId result = Super::GetPrimaryAssetIdForPath(object);
+
+	if (!result.IsValid())
+	{
+		TSubclassOf<UPrimaryDataAsset> tem(Cast<UClass>(object));
+
+		if (tem)
+		{
+			result = assets[tem];
+		}
+	}
+
+	return result;
+}
+
 bool ULostConnectionAssetManager::loadSN4K3Drone(UObject* worldContext, FLatentActionInfo info)
 {
 	return this->latentLoadAsset<USN4K3DataAsset>(worldContext, info);
