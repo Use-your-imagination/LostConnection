@@ -23,29 +23,20 @@ private:
 	FPrimaryAssetId currentActId;
 
 private:
-	template<typename T>
-	TSharedPtr<FStreamableHandle>& loadAsset(FStreamableDelegate delegate = FStreamableDelegate());
-
-	template<typename T>
-	void unloadAsset();
-
-	template<typename T>
-	void unloadAct();
-
-	template<typename T>
-	TSharedPtr<FStreamableHandle>& getHandle();
-
-	template<typename T>
-	bool latentLoadAsset(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
-
-	template<typename T>
-	bool latentLoadAct(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
-
-	template<typename T>
-	bool isAssetAlreadyLoaded();
+	static void startLatent(UObject* worldContext, const FLatentActionInfo& info, const TSharedPtr<FStreamableHandle>& handle);
 
 private:
-	static void startLatent(UObject* worldContext, const FLatentActionInfo& info, const TSharedPtr<FStreamableHandle>& handle);
+	TSharedPtr<FStreamableHandle>& loadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset, FStreamableDelegate delegate = FStreamableDelegate());
+
+	bool latentLoadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset, UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
+
+	bool latentLoadAct(const TSubclassOf<UBaseActDataAsset>& dataAsset, UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
+
+	void unloadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset);
+
+	bool isAssetAlreadyLoaded(const TSubclassOf<UPrimaryDataAsset>& dataAsset) const;
+
+	TSharedPtr<FStreamableHandle>& getHandle(const TSubclassOf<UPrimaryDataAsset>& dataAsset);
 
 public:
 	static ULostConnectionAssetManager& get();
@@ -68,8 +59,20 @@ public:
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
 	UPARAM(DisplayName = IsAlreadyLoaded) bool loadDefaults(UObject* worldContext, FLatentActionInfo info);
 
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadDrone(TSubclassOf<UBaseDroneDataAsset> droneAsset, UObject* worldContext, FLatentActionInfo info);
+
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadAct(TSubclassOf<UBaseActDataAsset> actAsset, UObject* worldContext, FLatentActionInfo info);
+
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	void unloadDronesPreview();
+
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	void unloadDrone(TSubclassOf<UBaseDroneDataAsset> droneAsset);
+
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	void unloadAct(TSubclassOf<UBaseActDataAsset> actAsset);
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	TMap<FName, float> getLoadingState() const;
@@ -100,110 +103,12 @@ public:
 
 	TArray<const UBaseDroneDataAsset*> getDrones() const;
 
+	virtual FPrimaryAssetId GetPrimaryAssetIdForObject(UObject* object) const override;
+
 	~ULostConnectionAssetManager() = default;
-
-#pragma region Drones
-public:
-	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
-	UPARAM(DisplayName = IsAlreadyLoaded) bool loadSN4K3Drone(UObject* worldContext, FLatentActionInfo info);
-
-	UFUNCTION(Category = AssetLoading, BlueprintCallable)
-	void unloadSN4K3Drone();
-#pragma endregion
-
-#pragma region Acts
-public:
-	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
-	UPARAM(DisplayName = IsAlreadyLoaded) bool loadRuinedCityAct(UObject* worldContext, FLatentActionInfo info);
-
-	UFUNCTION(Category = AssetLoading, BlueprintCallable)
-	void unloadRuinedCityAct();
-#pragma endregion
 };
 
 inline ULostConnectionAssetManager& ULostConnectionAssetManager::get()
 {
 	return StaticCast<ULostConnectionAssetManager&>(UAssetManager::Get());
-}
-
-template<typename T>
-TSharedPtr<FStreamableHandle>& ULostConnectionAssetManager::loadAsset(FStreamableDelegate delegate)
-{
-	return handles.Add(T::StaticClass()->GetFName(), LoadPrimaryAsset(T::getPrimaryAssetId(), {}, delegate));
-}
-
-template<typename T>
-void ULostConnectionAssetManager::unloadAsset()
-{
-	if (!this->isAssetAlreadyLoaded<T>())
-	{
-		return;
-	}
-
-	UnloadPrimaryAsset(T::getPrimaryAssetId());
-
-	this->getHandle<T>().Reset();
-
-	handles.Remove(T::StaticClass()->GetFName());
-}
-
-template<typename T>
-void ULostConnectionAssetManager::unloadAct()
-{
-	if (!this->isAssetAlreadyLoaded<T>())
-	{
-		return;
-	}
-
-	UnloadPrimaryAsset(T::getPrimaryAssetId());
-
-	this->getHandle<T>().Reset();
-
-	handles.Remove(T::StaticClass()->GetFName());
-
-	currentActId = FPrimaryAssetId();
-}
-
-template<typename T>
-TSharedPtr<FStreamableHandle>& ULostConnectionAssetManager::getHandle()
-{
-	return handles[T::StaticClass()->GetFName()];
-}
-
-template<typename T>
-bool ULostConnectionAssetManager::latentLoadAsset(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate)
-{
-	if (this->isAssetAlreadyLoaded<T>())
-	{
-		return true;
-	}
-
-	TSharedPtr<FStreamableHandle>& asset = this->loadAsset<T>();
-
-	this->startLatent(worldContext, info, asset);
-
-	return false;
-}
-
-template<typename T>
-bool ULostConnectionAssetManager::latentLoadAct(UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate)
-{
-	if (this->isAssetAlreadyLoaded<T>())
-	{
-		return true;
-	}
-
-	TSharedPtr<FStreamableHandle>& asset = this->loadAsset<T>();
-
-	currentActId = T::getPrimaryAssetId();
-
-	this->startLatent(worldContext, info, asset);
-
-	return false;
-}
-
-template<typename T>
-bool ULostConnectionAssetManager::isAssetAlreadyLoaded()
-{
-	return handles.Contains(T::StaticClass()->GetFName());
 }

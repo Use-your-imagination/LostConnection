@@ -32,6 +32,17 @@ enum class ammoTypes : uint8
 	defaultType = 3 UMETA(DisplayName = "Default ammo")
 };
 
+UENUM(BlueprintType)
+enum class weaponSlotTypes : uint8
+{
+	none,
+	primaryWeaponSlot,
+	secondaryWeaponSlot,
+	defaultWeaponSlot,
+	firstInactiveWeaponSlot,
+	secondInactiveWeaponSlot
+};
+
 UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API UBaseWeapon : public UNetworkObject
 {

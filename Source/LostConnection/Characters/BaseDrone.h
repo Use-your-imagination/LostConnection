@@ -218,6 +218,8 @@ protected:
 private:
 	void restoreAbilitiesCooldown();
 
+	void restoreWeaponsCooldown();
+
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
@@ -246,6 +248,8 @@ protected:
 	void destroyDrone(ALostConnectionPlayerState* playerState);
 
 	void saveCurrentAbilitiesCooldown(ALostConnectionPlayerState* playerState);
+
+	void saveCurrentWeaponsCooldown(ALostConnectionPlayerState* playerState);
 
 	virtual void deathLogic() override;
 
@@ -283,10 +287,16 @@ public:
 	void action();
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
-	UBaseWeapon* getPrimaryWeapon();
+	UBaseWeapon* getPrimaryWeapon() const;
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
-	UBaseWeapon* getSecondaryWeapon();
+	UBaseWeapon* getSecondaryWeapon() const;
+
+	UFUNCTION(Category = Weapons, BlueprintCallable)
+	UBaseWeapon* getFirstInactiveWeapon() const;
+
+	UFUNCTION(Category = Weapons, BlueprintCallable)
+	UBaseWeapon* getSecondInactiveWeapon() const;
 
 	USpringArmComponent* GetCameraOffset() const;
 
@@ -461,4 +471,24 @@ inline void ABaseDrone::showBotHealthBar()
 	lastHealthBarTraceTarget->updateHealthBar();
 
 	lastHealthBarTraceTarget->setHealthBarVisibility(true);
+}
+
+inline UBaseWeapon* ABaseDrone::getPrimaryWeapon() const
+{
+	return Utility::getPlayerState(this)->getPrimaryWeapon();
+}
+
+inline UBaseWeapon* ABaseDrone::getSecondaryWeapon() const
+{
+	return Utility::getPlayerState(this)->getSecondaryWeapon();
+}
+
+inline UBaseWeapon* ABaseDrone::getFirstInactiveWeapon() const
+{
+	return Utility::getPlayerState(this)->getFirstInactiveWeapon();
+}
+
+inline UBaseWeapon* ABaseDrone::getSecondInactiveWeapon() const
+{
+	return Utility::getPlayerState(this)->getSecondInactiveWeapon();
 }

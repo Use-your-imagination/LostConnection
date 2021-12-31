@@ -127,7 +127,11 @@ void ASN4K3PassiveAbilityHead::explodeVFX()
 
 void ASN4K3PassiveAbilityHead::destroyHead()
 {
-	Utility::getPlayerState(this)->getCurrentUI()->RemoveFromViewport();
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+
+	playerState->getCurrentUI()->RemoveFromViewport();
+
+	playerState->setCurrentUI(NewObject<UUserWidget>(playerState, ULostConnectionAssetManager::get().getUI().getDefaultDeathUI()))->AddToViewport();
 
 	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(ULostConnectionAssetManager::get().getDefaults().getDeathPlaceholder(), {});
 

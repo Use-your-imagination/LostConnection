@@ -13,6 +13,11 @@ const TSubclassOf<ULostConnectionUI>& UUIDataAsset::getDefaultUI() const
 	return defaultUI;
 }
 
+const TSubclassOf<UUserWidget>& UUIDataAsset::getDefaultDeathUI() const
+{
+	return defaultDeathUI;
+}
+
 UMaterial* UUIDataAsset::getBaseWeaponSelectorMaterial() const
 {
 	return baseWeaponSelectorMaterial;

@@ -30,6 +30,13 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 
 void ASN4K3::deathLogic()
 {
+	const TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder>& placeholder = Cast<USN4K3UltimateAbility>(ultimateAbility)->getUltimatePlaceholder();
+
+	if (placeholder.IsValid())
+	{
+		placeholder->Destroy();
+	}
+
 	if (this->checkPassiveAbilityCast())
 	{
 		Cast<USN4K3PassiveAbility>(passiveAbility)->startCooldown();
@@ -76,16 +83,6 @@ ASN4K3::ASN4K3()
 void ASN4K3::playUltimateReturnAnimation()
 {
 	GetMesh()->GetAnimInstance()->Montage_Play(Cast<USN4K3UltimateAbility>(ultimateAbility)->getReturnAnimation(), Utility::fromPercent(this->getCastPoint()));
-}
-
-void ASN4K3::setUltimatePlaceholder(ASN4K3UltimateAbilityPlaceholder* ultimatePlaceholder)
-{
-	this->ultimatePlaceholder = ultimatePlaceholder;
-}
-
-const TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder>& ASN4K3::getUltimatePlaceholder() const
-{
-	return ultimatePlaceholder;
 }
 
 bool ASN4K3::checkPassiveAbilityCast() const

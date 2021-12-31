@@ -5,18 +5,20 @@
 #include "Constants/Constants.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-FAmmoData::FAmmoData(ammoTypes ammoType, int32 ammoCount) :
-	ammoCount(ammoCount),
-	ammoType(ammoType)
+template<typename T>
+static void reduceCooldownableDataObjects(float DeltaTime, TArray<T>& cooldownableData)
 {
+	for (int32 i = 0; i < cooldownableData.Num(); i++)
+	{
+		float& remainingCooldown = cooldownableData[i].remainingCooldown;
 
-}
+		remainingCooldown -= DeltaTime;
 
-FCooldownableAbilitiesData::FCooldownableAbilitiesData(abilitySlot slot, float remainingCooldown) :
-	remainingCooldown(remainingCooldown),
-	slot(slot)
-{
-
+		if (remainingCooldown <= 0.0f)
+		{
+			cooldownableData.RemoveAt(i--);
+		}
+	}
 }
 
 void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -28,6 +30,10 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME(ALostConnectionPlayerState, secondaryWeapon);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, defaultWeapon);
+	
+	DOREPLIFETIME(ALostConnectionPlayerState, firstInactiveWeapon);
+
+	DOREPLIFETIME(ALostConnectionPlayerState, secondInactiveWeapon);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, mainModules);
 
@@ -36,6 +42,8 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME(ALostConnectionPlayerState, spareAmmo);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableAbilities);
+
+	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
 }
 
 bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -59,6 +67,20 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 	wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
 
 	wroteSomething |= defaultWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	if (firstInactiveWeapon)
+	{
+		wroteSomething |= Channel->ReplicateSubobject(firstInactiveWeapon, *Bunch, *RepFlags);
+
+		wroteSomething |= firstInactiveWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	if (secondInactiveWeapon)
+	{
+		wroteSomething |= Channel->ReplicateSubobject(secondInactiveWeapon, *Bunch, *RepFlags);
+
+		wroteSomething |= secondInactiveWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
 
 	for (UNetworkObject* mainModule : mainModules)
 	{
@@ -102,6 +124,14 @@ void ALostConnectionPlayerState::addCooldownableAbility(abilitySlot slot, ICoold
 	}
 }
 
+void ALostConnectionPlayerState::addCooldownableWeapon(weaponSlotTypes slot, ICooldownable* cooldownable)
+{
+	if (!cooldownable->isUsable())
+	{
+		cooldownableWeapons.Add(FCooldownableWeaponsData(slot, cooldownable->getCurrentCooldown()));
+	}
+}
+
 void ALostConnectionPlayerState::setPrimaryWeapon(UBaseWeapon* primaryWeapon)
 {
 	this->primaryWeapon = primaryWeapon;
@@ -137,6 +167,11 @@ const TArray<FCooldownableAbilitiesData>& ALostConnectionPlayerState::getCooldow
 	return cooldownableAbilities;
 }
 
+const TArray<FCooldownableWeaponsData>& ALostConnectionPlayerState::getCooldownableWeapons() const
+{
+	return cooldownableWeapons;
+}
+
 ALostConnectionPlayerState::ALostConnectionPlayerState()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -162,16 +197,8 @@ void ALostConnectionPlayerState::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
-		for (int32 i = 0; i < cooldownableAbilities.Num(); i++)
-		{
-			float& remainingCooldown = cooldownableAbilities[i].remainingCooldown;
+		reduceCooldownableDataObjects(DeltaTime, cooldownableAbilities);
 
-			remainingCooldown -= DeltaTime;
-
-			if (remainingCooldown <= 0.0f)
-			{
-				cooldownableAbilities.RemoveAt(i--);
-			}
-		}
+		reduceCooldownableDataObjects(DeltaTime, cooldownableWeapons);
 	}
 }

@@ -15,40 +15,11 @@
 #include "Interfaces/Gameplay/Modules/Holders/MainModulesHolder.h"
 #include "Interfaces/Gameplay/Modules/Holders/WeaponModulesHolder.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
+#include "Utility/ReplicationStructures.h"
 
 #include "LostConnectionPlayerState.generated.h"
 
 #pragma warning(disable: 4458)
-
-USTRUCT()
-struct FAmmoData
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY()
-	int32 ammoCount;
-
-	UPROPERTY()
-	ammoTypes ammoType;
-
-	FAmmoData(ammoTypes ammoType = ammoTypes::small, int32 ammoCount = 0);
-};
-
-USTRUCT()
-struct FCooldownableAbilitiesData
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY()
-	float remainingCooldown;
-	
-	UPROPERTY()
-	abilitySlot slot;
-
-	FCooldownableAbilitiesData(abilitySlot slot = abilitySlot::empty, float remainingCooldown = 0.0f);
-};
 
 UCLASS()
 class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
@@ -72,6 +43,12 @@ protected:
 	UBaseWeapon* defaultWeapon;
 
 	UPROPERTY(Replicated)
+	UBaseWeapon* firstInactiveWeapon;
+
+	UPROPERTY(Replicated)
+	UBaseWeapon* secondInactiveWeapon;
+
+	UPROPERTY(Replicated)
 	TArray<UNetworkObject*> mainModules;
 
 	UPROPERTY(Replicated)
@@ -83,6 +60,9 @@ protected:
 protected:
 	UPROPERTY(Replicated)
 	TArray<FCooldownableAbilitiesData> cooldownableAbilities;
+
+	UPROPERTY(Replicated)
+	TArray<FCooldownableWeaponsData> cooldownableWeapons;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -98,6 +78,8 @@ public:
 
 	void addCooldownableAbility(abilitySlot slot, ICooldownable* cooldownable);
 
+	void addCooldownableWeapon(weaponSlotTypes slot, ICooldownable* cooldownable);
+
 	void setPrimaryWeapon(UBaseWeapon* primaryWeapon);
 
 	void setSecondaryWeapon(UBaseWeapon* secondaryWeapon);
@@ -110,16 +92,21 @@ public:
 
 	UBaseWeapon* getDefaultWeapon() const;
 
+	UBaseWeapon* getFirstInactiveWeapon() const;
+
+	UBaseWeapon* getSecondInactiveWeapon() const;
+
 	const TArray<UNetworkObject*>& getMainModules() const;
 
 	const TArray<UNetworkObject*>& getWeaponModules() const;
 
-	UFUNCTION(BlueprintCallable)
 	int32 getSpareAmmo(ammoTypes type) const;
 
 	TArray<FAmmoData>& getSpareAmmoArray();
 
 	const TArray<FCooldownableAbilitiesData>& getCooldownableAbilities() const;
+
+	const TArray<FCooldownableWeaponsData>& getCooldownableWeapons() const;
 
 public:
 	ALostConnectionPlayerState();
@@ -147,6 +134,16 @@ inline UBaseWeapon* ALostConnectionPlayerState::getSecondaryWeapon() const
 inline UBaseWeapon* ALostConnectionPlayerState::getDefaultWeapon() const
 {
 	return defaultWeapon;
+}
+
+inline UBaseWeapon* ALostConnectionPlayerState::getFirstInactiveWeapon() const
+{
+	return firstInactiveWeapon;
+}
+
+inline UBaseWeapon* ALostConnectionPlayerState::getSecondInactiveWeapon() const
+{
+	return secondInactiveWeapon;
 }
 
 inline int32 ALostConnectionPlayerState::getSpareAmmo(ammoTypes type) const
