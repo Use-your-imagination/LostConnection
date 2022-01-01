@@ -13,5 +13,7 @@ void ALostConnectionPlayerController::GetSeamlessTravelActorList(bool bToEntry, 
 
 ALostConnectionPlayerController::ALostConnectionPlayerController()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }

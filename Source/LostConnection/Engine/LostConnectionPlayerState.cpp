@@ -102,8 +102,6 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 void ALostConnectionPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
-
-	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
 }
 
 void ALostConnectionPlayerState::addMainModule(IMainModule* module)
@@ -177,6 +175,11 @@ ALostConnectionPlayerState::ALostConnectionPlayerState()
 	PrimaryActorTick.bCanEverTick = true;
 
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
+}
+
+void ALostConnectionPlayerState::init()
+{
+	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
 }
 
 UUserWidget* ALostConnectionPlayerState::setCurrentUI(UUserWidget* widget)

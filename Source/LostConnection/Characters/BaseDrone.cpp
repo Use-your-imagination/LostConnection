@@ -347,12 +347,17 @@ void ABaseDrone::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, ULostConnectionAssetManager::get().getUI().getDefaultUI());
+	if (GetController() && GetController() == UGameplayStatics::GetPlayerController(this, 0))
+	{
+		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+		ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, ULostConnectionAssetManager::get().getUI().getDefaultUI());
+		
+		playerState->init();
 
-	defaultUI->init(this);
+		defaultUI->init(this);
 
-	playerState->setCurrentUI(defaultUI)->AddToViewport();
+		playerState->setCurrentUI(defaultUI)->AddToViewport();
+	}
 
 	if (HasAuthority())
 	{

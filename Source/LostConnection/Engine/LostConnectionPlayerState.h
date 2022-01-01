@@ -111,6 +111,8 @@ public:
 public:
 	ALostConnectionPlayerState();
 
+	void init();
+
 	UFUNCTION(BlueprintCallable)
 	UUserWidget* setCurrentUI(UUserWidget* widget);
 
