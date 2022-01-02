@@ -78,22 +78,6 @@ void ABaseCharacter::PostInitializeComponents()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (HasAuthority())
-	{
-		TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
-
-		if (!spareAmmo.Num())
-		{
-			spareAmmo =
-			{
-				FAmmoData(ammoTypes::small, defaultSmallAmmoCount),
-				FAmmoData(ammoTypes::large, defaultLargeAmmoCount),
-				FAmmoData(ammoTypes::energy, defaultEnergyAmmoCount),
-				FAmmoData(ammoTypes::defaultType, 9999)
-			};
-		}
-	}
 }
 
 void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
@@ -580,6 +564,21 @@ TArray<TWeakObjectPtr<UBaseWeapon>> ABaseCharacter::getWeapons() const
 	}
 
 	return TArray<TWeakObjectPtr<UBaseWeapon>>();
+}
+
+int32 ABaseCharacter::getDefaultSmallAmmoCount() const
+{
+	return defaultSmallAmmoCount;
+}
+
+int32 ABaseCharacter::getDefaultLargeAmmoCount() const
+{
+	return defaultLargeAmmoCount;
+}
+
+int32 ABaseCharacter::getDefaultEnergyAmmoCount() const
+{
+	return defaultEnergyAmmoCount;
 }
 
 TimersUtility& ABaseCharacter::getTimers()

@@ -36,13 +36,6 @@ void ABaseBot::BeginPlay()
 	healthBar->AddElement(healthBarMaterial, nullptr, false, 10.0f, 40.0f, nullptr);
 
 	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
-
-	if (HasAuthority())
-	{
-		this->setDefaultWeapon(ULostConnectionAssetManager::get().getWeaponClass(UGauss::StaticClass()));
-
-		this->changeToDefaultWeapon();
-	}
 }
 
 void ABaseBot::deathLogic()

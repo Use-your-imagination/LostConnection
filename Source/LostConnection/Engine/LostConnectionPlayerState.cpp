@@ -184,7 +184,17 @@ void ALostConnectionPlayerState::init()
 
 UUserWidget* ALostConnectionPlayerState::setCurrentUI(UUserWidget* widget)
 {
+	if (currentUI)
+	{
+		currentUI->RemoveFromViewport();
+	}
+
 	currentUI = widget;
+
+	if (currentUI)
+	{
+		currentUI->AddToViewport();
+	}
 
 	return currentUI;
 }

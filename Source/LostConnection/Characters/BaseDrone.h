@@ -428,6 +428,8 @@ public:
 #pragma endregion
 
 	virtual ~ABaseDrone() = default;
+
+	friend class ALostConnectionPlayerController;
 };
 
 inline USpringArmComponent* ABaseDrone::GetCameraOffset() const
