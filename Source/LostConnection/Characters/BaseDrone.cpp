@@ -355,7 +355,7 @@ void ABaseDrone::BeginPlay()
 
 		defaultUI->init(this);
 
-		playerState->setCurrentUI(defaultUI)->AddToViewport();
+		playerState->setCurrentUI(defaultUI);
 	}
 
 	if (HasAuthority())

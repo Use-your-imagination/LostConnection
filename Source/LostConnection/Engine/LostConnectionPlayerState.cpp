@@ -64,9 +64,13 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 		wroteSomething |= secondaryWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
 
-	wroteSomething |= defaultWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	if (defaultWeapon)
+	{
+		wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
+
+		wroteSomething |= defaultWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
 
 	if (firstInactiveWeapon)
 	{

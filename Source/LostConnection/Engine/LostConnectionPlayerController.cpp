@@ -11,7 +11,7 @@
 #include "Weapons/SubmachineGuns/Hipter.h"
 #include "Weapons/Pistols/Gauss.h"
 
-void ALostConnectionPlayerController::BeginPlayer()
+void ALostConnectionPlayerController::BeginPlay()
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 	ALostConnectionPlayerState* playerState = GetPlayerState<ALostConnectionPlayerState>();
@@ -21,13 +21,15 @@ void ALostConnectionPlayerController::BeginPlayer()
 	{
 		if (ABaseDrone* drone = Cast<ABaseDrone>(pawn))
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Red, FString::Printf(L"player state: %d", StaticCast<bool>(PlayerState)));
+
 			ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, manager.getUI().getDefaultUI());
 
 			playerState->init();
 
 			defaultUI->init(drone);
 
-			playerState->setCurrentUI(defaultUI)->AddToViewport();
+			playerState->setCurrentUI(defaultUI);
 		}
 	}
 
@@ -58,9 +60,7 @@ void ALostConnectionPlayerController::BeginPlayer()
 
 		if (ABaseBot* bot = Cast<ABaseBot>(pawn))
 		{
-			bot->setDefaultWeapon(manager.getWeaponClass(UGauss::StaticClass()));
-
-			bot->changeToDefaultWeapon();
+			
 		}
 	}
 }
