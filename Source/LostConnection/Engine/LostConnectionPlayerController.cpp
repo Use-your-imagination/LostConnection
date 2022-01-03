@@ -21,8 +21,6 @@ void ALostConnectionPlayerController::BeginPlay()
 	{
 		if (ABaseDrone* drone = Cast<ABaseDrone>(pawn))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Red, FString::Printf(L"player state: %d", StaticCast<bool>(PlayerState)));
-
 			ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, manager.getUI().getDefaultUI());
 
 			playerState->init();

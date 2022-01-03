@@ -39,6 +39,8 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	virtual void PostInitializeComponents() override;
+
 protected:
 	virtual void deathLogic() override;
 
@@ -58,23 +60,9 @@ public:
 
 inline void ABaseBot::updateHealthBar()
 {
-	if (healthBarMaterial)
-	{
-		healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, L"healthBarMaterial is null");
-	}
+	healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
 
-	if (healthBarTextRender)
-	{
-		healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, L"healthBarTextRender is null");
-	}
+	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
 }
 
 inline void ABaseBot::setHealthBarVisibility(bool isVisible)
