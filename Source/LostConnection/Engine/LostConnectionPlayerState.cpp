@@ -64,9 +64,13 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 		wroteSomething |= secondaryWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
 
-	wroteSomething |= defaultWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	if (defaultWeapon)
+	{
+		wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
+
+		wroteSomething |= defaultWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
 
 	if (firstInactiveWeapon)
 	{
@@ -102,8 +106,6 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 void ALostConnectionPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
-
-	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
 }
 
 void ALostConnectionPlayerState::addMainModule(IMainModule* module)
@@ -179,9 +181,24 @@ ALostConnectionPlayerState::ALostConnectionPlayerState()
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }
 
+void ALostConnectionPlayerState::init()
+{
+	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
+}
+
 UUserWidget* ALostConnectionPlayerState::setCurrentUI(UUserWidget* widget)
 {
+	if (currentUI)
+	{
+		currentUI->RemoveFromViewport();
+	}
+
 	currentUI = widget;
+
+	if (currentUI)
+	{
+		currentUI->AddToViewport();
+	}
 
 	return currentUI;
 }

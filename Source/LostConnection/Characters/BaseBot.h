@@ -58,9 +58,23 @@ public:
 
 inline void ABaseBot::updateHealthBar()
 {
-	healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
+	if (healthBarMaterial)
+	{
+		healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, L"healthBarMaterial is null");
+	}
 
-	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
+	if (healthBarTextRender)
+	{
+		healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, L"healthBarTextRender is null");
+	}
 }
 
 inline void ABaseBot::setHealthBarVisibility(bool isVisible)

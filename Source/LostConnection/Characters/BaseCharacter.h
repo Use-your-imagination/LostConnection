@@ -280,6 +280,12 @@ public:
 
 	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const;
 
+	int32 getDefaultSmallAmmoCount() const;
+
+	int32 getDefaultLargeAmmoCount() const;
+
+	int32 getDefaultEnergyAmmoCount() const;
+
 	TimersUtility& getTimers();
 
 	virtual void Tick(float DeltaTime) override;

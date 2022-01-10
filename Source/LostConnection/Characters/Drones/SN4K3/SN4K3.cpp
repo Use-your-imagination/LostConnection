@@ -47,9 +47,7 @@ void ASN4K3::deathLogic()
 		const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
 		UUserWidget* headUI = NewObject<UUserWidget>(playerState, data->getHeadUI());
 
-		playerState->getCurrentUI()->RemoveFromViewport();
-
-		playerState->setCurrentUI(headUI)->AddToViewport();
+		playerState->setCurrentUI(headUI);
 
 		passiveAbility->useAbility();
 

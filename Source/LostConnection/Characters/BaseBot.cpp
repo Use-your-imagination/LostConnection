@@ -31,6 +31,8 @@ void ABaseBot::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GEngine->AddOnScreenDebugMessage(-1, 30.0f, FColor::Red, FString::Printf(L"Is bot on server: %d", HasAuthority()));
+
 	healthBarMaterial = UMaterialInstanceDynamic::Create(baseHealthBarMaterial, this);
 
 	healthBar->AddElement(healthBarMaterial, nullptr, false, 10.0f, 40.0f, nullptr);

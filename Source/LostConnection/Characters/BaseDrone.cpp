@@ -347,12 +347,16 @@ void ABaseDrone::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, ULostConnectionAssetManager::get().getUI().getDefaultUI());
+	if (GetController() && GetController() == UGameplayStatics::GetPlayerController(this, 0))
+	{
+		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 
-	defaultUI->init(this);
+		ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, ULostConnectionAssetManager::get().getUI().getDefaultUI());
 
-	playerState->setCurrentUI(defaultUI)->AddToViewport();
+		defaultUI->init(this);
+
+		playerState->setCurrentUI(defaultUI);
+	}
 
 	if (HasAuthority())
 	{
@@ -364,12 +368,6 @@ void ABaseDrone::BeginPlay()
 				}
 			}, 1.0f);
 
-		ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-
-		this->setPrimaryWeapon(manager.getWeaponClass(UHipter::StaticClass()));
-
-		this->setDefaultWeapon(manager.getWeaponClass(UGauss::StaticClass()));
-
 		passiveAbility->initAbility();
 
 		firstAbility->initAbility();
@@ -380,9 +378,12 @@ void ABaseDrone::BeginPlay()
 
 		ultimateAbility->initAbility();
 
-		this->restoreAbilitiesCooldown();
+		if (GetController())
+		{
+			this->restoreAbilitiesCooldown();
 
-		this->restoreWeaponsCooldown();
+			this->restoreWeaponsCooldown();
+		}
 	}
 }
 
@@ -617,9 +618,7 @@ void ABaseDrone::destroyDrone(ALostConnectionPlayerState* playerState)
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 
-	playerState->getCurrentUI()->RemoveFromViewport();
-
-	playerState->setCurrentUI(NewObject<UUserWidget>(playerState, manager.getUI().getDefaultDeathUI()))->AddToViewport();
+	playerState->setCurrentUI(NewObject<UUserWidget>(playerState, manager.getUI().getDefaultDeathUI()));
 
 	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
 

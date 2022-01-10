@@ -14,6 +14,8 @@ class LOSTCONNECTION_API ALostConnectionPlayerController : public APlayerControl
 	GENERATED_BODY()
 	
 protected:
+	virtual void BeginPlay() override;
+
 	virtual void GetSeamlessTravelActorList(bool bToEntry, TArray<AActor*>& ActorList) override;
 
 public:
