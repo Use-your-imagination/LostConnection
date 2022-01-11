@@ -3,13 +3,39 @@
 #include "PreConnectionPlaceholder.h"
 
 #include "Constants/Constants.h"
+#include "Utility/Utility.h"
+#include "Engine/LostConnectionPlayerController.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 
 void APreConnectionPlaceholder::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-APreConnectionPlaceholder::APreConnectionPlaceholder()
+void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (isAlreadySendRespawnRequest)
+	{
+		return;
+	}
+
+	ALostConnectionPlayerController* controller = Cast<ALostConnectionPlayerController>(GetController());
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+
+	if (ULostConnectionAssetManager::get().isAssetsLoadingEnd() && IsValid(controller) && IsValid(playerState) && IsValid(Utility::getGameState(this)))
+	{
+		isAlreadySendRespawnRequest = true;
+
+		playerState->init();
+
+		controller->respawnPlayer();
+	}
+}
+
+APreConnectionPlaceholder::APreConnectionPlaceholder() :
+	isAlreadySendRespawnRequest(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 

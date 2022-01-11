@@ -4,8 +4,6 @@
 
 #include "Constants/Constants.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
-#include "Utility/Utility.h"
-#include "Characters/Drones/SN4K3/SN4K3.h"
 
 template<typename T>
 static void reduceCooldownableDataObjects(float DeltaTime, TArray<T>& cooldownableData)
@@ -21,26 +19,6 @@ static void reduceCooldownableDataObjects(float DeltaTime, TArray<T>& cooldownab
 			cooldownableData.RemoveAt(i--);
 		}
 	}
-}
-
-void ALostConnectionPlayerState::spawnPlayerAfterConnection_Implementation()
-{
-	this->init();
-
-	APawn* pawn = GetPawn();
-	AController* controller = pawn->GetController();
-
-	controller->UnPossess();
-
-	FTransform spawnTransform(pawn->GetActorTransform());
-
-	pawn->Destroy();
-
-	ABaseDrone* drone = Utility::getGameState(this)->spawn<ABaseDrone>(Utility::findDroneClass(ULostConnectionAssetManager::get().getDrones(), ASN4K3::StaticClass()), spawnTransform);
-
-	controller->Possess(drone);
-
-	drone->FinishSpawning({}, true);
 }
 
 void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -123,11 +101,6 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 	}
 
 	return wroteSomething;
-}
-
-void ALostConnectionPlayerState::BeginPlay()
-{
-	Super::BeginPlay();
 }
 
 void ALostConnectionPlayerState::addMainModule(IMainModule* module)
