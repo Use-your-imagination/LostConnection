@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/GameState.h"
-#include "Net/UnrealNetwork.h"
 
 #include "LostConnectionGameState.generated.h"
 
@@ -49,28 +48,6 @@ public:
 	/// @return 
 	template<typename T>
 	T* spawn(const FTransform& transform, ESpawnActorCollisionHandlingMethod spawnMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-
-#pragma region Multiplayer
-private:
-	UFUNCTION(NetMulticast, Reliable)
-	void runMulticastReliable(AActor* caller, const FName& methodName);
-
-	UFUNCTION(NetMulticast, Unreliable)
-	void runMulticastUnreliable(AActor* caller, const FName& methodName);
-
-public:
-	UFUNCTION(Server, Reliable)
-	void runOnServerReliableWithMulticast(AActor* caller, const FName& methodName);
-
-	UFUNCTION(Server, Unreliable)
-	void runOnServerUnreliableWithMulticast(AActor* caller, const FName& methodName);
-
-	UFUNCTION(Server, Reliable)
-	void runOnServerReliable(AActor* caller, const FName& methodName);
-
-	UFUNCTION(Server, Unreliable)
-	void runOnServerUnreliable(AActor* caller, const FName& methodName);
-#pragma endregion
 };
 
 template<typename T>

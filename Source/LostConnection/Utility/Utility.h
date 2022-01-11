@@ -9,6 +9,7 @@
 
 #include "Engine/LostConnectionGameState.h"
 #include "Engine/LostConnectionPlayerState.h"
+#include "Engine/LostConnectionPlayerController.h"
 
 class LOSTCONNECTION_API Utility
 {
@@ -21,6 +22,8 @@ public:
 	static ALostConnectionGameState* getGameState(const AActor* actor);
 
 	static ALostConnectionPlayerState* getPlayerState(const APawn* pawn);
+
+	static ALostConnectionPlayerController* getPlayerController(const APawn* pawn);
 
 	static SIZE_T countStatuses(const class IStatusReceiver* target, const TSubclassOf<class UBaseStatus>& statusClass);
 
@@ -59,6 +62,11 @@ inline ALostConnectionGameState* Utility::getGameState(const AActor* actor)
 inline ALostConnectionPlayerState* Utility::getPlayerState(const APawn* pawn)
 {
 	return pawn->GetController()->GetPlayerState<ALostConnectionPlayerState>();
+}
+
+inline ALostConnectionPlayerController* Utility::getPlayerController(const APawn* pawn)
+{
+	return Cast<ALostConnectionPlayerController>(pawn->GetController());
 }
 
 inline float Utility::toPercent(float coefficient)

@@ -24,7 +24,7 @@ void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
 	ALostConnectionPlayerController* controller = Cast<ALostConnectionPlayerController>(GetController());
 	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 
-	if (ULostConnectionAssetManager::get().isAssetsLoadingEnd() && IsValid(controller) && IsValid(playerState) && IsValid(Utility::getGameState(this)))
+	if (ULostConnectionAssetManager::get().isAssetsLoadingEnd() && IsValid(controller) && IsValid(playerState))
 	{
 		isAlreadySendRespawnRequest = true;
 
