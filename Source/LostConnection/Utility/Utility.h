@@ -18,7 +18,7 @@ public:
 	~Utility() = default;
 
 public:
-	static ALostConnectionGameState* getGameState(const APawn* pawn);
+	static ALostConnectionGameState* getGameState(const AActor* actor);
 
 	static ALostConnectionPlayerState* getPlayerState(const APawn* pawn);
 
@@ -51,9 +51,9 @@ public:
 	static void processCooldown(T* cooldownableObject, float DeltaTime);
 };
 
-inline ALostConnectionGameState* Utility::getGameState(const APawn* pawn)
+inline ALostConnectionGameState* Utility::getGameState(const AActor* actor)
 {
-	return pawn->GetWorld()->GetGameState<ALostConnectionGameState>();
+	return actor->GetWorld()->GetGameState<ALostConnectionGameState>();
 }
 
 inline ALostConnectionPlayerState* Utility::getPlayerState(const APawn* pawn)

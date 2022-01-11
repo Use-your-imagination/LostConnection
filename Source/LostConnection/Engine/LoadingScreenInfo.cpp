@@ -23,7 +23,7 @@ void ALoadingScreenInfo::Tick(float DeltaTime)
 
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 
-	if (manager.getCurrentPercentLoading() == 100.0f)
+	if (manager.isAssetsLoadingEnd())
 	{
 		loadingScreen->RemoveFromViewport();
 
@@ -38,6 +38,7 @@ ALoadingScreenInfo::ALoadingScreenInfo()
 	static ConstructorHelpers::FClassFinder<UUserWidget> loadingScreenFinder(TEXT("/Game/LoadingScreen/BP_LoadingScreenUI"));
 
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = false;
 
 	loadingScreenClass = loadingScreenFinder.Class;
 }

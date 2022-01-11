@@ -14,13 +14,13 @@
 void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList)
 {
 	ActorList.Reserve(GameState->PlayerArray.Num());
-
+	
 	ActorList.Append(GameState->PlayerArray);
-
+	
 	if (bToTransition)
 	{
 		ActorList.Add(this);
-
+	
 		ActorList.Add(GameState);
 	}
 
@@ -29,7 +29,7 @@ void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TAr
 
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
-	static ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/Drones/SN4K3/BP_SN4K3"));
+	static ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/WorldPlaceable/BP_PreConnectionPlaceholder"));
 	static ConstructorHelpers::FClassFinder<APawn> defaultAIClassFinder(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
 	static ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerState"));
 	static ConstructorHelpers::FClassFinder<APlayerController> defaultPlayerControllerClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerController"));

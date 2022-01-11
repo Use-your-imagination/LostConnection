@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "GameFramework/GameStateBase.h"
+#include "GameFramework/GameState.h"
 #include "Net/UnrealNetwork.h"
 
 #include "LostConnectionGameState.generated.h"
@@ -12,7 +12,7 @@
 enum class typeOfDamage : uint8;
 
 UCLASS()
-class LOSTCONNECTION_API ALostConnectionGameState : public AGameStateBase
+class LOSTCONNECTION_API ALostConnectionGameState : public AGameState
 {
 	GENERATED_BODY()
 
@@ -40,7 +40,7 @@ public:
 	/// @param transform 
 	/// @return 
 	template<typename T>
-	T* spawn(UClass* staticClass, const FTransform& transform, ESpawnActorCollisionHandlingMethod spawnMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	T* spawn(UClass* subclass, const FTransform& transform, ESpawnActorCollisionHandlingMethod spawnMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
 	/// @brief Spawn actor deferred
 	/// @tparam T 
@@ -74,9 +74,9 @@ public:
 };
 
 template<typename T>
-T* ALostConnectionGameState::spawn(UClass* staticClass, const FTransform& transform, ESpawnActorCollisionHandlingMethod spawnMethod)
+T* ALostConnectionGameState::spawn(UClass* subclass, const FTransform& transform, ESpawnActorCollisionHandlingMethod spawnMethod)
 {
-	return GetWorld()->SpawnActorDeferred<T>(staticClass, transform, nullptr, nullptr, spawnMethod);
+	return GetWorld()->SpawnActorDeferred<T>(subclass, transform, nullptr, nullptr, spawnMethod);
 }
 
 template<typename T>

@@ -64,6 +64,10 @@ protected:
 	UPROPERTY(Replicated)
 	TArray<FCooldownableWeaponsData> cooldownableWeapons;
 
+private:
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void spawnPlayerAfterConnection();
+
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -111,6 +115,7 @@ public:
 public:
 	ALostConnectionPlayerState();
 
+	UFUNCTION(Category = Initialization, BlueprintCallable)
 	void init();
 
 	UFUNCTION(BlueprintCallable)

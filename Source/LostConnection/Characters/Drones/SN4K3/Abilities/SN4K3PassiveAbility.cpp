@@ -14,6 +14,10 @@ void USN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(USN4K3PassiveAbility, naniteMeter);
+	
+	DOREPLIFETIME(USN4K3PassiveAbility, cooldown);
+
+	DOREPLIFETIME(USN4K3PassiveAbility, currentCooldown);
 }
 
 USN4K3PassiveAbility::USN4K3PassiveAbility() :
