@@ -2,68 +2,9 @@
 
 #include "LostConnectionPlayerController.h"
 
-#include "Kismet/GameplayStatics.h"
-
 #include "Constants/Constants.h"
-#include "LostConnectionPlayerState.h"
-#include "Characters/BaseDrone.h"
-#include "Characters/BaseBot.h"
-#include "Weapons/SubmachineGuns/Hipter.h"
-#include "Weapons/Pistols/Gauss.h"
-
-void ALostConnectionPlayerController::BeginPlay()
-{
-	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-	ALostConnectionPlayerState* playerState = GetPlayerState<ALostConnectionPlayerState>();
-	APawn* pawn = GetPawn();
-
-	if (this == UGameplayStatics::GetPlayerController(this, 0))
-	{
-		if (ABaseDrone* drone = Cast<ABaseDrone>(pawn))
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Red, FString::Printf(L"player state: %d", StaticCast<bool>(PlayerState)));
-
-			ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, manager.getUI().getDefaultUI());
-
-			playerState->init();
-
-			defaultUI->init(drone);
-
-			playerState->setCurrentUI(defaultUI);
-		}
-	}
-
-	if (HasAuthority())
-	{
-		TArray<FAmmoData>& spareAmmo = playerState->getSpareAmmoArray();
-
-		if (ABaseCharacter* character = Cast<ABaseCharacter>(pawn))
-		{
-			if (!spareAmmo.Num())
-			{
-				spareAmmo =
-				{
-					FAmmoData(ammoTypes::small, character->getDefaultSmallAmmoCount()),
-					FAmmoData(ammoTypes::large, character->getDefaultLargeAmmoCount()),
-					FAmmoData(ammoTypes::energy, character->getDefaultEnergyAmmoCount()),
-					FAmmoData(ammoTypes::defaultType, 9999)
-				};
-			}
-		}
-
-		if (ABaseDrone* drone = Cast<ABaseDrone>(pawn))
-		{
-			drone->setPrimaryWeapon(manager.getWeaponClass(UHipter::StaticClass()));
-
-			drone->setDefaultWeapon(manager.getWeaponClass(UGauss::StaticClass()));
-		}
-
-		if (ABaseBot* bot = Cast<ABaseBot>(pawn))
-		{
-			
-		}
-	}
-}
+#include "Utility/Utility.h"
+#include "Characters/Drones/SN4K3/SN4K3.h"
 
 void ALostConnectionPlayerController::GetSeamlessTravelActorList(bool bToEntry, TArray<AActor*>& ActorList)
 {
@@ -78,3 +19,86 @@ ALostConnectionPlayerController::ALostConnectionPlayerController()
 
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }
+
+void ALostConnectionPlayerController::respawnPlayer_Implementation()
+{
+	APawn* pawn = GetPawn();
+	FTransform spawnTransform(pawn->GetActorTransform());
+
+	pawn->Destroy();
+
+	ABaseDrone* drone = Utility::getGameState(this)->spawn<ABaseDrone>(Utility::findDroneClass(ULostConnectionAssetManager::get().getDrones(), ASN4K3::StaticClass()), spawnTransform);
+
+	Possess(drone);
+
+	drone->FinishSpawning({}, true);
+}
+
+#pragma region Multiplayer
+void ALostConnectionPlayerController::runMulticastReliable_Implementation(AActor* caller, const FName& methodName)
+{
+	if (!caller)
+	{
+		return;
+	}
+
+	FSimpleDelegate delegate;
+
+	delegate.BindUFunction(caller, methodName);
+
+	delegate.Execute();
+}
+
+void ALostConnectionPlayerController::runMulticastUnreliable_Implementation(AActor* caller, const FName& methodName)
+{
+	if (!caller)
+	{
+		return;
+	}
+
+	FSimpleDelegate delegate;
+
+	delegate.BindUFunction(caller, methodName);
+
+	delegate.Execute();
+}
+
+void ALostConnectionPlayerController::runOnServerReliableWithMulticast_Implementation(AActor* caller, const FName& methodName)
+{
+	this->runMulticastReliable(caller, methodName);
+}
+
+void ALostConnectionPlayerController::runOnServerUnreliableWithMulticast_Implementation(AActor* caller, const FName& methodName)
+{
+	this->runMulticastUnreliable(caller, methodName);
+}
+
+void ALostConnectionPlayerController::runOnServerReliable_Implementation(AActor* caller, const FName& methodName)
+{
+	if (!caller)
+	{
+		return;
+	}
+
+	FSimpleDelegate delegate;
+
+	delegate.BindUFunction(caller, methodName);
+
+	delegate.Execute();
+}
+
+void ALostConnectionPlayerController::runOnServerUnreliable_Implementation(AActor* caller, const FName& methodName)
+{
+	if (!caller)
+	{
+		return;
+	}
+
+	FSimpleDelegate delegate;
+
+	delegate.BindUFunction(caller, methodName);
+
+	delegate.Execute();
+}
+
+#pragma endregion

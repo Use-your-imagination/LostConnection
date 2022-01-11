@@ -78,6 +78,22 @@ void ABaseCharacter::PostInitializeComponents()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (HasAuthority())
+	{
+		TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
+
+		if (!spareAmmo.Num())
+		{
+			spareAmmo =
+			{
+				FAmmoData(ammoTypes::small, this->getDefaultSmallAmmoCount()),
+				FAmmoData(ammoTypes::large, this->getDefaultLargeAmmoCount()),
+				FAmmoData(ammoTypes::energy, this->getDefaultEnergyAmmoCount()),
+				FAmmoData(ammoTypes::defaultType, 9999)
+			};
+		}
+	}
 }
 
 void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
@@ -281,6 +297,8 @@ ABaseCharacter::ABaseCharacter() :
 	PrimaryActorTick.bCanEverTick = true;
 
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
+
+	bReplicates = true;
 
 	USkeletalMeshComponent* mesh = GetMesh();
 	UCharacterMovementComponent* movement = GetCharacterMovement();

@@ -168,7 +168,7 @@ float ULostConnectionAssetManager::getCurrentPercentLoading() const
 	return Utility::toPercent(current / allAssets);
 }
 
-bool ULostConnectionAssetManager::isAssetLoadingEnd() const
+bool ULostConnectionAssetManager::isAssetsLoadingEnd() const
 {
 	return Algo::AllOf(handles, [](const auto& data) { return data.Value->HasLoadCompleted(); });
 }

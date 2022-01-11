@@ -103,11 +103,6 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 	return wroteSomething;
 }
 
-void ALostConnectionPlayerState::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void ALostConnectionPlayerState::addMainModule(IMainModule* module)
 {
 	mainModules.Add(Cast<UNetworkObject>(module));
@@ -188,14 +183,14 @@ void ALostConnectionPlayerState::init()
 
 UUserWidget* ALostConnectionPlayerState::setCurrentUI(UUserWidget* widget)
 {
-	if (currentUI)
+	if (IsValid(currentUI))
 	{
 		currentUI->RemoveFromViewport();
 	}
 
 	currentUI = widget;
 
-	if (currentUI)
+	if (IsValid(currentUI))
 	{
 		currentUI->AddToViewport();
 	}

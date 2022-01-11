@@ -347,15 +347,23 @@ void ABaseDrone::BeginPlay()
 {
 	Super::BeginPlay();
 
+	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+
 	if (GetController() && GetController() == UGameplayStatics::GetPlayerController(this, 0))
 	{
 		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-
-		ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(playerState, ULostConnectionAssetManager::get().getUI().getDefaultUI());
+		ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(this, manager.getUI().getDefaultUI());
 
 		defaultUI->init(this);
 
-		playerState->setCurrentUI(defaultUI);
+		if (IsValid(playerState))
+		{
+			playerState->setCurrentUI(defaultUI);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, L"Player state is not valid");
+		}
 	}
 
 	if (HasAuthority())
@@ -368,6 +376,10 @@ void ABaseDrone::BeginPlay()
 				}
 			}, 1.0f);
 
+		this->setPrimaryWeapon(manager.getWeaponClass(UHipter::StaticClass()));
+
+		this->setDefaultWeapon(manager.getWeaponClass(UGauss::StaticClass()));
+
 		passiveAbility->initAbility();
 
 		firstAbility->initAbility();
@@ -378,12 +390,9 @@ void ABaseDrone::BeginPlay()
 
 		ultimateAbility->initAbility();
 
-		if (GetController())
-		{
-			this->restoreAbilitiesCooldown();
+		this->restoreAbilitiesCooldown();
 
-			this->restoreWeaponsCooldown();
-		}
+		this->restoreWeaponsCooldown();
 	}
 }
 

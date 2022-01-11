@@ -7,11 +7,11 @@
 
 void MultiplayerUtility::runOnServerReliableWithMulticast(APawn* caller, const FName& methodName)
 {
-	ALostConnectionGameState* gameState = Utility::getGameState(caller);
+	ALostConnectionPlayerController* playerController = Utility::getPlayerController(caller);
 
-	if (gameState)
+	if (playerController)
 	{
-		gameState->runOnServerReliableWithMulticast(caller, methodName);
+		playerController->runOnServerReliableWithMulticast(caller, methodName);
 	}
 	else
 	{
@@ -21,11 +21,11 @@ void MultiplayerUtility::runOnServerReliableWithMulticast(APawn* caller, const F
 
 void MultiplayerUtility::runOnServerUnreliableWithMulticast(APawn* caller, const FName& methodName)
 {
-	ALostConnectionGameState* gameState = Utility::getGameState(caller);
+	ALostConnectionPlayerController* playerController = Utility::getPlayerController(caller);
 
-	if (gameState)
+	if (playerController)
 	{
-		gameState->runOnServerUnreliableWithMulticast(caller, methodName);
+		playerController->runOnServerUnreliableWithMulticast(caller, methodName);
 	}
 	else
 	{
@@ -35,11 +35,11 @@ void MultiplayerUtility::runOnServerUnreliableWithMulticast(APawn* caller, const
 
 void MultiplayerUtility::runOnServerReliable(APawn* caller, const FName& methodName)
 {
-	ALostConnectionGameState* gameState = Utility::getGameState(caller);
+	ALostConnectionPlayerController* playerController = Utility::getPlayerController(caller);
 
-	if (gameState)
+	if (playerController)
 	{
-		gameState->runOnServerReliable(caller, methodName);
+		playerController->runOnServerReliable(caller, methodName);
 	}
 	else
 	{
@@ -49,11 +49,11 @@ void MultiplayerUtility::runOnServerReliable(APawn* caller, const FName& methodN
 
 void MultiplayerUtility::runOnServerUnreliable(APawn* caller, const FName& methodName)
 {
-	ALostConnectionGameState* gameState = Utility::getGameState(caller);
+	ALostConnectionPlayerController* playerController = Utility::getPlayerController(caller);
 
-	if (gameState)
+	if (playerController)
 	{
-		gameState->runOnServerUnreliable(caller, methodName);
+		playerController->runOnServerUnreliable(caller, methodName);
 	}
 	else
 	{

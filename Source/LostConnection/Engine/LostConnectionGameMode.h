@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 
-#include "GameFramework/GameModeBase.h"
+#include "GameFramework/GameMode.h"
 
 #include "AI/AISpawner.h"
 
 #include "LostConnectionGameMode.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ALostConnectionGameMode : public AGameModeBase
+class LOSTCONNECTION_API ALostConnectionGameMode : public AGameMode
 {
 	GENERATED_BODY()
 
