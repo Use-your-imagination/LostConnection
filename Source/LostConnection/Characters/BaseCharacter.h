@@ -57,6 +57,12 @@ protected:
 	TimersUtility timers;
 
 protected:
+	UPROPERTY(Category = CharacterInformation, EditDefaultsOnly, BlueprintReadOnly)
+	FText characterName;
+
+	UPROPERTY(Category = CharacterInformation, EditDefaultsOnly, BlueprintReadOnly)
+	FText description;
+
 	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float health;
 

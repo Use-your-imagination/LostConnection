@@ -18,7 +18,7 @@ public:
 
 	static constexpr float shootDistance = 20000.0f;
 
-	static constexpr int32 actorNetUpdateFrequency = 45;
+	static constexpr int32 actorNetUpdateFrequency = 60;
 	static constexpr int32 minNetUpdateFrequency = 1;
 	
 	static constexpr int32 defaultSmallAmmoMaxCount = 700;

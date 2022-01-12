@@ -50,6 +50,9 @@ private:
 	virtual TArray<FInputActionBinding> initInputs();
 
 protected:
+	UPROPERTY(Category = CharacterInformation, EditDefaultsOnly, BlueprintReadOnly)
+	FText droneMK;
+
 	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float energy;
 
