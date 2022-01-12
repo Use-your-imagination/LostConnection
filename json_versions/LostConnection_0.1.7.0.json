@@ -1,4 +1,28 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.1.7.0"
+  "projectVersion": "0.1.7.0",
+  "Bug fixes": {
+    "type": "category",
+    "Multiplayer": {
+      "type": "item",
+      "notes": [
+        "Fix multiplayer connection"
+      ]
+    },
+    "UI": {
+      "type": "item",
+      "notes": [
+        "Fix cancel ability input setting displaying"
+      ]
+    }
+  },
+  "SN4K3": {
+    "type": "category",
+    "Visual": {
+      "type": "item",
+      "notes": [
+        "Add textures"
+      ]
+    }
+  }
 }

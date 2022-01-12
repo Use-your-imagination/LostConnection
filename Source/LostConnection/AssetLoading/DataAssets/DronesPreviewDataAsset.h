@@ -6,6 +6,7 @@
 
 #include "Engine/DataAsset.h"
 #include "Animation/AnimMontage.h"
+#include "Internationalization/StringTable.h"
 
 #include "DronesPreviewDataAsset.generated.h"
 
@@ -20,6 +21,9 @@ public:
 
 	UPROPERTY(Category = Animations, EditDefaultsOnly)
 	TSubclassOf<UAnimInstance> animationBlueprint;
+
+	UPROPERTY(Category = Information, EditDefaultsOnly)
+	UStringTable* droneInformation;
 
 	FDronePreview();
 };
