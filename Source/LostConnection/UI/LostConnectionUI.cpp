@@ -13,4 +13,11 @@ ULostConnectionUI::ULostConnectionUI(const FObjectInitializer& objectInitializer
 void ULostConnectionUI::init(ABaseDrone* player)
 {
 	this->player = player;
+
+	this->UIConstruction();
+}
+
+void ULostConnectionUI::UIConstruction_Implementation()
+{
+
 }

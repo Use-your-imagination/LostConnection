@@ -7,11 +7,6 @@
 #include "Engine/LostConnectionPlayerController.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-void APreConnectionPlaceholder::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

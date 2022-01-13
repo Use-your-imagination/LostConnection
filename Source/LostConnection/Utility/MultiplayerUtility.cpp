@@ -7,56 +7,56 @@
 
 void MultiplayerUtility::runOnServerReliableWithMulticast(APawn* caller, const FName& methodName)
 {
-	ALostConnectionPlayerController* playerController = Utility::getPlayerController(caller);
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
 
-	if (playerController)
+	if (playerState)
 	{
-		playerController->runOnServerReliableWithMulticast(caller, methodName);
+		playerState->runOnServerReliableWithMulticast(caller, methodName);
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to game state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
 	}
 }
 
 void MultiplayerUtility::runOnServerUnreliableWithMulticast(APawn* caller, const FName& methodName)
 {
-	ALostConnectionPlayerController* playerController = Utility::getPlayerController(caller);
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
 
-	if (playerController)
+	if (playerState)
 	{
-		playerController->runOnServerUnreliableWithMulticast(caller, methodName);
+		playerState->runOnServerUnreliableWithMulticast(caller, methodName);
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to game state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
 	}
 }
 
 void MultiplayerUtility::runOnServerReliable(APawn* caller, const FName& methodName)
 {
-	ALostConnectionPlayerController* playerController = Utility::getPlayerController(caller);
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
 
-	if (playerController)
+	if (playerState)
 	{
-		playerController->runOnServerReliable(caller, methodName);
+		playerState->runOnServerReliable(caller, methodName);
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to game state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
 	}
 }
 
 void MultiplayerUtility::runOnServerUnreliable(APawn* caller, const FName& methodName)
 {
-	ALostConnectionPlayerController* playerController = Utility::getPlayerController(caller);
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
 
-	if (playerController)
+	if (playerState)
 	{
-		playerController->runOnServerUnreliable(caller, methodName);
+		playerState->runOnServerUnreliable(caller, methodName);
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to game state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
 	}
 }

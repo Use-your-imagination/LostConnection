@@ -15,6 +15,18 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Statuses/Ailments/SwarmAilment.h"
 
+void ASN4K3PassiveAbilityHead::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Utility::executeOnOwningClient(this, [this]()
+		{
+			const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
+
+			Utility::setCurrentUI(data->getHeadUI(), this);
+		});
+}
+
 void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
@@ -96,10 +108,7 @@ void ASN4K3PassiveAbilityHead::explode()
 
 			character->getTimers().addTimer
 			(
-				[character, resurrect]()
-				{
-					character->detachDeathEvent(resurrect);
-				},
+				[character, resurrect]() { character->detachDeathEvent(resurrect); },
 				0.0f,
 				false,
 				character->getSwarm()->getRemainingDuration()
@@ -127,11 +136,8 @@ void ASN4K3PassiveAbilityHead::explodeVFX()
 
 void ASN4K3PassiveAbilityHead::destroyHead()
 {
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-
-	playerState->setCurrentUI(NewObject<UUserWidget>(playerState, ULostConnectionAssetManager::get().getUI().getDefaultDeathUI()));
-
-	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(ULostConnectionAssetManager::get().getDefaults().getDeathPlaceholder(), {});
+	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
 
 	GetController()->Possess(placeholder);
 

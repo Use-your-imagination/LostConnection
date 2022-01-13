@@ -17,8 +17,6 @@ private:
 	bool isAlreadySendRespawnRequest;
 
 protected:
-	virtual void BeginPlay() override;
-
 	UFUNCTION(Client, Reliable)
 	virtual void Tick(float DeltaTime) override;
 

@@ -349,22 +349,10 @@ void ABaseDrone::BeginPlay()
 
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 
-	if (GetController() && GetController() == UGameplayStatics::GetPlayerController(this, 0))
-	{
-		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-		ULostConnectionUI* defaultUI = NewObject<ULostConnectionUI>(this, manager.getUI().getDefaultUI());
-
-		defaultUI->init(this);
-
-		if (IsValid(playerState))
+	Utility::executeOnOwningClient(this, [this, &manager]() 
 		{
-			playerState->setCurrentUI(defaultUI);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, L"Player state is not valid");
-		}
-	}
+			Utility::setCurrentUI(manager.getUI().getDefaultUI(), this)->init(this);
+		});
 
 	if (HasAuthority())
 	{
@@ -623,13 +611,9 @@ void ABaseDrone::restoreEnergy(float amount)
 	currentEnergy = FMath::Min(energy, currentEnergy + amount);
 }
 
-void ABaseDrone::destroyDrone(ALostConnectionPlayerState* playerState)
+void ABaseDrone::destroyDrone()
 {
-	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-
-	playerState->setCurrentUI(NewObject<UUserWidget>(playerState, manager.getUI().getDefaultDeathUI()));
-
-	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
+	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(ULostConnectionAssetManager::get().getDefaults().getDeathPlaceholder(), {});
 
 	GetController()->Possess(placeholder);
 
@@ -703,7 +687,7 @@ void ABaseDrone::deathLogic()
 
 	if (isFullyDestruction)
 	{
-		this->destroyDrone(playerState);
+		this->destroyDrone();
 	}
 }
 

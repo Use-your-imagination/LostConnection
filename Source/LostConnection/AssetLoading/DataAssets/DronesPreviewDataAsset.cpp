@@ -3,7 +3,8 @@
 #include "DronesPreviewDataAsset.h"
 
 FDronePreview::FDronePreview() :
-	mesh(USkeletalMesh::StaticClass()->GetDefaultObject<USkeletalMesh>())
+	mesh(USkeletalMesh::StaticClass()->GetDefaultObject<USkeletalMesh>()),
+	droneInformation(UStringTable::StaticClass()->GetDefaultObject<UStringTable>())
 {
 
 }
@@ -15,7 +16,7 @@ FPrimaryAssetId UDronesPreviewDataAsset::getPrimaryAssetId()
 
 TArray<const FDronePreview*> UDronesPreviewDataAsset::getDronesPreview() const
 {
-	return TArray<const FDronePreview*>
+	return
 	{
 		&SN4K3
 	};
