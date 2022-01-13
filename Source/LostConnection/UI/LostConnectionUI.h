@@ -24,5 +24,8 @@ public:
 
 	void init(class ABaseDrone* player);
 
+	UFUNCTION(Category = Initialization, BlueprintNativeEvent)
+	void UIConstruction();
+
 	virtual ~ULostConnectionUI() = default;
 };

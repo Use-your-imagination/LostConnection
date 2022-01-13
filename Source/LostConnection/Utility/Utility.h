@@ -6,6 +6,7 @@
 
 #include "Algo/AnyOf.h"
 #include "GameFramework/Pawn.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Engine/LostConnectionGameState.h"
 #include "Engine/LostConnectionPlayerState.h"
@@ -52,6 +53,12 @@ public:
 
 	template<typename T>
 	static void processCooldown(T* cooldownableObject, float DeltaTime);
+
+	template<typename T>
+	static T* setCurrentUI(const TSubclassOf<T>& widget, APawn* outer);
+
+	template<typename FunctionT, typename... Args>
+	static void executeOnOwningClient(APawn* pawn, const FunctionT& function, Args&&... args);
 };
 
 inline ALostConnectionGameState* Utility::getGameState(const AActor* actor)
@@ -128,10 +135,31 @@ const T* Utility::findDroneAsset(const TArray<const class UBaseDroneDataAsset*>&
 template<typename T>
 inline void Utility::processCooldown(T* cooldownableObject, float DeltaTime)
 {
-	class ICooldownable* tem = Cast<class ICooldownable>(cooldownableObject);
-
-	if (tem)
+	if (class ICooldownable* tem = Cast<class ICooldownable>(cooldownableObject))
 	{
 		tem->processCooldown(DeltaTime);
+	}
+}
+
+template<typename T>
+T* Utility::setCurrentUI(const TSubclassOf<T>& widget, APawn* outer)
+{
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(outer);
+
+	playerState->setCurrentUI(widget, outer);
+
+	return Cast<T>(playerState->getCurrentUI());
+}
+
+template<typename FunctionT, typename... Args>
+void Utility::executeOnOwningClient(APawn* pawn, const FunctionT& function, Args&&... args)
+{
+	check(pawn);
+
+	AController* controller = pawn->GetController();
+
+	if (controller && controller == UGameplayStatics::GetPlayerController(pawn, 0))
+	{
+		function(Forward(args)...);
 	}
 }

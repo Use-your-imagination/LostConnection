@@ -248,7 +248,7 @@ protected:
 protected:
 	void restoreEnergy(float amount);
 
-	void destroyDrone(ALostConnectionPlayerState* playerState);
+	void destroyDrone();
 
 	void saveCurrentAbilitiesCooldown(ALostConnectionPlayerState* playerState);
 

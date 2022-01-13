@@ -111,8 +111,11 @@ public:
 
 	void init();
 
-	UFUNCTION(BlueprintCallable)
-	UUserWidget* setCurrentUI(UUserWidget* widget);
+	UFUNCTION(Client, Reliable)
+	void resetCurrentUI();
+
+	UFUNCTION(Client, Reliable)
+	void setCurrentUI(TSubclassOf<UUserWidget> widget, APawn* outer);
 
 	UUserWidget* getCurrentUI() const;
 

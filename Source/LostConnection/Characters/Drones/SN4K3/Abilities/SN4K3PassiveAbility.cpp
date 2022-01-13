@@ -44,11 +44,11 @@ int32 USN4K3PassiveAbility::getNaniteMeter() const
 
 void USN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 {
-	ASN4K3PassiveAbilityHead* head = target->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3PassiveAbilityHead>(headClass, target->GetActorTransform());
+	ASN4K3PassiveAbilityHead* head = Utility::getGameState(target)->spawn<ASN4K3PassiveAbilityHead>(headClass, target->GetActorTransform());
+
+	Utility::getPlayerController(target)->Possess(head);
 
 	head->FinishSpawning({}, true);
-
-	target->GetController()->Possess(head);
 
 	ICaster::Execute_applyPassiveAbilityEvent(Cast<UObject>(caster), target);
 }

@@ -13,6 +13,9 @@ class LOSTCONNECTION_API ADeathPlaceholder : public APawn
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	ADeathPlaceholder() = default;
 

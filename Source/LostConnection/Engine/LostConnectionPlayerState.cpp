@@ -30,7 +30,7 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME(ALostConnectionPlayerState, secondaryWeapon);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, defaultWeapon);
-	
+
 	DOREPLIFETIME(ALostConnectionPlayerState, firstInactiveWeapon);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, secondInactiveWeapon);
@@ -181,21 +181,26 @@ void ALostConnectionPlayerState::init()
 	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
 }
 
-UUserWidget* ALostConnectionPlayerState::setCurrentUI(UUserWidget* widget)
+void ALostConnectionPlayerState::resetCurrentUI_Implementation()
 {
 	if (IsValid(currentUI))
 	{
 		currentUI->RemoveFromViewport();
 	}
 
-	currentUI = widget;
+	currentUI = nullptr;
+}
 
+void ALostConnectionPlayerState::setCurrentUI_Implementation(TSubclassOf<UUserWidget> widget, APawn* outer)
+{
 	if (IsValid(currentUI))
 	{
-		currentUI->AddToViewport();
+		currentUI->RemoveFromViewport();
 	}
 
-	return currentUI;
+	currentUI = NewObject<UUserWidget>(outer, widget);
+
+	currentUI->AddToViewport();
 }
 
 UUserWidget* ALostConnectionPlayerState::getCurrentUI() const
