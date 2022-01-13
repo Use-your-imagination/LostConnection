@@ -161,8 +161,6 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 
 	mesh->SetupAttachment(sphere);
 
-	mesh->SetGenerateOverlapEvents(true);
-
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Ignore);
