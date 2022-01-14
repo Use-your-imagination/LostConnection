@@ -14,13 +14,6 @@ AISpawner::AISpawner()
 	spawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 }
 
-AISpawner& AISpawner::get()
-{
-	static AISpawner instance;
-
-	return instance;
-}
-
 void AISpawner::spawn(UWorld* world, int32 count) const
 {
 	const TArray<TSubclassOf<ABaseBot>>& bots = ULostConnectionAssetManager::get().getCurrentAct().getBots();

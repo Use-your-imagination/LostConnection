@@ -7,6 +7,7 @@
 #include "Engine/Font.h"
 
 #include "Weapons/Pistols/Gauss.h"
+#include "Engine/LostConnectionGameMode.h"
 
 void ABaseBot::onCurrentHealthChanged()
 {
@@ -52,7 +53,11 @@ void ABaseBot::PostInitializeComponents()
 
 void ABaseBot::deathLogic()
 {
+	UWorld* world = GetWorld();
+
 	Destroy();
+
+	world->GetAuthGameMode<ALostConnectionGameMode>()->getSpawnManager().notify(world);
 }
 
 ABaseBot::ABaseBot()

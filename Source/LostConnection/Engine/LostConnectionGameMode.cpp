@@ -8,8 +8,20 @@
 
 #include "LostConnectionGameState.h"
 #include "LostConnectionPlayerController.h"
+#include "Constants/Constants.h"
 
 #pragma warning(disable: 4458)
+
+void ALostConnectionGameMode::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ALostConnectionGameMode, totalBots);
+
+	DOREPLIFETIME(ALostConnectionGameMode, remainingBots);
+
+	DOREPLIFETIME(ALostConnectionGameMode, remainingWaves);
+}
 
 void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList)
 {
@@ -34,7 +46,11 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	static ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerState"));
 	static ConstructorHelpers::FClassFinder<APlayerController> defaultPlayerControllerClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerController"));
 	
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.TickInterval = 1.0f;
 	bUseSeamlessTravel = true;
+
+	NetUpdateFrequency = UConstants::minNetUpdateFrequency;
 
 	DefaultPawnClass = defaultPawnClassFinder.Class;
 	PlayerControllerClass = defaultPlayerControllerClassFinder.Class;
@@ -42,9 +58,27 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	GameStateClass = ALostConnectionGameState::StaticClass();
 }
 
-void ALostConnectionGameMode::spawnAI_Implementation(int32 count) const
+void ALostConnectionGameMode::initRoomAI_Implementation(int32 totalCount, int32 waves)
 {
-	spawner.spawn(GetWorld(), count);
+	spawnManager.init(totalCount, waves);
+
+	spawnManager.process(GetWorld());
+}
+
+AISpawnManager& ALostConnectionGameMode::getSpawnManager()
+{
+	return spawnManager;
+}
+
+void ALostConnectionGameMode::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	totalBots = spawnManager.getTotalCount();
+
+	remainingBots = spawnManager.getRemainingAIToSpawn();
+
+	remainingWaves = spawnManager.getRemainingWaves();
 }
 
 void ALostConnectionGameMode::PostSeamlessTravel()

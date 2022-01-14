@@ -9,13 +9,10 @@ class LOSTCONNECTION_API AISpawner
 private:
 	FActorSpawnParameters spawnParameters;
 
-private:
+public:
 	AISpawner();
 
-	~AISpawner() = default;
-
-public:
-	static AISpawner& get();
-
 	void spawn(UWorld* world, int32 count) const;
+
+	~AISpawner() = default;
 };

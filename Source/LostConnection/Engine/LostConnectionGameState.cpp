@@ -28,13 +28,8 @@ ALostConnectionGameState::ALostConnectionGameState()
 	NetUpdateFrequency = UConstants::minNetUpdateFrequency;
 }
 
-void ALostConnectionGameState::startRoomLoading()
+void ALostConnectionGameState::startRoomLoading_Implementation()
 {
-	if (!HasAuthority())
-	{
-		return;
-	}
-
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 	const UBaseActDataAsset& act = manager.getCurrentAct();
 	TArray<TSoftObjectPtr<UWorld>> rooms = act.getRooms();

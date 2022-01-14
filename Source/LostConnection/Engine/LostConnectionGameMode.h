@@ -6,7 +6,7 @@
 
 #include "GameFramework/GameMode.h"
 
-#include "AI/AISpawner.h"
+#include "AI/AISpawnManager.h"
 
 #include "LostConnectionGameMode.generated.h"
 
@@ -16,16 +16,31 @@ class LOSTCONNECTION_API ALostConnectionGameMode : public AGameMode
 	GENERATED_BODY()
 
 private:
-	AISpawner& spawner = AISpawner::get();
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 totalBots;
+
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 remainingBots;
+
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 remainingWaves;
+
+	AISpawnManager spawnManager;
 
 protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	virtual void GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList) override;
 
 public:
 	ALostConnectionGameMode();
 
 	UFUNCTION(Category = AI, Server, Reliable, BlueprintCallable)
-	void spawnAI(int32 count) const;
+	void initRoomAI(int32 totalCount, int32 waves);
+
+	AISpawnManager& getSpawnManager();
+
+	virtual void Tick(float DeltaTime) override;
 
 	virtual void PostSeamlessTravel() override;
 

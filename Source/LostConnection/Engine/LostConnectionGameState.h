@@ -30,7 +30,7 @@ private:
 public:
 	ALostConnectionGameState();
 
-	UFUNCTION(Category = RoomLoading, BlueprintCallable)
+	UFUNCTION(Category = RoomLoading, Server, Reliable, BlueprintCallable)
 	void startRoomLoading();
 
 	/// @brief Spawn actor deferred
