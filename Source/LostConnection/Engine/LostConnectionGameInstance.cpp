@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 
 const FString ULostConnectionGameInstance::options = "?listen?bIsLanMatch=1";
+const FName ULostConnectionGameInstance::serverNameKey = "ServerName";
 
 void ULostConnectionGameInstance::onCreateSession(FName sessionName, bool wasSuccessful)
 {
@@ -68,6 +69,8 @@ void ULostConnectionGameInstance::Init()
 
 			session->OnStartSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onStartSession);
 
+			session->OnDestroySessionCompleteDelegates;
+
 			sessionSettings = MakeShareable(new FOnlineSessionSettings());
 
 			sessionSettings->bIsLANMatch = true;
@@ -94,7 +97,7 @@ void ULostConnectionGameInstance::initSearchSession()
 
 void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const TSoftObjectPtr<UWorld>& level)
 {
-	sessionSettings->Set("ServerName", sessionName.ToString(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
+	sessionSettings->Set(serverNameKey, sessionName.ToString(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
 	sessionSettings->Set(SETTING_MAPNAME, level.GetAssetName(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
@@ -113,6 +116,27 @@ void ULostConnectionGameInstance::findLocalSessions(TSharedPtr<const FUniqueNetI
 void ULostConnectionGameInstance::createSession(FName sessionName, TSoftObjectPtr<UWorld> level)
 {
 	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionName, level);
+}
+
+void ULostConnectionGameInstance::destroySession(const FOnDestroySessionCompleteCallback& callback)
+{
+	if (session.IsValid() && sessionSettings.IsValid())
+	{
+		FString sessionName;
+
+		sessionSettings->Get(serverNameKey, sessionName);
+
+		onDestroyDelegate.BindLambda([this, callback](FName sessionName, bool wasSuccessful)
+			{
+				callback.Execute(sessionName, wasSuccessful);
+			});
+
+		session->DestroySession(*sessionName, onDestroyDelegate);
+	}
+	else
+	{
+		callback.Execute("", false);
+	}
 }
 
 void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)

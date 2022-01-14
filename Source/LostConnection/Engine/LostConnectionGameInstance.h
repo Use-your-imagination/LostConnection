@@ -13,6 +13,8 @@
 
 #include "LostConnectionGameInstance.generated.h"
 
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnDestroySessionCompleteCallback, FName, sessionName, bool, wasSuccessful);
+
 UCLASS()
 class LOSTCONNECTION_API ULostConnectionGameInstance : public UGameInstance
 {
@@ -27,12 +29,16 @@ private:
 
 private:
 	static const FString options;
+	static const FName serverNameKey;
 
 private:
 	IOnlineSubsystem* subsystem;
 	IOnlineSessionPtr session;
 	TSharedPtr<FOnlineSessionSettings> sessionSettings;
 	TSharedPtr<FOnlineSessionSearch> searchSession;
+
+private:
+	FOnDestroySessionCompleteDelegate onDestroyDelegate;
 
 private:
 	void Init() override;
@@ -48,6 +54,9 @@ public:
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
 	void createSession(FName sessionName, TSoftObjectPtr<UWorld> level);
+
+	UFUNCTION(Category = Sessions, BlueprintCallable)
+	void destroySession(const FOnDestroySessionCompleteCallback& callback);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
 	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
