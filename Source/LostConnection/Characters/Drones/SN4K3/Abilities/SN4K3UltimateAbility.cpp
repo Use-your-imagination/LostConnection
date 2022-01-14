@@ -22,6 +22,13 @@ void USN4K3UltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(USN4K3UltimateAbility, currentAbilityDuration);
 }
 
+void USN4K3UltimateAbility::setCollisionResponseToPawnChannel_Implementation(ABaseCharacter* target, ECollisionResponse response)
+{
+	target->GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, response);
+
+	target->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, response);
+}
+
 USN4K3UltimateAbility::USN4K3UltimateAbility()
 {
 	InitializationUtility::initAbilityId(__FILE__, id);
@@ -52,9 +59,7 @@ void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 	ASN4K3* drone = Cast<ASN4K3>(target);
 	FVector returnPosition;
 
-	drone->GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
-
-	drone->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+	this->setCollisionResponseToPawnChannel(drone, ECollisionResponse::ECR_Block);
 
 	if (currentAbilityDuration >= abilityDuration)
 	{
@@ -104,9 +109,7 @@ void USN4K3UltimateAbility::useAbility()
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
 
-	drone->GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
-
-	drone->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+	this->setCollisionResponseToPawnChannel(drone, ECollisionResponse::ECR_Ignore);
 
 	isUltimateAbilityUsed = true;
 
@@ -129,15 +132,13 @@ void USN4K3UltimateAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	ASN4K3* drone = Cast<ASN4K3>(caster);
-
 	if (isUltimateAbilityUsed)
 	{
 		currentAbilityDuration += DeltaTime;
 
 		if (currentAbilityDuration >= abilityDuration)
 		{
-			this->applyAbility(drone);
+			this->applyAbility(Cast<ASN4K3>(caster));
 		}
 	}
 }
