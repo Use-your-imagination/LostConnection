@@ -43,35 +43,35 @@ bool ABaseBotCaster::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	if (passiveAbility)
+	if (IsValid(passiveAbility))
 	{
 		wroteSomething |= passiveAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 
 		wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
 	}
 
-	if (firstAbility)
+	if (IsValid(firstAbility))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
 
 		wroteSomething |= firstAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (secondAbility)
+	if (IsValid(secondAbility))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(secondAbility, *Bunch, *RepFlags);
 
 		wroteSomething |= secondAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (thirdAbility)
+	if (IsValid(thirdAbility))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(thirdAbility, *Bunch, *RepFlags);
 
 		wroteSomething |= thirdAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (ultimateAbility)
+	if (IsValid(ultimateAbility))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 

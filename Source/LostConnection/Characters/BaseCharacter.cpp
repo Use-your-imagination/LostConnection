@@ -58,7 +58,7 @@ bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 
 	wroteSomething |= Channel->ReplicateSubobject(currentWeapon, *Bunch, *RepFlags);
 
-	if (currentWeapon)
+	if (IsValid(currentWeapon))
 	{
 		wroteSomething |= currentWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}

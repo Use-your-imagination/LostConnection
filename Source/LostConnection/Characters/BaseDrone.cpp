@@ -226,25 +226,40 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
+	if (IsValid(passiveAbility))
+	{
+		wroteSomething |= Channel->ReplicateSubobject(passiveAbility, *Bunch, *RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
+		wroteSomething |= passiveAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
 
-	wroteSomething |= Channel->ReplicateSubobject(secondAbility, *Bunch, *RepFlags);
+	if (IsValid(firstAbility))
+	{
+		wroteSomething |= Channel->ReplicateSubobject(firstAbility, *Bunch, *RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(thirdAbility, *Bunch, *RepFlags);
+		wroteSomething |= firstAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
 
-	wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
+	if (IsValid(secondAbility))
+	{
+		wroteSomething |= Channel->ReplicateSubobject(secondAbility, *Bunch, *RepFlags);
 
-	wroteSomething |= passiveAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		wroteSomething |= secondAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
 
-	wroteSomething |= firstAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	if (IsValid(thirdAbility))
+	{
+		wroteSomething |= Channel->ReplicateSubobject(thirdAbility, *Bunch, *RepFlags);
 
-	wroteSomething |= secondAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		wroteSomething |= thirdAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
 
-	wroteSomething |= thirdAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	if (IsValid(ultimateAbility))
+	{
+		wroteSomething |= Channel->ReplicateSubobject(ultimateAbility, *Bunch, *RepFlags);
 
-	wroteSomething |= ultimateAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		wroteSomething |= ultimateAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
 
 	return wroteSomething;
 }

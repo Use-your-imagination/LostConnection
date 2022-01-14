@@ -113,7 +113,7 @@ bool USN4K3ThirdAbility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* 
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	if (socketItem)
+	if (IsValid(socketItem))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(socketItem, *Bunch, *RepFlags);
 

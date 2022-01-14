@@ -50,36 +50,35 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	if (primaryWeapon)
+	if (IsValid(primaryWeapon))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(primaryWeapon, *Bunch, *RepFlags);
 
 		wroteSomething |= primaryWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (secondaryWeapon)
+	if (IsValid(secondaryWeapon))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(secondaryWeapon, *Bunch, *RepFlags);
 
 		wroteSomething |= secondaryWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-
-	if (defaultWeapon)
+	if (IsValid(defaultWeapon))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
 
 		wroteSomething |= defaultWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (firstInactiveWeapon)
+	if (IsValid(firstInactiveWeapon))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(firstInactiveWeapon, *Bunch, *RepFlags);
 
 		wroteSomething |= firstInactiveWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (secondInactiveWeapon)
+	if (IsValid(secondInactiveWeapon))
 	{
 		wroteSomething |= Channel->ReplicateSubobject(secondInactiveWeapon, *Bunch, *RepFlags);
 
@@ -88,16 +87,22 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 
 	for (UNetworkObject* mainModule : mainModules)
 	{
-		wroteSomething |= Channel->ReplicateSubobject(mainModule, *Bunch, *RepFlags);
+		if (IsValid(mainModule))
+		{
+			wroteSomething |= Channel->ReplicateSubobject(mainModule, *Bunch, *RepFlags);
 
-		wroteSomething |= mainModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+			wroteSomething |= mainModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		}
 	}
 
 	for (UNetworkObject* weaponModule : weaponModules)
 	{
-		wroteSomething |= Channel->ReplicateSubobject(weaponModule, *Bunch, *RepFlags);
+		if (IsValid(weaponModule))
+		{
+			wroteSomething |= Channel->ReplicateSubobject(weaponModule, *Bunch, *RepFlags);
 
-		wroteSomething |= weaponModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+			wroteSomething |= weaponModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		}
 	}
 
 	return wroteSomething;
