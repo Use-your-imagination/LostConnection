@@ -109,8 +109,8 @@ ABaseAmmo::ABaseAmmo()
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> onHitFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletOnHit.NPSBulletOnHit'"));
 
 	PrimaryActorTick.bCanEverTick = false;
-
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
+	bReplicates = false;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
@@ -131,10 +131,10 @@ ABaseAmmo::ABaseAmmo()
 
 	movement->ProjectileGravityScale = 0.0f;
 
-	movement->SetIsReplicated(true);
+	// movement->SetIsReplicated(true);
 
-	movement->InitialSpeed = 5200.0f;
-	movement->MaxSpeed = 5200.0f;
+	movement->InitialSpeed = UConstants::ammoSpeed;
+	movement->MaxSpeed = UConstants::ammoSpeed;
 
 	tracerAsset = tracerFinder.Object;
 

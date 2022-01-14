@@ -10,8 +10,8 @@
 AFakeAmmo::AFakeAmmo()
 {	
 	PrimaryActorTick.bCanEverTick = false;
-
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
+	bReplicates = true;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
@@ -27,8 +27,8 @@ AFakeAmmo::AFakeAmmo()
 
 	movement->SetIsReplicated(true);
 
-	movement->InitialSpeed = 5200.0f;
-	movement->MaxSpeed = 5200.0f;
+	movement->InitialSpeed = UConstants::ammoSpeed;
+	movement->MaxSpeed = UConstants::ammoSpeed;
 
 	tracer->SetupAttachment(mesh);
 }
