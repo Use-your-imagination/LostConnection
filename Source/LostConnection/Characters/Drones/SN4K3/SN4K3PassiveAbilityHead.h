@@ -4,12 +4,10 @@
 
 #include "CoreMinimal.h"
 
-#include "GameFramework/Pawn.h"
-#include "Components/SphereComponent.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/PlayerInput.h"
 #include "Net/UnrealNetwork.h"
 #include "NiagaraSystem.h"
-#include "GameFramework/FloatingPawnMovement.h"
 
 #include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
 
@@ -17,21 +15,12 @@
 
 UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API ASN4K3PassiveAbilityHead :
-	public APawn,
+	public ACharacter,
 	public IAilmentInflictor
 {
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	USphereComponent* sphere;
-
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* mesh;
-
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UFloatingPawnMovement* movement;
-
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* explosionParticles;
 
@@ -81,8 +70,6 @@ public:
 
 	UFUNCTION(Category = Checks, BlueprintNativeEvent, BlueprintCallable)
 	bool checkSpeedup();
-
-	virtual UPawnMovementComponent* GetMovementComponent() const final override;
 
 	virtual void Tick(float DeltaTime) override;
 

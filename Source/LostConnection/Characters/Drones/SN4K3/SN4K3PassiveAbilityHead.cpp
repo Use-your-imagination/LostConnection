@@ -4,6 +4,7 @@
 
 #include "Kismet/KismetSystemLibrary.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/CapsuleComponent.h"
 
 #include "Constants/Constants.h"
 #include "Characters/BaseCharacter.h"
@@ -82,7 +83,7 @@ void ASN4K3PassiveAbilityHead::explode()
 
 	this->explodeVFX();
 
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), mesh->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetMesh()->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
 
 	for (auto& i : tem)
 	{
@@ -125,7 +126,7 @@ void ASN4K3PassiveAbilityHead::explodeVFX()
 	(
 		GetWorld(),
 		explosionParticles,
-		mesh->GetComponentLocation(),
+		GetMesh()->GetComponentLocation(),
 		FRotator::ZeroRotator,
 		FVector::OneVector,
 		true,
@@ -150,16 +151,14 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 	isExploded(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 
-	sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
-	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	movement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("Movement"));
+	UCapsuleComponent* capsule = GetCapsuleComponent();
+	USkeletalMeshComponent* mesh = GetMesh();
 
-	SetRootComponent(sphere);
-
-	mesh->SetupAttachment(sphere);
+	capsule->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	
+	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
@@ -168,10 +167,6 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
 
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
-
-	movement->SetUpdatedComponent(sphere);
-
-	movement->SetIsReplicated(true);
 }
 
 void ASN4K3PassiveAbilityHead::speedup_Implementation()
@@ -187,11 +182,6 @@ bool ASN4K3PassiveAbilityHead::checkExplode_Implementation()
 bool ASN4K3PassiveAbilityHead::checkSpeedup_Implementation()
 {
 	return true;
-}
-
-UPawnMovementComponent* ASN4K3PassiveAbilityHead::GetMovementComponent() const
-{
-	return movement;
 }
 
 void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)

@@ -429,12 +429,10 @@ void ABaseDrone::MoveForward(float Value)
 {
 	if (Controller && Value)
 	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		FRotator Rotation = Controller->GetControlRotation();
+		FRotator YawRotation(0, Rotation.Yaw, 0);
+		FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 
-		// get forward vector
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -443,26 +441,21 @@ void ABaseDrone::MoveRight(float Value)
 {
 	if (Controller && Value)
 	{
-		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get right vector 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
+		FRotator Rotation = Controller->GetControlRotation();
+		FRotator YawRotation(0, Rotation.Yaw, 0);
+		FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		
 		AddMovementInput(Direction, Value);
 	}
 }
 
 void ABaseDrone::TurnAtRate(float Rate)
 {
-	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
 void ABaseDrone::LookUpAtRate(float Rate)
 {
-	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
