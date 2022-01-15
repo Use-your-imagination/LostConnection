@@ -156,9 +156,9 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 	UCapsuleComponent* capsule = GetCapsuleComponent();
 	USkeletalMeshComponent* mesh = GetMesh();
 
-	capsule->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	capsule->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	
-	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Ignore);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
