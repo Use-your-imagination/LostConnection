@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "UObject/Interface.h"
+#include "UObject/WeakInterfacePtr.h"
 
 #include "OnDeathEvent.generated.h"
 
@@ -18,10 +19,13 @@ class LOSTCONNECTION_API IOnDeathEvent
 {
 	GENERATED_BODY()
 
+protected:
+	virtual TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() = 0;
+
 public:
 	IOnDeathEvent() = default;
 
-	virtual void initDeathEvent(class IDeathEventsHolder* holder) = 0;
+	virtual void initDeathEvent(class IDeathEventsHolder* holder);
 
 	virtual void deathEventAction() = 0;
 

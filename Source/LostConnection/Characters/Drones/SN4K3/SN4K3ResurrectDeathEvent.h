@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 
 #include "UObject/NoExportTypes.h"
-#include "UObject/WeakInterfacePtr.h"
 
 #include "Interfaces/Gameplay/Descriptions/Observers/GameplayEvents/OnDeathEvent.h"
 #include "Network/NetworkObject.h"
+#include "Engine/LostConnectionPlayerController.h"
 
 #include "SN4K3ResurrectDeathEvent.generated.h"
 
@@ -23,15 +23,16 @@ class LOSTCONNECTION_API USN4K3ResurrectDeathEvent :
 
 private:
 	TWeakInterfacePtr<class IDeathEventsHolder> holder;
+	FTransform respawnTransform;
+	ALostConnectionPlayerController* controller;
 
-	TWeakObjectPtr<class ASN4K3PassiveAbilityHead> head;
+private:
+	TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() override;
 	
 public:
 	USN4K3ResurrectDeathEvent() = default;
 
-	void initHead(class ASN4K3PassiveAbilityHead* head);
-
-	void initDeathEvent(class IDeathEventsHolder* holder) override;
+	void init(ALostConnectionPlayerController* controller, const FTransform& respawnTransform);
 
 	void deathEventAction() override;
 

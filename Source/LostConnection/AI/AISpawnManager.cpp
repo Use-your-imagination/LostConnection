@@ -40,7 +40,6 @@ void AISpawnManager::process(UWorld* world)
 
 void AISpawnManager::init(int32 totalCount, int32 waves)
 {
-	this->totalCount = totalCount;
 	remainingAIToSpawn = totalCount;
 	remainingWaves = waves;
 	
@@ -52,11 +51,6 @@ void AISpawnManager::notify(UWorld* world)
 	remainingAIToSpawn--;
 
 	this->process(world);
-}
-
-int32 AISpawnManager::getTotalCount() const
-{
-	return totalCount;
 }
 
 int32 AISpawnManager::getRemainingAIToSpawn() const

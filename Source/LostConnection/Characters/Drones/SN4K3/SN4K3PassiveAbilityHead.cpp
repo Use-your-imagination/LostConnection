@@ -80,6 +80,8 @@ void ASN4K3PassiveAbilityHead::explode()
 {
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
 	TArray<AActor*> tem;
+	ALostConnectionPlayerController* controller = Utility::getPlayerController(this);
+	FTransform respawnTransform = GetActorTransform();
 
 	this->explodeVFX();
 
@@ -101,11 +103,11 @@ void ASN4K3PassiveAbilityHead::explode()
 
 			resurrect->initDeathEvent(character);
 
-			resurrect->initHead(this);
-
-			character->takeDamage(this);
+			resurrect->init(controller, respawnTransform);
 
 			character->statusInflictorImpactAction(this, characterHit);
+
+			character->takeDamage(this);
 
 			character->getTimers().addTimer
 			(

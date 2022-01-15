@@ -20,6 +20,9 @@ private:
 	int32 totalBots;
 
 	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 totalWaves;
+
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 remainingBots;
 
 	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
