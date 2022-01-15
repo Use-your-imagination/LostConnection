@@ -17,7 +17,7 @@ class LOSTCONNECTION_API USN4K3SecondAbility :
 	GENERATED_BODY()
 
 private:
-	TWeakObjectPtr<class ABaseCharacter> target;
+	TWeakInterfacePtr<class IDeathEventsHolder> holder;
 	
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float distance;
@@ -35,12 +35,13 @@ private:
 	float naniteMeterCoefficient;
 
 private:
+	TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() override;
+
+private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	USN4K3SecondAbility();
-
-	void initDeathEvent(class IDeathEventsHolder* holder) override;
 
 	float getDistance() const;
 

@@ -8,40 +8,32 @@
 #include "Engine/LostConnectionGameState.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-void USN4K3ResurrectDeathEvent::initHead(ASN4K3PassiveAbilityHead* head)
+TWeakInterfacePtr<IDeathEventsHolder>& USN4K3ResurrectDeathEvent::getDeathEventsHolder()
 {
-	this->head = head;
+	return holder;
 }
 
-void USN4K3ResurrectDeathEvent::initDeathEvent(IDeathEventsHolder* holder)
+void USN4K3ResurrectDeathEvent::init(ALostConnectionPlayerController* controller, const FTransform& respawnTransform)
 {
-	if (this->holder.IsValid())
-	{
-		this->holder->detachDeathEvent(this);
-	}
-
-	this->holder = holder;
-
-	holder->attachDeathEvent(this);
+	this->respawnTransform = respawnTransform;
+	this->controller = controller;
 }
 
 void USN4K3ResurrectDeathEvent::deathEventAction()
 {
-	if (!head.IsValid())
+	if (!IsValid(controller))
 	{
 		return;
 	}
 
 	TSubclassOf<ABaseDrone> droneClass = Utility::findDroneClass(ULostConnectionAssetManager::get().getDrones(), ASN4K3::StaticClass());
-	ASN4K3* drone = head->GetWorld()->GetGameState<ALostConnectionGameState>()->spawn<ASN4K3>(droneClass, head->GetActorTransform());
+	ASN4K3* drone = Utility::getGameState(controller)->spawn<ASN4K3>(droneClass, respawnTransform);
 
-	Utility::getPlayerState(head.Get())->resetCurrentUI();
+	controller->GetPlayerState<ALostConnectionPlayerState>()->resetCurrentUI();
 
-	head->GetController()->Possess(drone);
+	controller->Possess(drone);
 
 	drone->FinishSpawning({}, true);
-
-	head->Destroy();
 }
 
 IDeathEventsHolder* USN4K3ResurrectDeathEvent::getDeathEventsHolder() const

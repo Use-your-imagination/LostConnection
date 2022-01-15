@@ -12,7 +12,6 @@ class LOSTCONNECTION_API AISpawnManager
 {
 private:
 	AISpawner spawner;
-	int32 totalCount;
 	int32 remainingAIToSpawn;
 	int32 remainingWaves;
 	int32 spawnPerWave;
@@ -29,8 +28,6 @@ public:
 	void init(int32 totalCount, int32 waves);
 
 	void notify(UWorld* world);
-
-	int32 getTotalCount() const;
 
 	int32 getRemainingAIToSpawn() const;
 

@@ -18,6 +18,8 @@ void ALostConnectionGameMode::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 
 	DOREPLIFETIME(ALostConnectionGameMode, totalBots);
 
+	DOREPLIFETIME(ALostConnectionGameMode, totalWaves);
+
 	DOREPLIFETIME(ALostConnectionGameMode, remainingBots);
 
 	DOREPLIFETIME(ALostConnectionGameMode, remainingWaves);
@@ -60,6 +62,10 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 
 void ALostConnectionGameMode::initRoomAI_Implementation(int32 totalCount, int32 waves)
 {
+	totalBots = totalCount;
+
+	totalWaves = waves;
+
 	spawnManager.init(totalCount, waves);
 
 	spawnManager.process(GetWorld());
@@ -73,8 +79,6 @@ AISpawnManager& ALostConnectionGameMode::getSpawnManager()
 void ALostConnectionGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	totalBots = spawnManager.getTotalCount();
 
 	remainingBots = spawnManager.getRemainingAIToSpawn();
 
