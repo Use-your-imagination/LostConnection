@@ -4,6 +4,12 @@
 
 #include "Kismet/GameplayStatics.h"
 
+#include "LostConnectionGameSession.h"
+#include "LostConnectionPlayerController.h"
+#include "LostConnectionGameState.h"
+#include "LostConnectionPlayerState.h"
+#include "Constants/Constants.h"
+
 const FString ULostConnectionGameInstance::options = "?listen?bIsLanMatch=1";
 const FName ULostConnectionGameInstance::serverNameKey = "ServerName";
 
@@ -21,7 +27,7 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 	{
 		APlayerController* controller = GetFirstLocalPlayerController();
 		FString levelName;
-		
+
 		controller->SetInputMode(FInputModeGameOnly());
 
 		controller->SetShowMouseCursor(false);
@@ -120,14 +126,26 @@ void ULostConnectionGameInstance::createSession(FName sessionName, TSoftObjectPt
 
 void ULostConnectionGameInstance::destroySession(const FOnDestroySessionCompleteCallback& callback)
 {
-	if (session.IsValid() && sessionSettings.IsValid())
+	ALostConnectionPlayerController* controller = GetWorld()->GetFirstPlayerController<ALostConnectionPlayerController>();
+
+	if (controller->HasAuthority())
 	{
+		ALostConnectionGameSession* gameSession = Cast<ALostConnectionGameSession>(GetWorld()->GetAuthGameMode()->GameSession);
 		FString sessionName;
 
 		sessionSettings->Get(serverNameKey, sessionName);
 
-		onDestroyDelegate.BindLambda([this, callback](FName sessionName, bool wasSuccessful)
+		onDestroyDelegate.BindLambda([this, callback, gameSession](FName sessionName, bool wasSuccessful)
 			{
+				for (APlayerState* state : GetWorld()->GetGameState<ALostConnectionGameState>()->PlayerArray)
+				{
+					ALostConnectionPlayerController* controller = state->GetOwner<ALostConnectionPlayerController>();
+
+					controller->save();
+
+					gameSession->KickPlayer(controller, FText::FromStringTable(UConstants::sessionsStringTablePath, UConstants::destroySessionKey));
+				}
+
 				callback.Execute(sessionName, wasSuccessful);
 			});
 
@@ -135,6 +153,8 @@ void ULostConnectionGameInstance::destroySession(const FOnDestroySessionComplete
 	}
 	else
 	{
+		controller->save();
+
 		callback.Execute("", false);
 	}
 }

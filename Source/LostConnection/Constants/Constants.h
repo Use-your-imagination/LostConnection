@@ -37,6 +37,9 @@ public:
 	static const FString defaultActionMessageKey;
 	static const FString actionHotkey;
 
+	static const FName sessionsStringTablePath;
+	static const FString destroySessionKey;
+
 public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static FText getProjectVersion();

@@ -23,5 +23,8 @@ public:
 	UFUNCTION(Server, Reliable)
 	void respawnPlayer();
 
+	UFUNCTION(Client, Reliable)
+	void save();
+
 	virtual ~ALostConnectionPlayerController() = default;
 };

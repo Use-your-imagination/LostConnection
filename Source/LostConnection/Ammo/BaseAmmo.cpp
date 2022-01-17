@@ -110,7 +110,7 @@ ABaseAmmo::ABaseAmmo()
 
 	PrimaryActorTick.bCanEverTick = false;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
-	bReplicates = false;
+	bReplicates = true;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
@@ -131,7 +131,7 @@ ABaseAmmo::ABaseAmmo()
 
 	movement->ProjectileGravityScale = 0.0f;
 
-	// movement->SetIsReplicated(true);
+	movement->SetIsReplicated(true);
 
 	movement->InitialSpeed = UConstants::ammoSpeed;
 	movement->MaxSpeed = UConstants::ammoSpeed;

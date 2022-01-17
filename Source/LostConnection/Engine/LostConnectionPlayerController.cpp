@@ -33,3 +33,8 @@ void ALostConnectionPlayerController::respawnPlayer_Implementation()
 
 	drone->FinishSpawning({}, true);
 }
+
+void ALostConnectionPlayerController::save_Implementation()
+{
+
+}
