@@ -39,6 +39,8 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 {
 	this->target = StaticCast<IStatusReceiver*>(target.GetInterface());
 
+	// TODO: Add coefficients
+
 	inflictorDamage = inflictor->getBaseDamage();
 
 	inflictorAddedDamage = inflictor->getAddedDamage();
