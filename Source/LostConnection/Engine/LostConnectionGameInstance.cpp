@@ -48,7 +48,7 @@ void ULostConnectionGameInstance::onFindSessions(bool wasSuccessful, TArray<FBlu
 			}
 		}
 
-		if (widget && IsValid(widget.GetObject()))
+		if (IsValid(widget.GetObject()))
 		{
 			IInitSessions::Execute_initSessionList(widget.GetObject());
 		}
