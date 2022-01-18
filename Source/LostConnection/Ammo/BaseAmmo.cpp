@@ -31,12 +31,12 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 	bool shotThrough = OtherActor->Implements<UShotThrough>();
 
-	if (OtherActor && lastTarget == OtherActor)
+	if (IsValid(OtherActor) && lastTarget == OtherActor)
 	{
 		return;
 	}
 
-	if (shotThrough && OtherActor)
+	if (shotThrough && IsValid(OtherActor))
 	{
 		IShotThrough::Execute_impactAction(OtherActor, this, SweepResult);
 
@@ -78,7 +78,7 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 		movement->Velocity = FVector(0.0f);
 
-		if (fakeAmmo->IsValidLowLevelFast())
+		if (IsValid(fakeAmmo))
 		{
 			fakeAmmo->deactivateTracer();
 
@@ -141,9 +141,9 @@ ABaseAmmo::ABaseAmmo()
 	onHitAsset = onHitFinder.Object;
 }
 
-void ABaseAmmo::launch_Implementation(ABaseCharacter* character, const FTransform& fakeAmmoTransform, const FRotator& spread)
+void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& fakeAmmoTransform, const FRotator& spread)
 {
-	if (!character || !character->IsValidLowLevel())
+	if (!character.IsValid())
 	{
 		return;
 	}
@@ -154,7 +154,7 @@ void ABaseAmmo::launch_Implementation(ABaseCharacter* character, const FTransfor
 
 	FinishSpawning({}, true);
 
-	fakeAmmo = Utility::getGameState(character)->spawn<AFakeAmmo>(fakeAmmoTransform);
+	fakeAmmo = Utility::getGameState(character.Get())->spawn<AFakeAmmo>(fakeAmmoTransform);
 
 	fakeAmmo->copyAmmo(this);
 

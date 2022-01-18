@@ -61,16 +61,15 @@ protected:
 public:
 	ABaseAmmo();
 
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void launch(class ABaseCharacter* character, const FTransform& fakeAmmoTransform, const FRotator& spread) final;
+	void launch(const TWeakObjectPtr<class ABaseCharacter>& character, const FTransform& fakeAmmoTransform, const FRotator& spread);
 
 	virtual void copyProperties(class UBaseWeapon* weapon);
 
-	virtual UStaticMeshComponent* getAmmoMeshComponent() const final;
+	UStaticMeshComponent* getAmmoMeshComponent() const;
 
-	virtual bool getIsAlly() const final;
+	bool getIsAlly() const;
 
-	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwner() const final;
+	const TWeakObjectPtr<class ABaseCharacter>& getOwner() const;
 
 	virtual void appendIncreasedDamageCoefficient(float coefficient) final override;
 

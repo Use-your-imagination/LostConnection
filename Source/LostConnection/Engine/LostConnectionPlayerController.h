@@ -23,7 +23,7 @@ public:
 	UFUNCTION(Server, Reliable)
 	void respawnPlayer();
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(Category = Save, Client, Reliable, BlueprintCallable)
 	void save();
 
 	virtual ~ALostConnectionPlayerController() = default;

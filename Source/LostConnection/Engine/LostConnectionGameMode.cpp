@@ -45,7 +45,6 @@ void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TAr
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
 	static ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/WorldPlaceable/BP_PreConnectionPlaceholder"));
-	static ConstructorHelpers::FClassFinder<APawn> defaultAIClassFinder(TEXT("/Game/AI/Enemies/EnemyBlueprints/Default/BP_DefaultEnemy"));
 	static ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerState"));
 	static ConstructorHelpers::FClassFinder<APlayerController> defaultPlayerControllerClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerController"));
 	

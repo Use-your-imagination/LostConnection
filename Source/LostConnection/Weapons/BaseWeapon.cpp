@@ -79,7 +79,7 @@ void UBaseWeapon::shoot()
 		ABaseDrone* drone = Cast<ABaseDrone>(owner.Get());
 		float currentSpreadDistance = this->calculateSpreadDistance();
 
-		if (drone)
+		if (IsValid(drone))
 		{
 			UCameraComponent* camera = drone->GetFollowCamera();
 
@@ -101,7 +101,7 @@ void UBaseWeapon::shoot()
 			AAIController* controller = bot->GetController<AAIController>();
 			ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"));
 
-			if (target && target->IsValidLowLevelFast())
+			if (IsValid(target))
 			{
 				ammoTransform = FTransform
 				(
@@ -120,7 +120,7 @@ void UBaseWeapon::shoot()
 		float pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);
 		float yaw = FMath::Tan(FMath::Acos(pitch / currentSpreadDistance)) * pitch;
 
-		launchedAmmo->launch(owner.Get(), fakeAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
+		launchedAmmo->launch(owner, fakeAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
 		currentMagazineSize -= ammoCost;
 

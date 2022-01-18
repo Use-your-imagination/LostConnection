@@ -2,8 +2,6 @@
 
 #include "LostConnectionGameInstance.h"
 
-#include <fstream>
-
 #include "Kismet/GameplayStatics.h"
 
 #include "LostConnectionGameSession.h"
@@ -128,47 +126,25 @@ void ULostConnectionGameInstance::destroySession(const FOnDestroySessionComplete
 {
 	ALostConnectionPlayerController* controller = GetWorld()->GetFirstPlayerController<ALostConnectionPlayerController>();
 
-	if (!session.IsValid() || !controller->HasAuthority())
-	{
-		controller->save();
-
-		callback.Execute("", false);
-	}
-	else
-	{
-		ALostConnectionGameSession* gameSession = Cast<ALostConnectionGameSession>(GetWorld()->GetAuthGameMode()->GameSession);
+	if (controller->HasAuthority())
+	{	
 		FString sessionName;
 
 		sessionSettings->Get(serverNameKey, sessionName);
 
-		onDestroyDelegate.BindLambda([this, callback, gameSession](FName sessionName, bool wasSuccessful)
+		onDestroyDelegate.BindLambda([this, callback, controller](FName sessionName, bool wasSuccessful)
 			{
+				ALostConnectionGameSession* gameSession = Cast<ALostConnectionGameSession>(GetWorld()->GetAuthGameMode()->GameSession);
+
 				for (APlayerState* state : GetWorld()->GetGameState<ALostConnectionGameState>()->PlayerArray)
 				{
-					using namespace std;
+					ALostConnectionPlayerController* kickedPlayer = state->GetOwner<ALostConnectionPlayerController>();
 
-					auto owner = state->GetOwner();
-
-					if (IsValid(owner))
+					if (IsValid(kickedPlayer) && controller != kickedPlayer)
 					{
-						ofstream log("log.txt", ios::app); 
+						kickedPlayer->save();
 
-						ALostConnectionPlayerController* controller = state->GetOwner<ALostConnectionPlayerController>();
-
-						log << "Owner: "<< * owner->GetName() << endl;
-
-						if (IsValid(controller))
-						{
-							controller->save();
-
-							log << "Controller: " << *controller->GetName() << endl;
-
-							gameSession->KickPlayer(controller, FText::FromStringTable(UConstants::sessionsStringTablePath, UConstants::destroySessionKey));
-						}
-					}
-					else
-					{
-						ofstream("error.txt", ios::app) << "Owner is not valid" << endl;
+						gameSession->KickPlayer(kickedPlayer, FText::FromStringTable(UConstants::sessionsStringTablePath, UConstants::destroySessionKey));
 					}
 				}
 
@@ -176,6 +152,12 @@ void ULostConnectionGameInstance::destroySession(const FOnDestroySessionComplete
 			});
 
 		session->DestroySession(*sessionName, onDestroyDelegate);
+	}
+	else
+	{
+		controller->save();
+
+		callback.Execute("", false);
 	}
 }
 
