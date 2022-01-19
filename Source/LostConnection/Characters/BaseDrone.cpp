@@ -720,14 +720,14 @@ ABaseDrone::ABaseDrone() :
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	CameraOffset = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraOffset"));
+	CameraOffset = CreateDefaultSubobject<USpringArmComponent>("CameraOffset");
 	CameraOffset->SetupAttachment(RootComponent);
 	CameraOffset->TargetArmLength = 300.0f;
 	CameraOffset->bUsePawnControlRotation = true;
 	CameraOffset->AddLocalOffset({ 0.0f, 0.0f, 50.0f });
 	CameraOffset->SocketOffset = { 0.0f, 90.0f, 0.0f };
 
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	FollowCamera = CreateDefaultSubobject<UCameraComponent>("FollowCamera");
 	FollowCamera->SetupAttachment(CameraOffset, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 

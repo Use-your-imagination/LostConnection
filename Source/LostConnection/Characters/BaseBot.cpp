@@ -68,8 +68,8 @@ ABaseBot::ABaseBot()
 	
 	isAlly = false;
 
-	healthBar = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("HealthBar"));
-	healthBarTextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("healthBarTextRender"));
+	healthBar = CreateDefaultSubobject<UMaterialBillboardComponent>("HealthBar");
+	healthBarTextRender = CreateDefaultSubobject<UTextRenderComponent>("healthBarTextRender");
 	
 	healthBar->SetupAttachment(GetMesh());
 

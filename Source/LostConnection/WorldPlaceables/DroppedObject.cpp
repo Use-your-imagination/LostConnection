@@ -17,8 +17,8 @@ ADroppedObject::ADroppedObject()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
-	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	vfx = CreateDefaultSubobject<UNiagaraComponent>(TEXT("VFX"));
+	mesh = CreateDefaultSubobject<USkeletalMeshComponent>("Mesh");
+	vfx = CreateDefaultSubobject<UNiagaraComponent>("VFX");
 
 	SetRootComponent(mesh);
 

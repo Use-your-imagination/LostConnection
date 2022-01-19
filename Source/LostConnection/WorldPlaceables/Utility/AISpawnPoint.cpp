@@ -6,7 +6,7 @@ AAISpawnPoint::AAISpawnPoint()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+	arrow = CreateDefaultSubobject<UArrowComponent>("Arrow");
 
 	arrow->SetArrowColor(FLinearColor::Red);
 }

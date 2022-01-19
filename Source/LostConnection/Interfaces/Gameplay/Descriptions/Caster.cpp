@@ -47,7 +47,7 @@ void ICaster::cancelCurrentAbilityAnimation()
 
 		if (currentAbility && currentAbility->getIsCancelable())
 		{
-			drone->GetMesh()->GetAnimInstance()->Montage_StopGroupByName(currentAbility->getCancelBlendOutTime(), TEXT("Skills"));
+			drone->GetMesh()->GetAnimInstance()->Montage_StopGroupByName(currentAbility->getCancelBlendOutTime(), "Skills");
 		}
 
 		drone->setCurrentAbility(nullptr);
@@ -63,7 +63,7 @@ void ICaster::cancelCurrentAbilityAnimation()
 
 		if (currentAbility && currentAbility->getIsCancelable())
 		{
-			bot->GetMesh()->GetAnimInstance()->Montage_StopGroupByName(currentAbility->getCancelBlendOutTime(), TEXT("Skills"));
+			bot->GetMesh()->GetAnimInstance()->Montage_StopGroupByName(currentAbility->getCancelBlendOutTime(), "Skills");
 		}
 
 		bot->setCurrentAbility(nullptr);

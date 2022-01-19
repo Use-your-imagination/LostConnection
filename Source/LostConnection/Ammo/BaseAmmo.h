@@ -14,7 +14,7 @@
 
 #pragma warning(disable: 4458)
 
-UCLASS(BlueprintType)
+UCLASS(BlueprintType, DefaultToInstanced)
 class LOSTCONNECTION_API ABaseAmmo :
 	public APawn,
 	public IAilmentInflictor
@@ -22,31 +22,32 @@ class LOSTCONNECTION_API ABaseAmmo :
 	GENERATED_BODY()
 
 private:
-	TWeakObjectPtr<class ABaseCharacter> owner;
-
-protected:
 	UFUNCTION()
 	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-protected:
-	UPROPERTY(Category = Components, BlueprintReadOnly)
+private:
+	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* mesh;
 
-	UPROPERTY(Category = Movement, BlueprintReadOnly)
+	UPROPERTY(Category = Movement, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* movement;
-	
-	UPROPERTY(Category = Particles, BlueprintReadOnly)
-	UNiagaraSystem* tracerAsset;
 
-	UPROPERTY(Category = Components, BlueprintReadOnly)
+	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UNiagaraSystem* onHitAsset;
+
+	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UStaticMesh* brokenAmmoMesh;
 
-	UPROPERTY(Category = Particles, BlueprintReadOnly)
-	UNiagaraSystem* onHitAsset;
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	class AFakeAmmo* fakeAmmoTemplate;
 
 	UPROPERTY()
 	class AFakeAmmo* fakeAmmo;
 
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float ammoSpeed;
+
+	TWeakObjectPtr<class ABaseCharacter> owner;
 	AActor* lastTarget;
 	float damage;
 	float addedDamage;

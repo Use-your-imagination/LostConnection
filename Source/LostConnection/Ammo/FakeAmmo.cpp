@@ -7,15 +7,16 @@
 
 #include "Constants/Constants.h"
 
-AFakeAmmo::AFakeAmmo()
+AFakeAmmo::AFakeAmmo() :
+	ammoSpeed(UConstants::ammoSpeed)
 {	
 	PrimaryActorTick.bCanEverTick = false;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 	bReplicates = true;
 
-	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
-	tracer = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Tracer"));
-	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
+	mesh = CreateDefaultSubobject<UStaticMeshComponent>("AmmoMesh");
+	tracer = CreateDefaultSubobject<UNiagaraComponent>("Tracer");
+	movement = CreateDefaultSubobject<UProjectileMovementComponent>("Movement");
 
 	SetRootComponent(mesh);
 
@@ -27,24 +28,10 @@ AFakeAmmo::AFakeAmmo()
 
 	movement->SetIsReplicated(true);
 
-	movement->InitialSpeed = UConstants::ammoSpeed;
-	movement->MaxSpeed = UConstants::ammoSpeed;
+	movement->InitialSpeed = ammoSpeed;
+	movement->MaxSpeed = ammoSpeed;
 
 	tracer->SetupAttachment(mesh);
-}
-
-void AFakeAmmo::copyAmmo(ABaseAmmo* ammo)
-{
-	mesh->SetStaticMesh(ammo->mesh->GetStaticMesh());
-
-	tracer->SetAsset(ammo->tracerAsset);
-
-	brokenAmmoMesh = ammo->brokenAmmoMesh;
-}
-
-void AFakeAmmo::deactivateTracer()
-{
-	tracer->Deactivate();
 }
 
 UStaticMeshComponent* AFakeAmmo::getFakeAmmoMeshComponent() const

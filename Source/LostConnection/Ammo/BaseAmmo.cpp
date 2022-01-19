@@ -69,11 +69,13 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 	if (damage <= 0.0f)
 	{
-		mesh->SetStaticMesh(brokenAmmoMesh);
+		mesh->SetVisibility(true, true);
 
 		mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
 		mesh->SetSimulatePhysics(true);
+
+		mesh->SetStaticMesh(brokenAmmoMesh);
 
 		movement->ProjectileGravityScale = 1.0f;
 
@@ -81,9 +83,9 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 		if (IsValid(fakeAmmo))
 		{
-			fakeAmmo->deactivateTracer();
-
 			fakeAmmo->Destroy();
+			
+			fakeAmmo = nullptr;
 		}
 
 		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
@@ -104,17 +106,16 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	}
 }
 
-ABaseAmmo::ABaseAmmo()
+ABaseAmmo::ABaseAmmo() :
+	ammoSpeed(UConstants::ammoSpeed)
 {
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletTracer.NPSBulletTracer'"));
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> onHitFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletOnHit.NPSBulletOnHit'"));
-
 	PrimaryActorTick.bCanEverTick = false;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 	bReplicates = true;
 
-	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
-	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
+	mesh = CreateDefaultSubobject<UStaticMeshComponent>("AmmoMesh");
+	movement = CreateDefaultSubobject<UProjectileMovementComponent>("Movement");
+	fakeAmmoTemplate = CreateDefaultSubobject<AFakeAmmo>("FakeAmmoTemplate");
 
 	SetRootComponent(mesh);
 
@@ -128,18 +129,16 @@ ABaseAmmo::ABaseAmmo()
 
 	mesh->SetVisibility(false, true);
 
+	fakeAmmoTemplate->getFakeAmmoMeshComponent()->SetStaticMesh(mesh->GetStaticMesh());
+
 	movement->SetUpdatedComponent(mesh);
 
 	movement->ProjectileGravityScale = 0.0f;
 
 	movement->SetIsReplicated(true);
 
-	movement->InitialSpeed = UConstants::ammoSpeed;
-	movement->MaxSpeed = UConstants::ammoSpeed;
-
-	tracerAsset = tracerFinder.Object;
-
-	onHitAsset = onHitFinder.Object;
+	movement->InitialSpeed = ammoSpeed;
+	movement->MaxSpeed = ammoSpeed;
 }
 
 void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& fakeAmmoTransform, const FRotator& spread)
@@ -149,15 +148,19 @@ void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FT
 		return;
 	}
 
+	FActorSpawnParameters parameters;
+
+	parameters.bDeferConstruction = true;
+	parameters.Template = fakeAmmoTemplate;
+	parameters.Owner = this;
+	
 	isAlly = character->getIsAlly();
 
 	mesh->AddRelativeRotation(spread);
 
 	UGameplayStatics::FinishSpawningActor(this, GetActorTransform());
 
-	fakeAmmo = Utility::getGameState(character.Get())->spawn<AFakeAmmo>(fakeAmmoTransform);
-
-	fakeAmmo->copyAmmo(this);
+	fakeAmmo = character->GetWorld()->SpawnActor<AFakeAmmo>(AFakeAmmo::StaticClass(), fakeAmmoTransform, parameters);
 
 	fakeAmmo->getFakeAmmoMeshComponent()->AddRelativeRotation(spread);
 

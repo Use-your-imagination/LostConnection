@@ -12,31 +12,27 @@
 
 #include "FakeAmmo.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType, DefaultToInstanced)
 class LOSTCONNECTION_API AFakeAmmo : public APawn
 {
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* mesh;
 
-	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Movement, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* movement;
 
-	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNiagaraComponent* tracer;
 
-	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UStaticMesh* brokenAmmoMesh;
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float ammoSpeed;
 
 public:	
 	AFakeAmmo();
 	
-	void copyAmmo(ABaseAmmo* ammo);
-
-	void deactivateTracer();
-
 	UStaticMeshComponent* getFakeAmmoMeshComponent() const;
 
 	~AFakeAmmo() = default;

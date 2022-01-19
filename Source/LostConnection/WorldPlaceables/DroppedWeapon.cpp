@@ -47,7 +47,7 @@ void ADroppedWeapon::onWeaponChange()
 
 ADroppedWeapon::ADroppedWeapon()
 {
-	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
+	magazine = CreateDefaultSubobject<UStaticMeshComponent>("Magazine");
 
 	magazine->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
 
@@ -59,7 +59,7 @@ ADroppedWeapon::ADroppedWeapon()
 
 void ADroppedWeapon::setWeapon_Implementation(UBaseWeapon* newWeapon)
 {
-	weapon = DuplicateObject(newWeapon, this);
+	weapon = DuplicateObject<UBaseWeapon>(newWeapon, this);
 
 	this->setMesh(weapon->getWeaponMesh());
 }

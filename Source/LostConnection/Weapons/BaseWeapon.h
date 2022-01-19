@@ -103,7 +103,7 @@ protected:
 	float length;
 
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<ABaseAmmo> ammoClass;
+	ABaseAmmo* ammo;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, BlueprintReadOnly)
 	float drawback;
