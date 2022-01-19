@@ -4,6 +4,7 @@
 
 #include "Algo/AnyOf.h"
 #include "Algo/AllOf.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/Pawn.h"
@@ -127,9 +128,7 @@ ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo(AL
 
 	info->setOnEndLoadCallback(onEndLoadCallback);
 
-	info->FinishSpawning({}, true);
-
-	return info;
+	return Cast<ALoadingScreenInfo>(UGameplayStatics::FinishSpawningActor(info, info->GetActorTransform()));
 }
 
 ABaseDrone* UUtilityBlueprintFunctionLibrary::spawnDrone(TSubclassOf<ABaseDrone> droneClass, const FTransform& transform, APlayerController* controller, UObject* worldContext)
@@ -142,9 +141,7 @@ ABaseDrone* UUtilityBlueprintFunctionLibrary::spawnDrone(TSubclassOf<ABaseDrone>
 
 		controller->Possess(drone);
 
-		drone->FinishSpawning(transform);
-
-		return drone;
+		return Cast<ABaseDrone>(UGameplayStatics::FinishSpawningActor(drone, transform));
 	}
 
 	return nullptr;

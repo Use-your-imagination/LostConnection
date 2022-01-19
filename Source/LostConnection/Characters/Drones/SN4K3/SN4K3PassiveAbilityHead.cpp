@@ -3,6 +3,7 @@
 #include "SN4K3PassiveAbilityHead.h"
 
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/CapsuleComponent.h"
 
@@ -144,7 +145,7 @@ void ASN4K3PassiveAbilityHead::destroyHead()
 
 	GetController()->Possess(placeholder);
 
-	placeholder->FinishSpawning({ FRotator::ZeroRotator, GetActorLocation() });
+	UGameplayStatics::FinishSpawningActor(placeholder, { FRotator::ZeroRotator, GetActorLocation() });
 
 	Destroy();
 }

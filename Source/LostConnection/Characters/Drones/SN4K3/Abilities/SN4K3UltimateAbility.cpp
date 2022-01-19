@@ -3,6 +3,7 @@
 #include "SN4K3UltimateAbility.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
@@ -119,7 +120,7 @@ void USN4K3UltimateAbility::useAbility()
 
 	placeholder->setAbility(this);
 
-	placeholder->FinishSpawning({}, true);
+	UGameplayStatics::FinishSpawningActor(placeholder, placeholder->GetActorTransform());
 
 	ultimatePlaceholderLocation = placeholder->GetActorLocation();
 

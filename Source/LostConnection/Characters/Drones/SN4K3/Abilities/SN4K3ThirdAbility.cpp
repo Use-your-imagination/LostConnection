@@ -2,6 +2,8 @@
 
 #include "SN4K3ThirdAbility.h"
 
+#include "Kismet/GameplayStatics.h"
+
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Utility/InitializationUtility.h"
@@ -85,7 +87,7 @@ void USN4K3ThirdAbility::useAbility()
 
 	flag->setPeriod(period);
 
-	flag->FinishSpawning({}, true);
+	UGameplayStatics::FinishSpawningActor(flag, flag->GetActorTransform());
 
 	isFlagExist = true;
 

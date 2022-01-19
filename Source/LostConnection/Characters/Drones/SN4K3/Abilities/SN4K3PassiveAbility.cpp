@@ -3,6 +3,7 @@
 #include "SN4K3PassiveAbility.h"
 
 #include "Misc/App.h"	
+#include "Kismet/GameplayStatics.h"
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
@@ -14,7 +15,7 @@ void USN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(USN4K3PassiveAbility, naniteMeter);
-	
+
 	DOREPLIFETIME(USN4K3PassiveAbility, cooldown);
 
 	DOREPLIFETIME(USN4K3PassiveAbility, currentCooldown);
@@ -48,7 +49,7 @@ void USN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 
 	Utility::getPlayerController(target)->Possess(head);
 
-	head->FinishSpawning({}, true);
+	UGameplayStatics::FinishSpawningActor(head, target->GetActorTransform());
 
 	ICaster::Execute_applyPassiveAbilityEvent(Cast<UObject>(caster), target);
 }

@@ -5,6 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Weapons/BaseWeapon.h"
 #include "FakeAmmo.h"
@@ -152,7 +153,7 @@ void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FT
 
 	mesh->AddRelativeRotation(spread);
 
-	FinishSpawning({}, true);
+	UGameplayStatics::FinishSpawningActor(this, GetActorTransform());
 
 	fakeAmmo = Utility::getGameState(character.Get())->spawn<AFakeAmmo>(fakeAmmoTransform);
 
@@ -160,7 +161,7 @@ void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FT
 
 	fakeAmmo->getFakeAmmoMeshComponent()->AddRelativeRotation(spread);
 
-	fakeAmmo->FinishSpawning({}, true);
+	UGameplayStatics::FinishSpawningActor(fakeAmmo, fakeAmmoTransform);
 }
 
 void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
