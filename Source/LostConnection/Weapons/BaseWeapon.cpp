@@ -73,10 +73,11 @@ void UBaseWeapon::shoot()
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		FVector weaponBarrelLocation = owner->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel");
+		int32 boneIndex = owner->getCurrentWeaponMeshComponent()->GetBoneIndex("barrel");
+		FTransform weaponBarrelTransform = owner->getCurrentWeaponMeshComponent()->GetBoneTransform(boneIndex);
 		FTransform ammoTransform;
 		FTransform visibleAmmoTransform;
-		ABaseDrone* drone = Cast<ABaseDrone>(owner.Get());
+		ABaseDrone* drone = Cast<ABaseDrone>(owner);
 		float currentSpreadDistance = this->calculateSpreadDistance();
 		FActorSpawnParameters parameters;
 
@@ -90,18 +91,14 @@ void UBaseWeapon::shoot()
 			ammoTransform = FTransform
 			(
 				camera->GetForwardVector().ToOrientationRotator(),
-				camera->GetComponentLocation() + (drone->GetCameraOffset()->TargetArmLength + length) * camera->GetForwardVector()
+				camera->GetComponentLocation() + camera->GetForwardVector() * (drone->GetCameraOffset()->TargetArmLength + length)
 			);
 
-			visibleAmmoTransform = FTransform
-			(
-				((ammoTransform.GetLocation() + UConstants::shootDistance * camera->GetForwardVector()) - weaponBarrelLocation).ToOrientationRotator(),
-				weaponBarrelLocation
-			);
+			visibleAmmoTransform = weaponBarrelTransform.GetRelativeTransform(ammoTransform);
 		}
 		else
 		{
-			ABaseBot* bot = Cast<ABaseBot>(owner.Get());
+			ABaseBot* bot = Cast<ABaseBot>(owner);
 			AAIController* controller = bot->GetController<AAIController>();
 			ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"));
 
@@ -110,7 +107,7 @@ void UBaseWeapon::shoot()
 				ammoTransform = FTransform
 				(
 					(target->GetActorLocation() - bot->GetActorLocation()).ToOrientationRotator(),
-					weaponBarrelLocation
+					weaponBarrelTransform.GetLocation()
 				);
 
 				visibleAmmoTransform = ammoTransform;
