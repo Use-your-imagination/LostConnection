@@ -27,8 +27,8 @@ void AAmmo::PostInitializeComponents()
 
 	tracer->SetAsset(tracerAsset);
 
-	// movement->InitialSpeed = ammoSpeed;
-	// movement->MaxSpeed = ammoSpeed;
+	movement->Velocity = mesh->GetForwardVector() * ammoSpeed;
+	movement->MaxSpeed = ammoSpeed;
 }
 
 void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -82,7 +82,7 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 	if (damage <= 0.0f)
 	{
-		mesh->SetVisibility(true, true);
+		mesh->SetVisibility(true);
 
 		mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
@@ -93,6 +93,10 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		movement->ProjectileGravityScale = 1.0f;
 
 		movement->Velocity = FVector(0.0f);
+
+		visibleMesh->SetVisibility(false);
+
+		tracer->Deactivate();
 
 		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(
@@ -134,7 +138,7 @@ AAmmo::AAmmo() :
 
 	mesh->OnComponentBeginOverlap.AddDynamic(this, &AAmmo::onBeginOverlap);
 
-	mesh->SetVisibility(false, true);
+	mesh->SetVisibility(false);
 
 	visibleMesh->SetupAttachment(mesh);
 
@@ -147,9 +151,6 @@ AAmmo::AAmmo() :
 	movement->ProjectileGravityScale = 0.0f;
 
 	movement->SetIsReplicated(true);
-
-	movement->InitialSpeed = ammoSpeed;
-	movement->MaxSpeed = ammoSpeed;
 }
 
 void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& visibleAmmoRelativeTransform, const FRotator& spread)

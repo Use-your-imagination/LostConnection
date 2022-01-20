@@ -109,8 +109,6 @@ void UBaseWeapon::shoot()
 					(target->GetActorLocation() - bot->GetActorLocation()).ToOrientationRotator(),
 					weaponBarrelTransform.GetLocation()
 				);
-
-				visibleAmmoTransform = ammoTransform;
 			}
 		}
 
