@@ -22,23 +22,32 @@ class LOSTCONNECTION_API ABaseAmmo :
 	GENERATED_BODY()
 
 private:
+	void PostInitializeComponents() override;
+
+private:
 	UFUNCTION()
 	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private:
-	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* mesh;
 
 	UPROPERTY(Category = Movement, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* movement;
 
-	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* onHitAsset;
 
-	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UStaticMesh* brokenAmmoMesh;
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UNiagaraSystem* tracerAsset;
 
-	UPROPERTY(Category = Ammo, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UStaticMesh* meshAsset;
+
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UStaticMesh* brokenAmmoMeshAsset;
+
+	UPROPERTY(Category = Ammo, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	class AFakeAmmo* fakeAmmoTemplate;
 
 	UPROPERTY()

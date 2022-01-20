@@ -24,16 +24,17 @@ private:
 	UPROPERTY(Category = Movement, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* movement;
 
-	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNiagaraComponent* tracer;
 
-	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float ammoSpeed;
-
-public:	
+public:
 	AFakeAmmo();
 	
+	void setSpeed(float speed);
+
 	UStaticMeshComponent* getFakeAmmoMeshComponent() const;
+
+	UNiagaraComponent* getFakeTracerComponent() const;
 
 	~AFakeAmmo() = default;
 };

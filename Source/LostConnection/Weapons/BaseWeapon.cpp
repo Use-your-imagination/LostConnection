@@ -117,7 +117,7 @@ void UBaseWeapon::shoot()
 			}
 		}
 
-		ABaseAmmo* launchedAmmo = owner->GetWorld()->SpawnActor<ABaseAmmo>(ammo->StaticClass(), ammoTransform, parameters);
+		ABaseAmmo* launchedAmmo = owner->GetWorld()->SpawnActor<ABaseAmmo>(ABaseAmmo::StaticClass(), ammoTransform, parameters);
 
 		launchedAmmo->copyProperties(this);
 

@@ -18,6 +18,22 @@
 
 #pragma warning(disable: 4458)
 
+void ABaseAmmo::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	mesh->SetStaticMesh(meshAsset);
+
+	movement->InitialSpeed = ammoSpeed;
+	movement->MaxSpeed = ammoSpeed;
+
+	fakeAmmoTemplate->getFakeAmmoMeshComponent()->SetStaticMesh(meshAsset);
+
+	fakeAmmoTemplate->getFakeTracerComponent()->SetAsset(tracerAsset);
+
+	fakeAmmoTemplate->setSpeed(ammoSpeed);
+}
+
 void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!HasAuthority())
@@ -75,7 +91,7 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 		mesh->SetSimulatePhysics(true);
 
-		mesh->SetStaticMesh(brokenAmmoMesh);
+		mesh->SetStaticMesh(brokenAmmoMeshAsset);
 
 		movement->ProjectileGravityScale = 1.0f;
 
@@ -129,16 +145,11 @@ ABaseAmmo::ABaseAmmo() :
 
 	mesh->SetVisibility(false, true);
 
-	fakeAmmoTemplate->getFakeAmmoMeshComponent()->SetStaticMesh(mesh->GetStaticMesh());
-
 	movement->SetUpdatedComponent(mesh);
 
 	movement->ProjectileGravityScale = 0.0f;
 
 	movement->SetIsReplicated(true);
-
-	movement->InitialSpeed = ammoSpeed;
-	movement->MaxSpeed = ammoSpeed;
 }
 
 void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& fakeAmmoTransform, const FRotator& spread)
@@ -148,18 +159,18 @@ void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FT
 		return;
 	}
 
-	FActorSpawnParameters parameters;
-
-	parameters.bDeferConstruction = true;
-	parameters.Template = fakeAmmoTemplate;
-	parameters.Owner = this;
-	
 	isAlly = character->getIsAlly();
 
 	mesh->AddRelativeRotation(spread);
 
 	UGameplayStatics::FinishSpawningActor(this, GetActorTransform());
 
+	FActorSpawnParameters parameters;
+
+	parameters.bDeferConstruction = true;
+	parameters.Template = fakeAmmoTemplate;
+	parameters.Owner = this;
+	
 	fakeAmmo = character->GetWorld()->SpawnActor<AFakeAmmo>(AFakeAmmo::StaticClass(), fakeAmmoTransform, parameters);
 
 	fakeAmmo->getFakeAmmoMeshComponent()->AddRelativeRotation(spread);

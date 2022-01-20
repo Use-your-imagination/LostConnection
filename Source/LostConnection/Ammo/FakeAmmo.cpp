@@ -7,8 +7,7 @@
 
 #include "Constants/Constants.h"
 
-AFakeAmmo::AFakeAmmo() :
-	ammoSpeed(UConstants::ammoSpeed)
+AFakeAmmo::AFakeAmmo()
 {	
 	PrimaryActorTick.bCanEverTick = false;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
@@ -28,13 +27,21 @@ AFakeAmmo::AFakeAmmo() :
 
 	movement->SetIsReplicated(true);
 
-	movement->InitialSpeed = ammoSpeed;
-	movement->MaxSpeed = ammoSpeed;
-
 	tracer->SetupAttachment(mesh);
+}
+
+void AFakeAmmo::setSpeed(float speed)
+{
+	movement->InitialSpeed = speed;
+	movement->MaxSpeed = speed;
 }
 
 UStaticMeshComponent* AFakeAmmo::getFakeAmmoMeshComponent() const
 {
 	return mesh;
+}
+
+UNiagaraComponent* AFakeAmmo::getFakeTracerComponent() const
+{
+	return tracer;
 }
