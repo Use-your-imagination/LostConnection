@@ -4,7 +4,6 @@
 
 #include "Kismet/GameplayStatics.h"
 
-#include "LostConnectionGameSession.h"
 #include "LostConnectionPlayerController.h"
 #include "LostConnectionGameState.h"
 #include "LostConnectionPlayerState.h"
@@ -134,8 +133,6 @@ void ULostConnectionGameInstance::destroySession(const FOnDestroySessionComplete
 
 		onDestroyDelegate.BindLambda([this, callback, controller](FName sessionName, bool wasSuccessful)
 			{
-				ALostConnectionGameSession* gameSession = Cast<ALostConnectionGameSession>(GetWorld()->GetAuthGameMode()->GameSession);
-
 				for (APlayerState* state : GetWorld()->GetGameState<ALostConnectionGameState>()->PlayerArray)
 				{
 					ALostConnectionPlayerController* kickedPlayer = state->GetOwner<ALostConnectionPlayerController>();
@@ -144,7 +141,7 @@ void ULostConnectionGameInstance::destroySession(const FOnDestroySessionComplete
 					{
 						kickedPlayer->save();
 
-						gameSession->KickPlayer(kickedPlayer, FText::FromStringTable(UConstants::sessionsStringTablePath, UConstants::destroySessionKey));
+						//->KickPlayer(kickedPlayer, FText::FromStringTable(UConstants::sessionsStringTablePath, UConstants::destroySessionKey));
 					}
 				}
 

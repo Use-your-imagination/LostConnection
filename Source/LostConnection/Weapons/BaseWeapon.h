@@ -8,7 +8,7 @@
 #include "GameFramework/Character.h"
 
 #include "Network/NetworkObject.h"
-#include "Ammo/BaseAmmo.h"
+#include "Projectiles/Ammo.h"
 
 #include "BaseWeapon.generated.h"
 
@@ -103,7 +103,7 @@ protected:
 	float length;
 
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly)
-	ABaseAmmo* ammo;
+	AAmmo* ammo;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, BlueprintReadOnly)
 	float drawback;

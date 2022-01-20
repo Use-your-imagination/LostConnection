@@ -10,12 +10,12 @@
 
 #include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
 
-#include "BaseAmmo.generated.h"
+#include "Ammo.generated.h"
 
 #pragma warning(disable: 4458)
 
 UCLASS(BlueprintType, DefaultToInstanced)
-class LOSTCONNECTION_API ABaseAmmo :
+class LOSTCONNECTION_API AAmmo :
 	public APawn,
 	public IAilmentInflictor
 {
@@ -32,11 +32,14 @@ private:
 	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* mesh;
 
+	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* visibleMesh;
+
+	UPROPERTY(Category = Components, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UNiagaraComponent* tracer;
+
 	UPROPERTY(Category = Movement, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* movement;
-
-	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UNiagaraSystem* onHitAsset;
 
 	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* tracerAsset;
@@ -47,11 +50,8 @@ private:
 	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UStaticMesh* brokenAmmoMeshAsset;
 
-	UPROPERTY(Category = Ammo, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	class AFakeAmmo* fakeAmmoTemplate;
-
-	UPROPERTY()
-	class AFakeAmmo* fakeAmmo;
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UNiagaraSystem* onHitAsset;
 
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float ammoSpeed;
@@ -69,9 +69,9 @@ private:
 	float additionalCrushingHitChance;
 
 public:
-	ABaseAmmo();
+	AAmmo();
 
-	void launch(const TWeakObjectPtr<class ABaseCharacter>& character, const FTransform& fakeAmmoTransform, const FRotator& spread);
+	void launch(const TWeakObjectPtr<class ABaseCharacter>& character, const FTransform& visibleAmmoRelativeTransform, const FRotator& spread);
 
 	virtual void copyProperties(class UBaseWeapon* weapon);
 
@@ -117,7 +117,7 @@ public:
 
 	virtual float getAdditionalCrushingHitChance() const final override;
 
-	virtual ~ABaseAmmo() = default;
+	virtual ~AAmmo() = default;
 
 	friend class AFakeAmmo;
 };

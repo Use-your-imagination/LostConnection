@@ -299,7 +299,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) final override;
 
-	virtual void impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit) override;
+	virtual void impactAction_Implementation(AAmmo* ammo, const FHitResult& hit) override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void spawnStatusVFX(UNiagaraSystem* statusVFX, const FHitResult& hit) final override;

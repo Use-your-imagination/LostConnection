@@ -4,7 +4,7 @@
 
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Constants/Constants.h"
-#include "Ammo/BaseAmmo.h"
+#include "Projectiles/Ammo.h"
 
 ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 {
@@ -35,7 +35,7 @@ void ASN4K3UltimateAbilityPlaceholder::setAbility(USN4K3UltimateAbility* ability
 	this->ability = ability;
 }
 
-void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit)
+void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(AAmmo* ammo, const FHitResult& hit)
 {
 	ASN4K3* drone = Cast<ASN4K3>(ability->getCaster());
 

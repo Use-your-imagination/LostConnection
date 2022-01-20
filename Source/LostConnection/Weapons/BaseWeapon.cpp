@@ -57,7 +57,7 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 void UBaseWeapon::shoot()
 {
-	if (owner->getIsReloading())
+	if (!owner.IsValid() || owner->getIsReloading())
 	{
 		return;
 	}
@@ -75,7 +75,7 @@ void UBaseWeapon::shoot()
 	{
 		FVector weaponBarrelLocation = owner->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel");
 		FTransform ammoTransform;
-		FTransform fakeAmmoTransform;
+		FTransform visibleAmmoTransform;
 		ABaseDrone* drone = Cast<ABaseDrone>(owner.Get());
 		float currentSpreadDistance = this->calculateSpreadDistance();
 		FActorSpawnParameters parameters;
@@ -93,7 +93,7 @@ void UBaseWeapon::shoot()
 				camera->GetComponentLocation() + (drone->GetCameraOffset()->TargetArmLength + length) * camera->GetForwardVector()
 			);
 
-			fakeAmmoTransform = FTransform
+			visibleAmmoTransform = FTransform
 			(
 				((ammoTransform.GetLocation() + UConstants::shootDistance * camera->GetForwardVector()) - weaponBarrelLocation).ToOrientationRotator(),
 				weaponBarrelLocation
@@ -113,18 +113,18 @@ void UBaseWeapon::shoot()
 					weaponBarrelLocation
 				);
 
-				fakeAmmoTransform = ammoTransform;
+				visibleAmmoTransform = ammoTransform;
 			}
 		}
 
-		ABaseAmmo* launchedAmmo = owner->GetWorld()->SpawnActor<ABaseAmmo>(ABaseAmmo::StaticClass(), ammoTransform, parameters);
+		AAmmo* launchedAmmo = owner->GetWorld()->SpawnActor<AAmmo>(AAmmo::StaticClass(), ammoTransform, parameters);
 
 		launchedAmmo->copyProperties(this);
 
 		float pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);
 		float yaw = FMath::Tan(FMath::Acos(pitch / currentSpreadDistance)) * pitch;
 
-		launchedAmmo->launch(owner, fakeAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
+		launchedAmmo->launch(owner, visibleAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
 		currentMagazineSize -= ammoCost;
 
@@ -143,7 +143,7 @@ UBaseWeapon::UBaseWeapon() :
 	ammoCost(1),
 	length(100.0f)
 {
-	ammo = CreateDefaultSubobject<ABaseAmmo>("AmmoTemplate");
+	ammo = CreateDefaultSubobject<AAmmo>("AmmoTemplate");
 }
 
 void UBaseWeapon::startShoot()

@@ -8,7 +8,6 @@
 
 #include "LostConnectionGameState.h"
 #include "LostConnectionPlayerController.h"
-#include "LostConnectionGameSession.h"
 #include "Constants/Constants.h"
 
 #pragma warning(disable: 4458)
@@ -58,7 +57,6 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	PlayerControllerClass = defaultPlayerControllerClassFinder.Class;
 	PlayerStateClass = defaultPlayerStateClassFinder.Class;
 	GameStateClass = ALostConnectionGameState::StaticClass();
-	GameSessionClass = ALostConnectionGameSession::StaticClass();
 }
 
 void ALostConnectionGameMode::initRoomAI_Implementation(int32 totalCount, int32 waves)

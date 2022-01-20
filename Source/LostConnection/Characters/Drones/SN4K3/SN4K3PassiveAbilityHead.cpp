@@ -10,7 +10,7 @@
 #include "Constants/Constants.h"
 #include "Characters/BaseCharacter.h"
 #include "Utility/InitializationUtility.h"
-#include "Ammo/BaseAmmo.h"
+#include "Projectiles/Ammo.h"
 #include "Utility/MultiplayerUtility.h"
 #include "SN4K3ResurrectDeathEvent.h"
 #include "WorldPlaceables/DeathPlaceholder.h"

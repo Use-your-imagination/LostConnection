@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Use-your-imagination
 
-#include "BaseAmmo.h"
+#include "Ammo.h"
 
 #include "UObject/ConstructorHelpers.h"
 #include "NiagaraFunctionLibrary.h"
@@ -8,7 +8,6 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Weapons/BaseWeapon.h"
-#include "FakeAmmo.h"
 #include "Characters/BaseDrone.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Utility/Utility.h"
@@ -18,30 +17,28 @@
 
 #pragma warning(disable: 4458)
 
-void ABaseAmmo::PostInitializeComponents()
+void AAmmo::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
 	mesh->SetStaticMesh(meshAsset);
 
+	visibleMesh->SetStaticMesh(meshAsset);
+
+	tracer->SetAsset(tracerAsset);
+
 	movement->InitialSpeed = ammoSpeed;
 	movement->MaxSpeed = ammoSpeed;
-
-	fakeAmmoTemplate->getFakeAmmoMeshComponent()->SetStaticMesh(meshAsset);
-
-	fakeAmmoTemplate->getFakeTracerComponent()->SetAsset(tracerAsset);
-
-	fakeAmmoTemplate->setSpeed(ammoSpeed);
 }
 
-void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!HasAuthority())
 	{
 		return;
 	}
 
-	if (IsPendingKill() || Cast<ABaseAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor) || Cast<UCapsuleComponent>(OtherComp))
+	if (IsPendingKill() || Cast<AAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor) || Cast<UCapsuleComponent>(OtherComp))
 	{
 		return;
 	}
@@ -97,13 +94,6 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 		movement->Velocity = FVector(0.0f);
 
-		if (IsValid(fakeAmmo))
-		{
-			fakeAmmo->Destroy();
-			
-			fakeAmmo = nullptr;
-		}
-
 		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(
 			GetWorld(),
@@ -122,7 +112,7 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	}
 }
 
-ABaseAmmo::ABaseAmmo() :
+AAmmo::AAmmo() :
 	ammoSpeed(UConstants::ammoSpeed)
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -130,9 +120,10 @@ ABaseAmmo::ABaseAmmo() :
 	bReplicates = true;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>("AmmoMesh");
+	visibleMesh = CreateDefaultSubobject<UStaticMeshComponent>("FakeAmmoMesh");
+	tracer = CreateDefaultSubobject<UNiagaraComponent>("Tracer");
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>("Movement");
-	fakeAmmoTemplate = CreateDefaultSubobject<AFakeAmmo>("FakeAmmoTemplate");
-
+	
 	SetRootComponent(mesh);
 
 	mesh->SetGenerateOverlapEvents(true);
@@ -141,9 +132,15 @@ ABaseAmmo::ABaseAmmo() :
 
 	mesh->bReturnMaterialOnMove = true;
 
-	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::onBeginOverlap);
+	mesh->OnComponentBeginOverlap.AddDynamic(this, &AAmmo::onBeginOverlap);
 
 	mesh->SetVisibility(false, true);
+
+	visibleMesh->SetupAttachment(mesh);
+
+	visibleMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
+	tracer->SetupAttachment(visibleMesh);
 
 	movement->SetUpdatedComponent(mesh);
 
@@ -152,7 +149,7 @@ ABaseAmmo::ABaseAmmo() :
 	movement->SetIsReplicated(true);
 }
 
-void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& fakeAmmoTransform, const FRotator& spread)
+void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& visibleAmmoRelativeTransform, const FRotator& spread)
 {
 	if (!character.IsValid())
 	{
@@ -163,22 +160,12 @@ void ABaseAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FT
 
 	mesh->AddRelativeRotation(spread);
 
+	visibleMesh->SetRelativeTransform(visibleAmmoRelativeTransform);
+
 	UGameplayStatics::FinishSpawningActor(this, GetActorTransform());
-
-	FActorSpawnParameters parameters;
-
-	parameters.bDeferConstruction = true;
-	parameters.Template = fakeAmmoTemplate;
-	parameters.Owner = this;
-	
-	fakeAmmo = character->GetWorld()->SpawnActor<AFakeAmmo>(AFakeAmmo::StaticClass(), fakeAmmoTransform, parameters);
-
-	fakeAmmo->getFakeAmmoMeshComponent()->AddRelativeRotation(spread);
-
-	UGameplayStatics::FinishSpawningActor(fakeAmmo, fakeAmmoTransform);
 }
 
-void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
+void AAmmo::copyProperties(UBaseWeapon* weapon)
 {
 	damage = weapon->getBaseDamage();
 
@@ -244,102 +231,102 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 	}
 }
 
-UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
+UStaticMeshComponent* AAmmo::getAmmoMeshComponent() const
 {
 	return mesh;
 }
 
-bool ABaseAmmo::getIsAlly() const
+bool AAmmo::getIsAlly() const
 {
 	return isAlly;
 }
 
-const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwner() const
+const TWeakObjectPtr<ABaseCharacter>& AAmmo::getOwner() const
 {
 	return owner;
 }
 
-void ABaseAmmo::appendIncreasedDamageCoefficient(float coefficient)
+void AAmmo::appendIncreasedDamageCoefficient(float coefficient)
 {
 	increasedDamageCoefficients.Add(coefficient);
 }
 
-void ABaseAmmo::removeIncreasedDamageCoefficient(float coefficient)
+void AAmmo::removeIncreasedDamageCoefficient(float coefficient)
 {
 	increasedDamageCoefficients.Remove(coefficient);
 }
 
-void ABaseAmmo::appendMoreDamageCoefficient(float coefficient)
+void AAmmo::appendMoreDamageCoefficient(float coefficient)
 {
 	moreDamageCoefficients.Add(coefficient);
 }
 
-void ABaseAmmo::removeMoreDamageCoefficient(float coefficient)
+void AAmmo::removeMoreDamageCoefficient(float coefficient)
 {
 	moreDamageCoefficients.Remove(coefficient);
 }
 
-void ABaseAmmo::setBaseDamage(float damage)
+void AAmmo::setBaseDamage(float damage)
 {
 	damage = damage;
 }
 
-void ABaseAmmo::setAddedDamage(float addedDamage)
+void AAmmo::setAddedDamage(float addedDamage)
 {
 	this->addedDamage = addedDamage;
 }
 
-void ABaseAmmo::setAdditionalDamage(float additionalDamage)
+void AAmmo::setAdditionalDamage(float additionalDamage)
 {
 	this->additionalDamage = additionalDamage;
 }
 
-void ABaseAmmo::setCrushingHitChance_Implementation(float newCrushingHitChance)
+void AAmmo::setCrushingHitChance_Implementation(float newCrushingHitChance)
 {
 	crushingHitChance = newCrushingHitChance;
 }
 
-void ABaseAmmo::setAdditionalCrushingHitChance_Implementation(float newAdditionalCrushingHitChance)
+void AAmmo::setAdditionalCrushingHitChance_Implementation(float newAdditionalCrushingHitChance)
 {
 	additionalCrushingHitChance = newAdditionalCrushingHitChance;
 }
 
-float ABaseAmmo::getBaseDamage() const
+float AAmmo::getBaseDamage() const
 {
 	return damage;
 }
 
-float ABaseAmmo::getAddedDamage() const
+float AAmmo::getAddedDamage() const
 {
 	return 0.0f;
 }
 
-float ABaseAmmo::getAdditionalDamage() const
+float AAmmo::getAdditionalDamage() const
 {
 	return additionalDamage;
 }
 
-TArray<float> ABaseAmmo::getIncreasedDamageCoefficients() const
+TArray<float> AAmmo::getIncreasedDamageCoefficients() const
 {
 	return {};
 }
 
-TArray<float> ABaseAmmo::getMoreDamageCoefficients() const
+TArray<float> AAmmo::getMoreDamageCoefficients() const
 {
 	return {};
 }
 
-typeOfDamage ABaseAmmo::getDamageType() const
+typeOfDamage AAmmo::getDamageType() const
 {
 	return damageType;
 }
 
-float ABaseAmmo::getCrushingHitChance() const
+float AAmmo::getCrushingHitChance() const
 {
 	return crushingHitChance;
 }
 
-float ABaseAmmo::getAdditionalCrushingHitChance() const
+float AAmmo::getAdditionalCrushingHitChance() const
 {
 	return additionalCrushingHitChance;
 }

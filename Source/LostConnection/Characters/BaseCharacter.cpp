@@ -670,7 +670,7 @@ void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflic
 	}
 }
 
-void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit)
+void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& hit)
 {
 	if (isAlly != ammo->getIsAlly())
 	{
