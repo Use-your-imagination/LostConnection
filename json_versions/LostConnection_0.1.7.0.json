@@ -1,6 +1,42 @@
 {
   "projectName": "LostConnection",
   "projectVersion": "0.1.7.0",
+  "AI": {
+    "type": "category",
+    "Waves": {
+      "type": "item",
+      "notes": [
+        "Add waves spawning for AI"
+      ]
+    }
+  },
+  "UI": {
+    "type": "category",
+    "Progress bars": {
+      "type": "item",
+      "notes": [
+        "Added wave clear progress bars for host"
+      ]
+    }
+  },
+  "SN4K3": {
+    "type": "category",
+    "Visual": {
+      "type": "item",
+      "notes": [
+        "Add textures"
+      ]
+    }
+  },
+  "Map": {
+    "type": "category",
+    "Collision": {
+      "type": "item",
+      "notes": [
+        "Added collision with map objects"
+      ]
+    }
+  },
   "Bug fixes": {
     "type": "category",
     "Multiplayer": {
@@ -13,15 +49,6 @@
       "type": "item",
       "notes": [
         "Fix cancel ability input setting displaying"
-      ]
-    }
-  },
-  "SN4K3": {
-    "type": "category",
-    "Visual": {
-      "type": "item",
-      "notes": [
-        "Add textures"
       ]
     }
   }
