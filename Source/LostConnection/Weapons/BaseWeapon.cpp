@@ -79,11 +79,7 @@ void UBaseWeapon::shoot()
 		FTransform visibleAmmoTransform;
 		ABaseDrone* drone = Cast<ABaseDrone>(owner);
 		float currentSpreadDistance = this->calculateSpreadDistance();
-		FActorSpawnParameters parameters;
-
-		parameters.bDeferConstruction = true;
-		parameters.Template = ammo;
-
+		
 		if (IsValid(drone))
 		{
 			UCameraComponent* camera = drone->GetFollowCamera();
@@ -112,7 +108,7 @@ void UBaseWeapon::shoot()
 			}
 		}
 
-		AAmmo* launchedAmmo = owner->GetWorld()->SpawnActor<AAmmo>(AAmmo::StaticClass(), ammoTransform, parameters);
+		AAmmo* launchedAmmo = Utility::getGameState(owner.Get())->spawn<AAmmo>(ammoClass, ammoTransform);
 
 		launchedAmmo->copyProperties(this);
 
@@ -138,7 +134,7 @@ UBaseWeapon::UBaseWeapon() :
 	ammoCost(1),
 	length(100.0f)
 {
-	ammo = CreateDefaultSubobject<AAmmo>("AmmoTemplate");
+	
 }
 
 void UBaseWeapon::startShoot()

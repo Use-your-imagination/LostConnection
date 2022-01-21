@@ -14,7 +14,7 @@
 
 #pragma warning(disable: 4458)
 
-UCLASS(BlueprintType, DefaultToInstanced)
+UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API AAmmo :
 	public APawn,
 	public IAilmentInflictor
@@ -40,12 +40,6 @@ private:
 
 	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* movement;
-
-	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UNiagaraSystem* tracerAsset;
-
-	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UStaticMesh* meshAsset;
 
 	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UStaticMesh* brokenAmmoMeshAsset;

@@ -21,14 +21,8 @@ void AAmmo::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	mesh->SetStaticMesh(meshAsset);
-
-	visibleMesh->SetStaticMesh(meshAsset);
-
-	tracer->SetAsset(tracerAsset);
-
-	movement->Velocity = mesh->GetForwardVector() * ammoSpeed;
-	movement->MaxSpeed = ammoSpeed;
+	// movement->Velocity = mesh->GetForwardVector() * ammoSpeed;
+	// movement->MaxSpeed = ammoSpeed;
 }
 
 void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -151,6 +145,9 @@ AAmmo::AAmmo() :
 	movement->ProjectileGravityScale = 0.0f;
 
 	movement->SetIsReplicated(true);
+
+	movement->InitialSpeed = ammoSpeed;
+	movement->MaxSpeed = ammoSpeed;
 }
 
 void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& visibleAmmoRelativeTransform, const FRotator& spread)
