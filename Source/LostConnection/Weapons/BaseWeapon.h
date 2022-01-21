@@ -93,6 +93,12 @@ protected:
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	weaponTypes weaponType;
 
+	/*
+	* spreadDistance * currentAccuracyMultiplier;
+	* pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);
+	* yaw = FMath::Tan(FMath::Acos(pitch / currentSpreadDistance)) * pitch;
+	* Rotation = { pitch, FMath::RandRange(-yaw, yaw), 0.0f };
+	*/
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float spreadDistance;
 
@@ -105,6 +111,11 @@ protected:
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<AAmmo> ammoClass;
 
+	/*
+	* float decreaseAccuracyMultiplier = 0.95f;
+	* currentAccuracyMultiplier += drawback;
+	* Tick: currentAccuracyMultiplier = FMath::Max(1.0f, currentAccuracyMultiplier * decreaseAccuracyMultiplier);
+	*/
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, BlueprintReadOnly)
 	float drawback;
 

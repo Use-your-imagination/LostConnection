@@ -168,7 +168,7 @@ void UBaseWeapon::updateTimeBetweenShots_Implementation()
 
 void UBaseWeapon::Tick(float DeltaTime)
 {
-	static float constexpr decreaseAccuracyMultiplier = 0.95f;
+	static constexpr float decreaseAccuracyMultiplier = 0.95f;
 
 	if (currentTimeBetweenShots)
 	{
