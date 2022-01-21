@@ -106,7 +106,7 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 		onHit->SetNiagaraVariableBool("DeathState", true);
 
-		MarkPendingKill();
+		Destroy();
 	}
 }
 
