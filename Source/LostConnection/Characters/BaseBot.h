@@ -60,7 +60,7 @@ public:
 
 inline void ABaseBot::updateHealthBar()
 {
-	healthBarMaterial->SetScalarParameterValue(TEXT("LifePercent"), Utility::toPercent(currentHealth / health));
+	healthBarMaterial->SetScalarParameterValue("LifePercent", Utility::toPercent(currentHealth / health));
 
 	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
 }

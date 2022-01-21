@@ -319,15 +319,15 @@ ABaseCharacter::ABaseCharacter() :
 	movement->MaxWalkSpeedCrouched = defaultMovementSpeed / 3;
 	movement->bCanWalkOffLedgesWhenCrouching = true;
 
-	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CurrentWeaponMesh"));
+	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("CurrentWeaponMesh");
 	currentWeaponMesh->SetupAttachment(mesh, "Hand_WeaponSocket_R");
 	currentWeaponMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
-	magazine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Magazine"));
+	magazine = CreateDefaultSubobject<UStaticMeshComponent>("Magazine");
 	magazine->SetupAttachment(currentWeaponMesh);
 	magazine->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
-	underStatusComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("UnderStatus"));
+	underStatusComponent = CreateDefaultSubobject<UNiagaraComponent>("UnderStatus");
 	underStatusComponent->SetupAttachment(mesh);
 	underStatusComponent->AddLocalOffset(FVector(0.0f, 0.0f, this->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()));
 	underStatusComponent->SetAsset(underStatusFinder.Object);
@@ -670,7 +670,7 @@ void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflic
 	}
 }
 
-void ABaseCharacter::impactAction_Implementation(ABaseAmmo* ammo, const FHitResult& hit)
+void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& hit)
 {
 	if (isAlly != ammo->getIsAlly())
 	{

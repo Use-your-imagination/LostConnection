@@ -4,7 +4,6 @@
 
 #include "Kismet/GameplayStatics.h"
 
-#include "LostConnectionGameSession.h"
 #include "LostConnectionPlayerController.h"
 #include "LostConnectionGameState.h"
 #include "LostConnectionPlayerState.h"
@@ -75,8 +74,6 @@ void ULostConnectionGameInstance::Init()
 
 			session->OnStartSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onStartSession);
 
-			session->OnDestroySessionCompleteDelegates;
-
 			sessionSettings = MakeShareable(new FOnlineSessionSettings());
 
 			sessionSettings->bIsLANMatch = true;
@@ -129,21 +126,23 @@ void ULostConnectionGameInstance::destroySession(const FOnDestroySessionComplete
 	ALostConnectionPlayerController* controller = GetWorld()->GetFirstPlayerController<ALostConnectionPlayerController>();
 
 	if (controller->HasAuthority())
-	{
-		ALostConnectionGameSession* gameSession = Cast<ALostConnectionGameSession>(GetWorld()->GetAuthGameMode()->GameSession);
+	{	
 		FString sessionName;
 
 		sessionSettings->Get(serverNameKey, sessionName);
 
-		onDestroyDelegate.BindLambda([this, callback, gameSession](FName sessionName, bool wasSuccessful)
+		onDestroyDelegate.BindLambda([this, callback, controller](FName sessionName, bool wasSuccessful)
 			{
 				for (APlayerState* state : GetWorld()->GetGameState<ALostConnectionGameState>()->PlayerArray)
 				{
-					ALostConnectionPlayerController* controller = state->GetOwner<ALostConnectionPlayerController>();
+					ALostConnectionPlayerController* kickedPlayer = state->GetOwner<ALostConnectionPlayerController>();
 
-					controller->save();
+					if (IsValid(kickedPlayer) && controller != kickedPlayer)
+					{
+						kickedPlayer->save();
 
-					gameSession->KickPlayer(controller, FText::FromStringTable(UConstants::sessionsStringTablePath, UConstants::destroySessionKey));
+						//->KickPlayer(kickedPlayer, FText::FromStringTable(UConstants::sessionsStringTablePath, UConstants::destroySessionKey));
+					}
 				}
 
 				callback.Execute(sessionName, wasSuccessful);

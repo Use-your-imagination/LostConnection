@@ -1,13 +1,13 @@
 // Copyright (c) 2021 Use-your-imagination
 
-#include "BaseAmmo.h"
+#include "Ammo.h"
 
 #include "UObject/ConstructorHelpers.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Weapons/BaseWeapon.h"
-#include "FakeAmmo.h"
 #include "Characters/BaseDrone.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Utility/Utility.h"
@@ -17,26 +17,34 @@
 
 #pragma warning(disable: 4458)
 
-void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AAmmo::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	movement->Velocity = mesh->GetForwardVector() * ammoSpeed;
+	movement->MaxSpeed = ammoSpeed;
+}
+
+void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!HasAuthority())
 	{
 		return;
 	}
 
-	if (IsPendingKill() || Cast<ABaseAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor) || Cast<UCapsuleComponent>(OtherComp))
+	if (IsPendingKill() || Cast<AAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor) || Cast<UCapsuleComponent>(OtherComp))
 	{
 		return;
 	}
 
 	bool shotThrough = OtherActor->Implements<UShotThrough>();
 
-	if (OtherActor && lastTarget == OtherActor)
+	if (IsValid(OtherActor) && lastTarget == OtherActor)
 	{
 		return;
 	}
 
-	if (shotThrough && OtherActor)
+	if (shotThrough && IsValid(OtherActor))
 	{
 		IShotThrough::Execute_impactAction(OtherActor, this, SweepResult);
 
@@ -68,22 +76,21 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 	if (damage <= 0.0f)
 	{
-		mesh->SetStaticMesh(brokenAmmoMesh);
+		mesh->SetVisibility(true);
 
 		mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
 		mesh->SetSimulatePhysics(true);
 
+		mesh->SetStaticMesh(brokenAmmoMeshAsset);
+
 		movement->ProjectileGravityScale = 1.0f;
 
 		movement->Velocity = FVector(0.0f);
 
-		if (fakeAmmo->IsValidLowLevelFast())
-		{
-			fakeAmmo->deactivateTracer();
+		visibleMesh->SetVisibility(false);
 
-			fakeAmmo->Destroy();
-		}
+		tracer->Deactivate();
 
 		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(
@@ -103,18 +110,18 @@ void ABaseAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	}
 }
 
-ABaseAmmo::ABaseAmmo()
+AAmmo::AAmmo() :
+	ammoSpeed(UConstants::ammoSpeed)
 {
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> tracerFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletTracer.NPSBulletTracer'"));
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> onHitFinder(TEXT("NiagaraSystem'/Game/Assets/Weapons/Ammo/NPSBulletOnHit.NPSBulletOnHit'"));
-
 	PrimaryActorTick.bCanEverTick = false;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 	bReplicates = true;
 
-	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AmmoMesh"));
-	movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
-
+	mesh = CreateDefaultSubobject<UStaticMeshComponent>("AmmoMesh");
+	visibleMesh = CreateDefaultSubobject<UStaticMeshComponent>("FakeAmmoMesh");
+	tracer = CreateDefaultSubobject<UNiagaraComponent>("Tracer");
+	movement = CreateDefaultSubobject<UProjectileMovementComponent>("Movement");
+	
 	SetRootComponent(mesh);
 
 	mesh->SetGenerateOverlapEvents(true);
@@ -123,47 +130,42 @@ ABaseAmmo::ABaseAmmo()
 
 	mesh->bReturnMaterialOnMove = true;
 
-	mesh->OnComponentBeginOverlap.AddDynamic(this, &ABaseAmmo::onBeginOverlap);
+	mesh->OnComponentBeginOverlap.AddDynamic(this, &AAmmo::onBeginOverlap);
 
-	mesh->SetVisibility(false, true);
+	mesh->SetVisibility(false);
+
+	visibleMesh->SetupAttachment(mesh);
+
+	visibleMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
+	tracer->SetupAttachment(visibleMesh);
 
 	movement->SetUpdatedComponent(mesh);
 
 	movement->ProjectileGravityScale = 0.0f;
 
 	movement->SetIsReplicated(true);
-
-	movement->InitialSpeed = UConstants::ammoSpeed;
-	movement->MaxSpeed = UConstants::ammoSpeed;
-
-	tracerAsset = tracerFinder.Object;
-
-	onHitAsset = onHitFinder.Object;
 }
 
-void ABaseAmmo::launch_Implementation(ABaseCharacter* character, const FTransform& fakeAmmoTransform, const FRotator& spread)
+void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& visibleAmmoRelativeTransform, const FRotator& spread)
 {
-	if (!character || !character->IsValidLowLevel())
+	if (!character.IsValid())
 	{
 		return;
 	}
 
 	isAlly = character->getIsAlly();
 
-	mesh->AddRelativeRotation(spread);
+	mesh->AddWorldRotation(spread);
 
-	FinishSpawning({}, true);
+	visibleMesh->SetRelativeTransform(visibleAmmoRelativeTransform);
 
-	fakeAmmo = Utility::getGameState(character)->spawn<AFakeAmmo>(fakeAmmoTransform);
+	visibleMesh->AddRelativeRotation({ 0.0f, 270.0f ,0.0f });
 
-	fakeAmmo->copyAmmo(this);
-
-	fakeAmmo->getFakeAmmoMeshComponent()->AddRelativeRotation(spread);
-
-	fakeAmmo->FinishSpawning({}, true);
+	UGameplayStatics::FinishSpawningActor(this, GetActorTransform());
 }
 
-void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
+void AAmmo::copyProperties(UBaseWeapon* weapon)
 {
 	damage = weapon->getBaseDamage();
 
@@ -229,102 +231,102 @@ void ABaseAmmo::copyProperties(UBaseWeapon* weapon)
 	}
 }
 
-UStaticMeshComponent* ABaseAmmo::getAmmoMeshComponent() const
+UStaticMeshComponent* AAmmo::getAmmoMeshComponent() const
 {
 	return mesh;
 }
 
-bool ABaseAmmo::getIsAlly() const
+bool AAmmo::getIsAlly() const
 {
 	return isAlly;
 }
 
-const TWeakObjectPtr<ABaseCharacter>& ABaseAmmo::getOwner() const
+const TWeakObjectPtr<ABaseCharacter>& AAmmo::getOwner() const
 {
 	return owner;
 }
 
-void ABaseAmmo::appendIncreasedDamageCoefficient(float coefficient)
+void AAmmo::appendIncreasedDamageCoefficient(float coefficient)
 {
 	increasedDamageCoefficients.Add(coefficient);
 }
 
-void ABaseAmmo::removeIncreasedDamageCoefficient(float coefficient)
+void AAmmo::removeIncreasedDamageCoefficient(float coefficient)
 {
 	increasedDamageCoefficients.Remove(coefficient);
 }
 
-void ABaseAmmo::appendMoreDamageCoefficient(float coefficient)
+void AAmmo::appendMoreDamageCoefficient(float coefficient)
 {
 	moreDamageCoefficients.Add(coefficient);
 }
 
-void ABaseAmmo::removeMoreDamageCoefficient(float coefficient)
+void AAmmo::removeMoreDamageCoefficient(float coefficient)
 {
 	moreDamageCoefficients.Remove(coefficient);
 }
 
-void ABaseAmmo::setBaseDamage(float damage)
+void AAmmo::setBaseDamage(float damage)
 {
 	damage = damage;
 }
 
-void ABaseAmmo::setAddedDamage(float addedDamage)
+void AAmmo::setAddedDamage(float addedDamage)
 {
 	this->addedDamage = addedDamage;
 }
 
-void ABaseAmmo::setAdditionalDamage(float additionalDamage)
+void AAmmo::setAdditionalDamage(float additionalDamage)
 {
 	this->additionalDamage = additionalDamage;
 }
 
-void ABaseAmmo::setCrushingHitChance_Implementation(float newCrushingHitChance)
+void AAmmo::setCrushingHitChance_Implementation(float newCrushingHitChance)
 {
 	crushingHitChance = newCrushingHitChance;
 }
 
-void ABaseAmmo::setAdditionalCrushingHitChance_Implementation(float newAdditionalCrushingHitChance)
+void AAmmo::setAdditionalCrushingHitChance_Implementation(float newAdditionalCrushingHitChance)
 {
 	additionalCrushingHitChance = newAdditionalCrushingHitChance;
 }
 
-float ABaseAmmo::getBaseDamage() const
+float AAmmo::getBaseDamage() const
 {
 	return damage;
 }
 
-float ABaseAmmo::getAddedDamage() const
+float AAmmo::getAddedDamage() const
 {
 	return 0.0f;
 }
 
-float ABaseAmmo::getAdditionalDamage() const
+float AAmmo::getAdditionalDamage() const
 {
 	return additionalDamage;
 }
 
-TArray<float> ABaseAmmo::getIncreasedDamageCoefficients() const
+TArray<float> AAmmo::getIncreasedDamageCoefficients() const
 {
 	return {};
 }
 
-TArray<float> ABaseAmmo::getMoreDamageCoefficients() const
+TArray<float> AAmmo::getMoreDamageCoefficients() const
 {
 	return {};
 }
 
-typeOfDamage ABaseAmmo::getDamageType() const
+typeOfDamage AAmmo::getDamageType() const
 {
 	return damageType;
 }
 
-float ABaseAmmo::getCrushingHitChance() const
+float AAmmo::getCrushingHitChance() const
 {
 	return crushingHitChance;
 }
 
-float ABaseAmmo::getAdditionalCrushingHitChance() const
+float AAmmo::getAdditionalCrushingHitChance() const
 {
 	return additionalCrushingHitChance;
 }

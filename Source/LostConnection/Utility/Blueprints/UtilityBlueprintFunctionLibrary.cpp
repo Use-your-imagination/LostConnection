@@ -4,6 +4,7 @@
 
 #include "Algo/AnyOf.h"
 #include "Algo/AllOf.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/Pawn.h"
@@ -64,7 +65,7 @@ void UUtilityBlueprintFunctionLibrary::rebindHotkeys(const TMap<FName, FString>&
 		{
 			int32 index = 0;
 
-			if (key->Find(TEXT(" Ctrl")) != INDEX_NONE)
+			if (key->Find(" Ctrl") != INDEX_NONE)
 			{
 				hotkey.Key = FKey(FName(key->Replace(TEXT(" Ctrl"), TEXT("Control"))));
 			}
@@ -127,9 +128,7 @@ ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo(AL
 
 	info->setOnEndLoadCallback(onEndLoadCallback);
 
-	info->FinishSpawning({}, true);
-
-	return info;
+	return Cast<ALoadingScreenInfo>(UGameplayStatics::FinishSpawningActor(info, info->GetActorTransform()));
 }
 
 ABaseDrone* UUtilityBlueprintFunctionLibrary::spawnDrone(TSubclassOf<ABaseDrone> droneClass, const FTransform& transform, APlayerController* controller, UObject* worldContext)
@@ -142,9 +141,7 @@ ABaseDrone* UUtilityBlueprintFunctionLibrary::spawnDrone(TSubclassOf<ABaseDrone>
 
 		controller->Possess(drone);
 
-		drone->FinishSpawning(transform);
-
-		return drone;
+		return Cast<ABaseDrone>(UGameplayStatics::FinishSpawningActor(drone, transform));
 	}
 
 	return nullptr;

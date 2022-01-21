@@ -2,6 +2,8 @@
 
 #include "SN4K3ResurrectDeathEvent.h"
 
+#include "Kismet/GameplayStatics.h"
+
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
 #include "SN4K3PassiveAbilityHead.h"
 #include "SN4K3.h"
@@ -33,7 +35,7 @@ void USN4K3ResurrectDeathEvent::deathEventAction()
 
 	controller->Possess(drone);
 
-	drone->FinishSpawning({}, true);
+	UGameplayStatics::FinishSpawningActor(drone, drone->GetActorTransform());
 }
 
 IDeathEventsHolder* USN4K3ResurrectDeathEvent::getDeathEventsHolder() const

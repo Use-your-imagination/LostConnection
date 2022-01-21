@@ -59,11 +59,11 @@ ASN4K3::ASN4K3()
 {
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASN4K3::onBeginOverlap);
 
-	passiveAbility = CreateDefaultSubobject<USN4K3PassiveAbility>(TEXT("PassiveAbility"));
-	firstAbility = CreateDefaultSubobject<USN4K3FirstAbility>(TEXT("FirstAbility"));
-	secondAbility = CreateDefaultSubobject<USN4K3SecondAbility>(TEXT("SecondAbility"));
-	thirdAbility = CreateDefaultSubobject<USN4K3ThirdAbility>(TEXT("ThirdAbility"));
-	ultimateAbility = CreateDefaultSubobject<USN4K3UltimateAbility>(TEXT("UltimateAbility"));
+	passiveAbility = CreateDefaultSubobject<USN4K3PassiveAbility>("PassiveAbility");
+	firstAbility = CreateDefaultSubobject<USN4K3FirstAbility>("FirstAbility");
+	secondAbility = CreateDefaultSubobject<USN4K3SecondAbility>("SecondAbility");
+	thirdAbility = CreateDefaultSubobject<USN4K3ThirdAbility>("ThirdAbility");
+	ultimateAbility = CreateDefaultSubobject<USN4K3UltimateAbility>("UltimateAbility");
 
 	passiveAbility->setCaster(this);
 	firstAbility->setCaster(this);

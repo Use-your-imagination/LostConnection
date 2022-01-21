@@ -57,7 +57,7 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 void UBaseWeapon::shoot()
 {
-	if (owner->getIsReloading())
+	if (!owner.IsValid() || owner->getIsReloading())
 	{
 		return;
 	}
@@ -73,54 +73,49 @@ void UBaseWeapon::shoot()
 
 	if (currentMagazineSize >= ammoCost)
 	{
-		FVector weaponBarrelLocation = owner->getCurrentWeaponMeshComponent()->GetBoneLocation("barrel");
+		int32 boneIndex = owner->getCurrentWeaponMeshComponent()->GetBoneIndex("barrel");
+		FTransform weaponBarrelTransform = owner->getCurrentWeaponMeshComponent()->GetBoneTransform(boneIndex);
 		FTransform ammoTransform;
-		FTransform fakeAmmoTransform;
-		ABaseDrone* drone = Cast<ABaseDrone>(owner.Get());
+		FTransform visibleAmmoTransform;
+		ABaseDrone* drone = Cast<ABaseDrone>(owner);
 		float currentSpreadDistance = this->calculateSpreadDistance();
-
-		if (drone)
+		
+		if (IsValid(drone))
 		{
 			UCameraComponent* camera = drone->GetFollowCamera();
 
 			ammoTransform = FTransform
 			(
 				camera->GetForwardVector().ToOrientationRotator(),
-				camera->GetComponentLocation() + (drone->GetCameraOffset()->TargetArmLength + length) * camera->GetForwardVector()
+				camera->GetComponentLocation() + camera->GetForwardVector() * (drone->GetCameraOffset()->TargetArmLength + length)
 			);
 
-			fakeAmmoTransform = FTransform
-			(
-				((ammoTransform.GetLocation() + UConstants::shootDistance * camera->GetForwardVector()) - weaponBarrelLocation).ToOrientationRotator(),
-				weaponBarrelLocation
-			);
+			visibleAmmoTransform = weaponBarrelTransform.GetRelativeTransform(ammoTransform);
 		}
 		else
 		{
-			ABaseBot* bot = Cast<ABaseBot>(owner.Get());
+			ABaseBot* bot = Cast<ABaseBot>(owner);
 			AAIController* controller = bot->GetController<AAIController>();
 			ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"));
 
-			if (target && target->IsValidLowLevelFast())
+			if (IsValid(target))
 			{
 				ammoTransform = FTransform
 				(
 					(target->GetActorLocation() - bot->GetActorLocation()).ToOrientationRotator(),
-					weaponBarrelLocation
+					weaponBarrelTransform.GetLocation()
 				);
-
-				fakeAmmoTransform = ammoTransform;
 			}
 		}
 
-		ABaseAmmo* launchedAmmo = Utility::getGameState(owner.Get())->spawn<ABaseAmmo>(ammoClass, ammoTransform);
+		AAmmo* launchedAmmo = Utility::getGameState(owner.Get())->spawn<AAmmo>(ammoClass, ammoTransform);
 
 		launchedAmmo->copyProperties(this);
 
 		float pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);
 		float yaw = FMath::Tan(FMath::Acos(pitch / currentSpreadDistance)) * pitch;
 
-		launchedAmmo->launch(owner.Get(), fakeAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
+		launchedAmmo->launch(owner, visibleAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
 		currentMagazineSize -= ammoCost;
 
@@ -139,7 +134,7 @@ UBaseWeapon::UBaseWeapon() :
 	ammoCost(1),
 	length(100.0f)
 {
-
+	
 }
 
 void UBaseWeapon::startShoot()
@@ -173,7 +168,7 @@ void UBaseWeapon::updateTimeBetweenShots_Implementation()
 
 void UBaseWeapon::Tick(float DeltaTime)
 {
-	static float constexpr decreaseAccuracyMultiplier = 0.95f;
+	static constexpr float decreaseAccuracyMultiplier = 0.95f;
 
 	if (currentTimeBetweenShots)
 	{

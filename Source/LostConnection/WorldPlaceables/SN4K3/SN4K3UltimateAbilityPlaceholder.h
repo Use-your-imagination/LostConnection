@@ -25,7 +25,7 @@ public:
 
 	void setAbility(USN4K3UltimateAbility* ability);
 
-	void impactAction_Implementation(class ABaseAmmo* ammo, const FHitResult& hit) override;
+	void impactAction_Implementation(class AAmmo* ammo, const FHitResult& hit) override;
 
 	float getFlatDamageReduction_Implementation() const override;
 

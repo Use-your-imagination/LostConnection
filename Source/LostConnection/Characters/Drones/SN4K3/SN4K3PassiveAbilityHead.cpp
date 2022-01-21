@@ -3,13 +3,14 @@
 #include "SN4K3PassiveAbilityHead.h"
 
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/CapsuleComponent.h"
 
 #include "Constants/Constants.h"
 #include "Characters/BaseCharacter.h"
 #include "Utility/InitializationUtility.h"
-#include "Ammo/BaseAmmo.h"
+#include "Projectiles/Ammo.h"
 #include "Utility/MultiplayerUtility.h"
 #include "SN4K3ResurrectDeathEvent.h"
 #include "WorldPlaceables/DeathPlaceholder.h"
@@ -144,7 +145,7 @@ void ASN4K3PassiveAbilityHead::destroyHead()
 
 	GetController()->Possess(placeholder);
 
-	placeholder->FinishSpawning({ FRotator::ZeroRotator, GetActorLocation() });
+	UGameplayStatics::FinishSpawningActor(placeholder, { FRotator::ZeroRotator, GetActorLocation() });
 
 	Destroy();
 }

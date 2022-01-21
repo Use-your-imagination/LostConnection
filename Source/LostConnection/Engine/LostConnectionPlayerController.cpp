@@ -2,6 +2,8 @@
 
 #include "LostConnectionPlayerController.h"
 
+#include "Kismet/GameplayStatics.h"
+
 #include "Constants/Constants.h"
 #include "Utility/Utility.h"
 #include "Characters/Drones/SN4K3/SN4K3.h"
@@ -31,7 +33,7 @@ void ALostConnectionPlayerController::respawnPlayer_Implementation()
 
 	Possess(drone);
 
-	drone->FinishSpawning({}, true);
+	UGameplayStatics::FinishSpawningActor(drone, drone->GetActorTransform());
 }
 
 void ALostConnectionPlayerController::save_Implementation()

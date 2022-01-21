@@ -10,43 +10,47 @@
 
 #include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
 
-#include "BaseAmmo.generated.h"
+#include "Ammo.generated.h"
 
 #pragma warning(disable: 4458)
 
-UCLASS(BlueprintType)
-class LOSTCONNECTION_API ABaseAmmo :
+UCLASS(BlueprintType, Blueprintable)
+class LOSTCONNECTION_API AAmmo :
 	public APawn,
 	public IAilmentInflictor
 {
 	GENERATED_BODY()
 
 private:
-	TWeakObjectPtr<class ABaseCharacter> owner;
+	void PostInitializeComponents() override;
 
-protected:
+private:
 	UFUNCTION()
 	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-protected:
-	UPROPERTY(Category = Components, BlueprintReadOnly)
+private:
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* mesh;
 
-	UPROPERTY(Category = Movement, BlueprintReadOnly)
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* visibleMesh;
+
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UNiagaraComponent* tracer;
+
+	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* movement;
-	
-	UPROPERTY(Category = Particles, BlueprintReadOnly)
-	UNiagaraSystem* tracerAsset;
 
-	UPROPERTY(Category = Components, BlueprintReadOnly)
-	UStaticMesh* brokenAmmoMesh;
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UStaticMesh* brokenAmmoMeshAsset;
 
-	UPROPERTY(Category = Particles, BlueprintReadOnly)
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNiagaraSystem* onHitAsset;
 
-	UPROPERTY()
-	class AFakeAmmo* fakeAmmo;
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float ammoSpeed;
 
+	TWeakObjectPtr<class ABaseCharacter> owner;
 	AActor* lastTarget;
 	float damage;
 	float addedDamage;
@@ -59,18 +63,17 @@ protected:
 	float additionalCrushingHitChance;
 
 public:
-	ABaseAmmo();
+	AAmmo();
 
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void launch(class ABaseCharacter* character, const FTransform& fakeAmmoTransform, const FRotator& spread) final;
+	void launch(const TWeakObjectPtr<class ABaseCharacter>& character, const FTransform& visibleAmmoRelativeTransform, const FRotator& spread);
 
 	virtual void copyProperties(class UBaseWeapon* weapon);
 
-	virtual UStaticMeshComponent* getAmmoMeshComponent() const final;
+	UStaticMeshComponent* getAmmoMeshComponent() const;
 
-	virtual bool getIsAlly() const final;
+	bool getIsAlly() const;
 
-	virtual const TWeakObjectPtr<class ABaseCharacter>& getOwner() const final;
+	const TWeakObjectPtr<class ABaseCharacter>& getOwner() const;
 
 	virtual void appendIncreasedDamageCoefficient(float coefficient) final override;
 
@@ -108,7 +111,7 @@ public:
 
 	virtual float getAdditionalCrushingHitChance() const final override;
 
-	virtual ~ABaseAmmo() = default;
+	virtual ~AAmmo() = default;
 
 	friend class AFakeAmmo;
 };
