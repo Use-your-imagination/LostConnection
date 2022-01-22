@@ -1,4 +1,13 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.1.8.0"
+  "projectVersion": "0.1.8.0",
+  "Big fixes": {
+    "type": "category",
+    "Reload": {
+      "type": "item",
+      "notes": [
+        "Fix reload animation on client"
+      ]
+    }
+  }
 }
