@@ -8,12 +8,23 @@
 
 #include "LostConnectionGameState.generated.h"
 
-enum class typeOfDamage : uint8;
-
 UCLASS()
 class LOSTCONNECTION_API ALostConnectionGameState : public AGameState
 {
 	GENERATED_BODY()
+
+private:
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 totalBots;
+
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 totalWaves;
+
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 remainingBots;
+
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 remainingWaves;
 
 private:
 	TArray<TSoftObjectPtr<UWorld>> usedRooms;
@@ -33,6 +44,14 @@ public:
 	UFUNCTION(Category = RoomLoading, Server, Reliable, BlueprintCallable)
 	void startRoomLoading();
 
+	int32& getTotalBots();
+
+	int32& getTotalWaves();
+
+	int32& getRemainingBots();
+
+	int32& getRemainingWaves();
+
 	/// @brief Spawn actor deferred
 	/// @tparam T 
 	/// @param staticClass 
@@ -48,6 +67,8 @@ public:
 	/// @return 
 	template<typename T>
 	T* spawn(const FTransform& transform, ESpawnActorCollisionHandlingMethod spawnMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+
+	virtual void Tick(float DeltaTime) override;
 };
 
 template<typename T>
