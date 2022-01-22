@@ -9,5 +9,14 @@
         "Fix reload animation on client"
       ]
     }
+  },
+  "UI": {
+    "type": "category",
+    "Progress bars": {
+      "type": "item",
+      "notes": [
+        "Added progress bars for joining players"
+      ]
+    }
   }
 }
