@@ -103,7 +103,13 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 
 	FInputActionBinding	cancelAbility("CancelAbility", IE_Pressed);
 
-	reload.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "reload"); });
+	reload.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
+		{
+			if (IsValid(currentWeapon) && this->getSpareAmmo(currentWeapon->getAmmoType()) != 0)
+			{
+				MultiplayerUtility::runOnServerReliableWithMulticast(this, "reload");
+			}
+		});
 
 	pressShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "shoot"); });
 	releaseShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "resetShoot"); });
@@ -364,7 +370,7 @@ void ABaseDrone::BeginPlay()
 
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 
-	Utility::executeOnOwningClient(this, [this, &manager]() 
+	Utility::executeOnOwningClient(this, [this, &manager]()
 		{
 			Utility::setCurrentUI(manager.getUI().getDefaultUI(), this)->init(this);
 		});
@@ -459,7 +465,7 @@ void ABaseDrone::MoveRight(float Value)
 		FRotator Rotation = Controller->GetControlRotation();
 		FRotator YawRotation(0, Rotation.Yaw, 0);
 		FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		
+
 		AddMovementInput(Direction, Value);
 	}
 }
