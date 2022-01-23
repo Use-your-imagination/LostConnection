@@ -150,9 +150,12 @@ void UBaseWeapon::shoot()
 		}
 	}
 
-	owner->PlayAnimMontage(shootAnimation);
+	if (shotsCount)
+	{
+		owner->PlayAnimMontage(shootAnimation);
 
-	IShoot::Execute_onShoot(owner.Get());
+		IShoot::Execute_onShoot(owner.Get());
+	}
 }
 
 UBaseWeapon::UBaseWeapon() :
