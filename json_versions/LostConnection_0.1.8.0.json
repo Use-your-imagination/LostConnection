@@ -8,6 +8,12 @@
       "notes": [
         "Fix reload animation on client"
       ]
+    },
+    "Shoot rate": {
+      "type": "item",
+      "notes": [
+        "Fix shoot rate > tick rate"
+      ]
     }
   },
   "UI": {
