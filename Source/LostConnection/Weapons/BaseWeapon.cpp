@@ -2,6 +2,8 @@
 
 #include "BaseWeapon.h"
 
+#include <chrono>
+
 #include "UObject/ConstructorHelpers.h"
 #include "Components/CapsuleComponent.h"
 #include "AIController.h"
@@ -114,7 +116,7 @@ void UBaseWeapon::shoot()
 		return;
 	}
 
-	int32 shotsCount = FMath::FloorToInt(FMath::Abs(currentTimeBetweenShots / timeBetweenShots));
+	int32 shotsCount = currentTimeBetweenShots ? FMath::FloorToInt(FMath::Abs(currentTimeBetweenShots / timeBetweenShots)) : 1;
 	int32 boneIndex = owner->getCurrentWeaponMeshComponent()->GetBoneIndex("barrel");
 	FTransform weaponBarrelTransform = owner->getCurrentWeaponMeshComponent()->GetBoneTransform(boneIndex);
 	FTransform ammoTransform = this->calculateAmmoTransform(weaponBarrelTransform);
@@ -195,7 +197,7 @@ void UBaseWeapon::Tick(float DeltaTime)
 	{
 		currentTimeBetweenShots = 0.0f;
 	}
-	else if (isShooting)
+	else if (isShooting && currentTimeBetweenShots)
 	{
 		currentTimeBetweenShots -= DeltaTime;
 	}
