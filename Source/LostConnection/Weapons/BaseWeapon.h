@@ -6,6 +6,7 @@
 
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
+#include "Animation/AnimMontage.h"
 
 #include "Network/NetworkObject.h"
 #include "Projectiles/Ammo.h"
@@ -71,8 +72,14 @@ protected:
 	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
 	UStaticMesh* magazineMesh;
 
-	UPROPERTY(Category = Animations, EditDefaultsOnly)
-	TSubclassOf<UAnimInstance> animationBlueprint;
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* reloadAnimation;
+
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* swapAnimation;
+
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* shootAnimation;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	ammoTypes ammoType;
@@ -213,8 +220,6 @@ public:
 	int32 getRoundsPerSecond() const;
 
 	weaponTypes getWeaponType() const;
-
-	UClass* getAnimationBlueprint() const;
 
 	const TWeakObjectPtr<class ABaseCharacter>& getOwner() const;
 

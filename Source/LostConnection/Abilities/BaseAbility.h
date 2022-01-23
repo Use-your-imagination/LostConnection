@@ -28,31 +28,31 @@ class LOSTCONNECTION_API UBaseAbility : public UNetworkObject
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Category = "Ability Information", EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Category = AbilityInformation, EditDefaultsOnly, BlueprintReadOnly)
 	FText name;
 
-	UPROPERTY(Category = "Ability Information", EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Category = AbilityInformation, EditDefaultsOnly, BlueprintReadOnly)
 	FText description;
 
-	UPROPERTY(Category = "Ability Information", EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = AbilityInformation, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float cost;
 
 	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly)
 	UTexture2D* icon;
 
-	UPROPERTY(Category = "Ability State", EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Category = AbilityState, EditDefaultsOnly, BlueprintReadOnly)
 	bool isCancelable;
 
-	UPROPERTY(Category = "Ability State", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = AbilityState, Replicated, BlueprintReadOnly)
 	bool isDisabled;
 
-	UPROPERTY(Category = "Ability State", EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Category = AbilityState, EditDefaultsOnly, BlueprintReadOnly)
 	bool isGrounded;
 
-	UPROPERTY(Category = "Ability Animation", EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Category = AbilityAnimation, EditDefaultsOnly, BlueprintReadOnly)
 	float cancelBlendOutTime;
 
-	UPROPERTY(Category = "Ability Animation", EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Category = AbilityAnimation, EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* animation;
 
 	abilitySlot id;

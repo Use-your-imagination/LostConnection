@@ -329,11 +329,6 @@ weaponTypes UBaseWeapon::getWeaponType() const
 	return weaponType;
 }
 
-UClass* UBaseWeapon::getAnimationBlueprint() const
-{
-	return animationBlueprint.Get();
-}
-
 const TWeakObjectPtr<ABaseCharacter>& UBaseWeapon::getOwner() const
 {
 	return owner;
