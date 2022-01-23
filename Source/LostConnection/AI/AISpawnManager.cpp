@@ -22,18 +22,20 @@ void AISpawnManager::process(UWorld* world)
 		return;
 	}
 
-	int32 spawnCount = 0;
+	currentWaveTotalBots = 0;
 
 	if (remainingWaves != 1)
 	{
-		spawnCount = spawnPerWave;
+		currentWaveTotalBots = spawnPerWave;
 	}
 	else
 	{
-		spawnCount = remainingAIToSpawn;
+		currentWaveTotalBots = remainingAIToSpawn;
 	}
 
-	spawner.spawn(world, spawnCount);
+	currentWaveRemainingBots = currentWaveTotalBots;
+
+	spawner.spawn(world, currentWaveTotalBots);
 
 	remainingWaves--;
 }
@@ -42,13 +44,14 @@ void AISpawnManager::init(int32 totalCount, int32 waves)
 {
 	remainingAIToSpawn = totalCount;
 	remainingWaves = waves;
-	
+
 	spawnPerWave = totalCount / waves;
 }
 
 void AISpawnManager::notify(UWorld* world)
 {
 	remainingAIToSpawn--;
+	currentWaveRemainingBots--;
 
 	this->process(world);
 }
@@ -61,4 +64,14 @@ int32 AISpawnManager::getRemainingAIToSpawn() const
 int32 AISpawnManager::getRemainingWaves() const
 {
 	return remainingWaves;
+}
+
+int32 AISpawnManager::getCurrentWaveTotalBots() const
+{
+	return currentWaveTotalBots;
+}
+
+int32 AISpawnManager::getCurrentWaveRemainingBots() const
+{
+	return currentWaveRemainingBots;
 }

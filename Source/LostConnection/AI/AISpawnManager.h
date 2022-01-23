@@ -15,6 +15,8 @@ private:
 	int32 remainingAIToSpawn;
 	int32 remainingWaves;
 	int32 spawnPerWave;
+	int32 currentWaveTotalBots;
+	int32 currentWaveRemainingBots;
 
 private:
 	static bool isBotsAlreadySpawned(UWorld* world);
@@ -32,6 +34,10 @@ public:
 	int32 getRemainingAIToSpawn() const;
 
 	int32 getRemainingWaves() const;
+
+	int32 getCurrentWaveTotalBots() const;
+
+	int32 getCurrentWaveRemainingBots() const;
 
 	~AISpawnManager() = default;
 

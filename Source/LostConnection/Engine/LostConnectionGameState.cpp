@@ -24,6 +24,10 @@ void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 
 	DOREPLIFETIME(ALostConnectionGameState, remainingWaves);
 
+	DOREPLIFETIME(ALostConnectionGameState, currentWaveTotalBots);
+
+	DOREPLIFETIME(ALostConnectionGameState, currentWaveRemainingBots);
+
 	DOREPLIFETIME(ALostConnectionGameState, isLastRoomLoaded);
 }
 
@@ -86,6 +90,16 @@ int32& ALostConnectionGameState::getRemainingWaves()
 	return remainingWaves;
 }
 
+int32& ALostConnectionGameState::getCurrentWaveTotalBots()
+{
+	return currentWaveTotalBots;
+}
+
+int32& ALostConnectionGameState::getCurrentWaveRemainingBots()
+{
+	return currentWaveRemainingBots;
+}
+
 void ALostConnectionGameState::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -101,6 +115,10 @@ void ALostConnectionGameState::Tick(float DeltaTime)
 			remainingBots = spawnManager.getRemainingAIToSpawn();
 
 			remainingWaves = spawnManager.getRemainingWaves();
+
+			currentWaveTotalBots = spawnManager.getCurrentWaveTotalBots();
+
+			currentWaveRemainingBots = spawnManager.getCurrentWaveRemainingBots();
 		}
 	}
 }

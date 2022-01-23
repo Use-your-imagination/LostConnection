@@ -26,6 +26,12 @@ private:
 	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 remainingWaves;
 
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 currentWaveTotalBots;
+
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	int32 currentWaveRemainingBots;
+
 private:
 	TArray<TSoftObjectPtr<UWorld>> usedRooms;
 
@@ -51,6 +57,10 @@ public:
 	int32& getRemainingBots();
 
 	int32& getRemainingWaves();
+
+	int32& getCurrentWaveTotalBots();
+
+	int32& getCurrentWaveRemainingBots();
 
 	/// @brief Spawn actor deferred
 	/// @tparam T 
