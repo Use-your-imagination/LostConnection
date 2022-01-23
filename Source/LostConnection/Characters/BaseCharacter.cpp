@@ -547,11 +547,6 @@ float ABaseCharacter::getSprintMovementSpeed() const
 	return sprintMovementSpeed;
 }
 
-bool ABaseCharacter::getIsReloading() const
-{
-	return isReloading;
-}
-
 USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMeshComponent() const
 {
 	return currentWeaponMesh;

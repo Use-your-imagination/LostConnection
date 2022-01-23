@@ -16,6 +16,49 @@
 
 #pragma warning(disable: 4458)
 
+FTransform UBaseWeapon::calculateAmmoTransform(const FTransform& weaponBarrelTransform)
+{
+	ABaseDrone* drone = Cast<ABaseDrone>(owner);
+
+	if (IsValid(drone))
+	{
+		UCameraComponent* camera = drone->GetFollowCamera();
+
+		return FTransform
+		(
+			camera->GetForwardVector().ToOrientationRotator(),
+			camera->GetComponentLocation() + camera->GetForwardVector() * (drone->GetCameraOffset()->TargetArmLength + length)
+		);
+	}
+	else
+	{
+		ABaseBot* bot = Cast<ABaseBot>(owner);
+		AAIController* controller = bot->GetController<AAIController>();
+		ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"));
+
+		if (IsValid(target))
+		{
+			return FTransform
+			(
+				(target->GetActorLocation() - bot->GetActorLocation()).ToOrientationRotator(),
+				weaponBarrelTransform.GetLocation()
+			);
+		}
+	}
+
+	return {};
+}
+
+FTransform UBaseWeapon::calculateVisibleAmmoTransform(const FTransform& weaponBarrelTransform, const FTransform& ammoTransform)
+{
+	if (!IsValid(Cast<ABaseDrone>(owner)))
+	{
+		return {};
+	}
+
+	return weaponBarrelTransform.GetRelativeTransform(ammoTransform);
+}
+
 void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -71,61 +114,38 @@ void UBaseWeapon::shoot()
 		return;
 	}
 
-	if (currentMagazineSize >= ammoCost)
+	int32 shotsCount = FMath::FloorToInt(FMath::Abs(currentTimeBetweenShots / timeBetweenShots));
+	int32 boneIndex = owner->getCurrentWeaponMeshComponent()->GetBoneIndex("barrel");
+	FTransform weaponBarrelTransform = owner->getCurrentWeaponMeshComponent()->GetBoneTransform(boneIndex);
+	FTransform ammoTransform = this->calculateAmmoTransform(weaponBarrelTransform);
+	FTransform visibleAmmoTransform = this->calculateVisibleAmmoTransform(weaponBarrelTransform, ammoTransform);
+	ALostConnectionGameState* gameState = Utility::getGameState(owner.Get());
+
+	for (size_t i = 0; i < shotsCount; i++)
 	{
-		int32 boneIndex = owner->getCurrentWeaponMeshComponent()->GetBoneIndex("barrel");
-		FTransform weaponBarrelTransform = owner->getCurrentWeaponMeshComponent()->GetBoneTransform(boneIndex);
-		FTransform ammoTransform;
-		FTransform visibleAmmoTransform;
-		ABaseDrone* drone = Cast<ABaseDrone>(owner);
-		float currentSpreadDistance = this->calculateSpreadDistance();
-		
-		if (IsValid(drone))
+		if (currentMagazineSize >= ammoCost)
 		{
-			UCameraComponent* camera = drone->GetFollowCamera();
+			float currentSpreadDistance = this->calculateSpreadDistance();
+			float pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);
+			float yaw = FMath::Tan(FMath::Acos(pitch / currentSpreadDistance)) * pitch;
+			AAmmo* launchedAmmo = gameState->spawn<AAmmo>(ammoClass, ammoTransform);
+			
+			launchedAmmo->copyProperties(this);
 
-			ammoTransform = FTransform
-			(
-				camera->GetForwardVector().ToOrientationRotator(),
-				camera->GetComponentLocation() + camera->GetForwardVector() * (drone->GetCameraOffset()->TargetArmLength + length)
-			);
+			launchedAmmo->launch(owner, visibleAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
-			visibleAmmoTransform = weaponBarrelTransform.GetRelativeTransform(ammoTransform);
+			currentMagazineSize -= ammoCost;
+
+			currentAccuracyMultiplier += drawback;
+
+			currentTimeBetweenShots += timeBetweenShots;
 		}
 		else
 		{
-			ABaseBot* bot = Cast<ABaseBot>(owner);
-			AAIController* controller = bot->GetController<AAIController>();
-			ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"));
+			MultiplayerUtility::runOnServerReliableWithMulticast(owner.Get(), "reload");
 
-			if (IsValid(target))
-			{
-				ammoTransform = FTransform
-				(
-					(target->GetActorLocation() - bot->GetActorLocation()).ToOrientationRotator(),
-					weaponBarrelTransform.GetLocation()
-				);
-			}
+			break;
 		}
-
-		AAmmo* launchedAmmo = Utility::getGameState(owner.Get())->spawn<AAmmo>(ammoClass, ammoTransform);
-
-		launchedAmmo->copyProperties(this);
-
-		float pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);
-		float yaw = FMath::Tan(FMath::Acos(pitch / currentSpreadDistance)) * pitch;
-
-		launchedAmmo->launch(owner, visibleAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
-
-		currentMagazineSize -= ammoCost;
-
-		currentTimeBetweenShots = timeBetweenShots;
-
-		currentAccuracyMultiplier += drawback;
-	}
-	else
-	{
-		MultiplayerUtility::runOnServerReliableWithMulticast(owner.Get(), "reload");
 	}
 }
 
@@ -169,15 +189,24 @@ void UBaseWeapon::updateTimeBetweenShots_Implementation()
 void UBaseWeapon::Tick(float DeltaTime)
 {
 	static constexpr float decreaseAccuracyMultiplier = 0.95f;
+	bool isReloading = owner->getIsReloading();
 
-	if (currentTimeBetweenShots)
+	if (isReloading)
+	{
+		currentTimeBetweenShots = 0.0f;
+	}
+	else if (isShooting)
+	{
+		currentTimeBetweenShots -= DeltaTime;
+	}
+	else if (currentTimeBetweenShots)
 	{
 		currentTimeBetweenShots = FMath::Max(0.0f, currentTimeBetweenShots - DeltaTime);
 	}
 
 	currentAccuracyMultiplier = FMath::Max(1.0f, currentAccuracyMultiplier * decreaseAccuracyMultiplier);
 
-	if (isShooting && !currentTimeBetweenShots)
+	if (!isReloading && isShooting && currentTimeBetweenShots <= 0.0f)
 	{
 		this->shoot();
 	}

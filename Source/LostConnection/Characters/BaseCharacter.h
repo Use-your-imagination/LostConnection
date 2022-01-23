@@ -350,6 +350,11 @@ inline int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
 	return Utility::getPlayerState(this)->getSpareAmmo(type);
 }
 
+inline bool ABaseCharacter::getIsReloading() const
+{
+	return isReloading;
+}
+
 inline bool ABaseCharacter::isWeaponEquipped() const
 {
 	return StaticCast<bool>(currentWeapon);

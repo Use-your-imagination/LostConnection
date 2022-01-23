@@ -54,6 +54,11 @@ private:
 	float currentTimeBetweenShots;
 	bool isShooting;
 
+private:
+	FTransform calculateAmmoTransform(const FTransform& weaponBarrelTransform);
+
+	FTransform calculateVisibleAmmoTransform(const FTransform& weaponBarrelTransform, const FTransform& ammoTransform);
+
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
