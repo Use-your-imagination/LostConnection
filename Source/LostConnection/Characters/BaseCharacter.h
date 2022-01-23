@@ -125,9 +125,6 @@ protected:
 	UPROPERTY(Category = Inputs, BlueprintReadWrite)
 	bool crouchHold;
 
-	UPROPERTY(Category = Inputs, BlueprintReadWrite)
-	bool primaryHold;
-
 	UPROPERTY(Category = Materials, BlueprintReadWrite)
 	UMaterialInstanceDynamic* characterMaterial;
 
@@ -136,17 +133,11 @@ protected:
 
 	UPROPERTY(Category = Death, BlueprintReadWrite)
 	FTimerHandle deathUpdateHandle;
-
-	UPROPERTY(Category = Shoot, BlueprintReadWrite)
-	FTimerHandle shootUpdateHandle;
 #pragma endregion
 
 #pragma region BlueprintFunctionLibraryEvents
 	UFUNCTION(Category = Death, BlueprintNativeEvent, BlueprintCallable)
 	void deathMaterialTimerUpdate();
-
-	UFUNCTION(Category = Shoot, BlueprintNativeEvent, BlueprintCallable)
-	void shootTimerUpdate();
 #pragma endregion
 
 protected:
@@ -187,13 +178,6 @@ protected:
 	virtual void reloadLogic() override;
 #pragma endregion
 
-#pragma region Shoot
-protected:
-	virtual void shootVisual() override;
-
-	virtual void shootLogic() override;
-#pragma endregion
-
 #pragma region Death
 protected:
 	virtual void deathVisual() override;
@@ -201,20 +185,8 @@ protected:
 	virtual void deathLogic() override;
 #pragma endregion
 
-	UFUNCTION()
-	void resetShootLogic();
-
 public:	
 	ABaseCharacter();
-
-	UFUNCTION(BlueprintCallable)
-	virtual void shoot();
-
-	UFUNCTION(BlueprintCallable)
-	virtual void resetShoot();
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void runShootLogic();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void runDeathLogic();
@@ -294,6 +266,12 @@ public:
 
 	TimersUtility& getTimers();
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void shoot() final override;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void resetShoot() final override;
+
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -357,5 +335,5 @@ inline bool ABaseCharacter::getIsReloading() const
 
 inline bool ABaseCharacter::isWeaponEquipped() const
 {
-	return StaticCast<bool>(currentWeapon);
+	return IsValid(currentWeapon);
 }

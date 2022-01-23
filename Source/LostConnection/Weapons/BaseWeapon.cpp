@@ -149,6 +149,8 @@ void UBaseWeapon::shoot()
 			break;
 		}
 	}
+
+	owner->PlayAnimMontage(shootAnimation);
 }
 
 UBaseWeapon::UBaseWeapon() :

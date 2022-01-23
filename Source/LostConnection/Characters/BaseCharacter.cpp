@@ -101,11 +101,6 @@ void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
 
 }
 
-void ABaseCharacter::shootTimerUpdate_Implementation()
-{
-
-}
-
 void ABaseCharacter::onCurrentWeaponChange()
 {
 	this->updateWeaponMesh();
@@ -221,28 +216,6 @@ void ABaseCharacter::runReloadLogic_Implementation()
 }
 #pragma endregion
 
-#pragma region Shoot
-void ABaseCharacter::shootVisual()
-{
-
-}
-
-void ABaseCharacter::shootLogic()
-{
-	if (this->isWeaponEquipped())
-	{
-		currentWeapon->startShoot();
-	}
-}
-
-void ABaseCharacter::runShootLogic_Implementation()
-{
-	this->shootLogic();
-
-	IShoot::Execute_shootEventLogic(this);
-}
-#pragma endregion
-
 #pragma region Death
 void ABaseCharacter::deathVisual()
 {
@@ -270,14 +243,6 @@ void ABaseCharacter::runDeathLogic_Implementation()
 	IDeath::Execute_deathEventLogic(this);
 }
 #pragma endregion
-
-void ABaseCharacter::resetShootLogic()
-{
-	if (currentWeapon)
-	{
-		currentWeapon->resetShoot(currentWeaponMesh, this);
-	}
-}
 
 ABaseCharacter::ABaseCharacter() :
 	defaultMovementSpeed(450.0f),
@@ -339,22 +304,8 @@ ABaseCharacter::ABaseCharacter() :
 
 	crouchHold = false;
 
-	primaryHold = false;
-
 	characterMaterial = nullptr;
 #pragma endregion
-}
-
-void ABaseCharacter::shoot()
-{
-	this->shootVisual();
-
-	IShoot::Execute_shootEventVisual(this);
-}
-
-void ABaseCharacter::resetShoot()
-{
-	MultiplayerUtility::runOnServerReliable(this, "resetShootLogic");
 }
 
 void ABaseCharacter::changeToDefaultWeapon_Implementation()
@@ -595,6 +546,22 @@ int32 ABaseCharacter::getDefaultEnergyAmmoCount() const
 TimersUtility& ABaseCharacter::getTimers()
 {
 	return timers;
+}
+
+void ABaseCharacter::shoot_Implementation()
+{
+	if (this->isWeaponEquipped())
+	{
+		currentWeapon->startShoot();
+	}
+}
+
+void ABaseCharacter::resetShoot_Implementation()
+{
+	if (this->isWeaponEquipped())
+	{
+		currentWeapon->resetShoot(currentWeaponMesh, this);
+	}
 }
 
 void ABaseCharacter::Tick(float DeltaTime)

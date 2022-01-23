@@ -14,25 +14,19 @@ class UShoot : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class LOSTCONNECTION_API IShoot
 {
 	GENERATED_BODY()
 
 protected:
 	UFUNCTION()
-	virtual void shootVisual() = 0;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void shootEventVisual();
+	virtual void shoot() = 0;
 
 	UFUNCTION()
-	virtual void shootLogic() = 0;
+	virtual void resetShoot() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void shootEventLogic();
+	void onShoot();
 
 public:
 	IShoot() = default;

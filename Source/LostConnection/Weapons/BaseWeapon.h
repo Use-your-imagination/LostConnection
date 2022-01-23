@@ -78,7 +78,7 @@ protected:
 	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* swapAnimation;
 
-	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Category = Animations, EditDefaultsOnly)
 	UAnimMontage* shootAnimation;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)

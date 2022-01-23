@@ -311,16 +311,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FVector getEndActionLineTrace() const;
 
-	UFUNCTION(BlueprintNativeEvent)
-	void pressShoot();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void releaseShoot();
-
-	virtual void shoot() final override;
-
-	virtual void resetShoot() final override;
-
 	UFUNCTION(Category = Abilities, BlueprintCallable)
 	TArray<UBaseAbility*> getDroneAbilities() const;
 

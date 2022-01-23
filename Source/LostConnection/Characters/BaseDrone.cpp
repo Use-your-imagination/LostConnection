@@ -81,9 +81,6 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 
 	FInputActionBinding reload("Reload", IE_Pressed);
 
-	FInputActionBinding pressShoot("Shoot", IE_Pressed);
-	FInputActionBinding releaseShoot("Shoot", IE_Released);
-
 	FInputActionBinding holdJump("Jump", IE_Pressed);
 	FInputActionBinding releaseJump("Jump", IE_Released);
 
@@ -111,9 +108,6 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 			}
 		});
 
-	pressShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "shoot"); });
-	releaseShoot.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliable(this, "resetShoot"); });
-
 	holdJump.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "Jump"); });
 	releaseJump.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerReliableWithMulticast(this, "StopJumping"); });
 
@@ -140,9 +134,6 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 		});
 
 	result.Add(reload);
-
-	result.Add(pressShoot);
-	result.Add(releaseShoot);
 
 	result.Add(holdJump);
 	result.Add(releaseJump);
@@ -563,6 +554,12 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		PlayerInputComponent->AddActionBinding(i);
 	}
 
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ABaseCharacter::shoot);
+	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ABaseCharacter::resetShoot);
+
+	PlayerInputComponent->BindAction("WeaponSelector", IE_Pressed, this, &ABaseDrone::pressWeaponSelector);
+	PlayerInputComponent->BindAction("WeaponSelector", IE_Released, this, &ABaseDrone::releaseWeaponSelector);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABaseDrone::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABaseDrone::MoveRight);
 
@@ -573,9 +570,6 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis("TurnRate", this, &ABaseDrone::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ABaseDrone::LookUpAtRate);
-
-	PlayerInputComponent->BindAction("WeaponSelector", IE_Pressed, this, &ABaseDrone::pressWeaponSelector);
-	PlayerInputComponent->BindAction("WeaponSelector", IE_Released, this, &ABaseDrone::releaseWeaponSelector);
 }
 
 void ABaseDrone::pressCrouch()
@@ -987,30 +981,6 @@ FVector ABaseDrone::getStartActionLineTrace() const
 FVector ABaseDrone::getEndActionLineTrace() const
 {
 	return this->getStartActionLineTrace() + (CameraOffset->TargetArmLength + 200.0f) * FollowCamera->GetForwardVector();
-}
-
-void ABaseDrone::pressShoot_Implementation()
-{
-
-}
-
-void ABaseDrone::releaseShoot_Implementation()
-{
-
-}
-
-void ABaseDrone::shoot()
-{
-	ABaseCharacter::shoot();
-
-	this->pressShoot();
-}
-
-void ABaseDrone::resetShoot()
-{
-	ABaseCharacter::resetShoot();
-
-	MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseShoot");
 }
 
 TArray<UBaseAbility*> ABaseDrone::getDroneAbilities() const
