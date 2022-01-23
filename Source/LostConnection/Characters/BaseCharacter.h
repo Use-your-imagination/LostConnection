@@ -335,5 +335,5 @@ inline bool ABaseCharacter::getIsReloading() const
 
 inline bool ABaseCharacter::isWeaponEquipped() const
 {
-	return IsValid(currentWeapon);
+	return StaticCast<bool>(currentWeapon);
 }
