@@ -156,7 +156,7 @@ void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTrans
 
 	isAlly = character->getIsAlly();
 
-	mesh->AddWorldRotation(spread);
+	mesh->AddRelativeRotation(spread);
 
 	visibleMesh->SetRelativeTransform(visibleAmmoRelativeTransform);
 
