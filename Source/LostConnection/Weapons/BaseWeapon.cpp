@@ -146,7 +146,7 @@ void UBaseWeapon::shoot()
 		{
 			MultiplayerUtility::runOnServerReliableWithMulticast(owner.Get(), "reload");
 
-			break;
+			return;
 		}
 	}
 
