@@ -138,7 +138,11 @@ AAmmo::AAmmo() :
 
 	visibleMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
+	visibleMesh->SetIsReplicated(true);
+
 	tracer->SetupAttachment(visibleMesh);
+
+	tracer->SetIsReplicated(true);
 
 	movement->SetUpdatedComponent(mesh);
 

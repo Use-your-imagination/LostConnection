@@ -11,7 +11,7 @@ void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (isAlreadySendRespawnRequest)
+	if (isAlreadySendRespawnRequest || !GetController())
 	{
 		return;
 	}
