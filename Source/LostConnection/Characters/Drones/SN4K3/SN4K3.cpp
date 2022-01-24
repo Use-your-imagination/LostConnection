@@ -74,7 +74,7 @@ ASN4K3::ASN4K3()
 
 void ASN4K3::playUltimateReturnAnimation()
 {
-	GetMesh()->GetAnimInstance()->Montage_Play(Cast<USN4K3UltimateAbility>(ultimateAbility)->getReturnAnimation(), Utility::fromPercent(this->getCastPoint()));
+	PlayAnimMontage(Cast<USN4K3UltimateAbility>(ultimateAbility)->getReturnAnimation(), Utility::fromPercent(this->getCastPoint()));
 }
 
 bool ASN4K3::checkPassiveAbilityCast() const

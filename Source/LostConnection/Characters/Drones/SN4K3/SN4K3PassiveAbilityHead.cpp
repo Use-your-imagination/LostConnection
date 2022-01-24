@@ -141,7 +141,19 @@ void ASN4K3PassiveAbilityHead::explodeVFX()
 void ASN4K3PassiveAbilityHead::destroyHead()
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
+
+	ALostConnectionGameState* gameState = Utility::getGameState(this);
+
+	check(gameState);
+	check(IsValid(gameState));
+
+	ADeathPlaceholder* placeholder = gameState->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
+
+	check(placeholder);
+	check(IsValid(placeholder));
+
+	check(GetController());
+	check(IsValid(GetController()));
 
 	GetController()->Possess(placeholder);
 
