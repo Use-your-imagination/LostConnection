@@ -268,10 +268,12 @@ ABaseCharacter::ABaseCharacter() :
 
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+	GetCapsuleComponent()->SetIsReplicated(true);
 
 	mesh->SetGenerateOverlapEvents(true);
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+	mesh->SetIsReplicated(true);
 
 	movement->bOrientRotationToMovement = true;
 	movement->RotationRate = FRotator(0.0f, 540.0f, 0.0f);

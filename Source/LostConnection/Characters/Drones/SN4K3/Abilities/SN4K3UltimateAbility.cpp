@@ -23,7 +23,7 @@ void USN4K3UltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(USN4K3UltimateAbility, currentAbilityDuration);
 }
 
-void USN4K3UltimateAbility::setCollisionResponseToPawnChannel_Implementation(ABaseCharacter* target, ECollisionResponse response)
+void USN4K3UltimateAbility::setCollisionResponseToPawnChannel(ABaseCharacter* target, ECollisionResponse response)
 {
 	target->GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, response);
 

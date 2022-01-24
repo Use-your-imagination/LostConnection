@@ -142,18 +142,7 @@ void ASN4K3PassiveAbilityHead::destroyHead()
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 
-	ALostConnectionGameState* gameState = Utility::getGameState(this);
-
-	check(gameState);
-	check(IsValid(gameState));
-
-	ADeathPlaceholder* placeholder = gameState->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
-
-	check(placeholder);
-	check(IsValid(placeholder));
-
-	check(GetController());
-	check(IsValid(GetController()));
+	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
 
 	GetController()->Possess(placeholder);
 
@@ -205,7 +194,7 @@ void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
-		if (isExploded)
+		if (isExploded && IsValid(GetController()))
 		{
 			this->destroyHead();
 

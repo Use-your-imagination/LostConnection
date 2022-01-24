@@ -47,7 +47,6 @@ void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(AAmmo* ammo, 
 	ability->applyAbility(drone);
 }
 
-
 float ASN4K3UltimateAbilityPlaceholder::getFlatDamageReduction_Implementation() const
 {
 	return 0.0f;

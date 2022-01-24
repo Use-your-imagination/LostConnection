@@ -34,7 +34,6 @@ private:
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UFUNCTION(NetMulticast, Reliable)
 	void setCollisionResponseToPawnChannel(class ABaseCharacter* target, ECollisionResponse response);
 
 public:
