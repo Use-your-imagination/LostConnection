@@ -246,8 +246,6 @@ protected:
 	void releaseWeaponSelector();
 
 protected:
-	void restoreEnergy(float amount);
-
 	void destroyDrone();
 
 	void saveCurrentAbilitiesCooldown(ALostConnectionPlayerState* playerState);
@@ -288,6 +286,9 @@ public:
 
 	UFUNCTION()
 	void action();
+
+	UFUNCTION(Server, Reliable)
+	void restoreEnergy(float amount);
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
 	UBaseWeapon* getPrimaryWeapon() const;

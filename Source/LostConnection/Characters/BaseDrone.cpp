@@ -614,11 +614,6 @@ void ABaseDrone::releaseWeaponSelector()
 	IInputActions::Execute_releaseWeaponSelectorAction(this);
 }
 
-void ABaseDrone::restoreEnergy(float amount)
-{
-	currentEnergy = FMath::Min(energy, currentEnergy + amount);
-}
-
 void ABaseDrone::destroyDrone()
 {
 	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(ULostConnectionAssetManager::get().getDefaults().getDeathPlaceholder(), {});
@@ -971,6 +966,11 @@ void ABaseDrone::action()
 	{
 		object->action(this);
 	}
+}
+
+void ABaseDrone::restoreEnergy_Implementation(float amount)
+{
+	currentEnergy = FMath::Min(energy, currentEnergy + amount);
 }
 
 FVector ABaseDrone::getStartActionLineTrace() const

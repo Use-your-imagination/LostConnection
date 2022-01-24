@@ -97,6 +97,8 @@ void USN4K3UltimateAbility::useAbility()
 
 	if (isUltimateAbilityUsed)
 	{
+		drone->restoreEnergy(cost);
+
 		this->applyAbility(drone);
 
 		return;
