@@ -32,6 +32,18 @@ public:
 	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
 	static bool allOfFloat(const TArray<float>& values, float compareValue);
 
+	/**
+	* Set scalar parameter for each material in mesh
+	*/
+	UFUNCTION(Category = "Utility|Materials", BlueprintCallable, Meta = (DisplayName = "Set material scalar parameter", CompactNodeTitle = "Material Scalar"))
+	static void setMaterialScalarParameter(USkeletalMeshComponent* mesh, FName parameterName, float value);
+
+	/**
+	* Set linear parameter for each material in mesh
+	*/
+	UFUNCTION(Category = "Utility|Materials", BlueprintCallable, Meta = (DisplayName = "Set material linear color parameter", CompactNodeTitle = "Material Linear Color"))
+	static void setMaterialLinearColorParameter(USkeletalMeshComponent* mesh, FName parameterName, FLinearColor value);
+
 	UFUNCTION(Category = "Utility|AssetManager", BlueprintCallable, BlueprintPure)
 	static class ULostConnectionAssetManager* getAssetManager();
 
