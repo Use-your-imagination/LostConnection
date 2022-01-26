@@ -88,12 +88,12 @@ float UIrradiationAilment::getAdditionalDamage() const
 
 TArray<float> UIrradiationAilment::getIncreasedDamageCoefficients() const
 {
-	return {};
+	return increasedDamageCoefficients;
 }
 
 TArray<float> UIrradiationAilment::getMoreDamageCoefficients() const
 {
-	return {};
+	return moreDamageCoefficients;
 }
 
 typeOfDamage UIrradiationAilment::getAilmentDamageType() const

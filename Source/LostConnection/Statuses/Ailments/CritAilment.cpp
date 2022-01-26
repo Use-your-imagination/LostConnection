@@ -128,12 +128,12 @@ float UCritAilment::getAdditionalDamage() const
 
 TArray<float> UCritAilment::getIncreasedDamageCoefficients() const
 {
-	return {};
+	return increasedDamageCoefficients;
 }
 
 TArray<float> UCritAilment::getMoreDamageCoefficients() const
 {
-	return {};
+	return moreDamageCoefficients;
 }
 
 typeOfDamage UCritAilment::getAilmentDamageType() const

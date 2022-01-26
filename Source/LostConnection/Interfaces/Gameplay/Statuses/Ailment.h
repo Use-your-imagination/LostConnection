@@ -16,7 +16,8 @@ enum class typeOfDamage : uint8
 	nanite = 2 UMETA(DisplayName = "Nanite"),
 	fire = 3 UMETA(DisplayName = "Fire"),
 	electricity = 4 UMETA(DisplayName = "Electricity"),
-	radiation = 5 UMETA(DisplayName = "Radiation")
+	radiation = 5 UMETA(DisplayName = "Radiation"),
+	cold = 6 UMETA(DisplayName = "Cold")
 };
 
 UINTERFACE(MinimalAPI)

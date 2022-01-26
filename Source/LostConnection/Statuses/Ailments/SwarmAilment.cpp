@@ -128,12 +128,12 @@ float USwarmAilment::getAdditionalDamage() const
 
 TArray<float> USwarmAilment::getIncreasedDamageCoefficients() const
 {
-	return {};
+	return increasedDamageCoefficients;
 }
 
 TArray<float> USwarmAilment::getMoreDamageCoefficients() const
 {
-	return {};
+	return moreDamageCoefficients;
 }
 
 typeOfDamage USwarmAilment::getAilmentDamageType() const

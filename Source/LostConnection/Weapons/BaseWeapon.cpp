@@ -142,7 +142,7 @@ void UBaseWeapon::shoot()
 
 			currentTimeBetweenShots += timeBetweenShots;
 		}
-		else
+		else if (owner->getSpareAmmo(ammoType) != 0)
 		{
 			MultiplayerUtility::runOnServerReliableWithMulticast(owner.Get(), "reload");
 

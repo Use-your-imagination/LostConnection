@@ -47,6 +47,8 @@ protected:
 	float inflictorDamage;
 	float inflictorAddedDamage;
 	float inflictorAdditionalDamage;
+	TArray<float> inflictorMoreDamageCoefficients;
+	TArray<float> inflictorIncreaseDamageCoefficients;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)

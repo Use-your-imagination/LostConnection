@@ -1,57 +1,54 @@
-// Copyright (c) 2021 Use-your-imagination
+// Copyright (c) 2022 Use-your-imagination
 
 #pragma once
 
 #include "CoreMinimal.h"
 
-#include "Statuses/BaseStatus.h"
+#include "Statuses/BaseTickStatus.h"
 #include "Interfaces/Gameplay/Statuses/Ailment.h"
 
-#include "SwarmAilment.generated.h"
+#include "ShatterAilment.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API USwarmAilment :
-	public UBaseStatus,
+class LOSTCONNECTION_API UShatterAilment : 
+	public UBaseTickStatus,
 	public IDamageInflictor,
 	public IAilment
 {
 	GENERATED_BODY()
-	
+
 private:
 	FString getStatusName() const override;
 
 	int32 calculateUnderStatusEffect() const override;
 
 private:
-	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float baseThreshold;
+	UPROPERTY(Category = Shatter, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float durationConversionPercent;
 
-	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float thresholdPerTotalLifePercentPool;
+	UPROPERTY(Category = Shatter, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float damagePercentPerMeter;
 
-	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float percentsPerSatellite;
-
-	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float threshold;
-
-	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Shatter, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<float> increasedDamageCoefficients;
 
-	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Shatter, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<float> moreDamageCoefficients;
+
+	FVector previousLocation;
+	float targetTotalLifePool;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	USwarmAilment() = default;
-
-	void increaseThreshold(IDamageInflictor* inflictor);
-
-	float getThreshold() const;
+	UShatterAilment() = default;
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
+
+	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+
+	bool Tick(float DeltaTime) override;
 
 	void appendIncreasedDamageCoefficient(float coefficient) override;
 
@@ -82,5 +79,5 @@ public:
 
 	typeOfDamage getAilmentDamageType() const override;
 
-	virtual ~USwarmAilment() = default;
+	virtual ~UShatterAilment() = default;
 };

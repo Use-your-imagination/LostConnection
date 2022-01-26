@@ -14,7 +14,7 @@ const TSubclassOf<UBaseStatus>& UStatusesDataAsset::operator [] (typeOfDamage da
 	return ailments[damageType];
 }
 
-const UClass* UStatusesDataAsset::getDefaultSN4K3Reservator() const
+const TSubclassOf<USN4K3Reservator>& UStatusesDataAsset::getDefaultSN4K3Reservator() const
 {
 	return SN4K3Reservator;
 }

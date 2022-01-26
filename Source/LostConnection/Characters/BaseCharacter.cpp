@@ -708,17 +708,19 @@ float ABaseCharacter::getPercentageDamageReduction_Implementation() const
 	return 25.0f;
 }
 
+float ABaseCharacter::getTotalLifePool() const
+{
+	// TODO: Add shields
+
+	return health;
+}
+
 float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) const
 {
 	// TODO: Add shields
 	float pool = health;
 
 	return Utility::toPercent(1.0f - (pool - inflictor->calculateTotalDamage()) / pool);
-}
-
-float ABaseCharacter::getHealthPercentDealt(IDamageInflictor* inflictor) const
-{
-	return Utility::toPercent(1.0f - (health - inflictor->calculateTotalDamage()) / health);
 }
 
 void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)

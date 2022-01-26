@@ -303,9 +303,9 @@ public:
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
 
-	virtual float getTotalLifePercentDealt(class IDamageInflictor* inflictor) const final override;
+	virtual float getTotalLifePool() const override;
 
-	virtual float getHealthPercentDealt(class IDamageInflictor* inflictor) const final override;
+	virtual float getTotalLifePercentDealt(class IDamageInflictor* inflictor) const final override;
 
 	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
 

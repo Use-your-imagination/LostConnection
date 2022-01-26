@@ -142,8 +142,6 @@ AAmmo::AAmmo() :
 
 	tracer->SetupAttachment(visibleMesh);
 
-	tracer->SetIsReplicated(true);
-
 	movement->SetUpdatedComponent(mesh);
 
 	movement->ProjectileGravityScale = 0.0f;
@@ -312,12 +310,12 @@ float AAmmo::getAdditionalDamage() const
 
 TArray<float> AAmmo::getIncreasedDamageCoefficients() const
 {
-	return {};
+	return increasedDamageCoefficients;
 }
 
 TArray<float> AAmmo::getMoreDamageCoefficients() const
 {
-	return {};
+	return moreDamageCoefficients;
 }
 
 typeOfDamage AAmmo::getDamageType() const

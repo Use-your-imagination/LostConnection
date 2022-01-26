@@ -147,12 +147,12 @@ float UArcingCurrentAilment::getAdditionalDamage() const
 
 TArray<float> UArcingCurrentAilment::getIncreasedDamageCoefficients() const
 {
-	return {};
+	return increasedDamageCoefficients;
 }
 
 TArray<float> UArcingCurrentAilment::getMoreDamageCoefficients() const
 {
-	return {};
+	return moreDamageCoefficients;
 }
 
 typeOfDamage UArcingCurrentAilment::getAilmentDamageType() const

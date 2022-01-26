@@ -24,5 +24,14 @@
         "Added progress bars for joining players"
       ]
     }
+  },
+  "Ailments": {
+    "type": "category",
+    "Shatter": {
+      "type": "item",
+      "notes": [
+        "Added shatter ailment"
+      ]
+    }
   }
 }
