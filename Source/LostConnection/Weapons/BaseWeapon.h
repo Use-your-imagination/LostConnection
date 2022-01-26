@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
 #include "Animation/AnimMontage.h"
+#include "Animation/AimOffsetBlendSpace.h"
 
 #include "Network/NetworkObject.h"
 #include "Projectiles/Ammo.h"
@@ -78,9 +79,15 @@ protected:
 	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* swapAnimation;
 
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* basePose;
+
 	UPROPERTY(Category = Animations, EditDefaultsOnly)
 	UAnimMontage* shootAnimation;
 
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	UAimOffsetBlendSpace* aimOffset;
+	
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	ammoTypes ammoType;
 
