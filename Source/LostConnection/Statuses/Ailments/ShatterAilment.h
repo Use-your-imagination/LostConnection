@@ -41,7 +41,7 @@ private:
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	void updateDuration(const TScriptInterface<IStatusInflictor>& inflictor);
+	void updateDuration(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target);
 
 public:
 	UShatterAilment() = default;

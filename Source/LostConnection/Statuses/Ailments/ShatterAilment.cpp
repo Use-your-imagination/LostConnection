@@ -29,7 +29,7 @@ void UShatterAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(UShatterAilment, moreDamageCoefficients);
 }
 
-void UShatterAilment::updateDuration(const TScriptInterface<IStatusInflictor>& inflictor)
+void UShatterAilment::updateDuration(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target)
 {
 	duration += target->getTotalLifePercentDealt(inflictor) / Utility::fromPercent(durationConversionPercent);
 }
@@ -48,7 +48,7 @@ void UShatterAilment::applyStatus_Implementation(const TScriptInterface<IStatusI
 		previousLocation = Cast<AActor>(target.GetObject())->GetActorLocation();
 	}
 
-	this->updateDuration(inflictor);
+	this->updateDuration(inflictor, target);
 }
 
 bool UShatterAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
@@ -111,7 +111,7 @@ void UShatterAilment::setAdditionalDamage_Implementation(float newAdditionalDama
 
 float UShatterAilment::getBaseDamage() const
 {
-	return targetTotalLifePool * Utility::fromPercent((Cast<AActor>(target->_getUObject())->GetActorLocation() - previousLocation).Size() * damagePercentPerMeter);
+	return targetTotalLifePool * Utility::fromPercent((Cast<AActor>(target->_getUObject())->GetActorLocation() - previousLocation).Size() / 100.0f * damagePercentPerMeter);
 }
 
 float UShatterAilment::getAddedDamage() const
