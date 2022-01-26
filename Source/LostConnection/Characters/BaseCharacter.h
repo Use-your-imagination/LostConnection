@@ -9,6 +9,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/ActorChannel.h"
 #include "Net/DataBunch.h"
+#include "Components/TimelineComponent.h"
 
 #include "Engine/LostConnectionPlayerState.h"
 #include "WorldPlaceables/DroppedWeapon.h"
@@ -41,14 +42,17 @@ class LOSTCONNECTION_API ABaseCharacter :
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	USkeletalMeshComponent* currentWeaponMesh;
 
-	UPROPERTY(Category = Weapons, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* magazine;
 
-	UPROPERTY(Category = VFX, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* underStatusComponent;
+
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadWrite)
+	UTimelineComponent* timeline;
 
 	UPROPERTY(Category = Weapons, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
 	UBaseWeapon* currentWeapon;
@@ -124,9 +128,6 @@ protected:
 
 	UPROPERTY(Category = Inputs, BlueprintReadWrite)
 	bool crouchHold;
-
-	UPROPERTY(Category = Materials, BlueprintReadWrite)
-	UMaterialInstanceDynamic* characterMaterial;
 
 	UPROPERTY(Category = Death, BlueprintReadWrite)
 	UTextureRenderTarget2D* deathMaskRenderTexture;

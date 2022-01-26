@@ -115,6 +115,26 @@ bool UUtilityBlueprintFunctionLibrary::allOfFloat(const TArray<float>& values, f
 	return Algo::AllOf(values, [&compareValue](float value) { return value == compareValue; });
 }
 
+void UUtilityBlueprintFunctionLibrary::setMaterialScalarParameter(USkeletalMeshComponent* mesh, FName parameterName, float value)
+{
+	TArray<UMaterialInterface*> materials = mesh->GetMaterials();
+
+	for (UMaterialInterface* material : materials)
+	{
+		Cast<UMaterialInstanceDynamic>(material)->SetScalarParameterValue(parameterName, value);
+	}
+}
+
+void UUtilityBlueprintFunctionLibrary::setMaterialLinearColorParameter(USkeletalMeshComponent* mesh, FName parameterName, FLinearColor value)
+{
+	TArray<UMaterialInterface*> materials = mesh->GetMaterials();
+
+	for (UMaterialInterface* material : materials)
+	{
+		Cast<UMaterialInstanceDynamic>(material)->SetVectorParameterValue(parameterName, value);
+	}
+}
+
 ULostConnectionAssetManager* UUtilityBlueprintFunctionLibrary::getAssetManager()
 {
 	return &StaticCast<ULostConnectionAssetManager&>(UAssetManager::Get());

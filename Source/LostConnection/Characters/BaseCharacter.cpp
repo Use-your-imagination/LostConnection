@@ -271,12 +271,15 @@ ABaseCharacter::ABaseCharacter() :
 
 	bReplicates = true;
 
+	UCapsuleComponent* capsule = GetCapsuleComponent();
 	USkeletalMeshComponent* mesh = GetMesh();
 	UCharacterMovementComponent* movement = GetCharacterMovement();
 
-	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
-	GetCapsuleComponent()->SetIsReplicated(true);
+	timeline = CreateDefaultSubobject<UTimelineComponent>("Timeline");
+
+	capsule->InitCapsuleSize(42.0f, 96.0f);
+	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+	capsule->SetIsReplicated(true);
 
 	mesh->SetGenerateOverlapEvents(true);
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
@@ -313,8 +316,6 @@ ABaseCharacter::ABaseCharacter() :
 	sprintHold = false;
 
 	crouchHold = false;
-
-	characterMaterial = nullptr;
 #pragma endregion
 }
 
