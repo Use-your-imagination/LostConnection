@@ -70,9 +70,17 @@ void ABaseCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	USkeletalMeshComponent* mesh = GetMesh();
+	TArray<UMaterialInterface*> materials = mesh->GetMaterials();
+
 	deathMaskRenderTexture = NewObject<UTextureRenderTarget2D>(this);
 
 	deathMaskRenderTexture->InitCustomFormat(256, 256, EPixelFormat::PF_G16, false);
+
+	for (int32 materialIndex = 0; materialIndex < materials.Num(); materialIndex++)
+	{
+		mesh->CreateAndSetMaterialInstanceDynamicFromMaterial(materialIndex, materials[materialIndex]);
+	}
 }
 
 void ABaseCharacter::BeginPlay()
