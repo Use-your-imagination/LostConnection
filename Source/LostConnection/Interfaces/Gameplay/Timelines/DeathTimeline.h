@@ -21,6 +21,5 @@ class LOSTCONNECTION_API IDeathTimeline
 public:
 	IDeathTimeline() = default;
 
-	UFUNCTION(Category = Timelines, BlueprintNativeEvent, BlueprintCallable)
-	void deathTimelineUpdate(float value);
+	virtual void deathTimelineUpdate(float value) = 0;
 };

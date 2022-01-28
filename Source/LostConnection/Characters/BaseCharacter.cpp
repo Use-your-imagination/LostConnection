@@ -791,5 +791,5 @@ const TArray<IOnDeathEvent*>& ABaseCharacter::getDeathEvents() const
 
 void ABaseCharacter::deathTimelineUpdate_Implementation(float value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(L"%f", value));
+	
 }

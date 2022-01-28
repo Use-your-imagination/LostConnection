@@ -319,7 +319,8 @@ public:
 
 	virtual const TArray<IOnDeathEvent*>& getDeathEvents() const final override;
 
-	void deathTimelineUpdate_Implementation(float value) override;
+	UFUNCTION(Category = Timelines, BlueprintNativeEvent, BlueprintCallable)
+	void deathTimelineUpdate(float value) override;
 
 	virtual ~ABaseCharacter() = default;
 };
