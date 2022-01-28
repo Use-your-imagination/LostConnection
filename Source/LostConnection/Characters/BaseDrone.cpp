@@ -995,6 +995,11 @@ TArray<UBaseAbility*> ABaseDrone::getDroneAbilities() const
 	};
 }
 
+bool ABaseDrone::getZooming() const
+{
+	return zooming;
+}
+
 void ABaseDrone::addMainModule(IMainModule* module)
 {
 	Utility::getPlayerState(this)->addMainModule(module);

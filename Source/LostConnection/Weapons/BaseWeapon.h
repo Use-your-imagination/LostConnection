@@ -57,9 +57,9 @@ private:
 	bool isShooting;
 
 private:
-	FTransform calculateAmmoTransform(const FTransform& weaponBarrelTransform);
+	FTransform calculateAmmoTransform(class ABaseDrone* drone, const FTransform& weaponBarrelTransform);
 
-	FTransform calculateVisibleAmmoTransform(const FTransform& weaponBarrelTransform, const FTransform& ammoTransform);
+	FTransform calculateVisibleAmmoTransform(class ABaseDrone* drone, const FTransform& weaponBarrelTransform, const FTransform& ammoTransform);
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -73,21 +73,33 @@ protected:
 	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
 	UStaticMesh* magazineMesh;
 
-	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Category = "Animations|States|Hip", EditDefaultsOnly, BlueprintReadOnly)
+	UAimOffsetBlendSpace* hipAimOffset;
+
+	UPROPERTY(Category = "Animations|States|Hip", EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* hipBasePoseAnimation;
+
+	UPROPERTY(Category = "Animations|States|Hip", EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* hipShootAnimation;
+
+	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
+	UAimOffsetBlendSpace* adsAimOffset;
+
+	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* adsBasePoseAnimation;
+
+	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* adsShootAnimation;
+
+	UPROPERTY(Category = "Animations|Actions", EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* reloadAnimation;
 
-	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* swapAnimation;
+	UPROPERTY(Category = "Animations|Actions", EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* switchFromAnimation;
 
-	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* basePose;
+	UPROPERTY(Category = "Animations|Actions", EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* switchToAnimation;
 
-	UPROPERTY(Category = Animations, EditDefaultsOnly)
-	UAnimMontage* shootAnimation;
-
-	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
-	UAimOffsetBlendSpace* aimOffset;
-	
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	ammoTypes ammoType;
 

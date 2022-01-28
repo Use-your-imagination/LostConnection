@@ -315,6 +315,8 @@ public:
 	UFUNCTION(Category = Abilities, BlueprintCallable)
 	TArray<UBaseAbility*> getDroneAbilities() const;
 
+	bool getZooming() const;
+
 	virtual void addMainModule(IMainModule* module) final override;
 
 	virtual void addWeaponModule(IWeaponModule* module) final override;

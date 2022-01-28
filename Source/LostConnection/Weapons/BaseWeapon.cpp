@@ -18,10 +18,8 @@
 
 #pragma warning(disable: 4458)
 
-FTransform UBaseWeapon::calculateAmmoTransform(const FTransform& weaponBarrelTransform)
+FTransform UBaseWeapon::calculateAmmoTransform(ABaseDrone* drone, const FTransform& weaponBarrelTransform)
 {
-	ABaseDrone* drone = Cast<ABaseDrone>(owner);
-
 	if (IsValid(drone))
 	{
 		UCameraComponent* camera = drone->GetFollowCamera();
@@ -51,9 +49,9 @@ FTransform UBaseWeapon::calculateAmmoTransform(const FTransform& weaponBarrelTra
 	return {};
 }
 
-FTransform UBaseWeapon::calculateVisibleAmmoTransform(const FTransform& weaponBarrelTransform, const FTransform& ammoTransform)
+FTransform UBaseWeapon::calculateVisibleAmmoTransform(ABaseDrone* drone, const FTransform& weaponBarrelTransform, const FTransform& ammoTransform)
 {
-	if (!IsValid(Cast<ABaseDrone>(owner)))
+	if (!IsValid(drone))
 	{
 		return {};
 	}
@@ -116,11 +114,12 @@ void UBaseWeapon::shoot()
 		return;
 	}
 
+	ABaseDrone* drone = Cast<ABaseDrone>(owner);
 	int32 shotsCount = currentTimeBetweenShots ? FMath::FloorToInt(FMath::Abs(currentTimeBetweenShots / timeBetweenShots)) : 1;
 	int32 boneIndex = owner->getCurrentWeaponMeshComponent()->GetBoneIndex("barrel");
 	FTransform weaponBarrelTransform = owner->getCurrentWeaponMeshComponent()->GetBoneTransform(boneIndex);
-	FTransform ammoTransform = this->calculateAmmoTransform(weaponBarrelTransform);
-	FTransform visibleAmmoTransform = this->calculateVisibleAmmoTransform(weaponBarrelTransform, ammoTransform);
+	FTransform ammoTransform = this->calculateAmmoTransform(drone, weaponBarrelTransform);
+	FTransform visibleAmmoTransform = this->calculateVisibleAmmoTransform(drone, weaponBarrelTransform, ammoTransform);
 	ALostConnectionGameState* gameState = Utility::getGameState(owner.Get());
 
 	for (size_t i = 0; i < shotsCount; i++)
@@ -152,6 +151,19 @@ void UBaseWeapon::shoot()
 
 	if (shotsCount)
 	{
+		UAnimMontage* shootAnimation = nullptr;
+
+		if (IsValid(drone))
+		{
+			shootAnimation = drone->getZooming() ?
+				adsShootAnimation :
+				hipShootAnimation;
+		}
+		else
+		{
+			shootAnimation = hipShootAnimation;
+		}
+
 		owner->PlayAnimMontage(shootAnimation);
 
 		IShoot::Execute_onShoot(owner.Get());
