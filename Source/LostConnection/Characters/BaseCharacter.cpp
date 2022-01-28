@@ -73,6 +73,7 @@ void ABaseCharacter::PostInitializeComponents()
 	USkeletalMeshComponent* mesh = GetMesh();
 	TArray<UMaterialInterface*> materials = mesh->GetMaterials();
 
+	timelines = NewObject<UTimelinesUtility>(this);
 	deathMaskRenderTexture = NewObject<UTextureRenderTarget2D>(this);
 
 	deathMaskRenderTexture->InitCustomFormat(256, 256, EPixelFormat::PF_G16, false);
@@ -266,16 +267,12 @@ ABaseCharacter::ABaseCharacter() :
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_SatusState.NPS_SatusState'"));
 
 	PrimaryActorTick.bCanEverTick = true;
-
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
-
 	bReplicates = true;
 
 	UCapsuleComponent* capsule = GetCapsuleComponent();
 	USkeletalMeshComponent* mesh = GetMesh();
 	UCharacterMovementComponent* movement = GetCharacterMovement();
-
-	timeline = CreateDefaultSubobject<UTimelineComponent>("Timeline");
 
 	capsule->InitCapsuleSize(42.0f, 96.0f);
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
@@ -579,24 +576,32 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!isDead && currentHealth == 0.0f)
+	if (isDead)
 	{
-		if (HasAuthority())
-		{
-			Algo::ForEachIf
-			(
-				deathEvents,
-				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
-				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
-			);
-
-			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
-
-			isDead = true;
-		}
+		return;
 	}
 
-	if (HasAuthority() && GetController())
+	if (currentHealth == 0.0f && HasAuthority())
+	{
+		Algo::ForEachIf
+		(
+			deathEvents,
+			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
+			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
+		);
+
+		isDead = true;
+
+		ForceNetUpdate();
+
+		MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
+
+		return;
+	}
+
+	timelines->Tick(DeltaTime);
+
+	if (HasAuthority())
 	{
 		TArray<UBaseStatus*> statusesToRemove;
 		UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
@@ -782,4 +787,9 @@ UCapsuleComponent* ABaseCharacter::getCapsuleComponent()
 const TArray<IOnDeathEvent*>& ABaseCharacter::getDeathEvents() const
 {
 	return deathEvents;
+}
+
+void ABaseCharacter::deathTimelineUpdate_Implementation(float value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(L"%f", value));
 }

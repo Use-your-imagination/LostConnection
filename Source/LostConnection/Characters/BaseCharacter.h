@@ -14,6 +14,7 @@
 #include "Engine/LostConnectionPlayerState.h"
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Utility/TimersUtility.h"
+#include "Utility/TimelinesUtility.h"
 #include "Utility/Utility.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
@@ -24,6 +25,7 @@
 #include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
 #include "Interfaces/Gameplay/Descriptions/AITargeted.h"
+#include "Interfaces/Gameplay/Timelines/DeathTimeline.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -37,7 +39,8 @@ class LOSTCONNECTION_API ABaseCharacter :
 	public IDeath,
 	public IAilmentReceiver,
 	public IDeathEventsHolder,
-	public IAITargeted
+	public IAITargeted,
+	public IDeathTimeline
 {
 	GENERATED_BODY()
 
@@ -51,11 +54,11 @@ protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* underStatusComponent;
 
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadWrite)
-	UTimelineComponent* timeline;
-
 	UPROPERTY(Category = Weapons, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
 	UBaseWeapon* currentWeapon;
+
+	UPROPERTY(Category = Timelines, BlueprintReadWrite)
+	UTimelinesUtility* timelines;
 
 protected:
 	TimersUtility timers;
@@ -315,6 +318,8 @@ public:
 	virtual UCapsuleComponent* getCapsuleComponent() final override;
 
 	virtual const TArray<IOnDeathEvent*>& getDeathEvents() const final override;
+
+	void deathTimelineUpdate_Implementation(float value) override;
 
 	virtual ~ABaseCharacter() = default;
 };

@@ -14,9 +14,6 @@ class UDeath : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class LOSTCONNECTION_API IDeath
 {
 	GENERATED_BODY()
