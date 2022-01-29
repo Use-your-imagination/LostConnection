@@ -243,6 +243,8 @@ void ABaseCharacter::deathLogic()
 	this->returnAmmoToSpare(playerState->getPrimaryWeapon());
 
 	this->returnAmmoToSpare(playerState->getSecondaryWeapon());
+
+	isDead = true;
 }
 
 void ABaseCharacter::runDeathLogic_Implementation()
@@ -590,18 +592,12 @@ void ABaseCharacter::Tick(float DeltaTime)
 			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
 		);
 
-		isDead = true;
-
-		ForceNetUpdate();
-
 		MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
-
-		return;
 	}
 
 	timelines->Tick(DeltaTime);
 
-	if (HasAuthority())
+	if (HasAuthority() && GetController())
 	{
 		TArray<UBaseStatus*> statusesToRemove;
 		UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
@@ -792,4 +788,9 @@ const TArray<IOnDeathEvent*>& ABaseCharacter::getDeathEvents() const
 void ABaseCharacter::deathTimelineUpdate_Implementation(float value)
 {
 	
+}
+
+void ABaseCharacter::deathTimelineFinished_Implementation()
+{
+
 }

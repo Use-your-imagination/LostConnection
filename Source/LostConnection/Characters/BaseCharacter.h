@@ -322,6 +322,9 @@ public:
 	UFUNCTION(Category = Timelines, BlueprintNativeEvent, BlueprintCallable)
 	void deathTimelineUpdate(float value) override;
 
+	UFUNCTION(Category = Timelines, BlueprintNativeEvent, BlueprintCallable)
+	void deathTimelineFinished() override;
+
 	virtual ~ABaseCharacter() = default;
 };
 

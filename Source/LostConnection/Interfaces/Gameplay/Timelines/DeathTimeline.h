@@ -22,4 +22,6 @@ public:
 	IDeathTimeline() = default;
 
 	virtual void deathTimelineUpdate(float value) = 0;
+
+	virtual void deathTimelineFinished() = 0;
 };
