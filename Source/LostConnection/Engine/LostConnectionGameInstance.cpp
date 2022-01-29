@@ -33,8 +33,6 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 
 		sessionSettings->Get(SETTING_MAPNAME, levelName);
 
-		chosenSessionName = sessionName;
-
 		GetWorld()->ServerTravel(levelName + options, true);
 	}
 }
@@ -91,13 +89,11 @@ void ULostConnectionGameInstance::Init()
 
 void ULostConnectionGameInstance::initSearchSession()
 {
-	chosenSessionName = "";
 	searchSession = MakeShareable(new FOnlineSessionSearch());
 
 	searchSession->bIsLanQuery = true;
 	searchSession->MaxSearchResults = 5;
 	searchSession->PingBucketSize = 50;
-	searchSession->TimeoutInSeconds = 5;
 
 	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 }
@@ -149,7 +145,7 @@ void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLeve
 		}
 		else
 		{
-			player->ClientTravel(levelToTravel.GetAssetName(), ETravelType::TRAVEL_Absolute, true);
+			player->ClientTravel(levelToTravel.GetAssetName(), ETravelType::TRAVEL_Absolute);
 		}
 	};
 
@@ -180,7 +176,7 @@ void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLeve
 			});
 	}
 
-	session->DestroySession(chosenSessionName, onDestroyDelegate);
+	session->DestroySession(NAME_GameSession, onDestroyDelegate);
 }
 
 void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
@@ -190,5 +186,5 @@ void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& 
 
 void ULostConnectionGameInstance::loadNextLevel(TSoftObjectPtr<UWorld> nextLevel)
 {
-	GetWorld()->ServerTravel(nextLevel.GetAssetName() + options, true);
+	GetWorld()->ServerTravel(nextLevel.GetAssetName() + options);
 }

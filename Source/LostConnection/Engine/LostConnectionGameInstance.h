@@ -39,9 +39,6 @@ private:
 	TSharedPtr<FOnlineSessionSettings> sessionSettings;
 	TSharedPtr<FOnlineSessionSearch> searchSession;
 
-	UPROPERTY(Category = Sessions, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"))
-	FName chosenSessionName;
-
 private:
 	FOnDestroySessionCompleteDelegate onDestroyDelegate;
 
