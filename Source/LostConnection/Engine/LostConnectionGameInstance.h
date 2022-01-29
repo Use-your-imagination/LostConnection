@@ -29,6 +29,8 @@ private:
 
 private:
 	static const FString options;
+
+public:
 	static const FName serverNameKey;
 
 private:
@@ -36,6 +38,9 @@ private:
 	IOnlineSessionPtr session;
 	TSharedPtr<FOnlineSessionSettings> sessionSettings;
 	TSharedPtr<FOnlineSessionSearch> searchSession;
+
+	UPROPERTY(Category = Sessions, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"))
+	FName chosenSessionName;
 
 private:
 	FOnDestroySessionCompleteDelegate onDestroyDelegate;
@@ -56,7 +61,7 @@ public:
 	void createSession(FName sessionName, TSoftObjectPtr<UWorld> level);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
-	void destroySession(const FOnDestroySessionCompleteCallback& callback);
+	void destroySession(TSoftObjectPtr<UWorld> selfLevelToTravel, TSoftObjectPtr<UWorld> clientsLevelToTravel);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
 	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);

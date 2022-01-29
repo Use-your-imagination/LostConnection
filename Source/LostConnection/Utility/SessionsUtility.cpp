@@ -2,9 +2,11 @@
 
 #include "SessionsUtility.h"
 
+#include "Engine/LostConnectionGameInstance.h"
+
 void USessionsUtility::getFindedSessionName(const FBlueprintSessionResult& sessionResult, FString& sessionName, EExecutionOutputs& branches)
 {
-	auto it = sessionResult.OnlineResult.Session.SessionSettings.Settings.Find("ServerName");
+	auto it = sessionResult.OnlineResult.Session.SessionSettings.Settings.Find(ULostConnectionGameInstance::serverNameKey);
 
 	if (it)
 	{
