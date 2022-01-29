@@ -33,6 +33,8 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 
 		sessionSettings->Get(SETTING_MAPNAME, levelName);
 
+		chosenSessionName = sessionName;
+
 		GetWorld()->ServerTravel(levelName + options, true);
 	}
 }
@@ -89,18 +91,20 @@ void ULostConnectionGameInstance::Init()
 
 void ULostConnectionGameInstance::initSearchSession()
 {
+	chosenSessionName = "";
 	searchSession = MakeShareable(new FOnlineSessionSearch());
 
 	searchSession->bIsLanQuery = true;
 	searchSession->MaxSearchResults = 5;
 	searchSession->PingBucketSize = 50;
+	searchSession->TimeoutInSeconds = 5;
 
 	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 }
 
 void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const TSoftObjectPtr<UWorld>& level)
 {
-	sessionSettings->Set(serverNameKey, sessionName.ToString(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
+	sessionSettings->Set(ULostConnectionGameInstance::serverNameKey, sessionName.ToString(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
 	sessionSettings->Set(SETTING_MAPNAME, level.GetAssetName(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
@@ -121,41 +125,62 @@ void ULostConnectionGameInstance::createSession(FName sessionName, TSoftObjectPt
 	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionName, level);
 }
 
-void ULostConnectionGameInstance::destroySession(const FOnDestroySessionCompleteCallback& callback)
+void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLevelToTravel, TSoftObjectPtr<UWorld> clientsLevelToTravel)
 {
 	ALostConnectionPlayerController* controller = GetWorld()->GetFirstPlayerController<ALostConnectionPlayerController>();
+	auto exitPlayer = [selfLevelToTravel, clientsLevelToTravel, controller](ALostConnectionPlayerController* player)
+	{
+		TSoftObjectPtr<UWorld> levelToTravel = nullptr;
+
+		if (player == controller)
+		{
+			levelToTravel = selfLevelToTravel;
+		}
+		else
+		{
+			levelToTravel = clientsLevelToTravel;
+		}
+
+		player->save();
+
+		if (levelToTravel.IsNull())
+		{
+			UKismetSystemLibrary::QuitGame(player->GetWorld(), player, EQuitPreference::Type::Quit, false);
+		}
+		else
+		{
+			player->ClientTravel(levelToTravel.GetAssetName(), ETravelType::TRAVEL_Absolute, true);
+		}
+	};
 
 	if (controller->HasAuthority())
-	{	
-		FString sessionName;
-
-		sessionSettings->Get(serverNameKey, sessionName);
-
-		onDestroyDelegate.BindLambda([this, callback, controller](FName sessionName, bool wasSuccessful)
+	{
+		onDestroyDelegate.BindLambda([this, controller, exitPlayer](FName sessionName, bool wasSuccessful)
 			{
-				for (APlayerState* state : GetWorld()->GetGameState<ALostConnectionGameState>()->PlayerArray)
+				TArray<APlayerState*>& states = GetWorld()->GetGameState<ALostConnectionGameState>()->PlayerArray;
+
+				for (APlayerState* state : states)
 				{
 					ALostConnectionPlayerController* kickedPlayer = state->GetOwner<ALostConnectionPlayerController>();
 
 					if (IsValid(kickedPlayer) && controller != kickedPlayer)
 					{
-						kickedPlayer->save();
-
-						//->KickPlayer(kickedPlayer, FText::FromStringTable(UConstants::sessionsStringTablePath, UConstants::destroySessionKey));
+						exitPlayer(kickedPlayer);
 					}
 				}
 
-				callback.Execute(sessionName, wasSuccessful);
+				exitPlayer(controller);
 			});
-
-		session->DestroySession(*sessionName, onDestroyDelegate);
 	}
 	else
 	{
-		controller->save();
-
-		callback.Execute("", false);
+		onDestroyDelegate.BindLambda([controller, exitPlayer](FName sessionName, bool wasSuccessful)
+			{
+				exitPlayer(controller);
+			});
 	}
+
+	session->DestroySession(chosenSessionName, onDestroyDelegate);
 }
 
 void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
