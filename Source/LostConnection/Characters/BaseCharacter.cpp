@@ -243,8 +243,6 @@ void ABaseCharacter::deathLogic()
 	this->returnAmmoToSpare(playerState->getPrimaryWeapon());
 
 	this->returnAmmoToSpare(playerState->getSecondaryWeapon());
-
-	isDead = true;
 }
 
 void ABaseCharacter::runDeathLogic_Implementation()
@@ -578,12 +576,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (isDead)
-	{
-		return;
-	}
-
-	if (currentHealth == 0.0f && HasAuthority())
+	if (HasAuthority() && !isDead && currentHealth == 0.0f)
 	{
 		Algo::ForEachIf
 		(
@@ -591,6 +584,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
 			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
 		);
+
+		isDead = true;
 
 		MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
 	}
