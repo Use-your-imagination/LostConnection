@@ -36,6 +36,8 @@ public:
 
 	static TSubclassOf<class ABaseDrone> findDroneClass(const TArray<const class UBaseDroneDataAsset*>& drones, const TSubclassOf<class ABaseDrone>& drone);
 
+	static void executeOnlyOnServerFromMulticast(AActor* actor, const TFunction<void()>& function);
+
 	template<typename T>
 	static bool checkChanceProc(const T& chance);
 

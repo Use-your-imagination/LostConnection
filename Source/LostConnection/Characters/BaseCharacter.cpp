@@ -177,7 +177,6 @@ void ABaseCharacter::setMaxSpeed(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
-#pragma region Reload
 void ABaseCharacter::reloadVisual()
 {
 
@@ -217,15 +216,6 @@ void ABaseCharacter::reloadLogic()
 	}
 }
 
-void ABaseCharacter::runReloadLogic_Implementation()
-{
-	this->reloadLogic();
-
-	IReload::Execute_reloadEventLogic(this);
-}
-#pragma endregion
-
-#pragma region Death
 void ABaseCharacter::deathVisual()
 {
 
@@ -245,13 +235,25 @@ void ABaseCharacter::deathLogic()
 	this->returnAmmoToSpare(playerState->getSecondaryWeapon());
 }
 
-void ABaseCharacter::runDeathLogic_Implementation()
+void ABaseCharacter::runReloadLogic()
 {
-	this->deathLogic();
+	Utility::executeOnlyOnServerFromMulticast(this, [this]()
+		{
+			this->reloadLogic();
 
-	IDeath::Execute_deathEventLogic(this);
+			IReload::Execute_reloadEventLogic(this);
+		});
 }
-#pragma endregion
+
+void ABaseCharacter::runDeathLogic()
+{
+	Utility::executeOnlyOnServerFromMulticast(this, [this]()
+		{
+			this->deathLogic();
+
+			IDeath::Execute_deathEventLogic(this);
+		});
+}
 
 ABaseCharacter::ABaseCharacter() :
 	defaultMovementSpeed(450.0f),

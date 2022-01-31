@@ -175,28 +175,23 @@ protected:
 
 	void setMaxSpeed(float speed);
 
-#pragma region Reload
 protected:
 	virtual void reloadVisual() override;
 
 	virtual void reloadLogic() override;
-#pragma endregion
 
-#pragma region Death
-protected:
 	virtual void deathVisual() override;
 
 	virtual void deathLogic() override;
-#pragma endregion
 
 public:	
 	ABaseCharacter();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void runDeathLogic();
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void runReloadLogic();
+
+	UFUNCTION(BlueprintCallable)
+	void runDeathLogic();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void changeToDefaultWeapon();

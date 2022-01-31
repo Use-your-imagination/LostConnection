@@ -9,14 +9,14 @@ void ICaster::castAbility(UBaseAbility* ability, const TFunction<void()>& callba
 {
 	AActor* actor = Cast<AActor>(this->_getUObject());
 
-	if (IsValid(actor) && actor->HasAuthority())
-	{
-		this->getCurrentEnergy() -= ability->getCost();
+	Utility::executeOnlyOnServerFromMulticast(actor, [this, ability, callback]()
+		{
+			this->getCurrentEnergy() -= ability->getCost();
 
-		ability->useAbility();
+			ability->useAbility();
 
-		callback();
-	}
+			callback();
+		});
 }
 
 void ICaster::setEnergy_Implementation(float newEnergy)
