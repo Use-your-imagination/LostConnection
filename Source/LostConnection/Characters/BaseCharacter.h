@@ -265,7 +265,7 @@ public:
 
 	TimersUtility& getTimers();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Server, Unreliable, BlueprintCallable)
 	virtual void shoot() final override;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)

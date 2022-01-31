@@ -271,7 +271,7 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void changeToSecondaryWeapon();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Server, Unreliable, BlueprintCallable)
 	void pickupAmmo(ammoTypes type, int32 count);
 
 	UFUNCTION(Server, Reliable)
@@ -289,7 +289,7 @@ public:
 	UFUNCTION()
 	void action();
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(Server, Unreliable)
 	void restoreEnergy(float amount);
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
