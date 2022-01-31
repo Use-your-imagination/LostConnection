@@ -5,7 +5,19 @@
 #include "Characters/BaseDrone.h"
 #include "Characters/BaseBotCaster.h"
 
-static TArray<UAnimMontage*> filler;
+void ICaster::castAbility(UBaseAbility* ability, const TFunction<void()>& callback)
+{
+	AActor* actor = Cast<AActor>(this->_getUObject());
+
+	if (IsValid(actor) && actor->HasAuthority())
+	{
+		this->getCurrentEnergy() -= ability->getCost();
+
+		ability->useAbility();
+
+		callback();
+	}
+}
 
 void ICaster::setEnergy_Implementation(float newEnergy)
 {
@@ -34,6 +46,8 @@ void ICaster::setCurrentAbility(UBaseAbility* ability)
 
 const TArray<UAnimMontage*>& ICaster::getAbilitiesAnimations() const
 {
+	static TArray<UAnimMontage*> filler;
+
 	PURE_VIRTUAL(ICaster::getAbilitiesAnimations, return filler;);
 }
 

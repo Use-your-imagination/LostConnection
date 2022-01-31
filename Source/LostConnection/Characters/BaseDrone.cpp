@@ -355,6 +355,11 @@ bool ABaseDrone::checkUltimateAbilityCast() const
 	return true;
 }
 
+float& ABaseDrone::getCurrentEnergy()
+{
+	return currentEnergy;
+}
+
 void ABaseDrone::BeginPlay()
 {
 	Super::BeginPlay();
@@ -1208,82 +1213,67 @@ const TArray<UNetworkObject*>& ABaseDrone::getWeaponModules() const
 	return Utility::getPlayerState(this)->getWeaponModules();
 }
 
-#pragma region PassiveAbility
 void ABaseDrone::castPassiveAbilityVisual()
 {
 
 }
 
-void ABaseDrone::castPassiveAbilityLogic_Implementation()
+void ABaseDrone::castPassiveAbilityLogic()
 {
-	currentEnergy -= passiveAbility->getCost();
-
-	passiveAbility->useAbility();
-
-	IPassiveAbilityCast::Execute_castPassiveAbilityEventLogic(this);
+	this->castAbility(passiveAbility, [this]()
+		{
+			IPassiveAbilityCast::Execute_castPassiveAbilityEventLogic(this);
+		});
 }
-#pragma endregion
 
-#pragma region FirstAbility
 void ABaseDrone::castFirstAbilityVisual()
 {
 
 }
 
-void ABaseDrone::castFirstAbilityLogic_Implementation()
+void ABaseDrone::castFirstAbilityLogic()
 {
-	currentEnergy -= firstAbility->getCost();
-
-	firstAbility->useAbility();
-
-	IFirstAbilityCast::Execute_castFirstAbilityEventLogic(this);
+	this->castAbility(firstAbility, [this]()
+		{
+			IFirstAbilityCast::Execute_castFirstAbilityEventLogic(this);
+		});	
 }
-#pragma endregion
 
-#pragma region SecondAbility
 void ABaseDrone::castSecondAbilityVisual()
 {
 
 }
 
-void ABaseDrone::castSecondAbilityLogic_Implementation()
+void ABaseDrone::castSecondAbilityLogic()
 {
-	currentEnergy -= secondAbility->getCost();
-
-	secondAbility->useAbility();
-
-	ISecondAbilityCast::Execute_castSecondAbilityEventLogic(this);
+	this->castAbility(secondAbility, [this]()
+		{
+			ISecondAbilityCast::Execute_castSecondAbilityEventLogic(this);
+		});
 }
-#pragma endregion
 
-#pragma region ThirdAbility
 void ABaseDrone::castThirdAbilityVisual()
 {
 
 }
 
-void ABaseDrone::castThirdAbilityLogic_Implementation()
+void ABaseDrone::castThirdAbilityLogic()
 {
-	currentEnergy -= thirdAbility->getCost();
-
-	thirdAbility->useAbility();
-
-	IThirdAbilityCast::Execute_castThirdAbilityEventLogic(this);
+	this->castAbility(thirdAbility, [this]()
+		{
+			IThirdAbilityCast::Execute_castThirdAbilityEventLogic(this);
+		});
 }
-#pragma endregion
 
-#pragma region UltimateAbility
 void ABaseDrone::castUltimateAbilityVisual()
 {
 
 }
 
-void ABaseDrone::castUltimateAbilityLogic_Implementation()
+void ABaseDrone::castUltimateAbilityLogic()
 {
-	currentEnergy -= ultimateAbility->getCost();
-
-	ultimateAbility->useAbility();
-
-	IUltimateAbilityCast::Execute_castUltimateAbilityEventLogic(this);
+	this->castAbility(ultimateAbility, [this]()
+		{
+			IUltimateAbilityCast::Execute_castUltimateAbilityEventLogic(this);
+		});
 }
-#pragma endregion

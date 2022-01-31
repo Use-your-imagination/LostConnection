@@ -175,6 +175,11 @@ bool ABaseBotCaster::checkUltimateAbilityCast() const
 	return true;
 }
 
+float& ABaseBotCaster::getCurrentEnergy()
+{
+	return currentEnergy;
+}
+
 void ABaseBotCaster::BeginPlay()
 {
 	Super::BeginPlay();
@@ -344,82 +349,67 @@ const TArray<UAnimMontage*>& ABaseBotCaster::getAbilitiesAnimations() const
 	return abilitiesAnimations;
 }
 
-#pragma region PassiveAbility
 void ABaseBotCaster::castPassiveAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castPassiveAbilityLogic_Implementation()
+void ABaseBotCaster::castPassiveAbilityLogic()
 {
-	currentEnergy -= passiveAbility->getCost();
-
-	passiveAbility->useAbility();
-
-	IPassiveAbilityCast::Execute_castPassiveAbilityEventLogic(this);
+	this->castAbility(passiveAbility, [this]()
+		{
+			IPassiveAbilityCast::Execute_castPassiveAbilityEventLogic(this);
+		});
 }
-#pragma endregion
 
-#pragma region FirstAbility
 void ABaseBotCaster::castFirstAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castFirstAbilityLogic_Implementation()
+void ABaseBotCaster::castFirstAbilityLogic()
 {
-	currentEnergy -= firstAbility->getCost();
-
-	firstAbility->useAbility();
-
-	IFirstAbilityCast::Execute_castFirstAbilityEventLogic(this);
+	this->castAbility(firstAbility, [this]()
+		{
+			IFirstAbilityCast::Execute_castFirstAbilityEventLogic(this);
+		});
 }
-#pragma endregion
 
-#pragma region SecondAbility
 void ABaseBotCaster::castSecondAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castSecondAbilityLogic_Implementation()
+void ABaseBotCaster::castSecondAbilityLogic()
 {
-	currentEnergy -= secondAbility->getCost();
-
-	secondAbility->useAbility();
-
-	ISecondAbilityCast::Execute_castSecondAbilityEventLogic(this);
+	this->castAbility(secondAbility, [this]()
+		{
+			ISecondAbilityCast::Execute_castSecondAbilityEventLogic(this);
+		});
 }
-#pragma endregion
 
-#pragma region ThirdAbility
 void ABaseBotCaster::castThirdAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castThirdAbilityLogic_Implementation()
+void ABaseBotCaster::castThirdAbilityLogic()
 {
-	currentEnergy -= thirdAbility->getCost();
-
-	thirdAbility->useAbility();
-
-	IThirdAbilityCast::Execute_castThirdAbilityEventLogic(this);
+	this->castAbility(thirdAbility, [this]()
+		{
+			IThirdAbilityCast::Execute_castThirdAbilityEventLogic(this);
+		});
 }
-#pragma endregion
 
-#pragma region UltimateAbility
 void ABaseBotCaster::castUltimateAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castUltimateAbilityLogic_Implementation()
+void ABaseBotCaster::castUltimateAbilityLogic()
 {
-	currentEnergy -= ultimateAbility->getCost();
-
-	ultimateAbility->useAbility();
-
-	IUltimateAbilityCast::Execute_castUltimateAbilityEventLogic(this);
+	this->castAbility(ultimateAbility, [this]()
+		{
+			IUltimateAbilityCast::Execute_castUltimateAbilityEventLogic(this);
+		});
 }
-#pragma endregion

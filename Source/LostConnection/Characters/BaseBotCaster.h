@@ -46,6 +46,8 @@ protected:
 
 	virtual bool checkUltimateAbilityCast() const override;
 
+	virtual float& getCurrentEnergy() final override;
+
 protected:
 	UPROPERTY(Category = CasterStats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float energy;
@@ -158,40 +160,30 @@ public:
 
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 
-#pragma region PassiveAbility
 	virtual void castPassiveAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-		virtual void castPassiveAbilityLogic() override;
-#pragma endregion
+	UFUNCTION(BlueprintCallable)
+	virtual void castPassiveAbilityLogic() override;
 
-#pragma region FirstAbility
 	virtual void castFirstAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-		virtual void castFirstAbilityLogic() override;
-#pragma endregion
+	UFUNCTION(BlueprintCallable)
+	virtual void castFirstAbilityLogic() override;
 
-#pragma region SecondAbility
 	virtual void castSecondAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-		virtual void castSecondAbilityLogic() override;
-#pragma endregion
+	UFUNCTION(BlueprintCallable)
+	virtual void castSecondAbilityLogic() override;
 
-#pragma region ThirdAbility
 	virtual void castThirdAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-		virtual void castThirdAbilityLogic() override;
-#pragma endregion
+	UFUNCTION(BlueprintCallable)
+	virtual void castThirdAbilityLogic() override;
 
-#pragma region UltimateAbility
 	virtual void castUltimateAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-		virtual void castUltimateAbilityLogic() override;
-#pragma endregion
+	UFUNCTION(BlueprintCallable)
+	virtual void castUltimateAbilityLogic() override;
 
 	virtual ~ABaseBotCaster() = default;
 };

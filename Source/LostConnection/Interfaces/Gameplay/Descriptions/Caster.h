@@ -21,6 +21,11 @@ class LOSTCONNECTION_API ICaster
 {
 	GENERATED_BODY()
 
+protected:
+	void castAbility(UBaseAbility* ability, const TFunction<void()>& callback);
+
+	virtual float& getCurrentEnergy() = 0;
+
 public:
 	ICaster() = default;
 

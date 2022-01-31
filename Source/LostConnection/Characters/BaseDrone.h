@@ -205,6 +205,8 @@ protected:
 
 	virtual bool checkUltimateAbilityCast() const override;
 
+	virtual float& getCurrentEnergy() final override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -388,40 +390,30 @@ public:
 	UFUNCTION(Category = Modules, BlueprintCallable)
 	virtual const TArray<UNetworkObject*>& getWeaponModules() const final override;
 
-#pragma region PassiveAbility
 	virtual void castPassiveAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	virtual void castPassiveAbilityLogic() override;
-#pragma endregion
 
-#pragma region FirstAbility
 	virtual void castFirstAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	virtual void castFirstAbilityLogic() override;
-#pragma endregion
 
-#pragma region SecondAbility
 	virtual void castSecondAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	virtual void castSecondAbilityLogic() override;
-#pragma endregion
 
-#pragma region ThirdAbility
 	virtual void castThirdAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	virtual void castThirdAbilityLogic() override;
-#pragma endregion
 
-#pragma region UltimateAbility
 	virtual void castUltimateAbilityVisual() override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	virtual void castUltimateAbilityLogic() override;
-#pragma endregion
 
 	virtual ~ABaseDrone() = default;
 
