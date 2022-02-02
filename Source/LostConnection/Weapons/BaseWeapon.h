@@ -87,7 +87,7 @@ protected:
 	UAimOffsetBlendSpace* adsAimOffset;
 
 	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
-	AnimSequence* adsBasePoseAnimation;
+	UAnimSequence* adsBasePoseAnimation;
 
 	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* adsShootAnimation;
