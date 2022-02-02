@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "Animation/AnimMontage.h"
 #include "Animation/AimOffsetBlendSpace.h"
+#include "Animation/AnimSequence.h"
 
 #include "Network/NetworkObject.h"
 #include "Projectiles/Ammo.h"
@@ -77,7 +78,7 @@ protected:
 	UAimOffsetBlendSpace* hipAimOffset;
 
 	UPROPERTY(Category = "Animations|States|Hip", EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* hipBasePoseAnimation;
+	UAnimSequence* hipBasePoseAnimation;
 
 	UPROPERTY(Category = "Animations|States|Hip", EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* hipShootAnimation;
@@ -86,7 +87,7 @@ protected:
 	UAimOffsetBlendSpace* adsAimOffset;
 
 	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* adsBasePoseAnimation;
+	AnimSequence* adsBasePoseAnimation;
 
 	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* adsShootAnimation;
