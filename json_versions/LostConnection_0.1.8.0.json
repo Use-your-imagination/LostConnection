@@ -39,5 +39,14 @@
         "Added shatter ailment"
       ]
     }
+  },
+  "Weapons": {
+    "type": "category",
+    "Animations": {
+      "type": "item",
+      "notes": [
+        "Added animations for weapons"
+      ]
+    }
   }
 }
