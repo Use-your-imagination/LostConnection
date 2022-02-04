@@ -4,21 +4,16 @@
 
 #include "NiagaraFunctionLibrary.h"
 
-void UVFXManager::init(AActor* owner)
+void UVFXManager::spawnVFX(UWorld* world, const FVector& location, UNiagaraSystem* vfx)
 {
-	this->owner = owner;
+	this->spawnVFX(world, FTransform(FRotator::ZeroRotator, location), vfx);
 }
 
-void UVFXManager::spawnVFX(const FVector& location, UNiagaraSystem* vfx)
-{
-	this->spawnVFX(FTransform(FRotator::ZeroRotator, location), vfx);
-}
-
-void UVFXManager::spawnVFX(const FTransform& transform, UNiagaraSystem* vfx)
+void UVFXManager::spawnVFX(UWorld* world, const FTransform& transform, UNiagaraSystem* vfx)
 {
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation
 	(
-		owner->GetWorld(),
+		world,
 		vfx,
 		transform.GetLocation(),
 		transform.GetRotation().Rotator(),

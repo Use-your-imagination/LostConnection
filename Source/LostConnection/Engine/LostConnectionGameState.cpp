@@ -31,13 +31,11 @@ void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ALostConnectionGameState, isLastRoomLoaded);
 }
 
-void ALostConnectionGameState::BeginPlay()
+void ALostConnectionGameState::PostInitializeComponents()
 {
-	Super::BeginPlay();
+	Super::PostInitializeComponents();
 
 	manager = NewObject<UVFXManager>(this);
-
-	manager->init(this);
 }
 
 void ALostConnectionGameState::loadRoom(const TSoftObjectPtr<UWorld>& room, FVector location, FRotator rotation)
@@ -47,12 +45,12 @@ void ALostConnectionGameState::loadRoom(const TSoftObjectPtr<UWorld>& room, FVec
 
 void ALostConnectionGameState::spawnVFXAtLocationMulticast_Implementation(const FVector& location, UNiagaraSystem* vfx)
 {
-	manager->spawnVFX(location, vfx);
+	manager->spawnVFX(GetWorld(), location, vfx);
 }
 
 void ALostConnectionGameState::spawnVFXAtTransformMulticast_Implementation(const FTransform& transform, UNiagaraSystem* vfx)
 {
-	manager->spawnVFX(transform, vfx);
+	manager->spawnVFX(GetWorld(), transform, vfx);
 }
 
 ALostConnectionGameState::ALostConnectionGameState()

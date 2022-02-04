@@ -46,7 +46,7 @@ private:
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
 
 private:
 	void loadRoom(const TSoftObjectPtr<UWorld>& room, FVector location, FRotator rotation);
