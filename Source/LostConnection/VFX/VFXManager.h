@@ -16,17 +16,12 @@ class LOSTCONNECTION_API UVFXManager : public UObject
 {
 	GENERATED_BODY()
 
-private:
-	AActor* owner;
-	
 public:
 	UVFXManager() = default;
 
-	void init(AActor* owner);
+	void spawnVFX(UWorld* world, const FVector& location, UNiagaraSystem* vfx);
 
-	void spawnVFX(const FVector& location, UNiagaraSystem* vfx);
-
-	void spawnVFX(const FTransform& transform, UNiagaraSystem* vfx);
+	void spawnVFX(UWorld* world, const FTransform& transform, UNiagaraSystem* vfx);
 
 	~UVFXManager() = default;
 };
