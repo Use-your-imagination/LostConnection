@@ -6,6 +6,8 @@
 
 #include "GameFramework/GameState.h"
 
+#include "VFX/VFXManager.h"
+
 #include "LostConnectionGameState.generated.h"
 
 UCLASS()
@@ -33,6 +35,9 @@ private:
 	int32 currentWaveRemainingBots;
 
 private:
+	UVFXManager* manager;
+
+private:
 	TArray<TSoftObjectPtr<UWorld>> usedRooms;
 
 	UPROPERTY(Category = RoomLoading, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -41,14 +46,28 @@ private:
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	virtual void BeginPlay() override;
+
 private:
 	void loadRoom(const TSoftObjectPtr<UWorld>& room, FVector location, FRotator rotation);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void spawnVFXAtLocationMulticast(const FVector& location, UNiagaraSystem* vfx);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void spawnVFXAtTransformMulticast(const FTransform& transform, UNiagaraSystem* vfx);
 
 public:
 	ALostConnectionGameState();
 
 	UFUNCTION(Category = RoomLoading, Server, Reliable, BlueprintCallable)
 	void startRoomLoading();
+
+	UFUNCTION(Category = VFX, Server, Unreliable, BlueprintCallable)
+	void spawnVFXAtLocation(const FVector& location, UNiagaraSystem* vfx);
+
+	UFUNCTION(Category = VFX, Server, Unreliable, BlueprintCallable)
+	void spawnVFXAtTransform(const FTransform& transform, UNiagaraSystem* vfx);
 
 	int32& getTotalBots();
 

@@ -55,8 +55,6 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void explode();
 
-	void explodeVFX();
-
 	void destroyHead();
 
 public:

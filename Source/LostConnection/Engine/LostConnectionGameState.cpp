@@ -31,9 +31,28 @@ void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ALostConnectionGameState, isLastRoomLoaded);
 }
 
+void ALostConnectionGameState::BeginPlay()
+{
+	Super::BeginPlay();
+
+	manager = NewObject<UVFXManager>(this);
+
+	manager->init(this);
+}
+
 void ALostConnectionGameState::loadRoom(const TSoftObjectPtr<UWorld>& room, FVector location, FRotator rotation)
 {
 	ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, room, location, rotation, isLastRoomLoaded);
+}
+
+void ALostConnectionGameState::spawnVFXAtLocationMulticast_Implementation(const FVector& location, UNiagaraSystem* vfx)
+{
+	manager->spawnVFX(location, vfx);
+}
+
+void ALostConnectionGameState::spawnVFXAtTransformMulticast_Implementation(const FTransform& transform, UNiagaraSystem* vfx)
+{
+	manager->spawnVFX(transform, vfx);
 }
 
 ALostConnectionGameState::ALostConnectionGameState()
@@ -68,6 +87,16 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 	this->loadRoom(room, waypoint->GetActorLocation(), waypoint->GetActorRotation());
 
 	waypoint->Destroy();
+}
+
+void ALostConnectionGameState::spawnVFXAtLocation_Implementation(const FVector& location, UNiagaraSystem* vfx)
+{
+	this->spawnVFXAtLocationMulticast(location, vfx);
+}
+
+void ALostConnectionGameState::spawnVFXAtTransform_Implementation(const FTransform& transform, UNiagaraSystem* vfx)
+{
+	this->spawnVFXAtTransformMulticast(transform, vfx);
 }
 
 int32& ALostConnectionGameState::getTotalBots()

@@ -18,6 +18,7 @@
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 #include "Constants/Constants.h"
 #include "Utility/Utility.h"
+#include "Interfaces/Animations/WeaponUser.h"
 
 #include "Utility/MultiplayerUtility.h"
 
@@ -112,7 +113,14 @@ void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
 
 void ABaseCharacter::onCurrentWeaponChange()
 {
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+
 	this->updateWeaponMesh();
+
+	if (animInstance->Implements<UWeaponUser>())
+	{
+		IWeaponUser::Execute_weaponUpdate(animInstance, currentWeapon);
+	}
 }
 
 void ABaseCharacter::onCurrentHealthChanged()
@@ -322,7 +330,7 @@ void ABaseCharacter::changeToDefaultWeapon_Implementation()
 {
 	currentWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
 
-	this->updateWeaponMesh();
+	this->onCurrentWeaponChange();
 }
 
 void ABaseCharacter::restoreHealth(float amount)

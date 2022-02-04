@@ -84,7 +84,7 @@ void ASN4K3PassiveAbilityHead::explode()
 	ALostConnectionPlayerController* controller = Utility::getPlayerController(this);
 	FTransform respawnTransform = GetActorTransform();
 
-	this->explodeVFX();
+	Utility::getGameState(this)->spawnVFXAtLocation(GetMesh()->GetComponentLocation(), explosionParticles);
 
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetMesh()->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
 
@@ -121,21 +121,6 @@ void ASN4K3PassiveAbilityHead::explode()
 	}
 
 	isExploded = true;
-}
-
-void ASN4K3PassiveAbilityHead::explodeVFX()
-{
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation
-	(
-		GetWorld(),
-		explosionParticles,
-		GetMesh()->GetComponentLocation(),
-		FRotator::ZeroRotator,
-		FVector::OneVector,
-		true,
-		true,
-		ENCPoolMethod::AutoRelease
-	);
 }
 
 void ASN4K3PassiveAbilityHead::destroyHead()

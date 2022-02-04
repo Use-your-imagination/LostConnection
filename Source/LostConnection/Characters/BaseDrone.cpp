@@ -800,14 +800,14 @@ void ABaseDrone::changeToPrimaryWeapon_Implementation()
 {
 	currentWeapon = Utility::getPlayerState(this)->getPrimaryWeapon();
 
-	this->updateWeaponMesh();
+	this->onCurrentWeaponChange();
 }
 
 void ABaseDrone::changeToSecondaryWeapon_Implementation()
 {
 	currentWeapon = Utility::getPlayerState(this)->getSecondaryWeapon();
 
-	this->updateWeaponMesh();
+	this->onCurrentWeaponChange();
 }
 
 void ABaseDrone::pickupAmmo_Implementation(ammoTypes type, int32 count)
@@ -850,7 +850,7 @@ void ABaseDrone::dropWeapon_Implementation()
 		currentWeapon = secondaryWeapon = nullptr;
 	}
 
-	this->updateWeaponMesh();
+	this->onCurrentWeaponChange();
 
 	UGameplayStatics::FinishSpawningActor(droppedWeapon, droppedWeapon->GetActorTransform());
 }
