@@ -92,6 +92,7 @@ void ABaseCharacter::BeginPlay()
 	if (HasAuthority())
 	{
 		TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
+		energyShield = NewObject<UBaseEnergyShield>(this, energyShieldClass);
 
 		if (!spareAmmo.Num())
 		{
@@ -586,6 +587,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	timelines->Tick(DeltaTime);
+
 	if (HasAuthority() && !isDead && currentHealth == 0.0f)
 	{
 		Algo::ForEachIf
@@ -600,10 +603,12 @@ void ABaseCharacter::Tick(float DeltaTime)
 		MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
 	}
 
-	timelines->Tick(DeltaTime);
-
-	if (HasAuthority() && GetController())
+	if (HasAuthority() && !isDead)
 	{
+		check(GetController());
+
+		check(IsValid(GetController()));
+
 		TArray<UBaseStatus*> statusesToRemove;
 		UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
 
@@ -630,6 +635,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 		statusesToRemove.Empty();
 
 		timers.processTimers(DeltaTime);
+
+		energyShield->Tick(DeltaTime);
 	}
 }
 
@@ -792,7 +799,7 @@ const TArray<IOnDeathEvent*>& ABaseCharacter::getDeathEvents() const
 
 void ABaseCharacter::deathTimelineUpdate_Implementation(float value)
 {
-	
+
 }
 
 void ABaseCharacter::deathTimelineFinished_Implementation()
