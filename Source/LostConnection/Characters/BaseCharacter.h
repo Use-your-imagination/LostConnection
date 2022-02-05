@@ -16,6 +16,7 @@
 #include "Utility/TimersUtility.h"
 #include "Utility/TimelinesUtility.h"
 #include "Utility/Utility.h"
+#include "EnergyShields/BaseEnergyShield.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Interfaces/Gameplay/Actions/MovementActions.h"
@@ -59,6 +60,13 @@ protected:
 
 	UPROPERTY(Category = Timelines, BlueprintReadWrite)
 	UTimelinesUtility* timelines;
+
+	UPROPERTY(Category = Stats, BlueprintReadOnly)
+	UBaseEnergyShield* energyShield;
+
+private:
+	UPROPERTY(Category = Classes, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UBaseEnergyShield> energyShieldClass;
 
 protected:
 	TimersUtility timers;
