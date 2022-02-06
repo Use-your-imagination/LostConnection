@@ -2,6 +2,8 @@
 
 #include "HeavyEnergyShield.h"
 
+#include "Characters/BaseCharacter.h"
+
 void UHeavyEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -35,9 +37,9 @@ float UHeavyEnergyShield::getCurrentPoolCapacity() const
 	return currentPoolCapacity;
 }
 
-void UHeavyEnergyShield::init(float startEnergyShieldCapacity)
+void UHeavyEnergyShield::init(const TWeakObjectPtr<ABaseCharacter>& owner)
 {
-	Super::init(startEnergyShieldCapacity);
+	Super::init(owner);
 
 	poolCapacity = capacity * Utility::fromPercent(basePoolConversion);
 	currentPoolCapacity = poolCapacity;

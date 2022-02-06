@@ -9,7 +9,7 @@
 #include "Weapons/Pistols/Gauss.h"
 #include "Engine/LostConnectionGameMode.h"
 
-void ABaseBot::onCurrentHealthChanged()
+void ABaseBot::onCurrentHealthChange()
 {
 	if (currentHealth != health)
 	{
@@ -47,6 +47,8 @@ void ABaseBot::PostInitializeComponents()
 	healthBarMaterial = UMaterialInstanceDynamic::Create(baseHealthBarMaterial, this);
 
 	healthBar->AddElement(healthBarMaterial, nullptr, false, 10.0f, 40.0f, nullptr);
+
+	healthBarMaterial->SetVectorParameterValue("ShieldColor", energyShield->getEnergyShieldColor());
 
 	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
 }

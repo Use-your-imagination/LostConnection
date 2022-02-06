@@ -32,7 +32,7 @@ protected:
 	UMaterial* baseHealthBarMaterial;
 
 protected:
-	virtual void onCurrentHealthChanged() override;
+	virtual void onCurrentHealthChange() override;
 
 protected:
 	virtual void Tick(float DeltaTime) override;
@@ -61,6 +61,8 @@ public:
 inline void ABaseBot::updateHealthBar()
 {
 	healthBarMaterial->SetScalarParameterValue("LifePercent", Utility::toPercent(currentHealth / health));
+
+	healthBarMaterial->SetScalarParameterValue("ShieldPercent", Utility::toPercent(energyShield->getCurrentCapacity() / energyShield->getCapacity()));
 
 	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
 }

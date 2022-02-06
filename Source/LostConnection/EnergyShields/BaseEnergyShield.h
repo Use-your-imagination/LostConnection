@@ -10,6 +10,8 @@
 
 #include "BaseEnergyShield.generated.h"
 
+#pragma warning(disable: 4458)
+
 UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API UBaseEnergyShield : public UNetworkObject
 {
@@ -25,7 +27,7 @@ protected:
 	UPROPERTY(Category = EnergyShield, Replicated, BlueprintReadOnly)
 	float capacity;
 
-	UPROPERTY(Category = EnergyShield, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = EnergyShield, ReplicatedUsing = onCurrentCapacityChanged, BlueprintReadOnly)
 	float currentCapacity;
 
 	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, Replicated, BlueprintReadOnly)
@@ -45,13 +47,18 @@ protected:
 
 	TimersUtility timers;
 
+	TWeakObjectPtr<class ABaseCharacter> owner;
+
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION()
+	virtual void onCurrentCapacityChanged();
 
 public:
 	UBaseEnergyShield() = default;
 
-	virtual void init(float startEnergyShieldCapacity);
+	virtual void init(const TWeakObjectPtr<class ABaseCharacter>& owner);
 
 	virtual float takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor);
 
@@ -65,6 +72,8 @@ public:
 	virtual void onEndRechargeShield();
 
 	virtual void Tick(float DeltaTime);
+
+	const FLinearColor& getEnergyShieldColor() const;
 
 	float getCapacity() const;
 
@@ -80,3 +89,13 @@ public:
 
 	virtual ~UBaseEnergyShield() = default;
 };
+
+inline float UBaseEnergyShield::getCapacity() const
+{
+	return capacity;
+}
+
+inline float UBaseEnergyShield::getCurrentCapacity() const
+{
+	return currentCapacity;
+}

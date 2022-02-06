@@ -30,7 +30,7 @@
 
 #include "BaseCharacter.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API ABaseCharacter :
 	public ACharacter,
 	public IShotThrough,
@@ -84,7 +84,7 @@ protected:
 	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float health;
 
-	UPROPERTY(Category = Stats, EditDefaultsOnly, ReplicatedUsing = onCurrentHealthChanged, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, EditDefaultsOnly, ReplicatedUsing = onCurrentHealthChange, BlueprintReadOnly)
 	float currentHealth;
 
 	UPROPERTY(Category = Stats, Replicated, BlueprintReadOnly)
@@ -159,8 +159,9 @@ protected:
 	UFUNCTION()
 	void onCurrentWeaponChange();
 
+public:
 	UFUNCTION()
-	virtual void onCurrentHealthChanged();
+	virtual void onCurrentHealthChange();
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -273,6 +274,8 @@ public:
 	int32 getDefaultLargeAmmoCount() const;
 
 	int32 getDefaultEnergyAmmoCount() const;
+
+	float getStartEnergyShieldCapacity() const;
 
 	TimersUtility& getTimers();
 

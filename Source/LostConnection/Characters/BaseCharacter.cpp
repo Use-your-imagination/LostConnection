@@ -19,6 +19,7 @@
 #include "Constants/Constants.h"
 #include "Utility/Utility.h"
 #include "Interfaces/Animations/WeaponUser.h"
+#include "EnergyShields/EmptyEnergyShield.h"
 
 #include "Utility/MultiplayerUtility.h"
 
@@ -83,6 +84,13 @@ void ABaseCharacter::PostInitializeComponents()
 	{
 		mesh->CreateAndSetMaterialInstanceDynamicFromMaterial(materialIndex, materials[materialIndex]);
 	}
+
+	if (HasAuthority())
+	{
+		energyShield = NewObject<UBaseEnergyShield>(this, energyShieldClass);
+
+		energyShield->init(this);
+	}
 }
 
 void ABaseCharacter::BeginPlay()
@@ -92,10 +100,7 @@ void ABaseCharacter::BeginPlay()
 	if (HasAuthority())
 	{
 		TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
-		energyShield = NewObject<UBaseEnergyShield>(this, energyShieldClass);
-
-		energyShield->init(startEnergyShieldCapacity);
-
+		
 		if (!spareAmmo.Num())
 		{
 			spareAmmo =
@@ -126,7 +131,7 @@ void ABaseCharacter::onCurrentWeaponChange()
 	}
 }
 
-void ABaseCharacter::onCurrentHealthChanged()
+void ABaseCharacter::onCurrentHealthChange()
 {
 
 }
@@ -267,6 +272,7 @@ void ABaseCharacter::runDeathLogic()
 }
 
 ABaseCharacter::ABaseCharacter() :
+	energyShieldClass(UEmptyEnergyShield::StaticClass()),
 	defaultMovementSpeed(450.0f),
 	sprintMovementSpeed(575.0f),
 	isDead(false),
@@ -450,7 +456,7 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 
 	currentHealth = newCurrentHealth;
 
-	this->onCurrentHealthChanged();
+	this->onCurrentHealthChange();
 }
 
 void ABaseCharacter::setReservedHealth_Implementation(float newReservedHealth)
@@ -562,6 +568,11 @@ int32 ABaseCharacter::getDefaultLargeAmmoCount() const
 int32 ABaseCharacter::getDefaultEnergyAmmoCount() const
 {
 	return defaultEnergyAmmoCount;
+}
+
+float ABaseCharacter::getStartEnergyShieldCapacity() const
+{
+	return startEnergyShieldCapacity;
 }
 
 TimersUtility& ABaseCharacter::getTimers()
@@ -736,15 +747,12 @@ float ABaseCharacter::getPercentageDamageReduction_Implementation() const
 
 float ABaseCharacter::getTotalLifePool() const
 {
-	// TODO: Add shields
-
-	return health;
+	return health + energyShield->getCapacity();
 }
 
 float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) const
 {
-	// TODO: Add shields
-	float pool = health;
+	float pool = this->getTotalLifePool();
 
 	return Utility::toPercent(1.0f - (pool - inflictor->calculateTotalDamage()) / pool);
 }

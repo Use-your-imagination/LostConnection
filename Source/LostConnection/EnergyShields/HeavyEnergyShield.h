@@ -40,7 +40,7 @@ public:
 
 	float getCurrentPoolCapacity() const;
 
-	void init(float startEnergyShieldCapacity) override;
+	void init(const TWeakObjectPtr<class ABaseCharacter>& owner) override;
 
 	virtual ~UHeavyEnergyShield() = default;
 };

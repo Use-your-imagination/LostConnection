@@ -3,6 +3,7 @@
 #include "BaseEnergyShield.h"
 
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "Characters/BaseCharacter.h"
 
 void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -23,10 +24,17 @@ void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(UBaseEnergyShield, isRecharging);
 }
 
-void UBaseEnergyShield::init(float startEnergyShieldCapacity)
+void UBaseEnergyShield::onCurrentCapacityChanged()
 {
-	capacity = startEnergyShieldCapacity;
-	currentCapacity = startEnergyShieldCapacity;
+	owner->onCurrentHealthChange();
+}
+
+void UBaseEnergyShield::init(const TWeakObjectPtr<ABaseCharacter>& owner)
+{
+	this->owner = owner;
+
+	capacity = owner->getStartEnergyShieldCapacity();
+	currentCapacity = capacity;
 
 	timers.addTimer([this]()
 		{
@@ -45,6 +53,8 @@ void UBaseEnergyShield::init(float startEnergyShieldCapacity)
 float UBaseEnergyShield::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
 {
 	currentCapacity -= inflictor->calculateTotalDamage();
+
+	this->onCurrentCapacityChanged();
 
 	if (currentCapacity <= 0)
 	{
@@ -93,14 +103,9 @@ void UBaseEnergyShield::Tick(float DeltaTime)
 	}
 }
 
-float UBaseEnergyShield::getCapacity() const
+const FLinearColor& UBaseEnergyShield::getEnergyShieldColor() const
 {
-	return capacity;
-}
-
-float UBaseEnergyShield::getCurrentCapacity() const
-{
-	return currentCapacity;
+	return energyShieldColor;
 }
 
 float UBaseEnergyShield::getRechargeDelay() const
