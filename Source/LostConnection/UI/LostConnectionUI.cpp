@@ -21,3 +21,8 @@ void ULostConnectionUI::UIConstruction_Implementation()
 {
 
 }
+
+void ULostConnectionUI::onEnergyShieldUpdate_Implementation()
+{
+
+}
