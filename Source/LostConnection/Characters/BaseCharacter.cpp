@@ -29,6 +29,8 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(ABaseCharacter, energyShield);
+
 	DOREPLIFETIME(ABaseCharacter, health);
 
 	DOREPLIFETIME(ABaseCharacter, currentHealth);
@@ -58,11 +60,18 @@ bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(currentWeapon, *Bunch, *RepFlags);
-
 	if (IsValid(currentWeapon))
 	{
+		wroteSomething |= Channel->ReplicateSubobject(currentWeapon, *Bunch, *RepFlags);
+
 		wroteSomething |= currentWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	if (IsValid(energyShield))
+	{
+		wroteSomething |= Channel->ReplicateSubobject(energyShield, *Bunch, *RepFlags);
+
+		wroteSomething |= energyShield->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
 	return wroteSomething;

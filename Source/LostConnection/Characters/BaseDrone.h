@@ -430,7 +430,7 @@ inline UCameraComponent* ABaseDrone::GetFollowCamera() const
 	return FollowCamera;
 }
 
-inline void ABaseDrone::showBotHealthBar()
+FORCEINLINE void ABaseDrone::showBotHealthBar()
 {
 	FCollisionQueryParams ignoreParameters;
 	FHitResult hit;
@@ -445,7 +445,7 @@ inline void ABaseDrone::showBotHealthBar()
 
 	if (lastHealthBarTraceTarget.IsValid() && hit.Actor != lastHealthBarTraceTarget)
 	{
-		if (lastHealthBarTraceTarget->getCurrentHealth() == lastHealthBarTraceTarget->getHealth())
+		if (!lastHealthBarTraceTarget->isDamaged())
 		{
 			lastHealthBarTraceTarget->setHealthBarVisibility(false);
 		}

@@ -61,7 +61,7 @@ protected:
 	UPROPERTY(Category = Timelines, BlueprintReadWrite)
 	UTimelinesUtility* timelines;
 
-	UPROPERTY(Category = EnergyShield, BlueprintReadOnly)
+	UPROPERTY(Category = EnergyShield, Replicated, BlueprintReadOnly)
 	UBaseEnergyShield* energyShield;
 
 	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, BlueprintReadOnly)
@@ -213,6 +213,8 @@ public:
 
 	void returnAmmoToSpare(UBaseWeapon* weapon);
 
+	bool isDamaged() const;
+
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void setDefaultWeapon(TSubclassOf<UBaseWeapon> defaultWeapon);
 
@@ -336,6 +338,12 @@ public:
 
 	virtual ~ABaseCharacter() = default;
 };
+
+inline bool ABaseCharacter::isDamaged() const
+{
+	return (currentHealth < health) ||
+		(energyShield->getCurrentCapacity() < energyShield->getCapacity());
+}
 
 inline int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
 {
