@@ -29,7 +29,7 @@ protected:
 	UMaterialInstanceDynamic* healthBarMaterial;
 
 	UPROPERTY()
-	UMaterialInstance* baseHealthBarMaterial;
+	UMaterial* baseHealthBarMaterial;
 
 protected:
 	virtual void onCurrentHealthChanged() override;
