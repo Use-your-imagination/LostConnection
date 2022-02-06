@@ -61,8 +61,11 @@ protected:
 	UPROPERTY(Category = Timelines, BlueprintReadWrite)
 	UTimelinesUtility* timelines;
 
-	UPROPERTY(Category = Stats, BlueprintReadOnly)
+	UPROPERTY(Category = EnergyShield, BlueprintReadOnly)
 	UBaseEnergyShield* energyShield;
+
+	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, BlueprintReadOnly)
+	float startEnergyShieldCapacity;
 
 private:
 	UPROPERTY(Category = Classes, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))

@@ -2,12 +2,14 @@
 
 #include "BaseEnergyShield.h"
 
+#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+
 void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UBaseEnergyShield, capacity);
-	
+
 	DOREPLIFETIME(UBaseEnergyShield, currentCapacity);
 
 	DOREPLIFETIME(UBaseEnergyShield, rechargeDelay);
@@ -21,8 +23,11 @@ void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(UBaseEnergyShield, isRecharging);
 }
 
-void UBaseEnergyShield::init()
+void UBaseEnergyShield::init(float startEnergyShieldCapacity)
 {
+	capacity = startEnergyShieldCapacity;
+	currentCapacity = startEnergyShieldCapacity;
+
 	timers.addTimer([this]()
 		{
 			if (isRecharging)
@@ -35,6 +40,20 @@ void UBaseEnergyShield::init()
 				}
 			}
 		}, 1.0f);
+}
+
+float UBaseEnergyShield::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
+{
+	currentCapacity -= inflictor->calculateTotalDamage();
+
+	if (currentCapacity <= 0)
+	{
+		this->onDestroyShield();
+
+		return FMath::Abs(currentCapacity);
+	}
+
+	return 0;
 }
 
 void UBaseEnergyShield::restoreShield_Implementation()

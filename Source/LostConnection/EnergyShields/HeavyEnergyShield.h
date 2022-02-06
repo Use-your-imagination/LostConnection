@@ -40,7 +40,7 @@ public:
 
 	float getCurrentPoolCapacity() const;
 
-	void init() override;
+	void init(float startEnergyShieldCapacity) override;
 
 	virtual ~UHeavyEnergyShield() = default;
 };

@@ -35,9 +35,9 @@ float UHeavyEnergyShield::getCurrentPoolCapacity() const
 	return currentPoolCapacity;
 }
 
-void UHeavyEnergyShield::init()
+void UHeavyEnergyShield::init(float startEnergyShieldCapacity)
 {
-	Super::init();
+	Super::init(startEnergyShieldCapacity);
 
 	poolCapacity = capacity * Utility::fromPercent(basePoolConversion);
 	currentPoolCapacity = poolCapacity;

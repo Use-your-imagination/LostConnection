@@ -16,10 +16,16 @@ class LOSTCONNECTION_API UBaseEnergyShield : public UNetworkObject
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, BlueprintReadOnly)
+	FLinearColor energyShieldColor;
+
+	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, BlueprintReadOnly)
+	FLinearColor energyShieldInterpColor;
+
+	UPROPERTY(Category = EnergyShield, Replicated, BlueprintReadOnly)
 	float capacity;
 
-	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = EnergyShield, Replicated, BlueprintReadOnly)
 	float currentCapacity;
 
 	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, Replicated, BlueprintReadOnly)
@@ -45,7 +51,9 @@ protected:
 public:
 	UBaseEnergyShield() = default;
 
-	virtual void init();
+	virtual void init(float startEnergyShieldCapacity);
+
+	virtual float takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor);
 
 	UFUNCTION(Server, Reliable)
 	virtual void restoreShield();

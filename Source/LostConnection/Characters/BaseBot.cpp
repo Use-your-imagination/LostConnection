@@ -62,7 +62,7 @@ void ABaseBot::deathLogic()
 
 ABaseBot::ABaseBot()
 {
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> healthBarBaseMaterialFinder(TEXT("MaterialInstanceConstant'/Game/Assets/FX/M_HealthBar_Inst.M_HealthBar_Inst'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> healthBarBaseMaterialFinder(TEXT("Material'/Game/Assets/FX/M_HealthBar.M_HealthBar'"));
 	static ConstructorHelpers::FObjectFinder<UMaterial> textMaterialFinder(TEXT("Material'/Game/Assets/FX/M_NumericLife.M_NumericLife'"));
 	static ConstructorHelpers::FObjectFinder<UFont> textFontFinder(TEXT("Font'/Engine/EditorResources/SmallFont.SmallFont'"));
 	

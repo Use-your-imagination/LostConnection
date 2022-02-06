@@ -94,6 +94,8 @@ void ABaseCharacter::BeginPlay()
 		TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
 		energyShield = NewObject<UBaseEnergyShield>(this, energyShieldClass);
 
+		energyShield->init(startEnergyShieldCapacity);
+
 		if (!spareAmmo.Num())
 		{
 			spareAmmo =
@@ -642,7 +644,9 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
 {
-	float tem = currentHealth - inflictor->calculateTotalDamage();
+	check(HasAuthority());
+
+	float tem = currentHealth - energyShield->takeDamage(inflictor);
 
 	if (tem < 0.0f)
 	{
