@@ -76,7 +76,16 @@ bool UIrradiationAilment::applyEffect(IStatusReceiver* target, const FHitResult&
 		return false;
 	}
 
-	target->setCurrentHealth(target->getCurrentHealth() - this->calculateTotalDamage() * Utility::fromPercent(irradiationMultiplier));
+	float tem = target->getCurrentHealth() - this->calculateTotalDamage() * Utility::fromPercent(irradiationMultiplier);
+
+	if (tem < 0.0f)
+	{
+		target->setCurrentHealth(0.0f);
+	}
+	else
+	{
+		target->setCurrentHealth(tem);
+	}
 
 	return true;
 }

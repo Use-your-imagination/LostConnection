@@ -21,7 +21,7 @@ private:
 	UPROPERTY(Category = Irradiation, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float irradiationMultiplier;
 
-	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Irradiation, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float irradiationMultiplierPerPercentEnergyShieldPool;
 
 	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
