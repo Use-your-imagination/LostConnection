@@ -112,7 +112,7 @@ void ABaseCharacter::BeginPlay()
 	if (HasAuthority())
 	{
 		TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
-		
+
 		if (!spareAmmo.Num())
 		{
 			spareAmmo =
@@ -461,33 +461,6 @@ void ABaseCharacter::setHealth_Implementation(float newHealth)
 	health = newHealth;
 }
 
-void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
-{
-	if (swarm.IsValid())
-	{
-		float newPercentHealth = Utility::toPercent(newCurrentHealth / health);
-
-		if (newPercentHealth <= swarm->getThreshold())
-		{
-			FHitResult hit;
-
-			hit.Actor = this;
-			hit.Component = GetMesh();
-			hit.Location = GetActorLocation();
-
-			swarm->applyEffect(this, hit);
-
-			currentHealth = 0.0f;
-
-			return;
-		}
-	}
-
-	currentHealth = newCurrentHealth;
-
-	this->onCurrentHealthChange();
-}
-
 void ABaseCharacter::setReservedHealth_Implementation(float newReservedHealth)
 {
 	reservedHealth = newReservedHealth;
@@ -530,11 +503,6 @@ UBaseWeapon* ABaseCharacter::getDefaultWeapon()
 float ABaseCharacter::getHealth() const
 {
 	return health;
-}
-
-float ABaseCharacter::getCurrentHealth() const
-{
-	return currentHealth;
 }
 
 float ABaseCharacter::getReservedHealth() const
@@ -744,9 +712,41 @@ void ABaseCharacter::detachDeathEvent(IOnDeathEvent* event)
 	deathEvents.Remove(event);
 }
 
+void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
+{
+	if (swarm.IsValid())
+	{
+		float newPercentHealth = Utility::toPercent(newCurrentHealth / health);
+
+		if (newPercentHealth <= swarm->getThreshold())
+		{
+			FHitResult hit;
+
+			hit.Actor = this;
+			hit.Component = GetMesh();
+			hit.Location = GetActorLocation();
+
+			swarm->applyEffect(this, hit);
+
+			currentHealth = 0.0f;
+
+			return;
+		}
+	}
+
+	currentHealth = newCurrentHealth;
+
+	this->onCurrentHealthChange();
+}
+
 void ABaseCharacter::setUnderStatusIntVariable_Implementation(const FString& key, int32 value)
 {
 	underStatusComponent->SetNiagaraVariableInt(key, value);
+}
+
+float ABaseCharacter::getCurrentHealth() const
+{
+	return currentHealth;
 }
 
 const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
@@ -779,11 +779,33 @@ float ABaseCharacter::getTotalLifePool() const
 	return health + energyShield->getCapacity();
 }
 
+float ABaseCharacter::getLifePool() const
+{
+	return health;
+}
+
+float ABaseCharacter::getEnergyShieldPool() const
+{
+	return energyShield->getCapacity();
+}
+
 float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) const
 {
 	float pool = this->getTotalLifePool();
 
 	return Utility::toPercent(1.0f - (pool - inflictor->calculateTotalDamage()) / pool);
+}
+
+float ABaseCharacter::getLifePercentDealt(class IDamageInflictor* inflictor) const
+{
+	return Utility::toPercent(1.0f - (health - inflictor->calculateTotalDamage()) / health);
+}
+
+float ABaseCharacter::getEnergyShieldPercentDealt(class IDamageInflictor* inflictor) const
+{
+	float capacity = energyShield->getCapacity();
+
+	return Utility::toPercent(1.0f - (capacity - inflictor->calculateTotalDamage()) / capacity);
 }
 
 void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)

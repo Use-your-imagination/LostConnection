@@ -2,6 +2,9 @@
 
 #include "IrradiationAilment.h"
 
+#include "Algo/Accumulate.h"
+
+#include "Interfaces/Gameplay/Statuses/Base/StatusReceiver.h"
 #include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
 #include "Utility/Utility.h"
 
@@ -19,11 +22,20 @@ void UIrradiationAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UIrradiationAilment, damage);
-	
+	DOREPLIFETIME(UIrradiationAilment, irradiationMultiplier);
+
+	DOREPLIFETIME(UIrradiationAilment, irradiationMultiplierPerPercentEnergyShieldPool);
+
+	DOREPLIFETIME(UIrradiationAilment, additionalIrradiationMultiplier);
+
 	DOREPLIFETIME(UIrradiationAilment, increasedDamageCoefficients);
 
 	DOREPLIFETIME(UIrradiationAilment, moreDamageCoefficients);
+}
+
+float UIrradiationAilment::getAdditionalIrradiationMultiplier() const
+{
+	return additionalIrradiationMultiplier;
 }
 
 void UIrradiationAilment::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
@@ -33,7 +45,40 @@ void UIrradiationAilment::applyStatus_Implementation(const TScriptInterface<ISta
 		return;
 	}
 
+	const TArray<UBaseStatus*>& statuses = target->getStatuses();
+
+	additionalIrradiationMultiplier = target->getEnergyShieldPercentDealt(this) / irradiationMultiplierPerPercentEnergyShieldPool;
+
+	irradiationMultiplier += Algo::Accumulate
+	(
+		statuses,
+		0.0f,
+		[](float currentValue, const UBaseStatus* status)
+		{
+			const UIrradiationAilment* irradiation = Cast<UIrradiationAilment>(status);
+
+			if (irradiation)
+			{
+				return currentValue + irradiation->getAdditionalIrradiationMultiplier();
+			}
+
+			return currentValue;
+		}
+	);
+
 	Super::applyStatus_Implementation(inflictor, target, hit);
+}
+
+bool UIrradiationAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+{
+	if (!Super::applyEffect(target, hit))
+	{
+		return false;
+	}
+
+	target->setCurrentHealth(target->getCurrentHealth() - this->calculateTotalDamage() * Utility::fromPercent(irradiationMultiplier));
+
+	return true;
 }
 
 void UIrradiationAilment::appendIncreasedDamageCoefficient(float coefficient)
@@ -58,7 +103,7 @@ void UIrradiationAilment::removeMoreDamageCoefficient(float coefficient)
 
 void UIrradiationAilment::setBaseDamage_Implementation(float newDamage)
 {
-	damage = newDamage;
+	inflictorDamage = newDamage;
 }
 
 void UIrradiationAilment::setAddedDamage_Implementation(float newAddedDamage)
@@ -73,7 +118,7 @@ void UIrradiationAilment::setAdditionalDamage_Implementation(float newAdditional
 
 float UIrradiationAilment::getBaseDamage() const
 {
-	return damage;
+	return inflictorDamage;
 }
 
 float UIrradiationAilment::getAddedDamage() const
@@ -88,12 +133,12 @@ float UIrradiationAilment::getAdditionalDamage() const
 
 TArray<float> UIrradiationAilment::getIncreasedDamageCoefficients() const
 {
-	return increasedDamageCoefficients;
+	return inflictorIncreaseDamageCoefficients;
 }
 
 TArray<float> UIrradiationAilment::getMoreDamageCoefficients() const
 {
-	return moreDamageCoefficients;
+	return inflictorMoreDamageCoefficients;
 }
 
 typeOfDamage UIrradiationAilment::getAilmentDamageType() const

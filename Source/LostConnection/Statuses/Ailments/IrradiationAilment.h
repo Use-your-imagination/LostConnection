@@ -18,8 +18,14 @@ class LOSTCONNECTION_API UIrradiationAilment :
 	GENERATED_BODY()
 	
 private:
+	UPROPERTY(Category = Irradiation, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float irradiationMultiplier;
+
 	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float damage;
+	float irradiationMultiplierPerPercentEnergyShieldPool;
+
+	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float additionalIrradiationMultiplier;
 
 	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<float> increasedDamageCoefficients;
@@ -38,7 +44,11 @@ private:
 public:
 	UIrradiationAilment() = default;
 
+	float getAdditionalIrradiationMultiplier() const;
+
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
+
+	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
 	void appendIncreasedDamageCoefficient(float coefficient) override;
 

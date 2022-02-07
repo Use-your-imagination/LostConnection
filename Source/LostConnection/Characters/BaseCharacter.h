@@ -225,9 +225,6 @@ public:
 	void setHealth(float newHealth);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void setCurrentHealth(float newCurrentHealth);
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void setReservedHealth(float newReservedHealth);
 
 	UFUNCTION(Server, Reliable)
@@ -246,8 +243,6 @@ public:
 	UBaseWeapon* getDefaultWeapon();
 
 	float getHealth() const;
-
-	float getCurrentHealth() const;
 
 	float getReservedHealth() const;
 
@@ -308,8 +303,13 @@ public:
 
 	virtual void detachDeathEvent(IOnDeathEvent* event) final override;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void setCurrentHealth(float newCurrentHealth) final override;
+
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void setUnderStatusIntVariable(const FString& key, int32 value) final override;
+
+	virtual float getCurrentHealth() const final override;
 
 	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
 
@@ -323,7 +323,15 @@ public:
 
 	virtual float getTotalLifePool() const override;
 
+	virtual float getLifePool() const override;
+
+	virtual float getEnergyShieldPool() const override;
+
 	virtual float getTotalLifePercentDealt(class IDamageInflictor* inflictor) const final override;
+
+	virtual float getLifePercentDealt(class IDamageInflictor* inflictor) const final override;
+
+	virtual float getEnergyShieldPercentDealt(class IDamageInflictor* inflictor) const final override;
 
 	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
 
