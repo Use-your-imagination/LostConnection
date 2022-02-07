@@ -12,5 +12,14 @@
         "Heavy energy shield: high capacity, extended recharge."
       ]
     }
+  },
+  "Ailments": {
+    "type": "category",
+    "Irradiation": {
+      "type": "item",
+      "notes": [
+        "Added irradiation ailment"
+      ]
+    }
   }
 }
