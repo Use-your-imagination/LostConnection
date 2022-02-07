@@ -1,4 +1,16 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.1.9.0"
+  "projectVersion": "0.1.9.0",
+  "Gameplay": {
+    "type": "category",
+    "Energy Shields": {
+      "type": "item",
+      "notes": [
+        "Added 3 types of energy shields",
+        "Light energy shield: low capacity and recharge delay, high recharge rate.",
+        "Normal energy shield: average capacity, recharge delay, recharge rate.",
+        "Heavy energy shield: high capacity, extended recharge."
+      ]
+    }
+  }
 }
