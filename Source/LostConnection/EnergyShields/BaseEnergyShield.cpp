@@ -47,14 +47,14 @@ void UBaseEnergyShield::init(const TWeakObjectPtr<ABaseCharacter>& owner)
 		{
 			if (isRecharging)
 			{
-				currentCapacity = FMath::Min(capacity, currentCapacity + capacity * Utility::fromPercent(rechargeRate));
+				currentCapacity = FMath::Min(capacity, currentCapacity + capacity * Utility::fromPercent(rechargeRate) / rechargesPerSecond);
 
 				if (currentCapacity == capacity)
 				{
 					this->onEndRechargeShield();
 				}
 			}
-		}, 1.0f);
+		}, 1.0f / rechargesPerSecond);
 }
 
 float UBaseEnergyShield::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
@@ -62,7 +62,7 @@ float UBaseEnergyShield::takeDamage(const TScriptInterface<IDamageInflictor>& in
 	float tem = currentCapacity - inflictor->calculateTotalDamage();
 	float remainingDamage = 0.0f;
 
-	if (tem <= 0)
+	if (tem <= 0.0f)
 	{
 		remainingDamage = FMath::Abs(tem);
 

@@ -39,6 +39,9 @@ protected:
 	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float addedEffectiveness;
 
+	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, BlueprintReadOnly)
+	int32 rechargesPerSecond;
+
 	UPROPERTY(Category = EnergyShield, Replicated, BlueprintReadOnly)
 	float remainingTimeToRestoreShield;
 
