@@ -27,5 +27,8 @@ public:
 	UFUNCTION(Category = Initialization, BlueprintNativeEvent)
 	void UIConstruction();
 
+	UFUNCTION(Category = EnergyShield, BlueprintNativeEvent)
+	void onEnergyShieldUpdate();
+
 	virtual ~ULostConnectionUI() = default;
 };

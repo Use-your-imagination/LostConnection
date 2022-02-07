@@ -29,6 +29,13 @@ void UBaseEnergyShield::onCurrentCapacityChanged()
 	owner->onCurrentHealthChange();
 }
 
+void UBaseEnergyShield::startRechargeDelay()
+{
+	remainingTimeToRestoreShield = rechargeDelay;
+
+	isRecharging = false;
+}
+
 void UBaseEnergyShield::init(const TWeakObjectPtr<ABaseCharacter>& owner)
 {
 	this->owner = owner;
@@ -40,7 +47,7 @@ void UBaseEnergyShield::init(const TWeakObjectPtr<ABaseCharacter>& owner)
 		{
 			if (isRecharging)
 			{
-				currentCapacity = FMath::Min(capacity, currentCapacity + currentCapacity * Utility::fromPercent(rechargeRate));
+				currentCapacity = FMath::Min(capacity, currentCapacity + capacity * Utility::fromPercent(rechargeRate));
 
 				if (currentCapacity == capacity)
 				{
@@ -52,18 +59,27 @@ void UBaseEnergyShield::init(const TWeakObjectPtr<ABaseCharacter>& owner)
 
 float UBaseEnergyShield::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
 {
-	currentCapacity -= inflictor->calculateTotalDamage();
+	float tem = currentCapacity - inflictor->calculateTotalDamage();
+	float remainingDamage = 0.0f;
+
+	if (tem <= 0)
+	{
+		remainingDamage = FMath::Abs(tem);
+
+		currentCapacity = 0.0f;
+
+		this->onDestroyShield();
+	}
+	else
+	{
+		currentCapacity = tem;
+	}
+
+	this->startRechargeDelay();
 
 	this->onCurrentCapacityChanged();
 
-	if (currentCapacity <= 0)
-	{
-		this->onDestroyShield();
-
-		return FMath::Abs(currentCapacity);
-	}
-
-	return 0;
+	return remainingDamage;
 }
 
 void UBaseEnergyShield::restoreShield_Implementation()
@@ -73,9 +89,7 @@ void UBaseEnergyShield::restoreShield_Implementation()
 
 void UBaseEnergyShield::onDestroyShield()
 {
-	remainingTimeToRestoreShield = rechargeDelay;
-
-	isRecharging = false;
+	this->startRechargeDelay();
 }
 
 void UBaseEnergyShield::onStartRechargeShield()

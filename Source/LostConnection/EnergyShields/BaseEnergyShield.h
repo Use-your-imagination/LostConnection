@@ -55,6 +55,9 @@ protected:
 	UFUNCTION()
 	virtual void onCurrentCapacityChanged();
 
+private:
+	void startRechargeDelay();
+
 public:
 	UBaseEnergyShield() = default;
 

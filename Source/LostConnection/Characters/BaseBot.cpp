@@ -11,7 +11,7 @@
 
 void ABaseBot::onCurrentHealthChange()
 {
-	if (currentHealth != health)
+	if (this->isDamaged())
 	{
 		this->setHealthBarVisibility(true);
 
