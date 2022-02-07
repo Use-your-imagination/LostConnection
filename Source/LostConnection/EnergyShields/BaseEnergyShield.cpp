@@ -54,6 +54,8 @@ void UBaseEnergyShield::init(ABaseCharacter* owner)
 			{
 				currentCapacity = FMath::Min(capacity, currentCapacity + capacity * Utility::fromPercent(rechargeRate) / rechargesPerSecond);
 
+				this->onCurrentCapacityChanged();
+
 				if (currentCapacity == capacity)
 				{
 					this->onEndRechargeShield();

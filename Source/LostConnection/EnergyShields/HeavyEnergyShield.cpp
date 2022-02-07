@@ -52,6 +52,8 @@ void UHeavyEnergyShield::init(ABaseCharacter* owner)
 			if (isRecharging)
 			{
 				currentPoolCapacity = FMath::Min(poolCapacity, currentPoolCapacity + poolCapacity * Utility::fromPercent(poolRechargeRate) / rechargesPerSecond);
+
+				this->onCurrentCapacityChanged();
 			}
 		}, 1.0f / rechargesPerSecond);
 }
