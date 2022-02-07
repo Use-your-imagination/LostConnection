@@ -61,7 +61,7 @@ protected:
 	UPROPERTY(Category = Timelines, BlueprintReadWrite)
 	UTimelinesUtility* timelines;
 
-	UPROPERTY(Category = EnergyShield, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = EnergyShield, ReplicatedUsing = onEnergyShieldUpdate, BlueprintReadOnly)
 	UBaseEnergyShield* energyShield;
 
 	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, BlueprintReadOnly)
@@ -158,6 +158,9 @@ protected:
 protected:
 	UFUNCTION()
 	void onCurrentWeaponChange();
+
+	UFUNCTION()
+	void onEnergyShieldUpdate();
 
 public:
 	UFUNCTION()
@@ -342,7 +345,7 @@ public:
 inline bool ABaseCharacter::isDamaged() const
 {
 	return (currentHealth < health) ||
-		(energyShield->getCurrentCapacity() < energyShield->getCapacity());
+		(IsValid(energyShield) && energyShield->getCurrentCapacity() < energyShield->getCapacity());
 }
 
 inline int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const

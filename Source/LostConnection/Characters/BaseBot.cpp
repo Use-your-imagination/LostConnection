@@ -48,7 +48,10 @@ void ABaseBot::PostInitializeComponents()
 
 	healthBar->AddElement(healthBarMaterial, nullptr, false, 10.0f, 40.0f, nullptr);
 
-	healthBarMaterial->SetVectorParameterValue("ShieldColor", energyShield->getEnergyShieldColor());
+	if (HasAuthority())
+	{
+		this->updateShield();
+	}
 
 	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
 }
@@ -91,4 +94,12 @@ ABaseBot::ABaseBot()
 	healthBar->SetVisibility(false);
 
 	healthBarTextRender->SetVisibility(false);
+}
+
+void ABaseBot::updateShield()
+{
+	if (IsValid(healthBarMaterial))
+	{
+		healthBarMaterial->SetVectorParameterValue("ShieldColor", energyShield->getEnergyShieldColor());
+	}	
 }

@@ -47,13 +47,15 @@ protected:
 public:
 	ABaseBot();
 
-	virtual void updateHealthBar() final;
+	void updateShield();
 
-	virtual void setHealthBarVisibility(bool isVisible) final;
+	void updateHealthBar();
 
-	virtual UMaterialBillboardComponent* getHealthBar() const;
+	void setHealthBarVisibility(bool isVisible);
 
-	virtual UTextRenderComponent* getHealthBarTextRender() const;
+	UMaterialBillboardComponent* getHealthBar() const;
+
+	UTextRenderComponent* getHealthBarTextRender() const;
 
 	virtual ~ABaseBot() = default;
 };
@@ -62,7 +64,10 @@ inline void ABaseBot::updateHealthBar()
 {
 	healthBarMaterial->SetScalarParameterValue("LifePercent", Utility::toPercent(currentHealth / health));
 
-	healthBarMaterial->SetScalarParameterValue("ShieldPercent", Utility::toPercent(energyShield->getCurrentCapacity() / energyShield->getCapacity()));
+	if (IsValid(energyShield))
+	{
+		healthBarMaterial->SetScalarParameterValue("ShieldPercent", Utility::toPercent(energyShield->getCurrentCapacity() / energyShield->getCapacity()));
+	}
 
 	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
 }

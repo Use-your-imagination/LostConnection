@@ -48,9 +48,10 @@ protected:
 	UPROPERTY(Category = EnergyShield, Replicated, BlueprintReadOnly)
 	bool isRecharging;
 
-	TimersUtility timers;
+	UPROPERTY(Replicated)
+	class ABaseCharacter* owner;
 
-	TWeakObjectPtr<class ABaseCharacter> owner;
+	TimersUtility timers;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -64,7 +65,7 @@ private:
 public:
 	UBaseEnergyShield() = default;
 
-	virtual void init(const TWeakObjectPtr<class ABaseCharacter>& owner);
+	virtual void init(class ABaseCharacter* owner);
 
 	virtual float takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor);
 

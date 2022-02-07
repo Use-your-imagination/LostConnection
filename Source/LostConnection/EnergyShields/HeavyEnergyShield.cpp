@@ -37,7 +37,7 @@ float UHeavyEnergyShield::getCurrentPoolCapacity() const
 	return currentPoolCapacity;
 }
 
-void UHeavyEnergyShield::init(const TWeakObjectPtr<ABaseCharacter>& owner)
+void UHeavyEnergyShield::init(ABaseCharacter* owner)
 {
 	Super::init(owner);
 
@@ -51,7 +51,7 @@ void UHeavyEnergyShield::init(const TWeakObjectPtr<ABaseCharacter>& owner)
 		{
 			if (isRecharging)
 			{
-				currentPoolCapacity = FMath::Min(poolCapacity, currentPoolCapacity + currentPoolCapacity * Utility::fromPercent(poolRechargeRate));
+				currentPoolCapacity = FMath::Min(poolCapacity, currentPoolCapacity + poolCapacity * Utility::fromPercent(poolRechargeRate) / rechargesPerSecond);
 			}
-		}, 1.0f);
+		}, 1.0f / rechargesPerSecond);
 }

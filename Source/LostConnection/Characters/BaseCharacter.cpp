@@ -15,6 +15,7 @@
 #include "Statuses/Ailments/SwarmAilment.h"
 #include "Utility/InitializationUtility.h"
 #include "BaseBot.h"
+#include "BaseDrone.h"
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 #include "Constants/Constants.h"
 #include "Utility/Utility.h"
@@ -99,6 +100,8 @@ void ABaseCharacter::PostInitializeComponents()
 		energyShield = NewObject<UBaseEnergyShield>(this, energyShieldClass);
 
 		energyShield->init(this);
+
+		this->onEnergyShieldUpdate();
 	}
 }
 
@@ -137,6 +140,23 @@ void ABaseCharacter::onCurrentWeaponChange()
 	if (animInstance->Implements<UWeaponUser>())
 	{
 		IWeaponUser::Execute_weaponUpdate(animInstance, currentWeapon);
+	}
+}
+
+void ABaseCharacter::onEnergyShieldUpdate()
+{
+	if (GetController() && Cast<ABaseDrone>(this))
+	{
+		ULostConnectionUI* ui = Cast<ULostConnectionUI>(Utility::getPlayerState(this)->getCurrentUI());
+
+		if (ui)
+		{
+			ui->onEnergyShieldUpdate();
+		}
+	}
+	else if (ABaseBot* bot = Cast<ABaseBot>(this))
+	{
+		bot->updateShield();
 	}
 }
 

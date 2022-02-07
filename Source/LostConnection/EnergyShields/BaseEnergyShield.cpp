@@ -22,11 +22,16 @@ void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(UBaseEnergyShield, remainingTimeToRestoreShield);
 
 	DOREPLIFETIME(UBaseEnergyShield, isRecharging);
+
+	DOREPLIFETIME(UBaseEnergyShield, owner);
 }
 
 void UBaseEnergyShield::onCurrentCapacityChanged()
 {
-	owner->onCurrentHealthChange();
+	if (IsValid(owner))
+	{
+		owner->onCurrentHealthChange();
+	}
 }
 
 void UBaseEnergyShield::startRechargeDelay()
@@ -36,7 +41,7 @@ void UBaseEnergyShield::startRechargeDelay()
 	isRecharging = false;
 }
 
-void UBaseEnergyShield::init(const TWeakObjectPtr<ABaseCharacter>& owner)
+void UBaseEnergyShield::init(ABaseCharacter* owner)
 {
 	this->owner = owner;
 
