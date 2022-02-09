@@ -21,5 +21,15 @@
         "Added irradiation ailment"
       ]
     }
+  },
+  "Visual": {
+    "type": "category",
+    "Animations": {
+      "type": "item",
+      "notes": [
+        "Update Hipter animations",
+        "Added Gauss animations"
+      ]
+    }
   }
 }
