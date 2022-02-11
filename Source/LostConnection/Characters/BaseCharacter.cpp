@@ -162,7 +162,19 @@ void ABaseCharacter::onEnergyShieldUpdate()
 
 void ABaseCharacter::onCurrentHealthChange()
 {
+	if (HasAuthority() && !isDead && currentHealth == 0.0f)
+	{
+		Algo::ForEachIf
+		(
+			deathEvents,
+			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
+			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
+		);
 
+		isDead = true;
+
+		MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
+	}
 }
 
 void ABaseCharacter::updateWeaponMesh()
@@ -598,20 +610,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	timelines->Tick(DeltaTime);
-
-	if (HasAuthority() && !isDead && currentHealth == 0.0f)
-	{
-		Algo::ForEachIf
-		(
-			deathEvents,
-			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
-			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
-		);
-
-		isDead = true;
-
-		MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
-	}
 
 	if (HasAuthority() && !isDead)
 	{
