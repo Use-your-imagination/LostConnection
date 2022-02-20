@@ -23,6 +23,11 @@
 		{
 			"Name": "EditorScriptingUtilities",
 			"Enabled": true
+		},
+		{
+			"Name": "AnimationCutter",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/c89333454f7549c78f6cc53495f67742"
 		}
 	]
 }
