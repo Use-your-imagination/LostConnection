@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright (c) 2022 Use-your-imagination
 
 using System;
 using System.IO;

@@ -1,0 +1,43 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Animation Cutter",
+	"Description": "Faster Animation cut workflow",
+	"Category": "Code Plugin",
+	"CreatedBy": "Mebebonk",
+	"CreatedByURL": "https://github.com/Mebebonk/",
+	"DocsURL": "https://github.com/Mebebonk/AnimationCutterPublic/wiki",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/c89333454f7549c78f6cc53495f67742",
+	"SupportURL": "wirex2000@gmail.com",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"EngineVersion": [
+		"4.26.0",
+		"4.27.0"
+	],
+	"Modules": [
+		{
+			"Name": "AnimationCutter",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win32",
+				"Win64",
+				"HoloLens",
+				"Mac",
+				"XboxOne",
+				"PS4",
+				"IOS",
+				"Android",
+				"Linux",
+				"LinuxAArch64",
+				"TVOS",
+				"Switch",
+				"Lumin"
+			]
+		}
+	]
+}
