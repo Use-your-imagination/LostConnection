@@ -366,10 +366,10 @@ void ABaseDrone::BeginPlay()
 
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 
-	Utility::executeOnOwningClient(this, [this, &manager]()
-		{
-			Utility::setCurrentUI(manager.getUI().getDefaultUI(), this)->init(this);
-		});
+	if (GetController() && !Utility::getPlayerState(this)->getCurrentUI())
+	{
+		this->initDefaultUI();
+	}
 
 	if (HasAuthority())
 	{
@@ -758,44 +758,6 @@ ABaseDrone::ABaseDrone() :
 #pragma endregion
 }
 
-void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primaryWeapon)
-{
-	if (!primaryWeapon)
-	{
-		UE_LOG(LogTemp, Error, L"Primary weapon is null");
-
-		return;
-	}
-
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, primaryWeapon);
-
-	weapon->setOwner(this);
-
-	weapon->updateTimeBetweenShots();
-
-	playerState->setPrimaryWeapon(weapon);
-}
-
-void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> secondaryWeapon)
-{
-	if (!secondaryWeapon)
-	{
-		UE_LOG(LogTemp, Error, L"Secondary weapon is null");
-
-		return;
-	}
-
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, secondaryWeapon);
-
-	weapon->setOwner(this);
-
-	weapon->updateTimeBetweenShots();
-
-	playerState->setSecondaryWeapon(weapon);
-}
-
 void ABaseDrone::changeToPrimaryWeapon_Implementation()
 {
 	currentWeapon = Utility::getPlayerState(this)->getPrimaryWeapon();
@@ -976,6 +938,52 @@ void ABaseDrone::action()
 void ABaseDrone::restoreEnergy_Implementation(float amount)
 {
 	currentEnergy = FMath::Min(energy, currentEnergy + amount);
+}
+
+void ABaseDrone::initDefaultUI()
+{
+	Utility::executeOnOwningClient(this, [this]()
+		{
+			Utility::setCurrentUI(ULostConnectionAssetManager::get().getUI().getDefaultUI(), this)->init(this);
+		});
+}
+
+void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primaryWeapon)
+{
+	if (!primaryWeapon)
+	{
+		UE_LOG(LogTemp, Error, L"Primary weapon is null");
+
+		return;
+	}
+
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, primaryWeapon);
+
+	weapon->setOwner(this);
+
+	weapon->updateTimeBetweenShots();
+
+	playerState->setPrimaryWeapon(weapon);
+}
+
+void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> secondaryWeapon)
+{
+	if (!secondaryWeapon)
+	{
+		UE_LOG(LogTemp, Error, L"Secondary weapon is null");
+
+		return;
+	}
+
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, secondaryWeapon);
+
+	weapon->setOwner(this);
+
+	weapon->updateTimeBetweenShots();
+
+	playerState->setSecondaryWeapon(weapon);
 }
 
 FVector ABaseDrone::getStartActionLineTrace() const

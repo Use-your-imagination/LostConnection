@@ -39,6 +39,8 @@ void ABaseBot::BeginPlay()
 		this->setDefaultWeapon(ULostConnectionAssetManager::get().getWeaponClass(UGauss::StaticClass()));
 
 		this->changeToDefaultWeapon();
+
+		this->updateShield();
 	}
 }
 
@@ -49,11 +51,6 @@ void ABaseBot::PostInitializeComponents()
 	healthBarMaterial = UMaterialInstanceDynamic::Create(baseHealthBarMaterial, this);
 
 	healthBar->AddElement(healthBarMaterial, nullptr, false, 10.0f, 40.0f, nullptr);
-
-	if (HasAuthority())
-	{
-		this->updateShield();
-	}
 
 	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
 }
@@ -72,12 +69,12 @@ ABaseBot::ABaseBot()
 	static ConstructorHelpers::FObjectFinder<UMaterial> healthBarBaseMaterialFinder(TEXT("Material'/Game/Assets/FX/M_HealthBar.M_HealthBar'"));
 	static ConstructorHelpers::FObjectFinder<UMaterial> textMaterialFinder(TEXT("Material'/Game/Assets/FX/M_NumericLife.M_NumericLife'"));
 	static ConstructorHelpers::FObjectFinder<UFont> textFontFinder(TEXT("Font'/Engine/EditorResources/SmallFont.SmallFont'"));
-	
+
 	isAlly = false;
 
 	healthBar = CreateDefaultSubobject<UMaterialBillboardComponent>("HealthBar");
 	healthBarTextRender = CreateDefaultSubobject<UTextRenderComponent>("healthBarTextRender");
-	
+
 	healthBar->SetupAttachment(GetMesh());
 
 	healthBarTextRender->SetupAttachment(healthBar);
@@ -103,5 +100,5 @@ void ABaseBot::updateShield()
 	if (IsValid(healthBarMaterial))
 	{
 		healthBarMaterial->SetVectorParameterValue("ShieldColor", energyShield->getEnergyShieldColor());
-	}	
+	}
 }

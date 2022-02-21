@@ -100,8 +100,6 @@ void ABaseCharacter::PostInitializeComponents()
 		energyShield = NewObject<UBaseEnergyShield>(this, energyShieldClass);
 
 		energyShield->init(this);
-
-		this->onEnergyShieldUpdate();
 	}
 }
 
@@ -123,6 +121,8 @@ void ABaseCharacter::BeginPlay()
 				FAmmoData(ammoTypes::defaultType, 9999)
 			};
 		}
+
+		this->onEnergyShieldUpdate();
 	}
 }
 
@@ -147,6 +147,11 @@ void ABaseCharacter::onEnergyShieldUpdate()
 {
 	if (GetController() && Cast<ABaseDrone>(this))
 	{
+		if (!Utility::getPlayerState(this)->getCurrentUI())
+		{
+			Cast<ABaseDrone>(this)->initDefaultUI();
+		}
+
 		ULostConnectionUI* ui = Cast<ULostConnectionUI>(Utility::getPlayerState(this)->getCurrentUI());
 
 		if (ui)

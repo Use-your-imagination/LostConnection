@@ -260,12 +260,6 @@ public:
 	ABaseDrone();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void setPrimaryWeapon(TSubclassOf<UBaseWeapon> primaryWeapon);
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void setSecondaryWeapon(TSubclassOf<UBaseWeapon> secondaryWeapon);
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void changeToPrimaryWeapon();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
@@ -291,6 +285,14 @@ public:
 
 	UFUNCTION(Server, Unreliable)
 	void restoreEnergy(float amount);
+
+	void initDefaultUI();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void setPrimaryWeapon(TSubclassOf<UBaseWeapon> primaryWeapon);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void setSecondaryWeapon(TSubclassOf<UBaseWeapon> secondaryWeapon);
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
 	UBaseWeapon* getPrimaryWeapon() const;
