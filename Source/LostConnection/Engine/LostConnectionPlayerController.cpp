@@ -33,7 +33,7 @@ void ALostConnectionPlayerController::respawnPlayer_Implementation()
 
 	Possess(drone);
 
-	UGameplayStatics::FinishSpawningActor(drone, drone->GetActorTransform());
+	drone->FinishSpawning({}, true);
 }
 
 void ALostConnectionPlayerController::save_Implementation()

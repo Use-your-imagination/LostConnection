@@ -126,7 +126,7 @@ bool ASN4K3::checkThirdAbilityCast() const
 
 	USN4K3ThirdAbility* ability = Cast<USN4K3ThirdAbility>(thirdAbility);
 
-	return IsValid(ability) && !ability->getIsFlagExist();
+	return IsValid(ability);
 }
 
 bool ASN4K3::checkUltimateAbilityCast() const

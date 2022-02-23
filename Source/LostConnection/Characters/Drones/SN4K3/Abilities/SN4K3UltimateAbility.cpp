@@ -123,7 +123,7 @@ void USN4K3UltimateAbility::useAbility()
 
 	placeholder->setAbility(this);
 
-	UGameplayStatics::FinishSpawningActor(placeholder, placeholder->GetActorTransform());
+	placeholder->FinishSpawning({}, true);
 
 	ultimatePlaceholderLocation = placeholder->GetActorLocation();
 

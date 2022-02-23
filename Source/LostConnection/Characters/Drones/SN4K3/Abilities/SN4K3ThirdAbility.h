@@ -31,17 +31,13 @@ private:
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNetworkObject* socketItem;
 
-	bool isFlagExist;
+	TWeakObjectPtr<class ASN4K3ThirdAbilityFlag> flagPointer;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	USN4K3ThirdAbility();
-
-	void setIsFlagExist(bool isFlagExist);
-
-	bool getIsFlagExist() const;
 
 	void applyAbility(class ABaseCharacter* target) override;
 

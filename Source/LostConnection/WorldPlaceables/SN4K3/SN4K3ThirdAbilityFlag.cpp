@@ -40,8 +40,6 @@ void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
 
 		if (lifetime <= 0.0f)
 		{
-			ability->setIsFlagExist(false);
-
 			Destroy();
 		}
 	}
