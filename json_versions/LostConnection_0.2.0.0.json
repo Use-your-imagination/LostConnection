@@ -1,4 +1,13 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.2.0.0"
+  "projectVersion": "0.2.0.0",
+  "Visual": {
+    "type": "category",
+    "Hipter": {
+      "type": "item",
+      "notes": [
+        "Added Hipter animations"
+      ]
+    }
+  }
 }

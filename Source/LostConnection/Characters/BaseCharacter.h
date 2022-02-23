@@ -81,7 +81,7 @@ protected:
 	UPROPERTY(Category = CharacterInformation, EditDefaultsOnly, BlueprintReadOnly)
 	FText description;
 
-	UPROPERTY(Category = Stats, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = Stats, EditDefaultsOnly, ReplicatedUsing = onHealthChange, BlueprintReadOnly)
 	float health;
 
 	UPROPERTY(Category = Stats, EditDefaultsOnly, ReplicatedUsing = onCurrentHealthChange, BlueprintReadOnly)
@@ -163,6 +163,9 @@ protected:
 	void onEnergyShieldUpdate();
 
 public:
+	UFUNCTION()
+	virtual void onHealthChange();
+
 	UFUNCTION()
 	virtual void onCurrentHealthChange();
 

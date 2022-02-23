@@ -9,6 +9,16 @@
 #include "Weapons/Pistols/Gauss.h"
 #include "Engine/LostConnectionGameMode.h"
 
+void ABaseBot::onHealthChange()
+{
+	Super::onHealthChange();
+
+	if (IsValid(healthBarMaterial) && IsValid(energyShield))
+	{
+		healthBarMaterial->SetScalarParameterValue("LifeToShieldMultiplier", health / energyShield->getCapacity());
+	}
+}
+
 void ABaseBot::onCurrentHealthChange()
 {
 	Super::onCurrentHealthChange();

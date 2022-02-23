@@ -26,7 +26,15 @@ void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(UBaseEnergyShield, owner);
 }
 
-void UBaseEnergyShield::onCurrentCapacityChanged()
+void UBaseEnergyShield::onCapacityChange()
+{
+	if (IsValid(owner))
+	{
+		owner->onHealthChange();
+	}
+}
+
+void UBaseEnergyShield::onCurrentCapacityChange()
 {
 	if (IsValid(owner))
 	{
@@ -54,7 +62,7 @@ void UBaseEnergyShield::init(ABaseCharacter* owner)
 			{
 				currentCapacity = FMath::Min(capacity, currentCapacity + capacity * Utility::fromPercent(rechargeRate) / rechargesPerSecond);
 
-				this->onCurrentCapacityChanged();
+				this->onCurrentCapacityChange();
 
 				if (currentCapacity == capacity)
 				{
@@ -84,7 +92,7 @@ float UBaseEnergyShield::takeDamage(const TScriptInterface<IDamageInflictor>& in
 
 	this->startRechargeDelay();
 
-	this->onCurrentCapacityChanged();
+	this->onCurrentCapacityChange();
 
 	return remainingDamage;
 }

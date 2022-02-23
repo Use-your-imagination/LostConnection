@@ -32,6 +32,8 @@ protected:
 	UMaterial* baseHealthBarMaterial;
 
 protected:
+	virtual void onHealthChange() override;
+
 	virtual void onCurrentHealthChange() override;
 
 protected:

@@ -21,6 +21,7 @@
 #include "Utility/Utility.h"
 #include "Interfaces/Animations/WeaponUser.h"
 #include "EnergyShields/EmptyEnergyShield.h"
+#include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
 
 #include "Utility/MultiplayerUtility.h"
 
@@ -163,6 +164,13 @@ void ABaseCharacter::onEnergyShieldUpdate()
 	{
 		bot->updateShield();
 	}
+
+	UUtilityBlueprintFunctionLibrary::setMaterialLinearColorParameter(GetMesh(), "ShieldColor", energyShield->getEnergyShieldColor());
+}
+
+void ABaseCharacter::onHealthChange()
+{
+
 }
 
 void ABaseCharacter::onCurrentHealthChange()
