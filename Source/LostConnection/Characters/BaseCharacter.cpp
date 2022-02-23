@@ -125,6 +125,8 @@ void ABaseCharacter::BeginPlay()
 
 		this->onEnergyShieldUpdate();
 	}
+
+	this->onHealthChange();
 }
 
 void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
@@ -626,10 +628,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	if (HasAuthority() && !isDead)
 	{
-		check(GetController());
-
-		check(IsValid(GetController()));
-
 		TArray<UBaseStatus*> statusesToRemove;
 		UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
 
