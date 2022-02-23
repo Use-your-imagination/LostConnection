@@ -8,14 +8,7 @@
 
 ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> meshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/SN4K3/SN4K3Mesh.SN4K3Mesh'"));
-	static ConstructorHelpers::FClassFinder<UAnimInstance> animBPFinder(TEXT("/Game/Drones/SN4K3/AnimBP_SN4K3_UltReplica"));
-
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
-
-	mesh->SetSkeletalMesh(meshFinder.Object);
-
-	mesh->SetAnimClass(animBPFinder.Class);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 

@@ -49,11 +49,7 @@ void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
 
 ASN4K3ThirdAbilityFlag::ASN4K3ThirdAbilityFlag()
 {
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> flagMeshFinder(TEXT("SkeletalMesh'/Game/Assets/Characters/SN4K3/Abilities/Third/Meshes/Flag.Flag'"));
-
 	NetUpdateFrequency = UConstants::minNetUpdateFrequency;
-
-	mesh->SetSkeletalMesh(flagMeshFinder.Object);
 
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
