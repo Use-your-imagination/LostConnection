@@ -35,7 +35,7 @@ void USN4K3ResurrectDeathEvent::deathEventAction()
 
 	controller->Possess(drone);
 
-	UGameplayStatics::FinishSpawningActor(drone, drone->GetActorTransform());
+	drone->FinishSpawning({}, true);
 }
 
 IDeathEventsHolder* USN4K3ResurrectDeathEvent::getDeathEventsHolder() const

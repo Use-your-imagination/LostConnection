@@ -49,7 +49,7 @@ void USN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 
 	Utility::getPlayerController(target)->Possess(head);
 
-	UGameplayStatics::FinishSpawningActor(head, target->GetActorTransform());
+	head->FinishSpawning({}, true);
 
 	ICaster::Execute_applyPassiveAbilityEvent(Cast<UObject>(caster), target);
 }

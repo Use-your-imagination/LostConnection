@@ -164,7 +164,7 @@ void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTrans
 
 	visibleMesh->AddRelativeRotation({ 0.0f, 270.0f ,0.0f });
 
-	UGameplayStatics::FinishSpawningActor(this, GetActorTransform());
+	FinishSpawning({}, true);
 }
 
 void AAmmo::copyProperties(UBaseWeapon* weapon)

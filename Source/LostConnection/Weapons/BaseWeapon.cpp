@@ -210,7 +210,7 @@ void UBaseWeapon::updateTimeBetweenShots_Implementation()
 void UBaseWeapon::Tick(float DeltaTime)
 {
 	static constexpr float decreaseAccuracyMultiplier = 0.95f;
-	bool isReloading = owner->getIsReloading();
+	bool isReloading = owner.IsValid() && owner->getIsReloading();
 
 	if (isReloading)
 	{

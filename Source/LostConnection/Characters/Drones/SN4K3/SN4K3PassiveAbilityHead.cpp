@@ -131,7 +131,7 @@ void ASN4K3PassiveAbilityHead::destroyHead()
 
 	GetController()->Possess(placeholder);
 
-	UGameplayStatics::FinishSpawningActor(placeholder, { FRotator::ZeroRotator, GetActorLocation() });
+	placeholder->FinishSpawning({ FRotator::ZeroRotator, GetActorLocation() });
 
 	Destroy();
 }

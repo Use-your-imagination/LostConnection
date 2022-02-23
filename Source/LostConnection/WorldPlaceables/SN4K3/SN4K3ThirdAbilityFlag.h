@@ -9,7 +9,7 @@
 
 #include "SN4K3ThirdAbilityFlag.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API ASN4K3ThirdAbilityFlag : public ADroppedObject
 {
 	GENERATED_BODY()
@@ -37,5 +37,5 @@ public:
 
 	void setRadius(float radius);
 
-	~ASN4K3ThirdAbilityFlag() = default;
+	virtual ~ASN4K3ThirdAbilityFlag() = default;
 };

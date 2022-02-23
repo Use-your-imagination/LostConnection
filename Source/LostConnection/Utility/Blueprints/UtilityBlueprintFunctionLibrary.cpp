@@ -148,7 +148,9 @@ ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo(AL
 
 	info->setOnEndLoadCallback(onEndLoadCallback);
 
-	return Cast<ALoadingScreenInfo>(UGameplayStatics::FinishSpawningActor(info, info->GetActorTransform()));
+	info->FinishSpawning({}, true);
+
+	return info;
 }
 
 ABaseDrone* UUtilityBlueprintFunctionLibrary::spawnDrone(TSubclassOf<ABaseDrone> droneClass, const FTransform& transform, APlayerController* controller, UObject* worldContext)
@@ -161,7 +163,9 @@ ABaseDrone* UUtilityBlueprintFunctionLibrary::spawnDrone(TSubclassOf<ABaseDrone>
 
 		controller->Possess(drone);
 
-		return Cast<ABaseDrone>(UGameplayStatics::FinishSpawningActor(drone, transform));
+		drone->FinishSpawning(transform);
+
+		return drone;
 	}
 
 	return nullptr;

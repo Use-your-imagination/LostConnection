@@ -109,6 +109,7 @@ void USN4K3UltimateAbility::useAbility()
 	}
 
 	FVector tem = drone->GetActorLocation();
+	const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
 
@@ -118,11 +119,11 @@ void USN4K3UltimateAbility::useAbility()
 
 	currentCooldown = cooldown;
 
-	ASN4K3UltimateAbilityPlaceholder* placeholder = Utility::getGameState(drone)->spawn<ASN4K3UltimateAbilityPlaceholder>(FTransform(drone->GetMesh()->GetComponentRotation(), MoveTemp(tem)));
+	ASN4K3UltimateAbilityPlaceholder* placeholder = Utility::getGameState(drone)->spawn<ASN4K3UltimateAbilityPlaceholder>(data->getUltimateAbilityPlaceholder(), FTransform(drone->GetMesh()->GetComponentRotation(), MoveTemp(tem)));
 
 	placeholder->setAbility(this);
 
-	UGameplayStatics::FinishSpawningActor(placeholder, placeholder->GetActorTransform());
+	placeholder->FinishSpawning({}, true);
 
 	ultimatePlaceholderLocation = placeholder->GetActorLocation();
 

@@ -36,16 +36,6 @@ USN4K3ThirdAbility::USN4K3ThirdAbility() :
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
-void USN4K3ThirdAbility::setIsFlagExist(bool isFlagExist)
-{
-	this->isFlagExist = isFlagExist;
-}
-
-bool USN4K3ThirdAbility::getIsFlagExist() const
-{
-	return isFlagExist;
-}
-
 void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
 {
 	if (!IsValid(socketItem))
@@ -67,17 +57,24 @@ void USN4K3ThirdAbility::useAbility()
 
 	ASN4K3* drone = Cast<ASN4K3>(caster);
 	FVector tem = drone->GetActorForwardVector() * 200;
+	const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
+	USN4K3Reservator* defaultReservator = Cast<USN4K3Reservator>(socketItem);
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
-
-	USN4K3Reservator* defaultReservator = Cast<USN4K3Reservator>(socketItem);
 
 	if (defaultReservator)
 	{
 		defaultReservator->setBuffDuration(period);
 	}
 
-	ASN4K3ThirdAbilityFlag* flag = Utility::getGameState(drone)->spawn<ASN4K3ThirdAbilityFlag>({ drone->GetActorRotation(), tem + drone->GetActorLocation() });
+	if (flagPointer.IsValid())
+	{
+		flagPointer->Destroy();
+
+		flagPointer.Reset();
+	}
+
+	ASN4K3ThirdAbilityFlag* flag = Utility::getGameState(drone)->spawn<ASN4K3ThirdAbilityFlag>(data->getThirdAbilityFlag(), { drone->GetActorRotation(), tem + drone->GetActorLocation() });
 
 	flag->setLifetime(lifetime);
 
@@ -87,9 +84,9 @@ void USN4K3ThirdAbility::useAbility()
 
 	flag->setPeriod(period);
 
-	UGameplayStatics::FinishSpawningActor(flag, flag->GetActorTransform());
+	flag->FinishSpawning({}, true);
 
-	isFlagExist = true;
+	flagPointer = flag;
 
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }

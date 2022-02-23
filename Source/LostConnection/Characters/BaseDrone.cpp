@@ -625,7 +625,7 @@ void ABaseDrone::destroyDrone()
 
 	GetController()->Possess(placeholder);
 
-	UGameplayStatics::FinishSpawningActor(placeholder, { FRotator::ZeroRotator, GetActorLocation() });
+	placeholder->FinishSpawning({ FRotator::ZeroRotator, GetActorLocation() });
 
 	Destroy();
 }
@@ -814,7 +814,7 @@ void ABaseDrone::dropWeapon_Implementation()
 
 	this->onCurrentWeaponChange();
 
-	UGameplayStatics::FinishSpawningActor(droppedWeapon, droppedWeapon->GetActorTransform());
+	droppedWeapon->FinishSpawning({}, true);
 }
 
 void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
