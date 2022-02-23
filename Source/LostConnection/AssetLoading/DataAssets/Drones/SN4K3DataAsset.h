@@ -19,6 +19,12 @@ private:
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> headUI;
 
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ASN4K3UltimateAbilityPlaceholder> ultimateAbilityPlaceholder;
+
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ASN4K3ThirdAbilityFlag> thirdAbilityFlag;
+
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
 
@@ -26,6 +32,10 @@ public:
 	USN4K3DataAsset() = default;
 
 	const TSubclassOf<UUserWidget>& getHeadUI() const;
+
+	const TSubclassOf<class ASN4K3UltimateAbilityPlaceholder>& getUltimateAbilityPlaceholder() const;
+
+	const TSubclassOf<class ASN4K3ThirdAbilityFlag>& getThirdAbilityFlag() const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

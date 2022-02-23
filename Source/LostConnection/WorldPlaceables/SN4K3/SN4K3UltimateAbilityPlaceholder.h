@@ -10,7 +10,7 @@
 
 #include "SN4K3UltimateAbilityPlaceholder.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API ASN4K3UltimateAbilityPlaceholder : 
 	public ADroppedObject,
 	public IShotThrough
@@ -31,5 +31,5 @@ public:
 
 	float getPercentageDamageReduction_Implementation() const override;
 
-	~ASN4K3UltimateAbilityPlaceholder() = default;
+	virtual ~ASN4K3UltimateAbilityPlaceholder() = default;
 };

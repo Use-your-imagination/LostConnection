@@ -67,6 +67,7 @@ void USN4K3ThirdAbility::useAbility()
 
 	ASN4K3* drone = Cast<ASN4K3>(caster);
 	FVector tem = drone->GetActorForwardVector() * 200;
+	const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
 
@@ -77,7 +78,7 @@ void USN4K3ThirdAbility::useAbility()
 		defaultReservator->setBuffDuration(period);
 	}
 
-	ASN4K3ThirdAbilityFlag* flag = Utility::getGameState(drone)->spawn<ASN4K3ThirdAbilityFlag>({ drone->GetActorRotation(), tem + drone->GetActorLocation() });
+	ASN4K3ThirdAbilityFlag* flag = Utility::getGameState(drone)->spawn<ASN4K3ThirdAbilityFlag>(data->getThirdAbilityFlag(), { drone->GetActorRotation(), tem + drone->GetActorLocation() });
 
 	flag->setLifetime(lifetime);
 
