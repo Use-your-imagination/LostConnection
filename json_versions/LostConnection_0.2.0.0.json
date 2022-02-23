@@ -9,5 +9,14 @@
         "Added Hipter animations"
       ]
     }
+  },
+  "SN4K3": {
+    "type": "category",
+    "Third ability": {
+      "type": "item",
+      "notes": [
+        "Now recast delete previous flag and places new"
+      ]
+    }
   }
 }
