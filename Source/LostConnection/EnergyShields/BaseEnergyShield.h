@@ -24,10 +24,10 @@ protected:
 	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, BlueprintReadOnly)
 	FLinearColor energyShieldInterpColor;
 
-	UPROPERTY(Category = EnergyShield, Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = EnergyShield, ReplicatedUsing = onCapacityChange, BlueprintReadOnly)
 	float capacity;
 
-	UPROPERTY(Category = EnergyShield, ReplicatedUsing = onCurrentCapacityChanged, BlueprintReadOnly)
+	UPROPERTY(Category = EnergyShield, ReplicatedUsing = onCurrentCapacityChange, BlueprintReadOnly)
 	float currentCapacity;
 
 	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, Replicated, BlueprintReadOnly)
@@ -57,7 +57,10 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION()
-	virtual void onCurrentCapacityChanged();
+	virtual void onCapacityChange();
+
+	UFUNCTION()
+	virtual void onCurrentCapacityChange();
 
 private:
 	void startRechargeDelay();
