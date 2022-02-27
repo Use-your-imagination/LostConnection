@@ -74,9 +74,9 @@ FORCEINLINE void ABaseBot::updateHealthBar()
 		(
 			FText::Format
 			(
-				FText::FromString("{0} / {1}"),
-				Utility::getFTextFromFloat(currentHealth),
-				Utility::getFTextFromFloat(energyShield->getCurrentCapacity())
+				FText::FromString("{0} | {1}"),
+				Utility::getFTextFromFloat(energyShield->getCurrentCapacity()),
+				Utility::getFTextFromFloat(currentHealth)
 			)
 		);
 	}

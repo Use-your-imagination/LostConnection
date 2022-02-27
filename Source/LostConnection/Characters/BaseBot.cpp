@@ -97,6 +97,7 @@ ABaseBot::ABaseBot()
 	healthBarTextRender->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
 	healthBarTextRender->SetTextRenderColor(FColor::White);
 	healthBarTextRender->SetFont(textFontFinder.Object);
+	healthBarTextRender->SetWorldSize(15.0f);
 
 	baseHealthBarMaterial = healthBarBaseMaterialFinder.Object;
 
