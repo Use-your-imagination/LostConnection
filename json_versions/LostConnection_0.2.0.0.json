@@ -8,6 +8,12 @@
       "notes": [
         "Added Hipter animations"
       ]
+    },
+    "Health bar": {
+      "type": "item",
+      "notes": [
+        "Add energy shield capacity to health bar"
+      ]
     }
   },
   "SN4K3": {
