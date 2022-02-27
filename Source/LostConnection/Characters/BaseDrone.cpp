@@ -952,7 +952,7 @@ void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primar
 {
 	if (!primaryWeapon)
 	{
-		UE_LOG(LogTemp, Error, L"Primary weapon is null");
+		UE_LOG(LogTemp, Error, TEXT("Primary weapon is null"));
 
 		return;
 	}
@@ -971,7 +971,7 @@ void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> seco
 {
 	if (!secondaryWeapon)
 	{
-		UE_LOG(LogTemp, Error, L"Secondary weapon is null");
+		UE_LOG(LogTemp, Error, TEXT("Secondary weapon is null"));
 
 		return;
 	}

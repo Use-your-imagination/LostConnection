@@ -468,7 +468,7 @@ void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> de
 {
 	if (!defaultWeapon)
 	{
-		UE_LOG(LogTemp, Warning, L"Default weapon is null");
+		UE_LOG(LogTemp, Warning, TEXT("Default weapon is null"));
 
 		return;
 	}

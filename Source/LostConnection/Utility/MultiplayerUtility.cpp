@@ -15,7 +15,7 @@ void MultiplayerUtility::runOnServerReliableWithMulticast(APawn* caller, const F
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Can't cast to player state in MutliplayerUtility at %d %s %s"), __LINE__, *caller->GetName(), *methodName.ToString()));
 	}
 }
 
@@ -29,7 +29,7 @@ void MultiplayerUtility::runOnServerUnreliableWithMulticast(APawn* caller, const
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Can't cast to player state in MutliplayerUtility at %d %s %s"), __LINE__, *caller->GetName(), *methodName.ToString()));
 	}
 }
 
@@ -43,7 +43,7 @@ void MultiplayerUtility::runOnServerReliable(APawn* caller, const FName& methodN
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Can't cast to player state in MutliplayerUtility at %d %s %s"), __LINE__, *caller->GetName(), *methodName.ToString()));
 	}
 }
 
@@ -57,6 +57,6 @@ void MultiplayerUtility::runOnServerUnreliable(APawn* caller, const FName& metho
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(L"Can't cast to player state in MutliplayerUtility at %d %s %s", __LINE__, *caller->GetName(), *methodName.ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Can't cast to player state in MutliplayerUtility at %d %s %s"), __LINE__, *caller->GetName(), *methodName.ToString()));
 	}
 }

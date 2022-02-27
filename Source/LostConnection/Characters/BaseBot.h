@@ -62,16 +62,28 @@ public:
 	virtual ~ABaseBot() = default;
 };
 
-inline void ABaseBot::updateHealthBar()
+FORCEINLINE void ABaseBot::updateHealthBar()
 {
 	healthBarMaterial->SetScalarParameterValue("LifePercent", Utility::toPercent(currentHealth / health));
 
 	if (IsValid(energyShield))
 	{
 		healthBarMaterial->SetScalarParameterValue("ShieldPercent", Utility::toPercent(energyShield->getCurrentCapacity() / energyShield->getCapacity()));
-	}
 
-	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
+		healthBarTextRender->SetText
+		(
+			FText::Format
+			(
+				FText::FromString("{0} / {1}"),
+				Utility::getFTextFromFloat(currentHealth),
+				Utility::getFTextFromFloat(energyShield->getCurrentCapacity())
+			)
+		);
+	}
+	else
+	{
+		healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
+	}
 }
 
 inline void ABaseBot::setHealthBarVisibility(bool isVisible)
