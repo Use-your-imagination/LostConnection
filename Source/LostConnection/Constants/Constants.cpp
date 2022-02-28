@@ -2,7 +2,7 @@
 
 #include "Constants.h"
 
-const FString UConstants::projectVersion = "v0.2.0.0";
+const FString UConstants::projectVersion = "v0.2.1.0";
 
 const FName UConstants::actionStringTablePath = "/Game/Text/Actions.Actions";
 const FString UConstants::defaultActionMessageKey = "DefaultActionMessage";
