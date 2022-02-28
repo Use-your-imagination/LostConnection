@@ -23,6 +23,12 @@
       "notes": [
         "Now recast delete previous flag and places new"
       ]
+    },
+    "FX": {
+      "type": "item",
+      "notes": [
+        "Added passive, first, third and ultimate abilities FXes."
+      ]
     }
   }
 }
