@@ -6,7 +6,7 @@
 
 #include "WorldPlaceables/DroppedObject.h"
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
-#include "Characters/Drones/SN4K3/Abilities/SN4K3UltimateAbility.h"
+#include "Abilities/SN4K3UltimateAbility.h"
 
 #include "SN4K3UltimateAbilityPlaceholder.generated.h"
 

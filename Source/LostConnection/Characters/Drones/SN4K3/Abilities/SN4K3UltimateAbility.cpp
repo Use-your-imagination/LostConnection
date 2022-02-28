@@ -9,7 +9,7 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Utility/InitializationUtility.h"
 #include "Engine/LostConnectionGameState.h"
-#include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
+#include "Characters/Drones/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
 #include "SN4K3PassiveAbility.h"
 
 void USN4K3UltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

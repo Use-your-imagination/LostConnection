@@ -7,7 +7,7 @@
 #include "Characters/Drones/SN4K3/SN4K3.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Utility/InitializationUtility.h"
-#include "WorldPlaceables/SN4K3/SN4K3ThirdAbilityFlag.h"
+#include "Characters/Drones/SN4K3/SN4K3ThirdAbilityFlag.h"
 #include "Engine/LostConnectionGameState.h"
 #include "SN4K3PassiveAbility.h"
 #include "Characters/Drones/SN4K3/SN4K3Reservator.h"

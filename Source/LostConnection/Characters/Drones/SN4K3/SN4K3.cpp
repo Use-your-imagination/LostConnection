@@ -11,7 +11,7 @@
 #include "Abilities/SN4K3SecondAbility.h"
 #include "Abilities/SN4K3ThirdAbility.h"
 #include "Abilities/SN4K3UltimateAbility.h"
-#include "WorldPlaceables/SN4K3/SN4K3UltimateAbilityPlaceholder.h"
+#include "SN4K3UltimateAbilityPlaceholder.h"
 #include "Utility/MultiplayerUtility.h"
 #include "Utility/Utility.h"
 #include "AssetLoading/LostConnectionAssetManager.h"

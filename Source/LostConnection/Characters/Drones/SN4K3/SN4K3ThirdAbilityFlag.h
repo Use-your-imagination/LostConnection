@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "WorldPlaceables/DroppedObject.h"
-#include "Characters/Drones/SN4K3/Abilities/SN4K3ThirdAbility.h"
+#include "Abilities/SN4K3ThirdAbility.h"
 
 #include "SN4K3ThirdAbilityFlag.generated.h"
 
