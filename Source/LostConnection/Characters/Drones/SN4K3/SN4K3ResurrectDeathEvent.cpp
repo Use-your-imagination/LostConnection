@@ -23,7 +23,7 @@ void USN4K3ResurrectDeathEvent::init(ALostConnectionPlayerController* controller
 
 void USN4K3ResurrectDeathEvent::deathEventAction()
 {
-	if (!IsValid(controller))
+	if (!IsValid(controller) || controller->GetPawn<ASN4K3>())
 	{
 		return;
 	}

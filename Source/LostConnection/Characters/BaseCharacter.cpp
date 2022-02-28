@@ -464,6 +464,11 @@ void ABaseCharacter::returnAmmoToSpare(UBaseWeapon* weapon)
 	currentWeaponSpareAmmo = tem;
 }
 
+void ABaseCharacter::playAnimation_Implementation(UAnimMontage* animation)
+{
+	PlayAnimMontage(animation);
+}
+
 void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> defaultWeapon)
 {
 	if (!defaultWeapon)

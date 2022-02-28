@@ -221,6 +221,9 @@ public:
 
 	bool isDamaged() const;
 
+	UFUNCTION(NetMulticast, Unreliable)
+	void playAnimation(UAnimMontage* animation);
+
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void setDefaultWeapon(TSubclassOf<UBaseWeapon> defaultWeapon);
 

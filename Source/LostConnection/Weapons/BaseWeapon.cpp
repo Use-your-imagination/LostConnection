@@ -164,7 +164,7 @@ void UBaseWeapon::shoot()
 			shootAnimation = hipShootAnimation;
 		}
 
-		owner->PlayAnimMontage(shootAnimation);
+		owner->playAnimation(shootAnimation);
 
 		IShoot::Execute_onShoot(owner.Get());
 	}

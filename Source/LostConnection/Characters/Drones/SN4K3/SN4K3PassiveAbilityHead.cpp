@@ -83,8 +83,8 @@ void ASN4K3PassiveAbilityHead::explode()
 	TArray<AActor*> tem;
 	ALostConnectionPlayerController* controller = Utility::getPlayerController(this);
 	FTransform respawnTransform = GetActorTransform();
-
-	Utility::getGameState(this)->spawnVFXAtLocation(GetMesh()->GetComponentLocation(), explosionParticles);
+	ALostConnectionGameState* gameState = Utility::getGameState(this);
+	gameState->spawnVFXAtLocation(GetMesh()->GetComponentLocation(), explosionParticles);
 
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetMesh()->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
 
@@ -100,7 +100,7 @@ void ASN4K3PassiveAbilityHead::explode()
 			characterHit.Component = character->GetMesh();
 			characterHit.Location = character->GetActorLocation();
 
-			USN4K3ResurrectDeathEvent* resurrect = NewObject<USN4K3ResurrectDeathEvent>(character);
+			USN4K3ResurrectDeathEvent* resurrect = NewObject<USN4K3ResurrectDeathEvent>(gameState);
 
 			resurrect->initDeathEvent(character);
 
