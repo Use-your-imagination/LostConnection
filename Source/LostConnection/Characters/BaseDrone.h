@@ -111,7 +111,7 @@ protected:
 	TWeakObjectPtr<class ABaseBot> lastHealthBarTraceTarget;
 
 #pragma region BlueprintFunctionLibrary
-	UPROPERTY(Category = Inputs, BlueprintReadWrite)
+	UPROPERTY(Category = Inputs, Replicated, BlueprintReadWrite)
 	bool secondaryHold;
 
 	UPROPERTY(Category = Inputs, BlueprintReadWrite)

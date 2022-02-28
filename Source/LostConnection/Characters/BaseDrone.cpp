@@ -79,6 +79,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	// result.Add(releaseSelectFourthPlayer);
 #pragma endregion
 
+	FInputActionBinding pressZoomAction("Zoom", IE_Pressed);
+	FInputActionBinding releaseZoomAction("Zoom", IE_Released);
+
 	FInputActionBinding reload("Reload", IE_Pressed);
 
 	FInputActionBinding holdJump("Jump", IE_Pressed);
@@ -99,6 +102,16 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	FInputActionBinding	dropWeapon("DropWeapon", IE_Pressed);
 
 	FInputActionBinding	cancelAbility("CancelAbility", IE_Pressed);
+
+	pressZoomAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
+		{
+			MultiplayerUtility::runOnServerReliableWithMulticast(this, "pressZoom");
+		});
+
+	releaseZoomAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
+		{
+			MultiplayerUtility::runOnServerReliableWithMulticast(this, "releaseZoom");
+		});
 
 	reload.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
 		{
@@ -132,6 +145,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 				UUtilityBlueprintFunctionLibrary::cancelCurrentAbilityAnimation(this);
 			}
 		});
+
+	result.Add(pressZoomAction);
+	result.Add(releaseZoomAction);
 
 	result.Add(reload);
 
@@ -217,6 +233,8 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(ABaseDrone, ultimateAbility);
 
 	DOREPLIFETIME(ABaseDrone, slideCooldown);
+
+	DOREPLIFETIME(ABaseDrone, secondaryHold);
 }
 
 bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -567,9 +585,6 @@ void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABaseDrone::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABaseDrone::MoveRight);
-
-	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &ABaseDrone::pressZoom);
-	PlayerInputComponent->BindAction("Zoom", IE_Released, this, &ABaseDrone::releaseZoom);
 
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("TurnRate", this, &ABaseDrone::TurnAtRate);
