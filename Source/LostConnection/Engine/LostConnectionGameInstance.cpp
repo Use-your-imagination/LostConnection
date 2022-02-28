@@ -148,9 +148,6 @@ void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLeve
 			player->ClientTravel(levelToTravel.GetAssetName(), ETravelType::TRAVEL_Absolute);
 		}
 	};
-	FString sessionName;
-
-	sessionSettings->Get(ULostConnectionGameInstance::serverNameKey, sessionName);
 
 	if (controller->HasAuthority())
 	{
@@ -179,7 +176,7 @@ void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLeve
 			});
 	}
 
-	session->DestroySession(sessionName.IsEmpty() ? FName(NAME_GameSession) : *sessionName, onDestroyDelegate);
+	session->DestroySession(FName(NAME_GameSession), onDestroyDelegate);
 }
 
 void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
