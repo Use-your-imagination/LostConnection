@@ -31,7 +31,7 @@ void ASN4K3PassiveAbilityHead::BeginPlay()
 
 void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	check(PlayerInputComponent);
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	FInputActionBinding pressExplosion("Shoot", IE_Pressed);
 	FInputActionBinding pressSprint("Zoom", IE_Pressed);

@@ -6,6 +6,7 @@
 
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UObject/ScriptInterface.h"
+#include "GameFramework/InputSettings.h"
 
 #include "Engine/LoadingScreenInfo.h"
 
@@ -52,4 +53,7 @@ public:
 
 	UFUNCTION(Category = "Utility|Spawning", BlueprintCallable, Meta = (HidePin = worldContext, DefaultToSelf = worldContext))
 	static class ABaseDrone* spawnDrone(TSubclassOf<class ABaseDrone> droneClass, const FTransform& transform, APlayerController* controller, UObject* worldContext);
+
+	UFUNCTION(Category = "Utility|Hotkeys", BlueprintCallable, BlueprintPure)
+	static TArray<FInputActionKeyMapping> getActionMapping(FName actionName);
 };

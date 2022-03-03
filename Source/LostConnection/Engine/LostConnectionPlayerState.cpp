@@ -44,6 +44,10 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableAbilities);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
+
+	DOREPLIFETIME(ALostConnectionPlayerState, respawnCooldown);
+
+	DOREPLIFETIME(ALostConnectionPlayerState, currentRespawnCooldown);
 }
 
 bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -196,21 +200,48 @@ void ALostConnectionPlayerState::resetCurrentUI_Implementation()
 	currentUI = nullptr;
 }
 
+void ALostConnectionPlayerState::restoreRespawnCooldown_Implementation()
+{
+	currentRespawnCooldown = respawnCooldown;
+}
+
 void ALostConnectionPlayerState::setCurrentUI_Implementation(TSubclassOf<UUserWidget> widget, APawn* outer)
 {
-	if (IsValid(currentUI))
-	{
-		currentUI->RemoveFromViewport();
-	}
+	this->resetCurrentUI();
 
 	currentUI = NewObject<UUserWidget>(outer, widget);
 
+	if (currentUI->Implements<UPlayerHolder>())
+	{
+		IPlayerHolder::Execute_setPlayer(currentUI, outer);
+	}
+
 	currentUI->AddToViewport();
+}
+
+void ALostConnectionPlayerState::setDroneClass_Implementation(TSubclassOf<ABaseDrone> newDroneClass)
+{
+	droneClass = newDroneClass;
+}
+
+void ALostConnectionPlayerState::setCurrentRespawnCooldown_Implementation(float newCurrentRespawnCooldown)
+{
+	currentRespawnCooldown = newCurrentRespawnCooldown;
 }
 
 UUserWidget* ALostConnectionPlayerState::getCurrentUI() const
 {
 	return currentUI;
+}
+
+const TSubclassOf<ABaseDrone>& ALostConnectionPlayerState::getDroneClass() const
+{
+	return droneClass;
+}
+
+float ALostConnectionPlayerState::getCurrentRespawnCooldown() const
+{
+	return currentRespawnCooldown;
 }
 
 void ALostConnectionPlayerState::Tick(float DeltaTime)
@@ -222,6 +253,11 @@ void ALostConnectionPlayerState::Tick(float DeltaTime)
 		reduceCooldownableDataObjects(DeltaTime, cooldownableAbilities);
 
 		reduceCooldownableDataObjects(DeltaTime, cooldownableWeapons);
+
+		if (currentRespawnCooldown)
+		{
+			currentRespawnCooldown = FMath::Max(0.0f, currentRespawnCooldown - DeltaTime);
+		}
 	}
 }
 

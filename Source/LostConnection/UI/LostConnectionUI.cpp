@@ -26,3 +26,13 @@ void ULostConnectionUI::onEnergyShieldUpdate_Implementation()
 {
 
 }
+
+void ULostConnectionUI::setPlayer_Implementation(APawn* playerPawn)
+{
+	player = Cast<ABaseDrone>(playerPawn);
+}
+
+APawn* ULostConnectionUI::getPlayer_Implementation() const
+{
+	return player;
+}

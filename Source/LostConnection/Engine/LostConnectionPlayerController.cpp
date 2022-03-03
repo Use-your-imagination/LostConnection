@@ -22,18 +22,29 @@ ALostConnectionPlayerController::ALostConnectionPlayerController()
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }
 
-void ALostConnectionPlayerController::respawnPlayer_Implementation()
+void ALostConnectionPlayerController::respawnPlayer_Implementation(const FTransform& respawnTransform)
 {
 	APawn* pawn = GetPawn();
-	FTransform spawnTransform(pawn->GetActorTransform());
+	FTransform spawnTransform(respawnTransform);
+	ALostConnectionPlayerState* playerState = GetPlayerState<ALostConnectionPlayerState>();
 
 	pawn->Destroy();
 
-	ABaseDrone* drone = Utility::getGameState(this)->spawn<ABaseDrone>(Utility::findDroneClass(ULostConnectionAssetManager::get().getDrones(), ASN4K3::StaticClass()), spawnTransform);
+	ABaseDrone* drone = Utility::getGameState(this)->spawn<ABaseDrone>
+	(
+		Utility::findDroneClass
+		(
+			ULostConnectionAssetManager::get().getDrones(),
+			playerState->getDroneClass()
+		),
+		spawnTransform
+	);
 
 	Possess(drone);
 
 	drone->FinishSpawning({}, true);
+
+	playerState->restoreRespawnCooldown();
 }
 
 void ALostConnectionPlayerController::save_Implementation()

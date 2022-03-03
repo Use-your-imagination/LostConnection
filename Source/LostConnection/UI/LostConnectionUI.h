@@ -5,18 +5,20 @@
 #include "CoreMinimal.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Interfaces/UI/Playerholder.h"
 
 #include "LostConnectionUI.generated.h"
 
 #pragma warning(disable: 4458)
 
 UCLASS(BlueprintType, Blueprintable)
-class LOSTCONNECTION_API ULostConnectionUI : public UUserWidget
+class LOSTCONNECTION_API ULostConnectionUI :
+	public UUserWidget,
+	public IPlayerHolder
 {
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(Category = Player, BlueprintReadOnly)
 	class ABaseDrone* player;
 
 public:
@@ -29,6 +31,12 @@ public:
 
 	UFUNCTION(Category = EnergyShield, BlueprintNativeEvent)
 	void onEnergyShieldUpdate();
+
+	UFUNCTION()
+	void setPlayer_Implementation(APawn* playerPawn) override;
+
+	UFUNCTION()
+	APawn* getPlayer_Implementation() const override;
 
 	virtual ~ULostConnectionUI() = default;
 };

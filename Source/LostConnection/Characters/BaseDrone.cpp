@@ -568,7 +568,7 @@ void ABaseDrone::restoreWeaponsCooldown()
 
 void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	check(PlayerInputComponent);
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	TArray<FInputActionBinding> inputs = this->initInputs();
 

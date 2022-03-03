@@ -6,6 +6,7 @@
 #include "Utility/Utility.h"
 #include "Engine/LostConnectionPlayerController.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
+#include "Characters/Drones/SN4K3/SN4K3.h"
 
 void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
 {
@@ -25,7 +26,11 @@ void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
 
 		playerState->init();
 
-		controller->respawnPlayer();
+		playerState->setDroneClass(ASN4K3::StaticClass());
+
+		controller->respawnPlayer(controller->GetPawn()->GetActorTransform());
+
+		playerState->setCurrentRespawnCooldown(0.0f);
 	}
 }
 

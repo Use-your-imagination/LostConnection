@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Pawn.h"
+#include "GameFramework/PlayerInput.h"
 
 #include "DeathPlaceholder.generated.h"
 
@@ -13,8 +14,14 @@ class LOSTCONNECTION_API ADeathPlaceholder : public APawn
 {
 	GENERATED_BODY()
 
+private:
+	UFUNCTION()
+	void checkRespawn();
+
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 public:
 	ADeathPlaceholder() = default;

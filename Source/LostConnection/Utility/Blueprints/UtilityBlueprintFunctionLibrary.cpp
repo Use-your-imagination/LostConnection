@@ -170,3 +170,11 @@ ABaseDrone* UUtilityBlueprintFunctionLibrary::spawnDrone(TSubclassOf<ABaseDrone>
 
 	return nullptr;
 }
+
+TArray<FInputActionKeyMapping> UUtilityBlueprintFunctionLibrary::getActionMapping(FName actionName)
+{
+	TArray<FInputActionKeyMapping> result;
+	GetDefault<UInputSettings>()->GetActionMappingByName(actionName, result);
+
+	return result;
+}

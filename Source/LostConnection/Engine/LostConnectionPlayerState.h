@@ -64,6 +64,14 @@ protected:
 	UPROPERTY(Replicated)
 	TArray<FCooldownableWeaponsData> cooldownableWeapons;
 
+	UPROPERTY(Category = Respawn, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	float respawnCooldown;
+
+	UPROPERTY(Category = Respawn, Replicated, BlueprintReadOnly)
+	float currentRespawnCooldown;
+
+	TSubclassOf<class ABaseDrone> droneClass;
+
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -114,10 +122,23 @@ public:
 	UFUNCTION(Client, Reliable)
 	void resetCurrentUI();
 
+	UFUNCTION(Server, Reliable)
+	void restoreRespawnCooldown();
+
 	UFUNCTION(Client, Reliable)
 	void setCurrentUI(TSubclassOf<UUserWidget> widget, APawn* outer);
 
+	UFUNCTION(Server, Reliable)
+	void setDroneClass(TSubclassOf<class ABaseDrone> newDroneClass);
+
+	UFUNCTION(Server, Reliable)
+	void setCurrentRespawnCooldown(float newCurrentRespawnCooldown);
+
 	UUserWidget* getCurrentUI() const;
+
+	const TSubclassOf<class ABaseDrone>& getDroneClass() const;
+
+	float getCurrentRespawnCooldown() const;
 
 	virtual void Tick(float DeltaTime) override;
 
