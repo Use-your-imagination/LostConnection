@@ -1,4 +1,13 @@
 {
   "projectName": "LostConnection",
-  "projectVersion": "0.2.1.0"
+  "projectVersion": "0.2.1.0",
+  "Gameplay": {
+    "type": "category",
+    "Respawn": {
+      "type": "item",
+      "notes": [
+        "Add respawn with 10 minutes cooldown"
+      ]
+    }
+  }
 }
