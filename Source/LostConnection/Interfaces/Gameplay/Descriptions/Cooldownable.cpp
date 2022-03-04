@@ -6,25 +6,15 @@ void ICooldownable::startCooldown(float startCooldown)
 {
 	if (startCooldown)
 	{
-		this->getCurrentCooldown() = startCooldown;
+		this->getCurrentCooldownReference() = startCooldown;
 	}
 	else
 	{
-		this->getCurrentCooldown() = this->getCooldown();
-	}
-}
-
-void ICooldownable::processCooldown(float DeltaTime)
-{
-	float& currentCooldown = this->getCurrentCooldown();
-
-	if (currentCooldown)
-	{
-		currentCooldown = FMath::Max(0.0f, currentCooldown - DeltaTime);
+		this->getCurrentCooldownReference() = this->getCooldown();
 	}
 }
 
 void ICooldownable::resetCooldown()
 {
-	this->getCurrentCooldown() = 0.0f;
+	this->getCurrentCooldownReference() = 0.0f;
 }

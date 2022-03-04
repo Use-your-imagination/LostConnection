@@ -122,7 +122,7 @@ void ALostConnectionPlayerState::addWeaponModule(IWeaponModule* module)
 	weaponModules.Add(Cast<UNetworkObject>(module));
 }
 
-void ALostConnectionPlayerState::addCooldownableAbility(abilitySlot slot, ICooldownable* cooldownable)
+void ALostConnectionPlayerState::addCooldownableAbility(abilitySlot slot, const ICooldownable* cooldownable)
 {
 	if (!cooldownable->isUsable())
 	{
@@ -130,7 +130,7 @@ void ALostConnectionPlayerState::addCooldownableAbility(abilitySlot slot, ICoold
 	}
 }
 
-void ALostConnectionPlayerState::addCooldownableWeapon(weaponSlotTypes slot, ICooldownable* cooldownable)
+void ALostConnectionPlayerState::addCooldownableWeapon(weaponSlotTypes slot, const ICooldownable* cooldownable)
 {
 	if (!cooldownable->isUsable())
 	{

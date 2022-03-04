@@ -59,7 +59,9 @@ public:
 
 	float getCooldown() const override;
 
-	float& getCurrentCooldown() override;
+	float& getCurrentCooldownReference() override;
+
+	float getCurrentCooldown() const override;
 
 	~USN4K3PassiveAbility() = default;
 };

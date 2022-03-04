@@ -35,7 +35,9 @@ public:
 
 	virtual float getCooldown() const final override;
 
-	virtual float& getCurrentCooldown() final override;
+	virtual float& getCurrentCooldownReference() final override;
+
+	virtual float getCurrentCooldown() const final override;
 
 	virtual ~UBaseUltimateAbility() = default;
 };

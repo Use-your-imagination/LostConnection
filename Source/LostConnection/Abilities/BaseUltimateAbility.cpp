@@ -33,7 +33,12 @@ float UBaseUltimateAbility::getCooldown() const
 	return cooldown;
 }
 
-float& UBaseUltimateAbility::getCurrentCooldown()
+float& UBaseUltimateAbility::getCurrentCooldownReference()
+{
+	return currentCooldown;
+}
+
+float UBaseUltimateAbility::getCurrentCooldown() const
 {
 	return currentCooldown;
 }

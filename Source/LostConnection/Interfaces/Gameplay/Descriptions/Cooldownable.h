@@ -34,19 +34,32 @@ public:
 	virtual float getCooldown() const = 0;
 
 	UFUNCTION(Category = Cooldown, BlueprintCallable)
-	virtual float& getCurrentCooldown() = 0;
+	virtual float& getCurrentCooldownReference() = 0;
+
+	UFUNCTION(Category = Cooldown, BlueprintCallable)
+	virtual float getCurrentCooldown() const = 0;
 
 	// Value between 0 and 1
 	UFUNCTION(Category = Cooldown, BlueprintCallable)
 	virtual float getCooldownState() const;
 };
 
+inline void ICooldownable::processCooldown(float DeltaTime)
+{
+	float& currentCooldown = this->getCurrentCooldownReference();
+
+	if (currentCooldown)
+	{
+		currentCooldown = FMath::Max(0.0f, currentCooldown - DeltaTime);
+	}
+}
+
 inline bool ICooldownable::isUsable() const
 {
-	return const_cast<ICooldownable*>(this)->getCurrentCooldown() == 0.0f;
+	return this->getCurrentCooldown() == 0.0f;
 }
 
 inline float ICooldownable::getCooldownState() const
 {
-	return const_cast<ICooldownable*>(this)->getCurrentCooldown() / this->getCooldown();
+	return this->getCurrentCooldown() / this->getCooldown();
 }

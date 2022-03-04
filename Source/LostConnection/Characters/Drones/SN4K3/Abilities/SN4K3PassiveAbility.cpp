@@ -106,7 +106,12 @@ float USN4K3PassiveAbility::getCooldown() const
 	return cooldown;
 }
 
-float& USN4K3PassiveAbility::getCurrentCooldown()
+float& USN4K3PassiveAbility::getCurrentCooldownReference()
+{
+	return currentCooldown;
+}
+
+float USN4K3PassiveAbility::getCurrentCooldown() const
 {
 	return currentCooldown;
 }

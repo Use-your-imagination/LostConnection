@@ -82,9 +82,9 @@ public:
 
 	void addWeaponModule(IWeaponModule* module);
 
-	void addCooldownableAbility(abilitySlot slot, ICooldownable* cooldownable);
+	void addCooldownableAbility(abilitySlot slot, const ICooldownable* cooldownable);
 
-	void addCooldownableWeapon(weaponSlotTypes slot, ICooldownable* cooldownable);
+	void addCooldownableWeapon(weaponSlotTypes slot, const ICooldownable* cooldownable);
 
 	void setPrimaryWeapon(UBaseWeapon* primaryWeapon);
 
