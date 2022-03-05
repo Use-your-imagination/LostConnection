@@ -7,6 +7,7 @@
 #include "GameFramework/GameState.h"
 
 #include "VFX/VFXManager.h"
+#include "Interfaces/Economy/LootPointsGiver.h"
 
 #include "LostConnectionGameState.generated.h"
 
@@ -57,6 +58,9 @@ private:
 	UFUNCTION(NetMulticast, Unreliable)
 	void spawnVFXAtTransformMulticast(const FTransform& transform, UNiagaraSystem* vfx);
 
+	UFUNCTION(Server, Reliable)
+	void giveEachPlayerLootPoints(int32 count);
+
 public:
 	ALostConnectionGameState();
 
@@ -68,6 +72,8 @@ public:
 
 	UFUNCTION(Category = VFX, Server, Unreliable, BlueprintCallable)
 	void spawnVFXAtTransform(const FTransform& transform, UNiagaraSystem* vfx);
+
+	void verteilenLootPoints(ILootPointsGiver* giver);
 
 	int32& getTotalBots();
 

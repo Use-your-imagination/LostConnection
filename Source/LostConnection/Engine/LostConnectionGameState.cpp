@@ -53,6 +53,14 @@ void ALostConnectionGameState::spawnVFXAtTransformMulticast_Implementation(const
 	manager->spawnVFX(GetWorld(), transform, vfx);
 }
 
+void ALostConnectionGameState::giveEachPlayerLootPoints_Implementation(int32 count)
+{
+	for (APlayerState* playerState : PlayerArray)
+	{
+		Cast<ALostConnectionPlayerState>(playerState)->increaseLootPoints(count);
+	}
+}
+
 ALostConnectionGameState::ALostConnectionGameState()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -97,6 +105,20 @@ void ALostConnectionGameState::spawnVFXAtTransform_Implementation(const FTransfo
 	this->spawnVFXAtTransformMulticast(transform, vfx);
 }
 
+void ALostConnectionGameState::verteilenLootPoints(ILootPointsGiver* giver)
+{
+	if (!giver || !IsValid(giver->_getUObject()))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, L"Failed to receive loot points");
+
+		return;
+	}
+
+	int32 lootPointsFromGiver = giver->getLootPoints();
+
+	this->giveEachPlayerLootPoints(lootPointsFromGiver);
+}
+
 int32& ALostConnectionGameState::getTotalBots()
 {
 	return totalBots;
@@ -135,17 +157,19 @@ void ALostConnectionGameState::Tick(float DeltaTime)
 	{
 		ALostConnectionGameMode* gameMode = GetWorld()->GetAuthGameMode<ALostConnectionGameMode>();
 
-		if (IsValid(gameMode))
+		if (!gameMode)
 		{
-			AISpawnManager& spawnManager = gameMode->getSpawnManager();
-
-			remainingBots = spawnManager.getRemainingAIToSpawn();
-
-			remainingWaves = spawnManager.getRemainingWaves();
-
-			currentWaveTotalBots = spawnManager.getCurrentWaveTotalBots();
-
-			currentWaveRemainingBots = spawnManager.getCurrentWaveRemainingBots();
+			return;
 		}
+
+		AISpawnManager& spawnManager = gameMode->getSpawnManager();
+
+		remainingBots = spawnManager.getRemainingAIToSpawn();
+
+		remainingWaves = spawnManager.getRemainingWaves();
+
+		currentWaveTotalBots = spawnManager.getCurrentWaveTotalBots();
+
+		currentWaveRemainingBots = spawnManager.getCurrentWaveRemainingBots();
 	}
 }

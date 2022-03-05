@@ -72,6 +72,9 @@ protected:
 	UPROPERTY(Category = Respawn, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UCooldownableUtilityObject* respawnCooldown;
 
+	UPROPERTY(Category = Economy, Replicated, BlueprintReadOnly)
+	int32 lootPoints;
+
 	TSubclassOf<class ABaseDrone> droneClass;
 
 protected:
@@ -127,6 +130,12 @@ public:
 	UFUNCTION(Server, Reliable)
 	void restoreRespawnCooldown();
 
+	UFUNCTION(Server, Reliable)
+	void increaseLootPoints(int32 count);
+
+	UFUNCTION(Server, Reliable)
+	void spendLootPoints(int32 count);
+
 	UFUNCTION(Client, Reliable)
 	void setCurrentUI(TSubclassOf<UUserWidget> widget, APawn* outer);
 
@@ -141,6 +150,8 @@ public:
 	const TSubclassOf<class ABaseDrone>& getDroneClass() const;
 
 	float getCurrentRespawnCooldown() const;
+
+	int32 getLootPoints() const;
 
 	virtual void Tick(float DeltaTime) override;
 

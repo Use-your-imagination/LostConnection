@@ -30,6 +30,8 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, respawnCooldown);
+
+	DOREPLIFETIME(ALostConnectionPlayerState, lootPoints);
 }
 
 bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -188,6 +190,16 @@ void ALostConnectionPlayerState::restoreRespawnCooldown_Implementation()
 	respawnCooldown->startCooldown();
 }
 
+void ALostConnectionPlayerState::increaseLootPoints_Implementation(int32 count)
+{
+	lootPoints += count;
+}
+
+void ALostConnectionPlayerState::spendLootPoints_Implementation(int32 count)
+{
+	lootPoints -= count;
+}
+
 void ALostConnectionPlayerState::setCurrentUI_Implementation(TSubclassOf<UUserWidget> widget, APawn* outer)
 {
 	this->resetCurrentUI();
@@ -225,6 +237,11 @@ const TSubclassOf<ABaseDrone>& ALostConnectionPlayerState::getDroneClass() const
 float ALostConnectionPlayerState::getCurrentRespawnCooldown() const
 {
 	return respawnCooldown->getCurrentCooldown();
+}
+
+int32 ALostConnectionPlayerState::getLootPoints() const
+{
+	return lootPoints;
 }
 
 #pragma region Multiplayer

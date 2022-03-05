@@ -10,11 +10,14 @@
 
 #include "BaseCharacter.h"
 #include "Utility/Utility.h"
+#include "Interfaces/Economy/LootPointsGiver.h"
 
 #include "BaseBot.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API ABaseBot : public ABaseCharacter
+class LOSTCONNECTION_API ABaseBot :
+	public ABaseCharacter,
+	public ILootPointsGiver
 {
 	GENERATED_BODY()
 
@@ -31,6 +34,9 @@ protected:
 	UPROPERTY()
 	UMaterial* baseHealthBarMaterial;
 
+	UPROPERTY(Category = Economy, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	int32 lootPointsReward;
+
 protected:
 	virtual void onHealthChange() override;
 
@@ -42,6 +48,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void PostInitializeComponents() override;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	virtual void deathLogic() override;
@@ -60,6 +68,8 @@ public:
 	UMaterialBillboardComponent* getHealthBar() const;
 
 	UTextRenderComponent* getHealthBarTextRender() const;
+
+	virtual int32 getLootPoints() const final override;
 
 	virtual ~ABaseBot() = default;
 };

@@ -32,6 +32,8 @@ public:
 
 	static constexpr float showHealthBarDistance = 5000.0f;
 
+	static constexpr int32 maxSpendLootPoints = 20000;
+
 public:
 	static const FName actionStringTablePath;
 	static const FString defaultActionMessageKey;

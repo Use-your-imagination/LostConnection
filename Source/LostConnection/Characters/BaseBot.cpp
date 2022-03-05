@@ -66,13 +66,28 @@ void ABaseBot::PostInitializeComponents()
 	healthBarTextRender->SetText(Utility::getFTextFromFloat(currentHealth));
 }
 
+void ABaseBot::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABaseBot, lootPointsReward);
+}
+
 void ABaseBot::deathLogic()
 {
 	UWorld* world = GetWorld();
 
+	if (!isAlly)
+	{
+		world->GetGameState<ALostConnectionGameState>()->verteilenLootPoints(this);
+	}
+
 	Destroy();
 
-	world->GetAuthGameMode<ALostConnectionGameMode>()->getSpawnManager().notify(world);
+	if (!isAlly)
+	{
+		world->GetAuthGameMode<ALostConnectionGameMode>()->getSpawnManager().notify(world);
+	}
 }
 
 void ABaseBot::updateCharacterVisual()
@@ -121,4 +136,9 @@ void ABaseBot::updateShield()
 	{
 		healthBarMaterial->SetVectorParameterValue("ShieldColor", energyShield->getEnergyShieldColor());
 	}
+}
+
+int32 ABaseBot::getLootPoints() const
+{
+	return lootPointsReward;
 }
