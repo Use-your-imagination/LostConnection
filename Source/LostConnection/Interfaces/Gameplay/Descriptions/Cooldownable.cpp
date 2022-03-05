@@ -4,7 +4,7 @@
 
 void ICooldownable::startCooldown(float startCooldown)
 {
-	if (startCooldown)
+	if (startCooldown >= 0.0f)
 	{
 		this->getCurrentCooldownReference() = startCooldown;
 	}
@@ -12,6 +12,8 @@ void ICooldownable::startCooldown(float startCooldown)
 	{
 		this->getCurrentCooldownReference() = this->getCooldown();
 	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 30.0f, FColor::Red, FString::Printf(L"cooldown: %f, currentCooldown: %f, currentCooldownReference: %f", this->getCooldown(), this->getCurrentCooldownReference(), this->getCurrentCooldown()));
 }
 
 void ICooldownable::resetCooldown()

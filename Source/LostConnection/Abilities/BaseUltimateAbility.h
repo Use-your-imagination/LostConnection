@@ -6,6 +6,7 @@
 
 #include "BaseAbility.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
+#include "Utility/CooldownableUtilityObject.h"
 
 #include "BaseUltimateAbility.generated.h"
 
@@ -17,11 +18,8 @@ class LOSTCONNECTION_API UBaseUltimateAbility :
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(Category = AbilityState, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	float cooldown;
-
-	UPROPERTY(Category = AbilityState, Replicated, BlueprintReadOnly)
-	float currentCooldown;
+	UPROPERTY(Category = Cooldown, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	UCooldownableUtilityObject* cooldown;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -38,6 +36,8 @@ public:
 	virtual float& getCurrentCooldownReference() final override;
 
 	virtual float getCurrentCooldown() const final override;
+
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	virtual ~UBaseUltimateAbility() = default;
 };

@@ -9,13 +9,11 @@ void UBaseUltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UBaseUltimateAbility, cooldown);
-
-	DOREPLIFETIME(UBaseUltimateAbility, currentCooldown);
 }
 
 UBaseUltimateAbility::UBaseUltimateAbility()
 {
-
+	
 }
 
 void UBaseUltimateAbility::applyAbility(ABaseCharacter* target)
@@ -30,15 +28,24 @@ void UBaseUltimateAbility::useAbility()
 
 float UBaseUltimateAbility::getCooldown() const
 {
-	return cooldown;
+	return cooldown->getCooldown();
 }
 
 float& UBaseUltimateAbility::getCurrentCooldownReference()
 {
-	return currentCooldown;
+	return cooldown->getCurrentCooldownReference();
 }
 
 float UBaseUltimateAbility::getCurrentCooldown() const
 {
-	return currentCooldown;
+	return cooldown->getCurrentCooldown();
+}
+
+bool UBaseUltimateAbility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(cooldown, *Bunch, *RepFlags);
+
+	return wroteSomething;
 }

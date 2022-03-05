@@ -17,8 +17,6 @@ void USN4K3PassiveAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME(USN4K3PassiveAbility, naniteMeter);
 
 	DOREPLIFETIME(USN4K3PassiveAbility, cooldown);
-
-	DOREPLIFETIME(USN4K3PassiveAbility, currentCooldown);
 }
 
 USN4K3PassiveAbility::USN4K3PassiveAbility() :
@@ -82,7 +80,7 @@ void USN4K3PassiveAbility::Tick(float DeltaTime)
 		type = directionTypes::decrease;
 	}
 
-	lastTimeAbilityUsed += FApp::GetDeltaTime();
+	lastTimeAbilityUsed += DeltaTime;
 
 	switch (type)
 	{
@@ -103,15 +101,24 @@ void USN4K3PassiveAbility::Tick(float DeltaTime)
 
 float USN4K3PassiveAbility::getCooldown() const
 {
-	return cooldown;
+	return cooldown->getCooldown();
 }
 
 float& USN4K3PassiveAbility::getCurrentCooldownReference()
 {
-	return currentCooldown;
+	return cooldown->getCurrentCooldownReference();
 }
 
 float USN4K3PassiveAbility::getCurrentCooldown() const
 {
-	return currentCooldown;
+	return cooldown->getCurrentCooldown();
+}
+
+bool USN4K3PassiveAbility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(cooldown, *Bunch, *RepFlags);
+
+	return wroteSomething;
 }

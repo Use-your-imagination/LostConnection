@@ -16,6 +16,7 @@
 #include "Interfaces/Gameplay/Modules/Holders/WeaponModulesHolder.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
 #include "Utility/ReplicationStructures.h"
+#include "Utility/CooldownableUtilityObject.h"
 
 #include "LostConnectionPlayerState.generated.h"
 
@@ -25,6 +26,10 @@ UCLASS()
 class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 {
 	GENERATED_BODY()
+
+private:
+	template<typename T>
+	static void reduceCooldownableDataObjects(float DeltaTime, TArray<T>& cooldownableData);
 
 protected:
 	UPROPERTY(Category = UI, BlueprintReadOnly)
@@ -64,11 +69,8 @@ protected:
 	UPROPERTY(Replicated)
 	TArray<FCooldownableWeaponsData> cooldownableWeapons;
 
-	UPROPERTY(Category = Respawn, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	float respawnCooldown;
-
-	UPROPERTY(Category = Respawn, Replicated, BlueprintReadOnly)
-	float currentRespawnCooldown;
+	UPROPERTY(Category = Respawn, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
+	UCooldownableUtilityObject* respawnCooldown;
 
 	TSubclassOf<class ABaseDrone> droneClass;
 
@@ -132,7 +134,7 @@ public:
 	void setDroneClass(TSubclassOf<class ABaseDrone> newDroneClass);
 
 	UFUNCTION(Server, Reliable)
-	void setCurrentRespawnCooldown(float newCurrentRespawnCooldown);
+	void setCurrentRespawnCooldown(float currentRespawnCooldown);
 
 	UUserWidget* getCurrentUI() const;
 
@@ -166,6 +168,22 @@ public:
 	void runOnServerUnreliable(AActor* caller, const FName& methodName);
 #pragma endregion
 };
+
+template<typename T>
+void ALostConnectionPlayerState::reduceCooldownableDataObjects(float DeltaTime, TArray<T>& cooldownableData)
+{
+	for (int32 i = 0; i < cooldownableData.Num(); i++)
+	{
+		float& remainingCooldown = cooldownableData[i].remainingCooldown;
+
+		remainingCooldown -= DeltaTime;
+
+		if (remainingCooldown <= 0.0f)
+		{
+			cooldownableData.RemoveAt(i--);
+		}
+	}
+}
 
 inline UBaseWeapon* ALostConnectionPlayerState::getPrimaryWeapon() const
 {
@@ -203,4 +221,18 @@ inline int32 ALostConnectionPlayerState::getSpareAmmo(ammoTypes type) const
 	}
 
 	return 0;
+}
+
+FORCEINLINE void ALostConnectionPlayerState::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (HasAuthority())
+	{
+		ALostConnectionPlayerState::reduceCooldownableDataObjects(DeltaTime, cooldownableAbilities);
+
+		ALostConnectionPlayerState::reduceCooldownableDataObjects(DeltaTime, cooldownableWeapons);
+
+		respawnCooldown->processCooldown(DeltaTime);
+	}
 }

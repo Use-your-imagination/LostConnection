@@ -8,9 +8,6 @@
 
 #include "BasePassiveAbility.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class LOSTCONNECTION_API UBasePassiveAbility : public UBaseAbility
 {

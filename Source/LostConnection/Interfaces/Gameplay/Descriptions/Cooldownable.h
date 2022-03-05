@@ -21,7 +21,7 @@ class LOSTCONNECTION_API ICooldownable
 public:
 	ICooldownable() = default;
 
-	virtual void startCooldown(float startCooldown = 0.0f);
+	virtual void startCooldown(float startCooldown = -1.0f);
 
 	virtual void processCooldown(float DeltaTime);
 

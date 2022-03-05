@@ -5,22 +5,6 @@
 #include "Constants/Constants.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-template<typename T>
-static void reduceCooldownableDataObjects(float DeltaTime, TArray<T>& cooldownableData)
-{
-	for (int32 i = 0; i < cooldownableData.Num(); i++)
-	{
-		float& remainingCooldown = cooldownableData[i].remainingCooldown;
-
-		remainingCooldown -= DeltaTime;
-
-		if (remainingCooldown <= 0.0f)
-		{
-			cooldownableData.RemoveAt(i--);
-		}
-	}
-}
-
 void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -46,8 +30,6 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, respawnCooldown);
-
-	DOREPLIFETIME(ALostConnectionPlayerState, currentRespawnCooldown);
 }
 
 bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -108,6 +90,8 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 			wroteSomething |= weaponModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
 		}
 	}
+
+	wroteSomething |= Channel->ReplicateSubobject(respawnCooldown, *Bunch, *RepFlags);
 
 	return wroteSomething;
 }
@@ -181,7 +165,6 @@ const TArray<FCooldownableWeaponsData>& ALostConnectionPlayerState::getCooldowna
 ALostConnectionPlayerState::ALostConnectionPlayerState()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }
 
@@ -202,7 +185,7 @@ void ALostConnectionPlayerState::resetCurrentUI_Implementation()
 
 void ALostConnectionPlayerState::restoreRespawnCooldown_Implementation()
 {
-	currentRespawnCooldown = respawnCooldown;
+	respawnCooldown->startCooldown();
 }
 
 void ALostConnectionPlayerState::setCurrentUI_Implementation(TSubclassOf<UUserWidget> widget, APawn* outer)
@@ -224,9 +207,9 @@ void ALostConnectionPlayerState::setDroneClass_Implementation(TSubclassOf<ABaseD
 	droneClass = newDroneClass;
 }
 
-void ALostConnectionPlayerState::setCurrentRespawnCooldown_Implementation(float newCurrentRespawnCooldown)
+void ALostConnectionPlayerState::setCurrentRespawnCooldown_Implementation(float currentRespawnCooldown)
 {
-	currentRespawnCooldown = newCurrentRespawnCooldown;
+	respawnCooldown->startCooldown(currentRespawnCooldown);
 }
 
 UUserWidget* ALostConnectionPlayerState::getCurrentUI() const
@@ -241,24 +224,7 @@ const TSubclassOf<ABaseDrone>& ALostConnectionPlayerState::getDroneClass() const
 
 float ALostConnectionPlayerState::getCurrentRespawnCooldown() const
 {
-	return currentRespawnCooldown;
-}
-
-void ALostConnectionPlayerState::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (HasAuthority())
-	{
-		reduceCooldownableDataObjects(DeltaTime, cooldownableAbilities);
-
-		reduceCooldownableDataObjects(DeltaTime, cooldownableWeapons);
-
-		if (currentRespawnCooldown)
-		{
-			currentRespawnCooldown = FMath::Max(0.0f, currentRespawnCooldown - DeltaTime);
-		}
-	}
+	return respawnCooldown->getCurrentCooldown();
 }
 
 #pragma region Multiplayer

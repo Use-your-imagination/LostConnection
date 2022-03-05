@@ -7,6 +7,7 @@
 #include "Abilities/BasePassiveAbility.h"
 #include "Characters/Drones/SN4K3/SN4K3PassiveAbilityHead.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
+#include "Utility/CooldownableUtilityObject.h"
 
 #include "SN4K3PassiveAbility.generated.h"
 
@@ -28,11 +29,8 @@ private:
 	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 naniteMeter;
 
-	UPROPERTY(Category = AbilityState, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float cooldown;
-
-	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float currentCooldown;
+	UPROPERTY(Category = SN4K3, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UCooldownableUtilityObject* cooldown;
 
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ASN4K3PassiveAbilityHead> headClass;
@@ -62,6 +60,8 @@ public:
 	float& getCurrentCooldownReference() override;
 
 	float getCurrentCooldown() const override;
+
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	~USN4K3PassiveAbility() = default;
 };

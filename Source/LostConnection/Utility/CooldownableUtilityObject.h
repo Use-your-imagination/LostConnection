@@ -11,7 +11,7 @@
 
 #include "CooldownableUtilityObject.generated.h"
 
-UCLASS(BlueprintType, DefaultToInstanced)
+UCLASS(BlueprintType, DefaultToInstanced, EditInlineNew)
 class LOSTCONNECTION_API UCooldownableUtilityObject : 
 	public UObject,
 	public ICooldownable
