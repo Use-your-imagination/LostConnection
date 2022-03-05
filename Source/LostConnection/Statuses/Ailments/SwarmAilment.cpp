@@ -3,6 +3,7 @@
 #include "SwarmAilment.h"
 
 #include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
+#include "Characters/BaseCharacter.h"
 
 #pragma warning(disable: 4458)
 
@@ -14,6 +15,14 @@ FString USwarmAilment::getStatusName() const
 int32 USwarmAilment::calculateUnderStatusEffect() const
 {
 	return FMath::Max<int32>(1, StaticCast<int32>(this->getThreshold() / percentsPerSatellite));
+}
+
+void USwarmAilment::updateSwarmHealthBar()
+{
+	if (ABaseCharacter* tem = Cast<ABaseCharacter>(target->_getUObject()))
+	{
+		tem->updateCharacterVisualCall();
+	}
 }
 
 void USwarmAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -65,6 +74,8 @@ void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInf
 
 			target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
 
+			swarm->updateSwarmHealthBar();
+
 			return;
 		}
 	}
@@ -74,6 +85,15 @@ void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInf
 	ailmentReceiver->applySwarmAilment(this);
 
 	threshold = baseThreshold;
+
+	this->updateSwarmHealthBar();
+}
+
+void USwarmAilment::postRemove()
+{
+	Super::postRemove();
+
+	this->updateSwarmHealthBar();
 }
 
 void USwarmAilment::appendIncreasedDamageCoefficient(float coefficient)

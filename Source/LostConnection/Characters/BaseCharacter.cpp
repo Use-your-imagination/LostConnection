@@ -307,6 +307,11 @@ void ABaseCharacter::deathLogic()
 	this->returnAmmoToSpare(playerState->getSecondaryWeapon());
 }
 
+void ABaseCharacter::updateCharacterVisual()
+{
+	
+}
+
 void ABaseCharacter::runReloadLogic()
 {
 	Utility::executeOnlyOnServerFromMulticast(this, [this]()
@@ -467,6 +472,11 @@ void ABaseCharacter::returnAmmoToSpare(UBaseWeapon* weapon)
 void ABaseCharacter::playAnimation_Implementation(UAnimMontage* animation)
 {
 	PlayAnimMontage(animation);
+}
+
+void ABaseCharacter::updateCharacterVisualCall()
+{
+	MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "updateCharacterVisual");
 }
 
 void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> defaultWeapon)
@@ -743,6 +753,8 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 			swarm->applyEffect(this, hit);
 
 			currentHealth = 0.0f;
+
+			this->onCurrentHealthChange();
 
 			return;
 		}

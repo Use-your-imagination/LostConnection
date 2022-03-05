@@ -8,6 +8,7 @@
 
 #include "Weapons/Pistols/Gauss.h"
 #include "Engine/LostConnectionGameMode.h"
+#include "Statuses/Ailments/SwarmAilment.h"
 
 void ABaseBot::onHealthChange()
 {
@@ -72,6 +73,14 @@ void ABaseBot::deathLogic()
 	Destroy();
 
 	world->GetAuthGameMode<ALostConnectionGameMode>()->getSpawnManager().notify(world);
+}
+
+void ABaseBot::updateCharacterVisual()
+{
+	if (swarm.IsValid())
+	{
+		healthBarMaterial->SetScalarParameterValue("ThresholdPercent", swarm->getThreshold());
+	}
 }
 
 ABaseBot::ABaseBot()

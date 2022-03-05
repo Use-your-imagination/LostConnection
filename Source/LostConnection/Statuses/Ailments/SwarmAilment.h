@@ -42,6 +42,9 @@ private:
 	TArray<float> moreDamageCoefficients;
 
 private:
+	void updateSwarmHealthBar();
+
+private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
@@ -52,6 +55,8 @@ public:
 	float getThreshold() const;
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
+
+	void postRemove() override;
 
 	void appendIncreasedDamageCoefficient(float coefficient) override;
 

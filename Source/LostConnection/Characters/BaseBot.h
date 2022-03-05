@@ -46,6 +46,8 @@ protected:
 protected:
 	virtual void deathLogic() override;
 
+	virtual void updateCharacterVisual() override;
+
 public:
 	ABaseBot();
 

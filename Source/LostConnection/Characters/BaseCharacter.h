@@ -202,6 +202,10 @@ protected:
 
 	virtual void deathLogic() override;
 
+protected:
+	UFUNCTION()
+	virtual void updateCharacterVisual();
+
 public:	
 	ABaseCharacter();
 
@@ -223,6 +227,9 @@ public:
 
 	UFUNCTION(NetMulticast, Unreliable)
 	void playAnimation(UAnimMontage* animation);
+
+	UFUNCTION(Category = Visual, BlueprintCallable)
+	void updateCharacterVisualCall();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void setDefaultWeapon(TSubclassOf<UBaseWeapon> defaultWeapon);
