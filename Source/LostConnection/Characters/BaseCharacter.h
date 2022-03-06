@@ -232,9 +232,6 @@ public:
 	void updateCharacterVisualCall();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void setDefaultWeapon(TSubclassOf<UBaseWeapon> defaultWeapon);
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void setHealth(float newHealth);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)

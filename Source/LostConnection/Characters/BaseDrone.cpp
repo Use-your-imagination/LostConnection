@@ -382,8 +382,6 @@ void ABaseDrone::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-
 	if (GetController() && !Utility::getPlayerState(this)->getCurrentUI())
 	{
 		this->initDefaultUI();
@@ -399,10 +397,6 @@ void ABaseDrone::BeginPlay()
 				}
 			}, 1.0f);
 
-		this->setPrimaryWeapon(manager.getWeaponClass(UHipter::StaticClass()));
-
-		this->setDefaultWeapon(manager.getWeaponClass(UGauss::StaticClass()));
-
 		passiveAbility->initAbility();
 
 		firstAbility->initAbility();
@@ -416,6 +410,8 @@ void ABaseDrone::BeginPlay()
 		this->restoreAbilitiesCooldown();
 
 		this->restoreWeaponsCooldown();
+
+		Utility::getPlayerState(this)->getPrimaryWeapon()->setOwner(this);
 	}
 }
 

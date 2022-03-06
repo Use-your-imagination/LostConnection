@@ -6,6 +6,7 @@
 
 #include "UObject/NoExportTypes.h"
 #include "Net/UnrealNetwork.h"
+#include "Engine/ActorChannel.h"
 
 #include "NetworkObject.generated.h"
 

@@ -12,6 +12,7 @@
 
 #include "Network/NetworkObject.h"
 #include "Projectiles/Ammo.h"
+#include "Interfaces/Inventory/Inventoriable.h"
 
 #include "BaseWeapon.generated.h"
 
@@ -47,7 +48,9 @@ enum class weaponSlotTypes : uint8
 };
 
 UCLASS(BlueprintType, Blueprintable)
-class LOSTCONNECTION_API UBaseWeapon : public UNetworkObject
+class LOSTCONNECTION_API UBaseWeapon :
+	public UNetworkObject,
+	public IInventoriable
 {
 	GENERATED_BODY()
 		
@@ -68,6 +71,12 @@ protected:
 	void shoot();
 
 protected:
+	UPROPERTY(Category = Description, EditDefaultsOnly, BlueprintReadOnly)
+	FText weaponName;
+
+	UPROPERTY(Category = Description, EditDefaultsOnly, BlueprintReadOnly)
+	FText weaponDescription;
+
 	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
 	USkeletalMesh* mesh;
 
@@ -248,6 +257,10 @@ public:
 	float getAdditionalCrushingHitChance() const;
 
 	float getLength() const;
+
+	const FText& getItemName() const override;
+
+	const FText& getItemDescription() const override;
 
 	virtual ~UBaseWeapon() = default;
 };

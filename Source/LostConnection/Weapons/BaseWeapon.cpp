@@ -367,3 +367,13 @@ float UBaseWeapon::getLength() const
 {
 	return length;
 }
+
+const FText& UBaseWeapon::getItemName() const
+{
+	return weaponName;
+}
+
+const FText& UBaseWeapon::getItemDescription() const
+{
+	return weaponDescription;
+}

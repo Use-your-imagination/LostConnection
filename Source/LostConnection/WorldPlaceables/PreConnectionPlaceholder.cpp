@@ -24,8 +24,6 @@ void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
 	{
 		isAlreadySendRespawnRequest = true;
 
-		playerState->init();
-
 		playerState->setDroneClass(ASN4K3::StaticClass());
 
 		controller->respawnPlayer(controller->GetPawn()->GetActorTransform());

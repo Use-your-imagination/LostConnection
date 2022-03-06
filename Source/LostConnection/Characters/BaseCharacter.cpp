@@ -110,7 +110,10 @@ void ABaseCharacter::BeginPlay()
 
 	if (HasAuthority())
 	{
-		TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
+		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+		TArray<FAmmoData>& spareAmmo = playerState->getSpareAmmoArray();
+
+		playerState->init();
 
 		if (!spareAmmo.Num())
 		{
@@ -122,6 +125,8 @@ void ABaseCharacter::BeginPlay()
 				FAmmoData(ammoTypes::defaultType, 9999)
 			};
 		}
+
+		playerState->getDefaultWeapon()->setOwner(this);
 
 		this->onEnergyShieldUpdate();
 	}
@@ -477,25 +482,6 @@ void ABaseCharacter::playAnimation_Implementation(UAnimMontage* animation)
 void ABaseCharacter::updateCharacterVisualCall()
 {
 	MultiplayerUtility::runOnServerUnreliableWithMulticast(this, "updateCharacterVisual");
-}
-
-void ABaseCharacter::setDefaultWeapon_Implementation(TSubclassOf<UBaseWeapon> defaultWeapon)
-{
-	if (!defaultWeapon)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Default weapon is null"));
-
-		return;
-	}
-
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, defaultWeapon);
-
-	weapon->setOwner(this);
-
-	weapon->updateTimeBetweenShots();
-
-	playerState->setDefaultWeapon(weapon);
 }
 
 void ABaseCharacter::setHealth_Implementation(float newHealth)

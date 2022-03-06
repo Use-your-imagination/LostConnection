@@ -17,6 +17,7 @@
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
 #include "Utility/ReplicationStructures.h"
 #include "Utility/CooldownableUtilityObject.h"
+#include "Inventory/Inventory.h"
 
 #include "LostConnectionPlayerState.generated.h"
 
@@ -38,20 +39,8 @@ protected:
 	UPROPERTY(Category = UI, BlueprintReadOnly)
 	UMaterialInstanceDynamic* selectorMaterial;
 
-	UPROPERTY(Replicated)
-	UBaseWeapon* primaryWeapon;
-
-	UPROPERTY(Replicated)
-	UBaseWeapon* secondaryWeapon;
-
-	UPROPERTY(Replicated)
-	UBaseWeapon* defaultWeapon;
-
-	UPROPERTY(Replicated)
-	UBaseWeapon* firstInactiveWeapon;
-
-	UPROPERTY(Replicated)
-	UBaseWeapon* secondInactiveWeapon;
+	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly)
+	UInventory* inventory;
 
 	UPROPERTY(Replicated)
 	TArray<UNetworkObject*> mainModules;
@@ -77,10 +66,12 @@ protected:
 
 	TSubclassOf<class ABaseDrone> droneClass;
 
-protected:
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	bool isInitialized;
 
-	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+protected:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 public:
 	void addMainModule(IMainModule* module);
@@ -95,7 +86,9 @@ public:
 
 	void setSecondaryWeapon(UBaseWeapon* secondaryWeapon);
 
-	void setDefaultWeapon(UBaseWeapon* defaultWeapon);
+	void setFirstInactiveWeapon(UBaseWeapon* secondaryWeapon);
+
+	void setSecondInactiveWeapon(UBaseWeapon* secondaryWeapon);
 
 	UBaseWeapon* getPrimaryWeapon() const;
 
@@ -198,27 +191,31 @@ void ALostConnectionPlayerState::reduceCooldownableDataObjects(float DeltaTime, 
 
 inline UBaseWeapon* ALostConnectionPlayerState::getPrimaryWeapon() const
 {
-	return primaryWeapon;
+	return inventory->getPrimaryWeaponCell()->getItem<UBaseWeapon>();
 }
 
 inline UBaseWeapon* ALostConnectionPlayerState::getSecondaryWeapon() const
 {
-	return secondaryWeapon;
+	return inventory->getSecondaryWeaponCell()->getItem<UBaseWeapon>();
 }
 
 inline UBaseWeapon* ALostConnectionPlayerState::getDefaultWeapon() const
 {
-	return defaultWeapon;
+	return inventory->getDefaultWeaponCell()->getItem<UBaseWeapon>();
 }
 
 inline UBaseWeapon* ALostConnectionPlayerState::getFirstInactiveWeapon() const
 {
-	return firstInactiveWeapon;
+	// TODO: inactive weapon getter
+
+	return nullptr;
 }
 
 inline UBaseWeapon* ALostConnectionPlayerState::getSecondInactiveWeapon() const
 {
-	return secondInactiveWeapon;
+	// TODO: inactive weapon getter
+
+	return nullptr;
 }
 
 inline int32 ALostConnectionPlayerState::getSpareAmmo(ammoTypes type) const

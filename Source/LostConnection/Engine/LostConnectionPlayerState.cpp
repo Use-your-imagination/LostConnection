@@ -9,15 +9,7 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ALostConnectionPlayerState, primaryWeapon);
-
-	DOREPLIFETIME(ALostConnectionPlayerState, secondaryWeapon);
-
-	DOREPLIFETIME(ALostConnectionPlayerState, defaultWeapon);
-
-	DOREPLIFETIME(ALostConnectionPlayerState, firstInactiveWeapon);
-
-	DOREPLIFETIME(ALostConnectionPlayerState, secondInactiveWeapon);
+	DOREPLIFETIME(ALostConnectionPlayerState, inventory);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, mainModules);
 
@@ -38,40 +30,9 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	if (IsValid(primaryWeapon))
-	{
-		wroteSomething |= Channel->ReplicateSubobject(primaryWeapon, *Bunch, *RepFlags);
+	wroteSomething |= Channel->ReplicateSubobject(inventory, *Bunch, *RepFlags);
 
-		wroteSomething |= primaryWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
-	}
-
-	if (IsValid(secondaryWeapon))
-	{
-		wroteSomething |= Channel->ReplicateSubobject(secondaryWeapon, *Bunch, *RepFlags);
-
-		wroteSomething |= secondaryWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
-	}
-
-	if (IsValid(defaultWeapon))
-	{
-		wroteSomething |= Channel->ReplicateSubobject(defaultWeapon, *Bunch, *RepFlags);
-
-		wroteSomething |= defaultWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
-	}
-
-	if (IsValid(firstInactiveWeapon))
-	{
-		wroteSomething |= Channel->ReplicateSubobject(firstInactiveWeapon, *Bunch, *RepFlags);
-
-		wroteSomething |= firstInactiveWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
-	}
-
-	if (IsValid(secondInactiveWeapon))
-	{
-		wroteSomething |= Channel->ReplicateSubobject(secondInactiveWeapon, *Bunch, *RepFlags);
-
-		wroteSomething |= secondInactiveWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
-	}
+	wroteSomething |= inventory->ReplicateSubobjects(Channel, Bunch, RepFlags);
 
 	for (UNetworkObject* mainModule : mainModules)
 	{
@@ -126,17 +87,22 @@ void ALostConnectionPlayerState::addCooldownableWeapon(weaponSlotTypes slot, con
 
 void ALostConnectionPlayerState::setPrimaryWeapon(UBaseWeapon* primaryWeapon)
 {
-	this->primaryWeapon = primaryWeapon;
+	inventory->setPrimaryWeaponCell(primaryWeapon);
 }
 
 void ALostConnectionPlayerState::setSecondaryWeapon(UBaseWeapon* secondaryWeapon)
 {
-	this->secondaryWeapon = secondaryWeapon;
+	inventory->setPrimaryWeaponCell(secondaryWeapon);
 }
 
-void ALostConnectionPlayerState::setDefaultWeapon(UBaseWeapon* defaultWeapon)
+void ALostConnectionPlayerState::setFirstInactiveWeapon(UBaseWeapon* secondaryWeapon)
 {
-	this->defaultWeapon = defaultWeapon;
+	// TODO: set inactive weapons
+}
+
+void ALostConnectionPlayerState::setSecondInactiveWeapon(UBaseWeapon* secondaryWeapon)
+{
+	// TODO: set inactive weapons
 }
 
 const TArray<UNetworkObject*>& ALostConnectionPlayerState::getMainModules() const
@@ -168,11 +134,22 @@ ALostConnectionPlayerState::ALostConnectionPlayerState()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
+
+	inventory = CreateDefaultSubobject<UInventory>("Inventory");
 }
 
 void ALostConnectionPlayerState::init()
 {
+	if (isInitialized)
+	{
+		return;
+	}
+
+	isInitialized = true;
+
 	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
+
+	inventory->init(this);
 }
 
 void ALostConnectionPlayerState::resetCurrentUI_Implementation()

@@ -47,8 +47,6 @@ void ABaseBot::BeginPlay()
 
 	if (HasAuthority())
 	{
-		this->setDefaultWeapon(ULostConnectionAssetManager::get().getWeaponClass(UGauss::StaticClass()));
-
 		this->changeToDefaultWeapon();
 
 		this->updateShield();
