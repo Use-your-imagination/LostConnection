@@ -12,6 +12,8 @@
 
 #include "Inventory.generated.h"
 
+#pragma warning(disable: 4458)
+
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API UInventory : public UNetworkObject
 {
@@ -27,6 +29,9 @@ private:
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UInventoryCell* defaultWeaponCell;
 
+	UPROPERTY(Category = "Inventory|Economy", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	int32 lootPoints;
+
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -35,17 +40,19 @@ public:
 
 	void init(APlayerState* playerState);
 
-	UFUNCTION(Server, Reliable)
 	void setPrimaryWeaponCell(UBaseWeapon* weapon);
 
-	UFUNCTION(Server, Reliable)
 	void setSecondaryWeaponCell(UBaseWeapon* weapon);
+
+	void setLootPoints(int32 lootPoints);
 
 	UInventoryCell* getPrimaryWeaponCell() const;
 
 	UInventoryCell* getSecondaryWeaponCell() const;
 
 	UInventoryCell* getDefaultWeaponCell() const;
+
+	int32 getLootPoints() const;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 

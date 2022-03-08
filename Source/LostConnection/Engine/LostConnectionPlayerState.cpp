@@ -22,8 +22,6 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, respawnCooldown);
-
-	DOREPLIFETIME(ALostConnectionPlayerState, lootPoints);
 }
 
 bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -85,22 +83,22 @@ void ALostConnectionPlayerState::addCooldownableWeapon(weaponSlotTypes slot, con
 	}
 }
 
-void ALostConnectionPlayerState::setPrimaryWeapon(UBaseWeapon* primaryWeapon)
+void ALostConnectionPlayerState::setPrimaryWeapon_Implementation(UBaseWeapon* primaryWeapon)
 {
 	inventory->setPrimaryWeaponCell(primaryWeapon);
 }
 
-void ALostConnectionPlayerState::setSecondaryWeapon(UBaseWeapon* secondaryWeapon)
+void ALostConnectionPlayerState::setSecondaryWeapon_Implementation(UBaseWeapon* secondaryWeapon)
 {
 	inventory->setPrimaryWeaponCell(secondaryWeapon);
 }
 
-void ALostConnectionPlayerState::setFirstInactiveWeapon(UBaseWeapon* secondaryWeapon)
+void ALostConnectionPlayerState::setFirstInactiveWeapon_Implementation(UBaseWeapon* secondaryWeapon)
 {
 	// TODO: set inactive weapons
 }
 
-void ALostConnectionPlayerState::setSecondInactiveWeapon(UBaseWeapon* secondaryWeapon)
+void ALostConnectionPlayerState::setSecondInactiveWeapon_Implementation(UBaseWeapon* secondaryWeapon)
 {
 	// TODO: set inactive weapons
 }
@@ -169,12 +167,12 @@ void ALostConnectionPlayerState::restoreRespawnCooldown_Implementation()
 
 void ALostConnectionPlayerState::increaseLootPoints_Implementation(int32 count)
 {
-	lootPoints += count;
+	inventory->setLootPoints(inventory->getLootPoints() + count);
 }
 
 void ALostConnectionPlayerState::spendLootPoints_Implementation(int32 count)
 {
-	lootPoints -= count;
+	inventory->setLootPoints(inventory->getLootPoints() - count);
 }
 
 void ALostConnectionPlayerState::setCurrentUI_Implementation(TSubclassOf<UUserWidget> widget, APawn* outer)
@@ -223,7 +221,7 @@ float ALostConnectionPlayerState::getCurrentRespawnCooldown() const
 
 int32 ALostConnectionPlayerState::getLootPoints() const
 {
-	return lootPoints;
+	return inventory->getLootPoints();
 }
 
 #pragma region Multiplayer

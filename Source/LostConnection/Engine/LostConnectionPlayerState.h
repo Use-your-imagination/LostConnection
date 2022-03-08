@@ -61,9 +61,6 @@ protected:
 	UPROPERTY(Category = Respawn, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UCooldownableUtilityObject* respawnCooldown;
 
-	UPROPERTY(Category = Economy, Replicated, BlueprintReadOnly)
-	int32 lootPoints;
-
 	TSubclassOf<class ABaseDrone> droneClass;
 
 	bool isInitialized;
@@ -82,12 +79,16 @@ public:
 
 	void addCooldownableWeapon(weaponSlotTypes slot, const ICooldownable* cooldownable);
 
+	UFUNCTION(Server, Reliable)
 	void setPrimaryWeapon(UBaseWeapon* primaryWeapon);
 
+	UFUNCTION(Server, Reliable)
 	void setSecondaryWeapon(UBaseWeapon* secondaryWeapon);
 
+	UFUNCTION(Server, Reliable)
 	void setFirstInactiveWeapon(UBaseWeapon* secondaryWeapon);
 
+	UFUNCTION(Server, Reliable)
 	void setSecondInactiveWeapon(UBaseWeapon* secondaryWeapon);
 
 	UBaseWeapon* getPrimaryWeapon() const;

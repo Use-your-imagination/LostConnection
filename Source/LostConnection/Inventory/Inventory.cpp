@@ -16,6 +16,8 @@ void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(UInventory, secondaryWeaponCell);
 
 	DOREPLIFETIME(UInventory, defaultWeaponCell);
+
+	DOREPLIFETIME(UInventory, lootPoints);
 }
 
 UInventory::UInventory()
@@ -43,14 +45,19 @@ void UInventory::init(APlayerState* playerState)
 	defaultWeaponCell->setItem(tem);
 }
 
-void UInventory::setPrimaryWeaponCell_Implementation(UBaseWeapon* weapon)
+void UInventory::setPrimaryWeaponCell(UBaseWeapon* weapon)
 {
 	primaryWeaponCell->setItem(weapon);
 }
 
-void UInventory::setSecondaryWeaponCell_Implementation(UBaseWeapon* weapon)
+void UInventory::setSecondaryWeaponCell(UBaseWeapon* weapon)
 {
 	secondaryWeaponCell->setItem(weapon);
+}
+
+void UInventory::setLootPoints(int32 lootPoints)
+{
+	this->lootPoints = FMath::Max(0, lootPoints);
 }
 
 UInventoryCell* UInventory::getPrimaryWeaponCell() const
@@ -66,6 +73,11 @@ UInventoryCell* UInventory::getSecondaryWeaponCell() const
 UInventoryCell* UInventory::getDefaultWeaponCell() const
 {
 	return defaultWeaponCell;
+}
+
+int32 UInventory::getLootPoints() const
+{
+	return lootPoints;
 }
 
 bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
