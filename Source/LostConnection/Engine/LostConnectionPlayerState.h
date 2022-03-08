@@ -15,7 +15,6 @@
 #include "Interfaces/Gameplay/Modules/Holders/MainModulesHolder.h"
 #include "Interfaces/Gameplay/Modules/Holders/WeaponModulesHolder.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
-#include "Utility/ReplicationStructures.h"
 #include "Utility/CooldownableUtilityObject.h"
 #include "Inventory/Inventory.h"
 
@@ -47,9 +46,6 @@ protected:
 
 	UPROPERTY(Replicated)
 	TArray<UNetworkObject*> weaponModules;
-
-	UPROPERTY(Replicated)
-	TArray<FAmmoData> spareAmmo;
 
 protected:
 	UPROPERTY(Replicated)
@@ -221,8 +217,10 @@ inline UBaseWeapon* ALostConnectionPlayerState::getSecondInactiveWeapon() const
 	return nullptr;
 }
 
-inline int32 ALostConnectionPlayerState::getSpareAmmo(ammoTypes type) const
+FORCEINLINE int32 ALostConnectionPlayerState::getSpareAmmo(ammoTypes type) const
 {
+	TArray<FAmmoData>& spareAmmo = inventory->getSpareAmmoArray();
+
 	for (const auto& data : spareAmmo)
 	{
 		if (data.ammoType == type)

@@ -21,16 +21,16 @@ public:
 	~UReplicationStructures() = default;
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FAmmoData
 {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY()
+	UPROPERTY(Category = Data, BlueprintReadOnly)
 	int32 ammoCount;
 
-	UPROPERTY()
+	UPROPERTY(Category = Data, BlueprintReadOnly)
 	ammoTypes ammoType;
 
 	FAmmoData(ammoTypes ammoType = ammoTypes::small, int32 ammoCount = 0);

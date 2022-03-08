@@ -18,6 +18,8 @@ void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(UInventory, defaultWeaponCell);
 
 	DOREPLIFETIME(UInventory, lootPoints);
+
+	DOREPLIFETIME(UInventory, spareAmmo);
 }
 
 UInventory::UInventory()

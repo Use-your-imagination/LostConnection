@@ -15,8 +15,6 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 
 	DOREPLIFETIME(ALostConnectionPlayerState, weaponModules);
 
-	DOREPLIFETIME(ALostConnectionPlayerState, spareAmmo);
-
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableAbilities);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
@@ -115,7 +113,7 @@ const TArray<UNetworkObject*>& ALostConnectionPlayerState::getWeaponModules() co
 
 TArray<FAmmoData>& ALostConnectionPlayerState::getSpareAmmoArray()
 {
-	return spareAmmo;
+	return inventory->getSpareAmmoArray();
 }
 
 const TArray<FCooldownableAbilitiesData>& ALostConnectionPlayerState::getCooldownableAbilities() const
