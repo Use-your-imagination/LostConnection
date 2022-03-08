@@ -20,6 +20,10 @@ void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(UInventory, lootPoints);
 
 	DOREPLIFETIME(UInventory, spareAmmo);
+
+	DOREPLIFETIME(UInventory, personalModules);
+
+	DOREPLIFETIME(UInventory, weaponModules);
 }
 
 UInventory::UInventory()
@@ -45,6 +49,16 @@ void UInventory::init(APlayerState* playerState)
 	tem->updateTimeBetweenShots();
 
 	defaultWeaponCell->setItem(tem);
+}
+
+void UInventory::addPersonalModule(UBasePersonalModule* module)
+{
+	personalModules.Add(module);
+}
+
+void UInventory::addWeaponModule(UBaseWeaponModule* module)
+{
+	weaponModules.Add(module);
 }
 
 void UInventory::setPrimaryWeaponCell(UBaseWeapon* weapon)
@@ -82,6 +96,16 @@ int32 UInventory::getLootPoints() const
 	return lootPoints;
 }
 
+const TArray<UBasePersonalModule*>& UInventory::getPersonalModules() const
+{
+	return personalModules;
+}
+
+const TArray<UBaseWeaponModule*>& UInventory::getWeaponModules() const
+{
+	return weaponModules;
+}
+
 bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
@@ -105,6 +129,26 @@ bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 		wroteSomething |= Channel->ReplicateSubobject(defaultWeaponCell, *Bunch, *RepFlags);
 
 		wroteSomething |= defaultWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	for (UBasePersonalModule* personalModule : personalModules)
+	{
+		if (IsValid(personalModule))
+		{
+			wroteSomething |= Channel->ReplicateSubobject(personalModule, *Bunch, *RepFlags);
+
+			wroteSomething |= personalModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		}
+	}
+
+	for (UBaseWeaponModule* weaponModule : weaponModules)
+	{
+		if (IsValid(weaponModule))
+		{
+			wroteSomething |= Channel->ReplicateSubobject(weaponModule, *Bunch, *RepFlags);
+
+			wroteSomething |= weaponModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		}
 	}
 
 	return wroteSomething;

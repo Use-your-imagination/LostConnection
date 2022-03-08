@@ -10,6 +10,8 @@
 #include "InventoryCell.h"
 #include "Weapons/BaseWeapon.h"
 #include "Utility/ReplicationStructures.h"
+#include "Interfaces/Modules/Holders/PersonalModulesHolder.h"
+#include "Interfaces/Modules/Holders/WeaponModulesHolder.h"
 
 #include "Inventory.generated.h"
 
@@ -36,6 +38,12 @@ private:
 	UPROPERTY(Category = "Inventory|Ammo", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<FAmmoData> spareAmmo;
 
+	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<UBasePersonalModule*> personalModules;
+
+	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<UBaseWeaponModule*> weaponModules;
+
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -43,6 +51,10 @@ public:
 	UInventory();
 
 	void init(APlayerState* playerState);
+
+	void addPersonalModule(UBasePersonalModule* module);
+
+	void addWeaponModule(UBaseWeaponModule* module);
 
 	void setPrimaryWeaponCell(UBaseWeapon* weapon);
 
@@ -59,6 +71,10 @@ public:
 	int32 getLootPoints() const;
 
 	TArray<FAmmoData>& getSpareAmmoArray();
+
+	const TArray<UBasePersonalModule*>& getPersonalModules() const;
+
+	const TArray<UBaseWeaponModule*>& getWeaponModules() const;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 

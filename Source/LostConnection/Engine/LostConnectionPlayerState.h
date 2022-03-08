@@ -12,8 +12,6 @@
 
 #include "Weapons/BaseWeapon.h"
 #include "Abilities/BaseAbility.h"
-#include "Interfaces/Modules/Holders/PersonalModulesHolder.h"
-#include "Interfaces/Modules/Holders/WeaponModulesHolder.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
 #include "Utility/CooldownableUtilityObject.h"
 #include "Inventory/Inventory.h"
@@ -41,12 +39,6 @@ protected:
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly)
 	UInventory* inventory;
 
-	UPROPERTY(Replicated)
-	TArray<UBasePersonalModule*> personalModules;
-
-	UPROPERTY(Replicated)
-	TArray<UBaseWeaponModule*> weaponModules;
-
 protected:
 	UPROPERTY(Replicated)
 	TArray<FCooldownableAbilitiesData> cooldownableAbilities;
@@ -67,8 +59,10 @@ protected:
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 public:
+	UFUNCTION(Server, Reliable)
 	void addPersonalModule(UBasePersonalModule* module);
 
+	UFUNCTION(Server, Reliable)
 	void addWeaponModule(UBaseWeaponModule* module);
 
 	void addCooldownableAbility(abilitySlot slot, const ICooldownable* cooldownable);

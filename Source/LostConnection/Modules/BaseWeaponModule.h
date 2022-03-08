@@ -13,4 +13,8 @@ class LOSTCONNECTION_API UBaseWeaponModule : public UBaseModule
 {
 	GENERATED_BODY()
 	
+public:
+	UBaseWeaponModule() = default;
+
+	virtual ~UBaseWeaponModule() = default;
 };

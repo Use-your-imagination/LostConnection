@@ -11,10 +11,6 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 
 	DOREPLIFETIME(ALostConnectionPlayerState, inventory);
 
-	DOREPLIFETIME(ALostConnectionPlayerState, personalModules);
-
-	DOREPLIFETIME(ALostConnectionPlayerState, weaponModules);
-
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableAbilities);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
@@ -30,39 +26,19 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 
 	wroteSomething |= inventory->ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	for (UNetworkObject* mainModule : personalModules)
-	{
-		if (IsValid(mainModule))
-		{
-			wroteSomething |= Channel->ReplicateSubobject(mainModule, *Bunch, *RepFlags);
-
-			wroteSomething |= mainModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
-		}
-	}
-
-	for (UNetworkObject* weaponModule : weaponModules)
-	{
-		if (IsValid(weaponModule))
-		{
-			wroteSomething |= Channel->ReplicateSubobject(weaponModule, *Bunch, *RepFlags);
-
-			wroteSomething |= weaponModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
-		}
-	}
-
 	wroteSomething |= Channel->ReplicateSubobject(respawnCooldown, *Bunch, *RepFlags);
 
 	return wroteSomething;
 }
 
-void ALostConnectionPlayerState::addPersonalModule(UBasePersonalModule* module)
+void ALostConnectionPlayerState::addPersonalModule_Implementation(UBasePersonalModule* module)
 {
-	personalModules.Add(module);
+	inventory->addPersonalModule(module);
 }
 
-void ALostConnectionPlayerState::addWeaponModule(UBaseWeaponModule* module)
+void ALostConnectionPlayerState::addWeaponModule_Implementation(UBaseWeaponModule* module)
 {
-	weaponModules.Add(module);
+	inventory->addWeaponModule(module);
 }
 
 void ALostConnectionPlayerState::addCooldownableAbility(abilitySlot slot, const ICooldownable* cooldownable)
@@ -103,12 +79,12 @@ void ALostConnectionPlayerState::setSecondInactiveWeapon_Implementation(UBaseWea
 
 const TArray<UBasePersonalModule*>& ALostConnectionPlayerState::getPersonalModules() const
 {
-	return personalModules;
+	return inventory->getPersonalModules();
 }
 
 const TArray<UBaseWeaponModule*>& ALostConnectionPlayerState::getWeaponModules() const
 {
-	return weaponModules;
+	return inventory->getWeaponModules();
 }
 
 TArray<FAmmoData>& ALostConnectionPlayerState::getSpareAmmoArray()
