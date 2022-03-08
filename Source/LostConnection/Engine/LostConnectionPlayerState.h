@@ -140,6 +140,8 @@ public:
 
 	UUserWidget* getCurrentUI() const;
 
+	UInventory* getInventory() const;
+
 	const TSubclassOf<class ABaseDrone>& getDroneClass() const;
 
 	float getCurrentRespawnCooldown() const;

@@ -34,14 +34,36 @@ void ADeathPlaceholder::BeginPlay()
 
 void ADeathPlaceholder::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 	FInputActionBinding action("Action", IE_Pressed);
+	FInputActionBinding inventory("Inventory", IE_Pressed);
 
 	action.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
 		{
 			MultiplayerUtility::runOnServerReliable(this, "checkRespawn");
 		});
 
+	inventory.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
+		{
+			ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+
+			if (!playerState)
+			{
+				return;
+			}
+
+			UUserWidget* currentUI = playerState->getCurrentUI();
+			
+			if (IInventoryUIHolder::Execute_getInventoryWidget(currentUI)->IsInViewport())
+			{
+				IInventoryUIHolder::Execute_hideInventory(currentUI, Utility::getPlayerController(this));
+			}
+			else
+			{
+				IInventoryUIHolder::Execute_showInventory(currentUI, Utility::getPlayerController(this));
+			}
+		});
+
 	PlayerInputComponent->AddActionBinding(action);
+
+	PlayerInputComponent->AddActionBinding(inventory);
 }

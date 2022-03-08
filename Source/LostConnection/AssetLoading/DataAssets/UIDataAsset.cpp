@@ -18,6 +18,11 @@ const TSubclassOf<UUserWidget>& UUIDataAsset::getDefaultDeathUI() const
 	return defaultDeathUI;
 }
 
+const TSubclassOf<UInventoryWidget>& UUIDataAsset::getInventoryWidget() const
+{
+	return inventoryWidget;
+}
+
 UMaterial* UUIDataAsset::getBaseWeaponSelectorMaterial() const
 {
 	return baseWeaponSelectorMaterial;

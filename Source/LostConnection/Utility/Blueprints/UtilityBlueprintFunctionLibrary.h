@@ -9,6 +9,7 @@
 #include "GameFramework/InputSettings.h"
 
 #include "Engine/LoadingScreenInfo.h"
+#include "UI/InventoryWidget.h"
 
 #include "UtilityBlueprintFunctionLibrary.generated.h"
 
@@ -56,4 +57,10 @@ public:
 
 	UFUNCTION(Category = "Utility|Hotkeys", BlueprintCallable, BlueprintPure)
 	static TArray<FInputActionKeyMapping> getActionMapping(FName actionName);
+
+	UFUNCTION(Category = "Utility|UI", BlueprintCallable)
+	static UInventoryWidget* makeDefaultInventoryWidget(APlayerController* playerController, UUserWidget* currentUI);
+
+	UFUNCTION(Category = "Utility|UI", BlueprintCallable)
+	static void showMouseCursor(APlayerController* playerController, bool isShowMouseCursor);
 };

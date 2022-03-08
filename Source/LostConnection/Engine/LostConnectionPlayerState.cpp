@@ -206,6 +206,11 @@ UUserWidget* ALostConnectionPlayerState::getCurrentUI() const
 	return currentUI;
 }
 
+UInventory* ALostConnectionPlayerState::getInventory() const
+{
+	return inventory;
+}
+
 const TSubclassOf<ABaseDrone>& ALostConnectionPlayerState::getDroneClass() const
 {
 	return droneClass;

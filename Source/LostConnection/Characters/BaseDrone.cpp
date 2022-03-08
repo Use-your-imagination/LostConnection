@@ -15,6 +15,7 @@
 #include "Utility/MultiplayerUtility.h"
 #include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
 #include "WorldPlaceables/DeathPlaceholder.h"
+#include "Interfaces/UI/InventoryUIHolder.h"
 
 #pragma warning(disable: 4458)
 
@@ -103,6 +104,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 
 	FInputActionBinding	cancelAbility("CancelAbility", IE_Pressed);
 
+	FInputActionBinding	inventory("Inventory", IE_Pressed);
+
 	pressZoomAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
 		{
 			MultiplayerUtility::runOnServerReliableWithMulticast(this, "pressZoom");
@@ -146,6 +149,27 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 			}
 		});
 
+	inventory.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
+		{
+			ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+
+			if (!playerState)
+			{
+				return;
+			}
+
+			UUserWidget* currentUI = playerState->getCurrentUI();
+
+			if (IInventoryUIHolder::Execute_getInventoryWidget(currentUI)->IsInViewport())
+			{
+				IInventoryUIHolder::Execute_hideInventory(currentUI, Utility::getPlayerController(this));
+			}
+			else
+			{
+				IInventoryUIHolder::Execute_showInventory(currentUI, Utility::getPlayerController(this));
+			}
+		});
+
 	result.Add(pressZoomAction);
 	result.Add(releaseZoomAction);
 
@@ -169,6 +193,8 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	result.Add(dropWeapon);
 
 	result.Add(cancelAbility);
+
+	result.Add(inventory);
 
 	return result;
 }
@@ -564,8 +590,6 @@ void ABaseDrone::restoreWeaponsCooldown()
 
 void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 	TArray<FInputActionBinding> inputs = this->initInputs();
 
 	for (const auto& i : inputs)
