@@ -93,6 +93,8 @@ void USwarmAilment::postRemove()
 {
 	Super::postRemove();
 
+	threshold = 0.0f;
+
 	this->updateSwarmHealthBar();
 }
 

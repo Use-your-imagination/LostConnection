@@ -10,3 +10,13 @@ UInventoryWidget* UInventoryWidget::init(ALostConnectionPlayerState* playerState
 
 	return this;
 }
+
+void UInventoryWidget::onShow_Implementation()
+{
+
+}
+
+void UInventoryWidget::onHide_Implementation()
+{
+
+}

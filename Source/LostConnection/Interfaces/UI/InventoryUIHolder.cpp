@@ -7,9 +7,13 @@
 
 void IInventoryUIHolder::showInventory_Implementation(APlayerController* playerController)
 {
+	UInventoryWidget* widget = IInventoryUIHolder::Execute_getInventoryWidget(this->_getUObject());
+
 	playerController->GetPlayerState<ALostConnectionPlayerState>()->getCurrentUI()->SetVisibility(ESlateVisibility::Hidden);
 
-	IInventoryUIHolder::Execute_getInventoryWidget(this->_getUObject())->AddToViewport(TNumericLimits<int32>::Max());
+	widget->AddToViewport(TNumericLimits<int32>::Max());
+
+	widget->onShow();
 
 	playerController->SetInputMode(FInputModeGameAndUI());
 
@@ -18,11 +22,15 @@ void IInventoryUIHolder::showInventory_Implementation(APlayerController* playerC
 
 void IInventoryUIHolder::hideInventory_Implementation(APlayerController* playerController)
 {
+	UInventoryWidget* widget = IInventoryUIHolder::Execute_getInventoryWidget(this->_getUObject());
+
 	playerController->SetInputMode(FInputModeGameOnly());
 
 	UUtilityBlueprintFunctionLibrary::showMouseCursor(playerController, false);
 
-	IInventoryUIHolder::Execute_getInventoryWidget(this->_getUObject())->RemoveFromViewport();
+	widget->RemoveFromViewport();
+
+	widget->onHide();
 
 	playerController->GetPlayerState<ALostConnectionPlayerState>()->getCurrentUI()->SetVisibility(ESlateVisibility::Visible);
 }

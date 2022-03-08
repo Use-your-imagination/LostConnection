@@ -22,5 +22,11 @@ private:
 public:
 	UInventoryWidget* init(class ALostConnectionPlayerState* playerState);
 
+	UFUNCTION(Category = Events, BlueprintNativeEvent)
+	void onShow();
+
+	UFUNCTION(Category = Events, BlueprintNativeEvent)
+	void onHide();
+
 	virtual ~UInventoryWidget() = default;
 };
