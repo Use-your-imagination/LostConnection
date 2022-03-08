@@ -75,3 +75,6 @@ DerivedDataCache/*
 
 # Generation bug
 *.ipch
+
+# Utility .exe.link
+PluginSaver.exe.lnk
