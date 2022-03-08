@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 
-#include "MainModule.h"
+#include "UObject/Interface.h"
 #include "Interfaces/Gameplay/Statuses/Ailment.h"
 
 #include "DamageModule.generated.h"
 
 UINTERFACE(MinimalAPI)
-class UDamageModule : public UMainModule
+class UDamageModule : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IDamageModule : public IMainModule
+class LOSTCONNECTION_API IDamageModule
 {
 	GENERATED_BODY()
 

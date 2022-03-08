@@ -1048,12 +1048,12 @@ bool ABaseDrone::getZooming() const
 	return zooming;
 }
 
-void ABaseDrone::addMainModule(IMainModule* module)
+void ABaseDrone::addPersonalModule(UBasePersonalModule* module)
 {
-	Utility::getPlayerState(this)->addMainModule(module);
+	Utility::getPlayerState(this)->addPersonalModule(module);
 }
 
-void ABaseDrone::addWeaponModule(IWeaponModule* module)
+void ABaseDrone::addWeaponModule(UBaseWeaponModule* module)
 {
 	Utility::getPlayerState(this)->addWeaponModule(module);
 }
@@ -1246,12 +1246,12 @@ const TArray<UAnimMontage*>& ABaseDrone::getAbilitiesAnimations() const
 	return abilitiesAnimations;
 }
 
-const TArray<UNetworkObject*>& ABaseDrone::getMainModules() const
+const TArray<UBasePersonalModule*>& ABaseDrone::getPersonalModules() const
 {
-	return Utility::getPlayerState(this)->getMainModules();
+	return Utility::getPlayerState(this)->getPersonalModules();
 }
 
-const TArray<UNetworkObject*>& ABaseDrone::getWeaponModules() const
+const TArray<UBaseWeaponModule*>& ABaseDrone::getWeaponModules() const
 {
 	return Utility::getPlayerState(this)->getWeaponModules();
 }

@@ -12,8 +12,8 @@
 
 #include "Weapons/BaseWeapon.h"
 #include "Abilities/BaseAbility.h"
-#include "Interfaces/Gameplay/Modules/Holders/MainModulesHolder.h"
-#include "Interfaces/Gameplay/Modules/Holders/WeaponModulesHolder.h"
+#include "Interfaces/Modules/Holders/PersonalModulesHolder.h"
+#include "Interfaces/Modules/Holders/WeaponModulesHolder.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
 #include "Utility/CooldownableUtilityObject.h"
 #include "Inventory/Inventory.h"
@@ -42,10 +42,10 @@ protected:
 	UInventory* inventory;
 
 	UPROPERTY(Replicated)
-	TArray<UNetworkObject*> mainModules;
+	TArray<UBasePersonalModule*> personalModules;
 
 	UPROPERTY(Replicated)
-	TArray<UNetworkObject*> weaponModules;
+	TArray<UBaseWeaponModule*> weaponModules;
 
 protected:
 	UPROPERTY(Replicated)
@@ -67,9 +67,9 @@ protected:
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 public:
-	void addMainModule(IMainModule* module);
+	void addPersonalModule(UBasePersonalModule* module);
 
-	void addWeaponModule(IWeaponModule* module);
+	void addWeaponModule(UBaseWeaponModule* module);
 
 	void addCooldownableAbility(abilitySlot slot, const ICooldownable* cooldownable);
 
@@ -97,9 +97,9 @@ public:
 
 	UBaseWeapon* getSecondInactiveWeapon() const;
 
-	const TArray<UNetworkObject*>& getMainModules() const;
+	const TArray<UBasePersonalModule*>& getPersonalModules() const;
 
-	const TArray<UNetworkObject*>& getWeaponModules() const;
+	const TArray<UBaseWeaponModule*>& getWeaponModules() const;
 
 	int32 getSpareAmmo(ammoTypes type) const;
 

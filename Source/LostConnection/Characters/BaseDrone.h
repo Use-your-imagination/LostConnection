@@ -34,7 +34,7 @@ class LOSTCONNECTION_API ABaseDrone :
 	public IThirdAbilityCast,
 	public IUltimateAbilityCast,
 	public IInputActions,
-	public IMainModulesHolder,
+	public IPersonalModulesHolder,
 	public IWeaponModulesHolder
 {
 	GENERATED_BODY()
@@ -321,9 +321,9 @@ public:
 
 	bool getZooming() const;
 
-	virtual void addMainModule(IMainModule* module) final override;
+	virtual void addPersonalModule(UBasePersonalModule* module) final override;
 
-	virtual void addWeaponModule(IWeaponModule* module) final override;
+	virtual void addWeaponModule(UBaseWeaponModule* module) final override;
 
 	virtual float getFlatDamageReduction_Implementation() const override;
 
@@ -387,10 +387,10 @@ public:
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 
 	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual const TArray<UNetworkObject*>& getMainModules() const final override;
+	virtual const TArray<UBasePersonalModule*>& getPersonalModules() const final override;
 
 	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual const TArray<UNetworkObject*>& getWeaponModules() const final override;
+	virtual const TArray<UBaseWeaponModule*>& getWeaponModules() const final override;
 
 	virtual void castPassiveAbilityVisual() override;
 

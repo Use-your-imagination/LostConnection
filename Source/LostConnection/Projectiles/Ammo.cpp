@@ -12,8 +12,12 @@
 #include "Interfaces/Gameplay/Descriptions/ShotThrough.h"
 #include "Utility/Utility.h"
 #include "Constants/Constants.h"
-#include "Interfaces/Gameplay/Modules/MainModules/DamageModule.h"
-#include "Interfaces/Gameplay/Modules/WeaponModules/WeaponDamageModule.h"
+#include "Interfaces/Modules/Holders/PersonalModulesHolder.h"
+#include "Interfaces/Modules/Holders/WeaponModulesHolder.h"
+#include "Interfaces/Modules/Damage/DamageModule.h"
+#include "Interfaces/Modules/Damage/WeaponDamageModule.h"
+#include "Modules/BasePersonalModule.h"
+#include "Modules/BaseWeaponModule.h"
 
 #pragma warning(disable: 4458)
 
@@ -185,9 +189,9 @@ void AAmmo::copyProperties(UBaseWeapon* weapon)
 
 	if (owner.IsValid())
 	{
-		if (owner->Implements<UMainModulesHolder>())
+		if (owner->Implements<UPersonalModulesHolder>())
 		{
-			const TArray<UNetworkObject*>& modules = Cast<IMainModulesHolder>(owner.Get())->getMainModules();
+			const TArray<UBasePersonalModule*>& modules = Cast<IPersonalModulesHolder>(owner)->getPersonalModules();
 
 			for (const auto& module : modules)
 			{
@@ -210,7 +214,7 @@ void AAmmo::copyProperties(UBaseWeapon* weapon)
 
 		if (owner->Implements<UWeaponModulesHolder>())
 		{
-			const TArray<UNetworkObject*>& modules = Cast<IWeaponModulesHolder>(owner.Get())->getWeaponModules();
+			const TArray<UBaseWeaponModule*>& modules = Cast<IWeaponModulesHolder>(owner)->getWeaponModules();
 
 			for (const auto& module : modules)
 			{

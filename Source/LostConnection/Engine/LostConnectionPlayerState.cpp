@@ -11,7 +11,7 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 
 	DOREPLIFETIME(ALostConnectionPlayerState, inventory);
 
-	DOREPLIFETIME(ALostConnectionPlayerState, mainModules);
+	DOREPLIFETIME(ALostConnectionPlayerState, personalModules);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, weaponModules);
 
@@ -30,7 +30,7 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 
 	wroteSomething |= inventory->ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	for (UNetworkObject* mainModule : mainModules)
+	for (UNetworkObject* mainModule : personalModules)
 	{
 		if (IsValid(mainModule))
 		{
@@ -55,14 +55,14 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 	return wroteSomething;
 }
 
-void ALostConnectionPlayerState::addMainModule(IMainModule* module)
+void ALostConnectionPlayerState::addPersonalModule(UBasePersonalModule* module)
 {
-	mainModules.Add(Cast<UNetworkObject>(module));
+	personalModules.Add(module);
 }
 
-void ALostConnectionPlayerState::addWeaponModule(IWeaponModule* module)
+void ALostConnectionPlayerState::addWeaponModule(UBaseWeaponModule* module)
 {
-	weaponModules.Add(Cast<UNetworkObject>(module));
+	weaponModules.Add(module);
 }
 
 void ALostConnectionPlayerState::addCooldownableAbility(abilitySlot slot, const ICooldownable* cooldownable)
@@ -101,12 +101,12 @@ void ALostConnectionPlayerState::setSecondInactiveWeapon_Implementation(UBaseWea
 	// TODO: set inactive weapons
 }
 
-const TArray<UNetworkObject*>& ALostConnectionPlayerState::getMainModules() const
+const TArray<UBasePersonalModule*>& ALostConnectionPlayerState::getPersonalModules() const
 {
-	return mainModules;
+	return personalModules;
 }
 
-const TArray<UNetworkObject*>& ALostConnectionPlayerState::getWeaponModules() const
+const TArray<UBaseWeaponModule*>& ALostConnectionPlayerState::getWeaponModules() const
 {
 	return weaponModules;
 }

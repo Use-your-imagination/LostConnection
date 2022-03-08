@@ -6,8 +6,7 @@
 
 #include "UObject/Interface.h"
 
-#include "Interfaces/Gameplay/Modules/WeaponModules/WeaponModule.h"
-#include "Network/NetworkObject.h"
+#include "Modules/BaseWeaponModule.h"
 
 #include "WeaponModulesHolder.generated.h"
 
@@ -24,9 +23,7 @@ class LOSTCONNECTION_API IWeaponModulesHolder
 public:
 	IWeaponModulesHolder() = default;
 
-	virtual void addWeaponModule(IWeaponModule* module) = 0;
+	virtual void addWeaponModule(UBaseWeaponModule* module) = 0;
 
-	/// @brief 
-	/// @return Array of IMainModule
-	virtual const TArray<UNetworkObject*>& getWeaponModules() const = 0;
+	virtual const TArray<UBaseWeaponModule*>& getWeaponModules() const = 0;
 };
