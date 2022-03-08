@@ -7,6 +7,8 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerInput.h"
 
+#include "Interfaces/UI/InventoryUIHolder.h"
+
 #include "DeathPlaceholder.generated.h"
 
 UCLASS(Blueprintable)

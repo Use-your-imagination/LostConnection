@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 
 #include "Blueprint/UserWidget.h"
+
 #include "Interfaces/UI/Playerholder.h"
+#include "Interfaces/UI/InventoryUIHolder.h"
 
 #include "LostConnectionUI.generated.h"
 
@@ -14,12 +16,16 @@
 UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API ULostConnectionUI :
 	public UUserWidget,
-	public IPlayerHolder
+	public IPlayerHolder,
+	public IInventoryUIHolder
 {
 	GENERATED_BODY()
 	
 protected:
 	class ABaseDrone* player;
+
+	UPROPERTY()
+	UInventoryWidget* inventoryWidget;
 
 public:
 	ULostConnectionUI(const FObjectInitializer& objectInitializer);
@@ -32,11 +38,11 @@ public:
 	UFUNCTION(Category = EnergyShield, BlueprintNativeEvent)
 	void onEnergyShieldUpdate();
 
-	UFUNCTION()
 	void setPlayer_Implementation(APawn* playerPawn) override;
 
-	UFUNCTION()
 	APawn* getPlayer_Implementation() const override;
+
+	UInventoryWidget* getInventoryWidget_Implementation() const override;
 
 	virtual ~ULostConnectionUI() = default;
 };

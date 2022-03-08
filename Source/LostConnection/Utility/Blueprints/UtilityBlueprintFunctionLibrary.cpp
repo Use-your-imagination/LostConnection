@@ -5,9 +5,11 @@
 #include "Algo/AnyOf.h"
 #include "Algo/AllOf.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "Components/CanvasPanel.h"
+#include "Components/CanvasPanelSlot.h"
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/Pawn.h"
+#include "Components/Button.h"
 
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Characters/BaseDrone.h"
@@ -106,7 +108,7 @@ bool UUtilityBlueprintFunctionLibrary::isAnyAnimationActive(const TScriptInterfa
 
 	UAnimInstance* animInstance = Cast<ABaseCharacter>(caster.GetObject())->GetMesh()->GetAnimInstance();
 	const TArray<UAnimMontage*>& animations = caster->getAbilitiesAnimations();
-	
+
 	return Algo::AnyOf(animations, [&animInstance](const UAnimMontage* montage) { return animInstance->Montage_IsPlaying(montage); });
 }
 
@@ -177,4 +179,21 @@ TArray<FInputActionKeyMapping> UUtilityBlueprintFunctionLibrary::getActionMappin
 	GetDefault<UInputSettings>()->GetActionMappingByName(actionName, result);
 
 	return result;
+}
+
+UInventoryWidget* UUtilityBlueprintFunctionLibrary::makeDefaultInventoryWidget(APlayerController* playerController, UUserWidget* currentUI)
+{
+	return CreateWidget<UInventoryWidget>(
+		playerController,
+		ULostConnectionAssetManager::get().getUI().getInventoryWidget())->init(playerController->GetPlayerState<ALostConnectionPlayerState>()
+		);
+}
+
+void UUtilityBlueprintFunctionLibrary::showMouseCursor(APlayerController* playerController, bool isShowMouseCursor)
+{
+	playerController->bShowMouseCursor = isShowMouseCursor;
+
+	playerController->bEnableClickEvents = isShowMouseCursor;
+
+	playerController->bEnableMouseOverEvents = isShowMouseCursor;
 }
