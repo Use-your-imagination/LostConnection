@@ -9,5 +9,23 @@
         "Add respawn with 10 minutes cooldown"
       ]
     }
+  },
+  "UI": {
+    "type": "category",
+    "Health bars": {
+      "type": "item",
+      "notes": [
+        "Update health bars"
+      ]
+    }
+  },
+  "Inventory": {
+    "type": "category",
+    "Inventory": {
+      "type": "item",
+      "notes": [
+        "Add simple inventory"
+      ]
+    }
   }
 }
