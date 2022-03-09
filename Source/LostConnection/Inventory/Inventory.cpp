@@ -23,6 +23,10 @@ void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(UInventory, defaultWeaponCell);
 
+	DOREPLIFETIME(UInventory, firstInactiveWeaponCell);
+
+	DOREPLIFETIME(UInventory, secondInactiveWeaponCell);
+
 	DOREPLIFETIME(UInventory, lootPoints);
 
 	DOREPLIFETIME(UInventory, spareAmmo);
@@ -41,6 +45,10 @@ UInventory::UInventory()
 	secondaryWeaponCell = CreateDefaultSubobject<UInventoryCell>("SecondaryWeaponCell");
 
 	defaultWeaponCell = CreateDefaultSubobject<UInventoryCell>("DefaultWeaponCell");
+
+	firstInactiveWeaponCell = CreateDefaultSubobject<UInventoryCell>("FirstInactiveWeaponCell");
+
+	secondInactiveWeaponCell = CreateDefaultSubobject<UInventoryCell>("SecondInactiveWeaponCell");
 }
 
 void UInventory::init(APlayerState* playerState)
@@ -104,6 +112,16 @@ void UInventory::setSecondaryWeaponCell(UBaseWeapon* weapon)
 	secondaryWeaponCell->setItem(weapon);
 }
 
+void UInventory::setFirstInactiveWeaponCell(UBaseWeapon* weapon)
+{
+	firstInactiveWeaponCell->setItem(weapon);
+}
+
+void UInventory::setSecondInactiveWeaponCell(UBaseWeapon* weapon)
+{
+	secondInactiveWeaponCell->setItem(weapon);
+}
+
 void UInventory::setLootPoints(int32 lootPoints)
 {
 	this->lootPoints = FMath::Max(0, lootPoints);
@@ -122,6 +140,16 @@ UInventoryCell* UInventory::getSecondaryWeaponCell() const
 UInventoryCell* UInventory::getDefaultWeaponCell() const
 {
 	return defaultWeaponCell;
+}
+
+UInventoryCell* UInventory::getFirstInactiveWeaponCell() const
+{
+	return firstInactiveWeaponCell;
+}
+
+UInventoryCell* UInventory::getSecondInactiveWeaponCell() const
+{
+	return secondInactiveWeaponCell;
 }
 
 int32 UInventory::getLootPoints() const
@@ -167,6 +195,20 @@ bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 		wroteSomething |= Channel->ReplicateSubobject(defaultWeaponCell, *Bunch, *RepFlags);
 
 		wroteSomething |= defaultWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	if (IsValid(firstInactiveWeaponCell))
+	{
+		wroteSomething |= Channel->ReplicateSubobject(firstInactiveWeaponCell, *Bunch, *RepFlags);
+
+		wroteSomething |= firstInactiveWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	if (IsValid(secondInactiveWeaponCell))
+	{
+		wroteSomething |= Channel->ReplicateSubobject(secondInactiveWeaponCell, *Bunch, *RepFlags);
+
+		wroteSomething |= secondInactiveWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
 	for (UBasePersonalModule* personalModule : personalEquippedModules)

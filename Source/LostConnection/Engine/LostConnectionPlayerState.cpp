@@ -57,24 +57,24 @@ void ALostConnectionPlayerState::addCooldownableWeapon(weaponSlotTypes slot, con
 	}
 }
 
-void ALostConnectionPlayerState::setPrimaryWeapon_Implementation(UBaseWeapon* primaryWeapon)
+void ALostConnectionPlayerState::setPrimaryWeapon_Implementation(UBaseWeapon* weapon)
 {
-	inventory->setPrimaryWeaponCell(primaryWeapon);
+	inventory->setPrimaryWeaponCell(weapon);
 }
 
-void ALostConnectionPlayerState::setSecondaryWeapon_Implementation(UBaseWeapon* secondaryWeapon)
+void ALostConnectionPlayerState::setSecondaryWeapon_Implementation(UBaseWeapon* weapon)
 {
-	inventory->setPrimaryWeaponCell(secondaryWeapon);
+	inventory->setPrimaryWeaponCell(weapon);
 }
 
-void ALostConnectionPlayerState::setFirstInactiveWeapon_Implementation(UBaseWeapon* secondaryWeapon)
+void ALostConnectionPlayerState::setFirstInactiveWeapon_Implementation(UBaseWeapon* weapon)
 {
-	// TODO: set inactive weapons
+	inventory->setFirstInactiveWeaponCell(weapon);
 }
 
-void ALostConnectionPlayerState::setSecondInactiveWeapon_Implementation(UBaseWeapon* secondaryWeapon)
+void ALostConnectionPlayerState::setSecondInactiveWeapon_Implementation(UBaseWeapon* weapon)
 {
-	// TODO: set inactive weapons
+	inventory->setSecondInactiveWeaponCell(weapon);
 }
 
 const TArray<UBasePersonalModule*>& ALostConnectionPlayerState::getPersonalEquippedModules() const

@@ -32,6 +32,12 @@ private:
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UInventoryCell* defaultWeaponCell;
 
+	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UInventoryCell* firstInactiveWeaponCell;
+
+	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UInventoryCell* secondInactiveWeaponCell;
+
 	UPROPERTY(Category = "Inventory|Economy", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 lootPoints;
 
@@ -63,6 +69,10 @@ public:
 
 	void setSecondaryWeaponCell(UBaseWeapon* weapon);
 
+	void setFirstInactiveWeaponCell(UBaseWeapon* weapon);
+
+	void setSecondInactiveWeaponCell(UBaseWeapon* weapon);
+
 	void setLootPoints(int32 lootPoints);
 
 	UInventoryCell* getPrimaryWeaponCell() const;
@@ -70,6 +80,10 @@ public:
 	UInventoryCell* getSecondaryWeaponCell() const;
 
 	UInventoryCell* getDefaultWeaponCell() const;
+
+	UInventoryCell* getFirstInactiveWeaponCell() const;
+
+	UInventoryCell* getSecondInactiveWeaponCell() const;
 
 	int32 getLootPoints() const;
 

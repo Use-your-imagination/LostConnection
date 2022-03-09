@@ -70,16 +70,16 @@ public:
 	void addCooldownableWeapon(weaponSlotTypes slot, const ICooldownable* cooldownable);
 
 	UFUNCTION(Server, Reliable)
-	void setPrimaryWeapon(UBaseWeapon* primaryWeapon);
+	void setPrimaryWeapon(UBaseWeapon* weapon);
 
 	UFUNCTION(Server, Reliable)
-	void setSecondaryWeapon(UBaseWeapon* secondaryWeapon);
+	void setSecondaryWeapon(UBaseWeapon* weapon);
 
 	UFUNCTION(Server, Reliable)
-	void setFirstInactiveWeapon(UBaseWeapon* secondaryWeapon);
+	void setFirstInactiveWeapon(UBaseWeapon* weapon);
 
 	UFUNCTION(Server, Reliable)
-	void setSecondInactiveWeapon(UBaseWeapon* secondaryWeapon);
+	void setSecondInactiveWeapon(UBaseWeapon* weapon);
 
 	UBaseWeapon* getPrimaryWeapon() const;
 
@@ -201,16 +201,12 @@ inline UBaseWeapon* ALostConnectionPlayerState::getDefaultWeapon() const
 
 inline UBaseWeapon* ALostConnectionPlayerState::getFirstInactiveWeapon() const
 {
-	// TODO: inactive weapon getter
-
-	return nullptr;
+	return inventory->getFirstInactiveWeaponCell()->getItem<UBaseWeapon>();
 }
 
 inline UBaseWeapon* ALostConnectionPlayerState::getSecondInactiveWeapon() const
 {
-	// TODO: inactive weapon getter
-
-	return nullptr;
+	return inventory->getSecondInactiveWeaponCell()->getItem<UBaseWeapon>();
 }
 
 FORCEINLINE int32 ALostConnectionPlayerState::getSpareAmmo(ammoTypes type) const
