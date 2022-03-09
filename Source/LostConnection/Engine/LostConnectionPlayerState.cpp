@@ -77,9 +77,14 @@ void ALostConnectionPlayerState::setSecondInactiveWeapon_Implementation(UBaseWea
 	// TODO: set inactive weapons
 }
 
-const TArray<UBasePersonalModule*>& ALostConnectionPlayerState::getPersonalModules() const
+const TArray<UBasePersonalModule*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
 {
-	return inventory->getPersonalModules();
+	return inventory->getPersonalEquippedModules();
+}
+
+const TArray<UBasePersonalModule*>& ALostConnectionPlayerState::getPersonalUnequippedModules() const
+{
+	return inventory->getPersonalUnequippedModules();
 }
 
 const TArray<UBaseWeaponModule*>& ALostConnectionPlayerState::getWeaponModules() const

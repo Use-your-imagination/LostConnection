@@ -1246,9 +1246,14 @@ const TArray<UAnimMontage*>& ABaseDrone::getAbilitiesAnimations() const
 	return abilitiesAnimations;
 }
 
-const TArray<UBasePersonalModule*>& ABaseDrone::getPersonalModules() const
+const TArray<UBasePersonalModule*>& ABaseDrone::getPersonalEquippedModules() const
 {
-	return Utility::getPlayerState(this)->getPersonalModules();
+	return Utility::getPlayerState(this)->getPersonalEquippedModules();
+}
+
+const TArray<UBasePersonalModule*>& ABaseDrone::getPersonalUnequippedModules() const
+{
+	return Utility::getPlayerState(this)->getPersonalUnequippedModules();
 }
 
 const TArray<UBaseWeaponModule*>& ABaseDrone::getWeaponModules() const

@@ -114,6 +114,28 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	}
 }
 
+template<typename ImplementsModuleInterface, typename ModuleInterface, typename ModuleT>
+void AAmmo::applyModules(const TArray<ModuleT*>& modules)
+{
+	for (const auto& module : modules)
+	{
+		if (module->Implements<ImplementsModuleInterface>())
+		{
+			const ModuleInterface* damageModule = Cast<const ModuleInterface>(module);
+
+			if (damageModule->getDamageType() != damageType)
+			{
+				continue;
+			}
+
+			addedDamage += damageModule->getAddedDamage();
+			increasedDamageCoefficients.Add(damageModule->getIncreasedDamage());
+			moreDamageCoefficients.Add(damageModule->getMoreDamage());
+			additionalDamage += damageModule->getAdditionalDamage();
+		}
+	}
+}
+
 AAmmo::AAmmo() :
 	ammoSpeed(UConstants::ammoSpeed)
 {
@@ -191,48 +213,14 @@ void AAmmo::copyProperties(UBaseWeapon* weapon)
 	{
 		if (owner->Implements<UPersonalModulesHolder>())
 		{
-			const TArray<UBasePersonalModule*>& modules = Cast<IPersonalModulesHolder>(owner)->getPersonalModules();
+			this->applyModules<UDamageModule, IDamageModule>(Cast<IPersonalModulesHolder>(owner)->getPersonalEquippedModules());
 
-			for (const auto& module : modules)
-			{
-				if (module->Implements<UDamageModule>())
-				{
-					const IDamageModule* damageModule = Cast<const IDamageModule>(module);
-
-					if (damageModule->getDamageType() != damageType)
-					{
-						continue;
-					}
-
-					addedDamage += damageModule->getAddedDamage();
-					increasedDamageCoefficients.Add(damageModule->getIncreasedDamage());
-					moreDamageCoefficients.Add(damageModule->getMoreDamage());
-					additionalDamage += damageModule->getAdditionalDamage();
-				}
-			}
+			this->applyModules<UDamageModule, IDamageModule>(Cast<IPersonalModulesHolder>(owner)->getPersonalUnequippedModules());
 		}
 
 		if (owner->Implements<UWeaponModulesHolder>())
 		{
-			const TArray<UBaseWeaponModule*>& modules = Cast<IWeaponModulesHolder>(owner)->getWeaponModules();
-
-			for (const auto& module : modules)
-			{
-				if (module->Implements<UWeaponDamageModule>())
-				{
-					const IWeaponDamageModule* weaponDamageModule = Cast<const IWeaponDamageModule>(module);
-
-					if (weaponDamageModule->getDamageType() != damageType)
-					{
-						continue;
-					}
-
-					addedDamage += weaponDamageModule->getAddedDamage();
-					increasedDamageCoefficients.Add(weaponDamageModule->getIncreasedDamage());
-					moreDamageCoefficients.Add(weaponDamageModule->getMoreDamage());
-					additionalDamage += weaponDamageModule->getAdditionalDamage();
-				}
-			}
+			this->applyModules<UWeaponDamageModule, IWeaponDamageModule>(Cast<IWeaponModulesHolder>(owner)->getWeaponModules());	
 		}
 	}
 }

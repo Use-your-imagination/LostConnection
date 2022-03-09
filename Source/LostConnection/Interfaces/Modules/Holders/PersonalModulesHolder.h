@@ -25,5 +25,7 @@ public:
 
 	virtual void addPersonalModule(UBasePersonalModule* module) = 0;
 
-	virtual const TArray<UBasePersonalModule*>& getPersonalModules() const = 0;
+	virtual const TArray<UBasePersonalModule*>& getPersonalEquippedModules() const = 0;
+
+	virtual const TArray<UBasePersonalModule*>& getPersonalUnequippedModules() const = 0;
 };

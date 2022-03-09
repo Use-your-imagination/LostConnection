@@ -39,7 +39,10 @@ private:
 	TArray<FAmmoData> spareAmmo;
 
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UBasePersonalModule*> personalModules;
+	TArray<UBasePersonalModule*> personalEquippedModules;
+
+	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<UBasePersonalModule*> personalUnequippedModules;
 
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<UBaseWeaponModule*> weaponModules;
@@ -72,7 +75,9 @@ public:
 
 	TArray<FAmmoData>& getSpareAmmoArray();
 
-	const TArray<UBasePersonalModule*>& getPersonalModules() const;
+	const TArray<UBasePersonalModule*>& getPersonalEquippedModules() const;
+
+	const TArray<UBasePersonalModule*>& getPersonalUnequippedModules() const;
 
 	const TArray<UBaseWeaponModule*>& getWeaponModules() const;
 

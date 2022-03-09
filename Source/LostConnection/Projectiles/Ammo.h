@@ -27,6 +27,9 @@ private:
 private:
 	UFUNCTION()
 	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	template<typename ImplementsModuleInterface, typename ModuleInterface, typename ModuleT>
+	void applyModules(const TArray<ModuleT*>& modules);
 
 private:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))

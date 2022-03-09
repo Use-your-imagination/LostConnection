@@ -4,5 +4,5 @@
 
 void AChooseActConsole::action(ABaseDrone* player)
 {
-	// TODO: Show change act UI
+	// TODO: show change act UI
 }

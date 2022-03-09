@@ -387,7 +387,10 @@ public:
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 
 	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual const TArray<UBasePersonalModule*>& getPersonalModules() const final override;
+	virtual const TArray<UBasePersonalModule*>& getPersonalEquippedModules() const final override;
+
+	UFUNCTION(Category = Modules, BlueprintCallable)
+	virtual const TArray<UBasePersonalModule*>& getPersonalUnequippedModules() const final override;
 
 	UFUNCTION(Category = Modules, BlueprintCallable)
 	virtual const TArray<UBaseWeaponModule*>& getWeaponModules() const final override;

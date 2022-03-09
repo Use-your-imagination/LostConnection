@@ -34,6 +34,8 @@ public:
 
 	static constexpr int32 maxSpendLootPoints = 20000;
 
+	static constexpr int32 personalModulesLimit = 8;
+
 public:
 	static const FName actionStringTablePath;
 	static const FString defaultActionMessageKey;
@@ -42,4 +44,7 @@ public:
 public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static FText getProjectVersion();
+
+	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
+	static int32 getPersonalModulesLimit();
 };

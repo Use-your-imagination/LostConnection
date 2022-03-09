@@ -12,3 +12,8 @@ FText UConstants::getProjectVersion()
 {
 	return FText::FromString(UConstants::projectVersion);
 }
+
+int32 UConstants::getPersonalModulesLimit()
+{
+	return personalModulesLimit;
+}

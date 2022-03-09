@@ -2,10 +2,16 @@
 
 #include "Inventory.h"
 
+#include "Algo/Copy.h"
+
 #include "Weapons/Pistols/Gauss.h"
 #include "Weapons/SubmachineGuns/Hipter.h"
 #include "Characters/BaseCharacter.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
+#include "Constants/Constants.h"
+
+template<typename ModuleT>
+static TArray<UBaseModule*> upgradeModules(const TArray<ModuleT*>& modules);
 
 void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -21,7 +27,9 @@ void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(UInventory, spareAmmo);
 
-	DOREPLIFETIME(UInventory, personalModules);
+	DOREPLIFETIME(UInventory, personalEquippedModules);
+
+	DOREPLIFETIME(UInventory, personalUnequippedModules);
 
 	DOREPLIFETIME(UInventory, weaponModules);
 }
@@ -53,12 +61,37 @@ void UInventory::init(APlayerState* playerState)
 
 void UInventory::addPersonalModule(UBasePersonalModule* module)
 {
-	personalModules.Add(module);
+	personalUnequippedModules.Add(module);
+
+	TArray<UBaseModule*> modules;
+
+	modules.Reserve(personalEquippedModules.Num() + personalUnequippedModules.Num());
+
+	Algo::Copy(personalEquippedModules, modules);
+
+	Algo::Copy(personalUnequippedModules, modules);
+
+	TArray<UBaseModule*> modulesToRemove = upgradeModules(modules);
+
+	for (UBaseModule* moduleToRemove : modulesToRemove)
+	{
+		if (!personalEquippedModules.Remove(Cast<UBasePersonalModule>(moduleToRemove)))
+		{
+			personalUnequippedModules.Remove(Cast<UBasePersonalModule>(moduleToRemove));
+		}
+	}
 }
 
 void UInventory::addWeaponModule(UBaseWeaponModule* module)
 {
 	weaponModules.Add(module);
+
+	TArray<UBaseModule*> modulesToRemove = upgradeModules(weaponModules);
+
+	for (UBaseModule* moduleToRemove : modulesToRemove)
+	{
+		weaponModules.Remove(Cast<UBaseWeaponModule>(moduleToRemove));
+	}
 }
 
 void UInventory::setPrimaryWeaponCell(UBaseWeapon* weapon)
@@ -96,9 +129,14 @@ int32 UInventory::getLootPoints() const
 	return lootPoints;
 }
 
-const TArray<UBasePersonalModule*>& UInventory::getPersonalModules() const
+const TArray<UBasePersonalModule*>& UInventory::getPersonalEquippedModules() const
 {
-	return personalModules;
+	return personalEquippedModules;
+}
+
+const TArray<UBasePersonalModule*>& UInventory::getPersonalUnequippedModules() const
+{
+	return personalUnequippedModules;
 }
 
 const TArray<UBaseWeaponModule*>& UInventory::getWeaponModules() const
@@ -131,7 +169,16 @@ bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 		wroteSomething |= defaultWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	for (UBasePersonalModule* personalModule : personalModules)
+	for (UBasePersonalModule* personalModule : personalEquippedModules)
+	{
+		if (IsValid(personalModule))
+		{
+			wroteSomething |= Channel->ReplicateSubobject(personalModule, *Bunch, *RepFlags);
+
+			wroteSomething |= personalModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		}
+	}
+	for (UBasePersonalModule* personalModule : personalUnequippedModules)
 	{
 		if (IsValid(personalModule))
 		{
@@ -152,4 +199,12 @@ bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	}
 
 	return wroteSomething;
+}
+
+template<typename ModuleT>
+TArray<UBaseModule*> upgradeModules(const TArray<ModuleT*>& modules)
+{
+	TArray<UBaseModule*> result;
+
+	return result;
 }

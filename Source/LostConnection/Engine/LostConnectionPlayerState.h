@@ -91,7 +91,9 @@ public:
 
 	UBaseWeapon* getSecondInactiveWeapon() const;
 
-	const TArray<UBasePersonalModule*>& getPersonalModules() const;
+	const TArray<UBasePersonalModule*>& getPersonalEquippedModules() const;
+
+	const TArray<UBasePersonalModule*>& getPersonalUnequippedModules() const;
 
 	const TArray<UBaseWeaponModule*>& getWeaponModules() const;
 

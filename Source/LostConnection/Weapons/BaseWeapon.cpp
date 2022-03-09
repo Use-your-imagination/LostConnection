@@ -121,6 +121,7 @@ void UBaseWeapon::shoot()
 	FTransform ammoTransform = this->calculateAmmoTransform(drone, weaponBarrelTransform);
 	FTransform visibleAmmoTransform = this->calculateVisibleAmmoTransform(drone, weaponBarrelTransform, ammoTransform);
 	ALostConnectionGameState* gameState = Utility::getGameState(owner.Get());
+	bool isAnyShot = false;
 
 	for (size_t i = 0; i < shotsCount; i++)
 	{
@@ -139,7 +140,7 @@ void UBaseWeapon::shoot()
 
 			currentAccuracyMultiplier += drawback;
 
-			currentTimeBetweenShots += timeBetweenShots;
+			isAnyShot = true;
 		}
 		else if (owner->getSpareAmmo(ammoType) != 0)
 		{
@@ -149,7 +150,12 @@ void UBaseWeapon::shoot()
 		}
 	}
 
-	if (shotsCount)
+	if (isAnyShot)
+	{
+		currentTimeBetweenShots += timeBetweenShots;
+	}
+
+	if (shotsCount && isAnyShot)
 	{
 		UAnimMontage* shootAnimation = nullptr;
 
