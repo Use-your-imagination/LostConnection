@@ -5,12 +5,6 @@
 #include "Characters/BaseDrone.h"
 #include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
 
-ULostConnectionUI::ULostConnectionUI(const FObjectInitializer& objectInitializer) :
-	UUserWidget(objectInitializer)
-{
-	
-}
-
 void ULostConnectionUI::init(ABaseDrone* player)
 {
 	this->player = player;

@@ -14,7 +14,6 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Interfaces/Gameplay/Actions/InputActions.h"
 #include "Constants/Constants.h"
-#include "BaseBot.h"
 
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbilityCast.h"
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbilityCast.h"
@@ -108,7 +107,7 @@ protected:
 	UPROPERTY(Category = Death, EditDefaultsOnly, BlueprintReadOnly)
 	bool isFullyDestruction;
 
-	TWeakObjectPtr<class ABaseBot> lastHealthBarTraceTarget;
+	TWeakObjectPtr<ABaseCharacter> lastHealthBarTraceTarget;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, Replicated, BlueprintReadWrite)
@@ -446,26 +445,26 @@ FORCEINLINE void ABaseDrone::showBotHealthBar()
 
 	GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility, ignoreParameters);
 
-	ABaseBot* bot = Cast<ABaseBot>(hit.Actor);
+	ABaseCharacter* character = Cast<ABaseCharacter>(hit.Actor);
 
 	if (lastHealthBarTraceTarget.IsValid() && hit.Actor != lastHealthBarTraceTarget)
 	{
 		if (!lastHealthBarTraceTarget->isDamaged())
 		{
-			lastHealthBarTraceTarget->setHealthBarVisibility(false);
+			lastHealthBarTraceTarget->setHealthBarVisibility(ESlateVisibility::Hidden);
 		}
 	}
 
-	if (!hit.Actor.IsValid() || !bot)
+	if (!hit.Actor.IsValid() || !character)
 	{
 		return;
 	}
 
-	lastHealthBarTraceTarget = bot;
+	lastHealthBarTraceTarget = character;
 
 	lastHealthBarTraceTarget->updateHealthBar();
 
-	lastHealthBarTraceTarget->setHealthBarVisibility(true);
+	lastHealthBarTraceTarget->setHealthBarVisibility(ESlateVisibility::Visible);
 }
 
 inline UBaseWeapon* ABaseDrone::getPrimaryWeapon() const

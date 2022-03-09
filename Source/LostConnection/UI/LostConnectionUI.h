@@ -28,8 +28,6 @@ protected:
 	UInventoryWidget* inventoryWidget;
 
 public:
-	ULostConnectionUI(const FObjectInitializer& objectInitializer);
-
 	void init(class ABaseDrone* player);
 
 	UFUNCTION(Category = Initialization, BlueprintNativeEvent)

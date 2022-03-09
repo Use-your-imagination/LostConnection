@@ -108,6 +108,8 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	healthBarWidget->GetWidget()->SetVisibility(ESlateVisibility::Hidden);
+
 	if (HasAuthority())
 	{
 		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
@@ -153,6 +155,8 @@ void ABaseCharacter::onCurrentWeaponChange()
 
 void ABaseCharacter::onEnergyShieldUpdate()
 {
+	this->getHealthBarWidget()->getImage()->GetDynamicMaterial()->SetVectorParameterValue("ShieldColor", energyShield->getEnergyShieldColor());
+
 	if (GetController() && Cast<ABaseDrone>(this))
 	{
 		if (!Utility::getPlayerState(this)->getCurrentUI())
@@ -167,33 +171,50 @@ void ABaseCharacter::onEnergyShieldUpdate()
 			ui->onEnergyShieldUpdate();
 		}
 	}
-	else if (ABaseBot* bot = Cast<ABaseBot>(this))
-	{
-		bot->updateShield();
-	}
 
 	UUtilityBlueprintFunctionLibrary::setMaterialLinearColorParameter(GetMesh(), "ShieldColor", energyShield->getEnergyShieldColor());
 }
 
 void ABaseCharacter::onHealthChange()
 {
+	UHealthBarWidget* widget = this->getHealthBarWidget();
+	UMaterialInstanceDynamic* healthBarMaterial = widget->getImage()->GetDynamicMaterial();
 
+	if (IsValid(healthBarMaterial) && IsValid(energyShield))
+	{
+		healthBarMaterial->SetScalarParameterValue("LifeToShieldMultiplier", health / energyShield->getCapacity());
+	}
 }
 
 void ABaseCharacter::onCurrentHealthChange()
 {
-	if (HasAuthority() && !isDead && currentHealth == 0.0f)
+	if (currentHealth == 0.0f)
 	{
-		Algo::ForEachIf
-		(
-			deathEvents,
-			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
-			[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
-		);
+		this->setHealthBarVisibility(ESlateVisibility::Hidden);
 
-		isDead = true;
+		if (HasAuthority() && !isDead)
+		{
+			Algo::ForEachIf
+			(
+				deathEvents,
+				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
+				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
+			);
 
-		MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
+			isDead = true;
+
+			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
+		}
+	}
+	else if (this->isDamaged() && !Utility::isYourPawn(this))
+	{
+		this->setHealthBarVisibility(ESlateVisibility::Visible);
+
+		this->updateHealthBar();
+	}
+	else
+	{
+		this->setHealthBarVisibility(ESlateVisibility::Hidden);
 	}
 }
 
@@ -314,7 +335,15 @@ void ABaseCharacter::deathLogic()
 
 void ABaseCharacter::updateCharacterVisual()
 {
-	
+	if (swarm.IsValid())
+	{
+		this->getHealthBarWidget()->getImage()->GetDynamicMaterial()->SetScalarParameterValue("ThresholdPercent", swarm->getThreshold());
+	}
+}
+
+UHealthBarWidget* ABaseCharacter::getHealthBarWidget() const
+{
+	return Cast<UHealthBarWidget>(healthBarWidget->GetWidget());
 }
 
 void ABaseCharacter::runReloadLogic()
@@ -350,6 +379,7 @@ ABaseCharacter::ABaseCharacter() :
 	defaultEnergyAmmoCount(maxEnergyAmmoCount* UConstants::conversionAmmoCoefficient)
 {
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_SatusState.NPS_SatusState'"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> healthBarWidgetFinder(TEXT("/Game/UI/WidgetComponents/BP_HealthBarWidget"));
 
 	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
@@ -360,35 +390,60 @@ ABaseCharacter::ABaseCharacter() :
 	UCharacterMovementComponent* movement = GetCharacterMovement();
 
 	capsule->InitCapsuleSize(42.0f, 96.0f);
+
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+
 	capsule->SetIsReplicated(true);
 
 	mesh->SetGenerateOverlapEvents(true);
+
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+
 	mesh->SetIsReplicated(true);
 
 	movement->bOrientRotationToMovement = true;
-	movement->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
-	movement->JumpZVelocity = 600.f;
+	movement->RotationRate = UConstants::rotationRate;
+	movement->JumpZVelocity = UConstants::jumpVelocity;
 	movement->AirControl = 1.0f;
-	movement->GetNavAgentPropertiesRef().bCanCrouch = true;
 	movement->MaxWalkSpeed = defaultMovementSpeed;
-	movement->MaxWalkSpeedCrouched = defaultMovementSpeed / 3;
+	movement->MaxWalkSpeedCrouched = defaultMovementSpeed / UConstants::crouchMaxWalkSpeedCoefficient;
 	movement->bCanWalkOffLedgesWhenCrouching = true;
 
+	movement->GetNavAgentPropertiesRef().bCanCrouch = true;
+
 	currentWeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("CurrentWeaponMesh");
-	currentWeaponMesh->SetupAttachment(mesh, "Hand_WeaponSocket_R");
+
 	currentWeaponMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
+	currentWeaponMesh->SetupAttachment(mesh, "Hand_WeaponSocket_R");
+
 	magazine = CreateDefaultSubobject<UStaticMeshComponent>("Magazine");
-	magazine->SetupAttachment(currentWeaponMesh);
+
 	magazine->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
+	magazine->SetupAttachment(currentWeaponMesh);
+
 	underStatusComponent = CreateDefaultSubobject<UNiagaraComponent>("UnderStatus");
-	underStatusComponent->SetupAttachment(mesh);
-	underStatusComponent->AddLocalOffset(FVector(0.0f, 0.0f, this->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()));
+
 	underStatusComponent->SetAsset(underStatusFinder.Object);
+
+	underStatusComponent->SetupAttachment(mesh);
+
+	underStatusComponent->AddLocalOffset(FVector(0.0f, 0.0f, this->getCapsuleComponent()->GetUnscaledCapsuleHalfHeight()));
+
+	healthBarWidget = CreateDefaultSubobject<UWidgetComponent>("HealthBarWidget");
+
+	healthBarWidget->SetDrawSize({ 175.0f, 40.0f });
+
+	healthBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+
+	healthBarWidget->SetWidgetClass(healthBarWidgetFinder.Class);
+
+	healthBarWidget->SetupAttachment(mesh);
+
+	healthBarWidget->AddLocalOffset(FVector(0.0f, 0.0f, 187.0f));
 
 #pragma region BlueprintFunctionLibrary
 	isReloading = false;

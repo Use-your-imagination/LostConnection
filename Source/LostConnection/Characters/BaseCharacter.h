@@ -10,6 +10,7 @@
 #include "Engine/ActorChannel.h"
 #include "Net/DataBunch.h"
 #include "Components/TimelineComponent.h"
+#include "Components/WidgetComponent.h"
 
 #include "Engine/LostConnectionPlayerState.h"
 #include "WorldPlaceables/DroppedWeapon.h"
@@ -27,6 +28,7 @@
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
 #include "Interfaces/Gameplay/Descriptions/AITargeted.h"
 #include "Interfaces/Gameplay/Timelines/DeathTimeline.h"
+#include "UI/HealthBarWidget.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -54,6 +56,9 @@ protected:
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* underStatusComponent;
+
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
+	UWidgetComponent* healthBarWidget;
 
 	UPROPERTY(Category = Weapons, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
 	UBaseWeapon* currentWeapon;
@@ -206,6 +211,9 @@ protected:
 	UFUNCTION()
 	virtual void updateCharacterVisual();
 
+private:
+	UHealthBarWidget* getHealthBarWidget() const;
+
 public:	
 	ABaseCharacter();
 
@@ -231,6 +239,8 @@ public:
 	UFUNCTION(Category = Visual, BlueprintCallable)
 	void updateCharacterVisualCall();
 
+	void updateHealthBar();
+
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void setHealth(float newHealth);
 
@@ -248,6 +258,8 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void setIsDead(bool newIsDead);
+
+	void setHealthBarVisibility(ESlateVisibility visibility);
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
 	UBaseWeapon* getDefaultWeapon();
@@ -364,6 +376,39 @@ inline bool ABaseCharacter::isDamaged() const
 {
 	return (currentHealth < health) ||
 		(IsValid(energyShield) && energyShield->getCurrentCapacity() < energyShield->getCapacity());
+}
+
+FORCEINLINE void ABaseCharacter::updateHealthBar()
+{
+	UHealthBarWidget* widget = this->getHealthBarWidget();
+	UMaterialInstanceDynamic* healthBarMaterial = widget->getImage()->GetDynamicMaterial();
+	UTextBlock* healthBarText = widget->getText();
+
+	healthBarMaterial->SetScalarParameterValue("LifePercent", Utility::toPercent(currentHealth / health));
+
+	if (IsValid(energyShield))
+	{
+		healthBarMaterial->SetScalarParameterValue("ShieldPercent", Utility::toPercent(energyShield->getCurrentCapacity() / energyShield->getCapacity()));
+
+		healthBarText->SetText
+		(
+			FText::Format
+			(
+				FText::FromString("{0} | {1}"),
+				Utility::getFTextFromFloat(energyShield->getCurrentCapacity()),
+				Utility::getFTextFromFloat(currentHealth)
+			)
+		);
+	}
+	else
+	{
+		healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
+	}
+}
+
+inline void ABaseCharacter::setHealthBarVisibility(ESlateVisibility visibility)
+{
+	this->getHealthBarWidget()->SetVisibility(visibility);
 }
 
 inline int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const

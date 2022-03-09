@@ -83,3 +83,8 @@ void Utility::executeOnlyOnServerFromMulticast(AActor* actor, const TFunction<vo
 		function();
 	}
 }
+
+bool Utility::isYourPawn(APawn* pawn)
+{
+	return IsValid(pawn) && (pawn->GetController() == GEngine->GetFirstLocalPlayerController(pawn->GetWorld()));
+}

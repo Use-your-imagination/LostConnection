@@ -38,6 +38,8 @@ public:
 
 	static void executeOnlyOnServerFromMulticast(AActor* actor, const TFunction<void()>& function);
 
+	static bool isYourPawn(APawn* pawn);
+
 	template<typename T>
 	static bool checkChanceProc(const T& chance);
 

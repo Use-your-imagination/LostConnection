@@ -2,6 +2,8 @@
 
 #include "Constants.h"
 
+const FRotator UConstants::rotationRate = { 0.0f, 540.0f, 0.0f };
+
 const FString UConstants::projectVersion = "v0.2.1.0";
 
 const FName UConstants::actionStringTablePath = "/Game/Text/Actions.Actions";
