@@ -91,11 +91,11 @@ public:
 
 	UBaseWeapon* getSecondInactiveWeapon() const;
 
-	const TArray<UBasePersonalModule*>& getPersonalEquippedModules() const;
+	const TArray<UInventoryCell*>& getPersonalEquippedModules() const;
 
-	const TArray<UBasePersonalModule*>& getPersonalUnequippedModules() const;
+	const TArray<UInventoryCell*>& getPersonalUnequippedModules() const;
 
-	const TArray<UBaseWeaponModule*>& getWeaponModules() const;
+	const TArray<UInventoryCell*>& getWeaponModules() const;
 
 	int32 getSpareAmmo(ammoTypes type) const;
 

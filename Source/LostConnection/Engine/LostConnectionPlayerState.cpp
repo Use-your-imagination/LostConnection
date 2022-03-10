@@ -77,17 +77,17 @@ void ALostConnectionPlayerState::setSecondInactiveWeapon_Implementation(UBaseWea
 	inventory->setSecondInactiveWeaponCell(weapon);
 }
 
-const TArray<UBasePersonalModule*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
+const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
 {
 	return inventory->getPersonalEquippedModules();
 }
 
-const TArray<UBasePersonalModule*>& ALostConnectionPlayerState::getPersonalUnequippedModules() const
+const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalUnequippedModules() const
 {
 	return inventory->getPersonalUnequippedModules();
 }
 
-const TArray<UBaseWeaponModule*>& ALostConnectionPlayerState::getWeaponModules() const
+const TArray<UInventoryCell*>& ALostConnectionPlayerState::getWeaponModules() const
 {
 	return inventory->getWeaponModules();
 }

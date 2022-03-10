@@ -51,13 +51,13 @@ private:
 	TArray<FAmmoData> spareAmmo;
 
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UBasePersonalModule*> personalEquippedModules;
+	TArray<UInventoryCell*> personalEquippedModules;
 
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UBasePersonalModule*> personalUnequippedModules;
+	TArray<UInventoryCell*> personalUnequippedModules;
 
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UBaseWeaponModule*> weaponModules;
+	TArray<UInventoryCell*> weaponModules;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -97,11 +97,11 @@ public:
 
 	TArray<FAmmoData>& getSpareAmmoArray();
 
-	const TArray<UBasePersonalModule*>& getPersonalEquippedModules() const;
+	const TArray<UInventoryCell*>& getPersonalEquippedModules() const;
 
-	const TArray<UBasePersonalModule*>& getPersonalUnequippedModules() const;
+	const TArray<UInventoryCell*>& getPersonalUnequippedModules() const;
 
-	const TArray<UBaseWeaponModule*>& getWeaponModules() const;
+	const TArray<UInventoryCell*>& getWeaponModules() const;
 
 	class ALostConnectionPlayerState* getPlayerState() const;
 

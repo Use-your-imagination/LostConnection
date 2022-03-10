@@ -10,8 +10,7 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Constants/Constants.h"
 
-template<typename ModuleT>
-static TArray<UBaseModule*> upgradeModules(const TArray<ModuleT*>& modules);
+static TArray<UInventoryCell*> upgradeModules(const TArray<UInventoryCell*>& modules);
 
 void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -73,9 +72,13 @@ void UInventory::init(ALostConnectionPlayerState* playerState)
 
 void UInventory::addPersonalModule(UBasePersonalModule* module)
 {
-	personalUnequippedModules.Add(module);
+	UInventoryCell* personalModuleCell = NewObject<UInventoryCell>(playerState);
+	TArray<UInventoryCell*> modules;
+	TArray<UInventoryCell*> modulesToRemove;
 
-	TArray<UBaseModule*> modules;
+	personalModuleCell->setItem(module);
+
+	personalUnequippedModules.Add(personalModuleCell);
 
 	modules.Reserve(personalEquippedModules.Num() + personalUnequippedModules.Num());
 
@@ -83,26 +86,31 @@ void UInventory::addPersonalModule(UBasePersonalModule* module)
 
 	Algo::Copy(personalUnequippedModules, modules);
 
-	TArray<UBaseModule*> modulesToRemove = upgradeModules(modules);
+	modulesToRemove = upgradeModules(modules);
 
-	for (UBaseModule* moduleToRemove : modulesToRemove)
+	for (UInventoryCell* moduleToRemove : modulesToRemove)
 	{
-		if (!personalEquippedModules.Remove(Cast<UBasePersonalModule>(moduleToRemove)))
+		if (!personalEquippedModules.Remove(moduleToRemove))
 		{
-			personalUnequippedModules.Remove(Cast<UBasePersonalModule>(moduleToRemove));
+			personalUnequippedModules.Remove(moduleToRemove);
 		}
 	}
 }
 
 void UInventory::addWeaponModule(UBaseWeaponModule* module)
 {
-	weaponModules.Add(module);
+	UInventoryCell* weaponModuleCell = NewObject<UInventoryCell>(playerState);
+	TArray<UInventoryCell*> modulesToRemove;
 
-	TArray<UBaseModule*> modulesToRemove = upgradeModules(weaponModules);
+	weaponModuleCell->setItem(module);
 
-	for (UBaseModule* moduleToRemove : modulesToRemove)
+	weaponModules.Add(weaponModuleCell);
+
+	modulesToRemove = upgradeModules(weaponModules);
+
+	for (UInventoryCell* moduleToRemove : modulesToRemove)
 	{
-		weaponModules.Remove(Cast<UBaseWeaponModule>(moduleToRemove));
+		weaponModules.Remove(moduleToRemove);
 	}
 }
 
@@ -170,17 +178,17 @@ int32 UInventory::getLootPoints() const
 	return lootPoints;
 }
 
-const TArray<UBasePersonalModule*>& UInventory::getPersonalEquippedModules() const
+const TArray<UInventoryCell*>& UInventory::getPersonalEquippedModules() const
 {
 	return personalEquippedModules;
 }
 
-const TArray<UBasePersonalModule*>& UInventory::getPersonalUnequippedModules() const
+const TArray<UInventoryCell*>& UInventory::getPersonalUnequippedModules() const
 {
 	return personalUnequippedModules;
 }
 
-const TArray<UBaseWeaponModule*>& UInventory::getWeaponModules() const
+const TArray<UInventoryCell*>& UInventory::getWeaponModules() const
 {
 	return weaponModules;
 }
@@ -234,32 +242,32 @@ bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 		}
 	}
 
-	for (UBasePersonalModule* personalModule : personalEquippedModules)
+	for (UInventoryCell* cell : personalEquippedModules)
 	{
-		if (IsValid(personalModule))
+		if (IsValid(cell))
 		{
-			wroteSomething |= Channel->ReplicateSubobject(personalModule, *Bunch, *RepFlags);
+			wroteSomething |= Channel->ReplicateSubobject(cell, *Bunch, *RepFlags);
 
-			wroteSomething |= personalModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+			wroteSomething |= cell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 		}
 	}
-	for (UBasePersonalModule* personalModule : personalUnequippedModules)
+	for (UInventoryCell* cell : personalUnequippedModules)
 	{
-		if (IsValid(personalModule))
+		if (IsValid(cell))
 		{
-			wroteSomething |= Channel->ReplicateSubobject(personalModule, *Bunch, *RepFlags);
+			wroteSomething |= Channel->ReplicateSubobject(cell, *Bunch, *RepFlags);
 
-			wroteSomething |= personalModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+			wroteSomething |= cell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 		}
 	}
 
-	for (UBaseWeaponModule* weaponModule : weaponModules)
+	for (UInventoryCell* cell : weaponModules)
 	{
-		if (IsValid(weaponModule))
+		if (IsValid(cell))
 		{
-			wroteSomething |= Channel->ReplicateSubobject(weaponModule, *Bunch, *RepFlags);
+			wroteSomething |= Channel->ReplicateSubobject(cell, *Bunch, *RepFlags);
 
-			wroteSomething |= weaponModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+			wroteSomething |= cell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 		}
 	}
 
@@ -271,10 +279,9 @@ ALostConnectionPlayerState* UInventory::getPlayerState() const
 	return playerState;
 }
 
-template<typename ModuleT>
-TArray<UBaseModule*> upgradeModules(const TArray<ModuleT*>& modules)
+TArray<UInventoryCell*> upgradeModules(const TArray<UInventoryCell*>& modules)
 {
-	TArray<UBaseModule*> result;
+	TArray<UInventoryCell*> result;
 
 	return result;
 }

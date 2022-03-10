@@ -25,5 +25,5 @@ public:
 
 	virtual void addWeaponModule(UBaseWeaponModule* module) = 0;
 
-	virtual const TArray<UBaseWeaponModule*>& getWeaponModules() const = 0;
+	virtual TArray<UBaseWeaponModule*> getWeaponModules() const = 0;
 };
