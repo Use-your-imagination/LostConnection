@@ -83,6 +83,9 @@ protected:
 	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
 	UStaticMesh* magazineMesh;
 
+	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly)
+	UTexture2D* weaponCellIcon;
+
 	UPROPERTY(Category = "Animations|States|Hip", EditDefaultsOnly, BlueprintReadOnly)
 	UAimOffsetBlendSpace* hipAimOffset;
 
@@ -261,6 +264,8 @@ public:
 	const FText& getItemName() const override;
 
 	const FText& getItemDescription() const override;
+
+	const UTexture2D* getCellIcon() const override;
 
 	virtual ~UBaseWeapon() = default;
 };

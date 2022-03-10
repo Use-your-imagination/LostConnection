@@ -21,7 +21,7 @@ private:
 	* Implements IInventoriable
 	*/
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UObject* item;
+	UNetworkObject* item;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

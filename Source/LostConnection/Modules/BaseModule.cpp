@@ -12,3 +12,8 @@ const FText& UBaseModule::getItemDescription() const
 {
 	return moduleDescription;
 }
+
+const UTexture2D* UBaseModule::getCellIcon() const
+{
+	return moduleIconTexture;
+}

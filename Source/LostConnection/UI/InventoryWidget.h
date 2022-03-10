@@ -28,5 +28,8 @@ public:
 	UFUNCTION(Category = Events, BlueprintNativeEvent)
 	void onHide();
 
+	UFUNCTION(Category = Callback, BlueprintCallable)
+	void onHideCallback();
+
 	virtual ~UInventoryWidget() = default;
 };

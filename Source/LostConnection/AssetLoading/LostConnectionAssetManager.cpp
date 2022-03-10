@@ -105,6 +105,11 @@ bool ULostConnectionAssetManager::loadDefaults(UObject* worldContext, FLatentAct
 	return this->latentLoadAsset(UDefaultsDataAsset::StaticClass(), worldContext, info);
 }
 
+bool ULostConnectionAssetManager::loadLoot(UObject* worldContext, FLatentActionInfo info)
+{
+	return this->latentLoadAsset(ULootDataAsset::StaticClass(), worldContext, info);
+}
+
 bool ULostConnectionAssetManager::loadDrone(TSubclassOf<UBaseDroneDataAsset> droneAsset, UObject* worldContext, FLatentActionInfo info)
 {
 	return this->latentLoadAsset(droneAsset, worldContext, info);
@@ -212,6 +217,11 @@ const UUIDataAsset& ULostConnectionAssetManager::getUI() const
 const UDefaultsDataAsset& ULostConnectionAssetManager::getDefaults() const
 {
 	return *GetPrimaryAssetObject<UDefaultsDataAsset>(assets[UDefaultsDataAsset::StaticClass()]);
+}
+
+const ULootDataAsset& ULostConnectionAssetManager::getLoot() const
+{
+	return *GetPrimaryAssetObject<ULootDataAsset>(assets[ULootDataAsset::StaticClass()]);
 }
 
 TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() const

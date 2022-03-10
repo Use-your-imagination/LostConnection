@@ -20,3 +20,10 @@ void UInventoryWidget::onHide_Implementation()
 {
 
 }
+
+void UInventoryWidget::onHideCallback()
+{
+	this->RemoveFromViewport();
+
+	inventory->getPlayerState()->getCurrentUI()->SetVisibility(ESlateVisibility::Visible);
+}

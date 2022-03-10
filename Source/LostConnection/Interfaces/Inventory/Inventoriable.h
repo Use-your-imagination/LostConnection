@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 
 #include "UObject/Interface.h"
+#include "Engine/Texture2D.h"
+
+#include "Network/NetworkObject.h"
 
 #include "Inventoriable.generated.h"
 
@@ -26,4 +29,9 @@ public:
 
 	UFUNCTION(Category = Inventory, BlueprintCallable)
 	virtual const FText& getItemDescription() const = 0;
+
+	UFUNCTION(Category = Inventory, BlueprintCallable)
+	virtual const UTexture2D* getCellIcon() const = 0;
+
+	UNetworkObject* getObject() const;
 };

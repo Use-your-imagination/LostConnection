@@ -9,6 +9,7 @@
 #include "AssetLoading/DataAssets/WeaponsDataAsset.h"
 #include "AssetLoading/DataAssets/UIDataAsset.h"
 #include "AssetLoading/DataAssets/DefaultsDataAsset.h"
+#include "AssetLoading/DataAssets/LootDataAsset.h"
 
 #include "AssetLoading/DataAssets/Drones/SN4K3DataAsset.h"
 

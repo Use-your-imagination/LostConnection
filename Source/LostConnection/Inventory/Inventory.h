@@ -23,6 +23,9 @@ class LOSTCONNECTION_API UInventory : public UNetworkObject
 	GENERATED_BODY()
 	
 private:
+	UPROPERTY(Category = Player, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	class ALostConnectionPlayerState* playerState;
+
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UInventoryCell* primaryWeaponCell;
 
@@ -37,6 +40,9 @@ private:
 
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UInventoryCell* secondInactiveWeaponCell;
+
+	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<UInventoryCell*> unequippedWeapons;
 
 	UPROPERTY(Category = "Inventory|Economy", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 lootPoints;
@@ -59,11 +65,13 @@ private:
 public:
 	UInventory();
 
-	void init(APlayerState* playerState);
+	void init(class ALostConnectionPlayerState* playerState);
 
 	void addPersonalModule(UBasePersonalModule* module);
 
 	void addWeaponModule(UBaseWeaponModule* module);
+
+	void addUnequippedWeapon(UBaseWeapon* weapon);
 
 	void setPrimaryWeaponCell(UBaseWeapon* weapon);
 
@@ -94,6 +102,8 @@ public:
 	const TArray<UBasePersonalModule*>& getPersonalUnequippedModules() const;
 
 	const TArray<UBaseWeaponModule*>& getWeaponModules() const;
+
+	class ALostConnectionPlayerState* getPlayerState() const;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 

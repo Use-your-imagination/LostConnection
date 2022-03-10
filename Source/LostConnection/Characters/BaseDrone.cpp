@@ -830,7 +830,7 @@ void ABaseDrone::dropWeapon_Implementation()
 
 	location.Z -= GetMesh()->SkeletalMesh->GetImportedBounds().BoxExtent.Z / 2;
 
-	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>(ADroppedWeapon::StaticClass(), { currentWeaponMesh->GetComponentRotation(), location + currentWeapon->getLength() * GetActorForwardVector() });
+	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>({ currentWeaponMesh->GetComponentRotation(), location + currentWeapon->getLength() * GetActorForwardVector() });
 
 	this->returnAmmoToSpare(currentWeapon);
 
@@ -854,15 +854,16 @@ void ABaseDrone::dropWeapon_Implementation()
 
 void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 {
+	if (!IsValid(weaponToEquip))
+	{
+		return;
+	}
+
 	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 	UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();
 	UBaseWeapon* secondaryWeapon = playerState->getSecondaryWeapon();
 	UBaseWeapon* defaultWeapon = playerState->getDefaultWeapon();
-
-	if (!weaponToEquip && !weaponToEquip->IsValidLowLevelFast())
-	{
-		return;
-	}
+	UInventory* inventory = playerState->getInventory();
 
 	UBaseWeapon* weapon = weaponToEquip->getWeapon();
 
@@ -870,34 +871,21 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 	weapon->updateTimeBetweenShots();
 
+	weapon->Rename(nullptr, playerState);
+
 	if (currentWeapon)
 	{
-		if (currentWeapon == primaryWeapon)
+		if (currentWeapon == primaryWeapon && !secondaryWeapon)
 		{
-			this->dropWeapon();
-
-			playerState->setPrimaryWeapon(weapon);
-
-			this->changeToPrimaryWeapon();
-		}
-		else if (currentWeapon == secondaryWeapon)
-		{
-			this->dropWeapon();
-
 			playerState->setSecondaryWeapon(weapon);
-
-			this->changeToSecondaryWeapon();
+		}
+		else if (currentWeapon == secondaryWeapon && !primaryWeapon)
+		{
+			playerState->setPrimaryWeapon(weapon);
 		}
 		else
 		{
-			if (!primaryWeapon)
-			{
-				playerState->setPrimaryWeapon(weapon);
-			}
-			else if (!secondaryWeapon)
-			{
-				playerState->setSecondaryWeapon(secondaryWeapon);
-			}
+			inventory->addUnequippedWeapon(weapon);
 		}
 	}
 	else

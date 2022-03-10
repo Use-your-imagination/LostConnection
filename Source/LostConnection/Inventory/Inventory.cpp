@@ -27,6 +27,8 @@ void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(UInventory, secondInactiveWeaponCell);
 
+	DOREPLIFETIME(UInventory, unequippedWeapons);
+
 	DOREPLIFETIME(UInventory, lootPoints);
 
 	DOREPLIFETIME(UInventory, spareAmmo);
@@ -51,10 +53,12 @@ UInventory::UInventory()
 	secondInactiveWeaponCell = CreateDefaultSubobject<UInventoryCell>("SecondInactiveWeaponCell");
 }
 
-void UInventory::init(APlayerState* playerState)
+void UInventory::init(ALostConnectionPlayerState* playerState)
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 	UBaseWeapon* tem = NewObject<UBaseWeapon>(playerState, manager.getWeaponClass(UHipter::StaticClass()));
+
+	this->playerState = playerState;
 
 	tem->updateTimeBetweenShots();
 
@@ -100,6 +104,15 @@ void UInventory::addWeaponModule(UBaseWeaponModule* module)
 	{
 		weaponModules.Remove(Cast<UBaseWeaponModule>(moduleToRemove));
 	}
+}
+
+void UInventory::addUnequippedWeapon(UBaseWeapon* weapon)
+{
+	UInventoryCell* weaponCell = NewObject<UInventoryCell>(playerState);
+
+	weaponCell->setItem(weapon);
+
+	unequippedWeapons.Add(weaponCell);
 }
 
 void UInventory::setPrimaryWeaponCell(UBaseWeapon* weapon)
@@ -211,6 +224,16 @@ bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 		wroteSomething |= secondInactiveWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
+	for (UInventoryCell* cell : unequippedWeapons)
+	{
+		if (IsValid(cell))
+		{
+			wroteSomething |= Channel->ReplicateSubobject(cell, *Bunch, *RepFlags);
+
+			wroteSomething |= cell->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		}
+	}
+
 	for (UBasePersonalModule* personalModule : personalEquippedModules)
 	{
 		if (IsValid(personalModule))
@@ -241,6 +264,11 @@ bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	}
 
 	return wroteSomething;
+}
+
+ALostConnectionPlayerState* UInventory::getPlayerState() const
+{
+	return playerState;
 }
 
 template<typename ModuleT>

@@ -383,3 +383,8 @@ const FText& UBaseWeapon::getItemDescription() const
 {
 	return weaponDescription;
 }
+
+const UTexture2D* UBaseWeapon::getCellIcon() const
+{
+	return weaponCellIcon;
+}

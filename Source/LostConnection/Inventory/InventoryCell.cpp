@@ -11,7 +11,7 @@ void UInventoryCell::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 void UInventoryCell::setItem(const IInventoriable* item)
 {
-	this->item = item->_getUObject();
+	this->item = item->getObject();
 }
 
 IInventoriable* UInventoryCell::getItem() const
@@ -23,11 +23,11 @@ bool UInventoryCell::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(item, *Bunch, *RepFlags);
-
-	if (UNetworkObject* networkObject = Cast<UNetworkObject>(item))
+	if (IsValid(item))
 	{
-		wroteSomething |= networkObject->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		wroteSomething |= Channel->ReplicateSubobject(item, *Bunch, *RepFlags);
+
+		wroteSomething |= item->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
 	return wroteSomething;

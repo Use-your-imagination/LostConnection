@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 
-#include "Engine/Texture2D.h"
-
 #include "Network/NetworkObject.h"
 #include "Interfaces/Inventory/Inventoriable.h"
 
@@ -34,6 +32,8 @@ public:
 	const FText& getItemName() const override;
 
 	const FText& getItemDescription() const override;
+
+	const UTexture2D* getCellIcon() const override;
 
 	virtual ~UBaseModule() = default;
 };

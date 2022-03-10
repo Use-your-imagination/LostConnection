@@ -87,19 +87,9 @@ public:
 
 	int32& getCurrentWaveRemainingBots();
 
-	/// @brief Spawn actor deferred
-	/// @tparam T 
-	/// @param staticClass 
-	/// @param transform 
-	/// @return 
 	template<typename T>
 	T* spawn(UClass* subclass, const FTransform& transform, ESpawnActorCollisionHandlingMethod spawnMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-	/// @brief Spawn actor deferred
-	/// @tparam T 
-	/// @param staticClass 
-	/// @param transform 
-	/// @return 
 	template<typename T>
 	T* spawn(const FTransform& transform, ESpawnActorCollisionHandlingMethod spawnMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 

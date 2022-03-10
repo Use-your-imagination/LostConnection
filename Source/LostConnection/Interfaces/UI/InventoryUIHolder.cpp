@@ -28,9 +28,5 @@ void IInventoryUIHolder::hideInventory_Implementation(APlayerController* playerC
 
 	UUtilityBlueprintFunctionLibrary::showMouseCursor(playerController, false);
 
-	widget->RemoveFromViewport();
-
 	widget->onHide();
-
-	playerController->GetPlayerState<ALostConnectionPlayerState>()->getCurrentUI()->SetVisibility(ESlateVisibility::Visible);
 }
