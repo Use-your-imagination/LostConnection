@@ -10,13 +10,13 @@ void IOnDeathEvent::initDeathEvent(IDeathEventsHolder* holder)
 
 	if (currentHolder.IsValid())
 	{
-		currentHolder->detachDeathEvent(this);
+		currentHolder->detachDeathEvent(this->_getUObject());
 	}
 
 	currentHolder = holder;
 
 	if (currentHolder.IsValid())
 	{
-		currentHolder->attachDeathEvent(this);
+		currentHolder->attachDeathEvent(this->_getUObject());
 	}	
 }

@@ -4,7 +4,7 @@
 
 void IDeathEventsHolder::notifyDeathEvents() const
 {
-	const TArray<IOnDeathEvent*>& events = this->getDeathEvents();
+	const TArray<TScriptInterface<IOnDeathEvent>>& events = this->getDeathEvents();
 
 	for (const auto& event : events)
 	{

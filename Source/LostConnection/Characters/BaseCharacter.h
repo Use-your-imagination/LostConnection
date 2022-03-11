@@ -133,7 +133,8 @@ protected:
 
 	TWeakObjectPtr<class USwarmAilment> swarm;
 
-	TArray<IOnDeathEvent*> deathEvents;
+	UPROPERTY()
+	TArray<TScriptInterface<IOnDeathEvent>> deathEvents;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Reloading, BlueprintReadWrite)
@@ -321,9 +322,9 @@ public:
 
 	virtual void applySwarmAilment(class USwarmAilment* swarm) final override;
 
-	virtual void attachDeathEvent(IOnDeathEvent* event) final override;
+	virtual void attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event) final override;
 
-	virtual void detachDeathEvent(IOnDeathEvent* event) final override;
+	virtual void detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event) final override;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setCurrentHealth(float newCurrentHealth) final override;
@@ -361,7 +362,7 @@ public:
 
 	virtual UCapsuleComponent* getCapsuleComponent() final override;
 
-	virtual const TArray<IOnDeathEvent*>& getDeathEvents() const final override;
+	virtual const TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() const final override;
 
 	UFUNCTION(Category = Timelines, BlueprintNativeEvent, BlueprintCallable)
 	void deathTimelineUpdate(float value) override;
@@ -408,7 +409,14 @@ FORCEINLINE void ABaseCharacter::updateHealthBar()
 
 inline void ABaseCharacter::setHealthBarVisibility(ESlateVisibility visibility)
 {
-	this->getHealthBarWidget()->SetVisibility(visibility);
+	UHealthBarWidget* widget = this->getHealthBarWidget();
+
+	if (!widget)
+	{
+		return;
+	}
+
+	widget->SetVisibility(visibility);
 }
 
 inline int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const

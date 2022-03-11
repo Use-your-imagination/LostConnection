@@ -208,7 +208,7 @@ void ABaseCharacter::onCurrentHealthChange()
 			Algo::ForEach
 			(
 				deathEvents,
-				[](IOnDeathEvent* event) { event->deathEventAction(); }
+				[](const TScriptInterface<IOnDeathEvent>& event) { event->deathEventAction(); }
 			);
 
 			isDead = true;
@@ -784,12 +784,12 @@ void ABaseCharacter::applySwarmAilment(USwarmAilment* swarm)
 	this->swarm = swarm;
 }
 
-void ABaseCharacter::attachDeathEvent(IOnDeathEvent* event)
+void ABaseCharacter::attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event)
 {
 	deathEvents.Add(event);
 }
 
-void ABaseCharacter::detachDeathEvent(IOnDeathEvent* event)
+void ABaseCharacter::detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event)
 {
 	deathEvents.Remove(event);
 }
@@ -939,7 +939,7 @@ UCapsuleComponent* ABaseCharacter::getCapsuleComponent()
 	return GetCapsuleComponent();
 }
 
-const TArray<IOnDeathEvent*>& ABaseCharacter::getDeathEvents() const
+const TArray<TScriptInterface<IOnDeathEvent>>& ABaseCharacter::getDeathEvents() const
 {
 	return deathEvents;
 }

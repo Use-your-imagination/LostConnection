@@ -22,11 +22,11 @@ class LOSTCONNECTION_API IDeathEventsHolder
 	GENERATED_BODY()
 
 public:
-	virtual void attachDeathEvent(IOnDeathEvent* event) = 0;
+	virtual void attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event) = 0;
 
-	virtual void detachDeathEvent(IOnDeathEvent* event) = 0;
+	virtual void detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event) = 0;
 
 	virtual void notifyDeathEvents() const;
 
-	virtual const TArray<IOnDeathEvent*>& getDeathEvents() const = 0;
+	virtual const TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() const = 0;
 };
