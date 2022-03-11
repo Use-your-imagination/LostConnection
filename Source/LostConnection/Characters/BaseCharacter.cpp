@@ -155,7 +155,12 @@ void ABaseCharacter::onCurrentWeaponChange()
 
 void ABaseCharacter::onEnergyShieldUpdate()
 {
-	this->getHealthBarWidget()->getImage()->GetDynamicMaterial()->SetVectorParameterValue("ShieldColor", energyShield->getEnergyShieldColor());
+	UHealthBarWidget* widget = this->getHealthBarWidget();
+
+	if (widget)
+	{
+		widget->getImage()->GetDynamicMaterial()->SetVectorParameterValue("ShieldColor", energyShield->getEnergyShieldColor());
+	}
 
 	if (GetController() && Cast<ABaseDrone>(this))
 	{
@@ -178,6 +183,12 @@ void ABaseCharacter::onEnergyShieldUpdate()
 void ABaseCharacter::onHealthChange()
 {
 	UHealthBarWidget* widget = this->getHealthBarWidget();
+
+	if (!widget)
+	{
+		return;
+	}
+
 	UMaterialInstanceDynamic* healthBarMaterial = widget->getImage()->GetDynamicMaterial();
 
 	if (IsValid(healthBarMaterial) && IsValid(energyShield))
@@ -194,11 +205,10 @@ void ABaseCharacter::onCurrentHealthChange()
 
 		if (HasAuthority() && !isDead)
 		{
-			Algo::ForEachIf
+			Algo::ForEach
 			(
 				deathEvents,
-				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { return event.IsValid(); },
-				[](const TWeakInterfacePtr<IOnDeathEvent>& event) { event->deathEventAction(); }
+				[](IOnDeathEvent* event) { event->deathEventAction(); }
 			);
 
 			isDead = true;
@@ -337,7 +347,14 @@ void ABaseCharacter::updateCharacterVisual()
 {
 	if (swarm.IsValid())
 	{
-		this->getHealthBarWidget()->getImage()->GetDynamicMaterial()->SetScalarParameterValue("ThresholdPercent", swarm->getThreshold());
+		UHealthBarWidget* widget = this->getHealthBarWidget();
+
+		if (!widget)
+		{
+			return;
+		}
+
+		widget->getImage()->GetDynamicMaterial()->SetScalarParameterValue("ThresholdPercent", swarm->getThreshold());
 	}
 }
 

@@ -67,6 +67,12 @@ void USN4K3SecondAbility::deathEventAction()
 	if (swarm.IsValid())
 	{
 		ASN4K3* drone = Cast<ASN4K3>(caster);
+
+		if (!IsValid(drone))
+		{
+			return;
+		}
+
 		float distance = (target->GetActorLocation() - drone->GetActorLocation()).Size();
 		float distanceCofficient;
 		float health = target->getHealth() * Utility::fromPercent(swarm->getThreshold()) * (naniteMeterCoefficient * Utility::fromPercent(thresholdedHealthHeal));

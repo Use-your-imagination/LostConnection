@@ -98,7 +98,7 @@ void ASN4K3PassiveAbilityHead::explode()
 			characterHit.Component = character->GetMesh();
 			characterHit.Location = character->GetActorLocation();
 
-			USN4K3ResurrectDeathEvent* resurrect = NewObject<USN4K3ResurrectDeathEvent>(gameState);
+			USN4K3ResurrectDeathEvent* resurrect = NewObject<USN4K3ResurrectDeathEvent>(character);
 
 			resurrect->initDeathEvent(character);
 
