@@ -26,6 +26,12 @@
       "notes": [
         "Add simple inventory"
       ]
+    },
+    "Loot points category": {
+      "type": "item",
+      "notes": [
+        "Add getting random weapon with loot points cost"
+      ]
     }
   }
 }
