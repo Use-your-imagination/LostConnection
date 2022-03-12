@@ -35,7 +35,7 @@ void ALoadingScreenInfo::Tick(float DeltaTime)
 
 ALoadingScreenInfo::ALoadingScreenInfo()
 {
-	static ConstructorHelpers::FClassFinder<UUserWidget> loadingScreenFinder(TEXT("/Game/LoadingScreen/BP_LoadingScreenUI"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> loadingScreenFinder(TEXT("/Game/UI/UIs/BP_LoadingScreenUI"));
 
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = false;

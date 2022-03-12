@@ -462,6 +462,8 @@ ABaseCharacter::ABaseCharacter() :
 
 	healthBarWidget->AddLocalOffset(FVector(0.0f, 0.0f, 187.0f));
 
+	healthBarWidget->SetPivot({ 0.5f, 1.0f });
+
 #pragma region BlueprintFunctionLibrary
 	isReloading = false;
 
