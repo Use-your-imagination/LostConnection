@@ -54,3 +54,20 @@ const TArray<UBaseWeaponModulesLootFunction*>& ALootManager::getWeaponModulesLoo
 {
 	return weaponModulesLootFunctions;
 }
+
+FText ALootManager::getWeaponsDropChance(int32 lootPoints) const
+{
+	FString result;
+
+	for (UBaseWeaponsLootFunction* weaponLootFunction : weaponsLootFunctions)
+	{
+		if (result.Len())
+		{
+			result += '\n';
+		}
+
+		result += FString::Printf(TEXT("%s: %.2f", *weaponLootFunction->getLootName().ToString(), weaponLootFunction->calculateLootChance(lootPoints)));
+	}
+
+	return FText::FromString(result);
+}
