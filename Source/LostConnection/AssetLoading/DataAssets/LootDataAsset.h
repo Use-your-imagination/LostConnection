@@ -6,6 +6,10 @@
 
 #include "Engine/DataAsset.h"
 
+#include "Maths/Loot/BaseWeaponsLootFunction.h"
+#include "Maths/Loot/BaseModulesLootFunction.h"
+#include "Maths/Loot/BaseWeaponModulesLootFunction.h"
+
 #include "LootDataAsset.generated.h"
 
 UCLASS(BlueprintType)
@@ -22,6 +26,15 @@ private:
 
 	UPROPERTY(Category = "Modules|Weapon", EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<class UBaseWeaponModule>> weaponModules;
+
+	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<UBaseWeaponsLootFunction>> weaponsLootFunctions;
+
+	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<UBaseModulesLootFunction>> modulesLootFunctions;
+
+	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<UBaseWeaponModulesLootFunction>> weaponModulesLootFunctions;
 
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
@@ -40,6 +53,12 @@ public:
 	const TArray<TSubclassOf<class UBasePersonalModule>>& getPersonalModules() const;
 
 	const TArray<TSubclassOf<class UBaseWeaponModule>>& getWeaponModules() const;
+
+	const TArray<TSubclassOf<UBaseWeaponsLootFunction>>& getWeaponsLootFunctions() const;
+
+	const TArray<TSubclassOf<UBaseModulesLootFunction>>& getModulesLootFunctions() const;
+
+	const TArray<TSubclassOf<UBaseWeaponModulesLootFunction>>& getWeaponModulesLootFunctions() const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

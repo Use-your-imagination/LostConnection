@@ -46,6 +46,21 @@ const TArray<TSubclassOf<UBaseWeaponModule>>& ULootDataAsset::getWeaponModules()
 	return weaponModules;
 }
 
+const TArray<TSubclassOf<UBaseWeaponsLootFunction>>& ULootDataAsset::getWeaponsLootFunctions() const
+{
+	return weaponsLootFunctions;
+}
+
+const TArray<TSubclassOf<UBaseModulesLootFunction>>& ULootDataAsset::getModulesLootFunctions() const
+{
+	return modulesLootFunctions;
+}
+
+const TArray<TSubclassOf<UBaseWeaponModulesLootFunction>>& ULootDataAsset::getWeaponModulesLootFunctions() const
+{
+	return weaponModulesLootFunctions;
+}
+
 FPrimaryAssetId ULootDataAsset::GetPrimaryAssetId() const
 {
 	return ULootDataAsset::getPrimaryAssetId();

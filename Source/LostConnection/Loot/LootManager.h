@@ -7,6 +7,7 @@
 #include "GameFramework/Info.h"
 
 #include "LootCreator.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 
 #include "LootManager.generated.h"
 
@@ -18,11 +19,34 @@ class LOSTCONNECTION_API ALootManager : public AInfo
 private:
 	LootCreator lootCreator;
 
+private:
+	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<UBaseWeaponsLootFunction*> weaponsLootFunctions;
+
+	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<UBaseModulesLootFunction*> modulesLootFunctions;
+
+	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<UBaseWeaponModulesLootFunction*> weaponModulesLootFunctions;
+
+private:
+	void BeginPlay() override;
+
+private:
+	template<typename LootFunctionT>
+	TArray<LootFunctionT*> createLootFunctions(const TArray<TSubclassOf<LootFunctionT>>& lootFunctionClasses);
+
 public:
 	ALootManager() = default;
 	
 	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
 	void addRandomWeapon(UInventory* playerInventory);
+
+	const TArray<UBaseWeaponsLootFunction*>& getWeaponsLootFunctions() const;
+
+	const TArray<UBaseModulesLootFunction*>& getModulesLootFunctions() const;
+
+	const TArray<UBaseWeaponModulesLootFunction*>& getWeaponModulesLootFunctions() const;
 
 	~ALootManager() = default;
 };
