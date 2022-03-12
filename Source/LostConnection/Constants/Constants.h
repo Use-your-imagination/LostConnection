@@ -8,6 +8,8 @@
 
 #include "Constants.generated.h"
 
+enum class weaponRarity : uint8;
+
 UCLASS()
 class LOSTCONNECTION_API UConstants : public UBlueprintFunctionLibrary
 {
@@ -51,4 +53,10 @@ public:
 
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static int32 getPersonalModulesLimit();
+
+	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
+	static int32 getWeaponModulesSize(weaponRarity rarity);
+
+	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
+	static const FColor& getRarityColor(weaponRarity rarity);
 };

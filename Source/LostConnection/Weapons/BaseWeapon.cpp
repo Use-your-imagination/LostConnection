@@ -96,6 +96,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseWeapon, length);
 
 	DOREPLIFETIME(UBaseWeapon, currentAccuracyMultiplier);
+
+	DOREPLIFETIME(UBaseWeapon, weaponModules);
 }
 
 void UBaseWeapon::shoot()
@@ -299,6 +301,13 @@ void UBaseWeapon::setWeaponType_Implementation(weaponTypes newWeaponType)
 	weaponType = newWeaponType;
 }
 
+void UBaseWeapon::setWeaponRarity_Implementation(weaponRarity newRarity)
+{
+	rarity = newRarity;
+
+	weaponModules.SetNum(UConstants::getWeaponModulesSize(rarity));
+}
+
 USkeletalMesh* UBaseWeapon::getWeaponMesh() const
 {
 	return mesh;
@@ -372,6 +381,23 @@ float UBaseWeapon::getAdditionalCrushingHitChance() const
 float UBaseWeapon::getLength() const
 {
 	return length;
+}
+
+bool UBaseWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	for (UBaseWeaponModule* weaponModule : weaponModules)
+	{
+		if (IsValid(weaponModule))
+		{
+			wroteSomething = Channel->ReplicateSubobject(weaponModule, *Bunch, *RepFlags);
+
+			wroteSomething = weaponModule->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		}
+	}
+
+	return wroteSomething;
 }
 
 const FText& UBaseWeapon::getItemName() const

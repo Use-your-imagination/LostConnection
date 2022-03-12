@@ -13,6 +13,7 @@
 #include "Network/NetworkObject.h"
 #include "Projectiles/Ammo.h"
 #include "Interfaces/Inventory/Inventoriable.h"
+#include "Modules/BaseWeaponModule.h"
 
 #include "BaseWeapon.generated.h"
 
@@ -21,30 +22,39 @@
 UENUM(BlueprintType)
 enum class weaponTypes : uint8
 {
-	automatic = 0 UMETA(DisplayName = "Automatic"),
-	semiAutomatic = 1 UMETA(DisplayName = "Semi-automatic"),
-	single = 2 UMETA(DisplayName = "Single"),
-	delay = 3 UMETA(DisplayName = "Delay")
+	automatic UMETA(DisplayName = "Automatic"),
+	semiAutomatic UMETA(DisplayName = "Semi-automatic"),
+	single UMETA(DisplayName = "Single"),
+	delay UMETA(DisplayName = "Delay")
 };
 
 UENUM(BlueprintType)
 enum class ammoTypes : uint8
 {
-	small = 0 UMETA(DisplayName = "Small ammo"),
-	large = 1 UMETA(DisplayName = "Large ammo"),
-	energy = 2 UMETA(DisplayName = "Energy ammo"),
-	defaultType = 3 UMETA(DisplayName = "Default ammo")
+	small UMETA(DisplayName = "Small ammo"),
+	large UMETA(DisplayName = "Large ammo"),
+	energy UMETA(DisplayName = "Energy ammo"),
+	defaultType UMETA(DisplayName = "Default ammo")
 };
 
 UENUM(BlueprintType)
 enum class weaponSlotTypes : uint8
 {
-	none,
-	primaryWeaponSlot,
-	secondaryWeaponSlot,
-	defaultWeaponSlot,
-	firstInactiveWeaponSlot,
-	secondInactiveWeaponSlot
+	none UMETA(DisplayName = "None"),
+	primaryWeaponSlot UMETA(DisplayName = "Primary weapon slot"),
+	secondaryWeaponSlot UMETA(DisplayName = "Secondary weapon slot"),
+	defaultWeaponSlot UMETA(DisplayName = "Default weapon slot"),
+	firstInactiveWeaponSlot UMETA(DisplayName = "First inactive weapon slot"),
+	secondInactiveWeaponSlot UMETA(DisplayName = "Second inactive weapon slot")
+};
+
+UENUM(BlueprintType)
+enum class weaponRarity : uint8
+{
+	normal UMETA(DisplayName = "Normal"),
+	rare UMETA(DisplayName = "Rare"),
+	epic UMETA(DisplayName = "Epic"),
+	legendary UMETA(DisplayName = "Legendary")
 };
 
 UCLASS(BlueprintType, Blueprintable)
@@ -181,6 +191,12 @@ protected:
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	float currentAccuracyMultiplier;
 
+	UPROPERTY(Category = Modules, Replicated, BlueprintReadOnly)
+	TArray<UBaseWeaponModule*> weaponModules;
+
+	UPROPERTY(Category = Rarity, Replicated, BlueprintReadOnly)
+	weaponRarity rarity;
+
 private:
 	UFUNCTION(Category = Weapons, BlueprintCallable, Meta = (AllowPrivateAccess = "true"))
 	float calculateSpreadDistance() const;
@@ -231,6 +247,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setWeaponType(weaponTypes newWeaponType);
 
+	UFUNCTION(Server, Reliable)
+	void setWeaponRarity(weaponRarity newRarity);
+
 	USkeletalMesh* getWeaponMesh() const;
 
 	UStaticMesh* getMagazineMesh() const;
@@ -261,11 +280,13 @@ public:
 
 	float getLength() const;
 
-	const FText& getItemName() const override;
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	const FText& getItemDescription() const override;
+	virtual const FText& getItemName() const final override;
 
-	const UTexture2D* getCellIcon() const override;
+	virtual const FText& getItemDescription() const final override;
+
+	virtual const UTexture2D* getCellIcon() const final override;
 
 	virtual ~UBaseWeapon() = default;
 };
