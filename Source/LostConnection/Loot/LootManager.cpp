@@ -74,7 +74,17 @@ FText ALootManager::getWeaponsDropChance(int32 lootPoints) const
 			result += '\n';
 		}
 
-		result += FString::Printf(TEXT("%s: %.2f%%"), *weaponLootFunction->getLootName().ToString(), weaponLootFunction->calculateLootChance(lootPoints));
+		float chance = weaponLootFunction->calculateLootChance(lootPoints);
+		const FString& weaponName = weaponLootFunction->getLootName().ToString();
+
+		if (chance < 1.0f)
+		{
+			result += FString::Printf(TEXT("%s: < 1%%"), *weaponName);
+		}
+		else
+		{
+			result += FString::Printf(TEXT("%s: %.0f%%"), *weaponName, chance);
+		}
 	}
 
 	return FText::FromString(result);
