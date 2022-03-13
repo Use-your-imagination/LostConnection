@@ -224,6 +224,11 @@ const ULootDataAsset& ULostConnectionAssetManager::getLoot() const
 	return *GetPrimaryAssetObject<ULootDataAsset>(assets[ULootDataAsset::StaticClass()]);
 }
 
+const ULootDataAsset* ULostConnectionAssetManager::getLootDataAsset() const
+{
+	return &this->getLoot();
+}
+
 TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() const
 {
 	UDronesPreviewDataAsset& asset = *GetPrimaryAssetObject<UDronesPreviewDataAsset>(UDronesPreviewDataAsset::getPrimaryAssetId());

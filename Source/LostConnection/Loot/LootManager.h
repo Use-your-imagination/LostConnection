@@ -50,8 +50,5 @@ public:
 
 	const TArray<UBaseWeaponModulesLootFunction*>& getWeaponModulesLootFunctions() const;
 
-	UFUNCTION(Category = UI, BlueprintCallable, BlueprintPure)
-	FText getWeaponsDropChance(int32 lootPoints) const;
-
 	~ALootManager() = default;
 };

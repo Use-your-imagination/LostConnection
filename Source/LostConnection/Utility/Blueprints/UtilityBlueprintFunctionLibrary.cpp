@@ -18,6 +18,16 @@
 #include "Engine/LostConnectionGameState.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
+FString appendLootDropChance(int32 lootPoints, const UBaseLootFunction* lootFunction)
+{
+	float chance = lootFunction->calculateLootChance(lootPoints);
+	const FString& lootName = lootFunction->getLootName().ToString();
+
+	return chance < 1.0f ?
+		FString::Printf(TEXT("%s: < 1%%"), *lootName) :
+		FString::Printf(TEXT("%s: %.0f%%"), *lootName, chance);
+}
+
 FString UUtilityBlueprintFunctionLibrary::firstSymbolToUpperCase(const FString& string)
 {
 	if (!string.Len())
@@ -196,4 +206,55 @@ void UUtilityBlueprintFunctionLibrary::showMouseCursor(APlayerController* player
 	playerController->bEnableClickEvents = isShowMouseCursor;
 
 	playerController->bEnableMouseOverEvents = isShowMouseCursor;
+}
+
+FText UUtilityBlueprintFunctionLibrary::getWeaponsDropChance(int32 lootPoints, const TArray<UBaseWeaponsLootFunction*>& weaponsLootFunctions)
+{
+	FString result;
+
+	for (const auto& lootFunction : weaponsLootFunctions)
+	{
+		if (result.Len())
+		{
+			result += '\n';
+		}
+
+		result += appendLootDropChance(lootPoints, lootFunction);
+	}
+
+	return FText::FromString(result);
+}
+
+FText UUtilityBlueprintFunctionLibrary::getModulesDropChance(int32 lootPoints, const TArray<UBaseModulesLootFunction*>& modulesLootFunctions)
+{
+	FString result;
+
+	for (const auto& lootFunction : modulesLootFunctions)
+	{
+		if (result.Len())
+		{
+			result += '\n';
+		}
+
+		result += appendLootDropChance(lootPoints, lootFunction);
+	}
+
+	return FText::FromString(result);
+}
+
+FText UUtilityBlueprintFunctionLibrary::getWeaponModulesDropChance(int32 lootPoints, const TArray<UBaseWeaponModulesLootFunction*>& weaponModulesLootFunctions)
+{
+	FString result;
+
+	for (const auto& lootFunction : weaponModulesLootFunctions)
+	{
+		if (result.Len())
+		{
+			result += '\n';
+		}
+
+		result += appendLootDropChance(lootPoints, lootFunction);
+	}
+
+	return FText::FromString(result);
 }

@@ -63,4 +63,13 @@ public:
 
 	UFUNCTION(Category = "Utility|UI", BlueprintCallable)
 	static void showMouseCursor(APlayerController* playerController, bool isShowMouseCursor);
+
+	UFUNCTION(Category = "Utility|UI", BlueprintCallable, BlueprintPure)
+	static FText getWeaponsDropChance(int32 lootPoints, const TArray<class UBaseWeaponsLootFunction*>& weaponsLootFunctions);
+
+	UFUNCTION(Category = "Utility|UI", BlueprintCallable, BlueprintPure)
+	static FText getModulesDropChance(int32 lootPoints, const TArray<class UBaseModulesLootFunction*>& modulesLootFunctions);
+
+	UFUNCTION(Category = "Utility|UI", BlueprintCallable, BlueprintPure)
+	static FText getWeaponModulesDropChance(int32 lootPoints, const TArray<class UBaseWeaponModulesLootFunction*>& weaponModulesLootFunctions);
 };

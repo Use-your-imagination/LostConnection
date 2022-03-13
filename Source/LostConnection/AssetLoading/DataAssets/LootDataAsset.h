@@ -36,7 +36,7 @@ private:
 	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<UBaseWeaponModulesLootFunction>> weaponModulesLootFunctions;
 
-	UPROPERTY(Category = Coefficients, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Coefficients, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float splitLootPointsCoefficient;
 
 public:
