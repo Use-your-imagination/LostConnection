@@ -17,7 +17,7 @@ public:
 	~InitializationUtility() = default;
 
 public:
-	static void initAbilityId(const FString& abilityClassName, abilitySlot& id);
+	static void initAbilityId(const FString& abilityClassName, EAbilitySlot& id);
 
-	static UBaseStatus* createDefaultAilment(typeOfDamage damageType, IAilmentReceiver* target);
+	static UBaseStatus* createDefaultAilment(ETypeOfDamage damageType, IAilmentReceiver* target);
 };

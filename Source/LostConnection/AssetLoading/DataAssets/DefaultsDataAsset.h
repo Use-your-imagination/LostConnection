@@ -5,10 +5,9 @@
 #include "CoreMinimal.h"
 
 #include "Engine/DataAsset.h"
+#include "Utility/Enums.h"
 
 #include "DefaultsDataAsset.generated.h"
-
-enum class weaponRarity : uint8;
 
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API UDefaultsDataAsset : public UPrimaryDataAsset
@@ -39,7 +38,7 @@ public:
 
 	const TSubclassOf<class ADeathPlaceholder>& getDeathPlaceholder() const;
 
-	const FColor& operator [] (weaponRarity rarity) const;
+	const FColor& operator [] (EWeaponRarity rarity) const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

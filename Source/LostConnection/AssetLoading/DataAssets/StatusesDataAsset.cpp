@@ -9,7 +9,7 @@ FPrimaryAssetId UStatusesDataAsset::getPrimaryAssetId()
 	return FPrimaryAssetId(FPrimaryAssetType("Statuses"), "Statuses");
 }
 
-const TSubclassOf<UBaseStatus>& UStatusesDataAsset::operator [] (typeOfDamage damageType) const
+const TSubclassOf<UBaseStatus>& UStatusesDataAsset::operator [] (ETypeOfDamage damageType) const
 {
 	return ailments[damageType];
 }

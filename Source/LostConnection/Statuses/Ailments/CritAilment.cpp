@@ -136,7 +136,7 @@ TArray<float> UCritAilment::getMoreDamageCoefficients() const
 	return moreDamageCoefficients;
 }
 
-typeOfDamage UCritAilment::getAilmentDamageType() const
+ETypeOfDamage UCritAilment::getAilmentDamageType() const
 {
-	return typeOfDamage::physical;
+	return ETypeOfDamage::physical;
 }

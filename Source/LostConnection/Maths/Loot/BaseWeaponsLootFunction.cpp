@@ -1,5 +1,8 @@
 // Copyright (c) 2022 Use-your-imagination
 
+#include "BaseWeaponsLootFunction.h"
 
-#include "Maths/Loot/BaseWeaponsLootFunction.h"
-
+EWeaponRarity UBaseWeaponsLootFunction::getWeaponRarity_Implementation() const
+{
+	return EWeaponRarity::normal;
+}

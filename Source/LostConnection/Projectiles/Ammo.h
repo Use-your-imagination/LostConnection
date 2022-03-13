@@ -60,7 +60,7 @@ private:
 	TArray<float> increasedDamageCoefficients;
 	TArray<float> moreDamageCoefficients;
 	float additionalDamage;
-	typeOfDamage damageType;
+	ETypeOfDamage damageType;
 	bool isAlly;
 	float crushingHitChance;
 	float additionalCrushingHitChance;
@@ -108,7 +108,7 @@ public:
 
 	virtual TArray<float> getMoreDamageCoefficients() const override;
 
-	virtual typeOfDamage getDamageType() const final override;
+	virtual ETypeOfDamage getDamageType() const final override;
 
 	virtual float getCrushingHitChance() const final override;
 

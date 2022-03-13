@@ -72,7 +72,7 @@ public:
 
 	TArray<float> getMoreDamageCoefficients() const override;
 
-	typeOfDamage getDamageType() const override;
+	ETypeOfDamage getDamageType() const override;
 
 	float getCrushingHitChance() const override;
 

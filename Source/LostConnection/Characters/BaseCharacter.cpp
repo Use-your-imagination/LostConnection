@@ -121,10 +121,10 @@ void ABaseCharacter::BeginPlay()
 		{
 			spareAmmo =
 			{
-				FAmmoData(ammoTypes::small, this->getDefaultSmallAmmoCount()),
-				FAmmoData(ammoTypes::large, this->getDefaultLargeAmmoCount()),
-				FAmmoData(ammoTypes::energy, this->getDefaultEnergyAmmoCount()),
-				FAmmoData(ammoTypes::defaultType, 9999)
+				FAmmoData(EAmmoType::small, this->getDefaultSmallAmmoCount()),
+				FAmmoData(EAmmoType::large, this->getDefaultLargeAmmoCount()),
+				FAmmoData(EAmmoType::energy, this->getDefaultEnergyAmmoCount()),
+				FAmmoData(EAmmoType::defaultType, 9999)
 			};
 		}
 
@@ -299,7 +299,7 @@ void ABaseCharacter::reloadLogic()
 
 	int32 currentMagazineSize = currentWeapon->getCurrentMagazineSize();
 	int32 magazineSize = currentWeapon->getMagazineSize();
-	ammoTypes ammoType = currentWeapon->getAmmoType();
+	EAmmoType ammoType = currentWeapon->getAmmoType();
 
 	if (currentMagazineSize == magazineSize)
 	{
@@ -505,9 +505,9 @@ void ABaseCharacter::returnAmmoToSpare(UBaseWeapon* weapon)
 		return;
 	}
 
-	ammoTypes ammoType = weapon->getAmmoType();
+	EAmmoType ammoType = weapon->getAmmoType();
 
-	if (ammoType == ammoTypes::defaultType)
+	if (ammoType == EAmmoType::defaultType)
 	{
 		return;
 	}
@@ -518,17 +518,17 @@ void ABaseCharacter::returnAmmoToSpare(UBaseWeapon* weapon)
 
 	switch (ammoType)
 	{
-	case ammoTypes::small:
+	case EAmmoType::small:
 		maxCount = maxSmallAmmoCount;
 
 		break;
 
-	case ammoTypes::large:
+	case EAmmoType::large:
 		maxCount = maxLargeAmmoCount;
 
 		break;
 
-	case ammoTypes::energy:
+	case EAmmoType::energy:
 		maxCount = maxEnergyAmmoCount;
 
 		break;

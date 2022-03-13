@@ -14,48 +14,11 @@
 #include "Projectiles/Ammo.h"
 #include "Interfaces/Inventory/Inventoriable.h"
 #include "Modules/BaseWeaponModule.h"
+#include "Utility/Enums.h"
 
 #include "BaseWeapon.generated.h"
 
 #pragma warning(disable: 4458)
-
-UENUM(BlueprintType)
-enum class weaponTypes : uint8
-{
-	automatic UMETA(DisplayName = "Automatic"),
-	semiAutomatic UMETA(DisplayName = "Semi-automatic"),
-	single UMETA(DisplayName = "Single"),
-	delay UMETA(DisplayName = "Delay")
-};
-
-UENUM(BlueprintType)
-enum class ammoTypes : uint8
-{
-	small UMETA(DisplayName = "Small ammo"),
-	large UMETA(DisplayName = "Large ammo"),
-	energy UMETA(DisplayName = "Energy ammo"),
-	defaultType UMETA(DisplayName = "Default ammo")
-};
-
-UENUM(BlueprintType)
-enum class weaponSlotTypes : uint8
-{
-	none UMETA(DisplayName = "None"),
-	primaryWeaponSlot UMETA(DisplayName = "Primary weapon slot"),
-	secondaryWeaponSlot UMETA(DisplayName = "Secondary weapon slot"),
-	defaultWeaponSlot UMETA(DisplayName = "Default weapon slot"),
-	firstInactiveWeaponSlot UMETA(DisplayName = "First inactive weapon slot"),
-	secondInactiveWeaponSlot UMETA(DisplayName = "Second inactive weapon slot")
-};
-
-UENUM(BlueprintType)
-enum class weaponRarity : uint8
-{
-	normal UMETA(DisplayName = "Normal"),
-	rare UMETA(DisplayName = "Rare"),
-	epic UMETA(DisplayName = "Epic"),
-	legendary UMETA(DisplayName = "Legendary")
-};
 
 UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API UBaseWeapon :
@@ -124,10 +87,10 @@ protected:
 	UAnimMontage* switchToAnimation;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	ammoTypes ammoType;
+	EAmmoType ammoType;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	typeOfDamage damageType;
+	ETypeOfDamage damageType;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float damage;
@@ -145,7 +108,7 @@ protected:
 	int32 roundsPerSecond;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	weaponTypes weaponType;
+	EWeaponType weaponType;
 
 	/*
 	* spreadDistance * currentAccuracyMultiplier;
@@ -195,7 +158,7 @@ protected:
 	TArray<UBaseWeaponModule*> weaponModules;
 
 	UPROPERTY(Category = Rarity, Replicated, BlueprintReadOnly)
-	weaponRarity rarity;
+	EWeaponRarity rarity;
 
 private:
 	UFUNCTION(Category = Weapons, BlueprintCallable, Meta = (AllowPrivateAccess = "true"))
@@ -227,7 +190,7 @@ public:
 	void setOwner(class ABaseCharacter* owner);
 
 	UFUNCTION(Server, Reliable)
-	void setAmmoType(ammoTypes newAmmoType);
+	void setAmmoType(EAmmoType newAmmoType);
 
 	UFUNCTION(Server, Reliable)
 	void setBaseDamage(float newDamage);
@@ -245,18 +208,18 @@ public:
 	void setRateOfFire(int32 newRoundsPerSecond);
 
 	UFUNCTION(Server, Reliable)
-	void setWeaponType(weaponTypes newWeaponType);
+	void setWeaponType(EWeaponType newWeaponType);
 
 	UFUNCTION(Server, Reliable)
-	void setWeaponRarity(weaponRarity newRarity);
+	void setWeaponRarity(EWeaponRarity newRarity);
 
 	USkeletalMesh* getWeaponMesh() const;
 
 	UStaticMesh* getMagazineMesh() const;
 
-	ammoTypes getAmmoType() const;
+	EAmmoType getAmmoType() const;
 
-	typeOfDamage getDamageType() const;
+	ETypeOfDamage getDamageType() const;
 
 	float getBaseDamage() const;
 
@@ -270,7 +233,7 @@ public:
 
 	int32 getRoundsPerSecond() const;
 
-	weaponTypes getWeaponType() const;
+	EWeaponType getWeaponType() const;
 
 	const TWeakObjectPtr<class ABaseCharacter>& getOwner() const;
 

@@ -15,20 +15,20 @@ const TSubclassOf<ADeathPlaceholder>& UDefaultsDataAsset::getDeathPlaceholder() 
 	return deathPlaceholder;
 }
 
-const FColor& UDefaultsDataAsset::operator [] (weaponRarity rarity) const
+const FColor& UDefaultsDataAsset::operator [] (EWeaponRarity rarity) const
 {
 	switch (rarity)
 	{
-	case weaponRarity::normal:
+	case EWeaponRarity::normal:
 		return normalRarityWeaponColor;
 
-	case weaponRarity::rare:
+	case EWeaponRarity::rare:
 		return rareRarityWeaponColor;
 
-	case weaponRarity::epic:
+	case EWeaponRarity::epic:
 		return epicRarityWeaponColor;
 
-	case weaponRarity::legendary:
+	case EWeaponRarity::legendary:
 		return legendaryRarityWeaponColor;
 	}
 

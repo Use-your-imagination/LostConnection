@@ -178,7 +178,7 @@ bool ULostConnectionAssetManager::isAssetsLoadingEnd() const
 	return Algo::AllOf(handles, [](const auto& data) { return data.Value->HasLoadCompleted(); });
 }
 
-const TSubclassOf<UBaseStatus>& ULostConnectionAssetManager::operator [] (typeOfDamage damageType) const
+const TSubclassOf<UBaseStatus>& ULostConnectionAssetManager::operator [] (ETypeOfDamage damageType) const
 {
 	UStatusesDataAsset& asset = *GetPrimaryAssetObject<UStatusesDataAsset>(UStatusesDataAsset::getPrimaryAssetId());
 

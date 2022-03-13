@@ -83,7 +83,7 @@ public:
 
 	TArray<float> getMoreDamageCoefficients() const override;
 
-	typeOfDamage getAilmentDamageType() const override;
+	ETypeOfDamage getAilmentDamageType() const override;
 
 	virtual ~UArcingCurrentAilment() = default;
 };

@@ -4,21 +4,15 @@
 
 #include "CoreMinimal.h"
 
-#include "UObject/Object.h"
 #include "Abilities/BaseAbility.h"
 #include "Weapons/BaseWeapon.h"
 
 #include "ReplicationStructures.generated.h"
 
-UCLASS()
-class LOSTCONNECTION_API UReplicationStructures : public UObject
+UENUM()
+enum class EReplicationStructures
 {
-	GENERATED_BODY()
-
-public:
-	UReplicationStructures() = default;
-
-	~UReplicationStructures() = default;
+	NONE
 };
 
 USTRUCT(BlueprintType)
@@ -31,9 +25,9 @@ public:
 	int32 ammoCount;
 
 	UPROPERTY(Category = Data, BlueprintReadOnly)
-	ammoTypes ammoType;
+	EAmmoType ammoType;
 
-	FAmmoData(ammoTypes ammoType = ammoTypes::small, int32 ammoCount = 0);
+	FAmmoData(EAmmoType ammoType = EAmmoType::small, int32 ammoCount = 0);
 };
 
 USTRUCT()
@@ -56,10 +50,10 @@ struct FCooldownableAbilitiesData : public FCooldownableData
 
 public:
 	UPROPERTY()
-	abilitySlot slot;
+	EAbilitySlot slot;
 
 public:
-	FCooldownableAbilitiesData(abilitySlot slot = abilitySlot::empty, float remainingCooldown = 0.0f);
+	FCooldownableAbilitiesData(EAbilitySlot slot = EAbilitySlot::empty, float remainingCooldown = 0.0f);
 };
 
 USTRUCT()
@@ -69,8 +63,8 @@ struct FCooldownableWeaponsData : public FCooldownableData
 
 public:
 	UPROPERTY()
-	weaponSlotTypes slot;
+	EWeaponSlotType slot;
 
 public:
-	FCooldownableWeaponsData(weaponSlotTypes slot = weaponSlotTypes::none, float remainingCooldown = 0.0f);
+	FCooldownableWeaponsData(EWeaponSlotType slot = EWeaponSlotType::none, float remainingCooldown = 0.0f);
 };

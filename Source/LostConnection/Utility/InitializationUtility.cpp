@@ -7,31 +7,31 @@
 #include "Utility.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-void InitializationUtility::initAbilityId(const FString& abilityClassName, abilitySlot& id)
+void InitializationUtility::initAbilityId(const FString& abilityClassName, EAbilitySlot& id)
 {
 	if (abilityClassName.Find("Passive") != INDEX_NONE)
 	{
-		id = abilitySlot::passiveAbility;
+		id = EAbilitySlot::passiveAbility;
 	}
 	else if (abilityClassName.Find("First") != INDEX_NONE)
 	{
-		id = abilitySlot::firstAbility;
+		id = EAbilitySlot::firstAbility;
 	}
 	else if (abilityClassName.Find("Second") != INDEX_NONE)
 	{
-		id = abilitySlot::secondAbility;
+		id = EAbilitySlot::secondAbility;
 	}
 	else if (abilityClassName.Find("Third") != INDEX_NONE)
 	{
-		id = abilitySlot::thirdAbility;
+		id = EAbilitySlot::thirdAbility;
 	}
 	else if (abilityClassName.Find("Ultimate") != INDEX_NONE)
 	{
-		id = abilitySlot::ultimateAbility;
+		id = EAbilitySlot::ultimateAbility;
 	}
 }
 
-UBaseStatus* InitializationUtility::createDefaultAilment(typeOfDamage damageType, IAilmentReceiver* target)
+UBaseStatus* InitializationUtility::createDefaultAilment(ETypeOfDamage damageType, IAilmentReceiver* target)
 {
 	return NewObject<UBaseStatus>(target->_getUObject(), ULostConnectionAssetManager::get()[damageType]);
 }

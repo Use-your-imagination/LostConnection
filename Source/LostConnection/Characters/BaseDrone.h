@@ -81,7 +81,7 @@ protected:
 
 protected:
 	UPROPERTY(Category = Abilities, ReplicatedUsing = onAbilityUsed, BlueprintReadOnly)
-	abilitySlot abilityId;
+	EAbilitySlot abilityId;
 
 	UPROPERTY(Category = Abilities, BlueprintReadOnly)
 	UBaseAbility* currentAbility;
@@ -265,7 +265,7 @@ public:
 	void changeToSecondaryWeapon();
 
 	UFUNCTION(Server, Unreliable, BlueprintCallable)
-	void pickupAmmo(ammoTypes type, int32 count);
+	void pickupAmmo(EAmmoType type, int32 count);
 
 	UFUNCTION(Server, Reliable)
 	void dropWeapon();

@@ -36,6 +36,9 @@ private:
 	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<UBaseWeaponModulesLootFunction>> weaponModulesLootFunctions;
 
+	UPROPERTY(Category = Coefficients, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	float splitLootPointsCoefficient;
+
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
 
@@ -59,6 +62,8 @@ public:
 	const TArray<TSubclassOf<UBaseModulesLootFunction>>& getModulesLootFunctions() const;
 
 	const TArray<TSubclassOf<UBaseWeaponModulesLootFunction>>& getWeaponModulesLootFunctions() const;
+
+	float getSplitLootPointsCoefficient() const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

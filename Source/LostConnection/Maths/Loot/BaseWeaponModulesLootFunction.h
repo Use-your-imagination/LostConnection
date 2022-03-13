@@ -13,4 +13,8 @@ class LOSTCONNECTION_API UBaseWeaponModulesLootFunction : public UBaseLootFuncti
 {
 	GENERATED_BODY()
 	
+public:
+	UBaseWeaponModulesLootFunction() = default;
+
+	virtual ~UBaseWeaponModulesLootFunction() = default;
 };

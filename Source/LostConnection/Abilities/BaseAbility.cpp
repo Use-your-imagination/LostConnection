@@ -102,7 +102,7 @@ UAnimMontage* UBaseAbility::getAnimation()
 	return animation;
 }
 
-abilitySlot UBaseAbility::getId() const
+EAbilitySlot UBaseAbility::getId() const
 {
 	return id;
 }

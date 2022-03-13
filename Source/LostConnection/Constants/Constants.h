@@ -6,9 +6,9 @@
 
 #include "Kismet/BlueprintFunctionLibrary.h"
 
-#include "Constants.generated.h"
+#include "Utility/Enums.h"
 
-enum class weaponRarity : uint8;
+#include "Constants.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API UConstants : public UBlueprintFunctionLibrary
@@ -55,8 +55,8 @@ public:
 	static int32 getPersonalModulesLimit();
 
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
-	static int32 getWeaponModulesSize(weaponRarity rarity);
+	static int32 getWeaponModulesSize(EWeaponRarity rarity);
 
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
-	static const FColor& getRarityColor(weaponRarity rarity);
+	static const FColor& getRarityColor(EWeaponRarity rarity);
 };

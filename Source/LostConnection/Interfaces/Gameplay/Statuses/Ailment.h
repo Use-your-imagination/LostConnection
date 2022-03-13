@@ -6,19 +6,9 @@
 
 #include "UObject/Interface.h"
 
-#include "Ailment.generated.h"
+#include "Utility/Enums.h"
 
-UENUM(BlueprintType)
-enum class typeOfDamage : uint8
-{
-	none = 0 UMETA(DisplayName = "None"),
-	physical = 1 UMETA(DisplayName = "Physical"),
-	nanite = 2 UMETA(DisplayName = "Nanite"),
-	fire = 3 UMETA(DisplayName = "Fire"),
-	electricity = 4 UMETA(DisplayName = "Electricity"),
-	radiation = 5 UMETA(DisplayName = "Radiation"),
-	cold = 6 UMETA(DisplayName = "Cold")
-};
+#include "Ailment.generated.h"
 
 UINTERFACE(MinimalAPI)
 class UAilment : public UInterface
@@ -33,5 +23,5 @@ class LOSTCONNECTION_API IAilment
 public:
 	IAilment() = default;
 
-	virtual typeOfDamage getAilmentDamageType() const = 0;
+	virtual ETypeOfDamage getAilmentDamageType() const = 0;
 };

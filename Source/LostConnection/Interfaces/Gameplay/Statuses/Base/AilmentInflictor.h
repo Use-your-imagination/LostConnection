@@ -26,7 +26,7 @@ public:
 
 	virtual void setAdditionalCrushingHitChance(float additionalCrushingHitChance);
 
-	virtual typeOfDamage getDamageType() const = 0;
+	virtual ETypeOfDamage getDamageType() const = 0;
 
 	virtual float getCrushingHitChance() const = 0;
 

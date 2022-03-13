@@ -310,7 +310,7 @@ TArray<float> AAmmo::getMoreDamageCoefficients() const
 	return moreDamageCoefficients;
 }
 
-typeOfDamage AAmmo::getDamageType() const
+ETypeOfDamage AAmmo::getDamageType() const
 {
 	return damageType;
 }

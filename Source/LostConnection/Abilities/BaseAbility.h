@@ -6,21 +6,11 @@
 
 #include "UObject/Object.h"
 #include "Animation/AnimMontage.h"
+#include "Utility/Enums.h"
 
 #include "Network/NetworkObject.h"
 
 #include "BaseAbility.generated.h"
-
-UENUM(BlueprintType)
-enum class abilitySlot : uint8
-{
-	empty = 0 UMETA(DisplayName = "No ability"),
-	passiveAbility = 1 UMETA(DisplayName = "Passive ability"),
-	firstAbility = 2 UMETA(DisplayName = "First ability"),
-	secondAbility = 3 UMETA(DisplayName = "Second ability"),
-	thirdAbility = 4 UMETA(DisplayName = "Third ability"),
-	ultimateAbility = 5 UMETA(DisplayName = "Ultimate ability")
-};
 
 UCLASS(DefaultToInstanced)
 class LOSTCONNECTION_API UBaseAbility : public UNetworkObject
@@ -55,7 +45,7 @@ protected:
 	UPROPERTY(Category = AbilityAnimation, EditDefaultsOnly, BlueprintReadOnly)
 	UAnimMontage* animation;
 
-	abilitySlot id;
+	EAbilitySlot id;
 
 	class ICaster* caster;
 
@@ -100,7 +90,7 @@ public:
 
 	virtual UAnimMontage* getAnimation() final;
 
-	virtual abilitySlot getId() const final;
+	virtual EAbilitySlot getId() const final;
 
 	virtual class ICaster* getCaster() const final;
 

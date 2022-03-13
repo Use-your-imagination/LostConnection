@@ -36,6 +36,8 @@ private:
 	template<typename LootFunctionT>
 	TArray<LootFunctionT*> createLootFunctions(const TArray<TSubclassOf<LootFunctionT>>& lootFunctionClasses);
 
+	void addRandomLoot(UInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints);
+
 public:
 	ALootManager() = default;
 	

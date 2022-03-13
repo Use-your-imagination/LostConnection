@@ -78,7 +78,7 @@ protected:
 
 protected:
 	UPROPERTY(Category = Abilities, ReplicatedUsing = onAbilityUsed, BlueprintReadOnly)
-	abilitySlot abilityId;
+	EAbilitySlot abilityId;
 
 	UPROPERTY(Category = Abilities, BlueprintReadOnly)
 	UBaseAbility* currentAbility;

@@ -8,14 +8,9 @@
 #include "Net/UnrealNetwork.h"
 #include "FindSessionsCallbackProxy.h"
 
-#include "SessionsUtility.generated.h"
+#include "Enums.h"
 
-UENUM(BlueprintType)
-enum class EExecutionOutputs : uint8
-{
-	Success UMETA(DisplayName = "Success"),
-	Fail UMETA(DisplayName = "Fail")
-};
+#include "SessionsUtility.generated.h"
 
 UCLASS(MinimalApi)
 class USessionsUtility : public UOnlineBlueprintCallProxyBase

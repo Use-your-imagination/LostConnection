@@ -120,7 +120,7 @@ TArray<float> UBurnAilment::getMoreDamageCoefficients() const
 	return moreDamageCoefficients;
 }
 
-typeOfDamage UBurnAilment::getAilmentDamageType() const
+ETypeOfDamage UBurnAilment::getAilmentDamageType() const
 {
-	return typeOfDamage::fire;
+	return ETypeOfDamage::fire;
 }

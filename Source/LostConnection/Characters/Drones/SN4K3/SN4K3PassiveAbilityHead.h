@@ -71,7 +71,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	typeOfDamage getDamageType() const override;
+	ETypeOfDamage getDamageType() const override;
 
 	float getCrushingHitChance() const override;
 

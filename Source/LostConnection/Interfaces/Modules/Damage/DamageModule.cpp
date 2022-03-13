@@ -2,7 +2,7 @@
 
 #include "DamageModule.h"
 
-typeOfDamage IDamageModule::getDamageType() const
+ETypeOfDamage IDamageModule::getDamageType() const
 {
-	return typeOfDamage::none;
+	return ETypeOfDamage::none;
 }

@@ -65,9 +65,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void addWeaponModule(UBaseWeaponModule* module);
 
-	void addCooldownableAbility(abilitySlot slot, const ICooldownable* cooldownable);
+	void addCooldownableAbility(EAbilitySlot slot, const ICooldownable* cooldownable);
 
-	void addCooldownableWeapon(weaponSlotTypes slot, const ICooldownable* cooldownable);
+	void addCooldownableWeapon(EWeaponSlotType slot, const ICooldownable* cooldownable);
 
 	UFUNCTION(Server, Reliable)
 	void setPrimaryWeapon(UBaseWeapon* weapon);
@@ -97,7 +97,7 @@ public:
 
 	const TArray<UInventoryCell*>& getWeaponModules() const;
 
-	int32 getSpareAmmo(ammoTypes type) const;
+	int32 getSpareAmmo(EAmmoType type) const;
 
 	TArray<FAmmoData>& getSpareAmmoArray();
 
@@ -209,7 +209,7 @@ inline UBaseWeapon* ALostConnectionPlayerState::getSecondInactiveWeapon() const
 	return inventory->getSecondInactiveWeaponCell()->getItem<UBaseWeapon>();
 }
 
-FORCEINLINE int32 ALostConnectionPlayerState::getSpareAmmo(ammoTypes type) const
+FORCEINLINE int32 ALostConnectionPlayerState::getSpareAmmo(EAmmoType type) const
 {
 	TArray<FAmmoData>& spareAmmo = inventory->getSpareAmmoArray();
 

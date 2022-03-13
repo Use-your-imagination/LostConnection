@@ -309,32 +309,32 @@ void ABaseDrone::onAbilityUsed()
 {
 	switch (abilityId)
 	{
-	case abilitySlot::empty:
+	case EAbilitySlot::empty:
 		currentAbility = nullptr;
 
 		break;
 
-	case abilitySlot::passiveAbility:
+	case EAbilitySlot::passiveAbility:
 		currentAbility = passiveAbility;
 
 		break;
 
-	case abilitySlot::firstAbility:
+	case EAbilitySlot::firstAbility:
 		currentAbility = firstAbility;
 
 		break;
 
-	case abilitySlot::secondAbility:
+	case EAbilitySlot::secondAbility:
 		currentAbility = secondAbility;
 
 		break;
 
-	case abilitySlot::thirdAbility:
+	case EAbilitySlot::thirdAbility:
 		currentAbility = thirdAbility;
 
 		break;
 
-	case abilitySlot::ultimateAbility:
+	case EAbilitySlot::ultimateAbility:
 		currentAbility = ultimateAbility;
 
 		break;
@@ -524,27 +524,27 @@ void ABaseDrone::restoreAbilitiesCooldown()
 	{
 		switch (data.slot)
 		{
-		case abilitySlot::passiveAbility:
+		case EAbilitySlot::passiveAbility:
 			setCooldown(passiveAbility, data.remainingCooldown);
 
 			break;
 
-		case abilitySlot::firstAbility:
+		case EAbilitySlot::firstAbility:
 			setCooldown(firstAbility, data.remainingCooldown);
 
 			break;
 
-		case abilitySlot::secondAbility:
+		case EAbilitySlot::secondAbility:
 			setCooldown(secondAbility, data.remainingCooldown);
 
 			break;
 
-		case abilitySlot::thirdAbility:
+		case EAbilitySlot::thirdAbility:
 			setCooldown(thirdAbility, data.remainingCooldown);
 
 			break;
 
-		case abilitySlot::ultimateAbility:
+		case EAbilitySlot::ultimateAbility:
 			setCooldown(ultimateAbility, data.remainingCooldown);
 
 			break;
@@ -560,27 +560,27 @@ void ABaseDrone::restoreWeaponsCooldown()
 	{
 		switch (data.slot)
 		{
-		case weaponSlotTypes::primaryWeaponSlot:
+		case EWeaponSlotType::primaryWeaponSlot:
 			setCooldown(this->getPrimaryWeapon(), data.remainingCooldown);
 
 			break;
 
-		case weaponSlotTypes::secondaryWeaponSlot:
+		case EWeaponSlotType::secondaryWeaponSlot:
 			setCooldown(this->getSecondaryWeapon(), data.remainingCooldown);
 
 			break;
 
-		case weaponSlotTypes::defaultWeaponSlot:
+		case EWeaponSlotType::defaultWeaponSlot:
 			setCooldown(this->getDefaultWeapon(), data.remainingCooldown);
 
 			break;
 
-		case weaponSlotTypes::firstInactiveWeaponSlot:
+		case EWeaponSlotType::firstInactiveWeaponSlot:
 			setCooldown(this->getFirstInactiveWeapon(), data.remainingCooldown);
 
 			break;
 
-		case weaponSlotTypes::secondInactiveWeaponSlot:
+		case EWeaponSlotType::secondInactiveWeaponSlot:
 			setCooldown(this->getSecondInactiveWeapon(), data.remainingCooldown);
 
 			break;
@@ -669,52 +669,52 @@ void ABaseDrone::saveCurrentAbilitiesCooldown(ALostConnectionPlayerState* player
 {
 	if (ICooldownable* cooldownable = Cast<ICooldownable>(passiveAbility))
 	{
-		playerState->addCooldownableAbility(abilitySlot::passiveAbility, cooldownable);
+		playerState->addCooldownableAbility(EAbilitySlot::passiveAbility, cooldownable);
 	}
 
 	if (ICooldownable* cooldownable = Cast<ICooldownable>(firstAbility))
 	{
-		playerState->addCooldownableAbility(abilitySlot::firstAbility, cooldownable);
+		playerState->addCooldownableAbility(EAbilitySlot::firstAbility, cooldownable);
 	}
 
 	if (ICooldownable* cooldownable = Cast<ICooldownable>(secondAbility))
 	{
-		playerState->addCooldownableAbility(abilitySlot::secondAbility, cooldownable);
+		playerState->addCooldownableAbility(EAbilitySlot::secondAbility, cooldownable);
 	}
 
 	if (ICooldownable* cooldownable = Cast<ICooldownable>(thirdAbility))
 	{
-		playerState->addCooldownableAbility(abilitySlot::thirdAbility, cooldownable);
+		playerState->addCooldownableAbility(EAbilitySlot::thirdAbility, cooldownable);
 	}
 
-	playerState->addCooldownableAbility(abilitySlot::ultimateAbility, ultimateAbility);
+	playerState->addCooldownableAbility(EAbilitySlot::ultimateAbility, ultimateAbility);
 }
 
 void ABaseDrone::saveCurrentWeaponsCooldown(ALostConnectionPlayerState* playerState)
 {
 	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getPrimaryWeapon()))
 	{
-		playerState->addCooldownableWeapon(weaponSlotTypes::primaryWeaponSlot, cooldownable);
+		playerState->addCooldownableWeapon(EWeaponSlotType::primaryWeaponSlot, cooldownable);
 	}
 
 	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getSecondaryWeapon()))
 	{
-		playerState->addCooldownableWeapon(weaponSlotTypes::secondaryWeaponSlot, cooldownable);
+		playerState->addCooldownableWeapon(EWeaponSlotType::secondaryWeaponSlot, cooldownable);
 	}
 
 	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getDefaultWeapon()))
 	{
-		playerState->addCooldownableWeapon(weaponSlotTypes::defaultWeaponSlot, cooldownable);
+		playerState->addCooldownableWeapon(EWeaponSlotType::defaultWeaponSlot, cooldownable);
 	}
 
 	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getFirstInactiveWeapon()))
 	{
-		playerState->addCooldownableWeapon(weaponSlotTypes::firstInactiveWeaponSlot, cooldownable);
+		playerState->addCooldownableWeapon(EWeaponSlotType::firstInactiveWeaponSlot, cooldownable);
 	}
 
 	if (ICooldownable* cooldownable = Cast<ICooldownable>(this->getSecondInactiveWeapon()))
 	{
-		playerState->addCooldownableWeapon(weaponSlotTypes::secondInactiveWeaponSlot, cooldownable);
+		playerState->addCooldownableWeapon(EWeaponSlotType::secondInactiveWeaponSlot, cooldownable);
 	}
 }
 
@@ -807,7 +807,7 @@ void ABaseDrone::changeToSecondaryWeapon_Implementation()
 	this->onCurrentWeaponChange();
 }
 
-void ABaseDrone::pickupAmmo_Implementation(ammoTypes type, int32 count)
+void ABaseDrone::pickupAmmo_Implementation(EAmmoType type, int32 count)
 {
 	TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
 
@@ -1116,7 +1116,7 @@ void ABaseDrone::setCurrentAbility(UBaseAbility* ability)
 	}
 	else
 	{
-		abilityId = abilitySlot::empty;
+		abilityId = EAbilitySlot::empty;
 	}
 
 	this->onAbilityUsed();

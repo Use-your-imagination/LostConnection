@@ -16,7 +16,7 @@ class LOSTCONNECTION_API UStatusesDataAsset : public UPrimaryDataAsset
 	
 private:
 	UPROPERTY(Category = Ailments, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
-	TMap<typeOfDamage, TSubclassOf<class UBaseStatus>> ailments;
+	TMap<ETypeOfDamage, TSubclassOf<class UBaseStatus>> ailments;
 
 	UPROPERTY(Category = "Buffs|SN4K3", EditDefaultsOnly, Meta = (AllowPrivateAcess = "true"))
 	TSubclassOf<class USN4K3Reservator> SN4K3Reservator;
@@ -27,7 +27,7 @@ public:
 public:
 	UStatusesDataAsset() = default;
 
-	const TSubclassOf<class UBaseStatus>& operator [] (typeOfDamage damageType) const;
+	const TSubclassOf<class UBaseStatus>& operator [] (ETypeOfDamage damageType) const;
 
 	const TSubclassOf<class USN4K3Reservator>& getDefaultSN4K3Reservator() const;
 

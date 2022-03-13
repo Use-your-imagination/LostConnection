@@ -2,7 +2,7 @@
 
 #include "WeaponDamageModule.h"
 
-typeOfDamage IWeaponDamageModule::getDamageType() const
+ETypeOfDamage IWeaponDamageModule::getDamageType() const
 {
-	return typeOfDamage::none;
+	return ETypeOfDamage::none;
 }

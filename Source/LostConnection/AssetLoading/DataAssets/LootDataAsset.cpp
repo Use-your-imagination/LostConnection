@@ -61,6 +61,11 @@ const TArray<TSubclassOf<UBaseWeaponModulesLootFunction>>& ULootDataAsset::getWe
 	return weaponModulesLootFunctions;
 }
 
+float ULootDataAsset::getSplitLootPointsCoefficient() const
+{
+	return splitLootPointsCoefficient;
+}
+
 FPrimaryAssetId ULootDataAsset::GetPrimaryAssetId() const
 {
 	return ULootDataAsset::getPrimaryAssetId();

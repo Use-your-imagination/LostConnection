@@ -134,7 +134,7 @@ TArray<float> UShatterAilment::getMoreDamageCoefficients() const
 	return moreDamageCoefficients;
 }
 
-typeOfDamage UShatterAilment::getAilmentDamageType() const
+ETypeOfDamage UShatterAilment::getAilmentDamageType() const
 {
-	return typeOfDamage::cold;
+	return ETypeOfDamage::cold;
 }

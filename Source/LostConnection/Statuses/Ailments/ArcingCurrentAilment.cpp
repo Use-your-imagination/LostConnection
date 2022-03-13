@@ -155,7 +155,7 @@ TArray<float> UArcingCurrentAilment::getMoreDamageCoefficients() const
 	return moreDamageCoefficients;
 }
 
-typeOfDamage UArcingCurrentAilment::getAilmentDamageType() const
+ETypeOfDamage UArcingCurrentAilment::getAilmentDamageType() const
 {
-	return typeOfDamage::electricity;
+	return ETypeOfDamage::electricity;
 }

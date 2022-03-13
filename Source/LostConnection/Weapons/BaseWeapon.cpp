@@ -107,11 +107,11 @@ void UBaseWeapon::shoot()
 		return;
 	}
 
-	if (weaponType == weaponTypes::semiAutomatic || weaponType == weaponTypes::single)
+	if (weaponType == EWeaponType::semiAutomatic || weaponType == EWeaponType::single)
 	{
 		MultiplayerUtility::runOnServerReliable(owner.Get(), "resetShoot");
 	}
-	else if (weaponType == weaponTypes::delay)
+	else if (weaponType == EWeaponType::delay)
 	{
 		return;
 	}
@@ -195,13 +195,13 @@ void UBaseWeapon::resetShoot(USkeletalMeshComponent* currentVisibleWeaponMesh, A
 {
 	isShooting = false;
 
-	if (weaponType == weaponTypes::delay)
+	if (weaponType == EWeaponType::delay)
 	{
-		weaponType = weaponTypes::single;
+		weaponType = EWeaponType::single;
 
 		this->shoot();
 
-		weaponType = weaponTypes::delay;
+		weaponType = EWeaponType::delay;
 	}
 }
 
@@ -266,7 +266,7 @@ void UBaseWeapon::setOwner_Implementation(ABaseCharacter* owner)
 	this->owner = owner;
 }
 
-void UBaseWeapon::setAmmoType_Implementation(ammoTypes newAmmoType)
+void UBaseWeapon::setAmmoType_Implementation(EAmmoType newAmmoType)
 {
 	ammoType = newAmmoType;
 }
@@ -296,12 +296,12 @@ void UBaseWeapon::setRateOfFire_Implementation(int32 newRoundsPerSecond)
 	roundsPerSecond = newRoundsPerSecond;
 }
 
-void UBaseWeapon::setWeaponType_Implementation(weaponTypes newWeaponType)
+void UBaseWeapon::setWeaponType_Implementation(EWeaponType newWeaponType)
 {
 	weaponType = newWeaponType;
 }
 
-void UBaseWeapon::setWeaponRarity_Implementation(weaponRarity newRarity)
+void UBaseWeapon::setWeaponRarity_Implementation(EWeaponRarity newRarity)
 {
 	rarity = newRarity;
 
@@ -318,12 +318,12 @@ UStaticMesh* UBaseWeapon::getMagazineMesh() const
 	return magazineMesh;
 }
 
-ammoTypes UBaseWeapon::getAmmoType() const
+EAmmoType UBaseWeapon::getAmmoType() const
 {
 	return ammoType;
 }
 
-typeOfDamage UBaseWeapon::getDamageType() const
+ETypeOfDamage UBaseWeapon::getDamageType() const
 {
 	return damageType;
 }
@@ -358,7 +358,7 @@ int32 UBaseWeapon::getRoundsPerSecond() const
 	return roundsPerSecond;
 }
 
-weaponTypes UBaseWeapon::getWeaponType() const
+EWeaponType UBaseWeapon::getWeaponType() const
 {
 	return weaponType;
 }

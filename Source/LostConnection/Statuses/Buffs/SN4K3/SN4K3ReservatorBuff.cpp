@@ -53,7 +53,7 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 
 	for (auto& weapon : weapons)
 	{
-		if (weapon.IsValid() && (weapon->getDamageType() == typeOfDamage::nanite))
+		if (weapon.IsValid() && (weapon->getDamageType() == ETypeOfDamage::nanite))
 		{
 			FSimpleDelegate reset;
 
@@ -75,7 +75,7 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 			{
 				IAilmentInflictor* inflictor = Cast<IAilmentInflictor>(ability);
 
-				if (inflictor && (inflictor->getDamageType() == typeOfDamage::nanite))
+				if (inflictor && (inflictor->getDamageType() == ETypeOfDamage::nanite))
 				{
 					FSimpleDelegate reset;
 

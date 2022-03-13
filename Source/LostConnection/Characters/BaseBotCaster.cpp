@@ -85,32 +85,32 @@ void ABaseBotCaster::onAbilityUsed()
 {
 	switch (abilityId)
 	{
-	case abilitySlot::empty:
+	case EAbilitySlot::empty:
 		currentAbility = nullptr;
 
 		break;
 
-	case abilitySlot::passiveAbility:
+	case EAbilitySlot::passiveAbility:
 		currentAbility = passiveAbility;
 
 		break;
 
-	case abilitySlot::firstAbility:
+	case EAbilitySlot::firstAbility:
 		currentAbility = firstAbility;
 
 		break;
 
-	case abilitySlot::secondAbility:
+	case EAbilitySlot::secondAbility:
 		currentAbility = secondAbility;
 
 		break;
 
-	case abilitySlot::thirdAbility:
+	case EAbilitySlot::thirdAbility:
 		currentAbility = thirdAbility;
 
 		break;
 
-	case abilitySlot::ultimateAbility:
+	case EAbilitySlot::ultimateAbility:
 		currentAbility = ultimateAbility;
 
 		break;
@@ -263,7 +263,7 @@ void ABaseBotCaster::setCurrentAbility(UBaseAbility* ability)
 	}
 	else
 	{
-		abilityId = abilitySlot::empty;
+		abilityId = EAbilitySlot::empty;
 	}
 
 	this->onAbilityUsed();

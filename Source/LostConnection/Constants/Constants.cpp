@@ -23,27 +23,27 @@ int32 UConstants::getPersonalModulesLimit()
 	return personalModulesLimit;
 }
 
-int32 UConstants::getWeaponModulesSize(weaponRarity rarity)
+int32 UConstants::getWeaponModulesSize(EWeaponRarity rarity)
 {
 	switch (rarity)
 	{
-	case weaponRarity::normal:
+	case EWeaponRarity::normal:
 		return 2;
 
-	case weaponRarity::rare:
+	case EWeaponRarity::rare:
 		return 3;
 
-	case weaponRarity::epic:
+	case EWeaponRarity::epic:
 		return 4;
 
-	case weaponRarity::legendary:
+	case EWeaponRarity::legendary:
 		return 5;
 	}
 
 	return 0;
 }
 
-const FColor& UConstants::getRarityColor(weaponRarity rarity)
+const FColor& UConstants::getRarityColor(EWeaponRarity rarity)
 {
 	return ULostConnectionAssetManager::get().getDefaults()[rarity];
 }

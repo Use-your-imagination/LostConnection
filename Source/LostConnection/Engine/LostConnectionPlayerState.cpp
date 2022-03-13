@@ -41,7 +41,7 @@ void ALostConnectionPlayerState::addWeaponModule_Implementation(UBaseWeaponModul
 	inventory->addWeaponModule(module);
 }
 
-void ALostConnectionPlayerState::addCooldownableAbility(abilitySlot slot, const ICooldownable* cooldownable)
+void ALostConnectionPlayerState::addCooldownableAbility(EAbilitySlot slot, const ICooldownable* cooldownable)
 {
 	if (!cooldownable->isUsable())
 	{
@@ -49,7 +49,7 @@ void ALostConnectionPlayerState::addCooldownableAbility(abilitySlot slot, const 
 	}
 }
 
-void ALostConnectionPlayerState::addCooldownableWeapon(weaponSlotTypes slot, const ICooldownable* cooldownable)
+void ALostConnectionPlayerState::addCooldownableWeapon(EWeaponSlotType slot, const ICooldownable* cooldownable)
 {
 	if (!cooldownable->isUsable())
 	{

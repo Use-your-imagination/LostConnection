@@ -30,5 +30,5 @@ public:
 
 	virtual float getAdditionalDamage() const = 0;
 
-	virtual typeOfDamage getDamageType() const;
+	virtual ETypeOfDamage getDamageType() const;
 };

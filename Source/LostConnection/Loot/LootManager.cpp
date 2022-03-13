@@ -33,11 +33,19 @@ TArray<LootFunctionT*> ALootManager::createLootFunctions(const TArray<TSubclassO
 	return result;
 }
 
+void ALootManager::addRandomLoot(UInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints)
+{
+	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
+
+	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), UConstants::maxSpendLootPoints));
+}
+
 void ALootManager::addRandomWeapon_Implementation(UInventory* playerInventory)
 {
-	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(playerInventory->getLootPoints(), UConstants::maxSpendLootPoints));
+	int32 weaponLootPoints = playerInventory->getLootPoints();
+	int32 otherLootPoints = weaponLootPoints * ULostConnectionAssetManager::get().getLoot().getSplitLootPointsCoefficient();
 
-	lootCreator.createRandomWeapon(playerInventory);
+	this->addRandomLoot(playerInventory, weaponLootPoints, otherLootPoints, otherLootPoints);
 }
 
 const TArray<UBaseWeaponsLootFunction*>& ALootManager::getWeaponsLootFunctions() const
@@ -66,7 +74,7 @@ FText ALootManager::getWeaponsDropChance(int32 lootPoints) const
 			result += '\n';
 		}
 
-		result += FString::Printf(TEXT("%s: %.2f"), *weaponLootFunction->getLootName().ToString(), weaponLootFunction->calculateLootChance(lootPoints));
+		result += FString::Printf(TEXT("%s: %.2f%%"), *weaponLootFunction->getLootName().ToString(), weaponLootFunction->calculateLootChance(lootPoints));
 	}
 
 	return FText::FromString(result);

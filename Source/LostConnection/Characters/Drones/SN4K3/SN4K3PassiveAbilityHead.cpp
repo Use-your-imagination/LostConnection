@@ -186,9 +186,9 @@ void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
 	}
 }
 
-typeOfDamage ASN4K3PassiveAbilityHead::getDamageType() const
+ETypeOfDamage ASN4K3PassiveAbilityHead::getDamageType() const
 {
-	return typeOfDamage::nanite;
+	return ETypeOfDamage::nanite;
 }
 
 float ASN4K3PassiveAbilityHead::getCrushingHitChance() const

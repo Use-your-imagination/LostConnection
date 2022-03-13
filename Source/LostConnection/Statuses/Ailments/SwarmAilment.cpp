@@ -158,7 +158,7 @@ TArray<float> USwarmAilment::getMoreDamageCoefficients() const
 	return moreDamageCoefficients;
 }
 
-typeOfDamage USwarmAilment::getAilmentDamageType() const
+ETypeOfDamage USwarmAilment::getAilmentDamageType() const
 {
-	return typeOfDamage::nanite;
+	return ETypeOfDamage::nanite;
 }

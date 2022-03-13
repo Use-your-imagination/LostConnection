@@ -134,9 +134,9 @@ TArray<float> USN4K3FirstAbility::getMoreDamageCoefficients() const
 	return moreDamageCoefficients;
 }
 
-typeOfDamage USN4K3FirstAbility::getDamageType() const
+ETypeOfDamage USN4K3FirstAbility::getDamageType() const
 {
-	return typeOfDamage::nanite;
+	return ETypeOfDamage::nanite;
 }
 
 float USN4K3FirstAbility::getCrushingHitChance() const

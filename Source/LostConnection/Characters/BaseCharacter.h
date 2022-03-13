@@ -274,7 +274,7 @@ public:
 	float getSprintMovementSpeed() const;
 
 	UFUNCTION(BlueprintCallable)
-	int32 getSpareAmmo(ammoTypes type) const;
+	int32 getSpareAmmo(EAmmoType type) const;
 
 	bool getIsReloading() const;
 
@@ -419,7 +419,7 @@ inline void ABaseCharacter::setHealthBarVisibility(ESlateVisibility visibility)
 	widget->SetVisibility(visibility);
 }
 
-inline int32 ABaseCharacter::getSpareAmmo(ammoTypes type) const
+inline int32 ABaseCharacter::getSpareAmmo(EAmmoType type) const
 {
 	if (!GetController())
 	{

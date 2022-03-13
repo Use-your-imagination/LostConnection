@@ -150,7 +150,7 @@ TArray<float> UIrradiationAilment::getMoreDamageCoefficients() const
 	return inflictorMoreDamageCoefficients;
 }
 
-typeOfDamage UIrradiationAilment::getAilmentDamageType() const
+ETypeOfDamage UIrradiationAilment::getAilmentDamageType() const
 {
-	return typeOfDamage::radiation;
+	return ETypeOfDamage::radiation;
 }
