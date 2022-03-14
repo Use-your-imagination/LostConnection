@@ -23,7 +23,9 @@ FString appendLootDropChance(int32 lootPoints, const UBaseLootFunction* lootFunc
 	float chance = lootFunction->calculateLootChance(lootPoints);
 	const FString& lootName = lootFunction->getLootName().ToString();
 
-	return chance < 1.0f ?
+	return chance == 0.0f ?
+		FString::Printf(TEXT("%s: 0%%"), *lootName) :
+		chance < 1.0f ?
 		FString::Printf(TEXT("%s: < 1%%"), *lootName) :
 		FString::Printf(TEXT("%s: %.0f%%"), *lootName, chance);
 }
