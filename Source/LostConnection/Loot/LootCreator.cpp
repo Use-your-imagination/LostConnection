@@ -27,14 +27,17 @@ void LootCreator::createRandomWeapon(int32 lootPoints, UInventory* playerInvento
 		}
 		else
 		{
-			weaponRarityRanges.Emplace(1.0f, chance, rarity);
+			weaponRarityRanges.Emplace(0.0f, chance, rarity);
 		}
 	}
 
-	float chance = FMath::FRandRange(1.0f, weaponRarityRanges.Last().Get<1>());
+	float chance = FMath::FRandRange(0.0f, weaponRarityRanges.Last().Get<1>());
 	TTuple<float, float, EWeaponRarity>* result = weaponRarityRanges.FindByPredicate([&chance](const TTuple<float, float, EWeaponRarity>& range)
 		{
-			return UKismetMathLibrary::InRange_FloatFloat(chance, range.Get<0>(), range.Get<1>());
+			const float& begin = range.Get<0>();
+			const float& end = range.Get<1>();
+
+			return begin != end && UKismetMathLibrary::InRange_FloatFloat(chance, begin, end);
 		}
 	);
 
