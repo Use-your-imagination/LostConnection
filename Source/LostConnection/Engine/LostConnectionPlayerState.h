@@ -13,7 +13,7 @@
 #include "Weapons/BaseWeapon.h"
 #include "Abilities/BaseAbility.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
-#include "Utility/CooldownableUtilityObject.h"
+#include "Utility/CooldownableUtility.h"
 #include "Inventory/Inventory.h"
 
 #include "LostConnectionPlayerState.generated.h"
@@ -47,7 +47,7 @@ protected:
 	TArray<FCooldownableWeaponsData> cooldownableWeapons;
 
 	UPROPERTY(Category = Respawn, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UCooldownableUtilityObject* respawnCooldown;
+	UCooldownableUtility* respawnCooldown;
 
 	TSubclassOf<class ABaseDrone> droneClass;
 

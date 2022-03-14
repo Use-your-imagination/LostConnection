@@ -9,10 +9,10 @@
 
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
 
-#include "CooldownableUtilityObject.generated.h"
+#include "CooldownableUtility.generated.h"
 
 UCLASS(BlueprintType, DefaultToInstanced, EditInlineNew)
-class LOSTCONNECTION_API UCooldownableUtilityObject : 
+class LOSTCONNECTION_API UCooldownableUtility : 
 	public UObject,
 	public ICooldownable
 {
@@ -32,7 +32,7 @@ private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	UCooldownableUtilityObject() = default;
+	UCooldownableUtility() = default;
 
 	float getCooldown() const override;
 
@@ -40,5 +40,5 @@ public:
 
 	float getCurrentCooldown() const override;
 
-	~UCooldownableUtilityObject() = default;
+	~UCooldownableUtility() = default;
 };

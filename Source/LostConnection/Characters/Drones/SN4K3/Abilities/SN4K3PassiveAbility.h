@@ -7,7 +7,7 @@
 #include "Abilities/BasePassiveAbility.h"
 #include "Characters/Drones/SN4K3/SN4K3PassiveAbilityHead.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
-#include "Utility/CooldownableUtilityObject.h"
+#include "Utility/CooldownableUtility.h"
 
 #include "SN4K3PassiveAbility.generated.h"
 
@@ -30,7 +30,7 @@ private:
 	int32 naniteMeter;
 
 	UPROPERTY(Category = SN4K3, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UCooldownableUtilityObject* cooldown;
+	UCooldownableUtility* cooldown;
 
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ASN4K3PassiveAbilityHead> headClass;

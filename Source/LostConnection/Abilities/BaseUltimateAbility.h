@@ -6,7 +6,7 @@
 
 #include "BaseAbility.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
-#include "Utility/CooldownableUtilityObject.h"
+#include "Utility/CooldownableUtility.h"
 
 #include "BaseUltimateAbility.generated.h"
 
@@ -19,7 +19,7 @@ class LOSTCONNECTION_API UBaseUltimateAbility :
 	
 protected:
 	UPROPERTY(Category = Cooldown, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UCooldownableUtilityObject* cooldown;
+	UCooldownableUtility* cooldown;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
