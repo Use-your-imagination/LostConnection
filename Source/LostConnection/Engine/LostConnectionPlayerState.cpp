@@ -5,6 +5,22 @@
 #include "Constants/Constants.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
+template<typename T>
+void ALostConnectionPlayerState::reduceCooldownableData(float DeltaTime, TArray<T>& cooldownableData)
+{
+	for (int32 i = 0; i < cooldownableData.Num(); i++)
+	{
+		float& remainingCooldown = cooldownableData[i].remainingCooldown;
+
+		remainingCooldown -= DeltaTime;
+
+		if (remainingCooldown <= 0.0f)
+		{
+			cooldownableData.RemoveAt(i--);
+		}
+	}
+}
+
 void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -201,6 +217,20 @@ float ALostConnectionPlayerState::getCurrentRespawnCooldown() const
 int32 ALostConnectionPlayerState::getLootPoints() const
 {
 	return inventory->getLootPoints();
+}
+
+void ALostConnectionPlayerState::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (HasAuthority())
+	{
+		ALostConnectionPlayerState::reduceCooldownableData(DeltaTime, cooldownableAbilities);
+
+		ALostConnectionPlayerState::reduceCooldownableData(DeltaTime, cooldownableWeapons);
+
+		respawnCooldown->processCooldown(DeltaTime);
+	}
 }
 
 #pragma region Multiplayer

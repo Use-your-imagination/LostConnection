@@ -27,7 +27,7 @@ class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 
 private:
 	template<typename T>
-	static void reduceCooldownableDataObjects(float DeltaTime, TArray<T>& cooldownableData);
+	static void reduceCooldownableData(float DeltaTime, TArray<T>& cooldownableData);
 
 protected:
 	UPROPERTY(Category = UI, BlueprintReadOnly)
@@ -168,22 +168,6 @@ public:
 #pragma endregion
 };
 
-template<typename T>
-void ALostConnectionPlayerState::reduceCooldownableDataObjects(float DeltaTime, TArray<T>& cooldownableData)
-{
-	for (int32 i = 0; i < cooldownableData.Num(); i++)
-	{
-		float& remainingCooldown = cooldownableData[i].remainingCooldown;
-
-		remainingCooldown -= DeltaTime;
-
-		if (remainingCooldown <= 0.0f)
-		{
-			cooldownableData.RemoveAt(i--);
-		}
-	}
-}
-
 inline UBaseWeapon* ALostConnectionPlayerState::getPrimaryWeapon() const
 {
 	return inventory->getPrimaryWeaponCell()->getItem<UBaseWeapon>();
@@ -222,18 +206,4 @@ FORCEINLINE int32 ALostConnectionPlayerState::getSpareAmmo(EAmmoType type) const
 	}
 
 	return 0;
-}
-
-FORCEINLINE void ALostConnectionPlayerState::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (HasAuthority())
-	{
-		ALostConnectionPlayerState::reduceCooldownableDataObjects(DeltaTime, cooldownableAbilities);
-
-		ALostConnectionPlayerState::reduceCooldownableDataObjects(DeltaTime, cooldownableWeapons);
-
-		respawnCooldown->processCooldown(DeltaTime);
-	}
 }
