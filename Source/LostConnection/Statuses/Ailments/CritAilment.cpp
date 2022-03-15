@@ -2,8 +2,6 @@
 
 #include "CritAilment.h"
 
-#include "Algo/ForEach.h"
-
 #include "Interfaces/Gameplay/Statuses/Base/StatusReceiver.h"
 #include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
 #include "Utility/Utility.h"
@@ -35,15 +33,15 @@ void UCritAilment::initDamage()
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
-	Algo::ForEach(statuses, [this](const UBaseStatus* status)
-		{
-			if (const UCritAilment* crit = Cast<UCritAilment>(status))
-			{
-				damageInflictorUtility->appendIncreasedDamageCoefficient(Utility::fromPercent(crit->getCritMultiplier()));
-			}
-		});
+	damageInflictorUtility->setBaseDamage(inflictorDamage * Utility::fromPercent(damageMultiplierPercent));
 
-	damageInflictorUtility->setBaseDamage(inflictorDamage);
+	for (const UBaseStatus* status : statuses)
+	{
+		if (const UCritAilment* crit = Cast<UCritAilment>(status))
+		{
+			damageInflictorUtility->appendIncreasedDamageCoefficient(Utility::fromPercent(crit->getCritMultiplier()));
+		}
+	}
 }
 
 UCritAilment::UCritAilment()
