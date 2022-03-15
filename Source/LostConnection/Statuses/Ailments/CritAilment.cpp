@@ -2,7 +2,7 @@
 
 #include "CritAilment.h"
 
-#include "Algo/Accumulate.h"
+#include "Algo/ForEach.h"
 
 #include "Interfaces/Gameplay/Statuses/Base/StatusReceiver.h"
 #include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
@@ -31,6 +31,21 @@ void UCritAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(UCritAilment, damageInflictorUtility);
 }
 
+void UCritAilment::initDamage()
+{
+	const TArray<UBaseStatus*>& statuses = target->getStatuses();
+
+	Algo::ForEach(statuses, [this](const UBaseStatus* status)
+		{
+			if (const UCritAilment* crit = Cast<UCritAilment>(status))
+			{
+				damageInflictorUtility->appendIncreasedDamageCoefficient(Utility::fromPercent(crit->getCritMultiplier()));
+			}
+		});
+
+	damageInflictorUtility->setBaseDamage(inflictorDamage);
+}
+
 UCritAilment::UCritAilment()
 {
 	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
@@ -57,6 +72,8 @@ bool UCritAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	{
 		return false;
 	}
+
+	this->initDamage();
 
 	target->takeDamageFromInflictorHolder(this);
 

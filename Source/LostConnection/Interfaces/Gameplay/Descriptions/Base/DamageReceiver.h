@@ -24,7 +24,7 @@ public:
 
 	virtual void takeDamageFromInflictor(const TScriptInterface<class IDamageInflictor>& inflictor) = 0;
 
-	void takeDamageFromInflictorHolder(const TScriptInterface<class IDamageInflictorHolder>& inflictorHolder);
+	void takeDamageFromInflictorHolder(const class IDamageInflictorHolder* inflictorHolder);
 
 	virtual void setCurrentHealth(float newCurrentHealth) = 0;
 

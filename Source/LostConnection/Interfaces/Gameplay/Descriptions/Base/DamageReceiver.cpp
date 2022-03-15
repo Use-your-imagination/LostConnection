@@ -4,7 +4,7 @@
 
 #include "Interfaces/Holders/DamageInflictorHolder.h"
 
-void IDamageReceiver::takeDamageFromInflictorHolder(const TScriptInterface<IDamageInflictorHolder>& inflictorHolder)
+void IDamageReceiver::takeDamageFromInflictorHolder(const IDamageInflictorHolder* inflictorHolder)
 {
 	this->takeDamageFromInflictor(TScriptInterface<IDamageInflictor>(inflictorHolder->getDamageInflictorUtility()));
 }
