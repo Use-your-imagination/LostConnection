@@ -6,7 +6,6 @@
 
 #include "Statuses/BaseImpactStatus.h"
 #include "Interfaces/Gameplay/Statuses/Ailment.h"
-#include "Holders/Utility/DamageInflictorUtility.h"
 #include "Interfaces/Holders/DamageInflictorHolder.h"
 
 #include "CritAilment.generated.h"
@@ -53,7 +52,7 @@ public:
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	UDamageInflictorUtility* getDamageInflictorUtility() const;
+	UDamageInflictorUtility* getDamageInflictorUtility() const override;
 
 	ETypeOfDamage getAilmentDamageType() const override;
 

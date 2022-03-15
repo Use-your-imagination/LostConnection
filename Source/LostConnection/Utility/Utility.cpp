@@ -19,7 +19,7 @@ SIZE_T Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<U
 
 FText Utility::getFTextFromFloat(float value)
 {
-	static constexpr size_t digits = 3;
+	static constexpr SIZE_T digits = 3;
 
 	FString stringValue = FString::Printf(TEXT("%.0f"), value);
 	FString thousandSymbol = FText::FromStringTable("/Game/Text/Common.Common", "ThousandSymbol").ToString();

@@ -6,13 +6,14 @@
 
 #include "Statuses/BaseStatus.h"
 #include "Interfaces/Gameplay/Statuses/Ailment.h"
+#include "Interfaces/Holders/DamageInflictorHolder.h"
 
 #include "SwarmAilment.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API USwarmAilment :
 	public UBaseStatus,
-	public IDamageInflictor,
+	public IDamageInflictorHolder,
 	public IAilment
 {
 	GENERATED_BODY()
@@ -36,10 +37,7 @@ private:
 	float threshold;
 
 	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> increasedDamageCoefficients;
-
-	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> moreDamageCoefficients;
+	UDamageInflictorUtility* damageInflictorUtility;
 
 private:
 	void updateSwarmHealthBar();
@@ -48,7 +46,7 @@ private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	USwarmAilment() = default;
+	USwarmAilment();
 
 	void increaseThreshold(IDamageInflictor* inflictor);
 
@@ -58,32 +56,9 @@ public:
 
 	void postRemove() override;
 
-	void appendIncreasedDamageCoefficient(float coefficient) override;
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	void removeIncreasedDamageCoefficient(float coefficient) override;
-
-	void appendMoreDamageCoefficient(float coefficient) override;
-
-	void removeMoreDamageCoefficient(float coefficient) override;
-
-	UFUNCTION(Server, Reliable)
-	void setBaseDamage(float newDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAddedDamage(float newAddedDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAdditionalDamage(float newAdditionalDamage) override;
-
-	float getBaseDamage() const override;
-
-	float getAddedDamage() const override;
-
-	float getAdditionalDamage() const override;
-
-	TArray<float> getIncreasedDamageCoefficients() const override;
-
-	TArray<float> getMoreDamageCoefficients() const override;
+	UDamageInflictorUtility* getDamageInflictorUtility() const override;
 
 	ETypeOfDamage getAilmentDamageType() const override;
 

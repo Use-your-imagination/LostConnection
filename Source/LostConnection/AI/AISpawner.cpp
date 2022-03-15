@@ -21,7 +21,7 @@ void AISpawner::spawn(UWorld* world, int32 count) const
 
 	UGameplayStatics::GetAllActorsOfClass(world, AAISpawnPoint::StaticClass(), spawnPoints);
 
-	for (size_t i = 0; i < count; i++)
+	for (SIZE_T i = 0; i < count; i++)
 	{
 		const TSubclassOf<ABaseBot>& botClass = Utility::getRandomValueFromArray(bots);
 		const auto& spawnPoint = Utility::getRandomValueFromArray(spawnPoints);
