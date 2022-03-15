@@ -6,13 +6,14 @@
 
 #include "Statuses/BaseImpactStatus.h"
 #include "Interfaces/Gameplay/Statuses/Ailment.h"
+#include "Interfaces/Holders/DamageInflictorHolder.h"
 
 #include "IrradiationAilment.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API UIrradiationAilment :
 	public UBaseImpactStatus,
-	public IDamageInflictor,
+	public IDamageInflictorHolder,
 	public IAilment
 {
 	GENERATED_BODY()
@@ -28,10 +29,7 @@ private:
 	float additionalIrradiationMultiplier;
 
 	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> increasedDamageCoefficients;
-
-	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> moreDamageCoefficients;
+	UDamageInflictorUtility* damageInflictorUtility;
 
 private:
 	FString getStatusName() const override;
@@ -41,8 +39,10 @@ private:
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	void initDamage();
+
 public:
-	UIrradiationAilment() = default;
+	UIrradiationAilment();
 
 	float getAdditionalIrradiationMultiplier() const;
 
@@ -50,32 +50,9 @@ public:
 
 	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
-	void appendIncreasedDamageCoefficient(float coefficient) override;
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	void removeIncreasedDamageCoefficient(float coefficient) override;
-
-	void appendMoreDamageCoefficient(float coefficient) override;
-
-	void removeMoreDamageCoefficient(float coefficient) override;
-
-	UFUNCTION(Server, Reliable)
-	void setBaseDamage(float newDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAddedDamage(float newAddedDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAdditionalDamage(float newAdditionalDamage) override;
-
-	float getBaseDamage() const override;
-
-	float getAddedDamage() const override;
-
-	float getAdditionalDamage() const override;
-
-	TArray<float> getIncreasedDamageCoefficients() const override;
-
-	TArray<float> getMoreDamageCoefficients() const override;
+	UDamageInflictorUtility* getDamageInflictorUtility() const override;
 
 	ETypeOfDamage getAilmentDamageType() const override;
 

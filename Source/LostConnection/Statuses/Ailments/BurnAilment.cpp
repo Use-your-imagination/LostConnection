@@ -24,11 +24,12 @@ void UBurnAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 
 	DOREPLIFETIME(UBurnAilment, additionalFireCrushingHitChance);
 
-	DOREPLIFETIME(UBurnAilment, damage);
+	DOREPLIFETIME(UBurnAilment, damageInflictorUtility);
+}
 
-	DOREPLIFETIME(UBurnAilment, increasedDamageCoefficients);
-
-	DOREPLIFETIME(UBurnAilment, moreDamageCoefficients);
+UBurnAilment::UBurnAilment()
+{
+	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
 float UBurnAilment::getAdditionalFireCrushingHitChance() const
@@ -45,7 +46,7 @@ void UBurnAilment::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 	Super::applyStatus_Implementation(inflictor, target, hit);
 
-	damage = (inflictorDamage * burnDamageCoefficient) / (duration / tickPeriod);
+	damageInflictorUtility->setBaseDamage((inflictorDamage * burnDamageCoefficient) / (duration / tickPeriod));
 }
 
 bool UBurnAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
@@ -60,64 +61,20 @@ bool UBurnAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 	return true;
 }
 
-void UBurnAilment::appendIncreasedDamageCoefficient(float coefficient)
+bool UBurnAilment::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
-	increasedDamageCoefficients.Add(coefficient);
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(damageInflictorUtility, *Bunch, *RepFlags);
+
+	wroteSomething |= damageInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	return wroteSomething;
 }
 
-void UBurnAilment::removeIncreasedDamageCoefficient(float coefficient)
+UDamageInflictorUtility* UBurnAilment::getDamageInflictorUtility() const
 {
-	increasedDamageCoefficients.Remove(coefficient);
-}
-
-void UBurnAilment::appendMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Add(coefficient);
-}
-
-void UBurnAilment::removeMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Remove(coefficient);
-}
-
-void UBurnAilment::setBaseDamage_Implementation(float newDamage)
-{
-	damage = newDamage;
-}
-
-void UBurnAilment::setAddedDamage_Implementation(float newAddedDamage)
-{
-	inflictorAddedDamage = newAddedDamage;
-}
-
-void UBurnAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	inflictorAdditionalDamage = newAdditionalDamage;
-}
-
-float UBurnAilment::getBaseDamage() const
-{
-	return damage;
-}
-
-float UBurnAilment::getAddedDamage() const
-{
-	return inflictorAddedDamage;
-}
-
-float UBurnAilment::getAdditionalDamage() const
-{
-	return inflictorAdditionalDamage;
-}
-
-TArray<float> UBurnAilment::getIncreasedDamageCoefficients() const
-{
-	return increasedDamageCoefficients;
-}
-
-TArray<float> UBurnAilment::getMoreDamageCoefficients() const
-{
-	return moreDamageCoefficients;
+	return damageInflictorUtility;
 }
 
 ETypeOfDamage UBurnAilment::getAilmentDamageType() const

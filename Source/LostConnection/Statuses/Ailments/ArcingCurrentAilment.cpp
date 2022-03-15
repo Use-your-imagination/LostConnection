@@ -33,9 +33,12 @@ void UArcingCurrentAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 
 	DOREPLIFETIME(UArcingCurrentAilment, damageConversionPercent);
 
-	DOREPLIFETIME(UArcingCurrentAilment, increasedDamageCoefficients);
+	DOREPLIFETIME(UArcingCurrentAilment, damageInflictorUtility);
+}
 
-	DOREPLIFETIME(UArcingCurrentAilment, moreDamageCoefficients);
+UArcingCurrentAilment::UArcingCurrentAilment()
+{
+	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
 void UArcingCurrentAilment::increaseDamageConversion(IDamageInflictor* inflictor)
@@ -60,7 +63,7 @@ void UArcingCurrentAilment::applyStatus_Implementation(const TScriptInterface<IS
 
 			if (arcing)
 			{
-				arcing->increaseDamageConversion(this);
+				arcing->increaseDamageConversion(this->getDamageInflictorUtility());
 
 				target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
 			}
@@ -95,64 +98,20 @@ bool UArcingCurrentAilment::applyEffect(IStatusReceiver* target, const FHitResul
 	return true;
 }
 
-void UArcingCurrentAilment::appendIncreasedDamageCoefficient(float coefficient)
+bool UArcingCurrentAilment::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
-	increasedDamageCoefficients.Add(coefficient);
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(damageInflictorUtility, *Bunch, *RepFlags);
+
+	wroteSomething |= damageInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	return wroteSomething;
 }
 
-void UArcingCurrentAilment::removeIncreasedDamageCoefficient(float coefficient)
+UDamageInflictorUtility* UArcingCurrentAilment::getDamageInflictorUtility() const
 {
-	increasedDamageCoefficients.Remove(coefficient);
-}
-
-void UArcingCurrentAilment::appendMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Add(coefficient);
-}
-
-void UArcingCurrentAilment::removeMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Remove(coefficient);
-}
-
-void UArcingCurrentAilment::setBaseDamage_Implementation(float newDamage)
-{
-	inflictorDamage = newDamage;
-}
-
-void UArcingCurrentAilment::setAddedDamage_Implementation(float newAddedDamage)
-{
-	inflictorAddedDamage = newAddedDamage;
-}
-
-void UArcingCurrentAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	inflictorAdditionalDamage = newAdditionalDamage;
-}
-
-float UArcingCurrentAilment::getBaseDamage() const
-{
-	return inflictorDamage * Utility::fromPercent(damageConversionPercent);
-}
-
-float UArcingCurrentAilment::getAddedDamage() const
-{
-	return inflictorAddedDamage;
-}
-
-float UArcingCurrentAilment::getAdditionalDamage() const
-{
-	return inflictorAdditionalDamage;
-}
-
-TArray<float> UArcingCurrentAilment::getIncreasedDamageCoefficients() const
-{
-	return increasedDamageCoefficients;
-}
-
-TArray<float> UArcingCurrentAilment::getMoreDamageCoefficients() const
-{
-	return moreDamageCoefficients;
+	return damageInflictorUtility;
 }
 
 ETypeOfDamage UArcingCurrentAilment::getAilmentDamageType() const

@@ -6,13 +6,14 @@
 
 #include "Statuses/BaseTickStatus.h"
 #include "Interfaces/Gameplay/Statuses/Ailment.h"
+#include "Interfaces/Holders/DamageInflictorHolder.h"
 
 #include "ShatterAilment.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UShatterAilment : 
+class LOSTCONNECTION_API UShatterAilment :
 	public UBaseTickStatus,
-	public IDamageInflictor,
+	public IDamageInflictorHolder,
 	public IAilment
 {
 	GENERATED_BODY()
@@ -30,10 +31,7 @@ private:
 	float damagePercentPerMeter;
 
 	UPROPERTY(Category = Shatter, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> increasedDamageCoefficients;
-
-	UPROPERTY(Category = Shatter, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> moreDamageCoefficients;
+	UDamageInflictorUtility* damageInflictorUtility;
 
 	FVector previousLocation;
 	float targetTotalLifePool;
@@ -44,7 +42,7 @@ private:
 	void updateDuration(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target);
 
 public:
-	UShatterAilment() = default;
+	UShatterAilment();
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
@@ -52,32 +50,9 @@ public:
 
 	bool Tick(float DeltaTime) override;
 
-	void appendIncreasedDamageCoefficient(float coefficient) override;
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	void removeIncreasedDamageCoefficient(float coefficient) override;
-
-	void appendMoreDamageCoefficient(float coefficient) override;
-
-	void removeMoreDamageCoefficient(float coefficient) override;
-
-	UFUNCTION(Server, Reliable)
-	void setBaseDamage(float newDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAddedDamage(float newAddedDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAdditionalDamage(float newAdditionalDamage) override;
-
-	float getBaseDamage() const override;
-
-	float getAddedDamage() const override;
-
-	float getAdditionalDamage() const override;
-
-	TArray<float> getIncreasedDamageCoefficients() const override;
-
-	TArray<float> getMoreDamageCoefficients() const override;
+	UDamageInflictorUtility* getDamageInflictorUtility() const override;
 
 	ETypeOfDamage getAilmentDamageType() const override;
 

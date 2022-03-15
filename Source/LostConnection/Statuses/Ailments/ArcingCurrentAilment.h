@@ -6,13 +6,14 @@
 
 #include "Statuses/BaseTriggerStatus.h"
 #include "Interfaces/Gameplay/Statuses/Ailment.h"
+#include "Interfaces/Holders/DamageInflictorHolder.h"
 
 #include "ArcingCurrentAilment.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API UArcingCurrentAilment :
 	public UBaseTriggerStatus,
-	public IDamageInflictor,
+	public IDamageInflictorHolder,
 	public IAilment
 {
 	GENERATED_BODY()
@@ -42,13 +43,10 @@ private:
 	float damageConversionPercent;
 
 	UPROPERTY(Category = ArcingCurrent, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> increasedDamageCoefficients;
-
-	UPROPERTY(Category = ArcingCurrent, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> moreDamageCoefficients;
+	UDamageInflictorUtility* damageInflictorUtility;
 
 public:
-	UArcingCurrentAilment() = default;
+	UArcingCurrentAilment();
 
 	void increaseDamageConversion(IDamageInflictor* inflictor);
 
@@ -56,32 +54,9 @@ public:
 
 	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
-	void appendIncreasedDamageCoefficient(float coefficient) override;
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	void removeIncreasedDamageCoefficient(float coefficient) override;
-
-	void appendMoreDamageCoefficient(float coefficient) override;
-
-	void removeMoreDamageCoefficient(float coefficient) override;
-
-	UFUNCTION(Server, Reliable)
-	void setBaseDamage(float newDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAddedDamage(float newAddedDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAdditionalDamage(float newAdditionalDamage) override;
-
-	float getBaseDamage() const override;
-
-	float getAddedDamage() const override;
-
-	float getAdditionalDamage() const override;
-
-	TArray<float> getIncreasedDamageCoefficients() const override;
-
-	TArray<float> getMoreDamageCoefficients() const override;
+	UDamageInflictorUtility* getDamageInflictorUtility() const override;
 
 	ETypeOfDamage getAilmentDamageType() const override;
 

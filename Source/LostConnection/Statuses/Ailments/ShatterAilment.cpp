@@ -24,9 +24,12 @@ void UShatterAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 
 	DOREPLIFETIME(UShatterAilment, damagePercentPerMeter);
 
-	DOREPLIFETIME(UShatterAilment, increasedDamageCoefficients);
+	DOREPLIFETIME(UShatterAilment, damageInflictorUtility);
+}
 
-	DOREPLIFETIME(UShatterAilment, moreDamageCoefficients);
+UShatterAilment::UShatterAilment()
+{
+	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
 void UShatterAilment::updateDuration(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target)
@@ -58,11 +61,22 @@ bool UShatterAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit
 		return false;
 	}
 
+	FVector currentTargetLocation = Cast<AActor>(target->_getUObject())->GetActorLocation();
+
 	targetTotalLifePool = target->getTotalLifePool();
+
+	damageInflictorUtility->setBaseDamage
+	(
+		targetTotalLifePool * Utility::fromPercent
+		(
+			(currentTargetLocation - previousLocation).Size() / 100.0f *
+			damagePercentPerMeter
+		)
+	);
 
 	target->takeDamageFromInflictor(this);
 
-	previousLocation = Cast<AActor>(target->_getUObject())->GetActorLocation();
+	previousLocation = MoveTemp(currentTargetLocation);
 
 	return true;
 }
@@ -74,64 +88,20 @@ bool UShatterAilment::Tick(float DeltaTime)
 	return Super::Tick(DeltaTime);
 }
 
-void UShatterAilment::appendIncreasedDamageCoefficient(float coefficient)
+bool UShatterAilment::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
-	increasedDamageCoefficients.Add(coefficient);
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(damageInflictorUtility, *Bunch, *RepFlags);
+
+	wroteSomething |= damageInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	return wroteSomething;
 }
 
-void UShatterAilment::removeIncreasedDamageCoefficient(float coefficient)
+UDamageInflictorUtility* UShatterAilment::getDamageInflictorUtility() const
 {
-	increasedDamageCoefficients.Remove(coefficient);
-}
-
-void UShatterAilment::appendMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Add(coefficient);
-}
-
-void UShatterAilment::removeMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Remove(coefficient);
-}
-
-void UShatterAilment::setBaseDamage_Implementation(float newDamage)
-{
-	damagePercentPerMeter = newDamage;
-}
-
-void UShatterAilment::setAddedDamage_Implementation(float newAddedDamage)
-{
-	
-}
-
-void UShatterAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	
-}
-
-float UShatterAilment::getBaseDamage() const
-{
-	return targetTotalLifePool * Utility::fromPercent((Cast<AActor>(target->_getUObject())->GetActorLocation() - previousLocation).Size() / 100.0f * damagePercentPerMeter);
-}
-
-float UShatterAilment::getAddedDamage() const
-{
-	return 0.0f;
-}
-
-float UShatterAilment::getAdditionalDamage() const
-{
-	return 0.0f;
-}
-
-TArray<float> UShatterAilment::getIncreasedDamageCoefficients() const
-{
-	return increasedDamageCoefficients;
-}
-
-TArray<float> UShatterAilment::getMoreDamageCoefficients() const
-{
-	return moreDamageCoefficients;
+	return damageInflictorUtility;
 }
 
 ETypeOfDamage UShatterAilment::getAilmentDamageType() const
