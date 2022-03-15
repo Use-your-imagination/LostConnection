@@ -28,9 +28,12 @@ void UCritAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 
 	DOREPLIFETIME(UCritAilment, critMultiplier);
 
-	DOREPLIFETIME(UCritAilment, increasedDamageCoefficients);
+	DOREPLIFETIME(UCritAilment, damageInflictorUtility);
+}
 
-	DOREPLIFETIME(UCritAilment, moreDamageCoefficients);
+UCritAilment::UCritAilment()
+{
+	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
 float UCritAilment::getCritMultiplier() const
@@ -55,85 +58,27 @@ bool UCritAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 		return false;
 	}
 
-	target->takeDamage(this);
+	target->takeDamageFromInflictorHolder(this);
 
 	critMultiplier = target->getTotalLifePercentDealt(this) * damageMultiplierPerTotalLifePercentPool;
 
 	return true;
 }
 
-void UCritAilment::appendIncreasedDamageCoefficient(float coefficient)
+bool UCritAilment::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
-	increasedDamageCoefficients.Add(coefficient);
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(damageInflictorUtility, *Bunch, *RepFlags);
+
+	wroteSomething |= damageInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	return wroteSomething;
 }
 
-void UCritAilment::removeIncreasedDamageCoefficient(float coefficient)
+UDamageInflictorUtility* UCritAilment::getDamageInflictorUtility() const
 {
-	increasedDamageCoefficients.Remove(coefficient);
-}
-
-void UCritAilment::appendMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Add(coefficient);
-}
-
-void UCritAilment::removeMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Remove(coefficient);
-}
-
-void UCritAilment::setBaseDamage_Implementation(float newDamage)
-{
-	inflictorDamage = newDamage;
-}
-
-void UCritAilment::setAddedDamage_Implementation(float newAddedDamage)
-{
-	inflictorAddedDamage = newAddedDamage;
-}
-
-void UCritAilment::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	inflictorAdditionalDamage = newAdditionalDamage;
-}
-
-float UCritAilment::getBaseDamage() const
-{
-	const TArray<UBaseStatus*>& statuses = target->getStatuses();
-
-	float resultMultiplier = Algo::Accumulate(statuses, damageMultiplierPercent, [](float currentValue, const UBaseStatus* status)
-		{
-			const UCritAilment* crit = Cast<UCritAilment>(status);
-
-			if (crit)
-			{
-				return currentValue + crit->getCritMultiplier();
-			}
-
-			return currentValue;
-		});
-
-	return inflictorDamage * Utility::fromPercent(resultMultiplier);
-}
-
-float UCritAilment::getAddedDamage() const
-{
-	return inflictorAddedDamage;
-}
-
-float UCritAilment::getAdditionalDamage() const
-{
-	return inflictorAdditionalDamage;
-}
-
-TArray<float> UCritAilment::getIncreasedDamageCoefficients() const
-{
-	return increasedDamageCoefficients;
-}
-
-TArray<float> UCritAilment::getMoreDamageCoefficients() const
-{
-	return moreDamageCoefficients;
+	return damageInflictorUtility;
 }
 
 ETypeOfDamage UCritAilment::getAilmentDamageType() const

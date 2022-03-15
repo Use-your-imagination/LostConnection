@@ -22,7 +22,9 @@ class LOSTCONNECTION_API IDamageReceiver
 public:
 	IDamageReceiver() = default;
 
-	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) = 0;
+	virtual void takeDamageFromInflictor(const TScriptInterface<class IDamageInflictor>& inflictor) = 0;
+
+	void takeDamageFromInflictorHolder(const TScriptInterface<class IDamageInflictorHolder>& inflictorHolder);
 
 	virtual void setCurrentHealth(float newCurrentHealth) = 0;
 
@@ -39,6 +41,12 @@ public:
 	virtual float getLifePercentDealt(class IDamageInflictor* inflictor) const = 0;
 
 	virtual float getEnergyShieldPercentDealt(class IDamageInflictor* inflictor) const = 0;
+
+	float getTotalLifePercentDealt(class IDamageInflictorHolder* inflictorHolder) const;
+
+	float getLifePercentDealt(class IDamageInflictorHolder* inflictorHolder) const;
+
+	float getEnergyShieldPercentDealt(class IDamageInflictorHolder* inflictorHolder) const;
 
 	virtual USkeletalMeshComponent* getMeshComponent() = 0;
 

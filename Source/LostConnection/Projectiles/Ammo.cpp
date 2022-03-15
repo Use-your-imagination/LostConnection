@@ -203,7 +203,7 @@ void AAmmo::copyProperties(UBaseWeapon* weapon)
 
 	damageType = weapon->getDamageType();
 
-	crushingHitChance = weapon->getCrushingHitChance();
+	crushingHitChance = weapon->getBaseCrushingHitChance();
 
 	additionalCrushingHitChance = weapon->getAdditionalCrushingHitChance();
 
@@ -275,7 +275,7 @@ void AAmmo::setAdditionalDamage(float additionalDamage)
 	this->additionalDamage = additionalDamage;
 }
 
-void AAmmo::setCrushingHitChance_Implementation(float newCrushingHitChance)
+void AAmmo::setBaseCrushingHitChance_Implementation(float newCrushingHitChance)
 {
 	crushingHitChance = newCrushingHitChance;
 }
@@ -315,7 +315,7 @@ ETypeOfDamage AAmmo::getDamageType() const
 	return damageType;
 }
 
-float AAmmo::getCrushingHitChance() const
+float AAmmo::getBaseCrushingHitChance() const
 {
 	return crushingHitChance;
 }

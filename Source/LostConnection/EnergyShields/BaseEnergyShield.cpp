@@ -72,7 +72,7 @@ void UBaseEnergyShield::init(ABaseCharacter* owner)
 		}, 1.0f / rechargesPerSecond);
 }
 
-float UBaseEnergyShield::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
+float UBaseEnergyShield::takeDamageFromInflictor(const TScriptInterface<IDamageInflictor>& inflictor)
 {
 	float tem = currentCapacity - inflictor->calculateTotalDamage();
 	float remainingDamage = 0.0f;

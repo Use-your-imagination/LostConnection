@@ -4,7 +4,7 @@
 
 #include "Utility/Utility.h"
 
-void IAilmentInflictor::setCrushingHitChance(float crushingHitChance)
+void IAilmentInflictor::setBaseCrushingHitChance(float crushingHitChance)
 {
 
 }
@@ -16,5 +16,5 @@ void IAilmentInflictor::setAdditionalCrushingHitChance(float additionalCrushingH
 
 bool IAilmentInflictor::getCrushingHitProc() const
 {
-	return Utility::checkChanceProc(this->getCrushingHitChance() + this->getAdditionalCrushingHitChance());
+	return Utility::checkChanceProc(this->getBaseCrushingHitChance() + this->getAdditionalCrushingHitChance());
 }

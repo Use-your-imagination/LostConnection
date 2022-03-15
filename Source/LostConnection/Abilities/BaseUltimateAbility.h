@@ -6,7 +6,7 @@
 
 #include "BaseAbility.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
-#include "Utility/CooldownableUtility.h"
+#include "Holders/Utility/CooldownableUtility.h"
 
 #include "BaseUltimateAbility.generated.h"
 

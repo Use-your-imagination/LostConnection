@@ -237,7 +237,7 @@ public:
 
 	const TWeakObjectPtr<class ABaseCharacter>& getOwner() const;
 
-	float getCrushingHitChance() const;
+	float getBaseCrushingHitChance() const;
 
 	float getAdditionalCrushingHitChance() const;
 

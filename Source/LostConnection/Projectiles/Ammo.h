@@ -93,7 +93,7 @@ public:
 	virtual void setAdditionalDamage(float additionalDamage) final override;
 
 	UFUNCTION(Server, Reliable)
-	virtual void setCrushingHitChance(float newCrushingHitChance) final override;
+	virtual void setBaseCrushingHitChance(float newCrushingHitChance) final override;
 
 	UFUNCTION(Server, Reliable)
 	virtual void setAdditionalCrushingHitChance(float newAdditionalCrushingHitChance) final override;
@@ -110,7 +110,7 @@ public:
 
 	virtual ETypeOfDamage getDamageType() const final override;
 
-	virtual float getCrushingHitChance() const final override;
+	virtual float getBaseCrushingHitChance() const final override;
 
 	virtual float getAdditionalCrushingHitChance() const final override;
 

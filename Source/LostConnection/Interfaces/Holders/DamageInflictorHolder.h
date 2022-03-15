@@ -6,7 +6,7 @@
 
 #include "UObject/Interface.h"
 
-#include "Utility/DamageInflictorUtility.h"
+#include "Holders/Utility/DamageInflictorUtility.h"
 
 #include "DamageInflictorHolder.generated.h"
 

@@ -60,7 +60,7 @@ bool UShatterAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit
 
 	targetTotalLifePool = target->getTotalLifePool();
 
-	target->takeDamage(this);
+	target->takeDamageFromInflictor(this);
 
 	previousLocation = Cast<AActor>(target->_getUObject())->GetActorLocation();
 

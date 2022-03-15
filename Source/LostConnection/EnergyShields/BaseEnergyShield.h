@@ -70,7 +70,7 @@ public:
 
 	virtual void init(class ABaseCharacter* owner);
 
-	virtual float takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor);
+	virtual float takeDamageFromInflictor(const TScriptInterface<class IDamageInflictor>& inflictor);
 
 	UFUNCTION(Server, Reliable)
 	virtual void restoreShield();

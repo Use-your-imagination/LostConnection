@@ -13,7 +13,7 @@
 #include "Weapons/BaseWeapon.h"
 #include "Abilities/BaseAbility.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
-#include "Utility/CooldownableUtility.h"
+#include "Holders/Utility/CooldownableUtility.h"
 #include "Inventory/Inventory.h"
 
 #include "LostConnectionPlayerState.generated.h"

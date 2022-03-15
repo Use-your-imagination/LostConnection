@@ -45,7 +45,7 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 	hit.Component = target->getMeshComponent();
 	hit.Location = target->GetActorLocation();
 
-	target->takeDamage(this);
+	target->takeDamageFromInflictor(this);
 
 	target->statusInflictorImpactAction(this, hit);
 
@@ -139,7 +139,7 @@ ETypeOfDamage USN4K3FirstAbility::getDamageType() const
 	return ETypeOfDamage::nanite;
 }
 
-float USN4K3FirstAbility::getCrushingHitChance() const
+float USN4K3FirstAbility::getBaseCrushingHitChance() const
 {
 	return Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter();
 }

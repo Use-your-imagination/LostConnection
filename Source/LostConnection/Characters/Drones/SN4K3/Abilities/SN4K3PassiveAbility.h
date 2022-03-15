@@ -7,7 +7,7 @@
 #include "Abilities/BasePassiveAbility.h"
 #include "Characters/Drones/SN4K3/SN4K3PassiveAbilityHead.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
-#include "Utility/CooldownableUtility.h"
+#include "Holders/Utility/CooldownableUtility.h"
 
 #include "SN4K3PassiveAbility.generated.h"
 

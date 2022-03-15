@@ -106,7 +106,7 @@ void ASN4K3PassiveAbilityHead::explode()
 
 			character->statusInflictorImpactAction(this, characterHit);
 
-			character->takeDamage(this);
+			character->takeDamageFromInflictor(this);
 
 			character->getTimers().addTimer
 			(
@@ -191,7 +191,7 @@ ETypeOfDamage ASN4K3PassiveAbilityHead::getDamageType() const
 	return ETypeOfDamage::nanite;
 }
 
-float ASN4K3PassiveAbilityHead::getCrushingHitChance() const
+float ASN4K3PassiveAbilityHead::getBaseCrushingHitChance() const
 {
 	return 100.0f;
 }

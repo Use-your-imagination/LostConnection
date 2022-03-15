@@ -89,7 +89,7 @@ bool UArcingCurrentAilment::applyEffect(IStatusReceiver* target, const FHitResul
 
 	for (auto& i : targets)
 	{
-		Cast<ABaseCharacter>(i)->takeDamage(this);
+		Cast<ABaseCharacter>(i)->takeDamageFromInflictor(this);
 	}
 
 	return true;

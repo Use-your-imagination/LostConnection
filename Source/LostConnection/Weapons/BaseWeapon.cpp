@@ -368,7 +368,7 @@ const TWeakObjectPtr<ABaseCharacter>& UBaseWeapon::getOwner() const
 	return owner;
 }
 
-float UBaseWeapon::getCrushingHitChance() const
+float UBaseWeapon::getBaseCrushingHitChance() const
 {
 	return crushingHitChance;
 }

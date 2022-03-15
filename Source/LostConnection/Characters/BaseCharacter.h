@@ -311,7 +311,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void takeDamage(const TScriptInterface<class IDamageInflictor>& inflictor) final override;
+	virtual void takeDamageFromInflictor(const TScriptInterface<class IDamageInflictor>& inflictor) final override;
 
 	virtual void impactAction_Implementation(AAmmo* ammo, const FHitResult& hit) override;
 

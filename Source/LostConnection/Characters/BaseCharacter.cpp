@@ -203,6 +203,8 @@ void ABaseCharacter::onCurrentHealthChange()
 	{
 		this->setHealthBarVisibility(ESlateVisibility::Hidden);
 
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+
 		if (HasAuthority() && !isDead)
 		{
 			Algo::ForEach
@@ -734,11 +736,11 @@ void ABaseCharacter::Tick(float DeltaTime)
 	}
 }
 
-void ABaseCharacter::takeDamage(const TScriptInterface<IDamageInflictor>& inflictor)
+void ABaseCharacter::takeDamageFromInflictor(const TScriptInterface<IDamageInflictor>& inflictor)
 {
 	check(HasAuthority());
 
-	float tem = currentHealth - energyShield->takeDamage(inflictor);
+	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor);
 
 	if (tem < 0.0f)
 	{
@@ -754,7 +756,7 @@ void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& 
 {
 	if (isAlly != ammo->getIsAlly())
 	{
-		this->takeDamage(ammo);
+		this->takeDamageFromInflictor(ammo);
 
 		this->statusInflictorImpactAction(ammo, hit);
 	}

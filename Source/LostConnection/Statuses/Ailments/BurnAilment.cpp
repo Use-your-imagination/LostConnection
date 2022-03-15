@@ -55,7 +55,7 @@ bool UBurnAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 		return false;
 	}
 
-	target->takeDamage(this);
+	target->takeDamageFromInflictor(this);
 
 	return true;
 }

@@ -74,7 +74,7 @@ public:
 
 	ETypeOfDamage getDamageType() const override;
 
-	float getCrushingHitChance() const override;
+	float getBaseCrushingHitChance() const override;
 
 	float getAdditionalCrushingHitChance() const override;
 
