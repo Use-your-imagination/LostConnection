@@ -251,6 +251,8 @@ public:
 
 	virtual const UTexture2D* getCellIcon() const final override;
 
+	virtual const FColor& getBorderColor() const final override;
+
 	virtual ~UBaseWeapon() = default;
 };
 
