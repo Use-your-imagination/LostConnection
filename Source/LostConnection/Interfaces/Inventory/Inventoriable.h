@@ -33,5 +33,8 @@ public:
 	UFUNCTION(Category = Inventory, BlueprintCallable)
 	virtual const UTexture2D* getCellIcon() const = 0;
 
+	UFUNCTION(Category = Inventory, BlueprintCallable)
+	virtual const FColor& getBorderColor() const = 0;
+
 	UNetworkObject* getObject() const;
 };

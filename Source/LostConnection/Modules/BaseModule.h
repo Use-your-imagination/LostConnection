@@ -29,11 +29,13 @@ protected:
 public:
 	UBaseModule() = default;
 
-	const FText& getItemName() const override;
+	virtual const FText& getItemName() const final override;
 
-	const FText& getItemDescription() const override;
+	virtual const FText& getItemDescription() const final override;
 
-	const UTexture2D* getCellIcon() const override;
+	virtual const UTexture2D* getCellIcon() const final override;
+
+	virtual const FColor& getBorderColor() const final override;
 
 	virtual ~UBaseModule() = default;
 };

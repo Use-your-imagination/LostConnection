@@ -17,3 +17,10 @@ const UTexture2D* UBaseModule::getCellIcon() const
 {
 	return moduleIconTexture;
 }
+
+const FColor& UBaseModule::getBorderColor() const
+{
+	// TODO: add color to modules
+
+	return FColor::Transparent;
+}
