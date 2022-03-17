@@ -865,10 +865,6 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 	UBaseWeapon* weapon = weaponToEquip->getWeapon();
 
-	weapon->setOwner(this);
-
-	weapon->updateTimeBetweenShots();
-
 	weapon->Rename(nullptr, playerState);
 
 	if (currentWeapon)
@@ -981,10 +977,6 @@ void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primar
 	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, primaryWeapon);
 
-	weapon->setOwner(this);
-
-	weapon->updateTimeBetweenShots();
-
 	playerState->setPrimaryWeapon(weapon);
 }
 
@@ -999,10 +991,6 @@ void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> seco
 
 	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, secondaryWeapon);
-
-	weapon->setOwner(this);
-
-	weapon->updateTimeBetweenShots();
 
 	playerState->setSecondaryWeapon(weapon);
 }

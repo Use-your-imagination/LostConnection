@@ -6,6 +6,7 @@
 
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Utility/Utility.h"
+#include "Characters/BaseDrone.h"
 
 void LootCreator::createRandomWeapon(int32 lootPoints, UInventory* playerInventory, const TArray<UBaseWeaponsLootFunction*>& lootFunctions)
 {
@@ -48,5 +49,12 @@ void LootCreator::createRandomWeapon(int32 lootPoints, UInventory* playerInvento
 		weapon->setWeaponRarity(result->Get<2>());
 
 		playerInventory->addUnequippedWeapon(weapon);
+
+		if (ABaseDrone* drone = playerInventory->getPlayerState()->GetPawn<ABaseDrone>())
+		{
+			weapon->setOwner(drone);
+
+			weapon->updateTimeBetweenShots();
+		}
 	}
 }

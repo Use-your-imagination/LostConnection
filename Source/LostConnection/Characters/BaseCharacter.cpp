@@ -147,6 +147,13 @@ void ABaseCharacter::onCurrentWeaponChange()
 
 	this->updateWeaponMesh();
 
+	if (currentWeapon)
+	{
+		currentWeapon->setOwner(this);
+
+		currentWeapon->updateTimeBetweenShots();
+	}
+
 	if (animInstance->Implements<UWeaponUser>())
 	{
 		IWeaponUser::Execute_weaponUpdate(animInstance, currentWeapon);

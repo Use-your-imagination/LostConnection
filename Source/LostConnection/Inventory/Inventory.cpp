@@ -83,8 +83,6 @@ void UInventory::init(ALostConnectionPlayerState* playerState)
 
 	this->playerState = playerState;
 
-	defaultWeapon->updateTimeBetweenShots();
-
 	defaultWeaponCell->setItem(defaultWeapon);
 }
 
