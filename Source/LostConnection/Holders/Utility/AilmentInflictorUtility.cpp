@@ -115,8 +115,3 @@ float UAilmentInflictorUtility::getAdditionalCrushingHitChance() const
 {
 	return additionalCrushingHitChance;
 }
-
-void initDamageType(UAilmentInflictorUtility* ailmentInflictorUtility, ETypeOfDamage damageType)
-{
-	ailmentInflictorUtility->damageType = damageType;
-}

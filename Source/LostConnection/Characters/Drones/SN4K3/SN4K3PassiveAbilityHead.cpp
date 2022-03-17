@@ -62,33 +62,36 @@ void ASN4K3PassiveAbilityHead::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ASN4K3PassiveAbilityHead, naniteExplosionDamage);
-
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, explosionRadius);
 
-	DOREPLIFETIME(ASN4K3PassiveAbilityHead, addedDamage);
+	DOREPLIFETIME(ASN4K3PassiveAbilityHead, ailmentInflictorUtility);
+}
 
-	DOREPLIFETIME(ASN4K3PassiveAbilityHead, additionalDamage);
+bool ASN4K3PassiveAbilityHead::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	DOREPLIFETIME(ASN4K3PassiveAbilityHead, increasedDamageCoefficients);
+	// wroteSomething |= Channel->ReplicateSubobject(ailmentInflictorUtility, *Bunch, *RepFlags);
+	// 
+	// wroteSomething |= ailmentInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	DOREPLIFETIME(ASN4K3PassiveAbilityHead, moreDamageCoefficients);
+	return wroteSomething;
 }
 
 void ASN4K3PassiveAbilityHead::explode()
 {
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
-	TArray<AActor*> tem;
+	TArray<AActor*> enemies;
 	ALostConnectionPlayerController* controller = Utility::getPlayerController(this);
 	FTransform respawnTransform = GetActorTransform();
 	ALostConnectionGameState* gameState = Utility::getGameState(this);
 	gameState->spawnVFXAtLocation(GetMesh()->GetComponentLocation(), explosionParticles);
 
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetMesh()->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, tem);
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetMesh()->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, enemies);
 
-	for (auto& i : tem)
+	for (AActor* enemy : enemies)
 	{
-		ABaseCharacter* character = Cast<ABaseCharacter>(i);
+		ABaseCharacter* character = Cast<ABaseCharacter>(enemy);
 
 		if (!character->getIsAlly())
 		{
@@ -104,9 +107,9 @@ void ASN4K3PassiveAbilityHead::explode()
 
 			resurrect->init(controller, respawnTransform);
 
-			character->statusInflictorImpactAction(this, characterHit);
+			character->statusInflictorImpactAction(ailmentInflictorUtility, characterHit);
 
-			character->takeDamageFromInflictor(this);
+			character->takeDamageFromInflictor(ailmentInflictorUtility);
 
 			character->getTimers().addTimer
 			(
@@ -186,77 +189,9 @@ void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
 	}
 }
 
-ETypeOfDamage ASN4K3PassiveAbilityHead::getDamageType() const
+UAilmentInflictorUtility* ASN4K3PassiveAbilityHead::getAilmentInflictorUtility() const
 {
-	return ETypeOfDamage::nanite;
-}
+	return nullptr;
 
-float ASN4K3PassiveAbilityHead::getBaseCrushingHitChance() const
-{
-	return 100.0f;
-}
-
-float ASN4K3PassiveAbilityHead::getAdditionalCrushingHitChance() const
-{
-	return 0.0f;
-}
-
-void ASN4K3PassiveAbilityHead::appendIncreasedDamageCoefficient(float coefficient)
-{
-	increasedDamageCoefficients.Add(coefficient);
-}
-
-void ASN4K3PassiveAbilityHead::removeIncreasedDamageCoefficient(float coefficient)
-{
-	increasedDamageCoefficients.Remove(coefficient);
-}
-
-void ASN4K3PassiveAbilityHead::appendMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Add(coefficient);
-}
-
-void ASN4K3PassiveAbilityHead::removeMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Remove(coefficient);
-}
-
-void ASN4K3PassiveAbilityHead::setBaseDamage(float damage)
-{
-	naniteExplosionDamage = damage;
-}
-
-void ASN4K3PassiveAbilityHead::setAddedDamage(float addedDamage)
-{
-	this->addedDamage = addedDamage;
-}
-
-void ASN4K3PassiveAbilityHead::setAdditionalDamage(float additionalDamage)
-{
-	this->additionalDamage = additionalDamage;
-}
-
-float ASN4K3PassiveAbilityHead::getBaseDamage() const
-{
-	return naniteExplosionDamage;
-}
-
-float ASN4K3PassiveAbilityHead::getAddedDamage() const
-{
-	return addedDamage;
-}
-
-float ASN4K3PassiveAbilityHead::getAdditionalDamage() const
-{
-	return additionalDamage;
-}
-
-TArray<float> ASN4K3PassiveAbilityHead::getIncreasedDamageCoefficients() const
-{
-	return increasedDamageCoefficients;
-}
-
-TArray<float> ASN4K3PassiveAbilityHead::getMoreDamageCoefficients() const
-{
-	return moreDamageCoefficients;
+	// return ailmentInflictorUtility;
 }

@@ -9,14 +9,14 @@
 #include "Net/UnrealNetwork.h"
 #include "NiagaraSystem.h"
 
-#include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
+#include "Interfaces/Holders/AilmentInflictorHolder.h"
 
 #include "SN4K3PassiveAbilityHead.generated.h"
 
 UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API ASN4K3PassiveAbilityHead :
 	public ACharacter,
-	public IAilmentInflictor
+	public IAilmentInflictorHolder
 {
 	GENERATED_BODY()
 
@@ -25,22 +25,10 @@ private:
 	UNiagaraSystem* explosionParticles;
 
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float naniteExplosionDamage;
-
-	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float explosionRadius;
 
-	UPROPERTY(Category = DamageInflictor, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float addedDamage;
-
-	UPROPERTY(Category = DamageInflictor, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float additionalDamage;
-
-	UPROPERTY(Category = DamageInflictor, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> increasedDamageCoefficients;
-
-	UPROPERTY(Category = DamageInflictor, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<float> moreDamageCoefficients;
+	UPROPERTY(Category = Utility, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UAilmentInflictorUtility* ailmentInflictorUtility;
 
 	bool isExploded;
 
@@ -50,6 +38,8 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 private:
 	UFUNCTION(BlueprintCallable)
@@ -71,35 +61,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	ETypeOfDamage getDamageType() const override;
-
-	float getBaseCrushingHitChance() const override;
-
-	float getAdditionalCrushingHitChance() const override;
-
-	void appendIncreasedDamageCoefficient(float coefficient) override;
-
-	void removeIncreasedDamageCoefficient(float coefficient) override;
-
-	void appendMoreDamageCoefficient(float coefficient) override;
-
-	void removeMoreDamageCoefficient(float coefficient) override;
-
-	void setBaseDamage(float damage) override;
-
-	void setAddedDamage(float addedDamage) override;
-
-	void setAdditionalDamage(float additionalDamage) override;
-
-	float getBaseDamage() const override;
-
-	float getAddedDamage() const override;
-
-	float getAdditionalDamage() const override;
-
-	TArray<float> getIncreasedDamageCoefficients() const override;
-
-	TArray<float> getMoreDamageCoefficients() const override;
+	UAilmentInflictorUtility* getAilmentInflictorUtility() const override;
 
 	virtual ~ASN4K3PassiveAbilityHead() = default;
 };

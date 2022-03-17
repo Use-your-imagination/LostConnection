@@ -10,7 +10,7 @@
 
 #include "AilmentInflictorUtility.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(BlueprintType, DefaultToInstanced, EditInlineNew)
 class LOSTCONNECTION_API UAilmentInflictorUtility :
 	public UNetworkObject,
 	public IAilmentInflictor
@@ -18,16 +18,16 @@ class LOSTCONNECTION_API UAilmentInflictorUtility :
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Category = "Utility|AilmentInflictor", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = AilmentInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float baseCrushingHitChance;
 
-	UPROPERTY(Category = "Utility|AilmentInflictor", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = AilmentInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float additionalCrushingHitChance;
 
-	UPROPERTY(Category = "Utility|AilmentInflictor", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = AilmentInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	ETypeOfDamage damageType;
 
-	UPROPERTY(Category = "Utility|DamageInflictor", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = AilmentInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	UDamageInflictorUtility* damageInflictorUtility;
 
 private:
@@ -78,8 +78,4 @@ public:
 	float getAdditionalCrushingHitChance() const override;
 
 	~UAilmentInflictorUtility() = default;
-
-	friend void initDamageType(UAilmentInflictorUtility* ailmentInflictorUtility, ETypeOfDamage damageType);
 };
-
-void initDamageType(UAilmentInflictorUtility* ailmentInflictorUtility, ETypeOfDamage damageType);

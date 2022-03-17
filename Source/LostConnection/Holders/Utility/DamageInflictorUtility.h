@@ -10,7 +10,7 @@
 
 #include "DamageInflictorUtility.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(BlueprintType, DefaultToInstanced, EditInlineNew)
 class LOSTCONNECTION_API UDamageInflictorUtility :
 	public UNetworkObject,
 	public IDamageInflictor
@@ -18,19 +18,19 @@ class LOSTCONNECTION_API UDamageInflictorUtility :
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Category = "Utility|DamageInflictor", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float baseInflictorDamage;
 
-	UPROPERTY(Category = "Utility|DamageInflictor", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float addedInflictorDamage;
 
-	UPROPERTY(Category = "Utility|DamageInflictor", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float additionalInflictorDamage;
 
-	UPROPERTY(Category = "Utility|DamageInflictor", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	TArray<float> increasedInflictorDamageCoefficients;
 
-	UPROPERTY(Category = "Utility|DamageInflictor", Replicated, BlueprintReadOnly)
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	TArray<float> moreInflictorDamageCoefficients;
 
 private:
