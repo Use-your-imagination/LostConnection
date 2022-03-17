@@ -73,6 +73,56 @@ void ALostConnectionPlayerState::addCooldownableWeapon(EWeaponSlotType slot, con
 	}
 }
 
+void ALostConnectionPlayerState::returnAmmoToSpare_Implementation(UBaseWeapon* weapon)
+{
+	if (!weapon)
+	{
+		return;
+	}
+
+	EAmmoType ammoType = weapon->getAmmoType();
+
+	if (ammoType == EAmmoType::defaultType)
+	{
+		return;
+	}
+
+	TArray<FAmmoData>& spareAmmo = this->getSpareAmmoArray();
+	int32& currentWeaponSpareAmmo = Algo::FindByPredicate(spareAmmo, [&ammoType](FAmmoData& data) { return data.ammoType == ammoType; })->ammoCount;
+	int32 maxCount = 0;
+
+	switch (ammoType)
+	{
+	case EAmmoType::small:
+		maxCount = this->getMaxSmallAmmoCount();
+
+		break;
+
+	case EAmmoType::large:
+		maxCount = this->getMaxLargeAmmoCount();
+
+		break;
+
+	case EAmmoType::energy:
+		maxCount = this->getMaxEnergyAmmoCount();
+
+		break;
+	}
+
+	int32 tem = FMath::Min(maxCount, currentWeaponSpareAmmo + weapon->getCurrentMagazineSize());
+
+	if (tem == maxCount)
+	{
+		weapon->setCurrentMagazineSize(currentWeaponSpareAmmo + weapon->getCurrentMagazineSize() - maxCount);
+	}
+	else
+	{
+		weapon->setCurrentMagazineSize(0);
+	}
+
+	currentWeaponSpareAmmo = tem;
+}
+
 void ALostConnectionPlayerState::setPrimaryWeapon(UBaseWeapon* weapon)
 {
 	inventory->setPrimaryWeaponCell(weapon);
@@ -91,6 +141,21 @@ void ALostConnectionPlayerState::setFirstInactiveWeapon(UBaseWeapon* weapon)
 void ALostConnectionPlayerState::setSecondInactiveWeapon(UBaseWeapon* weapon)
 {
 	inventory->setSecondInactiveWeaponCell(weapon);
+}
+
+void ALostConnectionPlayerState::setMaxSmallAmmoCount(int32 count)
+{
+	inventory->setMaxSmallAmmoCount(count);
+}
+
+void ALostConnectionPlayerState::setMaxLargeAmmoCount(int32 count)
+{
+	inventory->setMaxLargeAmmoCount(count);
+}
+
+void ALostConnectionPlayerState::setMaxEnergyAmmoCount(int32 count)
+{
+	inventory->setMaxEnergyAmmoCount(count);
 }
 
 const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
@@ -121,6 +186,21 @@ const TArray<FCooldownableAbilitiesData>& ALostConnectionPlayerState::getCooldow
 const TArray<FCooldownableWeaponsData>& ALostConnectionPlayerState::getCooldownableWeapons() const
 {
 	return cooldownableWeapons;
+}
+
+int32 ALostConnectionPlayerState::getMaxSmallAmmoCount() const
+{
+	return inventory->getMaxSmallAmmoCount();
+}
+
+int32 ALostConnectionPlayerState::getMaxLargeAmmoCount() const
+{
+	return inventory->getMaxLargeAmmoCount();
+}
+
+int32 ALostConnectionPlayerState::getMaxEnergyAmmoCount() const
+{
+	return inventory->getMaxEnergyAmmoCount();
 }
 
 ALostConnectionPlayerState::ALostConnectionPlayerState()

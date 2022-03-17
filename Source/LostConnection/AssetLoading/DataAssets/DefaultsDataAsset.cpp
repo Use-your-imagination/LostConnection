@@ -4,10 +4,19 @@
 
 #include "WorldPlaceables/DeathPlaceholder.h"
 #include "Weapons/BaseWeapon.h"
+#include "Constants/Constants.h"
 
 FPrimaryAssetId UDefaultsDataAsset::getPrimaryAssetId()
 {
 	return FPrimaryAssetId(FPrimaryAssetType("Default"), "DefaultAssets");
+}
+
+UDefaultsDataAsset::UDefaultsDataAsset() :
+	maxSmallAmmoCount(UConstants::defaultSmallAmmoMaxCount),
+	maxLargeAmmoCount(UConstants::defaultLargeAmmoMaxCount),
+	maxEnergyAmmoCount(UConstants::defaultEnergyAmmoMaxCount)
+{
+
 }
 
 const TSubclassOf<ADeathPlaceholder>& UDefaultsDataAsset::getDeathPlaceholder() const
@@ -33,6 +42,21 @@ const FColor& UDefaultsDataAsset::operator [] (EWeaponRarity rarity) const
 	}
 
 	return FColor::Emerald;
+}
+
+int32 UDefaultsDataAsset::getMaxSmallAmmoCount() const
+{
+	return maxSmallAmmoCount;
+}
+
+int32 UDefaultsDataAsset::getMaxLargeAmmoCount() const
+{
+	return maxLargeAmmoCount;
+}
+
+int32 UDefaultsDataAsset::getMaxEnergyAmmoCount() const
+{
+	return maxEnergyAmmoCount;
 }
 
 FPrimaryAssetId UDefaultsDataAsset::GetPrimaryAssetId() const

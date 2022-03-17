@@ -67,6 +67,9 @@ public:
 
 	void addCooldownableWeapon(EWeaponSlotType slot, const ICooldownable* cooldownable);
 
+	UFUNCTION(Server, Reliable)
+	void returnAmmoToSpare(UBaseWeapon* weapon);
+
 	void setPrimaryWeapon(UBaseWeapon* weapon);
 
 	void setSecondaryWeapon(UBaseWeapon* weapon);
@@ -74,6 +77,12 @@ public:
 	void setFirstInactiveWeapon(UBaseWeapon* weapon);
 
 	void setSecondInactiveWeapon(UBaseWeapon* weapon);
+
+	void setMaxSmallAmmoCount(int32 count);
+
+	void setMaxLargeAmmoCount(int32 count);
+
+	void setMaxEnergyAmmoCount(int32 count);
 
 	UBaseWeapon* getPrimaryWeapon() const;
 
@@ -98,6 +107,12 @@ public:
 	const TArray<FCooldownableAbilitiesData>& getCooldownableAbilities() const;
 
 	const TArray<FCooldownableWeaponsData>& getCooldownableWeapons() const;
+
+	int32 getMaxSmallAmmoCount() const;
+
+	int32 getMaxLargeAmmoCount() const;
+
+	int32 getMaxEnergyAmmoCount() const;
 
 public:
 	ALostConnectionPlayerState();

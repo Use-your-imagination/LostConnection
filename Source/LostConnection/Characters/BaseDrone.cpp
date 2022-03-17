@@ -830,7 +830,7 @@ void ABaseDrone::dropWeapon_Implementation()
 
 	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>({ currentWeaponMesh->GetComponentRotation(), location + currentWeapon->getLength() * GetActorForwardVector() });
 
-	this->returnAmmoToSpare(currentWeapon);
+	playerState->returnAmmoToSpare(currentWeapon);
 
 	droppedWeapon->setWeapon(currentWeapon);
 

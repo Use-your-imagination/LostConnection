@@ -30,15 +30,30 @@ private:
 	UPROPERTY(Category = "UI|Weapons|Rarity", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	FColor legendaryRarityWeaponColor;
 
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	int32 maxSmallAmmoCount;
+
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	int32 maxLargeAmmoCount;
+
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	int32 maxEnergyAmmoCount;
+
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
 
 public:
-	UDefaultsDataAsset() = default;
+	UDefaultsDataAsset();
 
 	const TSubclassOf<class ADeathPlaceholder>& getDeathPlaceholder() const;
 
 	const FColor& operator [] (EWeaponRarity rarity) const;
+
+	int32 getMaxSmallAmmoCount() const;
+
+	int32 getMaxLargeAmmoCount() const;
+
+	int32 getMaxEnergyAmmoCount() const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

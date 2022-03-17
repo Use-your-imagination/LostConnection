@@ -59,6 +59,15 @@ private:
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<UInventoryCell*> weaponModules;
 
+	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	int32 maxSmallAmmoCount;
+
+	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	int32 maxLargeAmmoCount;
+
+	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	int32 maxEnergyAmmoCount;
+
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -93,6 +102,15 @@ public:
 	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void setLootPoints(int32 newLootPoints);
 
+	UFUNCTION(Server, Reliable)
+	void setMaxSmallAmmoCount(int32 count);
+
+	UFUNCTION(Server, Reliable)
+	void setMaxLargeAmmoCount(int32 count);
+
+	UFUNCTION(Server, Reliable)
+	void setMaxEnergyAmmoCount(int32 count);
+
 	UInventoryCell* getPrimaryWeaponCell() const;
 
 	UInventoryCell* getSecondaryWeaponCell() const;
@@ -114,6 +132,12 @@ public:
 	const TArray<UInventoryCell*>& getWeaponModules() const;
 
 	class ALostConnectionPlayerState* getPlayerState() const;
+
+	int32 getMaxSmallAmmoCount() const;
+
+	int32 getMaxLargeAmmoCount() const;
+
+	int32 getMaxEnergyAmmoCount() const;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 

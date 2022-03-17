@@ -37,6 +37,12 @@ void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(UInventory, personalUnequippedModules);
 
 	DOREPLIFETIME(UInventory, weaponModules);
+
+	DOREPLIFETIME(UInventory, maxSmallAmmoCount);
+
+	DOREPLIFETIME(UInventory, maxLargeAmmoCount);
+
+	DOREPLIFETIME(UInventory, maxEnergyAmmoCount);
 }
 
 bool UInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBaseWeapon* weapon)
@@ -48,8 +54,10 @@ bool UInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBas
 
 	if (weaponCell)
 	{
-		if (slot->getItem())
+		if (UBaseWeapon* slotWeapon = slot->getItem<UBaseWeapon>())
 		{
+			playerState->returnAmmoToSpare(slotWeapon);
+
 			Swap(slot, *weaponCell);
 		}
 		else
@@ -59,7 +67,7 @@ bool UInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBas
 			unequippedWeapons.RemoveSingle(slot);
 		}
 	}
-	
+
 	return StaticCast<bool>(weaponCell);
 }
 
@@ -80,8 +88,13 @@ void UInventory::init(ALostConnectionPlayerState* playerState)
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 	UBaseWeapon* defaultWeapon = NewObject<UBaseWeapon>(playerState, manager.getWeaponClass(UGauss::StaticClass()));
+	const UDefaultsDataAsset& defaults = manager.getDefaults();
 
 	this->playerState = playerState;
+
+	maxSmallAmmoCount = defaults.getMaxSmallAmmoCount();
+	maxLargeAmmoCount = defaults.getMaxLargeAmmoCount();
+	maxEnergyAmmoCount = defaults.getMaxEnergyAmmoCount();
 
 	defaultWeaponCell->setItem(defaultWeapon);
 }
@@ -184,6 +197,21 @@ void UInventory::setLootPoints_Implementation(int32 newLootPoints)
 	lootPoints = FMath::Max(0, newLootPoints);
 }
 
+void UInventory::setMaxSmallAmmoCount_Implementation(int32 count)
+{
+	maxSmallAmmoCount = count;
+}
+
+void UInventory::setMaxLargeAmmoCount_Implementation(int32 count)
+{
+	maxLargeAmmoCount = count;
+}
+
+void UInventory::setMaxEnergyAmmoCount_Implementation(int32 count)
+{
+	maxEnergyAmmoCount = count;
+}
+
 UInventoryCell* UInventory::getPrimaryWeaponCell() const
 {
 	return primaryWeaponCell;
@@ -227,6 +255,26 @@ const TArray<UInventoryCell*>& UInventory::getPersonalUnequippedModules() const
 const TArray<UInventoryCell*>& UInventory::getWeaponModules() const
 {
 	return weaponModules;
+}
+
+ALostConnectionPlayerState* UInventory::getPlayerState() const
+{
+	return playerState;
+}
+
+int32 UInventory::getMaxSmallAmmoCount() const
+{
+	return maxSmallAmmoCount;
+}
+
+int32 UInventory::getMaxLargeAmmoCount() const
+{
+	return maxLargeAmmoCount;
+}
+
+int32 UInventory::getMaxEnergyAmmoCount() const
+{
+	return maxEnergyAmmoCount;
 }
 
 bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -308,11 +356,6 @@ bool UInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	}
 
 	return wroteSomething;
-}
-
-ALostConnectionPlayerState* UInventory::getPlayerState() const
-{
-	return playerState;
 }
 
 TArray<UInventoryCell*> upgradeModules(const TArray<UInventoryCell*>& modules)

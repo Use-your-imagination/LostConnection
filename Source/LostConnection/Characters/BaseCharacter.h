@@ -107,15 +107,6 @@ protected:
 	UPROPERTY(Category = Properties, Replicated, BlueprintReadOnly)
 	bool isDead;
 
-	UPROPERTY(Category = Defaults, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	int32 maxSmallAmmoCount;
-
-	UPROPERTY(Category = Defaults, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	int32 maxLargeAmmoCount;
-
-	UPROPERTY(Category = Defaults, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	int32 maxEnergyAmmoCount;
-
 	UPROPERTY(Category = Defaults, EditDefaultsOnly, BlueprintReadOnly)
 	int32 defaultSmallAmmoCount;
 
@@ -229,8 +220,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void restoreHealth(float amount);
-
-	void returnAmmoToSpare(UBaseWeapon* weapon);
 
 	bool isDamaged() const;
 

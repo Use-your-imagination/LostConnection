@@ -50,12 +50,6 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
 	DOREPLIFETIME(ABaseCharacter, statuses);
-
-	DOREPLIFETIME(ABaseCharacter, maxSmallAmmoCount);
-
-	DOREPLIFETIME(ABaseCharacter, maxLargeAmmoCount);
-
-	DOREPLIFETIME(ABaseCharacter, maxEnergyAmmoCount);
 }
 
 bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -347,9 +341,9 @@ void ABaseCharacter::deathLogic()
 
 	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 
-	this->returnAmmoToSpare(playerState->getPrimaryWeapon());
+	playerState->returnAmmoToSpare(playerState->getPrimaryWeapon());
 
-	this->returnAmmoToSpare(playerState->getSecondaryWeapon());
+	playerState->returnAmmoToSpare(playerState->getSecondaryWeapon());
 }
 
 void ABaseCharacter::updateCharacterVisual()
@@ -397,12 +391,9 @@ ABaseCharacter::ABaseCharacter() :
 	defaultMovementSpeed(450.0f),
 	sprintMovementSpeed(575.0f),
 	isDead(false),
-	maxSmallAmmoCount(UConstants::defaultSmallAmmoMaxCount),
-	maxLargeAmmoCount(UConstants::defaultLargeAmmoMaxCount),
-	maxEnergyAmmoCount(UConstants::defaultEnergyAmmoMaxCount),
-	defaultSmallAmmoCount(maxSmallAmmoCount* UConstants::conversionAmmoCoefficient),
-	defaultLargeAmmoCount(maxLargeAmmoCount* UConstants::conversionAmmoCoefficient),
-	defaultEnergyAmmoCount(maxEnergyAmmoCount* UConstants::conversionAmmoCoefficient)
+	defaultSmallAmmoCount(UConstants::defaultSmallAmmoMaxCount),
+	defaultLargeAmmoCount(UConstants::defaultLargeAmmoMaxCount),
+	defaultEnergyAmmoCount(UConstants::defaultEnergyAmmoMaxCount)
 {
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_SatusState.NPS_SatusState'"));
 	static ConstructorHelpers::FClassFinder<UUserWidget> healthBarWidgetFinder(TEXT("/Game/UI/WidgetComponents/BP_HealthBarWidget"));
@@ -505,56 +496,6 @@ void ABaseCharacter::restoreHealth(float amount)
 	{
 		this->setCurrentHealth(tem);
 	}
-}
-
-void ABaseCharacter::returnAmmoToSpare(UBaseWeapon* weapon)
-{
-	if (!weapon || !GetController())
-	{
-		return;
-	}
-
-	EAmmoType ammoType = weapon->getAmmoType();
-
-	if (ammoType == EAmmoType::defaultType)
-	{
-		return;
-	}
-
-	TArray<FAmmoData>& spareAmmo = Utility::getPlayerState(this)->getSpareAmmoArray();
-	int32& currentWeaponSpareAmmo = Algo::FindByPredicate(spareAmmo, [&ammoType](FAmmoData& data) { return data.ammoType == ammoType; })->ammoCount;
-	int32 maxCount = 0;
-
-	switch (ammoType)
-	{
-	case EAmmoType::small:
-		maxCount = maxSmallAmmoCount;
-
-		break;
-
-	case EAmmoType::large:
-		maxCount = maxLargeAmmoCount;
-
-		break;
-
-	case EAmmoType::energy:
-		maxCount = maxEnergyAmmoCount;
-
-		break;
-	}
-
-	int32 tem = FMath::Min(maxCount, currentWeaponSpareAmmo + weapon->getCurrentMagazineSize());
-
-	if (tem == maxCount)
-	{
-		weapon->setCurrentMagazineSize(currentWeaponSpareAmmo + weapon->getCurrentMagazineSize() - maxCount);
-	}
-	else
-	{
-		weapon->setCurrentMagazineSize(0);
-	}
-
-	currentWeaponSpareAmmo = tem;
 }
 
 void ABaseCharacter::playAnimation_Implementation(UAnimMontage* animation)
