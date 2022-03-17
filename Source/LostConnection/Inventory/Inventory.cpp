@@ -39,6 +39,30 @@ void UInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(UInventory, weaponModules);
 }
 
+bool UInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBaseWeapon* weapon)
+{
+	UInventoryCell** weaponCell = unequippedWeapons.FindByPredicate([weapon](const UInventoryCell* cell)
+		{
+			return cell->getItem() == weapon;
+		});
+
+	if (weaponCell)
+	{
+		if (slot->getItem())
+		{
+			Swap(slot, *weaponCell);
+		}
+		else
+		{
+			slot = *weaponCell;
+
+			unequippedWeapons.RemoveSingle(slot);
+		}
+	}
+	
+	return StaticCast<bool>(weaponCell);
+}
+
 UInventory::UInventory()
 {
 	primaryWeaponCell = CreateDefaultSubobject<UInventoryCell>("PrimaryWeaponCell");
@@ -55,22 +79,16 @@ UInventory::UInventory()
 void UInventory::init(ALostConnectionPlayerState* playerState)
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-	UBaseWeapon* tem = NewObject<UBaseWeapon>(playerState, manager.getWeaponClass(UHipter::StaticClass()));
+	UBaseWeapon* defaultWeapon = NewObject<UBaseWeapon>(playerState, manager.getWeaponClass(UGauss::StaticClass()));
 
 	this->playerState = playerState;
 
-	tem->updateTimeBetweenShots();
+	defaultWeapon->updateTimeBetweenShots();
 
-	primaryWeaponCell->setItem(tem);
-
-	tem = NewObject<UBaseWeapon>(playerState, manager.getWeaponClass(UGauss::StaticClass()));
-
-	tem->updateTimeBetweenShots();
-
-	defaultWeaponCell->setItem(tem);
+	defaultWeaponCell->setItem(defaultWeapon);
 }
 
-void UInventory::addPersonalModule(UBasePersonalModule* module)
+void UInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 {
 	UInventoryCell* personalModuleCell = NewObject<UInventoryCell>(playerState);
 	TArray<UInventoryCell*> modules;
@@ -97,7 +115,7 @@ void UInventory::addPersonalModule(UBasePersonalModule* module)
 	}
 }
 
-void UInventory::addWeaponModule(UBaseWeaponModule* module)
+void UInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
 {
 	UInventoryCell* weaponModuleCell = NewObject<UInventoryCell>(playerState);
 	TArray<UInventoryCell*> modulesToRemove;
@@ -114,7 +132,7 @@ void UInventory::addWeaponModule(UBaseWeaponModule* module)
 	}
 }
 
-void UInventory::addUnequippedWeapon(UBaseWeapon* weapon)
+void UInventory::addUnequippedWeapon_Implementation(UBaseWeapon* weapon)
 {
 	UInventoryCell* weaponCell = NewObject<UInventoryCell>(playerState);
 
@@ -123,29 +141,49 @@ void UInventory::addUnequippedWeapon(UBaseWeapon* weapon)
 	unequippedWeapons.Add(weaponCell);
 }
 
-void UInventory::setPrimaryWeaponCell(UBaseWeapon* weapon)
+void UInventory::setPrimaryWeaponCell_Implementation(UBaseWeapon* weapon)
 {
+	if (this->swapBetweenUnequippedWeaponsAndSlot(primaryWeaponCell, weapon))
+	{
+		return;
+	}
+
 	primaryWeaponCell->setItem(weapon);
 }
 
-void UInventory::setSecondaryWeaponCell(UBaseWeapon* weapon)
+void UInventory::setSecondaryWeaponCell_Implementation(UBaseWeapon* weapon)
 {
+	if (this->swapBetweenUnequippedWeaponsAndSlot(secondaryWeaponCell, weapon))
+	{
+		return;
+	}
+
 	secondaryWeaponCell->setItem(weapon);
 }
 
-void UInventory::setFirstInactiveWeaponCell(UBaseWeapon* weapon)
+void UInventory::setFirstInactiveWeaponCell_Implementation(UBaseWeapon* weapon)
 {
+	if (this->swapBetweenUnequippedWeaponsAndSlot(firstInactiveWeaponCell, weapon))
+	{
+		return;
+	}
+
 	firstInactiveWeaponCell->setItem(weapon);
 }
 
-void UInventory::setSecondInactiveWeaponCell(UBaseWeapon* weapon)
+void UInventory::setSecondInactiveWeaponCell_Implementation(UBaseWeapon* weapon)
 {
+	if (this->swapBetweenUnequippedWeaponsAndSlot(secondInactiveWeaponCell, weapon))
+	{
+		return;
+	}
+
 	secondInactiveWeaponCell->setItem(weapon);
 }
 
-void UInventory::setLootPoints(int32 lootPoints)
+void UInventory::setLootPoints_Implementation(int32 newLootPoints)
 {
-	this->lootPoints = FMath::Max(0, lootPoints);
+	lootPoints = FMath::Max(0, newLootPoints);
 }
 
 UInventoryCell* UInventory::getPrimaryWeaponCell() const

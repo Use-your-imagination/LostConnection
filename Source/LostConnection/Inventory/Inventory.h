@@ -62,26 +62,36 @@ private:
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	bool swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBaseWeapon* weapon);
+
 public:
 	UInventory();
 
 	void init(class ALostConnectionPlayerState* playerState);
 
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void addPersonalModule(UBasePersonalModule* module);
 
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void addWeaponModule(UBaseWeaponModule* module);
 
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void addUnequippedWeapon(UBaseWeapon* weapon);
 
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void setPrimaryWeaponCell(UBaseWeapon* weapon);
 
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void setSecondaryWeaponCell(UBaseWeapon* weapon);
 
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void setFirstInactiveWeaponCell(UBaseWeapon* weapon);
 
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void setSecondInactiveWeaponCell(UBaseWeapon* weapon);
 
-	void setLootPoints(int32 lootPoints);
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
+	void setLootPoints(int32 newLootPoints);
 
 	UInventoryCell* getPrimaryWeaponCell() const;
 

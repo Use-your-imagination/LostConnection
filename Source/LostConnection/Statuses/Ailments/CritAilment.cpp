@@ -33,15 +33,15 @@ void UCritAilment::initDamage()
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
-	damageInflictorUtility->setBaseDamage(inflictorDamage * Utility::fromPercent(damageMultiplierPercent));
-
 	for (const UBaseStatus* status : statuses)
 	{
 		if (const UCritAilment* crit = Cast<UCritAilment>(status))
 		{
-			damageInflictorUtility->appendIncreasedDamageCoefficient(Utility::fromPercent(crit->getCritMultiplier()));
+			damageMultiplierPercent += crit->getCritMultiplier();
 		}
 	}
+
+	damageInflictorUtility->setBaseDamage(inflictorDamage * Utility::fromPercent(damageMultiplierPercent));
 }
 
 UCritAilment::UCritAilment()

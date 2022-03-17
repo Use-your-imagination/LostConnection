@@ -47,12 +47,12 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 	return wroteSomething;
 }
 
-void ALostConnectionPlayerState::addPersonalModule_Implementation(UBasePersonalModule* module)
+void ALostConnectionPlayerState::addPersonalModule(UBasePersonalModule* module)
 {
 	inventory->addPersonalModule(module);
 }
 
-void ALostConnectionPlayerState::addWeaponModule_Implementation(UBaseWeaponModule* module)
+void ALostConnectionPlayerState::addWeaponModule(UBaseWeaponModule* module)
 {
 	inventory->addWeaponModule(module);
 }
@@ -73,22 +73,22 @@ void ALostConnectionPlayerState::addCooldownableWeapon(EWeaponSlotType slot, con
 	}
 }
 
-void ALostConnectionPlayerState::setPrimaryWeapon_Implementation(UBaseWeapon* weapon)
+void ALostConnectionPlayerState::setPrimaryWeapon(UBaseWeapon* weapon)
 {
 	inventory->setPrimaryWeaponCell(weapon);
 }
 
-void ALostConnectionPlayerState::setSecondaryWeapon_Implementation(UBaseWeapon* weapon)
+void ALostConnectionPlayerState::setSecondaryWeapon(UBaseWeapon* weapon)
 {
 	inventory->setPrimaryWeaponCell(weapon);
 }
 
-void ALostConnectionPlayerState::setFirstInactiveWeapon_Implementation(UBaseWeapon* weapon)
+void ALostConnectionPlayerState::setFirstInactiveWeapon(UBaseWeapon* weapon)
 {
 	inventory->setFirstInactiveWeaponCell(weapon);
 }
 
-void ALostConnectionPlayerState::setSecondInactiveWeapon_Implementation(UBaseWeapon* weapon)
+void ALostConnectionPlayerState::setSecondInactiveWeapon(UBaseWeapon* weapon)
 {
 	inventory->setSecondInactiveWeaponCell(weapon);
 }

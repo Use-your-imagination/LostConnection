@@ -88,11 +88,20 @@ bool UArcingCurrentAilment::applyEffect(IStatusReceiver* target, const FHitResul
 
 	TArray<AActor*> targets;
 
-	UKismetSystemLibrary::SphereOverlapActors(Cast<UObject>(target)->GetWorld(), target->getMeshComponent()->GetComponentLocation(), radius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, targets);
+	UKismetSystemLibrary::SphereOverlapActors
+	(
+		Cast<UObject>(target)->GetWorld(),
+		target->getMeshComponent()->GetComponentLocation(),
+		radius,
+		traceObjectTypes,
+		ABaseCharacter::StaticClass(),
+		{},
+		targets
+	);
 
-	for (auto& i : targets)
+	for (auto& otherTarget : targets)
 	{
-		Cast<ABaseCharacter>(i)->takeDamageFromInflictor(this);
+		Cast<ABaseCharacter>(otherTarget)->takeDamageFromInflictor(this);
 	}
 
 	return true;

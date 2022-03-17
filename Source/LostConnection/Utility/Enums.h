@@ -56,24 +56,24 @@ enum class EWeaponRarity : uint8
 UENUM(BlueprintType)
 enum class EAbilitySlot : uint8
 {
-	empty = 0 UMETA(DisplayName = "No ability"),
-	passiveAbility = 1 UMETA(DisplayName = "Passive ability"),
-	firstAbility = 2 UMETA(DisplayName = "First ability"),
-	secondAbility = 3 UMETA(DisplayName = "Second ability"),
-	thirdAbility = 4 UMETA(DisplayName = "Third ability"),
-	ultimateAbility = 5 UMETA(DisplayName = "Ultimate ability")
+	empty UMETA(DisplayName = "No ability"),
+	passiveAbility UMETA(DisplayName = "Passive ability"),
+	firstAbility UMETA(DisplayName = "First ability"),
+	secondAbility UMETA(DisplayName = "Second ability"),
+	thirdAbility UMETA(DisplayName = "Third ability"),
+	ultimateAbility UMETA(DisplayName = "Ultimate ability")
 };
 
 UENUM(BlueprintType)
 enum class ETypeOfDamage : uint8
 {
-	none = 0 UMETA(DisplayName = "None"),
-	physical = 1 UMETA(DisplayName = "Physical"),
-	nanite = 2 UMETA(DisplayName = "Nanite"),
-	fire = 3 UMETA(DisplayName = "Fire"),
-	electricity = 4 UMETA(DisplayName = "Electricity"),
-	radiation = 5 UMETA(DisplayName = "Radiation"),
-	cold = 6 UMETA(DisplayName = "Cold")
+	none UMETA(DisplayName = "None"),
+	physical UMETA(DisplayName = "Physical"),
+	nanite UMETA(DisplayName = "Nanite"),
+	fire UMETA(DisplayName = "Fire"),
+	electricity UMETA(DisplayName = "Electricity"),
+	radiation UMETA(DisplayName = "Radiation"),
+	cold UMETA(DisplayName = "Cold")
 };
 
 UENUM(BlueprintType)

@@ -35,15 +35,15 @@ void UIrradiationAilment::initDamage()
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
-	damageInflictorUtility->setBaseDamage(inflictorDamage * Utility::fromPercent(irradiationMultiplier));
-
-	for (UBaseStatus* status : statuses)
+	for (const UBaseStatus* status : statuses)
 	{
-		if (UIrradiationAilment* irradiation = Cast<UIrradiationAilment>(status))
+		if (const UIrradiationAilment* irradiation = Cast<UIrradiationAilment>(status))
 		{
-			damageInflictorUtility->appendIncreasedDamageCoefficient(Utility::fromPercent(irradiation->getAdditionalIrradiationMultiplier()));
+			irradiationMultiplier += irradiation->getAdditionalIrradiationMultiplier();
 		}
 	}
+
+	damageInflictorUtility->setBaseDamage(inflictorDamage * Utility::fromPercent(irradiationMultiplier));
 }
 
 UIrradiationAilment::UIrradiationAilment()

@@ -436,8 +436,6 @@ void ABaseDrone::BeginPlay()
 		this->restoreAbilitiesCooldown();
 
 		this->restoreWeaponsCooldown();
-
-		Utility::getPlayerState(this)->getPrimaryWeapon()->setOwner(this);
 	}
 }
 

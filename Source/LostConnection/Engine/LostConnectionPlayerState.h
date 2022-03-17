@@ -59,26 +59,20 @@ protected:
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 public:
-	UFUNCTION(Server, Reliable)
 	void addPersonalModule(UBasePersonalModule* module);
 
-	UFUNCTION(Server, Reliable)
 	void addWeaponModule(UBaseWeaponModule* module);
 
 	void addCooldownableAbility(EAbilitySlot slot, const ICooldownable* cooldownable);
 
 	void addCooldownableWeapon(EWeaponSlotType slot, const ICooldownable* cooldownable);
 
-	UFUNCTION(Server, Reliable)
 	void setPrimaryWeapon(UBaseWeapon* weapon);
 
-	UFUNCTION(Server, Reliable)
 	void setSecondaryWeapon(UBaseWeapon* weapon);
 
-	UFUNCTION(Server, Reliable)
 	void setFirstInactiveWeapon(UBaseWeapon* weapon);
 
-	UFUNCTION(Server, Reliable)
 	void setSecondInactiveWeapon(UBaseWeapon* weapon);
 
 	UBaseWeapon* getPrimaryWeapon() const;
