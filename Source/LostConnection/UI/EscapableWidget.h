@@ -14,7 +14,5 @@ class LOSTCONNECTION_API UEscapableWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	UEscapableWidget() = default;
-
 	virtual ~UEscapableWidget() = default;
 };
