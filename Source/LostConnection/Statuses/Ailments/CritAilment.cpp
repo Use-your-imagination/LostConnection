@@ -75,6 +75,10 @@ bool UCritAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
 
 	target->takeDamageFromInflictorHolder(this);
 
+	damageInflictorUtility = NewObject<UDamageInflictorUtility>(this);
+
+	damageInflictorUtility->setBaseDamage(inflictorDamage);
+
 	critMultiplier = target->getTotalLifePercentDealt(this) * damageMultiplierPerTotalLifePercentPool;
 
 	return true;

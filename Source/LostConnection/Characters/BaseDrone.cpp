@@ -905,6 +905,11 @@ void ABaseDrone::changeWeapon()
 {
 	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 
+	if (currentWeapon)
+	{
+		currentWeapon->resetShoot(currentWeaponMesh, this);
+	}
+
 	if (currentWeapon == playerState->getPrimaryWeapon())
 	{
 		this->changeToSecondaryWeapon();
