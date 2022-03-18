@@ -81,12 +81,12 @@ float UAilmentInflictorUtility::getAdditionalDamage() const
 	return damageInflictorUtility->getAdditionalDamage();
 }
 
-TArray<float> UAilmentInflictorUtility::getIncreasedDamageCoefficients() const
+const TArray<float>& UAilmentInflictorUtility::getIncreasedDamageCoefficients() const
 {
 	return damageInflictorUtility->getIncreasedDamageCoefficients();
 }
 
-TArray<float> UAilmentInflictorUtility::getMoreDamageCoefficients() const
+const TArray<float>& UAilmentInflictorUtility::getMoreDamageCoefficients() const
 {
 	return damageInflictorUtility->getMoreDamageCoefficients();
 }

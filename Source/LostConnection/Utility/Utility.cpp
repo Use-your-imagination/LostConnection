@@ -9,6 +9,7 @@
 #include "Statuses/BaseStatus.h"
 #include "Characters/BaseDrone.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
+#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 
 SIZE_T Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<UBaseStatus>& statusClass)
 {
@@ -87,4 +88,17 @@ void Utility::executeOnlyOnServerFromMulticast(AActor* actor, const TFunction<vo
 bool Utility::isYourPawn(APawn* pawn)
 {
 	return IsValid(pawn) && (pawn->GetController() == GEngine->GetFirstLocalPlayerController(pawn->GetWorld()));
+}
+
+void Utility::resetDamageInflictor(IDamageInflictor* inflictor)
+{
+	inflictor->setBaseDamage(0.0f);
+
+	inflictor->setAddedDamage(0.0f);
+
+	inflictor->setAdditionalDamage(0.0f);
+
+	const_cast<TArray<float>&>(inflictor->getIncreasedDamageCoefficients()).Empty();
+
+	const_cast<TArray<float>&>(inflictor->getMoreDamageCoefficients()).Empty();
 }

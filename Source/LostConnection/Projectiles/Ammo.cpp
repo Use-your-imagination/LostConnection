@@ -54,9 +54,13 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 		lastTarget = OtherActor;
 
-		damage = damage * (1.0f - IShotThrough::Execute_getPercentageDamageReduction(OtherActor) * 0.01f) - IShotThrough::Execute_getFlatDamageReduction(OtherActor);
+		ailmentInflictorUtility->setBaseDamage
+		(
+			ailmentInflictorUtility->getBaseDamage() *
+			(1.0f - Utility::fromPercent(IShotThrough::Execute_getPercentageDamageReduction(OtherActor))) - IShotThrough::Execute_getFlatDamageReduction(OtherActor)
+		);
 
-		if (damage > 0.0f)
+		if (ailmentInflictorUtility->getBaseDamage() > 0.0f)
 		{
 			UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 			(
@@ -75,10 +79,10 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	}
 	else
 	{
-		damage = 0.0f;
+		ailmentInflictorUtility->setBaseDamage(0.0f);
 	}
 
-	if (damage <= 0.0f)
+	if (ailmentInflictorUtility->getBaseDamage() <= 0.0f)
 	{
 		mesh->SetVisibility(true);
 
@@ -144,10 +148,15 @@ AAmmo::AAmmo() :
 	bReplicates = true;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>("AmmoMesh");
+
 	visibleMesh = CreateDefaultSubobject<UStaticMeshComponent>("FakeAmmoMesh");
+
 	tracer = CreateDefaultSubobject<UNiagaraComponent>("Tracer");
+
 	movement = CreateDefaultSubobject<UProjectileMovementComponent>("Movement");
-	
+
+	ailmentInflictorUtility = CreateDefaultSubobject<UAilmentInflictorUtility>("AilmentInflictorUtility");
+
 	SetRootComponent(mesh);
 
 	mesh->SetGenerateOverlapEvents(true);
@@ -195,17 +204,17 @@ void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTrans
 
 void AAmmo::copyProperties(UBaseWeapon* weapon)
 {
-	damage = weapon->getBaseDamage();
-
-	addedDamage = weapon->getAddedDamage();
-
-	additionalDamage = weapon->getAdditionalDamage();
-
-	damageType = weapon->getDamageType();
-
-	crushingHitChance = weapon->getBaseCrushingHitChance();
-
-	additionalCrushingHitChance = weapon->getAdditionalCrushingHitChance();
+	// damage = weapon->getBaseDamage();
+	// 
+	// addedDamage = weapon->getAddedDamage();
+	// 
+	// additionalDamage = weapon->getAdditionalDamage();
+	// 
+	// damageType = weapon->getDamageType();
+	// 
+	// crushingHitChance = weapon->getBaseCrushingHitChance();
+	// 
+	// additionalCrushingHitChance = weapon->getAdditionalCrushingHitChance();
 
 	owner = weapon->getOwner();
 
@@ -240,87 +249,7 @@ const TWeakObjectPtr<ABaseCharacter>& AAmmo::getOwner() const
 	return owner;
 }
 
-void AAmmo::appendIncreasedDamageCoefficient(float coefficient)
+UAilmentInflictorUtility* AAmmo::getAilmentInflictorUtility() const
 {
-	increasedDamageCoefficients.Add(coefficient);
-}
-
-void AAmmo::removeIncreasedDamageCoefficient(float coefficient)
-{
-	increasedDamageCoefficients.Remove(coefficient);
-}
-
-void AAmmo::appendMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Add(coefficient);
-}
-
-void AAmmo::removeMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Remove(coefficient);
-}
-
-void AAmmo::setBaseDamage(float damage)
-{
-	damage = damage;
-}
-
-void AAmmo::setAddedDamage(float addedDamage)
-{
-	this->addedDamage = addedDamage;
-}
-
-void AAmmo::setAdditionalDamage(float additionalDamage)
-{
-	this->additionalDamage = additionalDamage;
-}
-
-void AAmmo::setBaseCrushingHitChance_Implementation(float newCrushingHitChance)
-{
-	crushingHitChance = newCrushingHitChance;
-}
-
-void AAmmo::setAdditionalCrushingHitChance_Implementation(float newAdditionalCrushingHitChance)
-{
-	additionalCrushingHitChance = newAdditionalCrushingHitChance;
-}
-
-float AAmmo::getBaseDamage() const
-{
-	return damage;
-}
-
-float AAmmo::getAddedDamage() const
-{
-	return 0.0f;
-}
-
-float AAmmo::getAdditionalDamage() const
-{
-	return additionalDamage;
-}
-
-TArray<float> AAmmo::getIncreasedDamageCoefficients() const
-{
-	return increasedDamageCoefficients;
-}
-
-TArray<float> AAmmo::getMoreDamageCoefficients() const
-{
-	return moreDamageCoefficients;
-}
-
-ETypeOfDamage AAmmo::getDamageType() const
-{
-	return damageType;
-}
-
-float AAmmo::getBaseCrushingHitChance() const
-{
-	return crushingHitChance;
-}
-
-float AAmmo::getAdditionalCrushingHitChance() const
-{
-	return additionalCrushingHitChance;
+	return ailmentInflictorUtility;
 }

@@ -86,7 +86,7 @@ bool UIrradiationAilment::applyEffect(IStatusReceiver* target, const FHitResult&
 		target->setCurrentHealth(tem);
 	}
 
-	damageInflictorUtility = NewObject<UDamageInflictorUtility>(this);
+	Utility::resetDamageInflictor(damageInflictorUtility);
 
 	damageInflictorUtility->setBaseDamage(inflictorDamage);
 

@@ -62,9 +62,9 @@ public:
 
 	float getAdditionalDamage() const override;
 
-	TArray<float> getIncreasedDamageCoefficients() const override;
+	const TArray<float>& getIncreasedDamageCoefficients() const override;
 
-	TArray<float> getMoreDamageCoefficients() const override;
+	const TArray<float>& getMoreDamageCoefficients() const override;
 
 	~UDamageInflictorUtility() = default;
 };

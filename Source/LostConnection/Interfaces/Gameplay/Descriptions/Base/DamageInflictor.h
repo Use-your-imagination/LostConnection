@@ -43,7 +43,7 @@ public:
 
 	virtual float getAdditionalDamage() const = 0;
 
-	virtual TArray<float> getIncreasedDamageCoefficients() const = 0;
+	virtual const TArray<float>& getIncreasedDamageCoefficients() const = 0;
 
-	virtual TArray<float> getMoreDamageCoefficients() const = 0;
+	virtual const TArray<float>& getMoreDamageCoefficients() const = 0;
 };

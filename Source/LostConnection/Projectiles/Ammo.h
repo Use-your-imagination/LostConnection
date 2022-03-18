@@ -8,7 +8,7 @@
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-#include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
+#include "Interfaces/Holders/AilmentInflictorHolder.h"
 
 #include "Ammo.generated.h"
 
@@ -17,7 +17,7 @@
 UCLASS(BlueprintType, Blueprintable)
 class LOSTCONNECTION_API AAmmo :
 	public APawn,
-	public IAilmentInflictor
+	public IAilmentInflictorHolder
 {
 	GENERATED_BODY()
 
@@ -55,15 +55,8 @@ private:
 
 	TWeakObjectPtr<class ABaseCharacter> owner;
 	AActor* lastTarget;
-	float damage;
-	float addedDamage;
-	TArray<float> increasedDamageCoefficients;
-	TArray<float> moreDamageCoefficients;
-	float additionalDamage;
-	ETypeOfDamage damageType;
+	UAilmentInflictorUtility* ailmentInflictorUtility;
 	bool isAlly;
-	float crushingHitChance;
-	float additionalCrushingHitChance;
 
 public:
 	AAmmo();
@@ -78,41 +71,7 @@ public:
 
 	const TWeakObjectPtr<class ABaseCharacter>& getOwner() const;
 
-	virtual void appendIncreasedDamageCoefficient(float coefficient) final override;
-
-	virtual void removeIncreasedDamageCoefficient(float coefficient) final override;
-
-	virtual void appendMoreDamageCoefficient(float coefficient) final override;
-
-	virtual void removeMoreDamageCoefficient(float coefficient) final override;
-
-	virtual void setBaseDamage(float damage) final override;
-
-	virtual void setAddedDamage(float addedDamage) final override;
-	
-	virtual void setAdditionalDamage(float additionalDamage) final override;
-
-	UFUNCTION(Server, Reliable)
-	virtual void setBaseCrushingHitChance(float newCrushingHitChance) final override;
-
-	UFUNCTION(Server, Reliable)
-	virtual void setAdditionalCrushingHitChance(float newAdditionalCrushingHitChance) final override;
-
-	virtual float getBaseDamage() const final override;
-
-	virtual float getAddedDamage() const override;
-
-	virtual float getAdditionalDamage() const override;
-
-	virtual TArray<float> getIncreasedDamageCoefficients() const override;
-
-	virtual TArray<float> getMoreDamageCoefficients() const override;
-
-	virtual ETypeOfDamage getDamageType() const final override;
-
-	virtual float getBaseCrushingHitChance() const final override;
-
-	virtual float getAdditionalCrushingHitChance() const final override;
+	UAilmentInflictorUtility* getAilmentInflictorUtility() const override;
 
 	virtual ~AAmmo() = default;
 

@@ -61,9 +61,9 @@ public:
 
 	float getAdditionalDamage() const override;
 
-	TArray<float> getIncreasedDamageCoefficients() const override;
+	const TArray<float>& getIncreasedDamageCoefficients() const override;
 
-	TArray<float> getMoreDamageCoefficients() const override;
+	const TArray<float>& getMoreDamageCoefficients() const override;
 
 	UFUNCTION(Server, Reliable)
 	void setBaseCrushingHitChance(float crushingHitChance) override;

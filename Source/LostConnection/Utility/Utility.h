@@ -40,6 +40,8 @@ public:
 
 	static bool isYourPawn(APawn* pawn);
 
+	static void resetDamageInflictor(class IDamageInflictor* inflictor);
+
 	template<typename T>
 	static bool checkChanceProc(const T& chance);
 
@@ -87,7 +89,7 @@ inline float Utility::toPercent(float coefficient)
 
 inline float Utility::fromPercent(float percent)
 {
-	return percent / 100.0f;
+	return percent * 0.01f;
 }
 
 template<typename T>

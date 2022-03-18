@@ -67,12 +67,12 @@ float UDamageInflictorUtility::getAdditionalDamage() const
 	return additionalInflictorDamage;
 }
 
-TArray<float> UDamageInflictorUtility::getIncreasedDamageCoefficients() const
+const TArray<float>& UDamageInflictorUtility::getIncreasedDamageCoefficients() const
 {
 	return increasedInflictorDamageCoefficients;
 }
 
-TArray<float> UDamageInflictorUtility::getMoreDamageCoefficients() const
+const TArray<float>& UDamageInflictorUtility::getMoreDamageCoefficients() const
 {
 	return moreInflictorDamageCoefficients;
 }

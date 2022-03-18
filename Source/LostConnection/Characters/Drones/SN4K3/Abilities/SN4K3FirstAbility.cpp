@@ -15,24 +15,19 @@ void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(USN4K3FirstAbility, damage);
-
 	DOREPLIFETIME(USN4K3FirstAbility, distance);
 
-	DOREPLIFETIME(USN4K3FirstAbility, addedDamage);
-
-	DOREPLIFETIME(USN4K3FirstAbility, additionalDamage);
-	
-	DOREPLIFETIME(USN4K3FirstAbility, increasedDamageCoefficients);
-
-	DOREPLIFETIME(USN4K3FirstAbility, moreDamageCoefficients);
+	DOREPLIFETIME(USN4K3FirstAbility, ailmentInflictorUtility);
 }
 
 USN4K3FirstAbility::USN4K3FirstAbility() :
-	damage(375.0f),
 	distance(1200.0f)
 {
 	cost = 90.0f;
+
+	ailmentInflictorUtility = CreateDefaultSubobject<UAilmentInflictorUtility>("AilmentInflictorUtility");
+
+	ailmentInflictorUtility->setBaseDamage(375.0f);
 
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
@@ -74,77 +69,18 @@ void USN4K3FirstAbility::useAbility()
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }
 
-void USN4K3FirstAbility::appendIncreasedDamageCoefficient(float coefficient)
+bool USN4K3FirstAbility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
-	increasedDamageCoefficients.Add(coefficient);
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(ailmentInflictorUtility, *Bunch, *RepFlags);
+
+	wroteSomething |= ailmentInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	return wroteSomething;
 }
 
-void USN4K3FirstAbility::removeIncreasedDamageCoefficient(float coefficient)
+UAilmentInflictorUtility* USN4K3FirstAbility::getAilmentInflictorUtility() const
 {
-	increasedDamageCoefficients.Remove(coefficient);
-}
-
-void USN4K3FirstAbility::appendMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Add(coefficient);
-}
-
-void USN4K3FirstAbility::removeMoreDamageCoefficient(float coefficient)
-{
-	moreDamageCoefficients.Remove(coefficient);
-}
-
-void USN4K3FirstAbility::setBaseDamage_Implementation(float newDamage)
-{
-	damage = newDamage;
-}
-
-void USN4K3FirstAbility::setAddedDamage_Implementation(float newAddedDamage)
-{
-	addedDamage = newAddedDamage;
-}
-
-void USN4K3FirstAbility::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	additionalDamage = newAdditionalDamage;
-}
-
-float USN4K3FirstAbility::getBaseDamage() const
-{
-	return damage;
-}
-
-float USN4K3FirstAbility::getAddedDamage() const
-{
-	return addedDamage;
-}
-
-float USN4K3FirstAbility::getAdditionalDamage() const
-{
-	return additionalDamage;
-}
-
-TArray<float> USN4K3FirstAbility::getIncreasedDamageCoefficients() const
-{
-	return increasedDamageCoefficients;
-}
-
-TArray<float> USN4K3FirstAbility::getMoreDamageCoefficients() const
-{
-	return moreDamageCoefficients;
-}
-
-ETypeOfDamage USN4K3FirstAbility::getDamageType() const
-{
-	return ETypeOfDamage::nanite;
-}
-
-float USN4K3FirstAbility::getBaseCrushingHitChance() const
-{
-	return Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter();
-}
-
-float USN4K3FirstAbility::getAdditionalCrushingHitChance() const
-{
-	return 0.0f;
+	return ailmentInflictorUtility;
 }
