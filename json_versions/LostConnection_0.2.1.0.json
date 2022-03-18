@@ -33,5 +33,14 @@
         "Add getting random weapon with loot points cost"
       ]
     }
+  },
+  "Main menu": {
+    "type": "category",
+    "Environment": {
+      "type": "item",
+      "notes": [
+        "Added currency tank"
+      ]
+    }
   }
 }
