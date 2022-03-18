@@ -127,17 +127,17 @@ void AAmmo::applyModules(const TArray<ModuleT*>& modules)
 	{
 		if (module->Implements<ImplementsModuleInterface>())
 		{
-			const ModuleInterface* damageModule = Cast<const ModuleInterface>(module);
+			const ModuleInterface* damageModule = Cast<ModuleInterface>(module);
 
-			if (damageModule->getDamageType() != damageType)
+			if (damageModule->getDamageType() != ailmentInflictorUtility->getDamageType())
 			{
 				continue;
 			}
 
-			addedDamage += damageModule->getAddedDamage();
-			increasedDamageCoefficients.Add(damageModule->getIncreasedDamage());
-			moreDamageCoefficients.Add(damageModule->getMoreDamage());
-			additionalDamage += damageModule->getAdditionalDamage();
+			ailmentInflictorUtility->setAddedDamage(ailmentInflictorUtility->getAddedDamage() + damageModule->getAddedDamage());
+			ailmentInflictorUtility->appendIncreasedDamageCoefficient(damageModule->getIncreasedDamage());
+			ailmentInflictorUtility->appendMoreDamageCoefficient(damageModule->getMoreDamage());
+			ailmentInflictorUtility->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage() + damageModule->getAdditionalDamage());
 		}
 	}
 }

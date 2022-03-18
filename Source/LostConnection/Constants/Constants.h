@@ -42,6 +42,8 @@ public:
 
 	static constexpr int32 personalModulesLimit = 8;
 
+	static constexpr int32 startZOrder = 1000;
+
 public:
 	static const FName actionStringTablePath;
 	static const FString defaultActionMessageKey;

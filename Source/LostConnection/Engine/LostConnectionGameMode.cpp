@@ -38,18 +38,19 @@ void ALostConnectionGameMode::BeginPlay()
 
 ALostConnectionGameMode::ALostConnectionGameMode()
 {
-	static ConstructorHelpers::FClassFinder<APawn> defaultPawnClassFinder(TEXT("/Game/WorldPlaceable/BP_PreConnectionPlaceholder"));
-	static ConstructorHelpers::FClassFinder<APlayerState> defaultPlayerStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerState"));
-	static ConstructorHelpers::FClassFinder<APlayerController> defaultPlayerControllerClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerController"));
+	static ConstructorHelpers::FClassFinder<APawn> pawnClassFinder(TEXT("/Game/WorldPlaceable/BP_PreConnectionPlaceholder"));
+	static ConstructorHelpers::FClassFinder<APlayerState> playerStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerState"));
+	static ConstructorHelpers::FClassFinder<AGameState> gameStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionGameState"));
+	static ConstructorHelpers::FClassFinder<APlayerController> playerControllerClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerController"));
 	
 	bUseSeamlessTravel = true;
 
 	NetUpdateFrequency = UConstants::minNetUpdateFrequency;
 
-	DefaultPawnClass = defaultPawnClassFinder.Class;
-	PlayerControllerClass = defaultPlayerControllerClassFinder.Class;
-	PlayerStateClass = defaultPlayerStateClassFinder.Class;
-	GameStateClass = ALostConnectionGameState::StaticClass();
+	DefaultPawnClass = pawnClassFinder.Class;
+	PlayerControllerClass = playerControllerClassFinder.Class;
+	PlayerStateClass = playerStateClassFinder.Class;
+	GameStateClass = gameStateClassFinder.Class;
 }
 
 void ALostConnectionGameMode::initRoomAI(int32 totalCount, int32 waves)

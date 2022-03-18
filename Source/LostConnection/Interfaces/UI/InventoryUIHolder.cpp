@@ -4,6 +4,7 @@
 
 #include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
 #include "Engine/LostConnectionPlayerState.h"
+#include "Constants/Constants.h"
 
 void IInventoryUIHolder::showInventory_Implementation(APlayerController* playerController)
 {

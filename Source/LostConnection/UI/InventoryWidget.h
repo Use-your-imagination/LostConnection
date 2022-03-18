@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 
-#include "Blueprint/UserWidget.h"
+#include "EscapableWidget.h"
 
 #include "Inventory/Inventory.h"
 
 #include "InventoryWidget.generated.h"
 
 UCLASS(Blueprintable)
-class LOSTCONNECTION_API UInventoryWidget : public UUserWidget
+class LOSTCONNECTION_API UInventoryWidget : public UEscapableWidget
 {
 	GENERATED_BODY()
 	
