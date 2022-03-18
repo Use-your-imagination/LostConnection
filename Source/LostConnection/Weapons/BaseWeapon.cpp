@@ -98,6 +98,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseWeapon, currentAccuracyMultiplier);
 
 	DOREPLIFETIME(UBaseWeapon, weaponModules);
+
+	DOREPLIFETIME(UBaseWeapon, rarity);
 }
 
 void UBaseWeapon::shoot()
