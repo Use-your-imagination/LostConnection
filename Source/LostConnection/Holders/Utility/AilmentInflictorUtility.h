@@ -78,4 +78,6 @@ public:
 	float getAdditionalCrushingHitChance() const override;
 
 	~UAilmentInflictorUtility() = default;
+
+	friend class AAmmo;
 };

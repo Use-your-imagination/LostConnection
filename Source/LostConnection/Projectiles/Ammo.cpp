@@ -43,6 +43,8 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 	bool shotThrough = OtherActor->Implements<UShotThrough>();
 
+	// TODO: remake shot through
+
 	if (IsValid(OtherActor) && lastTarget == OtherActor)
 	{
 		return;
@@ -204,17 +206,17 @@ void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTrans
 
 void AAmmo::copyProperties(UBaseWeapon* weapon)
 {
-	// damage = weapon->getBaseDamage();
-	// 
-	// addedDamage = weapon->getAddedDamage();
-	// 
-	// additionalDamage = weapon->getAdditionalDamage();
-	// 
-	// damageType = weapon->getDamageType();
-	// 
-	// crushingHitChance = weapon->getBaseCrushingHitChance();
-	// 
-	// additionalCrushingHitChance = weapon->getAdditionalCrushingHitChance();
+	ailmentInflictorUtility->setBaseDamage(weapon->getBaseDamage());
+	
+	ailmentInflictorUtility->setAddedDamage(weapon->getAddedDamage());
+	
+	ailmentInflictorUtility->setAdditionalDamage(weapon->getAdditionalDamage());
+	
+	ailmentInflictorUtility->damageType = weapon->getDamageType();
+	
+	ailmentInflictorUtility->setBaseCrushingHitChance(weapon->getBaseCrushingHitChance());
+	
+	ailmentInflictorUtility->setAdditionalCrushingHitChance(weapon->getAdditionalCrushingHitChance());
 
 	owner = weapon->getOwner();
 
