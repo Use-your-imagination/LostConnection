@@ -33,14 +33,14 @@ TArray<LootFunctionT*> ALootManager::createLootFunctions(const TArray<TSubclassO
 	return result;
 }
 
-void ALootManager::addRandomLoot(UInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints)
+void ALootManager::addRandomLoot(AInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints)
 {
 	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
 
 	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), UConstants::maxSpendLootPoints));
 }
 
-void ALootManager::addRandomWeapon_Implementation(UInventory* playerInventory)
+void ALootManager::addRandomWeapon_Implementation(AInventory* playerInventory)
 {
 	int32 weaponLootPoints = playerInventory->getLootPoints();
 	int32 otherLootPoints = weaponLootPoints * ULostConnectionAssetManager::get().getLoot().getSplitLootPointsCoefficient();

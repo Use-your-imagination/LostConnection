@@ -36,13 +36,13 @@ private:
 	template<typename LootFunctionT>
 	TArray<LootFunctionT*> createLootFunctions(const TArray<TSubclassOf<LootFunctionT>>& lootFunctionClasses);
 
-	void addRandomLoot(UInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints);
+	void addRandomLoot(AInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints);
 
 public:
 	ALootManager() = default;
 	
 	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
-	void addRandomWeapon(UInventory* playerInventory);
+	void addRandomWeapon(AInventory* playerInventory);
 
 	const TArray<UBaseWeaponsLootFunction*>& getWeaponsLootFunctions() const;
 

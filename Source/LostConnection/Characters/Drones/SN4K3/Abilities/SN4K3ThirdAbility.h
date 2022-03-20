@@ -28,6 +28,9 @@ private:
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float period;
 
+	/*
+	* Implements ISocketItem
+	*/
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UNetworkObject* socketItem;
 

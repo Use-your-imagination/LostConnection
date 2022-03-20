@@ -203,12 +203,22 @@ int32 ALostConnectionPlayerState::getMaxEnergyAmmoCount() const
 	return inventory->getMaxEnergyAmmoCount();
 }
 
+void ALostConnectionPlayerState::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (HasAuthority())
+	{
+		inventory = GetWorld()->SpawnActor<AInventory>();
+
+		inventory->init(this);
+	}
+}
+
 ALostConnectionPlayerState::ALostConnectionPlayerState()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
-
-	inventory = CreateDefaultSubobject<UInventory>("Inventory");
 }
 
 void ALostConnectionPlayerState::init()
@@ -221,8 +231,6 @@ void ALostConnectionPlayerState::init()
 	isInitialized = true;
 
 	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
-
-	inventory->init(this);
 }
 
 void ALostConnectionPlayerState::resetCurrentUI_Implementation()
@@ -279,7 +287,7 @@ UUserWidget* ALostConnectionPlayerState::getCurrentUI() const
 	return currentUI;
 }
 
-UInventory* ALostConnectionPlayerState::getInventory() const
+AInventory* ALostConnectionPlayerState::getInventory() const
 {
 	return inventory;
 }

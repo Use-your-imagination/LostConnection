@@ -53,9 +53,11 @@ private:
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float ammoSpeed;
 
+	UPROPERTY()
+	UAilmentInflictorUtility* ailmentInflictorUtility;
+
 	TWeakObjectPtr<class ABaseCharacter> owner;
 	AActor* lastTarget;
-	UAilmentInflictorUtility* ailmentInflictorUtility;
 	bool isAlly;
 
 public:

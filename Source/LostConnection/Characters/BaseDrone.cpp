@@ -861,7 +861,7 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 	UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();
 	UBaseWeapon* secondaryWeapon = playerState->getSecondaryWeapon();
 	UBaseWeapon* defaultWeapon = playerState->getDefaultWeapon();
-	UInventory* inventory = playerState->getInventory();
+	AInventory* inventory = playerState->getInventory();
 
 	UBaseWeapon* weapon = weaponToEquip->getWeapon();
 

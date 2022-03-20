@@ -8,7 +8,7 @@
 #include "Utility/Utility.h"
 #include "Characters/BaseDrone.h"
 
-void LootCreator::createRandomWeapon(int32 lootPoints, UInventory* playerInventory, const TArray<UBaseWeaponsLootFunction*>& lootFunctions)
+void LootCreator::createRandomWeapon(int32 lootPoints, AInventory* playerInventory, const TArray<UBaseWeaponsLootFunction*>& lootFunctions)
 {
 	const TSubclassOf<UBaseWeapon>& weaponClass = Utility::getRandomValueFromArray(ULostConnectionAssetManager::get().getLoot().getWeapons());
 	TArray<TTuple<float, float, EWeaponRarity>> weaponRarityRanges;

@@ -17,7 +17,7 @@ class LOSTCONNECTION_API UInventoryWidget : public UEscapableWidget
 	
 private:
 	UPROPERTY(Category = Inventory, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UInventory* inventory;
+	AInventory* inventory;
 
 public:
 	UInventoryWidget* init(class ALostConnectionPlayerState* playerState);

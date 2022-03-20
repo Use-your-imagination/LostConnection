@@ -37,7 +37,7 @@ protected:
 	UMaterialInstanceDynamic* selectorMaterial;
 
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly)
-	UInventory* inventory;
+	AInventory* inventory;
 
 protected:
 	UPROPERTY(Replicated)
@@ -114,6 +114,8 @@ public:
 
 	int32 getMaxEnergyAmmoCount() const;
 
+	void BeginPlay() override;
+
 public:
 	ALostConnectionPlayerState();
 
@@ -142,7 +144,7 @@ public:
 
 	UUserWidget* getCurrentUI() const;
 
-	UInventory* getInventory() const;
+	AInventory* getInventory() const;
 
 	const TSubclassOf<class ABaseDrone>& getDroneClass() const;
 

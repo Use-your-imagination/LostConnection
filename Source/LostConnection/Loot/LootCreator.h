@@ -14,7 +14,7 @@ class LOSTCONNECTION_API LootCreator
 public:
 	LootCreator() = default;
 
-	void createRandomWeapon(int32 lootPoints, UInventory* playerInventory, const TArray<UBaseWeaponsLootFunction*>& lootFunctions);
+	void createRandomWeapon(int32 lootPoints, AInventory* playerInventory, const TArray<UBaseWeaponsLootFunction*>& lootFunctions);
 
 	~LootCreator() = default;
 };

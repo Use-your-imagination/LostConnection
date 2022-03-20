@@ -4,9 +4,8 @@
 
 #include "CoreMinimal.h"
 
-#include "GameFramework/PlayerState.h"
+#include "GameFramework/Info.h"
 
-#include "Network/NetworkObject.h"
 #include "InventoryCell.h"
 #include "Weapons/BaseWeapon.h"
 #include "Utility/ReplicationStructures.h"
@@ -18,12 +17,12 @@
 #pragma warning(disable: 4458)
 
 UCLASS(BlueprintType)
-class LOSTCONNECTION_API UInventory : public UNetworkObject
+class LOSTCONNECTION_API AInventory : public AInfo
 {
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Player, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Player, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	class ALostConnectionPlayerState* playerState;
 
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -74,7 +73,7 @@ private:
 	bool swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBaseWeapon* weapon);
 
 public:
-	UInventory();
+	AInventory();
 
 	void init(class ALostConnectionPlayerState* playerState);
 
@@ -141,10 +140,10 @@ public:
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	~UInventory() = default;
+	~AInventory() = default;
 };
 
-inline TArray<FAmmoData>& UInventory::getSpareAmmoArray()
+inline TArray<FAmmoData>& AInventory::getSpareAmmoArray()
 {
 	return spareAmmo;
 }
