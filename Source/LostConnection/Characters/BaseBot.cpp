@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/Font.h"
+#include "AIController.h"
 
 #include "Weapons/Pistols/Gauss.h"
 #include "Engine/LostConnectionGameMode.h"
@@ -35,18 +36,35 @@ void ABaseBot::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 void ABaseBot::deathLogic()
 {
 	UWorld* world = GetWorld();
-
+	
 	if (!isAlly)
 	{
 		world->GetGameState<ALostConnectionGameState>()->verteilenLootPoints(this);
 	}
 
-	Destroy();
+	this->destroyAssociatedActors();
 
 	if (!isAlly)
 	{
 		world->GetAuthGameMode<ALostConnectionGameMode>()->getSpawnManager().notify(world);
 	}
+}
+
+void ABaseBot::destroyAssociatedActors()
+{
+	AAIController* controller = GetController<AAIController>();
+	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	AInventory* inventory = playerState->getInventory();
+
+	inventory->Destroy();
+
+	playerState->Destroy();
+
+	controller->UnPossess();
+
+	controller->Destroy();
+
+	Destroy();
 }
 
 ABaseBot::ABaseBot()

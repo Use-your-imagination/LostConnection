@@ -35,6 +35,8 @@ protected:
 protected:
 	virtual void deathLogic() override;
 
+	virtual void destroyAssociatedActors();
+
 public:
 	ABaseBot();
 
