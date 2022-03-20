@@ -122,8 +122,6 @@ void ABaseCharacter::BeginPlay()
 			};
 		}
 
-		playerState->getDefaultWeapon()->setOwner(this);
-
 		this->onEnergyShieldUpdate();
 	}
 
@@ -704,9 +702,9 @@ void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& 
 {
 	if (isAlly != ammo->getIsAlly())
 	{
-		this->takeDamageFromInflictor(ammo);
+		takeDamageFromInflictor(ammo->getAilmentInflictorUtility());
 
-		this->statusInflictorImpactAction(ammo, hit);
+		this->statusInflictorImpactAction(ammo->getAilmentInflictorUtility(), hit);
 	}
 }
 

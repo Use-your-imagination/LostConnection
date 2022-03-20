@@ -2,7 +2,7 @@
 
 #include "Inventoriable.h"
 
-UNetworkObject* IInventoriable::getObject() const
-{
-	return CastChecked<UNetworkObject>(_getUObject());
-}
+// UNetworkObject* IInventoriable::getObject() const
+// {
+// 	return CastChecked<UNetworkObject>(_getUObject());
+// }

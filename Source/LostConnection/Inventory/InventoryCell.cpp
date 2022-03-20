@@ -9,9 +9,9 @@ void UInventoryCell::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(UInventoryCell, item);
 }
 
-void UInventoryCell::setItem(const IInventoriable* item)
+void UInventoryCell::setItem(IInventoriable* item)
 {
-	this->item = item->getObject();
+	this->item = Cast<UNetworkObject>(item);
 }
 
 IInventoriable* UInventoryCell::getItem() const

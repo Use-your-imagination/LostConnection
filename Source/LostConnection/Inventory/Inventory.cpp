@@ -87,8 +87,8 @@ UInventory::UInventory()
 void UInventory::init(ALostConnectionPlayerState* playerState)
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-	UBaseWeapon* defaultWeapon = NewObject<UBaseWeapon>(playerState, manager.getWeaponClass(UGauss::StaticClass()));
 	const UDefaultsDataAsset& defaults = manager.getDefaults();
+	UBaseWeapon* defaultWeapon = NewObject<UBaseWeapon>(this, manager.getWeaponClass(UGauss::StaticClass()));
 
 	this->playerState = playerState;
 
@@ -101,7 +101,7 @@ void UInventory::init(ALostConnectionPlayerState* playerState)
 
 void UInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 {
-	UInventoryCell* personalModuleCell = NewObject<UInventoryCell>(playerState);
+	UInventoryCell* personalModuleCell = NewObject<UInventoryCell>(this);
 	TArray<UInventoryCell*> modules;
 	TArray<UInventoryCell*> modulesToRemove;
 
@@ -128,7 +128,7 @@ void UInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 
 void UInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
 {
-	UInventoryCell* weaponModuleCell = NewObject<UInventoryCell>(playerState);
+	UInventoryCell* weaponModuleCell = NewObject<UInventoryCell>(this);
 	TArray<UInventoryCell*> modulesToRemove;
 
 	weaponModuleCell->setItem(module);
@@ -145,7 +145,7 @@ void UInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
 
 void UInventory::addUnequippedWeapon_Implementation(UBaseWeapon* weapon)
 {
-	UInventoryCell* weaponCell = NewObject<UInventoryCell>(playerState);
+	UInventoryCell* weaponCell = NewObject<UInventoryCell>(this);
 
 	weaponCell->setItem(weapon);
 

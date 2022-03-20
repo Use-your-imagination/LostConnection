@@ -16,5 +16,5 @@ class LOSTCONNECTION_API UGauss : public UBaseWeapon
 public:
 	UGauss() = default;
 
-	~UGauss() = default;
+	virtual ~UGauss() = default;
 };

@@ -11,7 +11,7 @@
 
 #pragma warning(disable: 4458)
 
-UCLASS()
+UCLASS(BlueprintType)
 class LOSTCONNECTION_API UInventoryCell : public UNetworkObject
 {
 	GENERATED_BODY()
@@ -29,7 +29,7 @@ private:
 public:
 	UInventoryCell() = default;
 
-	void setItem(const IInventoriable* item);
+	void setItem(IInventoriable* item);
 
 	IInventoriable* getItem() const;
 

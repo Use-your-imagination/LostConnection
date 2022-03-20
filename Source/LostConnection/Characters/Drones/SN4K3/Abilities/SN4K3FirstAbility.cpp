@@ -40,9 +40,9 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 	hit.Component = target->getMeshComponent();
 	hit.Location = target->GetActorLocation();
 
-	target->takeDamageFromInflictor(this);
+	target->takeDamageFromInflictor(ailmentInflictorUtility);
 
-	target->statusInflictorImpactAction(this, hit);
+	target->statusInflictorImpactAction(ailmentInflictorUtility, hit);
 
 	ICaster::Execute_applyFirstAbilityEvent(Cast<UObject>(caster), target);
 }
