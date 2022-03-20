@@ -32,7 +32,7 @@ void LootCreator::createRandomWeapon(int32 lootPoints, AInventory* playerInvento
 		}
 	}
 
-	float chance = FMath::FRandRange(0.0f, weaponRarityRanges.Last().Get<1>());
+	float chance = FMath::FRandRange(0.0f, 100.0f);
 	TTuple<float, float, EWeaponRarity>* result = weaponRarityRanges.FindByPredicate([&chance](const TTuple<float, float, EWeaponRarity>& range)
 		{
 			const float& begin = range.Get<0>();
