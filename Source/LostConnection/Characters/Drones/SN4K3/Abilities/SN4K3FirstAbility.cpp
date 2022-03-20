@@ -25,10 +25,6 @@ USN4K3FirstAbility::USN4K3FirstAbility() :
 {
 	cost = 90.0f;
 
-	ailmentInflictorUtility = CreateDefaultSubobject<UAilmentInflictorUtility>("AilmentInflictorUtility");
-
-	ailmentInflictorUtility->setBaseDamage(375.0f);
-
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
@@ -39,6 +35,8 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 	hit.Actor = target;
 	hit.Component = target->getMeshComponent();
 	hit.Location = target->GetActorLocation();
+
+	ailmentInflictorUtility->setBaseCrushingHitChance(Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter());
 
 	target->takeDamageFromInflictor(ailmentInflictorUtility);
 
