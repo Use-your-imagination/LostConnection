@@ -42,5 +42,14 @@
         "Added currency tank"
       ]
     }
+  },
+  "Bug fixes": {
+    "type": "category",
+    "Animation": {
+      "type": "item",
+      "notes": [
+        "Fixed fall animation"
+      ]
+    }
   }
 }
