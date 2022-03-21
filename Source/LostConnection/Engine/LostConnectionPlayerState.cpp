@@ -38,10 +38,6 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	wroteSomething |= Channel->ReplicateSubobject(inventory, *Bunch, *RepFlags);
-
-	wroteSomething |= inventory->ReplicateSubobjects(Channel, Bunch, RepFlags);
-
 	wroteSomething |= Channel->ReplicateSubobject(respawnCooldown, *Bunch, *RepFlags);
 
 	return wroteSomething;
