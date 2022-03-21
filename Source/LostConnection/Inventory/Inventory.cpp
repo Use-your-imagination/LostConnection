@@ -75,6 +75,8 @@ bool AInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBas
 
 AInventory::AInventory()
 {
+	bReplicates = true;
+
 	primaryWeaponCell = CreateDefaultSubobject<UInventoryCell>("PrimaryWeaponCell");
 
 	secondaryWeaponCell = CreateDefaultSubobject<UInventoryCell>("SecondaryWeaponCell");
