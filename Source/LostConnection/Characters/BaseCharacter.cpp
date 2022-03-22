@@ -109,8 +109,6 @@ void ABaseCharacter::BeginPlay()
 		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 		TArray<FAmmoData>& spareAmmo = playerState->getSpareAmmoArray();
 
-		playerState->init();
-
 		if (!spareAmmo.Num())
 		{
 			spareAmmo =

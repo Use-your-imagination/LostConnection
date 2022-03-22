@@ -39,6 +39,9 @@ protected:
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly)
 	AInventory* inventory;
 
+	UPROPERTY(Category = Engine, BlueprintReadOnly)
+	class ALostConnectionPlayerController* playerController;
+
 protected:
 	UPROPERTY(Replicated)
 	TArray<FCooldownableAbilitiesData> cooldownableAbilities;
@@ -84,6 +87,8 @@ public:
 
 	void setMaxEnergyAmmoCount(int32 count);
 
+	void setPlayerController(class ALostConnectionPlayerController* playerController);
+
 	UBaseWeapon* getPrimaryWeapon() const;
 
 	UBaseWeapon* getSecondaryWeapon() const;
@@ -113,6 +118,8 @@ public:
 	int32 getMaxLargeAmmoCount() const;
 
 	int32 getMaxEnergyAmmoCount() const;
+
+	class ALostConnectionPlayerController* getPlayerController() const;
 
 	void BeginPlay() override;
 

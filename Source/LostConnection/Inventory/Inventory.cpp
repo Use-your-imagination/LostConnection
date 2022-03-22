@@ -75,7 +75,13 @@ bool AInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBas
 
 AInventory::AInventory()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
 	bReplicates = true;
+
+	bAlwaysRelevant = true;
+
+	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 
 	primaryWeaponCell = CreateDefaultSubobject<UInventoryCell>("PrimaryWeaponCell");
 
@@ -284,8 +290,6 @@ int32 AInventory::getMaxEnergyAmmoCount() const
 bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(playerState, *Bunch, *RepFlags);
 
 	if (IsValid(primaryWeaponCell))
 	{

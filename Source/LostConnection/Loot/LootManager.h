@@ -39,7 +39,7 @@ private:
 	void addRandomLoot(AInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints);
 
 public:
-	ALootManager() = default;
+	ALootManager();
 	
 	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
 	void addRandomWeapon(AInventory* playerInventory);

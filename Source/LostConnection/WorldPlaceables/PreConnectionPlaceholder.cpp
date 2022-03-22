@@ -17,16 +17,20 @@ void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
 		return;
 	}
 
-	ALostConnectionPlayerController* controller = Cast<ALostConnectionPlayerController>(GetController());
+	ALostConnectionPlayerController* playerController = GetController<ALostConnectionPlayerController>();
 	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
 
-	if (ULostConnectionAssetManager::get().isAssetsLoadingEnd() && IsValid(controller) && IsValid(playerState))
+	if (ULostConnectionAssetManager::get().isAssetsLoadingEnd() && IsValid(playerController) && IsValid(playerState))
 	{
 		isAlreadySendRespawnRequest = true;
 
 		playerState->setDroneClass(ASN4K3::StaticClass());
 
-		controller->respawnPlayer(controller->GetPawn()->GetActorTransform());
+		playerState->setPlayerController(playerController);
+
+		playerState->init();
+
+		playerController->respawnPlayer(playerController->GetPawn()->GetActorTransform());
 
 		playerState->setCurrentRespawnCooldown(0.0f);
 	}

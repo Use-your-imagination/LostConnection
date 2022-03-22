@@ -40,6 +40,13 @@ void ALootManager::addRandomLoot(AInventory* playerInventory, int32 weaponsLootP
 	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), UConstants::maxSpendLootPoints));
 }
 
+ALootManager::ALootManager()
+{
+	bReplicates = true;
+
+	bAlwaysRelevant = true;
+}
+
 void ALootManager::addRandomWeapon_Implementation(AInventory* playerInventory)
 {
 	int32 weaponLootPoints = playerInventory->getLootPoints();

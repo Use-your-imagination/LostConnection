@@ -7,6 +7,8 @@
 #include "GameFramework/PlayerController.h"
 #include "Net/UnrealNetwork.h"
 
+#include "Loot/LootManager.h"
+
 #include "LostConnectionPlayerController.generated.h"
 
 UCLASS()
@@ -14,8 +16,21 @@ class LOSTCONNECTION_API ALostConnectionPlayerController : public APlayerControl
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY(ReplicatedUsing = onLootManagerInit)
+	ALootManager* lootManager;
+
 protected:
 	virtual void GetSeamlessTravelActorList(bool bToEntry, TArray<AActor*>& ActorList) override;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+private:
+	UFUNCTION()
+	void onLootManagerInit();
+
+protected:
+	void BeginPlay() override;
 
 public:
 	ALostConnectionPlayerController();

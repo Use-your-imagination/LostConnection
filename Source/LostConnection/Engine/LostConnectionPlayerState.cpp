@@ -4,6 +4,8 @@
 
 #include "Constants/Constants.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
+#include "LostConnectionPlayerController.h"
+#include "Utility/Utility.h"
 
 template<typename T>
 void ALostConnectionPlayerState::reduceCooldownableData(float DeltaTime, TArray<T>& cooldownableData)
@@ -154,6 +156,11 @@ void ALostConnectionPlayerState::setMaxEnergyAmmoCount(int32 count)
 	inventory->setMaxEnergyAmmoCount(count);
 }
 
+void ALostConnectionPlayerState::setPlayerController(ALostConnectionPlayerController* playerController)
+{
+	this->playerController = playerController;
+}
+
 const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
 {
 	return inventory->getPersonalEquippedModules();
@@ -199,14 +206,21 @@ int32 ALostConnectionPlayerState::getMaxEnergyAmmoCount() const
 	return inventory->getMaxEnergyAmmoCount();
 }
 
+ALostConnectionPlayerController* ALostConnectionPlayerState::getPlayerController() const
+{
+	return playerController;
+}
+
 void ALostConnectionPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
 
+	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
+
 	if (HasAuthority())
 	{
 		inventory = GetWorld()->SpawnActor<AInventory>();
-
+		
 		inventory->init(this);
 	}
 }
@@ -214,19 +228,13 @@ void ALostConnectionPlayerState::BeginPlay()
 ALostConnectionPlayerState::ALostConnectionPlayerState()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }
 
 void ALostConnectionPlayerState::init()
 {
-	if (isInitialized)
-	{
-		return;
-	}
-
-	isInitialized = true;
-
-	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
+	inventory->SetOwner(playerController);
 }
 
 void ALostConnectionPlayerState::resetCurrentUI_Implementation()
