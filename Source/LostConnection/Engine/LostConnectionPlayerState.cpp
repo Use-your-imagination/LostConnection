@@ -29,6 +29,8 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 
 	DOREPLIFETIME(ALostConnectionPlayerState, inventory);
 
+	DOREPLIFETIME(ALostConnectionPlayerState, playerController);
+
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableAbilities);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
@@ -156,9 +158,9 @@ void ALostConnectionPlayerState::setMaxEnergyAmmoCount(int32 count)
 	inventory->setMaxEnergyAmmoCount(count);
 }
 
-void ALostConnectionPlayerState::setPlayerController(ALostConnectionPlayerController* playerController)
+void ALostConnectionPlayerState::setPlayerController_Implementation(ALostConnectionPlayerController* newPlayerController)
 {
-	this->playerController = playerController;
+	playerController = newPlayerController;
 }
 
 const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
@@ -232,7 +234,7 @@ ALostConnectionPlayerState::ALostConnectionPlayerState()
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }
 
-void ALostConnectionPlayerState::init()
+void ALostConnectionPlayerState::init_Implementation()
 {
 	inventory->SetOwner(playerController);
 }

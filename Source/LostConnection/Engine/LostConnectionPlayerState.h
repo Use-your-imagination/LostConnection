@@ -39,7 +39,7 @@ protected:
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly)
 	AInventory* inventory;
 
-	UPROPERTY(Category = Engine, BlueprintReadOnly)
+	UPROPERTY(Category = Engine, Replicated, BlueprintReadOnly)
 	class ALostConnectionPlayerController* playerController;
 
 protected:
@@ -87,7 +87,8 @@ public:
 
 	void setMaxEnergyAmmoCount(int32 count);
 
-	void setPlayerController(class ALostConnectionPlayerController* playerController);
+	UFUNCTION(Server, Reliable)
+	void setPlayerController(class ALostConnectionPlayerController* newPlayerController);
 
 	UBaseWeapon* getPrimaryWeapon() const;
 
@@ -126,6 +127,7 @@ public:
 public:
 	ALostConnectionPlayerState();
 
+	UFUNCTION(Server, Reliable)
 	void init();
 
 	UFUNCTION(Client, Reliable)
