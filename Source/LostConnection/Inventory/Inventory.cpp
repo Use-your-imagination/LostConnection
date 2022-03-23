@@ -73,8 +73,24 @@ bool AInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBas
 	return StaticCast<bool>(weaponCell);
 }
 
+void AInventory::onUnequippedWeaponsUpdate()
+{
+	for (UEscapableWidget*& widget : playerState->getEscapableWidgets())
+	{
+		widget->onNetUpdate();
+	}
+}
+
 AInventory::AInventory()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
+	bReplicates = true;
+
+	bAlwaysRelevant = true;
+
+	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
+
 	primaryWeaponCell = CreateDefaultSubobject<UInventoryCell>("PrimaryWeaponCell");
 
 	secondaryWeaponCell = CreateDefaultSubobject<UInventoryCell>("SecondaryWeaponCell");
@@ -282,8 +298,6 @@ int32 AInventory::getMaxEnergyAmmoCount() const
 bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(playerState, *Bunch, *RepFlags);
 
 	if (IsValid(primaryWeaponCell))
 	{

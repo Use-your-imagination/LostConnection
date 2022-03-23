@@ -3,7 +3,7 @@
 #include "LostConnectionUI.h"
 
 #include "Characters/BaseDrone.h"
-#include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
+#include "Utility/Utility.h"
 
 void ULostConnectionUI::init(ABaseDrone* player)
 {
@@ -11,7 +11,9 @@ void ULostConnectionUI::init(ABaseDrone* player)
 
 	this->UIConstruction();
 
-	inventoryWidget = UUtilityBlueprintFunctionLibrary::makeDefaultInventoryWidget(player->GetController<APlayerController>(), this);
+	inventoryWidget = CreateWidget<UInventoryWidget>(Utility::getPlayerController(player), ULostConnectionAssetManager::get().getUI().getInventoryWidget());
+
+	inventoryWidget->init(Utility::getPlayerState(player));
 }
 
 void ULostConnectionUI::UIConstruction_Implementation()

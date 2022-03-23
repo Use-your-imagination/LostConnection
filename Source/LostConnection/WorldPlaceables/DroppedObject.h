@@ -14,8 +14,7 @@
 #pragma warning(disable: 4458)
 
 UCLASS()
-class LOSTCONNECTION_API ADroppedObject :
-	public AActor
+class LOSTCONNECTION_API ADroppedObject : public AActor
 {
 	GENERATED_BODY()
 	

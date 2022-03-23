@@ -40,7 +40,7 @@ private:
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	UInventoryCell* secondInactiveWeaponCell;
 
-	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Weapons", ReplicatedUsing = onUnequippedWeaponsUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<UInventoryCell*> unequippedWeapons;
 
 	UPROPERTY(Category = "Inventory|Economy", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -71,6 +71,9 @@ private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	bool swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBaseWeapon* weapon);
+
+	UFUNCTION()
+	void onUnequippedWeaponsUpdate();
 
 public:
 	AInventory();

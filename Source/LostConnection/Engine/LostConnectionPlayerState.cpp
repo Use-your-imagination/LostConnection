@@ -4,6 +4,8 @@
 
 #include "Constants/Constants.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
+#include "LostConnectionPlayerController.h"
+#include "Utility/Utility.h"
 
 template<typename T>
 void ALostConnectionPlayerState::reduceCooldownableData(float DeltaTime, TArray<T>& cooldownableData)
@@ -27,6 +29,8 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 
 	DOREPLIFETIME(ALostConnectionPlayerState, inventory);
 
+	DOREPLIFETIME(ALostConnectionPlayerState, playerController);
+
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableAbilities);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
@@ -37,10 +41,6 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(inventory, *Bunch, *RepFlags);
-
-	wroteSomething |= inventory->ReplicateSubobjects(Channel, Bunch, RepFlags);
 
 	wroteSomething |= Channel->ReplicateSubobject(respawnCooldown, *Bunch, *RepFlags);
 
@@ -158,6 +158,11 @@ void ALostConnectionPlayerState::setMaxEnergyAmmoCount(int32 count)
 	inventory->setMaxEnergyAmmoCount(count);
 }
 
+void ALostConnectionPlayerState::setPlayerController_Implementation(ALostConnectionPlayerController* newPlayerController)
+{
+	playerController = newPlayerController;
+}
+
 const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
 {
 	return inventory->getPersonalEquippedModules();
@@ -203,14 +208,21 @@ int32 ALostConnectionPlayerState::getMaxEnergyAmmoCount() const
 	return inventory->getMaxEnergyAmmoCount();
 }
 
+ALostConnectionPlayerController* ALostConnectionPlayerState::getPlayerController() const
+{
+	return playerController;
+}
+
 void ALostConnectionPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
 
+	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
+
 	if (HasAuthority())
 	{
 		inventory = GetWorld()->SpawnActor<AInventory>();
-
+		
 		inventory->init(this);
 	}
 }
@@ -218,19 +230,13 @@ void ALostConnectionPlayerState::BeginPlay()
 ALostConnectionPlayerState::ALostConnectionPlayerState()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }
 
-void ALostConnectionPlayerState::init()
+void ALostConnectionPlayerState::init_Implementation()
 {
-	if (isInitialized)
-	{
-		return;
-	}
-
-	isInitialized = true;
-
-	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
+	inventory->SetOwner(playerController);
 }
 
 void ALostConnectionPlayerState::resetCurrentUI_Implementation()
@@ -241,6 +247,64 @@ void ALostConnectionPlayerState::resetCurrentUI_Implementation()
 	}
 
 	currentUI = nullptr;
+}
+
+void ALostConnectionPlayerState::createEscapableWidget_Implementation(TSubclassOf<UEscapableWidget> widgetClass)
+{
+	UEscapableWidget* widget = CreateWidget<UEscapableWidget>(playerController, widgetClass);
+
+	widget->init(this);
+
+	this->addEscapableWidget(widget);
+}
+
+void ALostConnectionPlayerState::addEscapableWidget(UEscapableWidget* widget)
+{
+	int32 nextZOrder = escapableWidgets.Num() ? escapableWidgets.Last()->getZOrder() + 1 : UConstants::startZOrder;
+
+	widget->setZOrder(nextZOrder);
+
+	for (UEscapableWidget* previousWidget : escapableWidgets)
+	{
+		previousWidget->updateAsPrevious(widget->getIsPreviousVisible(), widget->getIsPreviousHitTestable());
+	}
+
+	escapableWidgets.Add_GetRef(widget)->updateAsTop();
+
+	escapableWidgets.Last()->AddToViewport(nextZOrder);
+}
+
+void ALostConnectionPlayerState::popEscapableWidget()
+{
+	if (!escapableWidgets.Num())
+	{
+		return;
+	}
+
+	escapableWidgets.Last()->RemoveFromViewport();
+
+	escapableWidgets.Pop();
+
+	if (!escapableWidgets.Num())
+	{
+		this->getCurrentUI()->SetVisibility(ESlateVisibility::Visible);
+
+		return;
+	}
+
+	UEscapableWidget*& widget = escapableWidgets.Last();
+
+	for (UEscapableWidget* previousWidget : escapableWidgets)
+	{
+		if (previousWidget == widget)
+		{
+			widget->updateAsTop();
+
+			break;
+		}
+
+		previousWidget->updateAsPrevious(widget->getIsPreviousVisible(), widget->getIsPreviousHitTestable());
+	}
 }
 
 void ALostConnectionPlayerState::restoreRespawnCooldown_Implementation()
@@ -305,6 +369,11 @@ float ALostConnectionPlayerState::getCurrentRespawnCooldown() const
 int32 ALostConnectionPlayerState::getLootPoints() const
 {
 	return inventory->getLootPoints();
+}
+
+TArray<UEscapableWidget*>& ALostConnectionPlayerState::getEscapableWidgets()
+{
+	return escapableWidgets;
 }
 
 void ALostConnectionPlayerState::Tick(float DeltaTime)

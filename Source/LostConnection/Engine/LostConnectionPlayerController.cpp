@@ -15,6 +15,30 @@ void ALostConnectionPlayerController::GetSeamlessTravelActorList(bool bToEntry, 
 	Super::GetSeamlessTravelActorList(bToEntry, ActorList);
 }
 
+void ALostConnectionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ALostConnectionPlayerController, lootManager);
+}
+
+void ALostConnectionPlayerController::onLootManagerInit()
+{
+	lootManager->SetOwner(this);
+}
+
+void ALostConnectionPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (HasAuthority())
+	{
+		lootManager = Cast<ALootManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ALootManager::StaticClass()));
+
+		this->onLootManagerInit();
+	}
+}
+
 ALostConnectionPlayerController::ALostConnectionPlayerController()
 {
 	PrimaryActorTick.bCanEverTick = true;

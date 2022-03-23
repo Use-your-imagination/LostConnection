@@ -59,9 +59,6 @@ public:
 	static TArray<FInputActionKeyMapping> getActionMapping(FName actionName);
 
 	UFUNCTION(Category = "Utility|UI", BlueprintCallable)
-	static UInventoryWidget* makeDefaultInventoryWidget(APlayerController* playerController, UUserWidget* currentUI);
-
-	UFUNCTION(Category = "Utility|UI", BlueprintCallable)
 	static void showMouseCursor(APlayerController* playerController, bool isShowMouseCursor);
 
 	UFUNCTION(Category = "Utility|UI", BlueprintCallable, BlueprintPure)

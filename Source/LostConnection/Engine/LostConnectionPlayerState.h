@@ -15,6 +15,7 @@
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
 #include "Holders/Utility/CooldownableUtility.h"
 #include "Inventory/Inventory.h"
+#include "UI/EscapableWidget.h"
 
 #include "LostConnectionPlayerState.generated.h"
 
@@ -38,6 +39,12 @@ protected:
 
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly)
 	AInventory* inventory;
+
+	UPROPERTY(Category = Engine, Replicated, BlueprintReadOnly)
+	class ALostConnectionPlayerController* playerController;
+
+	UPROPERTY(Category = UI, BlueprintReadOnly)
+	TArray<UEscapableWidget*> escapableWidgets;
 
 protected:
 	UPROPERTY(Replicated)
@@ -84,6 +91,9 @@ public:
 
 	void setMaxEnergyAmmoCount(int32 count);
 
+	UFUNCTION(Server, Reliable)
+	void setPlayerController(class ALostConnectionPlayerController* newPlayerController);
+
 	UBaseWeapon* getPrimaryWeapon() const;
 
 	UBaseWeapon* getSecondaryWeapon() const;
@@ -114,15 +124,25 @@ public:
 
 	int32 getMaxEnergyAmmoCount() const;
 
+	class ALostConnectionPlayerController* getPlayerController() const;
+
 	void BeginPlay() override;
 
 public:
 	ALostConnectionPlayerState();
 
+	UFUNCTION(Server, Reliable)
 	void init();
 
 	UFUNCTION(Client, Reliable)
 	void resetCurrentUI();
+
+	UFUNCTION(Client, Reliable)
+	void createEscapableWidget(TSubclassOf<UEscapableWidget> widgetClass);
+
+	void addEscapableWidget(UEscapableWidget* widget);
+
+	void popEscapableWidget();
 
 	UFUNCTION(Server, Reliable)
 	void restoreRespawnCooldown();
@@ -151,6 +171,8 @@ public:
 	float getCurrentRespawnCooldown() const;
 
 	int32 getLootPoints() const;
+
+	TArray<UEscapableWidget*>& getEscapableWidgets();
 
 	virtual void Tick(float DeltaTime) override;
 

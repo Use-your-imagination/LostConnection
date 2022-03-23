@@ -12,8 +12,6 @@ void IInventoryUIHolder::showInventory_Implementation(APlayerController* playerC
 
 	playerController->GetPlayerState<ALostConnectionPlayerState>()->getCurrentUI()->SetVisibility(ESlateVisibility::Hidden);
 
-	widget->AddToViewport(TNumericLimits<int32>::Max());
-
 	widget->onShow();
 
 	playerController->SetInputMode(FInputModeGameAndUI());
