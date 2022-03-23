@@ -249,6 +249,64 @@ void ALostConnectionPlayerState::resetCurrentUI_Implementation()
 	currentUI = nullptr;
 }
 
+void ALostConnectionPlayerState::createEscapableWidget_Implementation(TSubclassOf<UEscapableWidget> widgetClass)
+{
+	UEscapableWidget* widget = CreateWidget<UEscapableWidget>(playerController, widgetClass);
+
+	widget->init(this);
+
+	this->addEscapableWidget(widget);
+}
+
+void ALostConnectionPlayerState::addEscapableWidget(UEscapableWidget* widget)
+{
+	int32 nextZOrder = escapableWidgets.Num() ? escapableWidgets.Last()->getZOrder() + 1 : UConstants::startZOrder;
+
+	widget->setZOrder(nextZOrder);
+
+	for (UEscapableWidget* previousWidget : escapableWidgets)
+	{
+		previousWidget->updateAsPrevious(widget->getIsPreviousVisible(), widget->getIsPreviousHitTestable());
+	}
+
+	escapableWidgets.Add_GetRef(widget)->updateAsTop();
+
+	escapableWidgets.Last()->AddToViewport(nextZOrder);
+}
+
+void ALostConnectionPlayerState::popEscapableWidget()
+{
+	if (!escapableWidgets.Num())
+	{
+		return;
+	}
+
+	escapableWidgets.Last()->RemoveFromViewport();
+
+	escapableWidgets.Pop();
+
+	if (!escapableWidgets.Num())
+	{
+		this->getCurrentUI()->SetVisibility(ESlateVisibility::Visible);
+
+		return;
+	}
+
+	UEscapableWidget*& widget = escapableWidgets.Last();
+
+	for (UEscapableWidget* previousWidget : escapableWidgets)
+	{
+		if (previousWidget == widget)
+		{
+			widget->updateAsTop();
+
+			break;
+		}
+
+		previousWidget->updateAsPrevious(widget->getIsPreviousVisible(), widget->getIsPreviousHitTestable());
+	}
+}
+
 void ALostConnectionPlayerState::restoreRespawnCooldown_Implementation()
 {
 	respawnCooldown->startCooldown();
@@ -311,6 +369,11 @@ float ALostConnectionPlayerState::getCurrentRespawnCooldown() const
 int32 ALostConnectionPlayerState::getLootPoints() const
 {
 	return inventory->getLootPoints();
+}
+
+TArray<UEscapableWidget*>& ALostConnectionPlayerState::getEscapableWidgets()
+{
+	return escapableWidgets;
 }
 
 void ALostConnectionPlayerState::Tick(float DeltaTime)

@@ -193,14 +193,6 @@ TArray<FInputActionKeyMapping> UUtilityBlueprintFunctionLibrary::getActionMappin
 	return result;
 }
 
-UInventoryWidget* UUtilityBlueprintFunctionLibrary::makeDefaultInventoryWidget(APlayerController* playerController, UUserWidget* currentUI)
-{
-	return CreateWidget<UInventoryWidget>(
-		playerController,
-		ULostConnectionAssetManager::get().getUI().getInventoryWidget())->init(playerController->GetPlayerState<ALostConnectionPlayerState>()
-		);
-}
-
 void UUtilityBlueprintFunctionLibrary::showMouseCursor(APlayerController* playerController, bool isShowMouseCursor)
 {
 	playerController->bShowMouseCursor = isShowMouseCursor;

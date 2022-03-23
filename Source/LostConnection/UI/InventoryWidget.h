@@ -20,7 +20,7 @@ private:
 	AInventory* inventory;
 
 public:
-	UInventoryWidget* init(class ALostConnectionPlayerState* playerState);
+	void init(class ALostConnectionPlayerState* playerState) override;
 
 	UFUNCTION(Category = Events, BlueprintNativeEvent)
 	void onShow();

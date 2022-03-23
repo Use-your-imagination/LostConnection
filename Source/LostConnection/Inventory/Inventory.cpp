@@ -73,6 +73,14 @@ bool AInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBas
 	return StaticCast<bool>(weaponCell);
 }
 
+void AInventory::onUnequippedWeaponsUpdate()
+{
+	for (UEscapableWidget*& widget : playerState->getEscapableWidgets())
+	{
+		widget->onNetUpdate();
+	}
+}
+
 AInventory::AInventory()
 {
 	PrimaryActorTick.bCanEverTick = true;

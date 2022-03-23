@@ -588,9 +588,7 @@ void ABaseDrone::restoreWeaponsCooldown()
 
 void ABaseDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	TArray<FInputActionBinding> inputs = this->initInputs();
-
-	for (const auto& i : inputs)
+	for (const auto& i : this->initInputs())
 	{
 		PlayerInputComponent->AddActionBinding(i);
 	}

@@ -4,16 +4,16 @@
 
 #include "Engine/LostConnectionPlayerState.h"
 
-UInventoryWidget* UInventoryWidget::init(ALostConnectionPlayerState* playerState)
+void UInventoryWidget::init(ALostConnectionPlayerState* playerState)
 {
-	inventory = playerState->getInventory();
+	Super::init(playerState);
 
-	return this;
+	inventory = playerState->getInventory();
 }
 
 void UInventoryWidget::onShow_Implementation()
 {
-
+	inventory->getPlayerState()->addEscapableWidget(this);
 }
 
 void UInventoryWidget::onHide_Implementation()
@@ -23,7 +23,5 @@ void UInventoryWidget::onHide_Implementation()
 
 void UInventoryWidget::onHideCallback()
 {
-	this->RemoveFromViewport();
-
-	inventory->getPlayerState()->getCurrentUI()->SetVisibility(ESlateVisibility::Visible);
+	inventory->getPlayerState()->popEscapableWidget();
 }
