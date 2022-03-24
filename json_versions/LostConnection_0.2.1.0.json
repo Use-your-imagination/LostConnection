@@ -17,6 +17,12 @@
       "notes": [
         "Update health bars"
       ]
+    },
+    "Icons": {
+      "type": "item",
+      "notes": [
+        "Add weapon icons in inventory"
+      ]
     }
   },
   "Inventory": {
@@ -27,7 +33,7 @@
         "Add simple inventory"
       ]
     },
-    "Loot points category": {
+    "Loot points tab": {
       "type": "item",
       "notes": [
         "Add getting random weapon with loot points cost"
