@@ -750,11 +750,7 @@ void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 
 		if (newPercentHealth <= swarm->getThreshold())
 		{
-			FHitResult hit;
-
-			hit.Actor = this;
-			hit.Component = GetMesh();
-			hit.Location = GetActorLocation();
+			FHitResult hit(this, GetMesh(), GetActorLocation(), {});
 
 			swarm->applyEffect(this, hit);
 

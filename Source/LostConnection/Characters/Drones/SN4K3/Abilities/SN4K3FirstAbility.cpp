@@ -30,11 +30,7 @@ USN4K3FirstAbility::USN4K3FirstAbility() :
 
 void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 {
-	FHitResult hit;
-
-	hit.Actor = target;
-	hit.Component = target->getMeshComponent();
-	hit.Location = target->GetActorLocation();
+	FHitResult hit(target, target->getMeshComponent(), target->GetActorLocation(), {});
 
 	ailmentInflictorUtility->setBaseCrushingHitChance(Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter());
 

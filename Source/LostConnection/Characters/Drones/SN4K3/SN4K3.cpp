@@ -105,7 +105,7 @@ bool ASN4K3::checkSecondAbilityCast() const
 
 	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace() + (ability->getDistance() * this->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Camera, ignoreParameters);
 
-	target = Cast<ABaseCharacter>(hit.Actor);
+	target = Cast<ABaseCharacter>(hit.GetActor());
 
 	result = target && !target->getIsAlly();
 

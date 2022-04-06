@@ -95,11 +95,7 @@ void ASN4K3PassiveAbilityHead::explode()
 
 		if (!character->getIsAlly())
 		{
-			FHitResult characterHit;
-
-			characterHit.Actor = character;
-			characterHit.Component = character->GetMesh();
-			characterHit.Location = character->GetActorLocation();
+			FHitResult characterHit(character, character->GetMesh(), character->GetActorLocation(), {});
 
 			USN4K3ResurrectDeathEvent* resurrect = NewObject<USN4K3ResurrectDeathEvent>(character);
 

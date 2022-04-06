@@ -947,7 +947,7 @@ void ABaseDrone::action()
 
 	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace(), ECollisionChannel::ECC_Visibility, ignoreParameters);
 
-	object = Cast<IActionable>(hit.Actor);
+	object = Cast<IActionable>(hit.GetActor());
 
 	if (object)
 	{

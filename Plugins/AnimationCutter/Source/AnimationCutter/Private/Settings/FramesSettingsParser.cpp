@@ -14,6 +14,11 @@ void FramesSettingsParser::parse(const TSharedPtr<FJsonObject>& settings)
 		framesToCut = step;
 	}
 
+	if (!settings->TryGetNumberField("threshold", threshold))
+	{
+		threshold = 0;
+	}
+
 	framesToCut--;
 }
 
@@ -30,4 +35,9 @@ int32 FramesSettingsParser::getStep() const
 int32 FramesSettingsParser::getFramesToCut() const
 {
 	return framesToCut;
+}
+
+int32 FramesSettingsParser::getThreshold() const
+{
+	return threshold;
 }

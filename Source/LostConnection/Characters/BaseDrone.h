@@ -445,9 +445,9 @@ FORCEINLINE void ABaseDrone::showBotHealthBar()
 
 	GetWorld()->LineTraceSingleByChannel(hit, start, end, ECollisionChannel::ECC_Visibility, ignoreParameters);
 
-	ABaseCharacter* character = Cast<ABaseCharacter>(hit.Actor);
+	ABaseCharacter* character = Cast<ABaseCharacter>(hit.GetActor());
 
-	if (lastHealthBarTraceTarget.IsValid() && hit.Actor != lastHealthBarTraceTarget)
+	if (lastHealthBarTraceTarget.IsValid() && hit.GetActor() != lastHealthBarTraceTarget)
 	{
 		if (!lastHealthBarTraceTarget->isDamaged())
 		{
@@ -455,7 +455,7 @@ FORCEINLINE void ABaseDrone::showBotHealthBar()
 		}
 	}
 
-	if (!hit.Actor.IsValid() || !character)
+	if (!hit.HasValidHitObjectHandle() || !character)
 	{
 		return;
 	}

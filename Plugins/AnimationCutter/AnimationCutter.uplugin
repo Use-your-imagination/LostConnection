@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
-	"Version": 1,
-	"VersionName": "1.0",
+	"Version": 2,
+	"VersionName": "1.1",
 	"FriendlyName": "Animation Cutter",
 	"Description": "Faster Animation cut workflow",
 	"Category": "Code Plugin",
@@ -16,27 +16,23 @@
 	"Installed": false,
 	"EngineVersion": [
 		"4.26.0",
-		"4.27.0"
+		"4.27.0",
+		"5.0.0"
 	],
 	"Modules": [
 		{
 			"Name": "AnimationCutter",
-			"Type": "UncookedOnly",
+			"Type": "Editor",
 			"LoadingPhase": "Default",
 			"WhitelistPlatforms": [
-				"Win32",
 				"Win64",
 				"HoloLens",
 				"Mac",
-				"XboxOne",
-				"PS4",
 				"IOS",
 				"Android",
 				"Linux",
-				"LinuxAArch64",
-				"TVOS",
-				"Switch",
-				"Lumin"
+				"LinuxArm64",
+				"TVOS"
 			]
 		}
 	]

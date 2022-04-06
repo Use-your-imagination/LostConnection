@@ -2,6 +2,9 @@
 
 #include "AnimationCutterAction.h"
 
+#include "Animation/AnimSequenceHelpers.h"
+#include "UObject/SavePackage.h"
+
 #include "ToolMenus.h"
 #include "Misc/FileHelper.h"
 #include "IDesktopPlatform.h"
@@ -99,6 +102,7 @@ void FAnimationCutterAction::cutAnimations(TSharedPtr<FJsonObject> settings, TAr
 	AnimSequenceSettingsParser animSequenceSettings(settings);
 	OutPathSettingsParser outPathSettings(settings);
 	FilesGenerationSettingsParser filesGenerationSettings(settings);
+	int32 threshold = framesSettings.getThreshold();
 
 	if (FAnimationCutterAction::getErrors({ &framesSettings, &animSequenceSettings, &outPathSettings, &filesGenerationSettings }))
 	{
@@ -107,7 +111,7 @@ void FAnimationCutterAction::cutAnimations(TSharedPtr<FJsonObject> settings, TAr
 
 	for (const TWeakObjectPtr<UAnimSequence>& animSequence : animSequences)
 	{
-		int32 frames = animSequence->GetNumberOfFrames();
+		int32 frames = threshold ? threshold : animSequence->GetNumberOfSampledKeys();
 
 		for (int32 startCutFrameIndex = 0; startCutFrameIndex < frames; startCutFrameIndex += framesSettings.getStep())
 		{
@@ -123,20 +127,23 @@ void FAnimationCutterAction::createNewAnimSequence(const TWeakObjectPtr<UAnimSeq
 	FString fileName = filesGenerationSettings.getFileName(sourceSequence->GetName());
 	UPackage* package = CreatePackage(*outPathSettings.getReferenceOutPath(sourceSequence.Get(), fileName));
 	UAnimSequence* animSequence = DuplicateObject<UAnimSequence>(sourceSequence.Get(), package, *fileName);
+	float startFrame = animSequence->GetTimeAtFrame(startCutFrameIndex);
+	float endFrame = animSequence->GetTimeAtFrame(startCutFrameIndex + framesSettings.getFramesToCut());
+	FSavePackageArgs saveArgs;
 	
 	animSequenceSettings.initAnimSequence(animSequence);
 
 	animSequence->RefPoseSeq = sourceSequence.Get();
 
-	animSequence->CropRawAnimData(animSequence->GetTimeAtFrame(startCutFrameIndex), true);
-
-	animSequence->CropRawAnimData(animSequence->GetTimeAtFrame(framesSettings.getFramesToCut()), false);
+	UE::Anim::AnimationData::Trim(animSequence, startFrame, endFrame);
 
 	FAssetRegistryModule::AssetCreated(animSequence);
 
 	animSequence->MarkPackageDirty();
 
-	UPackage::Save(package, animSequence, animSequence->GetFlags(), *outPathSettings.getRealOutPath(sourceSequence.Get(), fileName));
+	saveArgs.SaveFlags = animSequence->GetFlags();
+
+	UPackage::Save(package, animSequence, *outPathSettings.getRealOutPath(sourceSequence.Get(), fileName), saveArgs);
 }
 
 void FAnimationCutterAction::GetActions(const TArray<UObject*>& InObjects, FToolMenuSection& Section)

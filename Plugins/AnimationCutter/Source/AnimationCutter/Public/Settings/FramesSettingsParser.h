@@ -11,6 +11,7 @@ class FramesSettingsParser : public BaseSettingsParser
 private:
 	int32 step;
 	int32 framesToCut;
+	int32 threshold;
 
 private:
 	void parse(const TSharedPtr<FJsonObject>& settings) override;
@@ -21,6 +22,8 @@ public:
 	int32 getStep() const;
 
 	int32 getFramesToCut() const;
+
+	int32 getThreshold() const;
 
 	~FramesSettingsParser() = default;
 };
