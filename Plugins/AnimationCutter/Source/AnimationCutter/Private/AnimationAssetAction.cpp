@@ -210,11 +210,11 @@ void FAnimationAssetAction::RetargetAssets(TArray<UObject*> InAnimAssets, bool b
 
 	if (bOpenEditor)
 	{
-		SAnimationRemapSkeleton::ShowWindow(OldSkeleton, Message, bDuplicateAssets, FOnRetargetAnimation::CreateSP(this, &FAnimationAssetAction::RetargetNonSkeletonAnimationHandler, AnimAssets, TWeakPtr<class IToolkitHost>(EditWithinLevelEditor)));
+		//SAnimationRemapSkeleton::ShowWindow(OldSkeleton, Message, bDuplicateAssets, FOnRetargetAnimation::CreateSP(this, &FAnimationAssetAction::RetargetNonSkeletonAnimationHandler, AnimAssets, TWeakPtr<class IToolkitHost>(EditWithinLevelEditor)));
 	}
 	else
 	{
-		SAnimationRemapSkeleton::ShowWindow(OldSkeleton, Message, bDuplicateAssets, FOnRetargetAnimation::CreateSP(this, &FAnimationAssetAction::RetargetAnimationHandler, AnimAssets));
+		//SAnimationRemapSkeleton::ShowWindow(OldSkeleton, Message, bDuplicateAssets, FOnRetargetAnimation::CreateSP(this, &FAnimationAssetAction::RetargetAnimationHandler, AnimAssets));
 	}
 }
 

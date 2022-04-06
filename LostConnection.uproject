@@ -25,9 +25,13 @@
 			"Enabled": true
 		},
 		{
-			"Name": "AnimationCutter",
+			"Name": "Bridge",
 			"Enabled": true,
-			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/c89333454f7549c78f6cc53495f67742"
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Mac",
+				"Linux"
+			]
 		}
 	]
 }
