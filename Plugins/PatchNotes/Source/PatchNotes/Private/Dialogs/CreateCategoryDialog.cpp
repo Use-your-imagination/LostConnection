@@ -7,12 +7,14 @@
 
 void CreateCategoryDialog::collectData(const FPatchNotesModule& module, Validation& validation)
 {
+	validation.checkConfigurationExist();
+
 	validation.checkConfiguration();
 
 	VALIDATION_CHECK();
 
 	configuration = Utility::getConfigurationName(module.getConfigurations()->getCurrentSelectionString());
-	pathToConfiguration = module.getPathToConfigurations() / configuration + TEXT(".json");
+	pathToConfiguration = module.getPathToConfigurations() / module.getConfigurations()->getCurrentSelectionString() + TEXT(".json");
 	settings = Utility::getJSON(module.getPathToSettingsFile());
 	updateCategories = [&module]() { const_cast<FPatchNotesModule&>(module).updateCategories(); };
 }

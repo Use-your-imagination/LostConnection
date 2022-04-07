@@ -1,9 +1,9 @@
 ﻿{
-	"generatedFilesPath": "docs",
+	"generatedFilesPath": "C:/dev/LostConnection/docs",
 	"openAfterUpdate": true,
 	"projectName": "LostConnection",
-	"pathToBackgroundImage": null,
-	"pathToProjectLogo": null,
+	"pathToBackgroundImage": "https://github.com/Use-your-imagination/LostConnection/blob/661337e93c036cc6b88a4540af97f1b94d47ce72/Content/Assets/PatchNotesBackgroundImage/PatchNotesBackgroundImage.png?raw=true",
+	"pathToProjectLogo": "https://raw.githubusercontent.com/Use-your-imagination/LostConnection/b61723b723e5b6531d900d62645e20dc24a4eb07/Content/Assets/Icons/GameIcon/LostConnectionIcon.ico",
 	"pathToTemplate": null,
 	"patchNotesBackgroundColor": [ 0, 0, 0, 0.17000000178813934 ],
 	"generationProgressBarColor": [ 0, 1, 0, 1 ]

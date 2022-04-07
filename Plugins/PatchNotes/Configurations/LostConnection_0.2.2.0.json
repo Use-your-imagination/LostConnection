@@ -1,4 +1,15 @@
-{
-  "projectName": "LostConnection",
-  "projectVersion": "0.2.2.0"
+﻿{
+	"projectName": "LostConnection",
+	"projectVersion": "0.2.2.0",
+	"Engine":
+	{
+		"type": "category",
+		"Unreal Engine 5":
+		{
+			"type": "item",
+			"notes": [
+				"Move game to Unreal Engine 5"
+			]
+		}
+	}
 }
