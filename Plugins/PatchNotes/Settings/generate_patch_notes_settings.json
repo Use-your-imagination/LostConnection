@@ -1,0 +1,10 @@
+﻿{
+	"generatedFilesPath": "../../../../../../dev/LostConnection/Plugins/PatchNotes/GeneratedFiles",
+	"openAfterUpdate": true,
+	"projectName": "LostConnection",
+	"pathToBackgroundImage": null,
+	"pathToProjectLogo": null,
+	"pathToTemplate": null,
+	"patchNotesBackgroundColor": [ 0, 0, 0, 0.17000000178813934 ],
+	"generationProgressBarColor": [ 0, 1, 0, 1 ]
+}

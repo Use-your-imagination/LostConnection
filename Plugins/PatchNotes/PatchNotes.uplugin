@@ -1,0 +1,39 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Patch Notes",
+	"Description": "Patch notes generator",
+	"Category": "Code Plugin",
+	"CreatedBy": "Mebebonk",
+	"CreatedByURL": "https://github.com/Mebebonk/",
+	"DocsURL": "https://github.com/Mebebonk/PatchNotesPluginPublic/wiki",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/6905e8a2e0b345319e431036331e7ef3",
+	"SupportURL": "wirex2000@gmail.com",
+	"EngineVersion": [
+		"4.26.0",
+		"4.27.0",
+		"5.0.0"
+	],
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "PatchNotes",
+			"Type": "Editor",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"HoloLens",
+				"Mac",
+				"IOS",
+				"Android",
+				"Linux",
+				"LinuxArm64",
+				"TVOS"
+			]
+		}
+	]
+}
