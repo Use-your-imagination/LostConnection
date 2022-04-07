@@ -28,9 +28,5 @@ private:
 	void createNewAnimSequence(const TWeakObjectPtr<UAnimSequence>& sourceSequence, int32 startCutFrameIndex, const FramesSettingsParser& framesSettings, const AnimSequenceSettingsParser& animSequenceSettings, const OutPathSettingsParser& outPathSettings, FilesGenerationSettingsParser& filesGenerationSettings);
 
 public:
-	FAnimationCutterAction() = default;
-
 	void GetActions(const TArray<UObject*>& InObjects, struct FToolMenuSection& Section) override;
-
-	~FAnimationCutterAction() = default;
 };

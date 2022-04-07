@@ -36,7 +36,7 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		return;
 	}
 
-	if (IsPendingKill() || Cast<AAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor) || Cast<UCapsuleComponent>(OtherComp))
+	if (!IsValid(this) || Cast<AAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor) || Cast<UCapsuleComponent>(OtherComp))
 	{
 		return;
 	}
