@@ -9,7 +9,7 @@
 class PATCHNOTES_API CreateCategoryDialog : public BaseDialog
 {
 private:
-	FString configuration;
+	const FString* configuration;
 	FString pathToConfiguration;
 	TSharedPtr<SEditableTextBox> category;
 	TSharedPtr<FJsonObject> settings;

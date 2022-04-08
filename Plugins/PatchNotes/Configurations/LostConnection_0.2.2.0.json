@@ -11,5 +11,18 @@
 				"Move game to Unreal Engine 5"
 			]
 		}
+	},
+	"UI":
+	{
+		"type": "category",
+		"Escape navigation":
+		{
+			"type": "item",
+			"notes": [
+				"Escape key has few contexts of using",
+				"You can press escape to close top level menu",
+				"You can press escape to open escape menu if all top level menus are closed"
+			]
+		}
 	}
 }

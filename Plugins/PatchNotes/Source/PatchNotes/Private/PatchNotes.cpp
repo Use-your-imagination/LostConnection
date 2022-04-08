@@ -179,7 +179,7 @@ TSharedRef<SWidget> FPatchNotesModule::makeMenu()
 				{
 					TSharedPtr<FJsonObject> settings = Utility::getJSON(pathToSettingsFile);
 					IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
-					FString outPath = settings->GetStringField(TEXT("generatedFilesPath"));
+					FString outPath = Utility::getGeneratedFilesPath(settings);
 					const FString& currentConfiguration = configurations->getCurrentSelectionString();
 					FString htmlNotes = outPath / currentConfiguration + TEXT(".html");
 					FString stylesPath = outPath / Constants::stylesFileName;
@@ -191,7 +191,7 @@ TSharedRef<SWidget> FPatchNotesModule::makeMenu()
 
 					Async(EAsyncExecution::ThreadPool, [this, &platformFile, htmlNotes, currentConfiguration, settings, stylesPath, outPath]()
 						{
-							FString indexPath = FPaths::ConvertRelativePathToFull(outPath) / TEXT("index.html");
+							FString indexPath = outPath / TEXT("index.html");
 
 							Utility::runOnGameThread([this]() { generationProgressBar->SetVisibility(EVisibility::Visible); });
 							
@@ -498,6 +498,8 @@ void FPatchNotesModule::initDefaults(IPlatformFile& platformFile, const FString&
 	object->SetStringField(TEXT("generatedFilesPath"), pluginFolder / TEXT("GeneratedFiles"));
 
 	object->SetBoolField(TEXT("openAfterUpdate"), true);
+
+	object->SetBoolField(TEXT("isRelativeGeneratedFilesPath"), false);
 
 	object->SetStringField(TEXT("projectName"), FApp::GetProjectName());
 

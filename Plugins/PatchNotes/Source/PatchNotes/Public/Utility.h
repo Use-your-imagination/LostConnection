@@ -25,4 +25,6 @@ public:
 	static FString getConfigurationName(const FString& configurationWithVersion);
 
 	static void runOnGameThread(const TFunction<void()>& function);
+
+	static FString getGeneratedFilesPath(const TSharedPtr<FJsonObject>& settings);
 };

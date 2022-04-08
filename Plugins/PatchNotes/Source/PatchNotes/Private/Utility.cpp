@@ -78,3 +78,19 @@ void Utility::runOnGameThread(const TFunction<void()>& function)
 {
 	AsyncTask(ENamedThreads::Type::GameThread, function);
 }
+
+FString Utility::getGeneratedFilesPath(const TSharedPtr<FJsonObject>& settings)
+{
+	FString result = settings->GetStringField(TEXT("generatedFilesPath"));
+
+	if (settings->GetBoolField(TEXT("isRelativeGeneratedFilesPath")))
+	{
+		result = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) / result;
+	}
+	else
+	{
+		result = FPaths::ConvertRelativePathToFull(result);
+	}
+
+	return result;
+}

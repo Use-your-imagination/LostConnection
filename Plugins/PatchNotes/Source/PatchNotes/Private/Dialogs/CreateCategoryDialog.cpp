@@ -13,8 +13,8 @@ void CreateCategoryDialog::collectData(const FPatchNotesModule& module, Validati
 
 	VALIDATION_CHECK();
 
-	configuration = Utility::getConfigurationName(module.getConfigurations()->getCurrentSelectionString());
-	pathToConfiguration = module.getPathToConfigurations() / module.getConfigurations()->getCurrentSelectionString() + TEXT(".json");
+	configuration = &module.getConfigurations()->getCurrentSelectionString();
+	pathToConfiguration = module.getPathToConfigurations() / *configuration + TEXT(".json");
 	settings = Utility::getJSON(module.getPathToSettingsFile());
 	updateCategories = [&module]() { const_cast<FPatchNotesModule&>(module).updateCategories(); };
 }
@@ -28,7 +28,7 @@ TSharedPtr<SCustomDialog> CreateCategoryDialog::createDialog()
 			SNew(SVerticalBox) 
 			+ SVerticalBox::Slot().HAlign(EHorizontalAlignment::HAlign_Center).VAlign(EVerticalAlignment::VAlign_Top).AutoHeight()
 			[
-				SNew(STextBlock).Text(FText::FromString(configuration)).MinDesiredWidth(200.0f)
+				SNew(STextBlock).Text(FText::FromString(*configuration)).MinDesiredWidth(200.0f)
 			]
 			+ SVerticalBox::Slot().HAlign(EHorizontalAlignment::HAlign_Center).VAlign(EVerticalAlignment::VAlign_Top).AutoHeight()
 			[
