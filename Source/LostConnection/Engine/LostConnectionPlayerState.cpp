@@ -274,11 +274,11 @@ void ALostConnectionPlayerState::addEscapableWidget(UEscapableWidget* widget)
 	escapableWidgets.Last()->AddToViewport(nextZOrder);
 }
 
-void ALostConnectionPlayerState::popEscapableWidget()
+bool ALostConnectionPlayerState::popEscapableWidget()
 {
 	if (!escapableWidgets.Num())
 	{
-		return;
+		return false;
 	}
 
 	escapableWidgets.Last()->RemoveFromViewport();
@@ -289,7 +289,11 @@ void ALostConnectionPlayerState::popEscapableWidget()
 	{
 		this->getCurrentUI()->SetVisibility(ESlateVisibility::Visible);
 
-		return;
+		playerController->SetInputMode(FInputModeGameOnly());
+
+		playerController->SetShowMouseCursor(false);
+
+		return true;
 	}
 
 	UEscapableWidget*& widget = escapableWidgets.Last();
@@ -305,6 +309,8 @@ void ALostConnectionPlayerState::popEscapableWidget()
 
 		previousWidget->updateAsPrevious(widget->getIsPreviousVisible(), widget->getIsPreviousHitTestable());
 	}
+
+	return true;
 }
 
 void ALostConnectionPlayerState::restoreRespawnCooldown_Implementation()

@@ -141,8 +141,9 @@ public:
 	void createEscapableWidget(TSubclassOf<UEscapableWidget> widgetClass);
 
 	void addEscapableWidget(UEscapableWidget* widget);
-
-	void popEscapableWidget();
+	
+	UFUNCTION(Category = EscapeMenu, BlueprintCallable)
+	UPARAM(DisplayName = IsEscapableWidgetWasPopped) bool popEscapableWidget();
 
 	UFUNCTION(Server, Reliable)
 	void restoreRespawnCooldown();

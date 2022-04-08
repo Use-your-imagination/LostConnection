@@ -32,5 +32,8 @@
 			"Name": "StateTree",
 			"Enabled": true
 		}
+	],
+	"TargetPlatforms": [
+		"Windows"
 	]
 }
