@@ -67,13 +67,11 @@ void EditNotesDialog::collectData(const FPatchNotesModule& module, Validation& v
 
 	validation.checkCategory();
 
-	VALIDATION_CHECK();;
+	VALIDATION_CHECK();
 
-	const FString& configuration = module.getConfigurations()->getCurrentSelectionString();
-
-	this->configuration = &configuration;
-	this->category = &module.getCategories()->getCurrentSelectionString();
-	pathToConfiguration = module.getPathToConfigurations() / configuration + TEXT(".json");
+	configuration = &module.getConfigurations()->getCurrentSelectionString();
+	category = &module.getCategories()->getCurrentSelectionString();
+	pathToConfiguration = module.getPathToConfigurations() / *configuration + TEXT(".json");
 	notes = SNew(SMultiLineEditableText).HintText(FText::FromName(TEXT("Notes")));
 
 	this->initElements();

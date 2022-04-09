@@ -49,7 +49,7 @@ private:
 
 	void addNote();
 
-	bool collectData(FString& configuration, FString& category, FString& element, TArray<FString>& notes);
+	bool collectData(FString& configuration, FString& category, FString& elementValue, TArray<FString>& notesValues);
 
 	void resetProgressBar(float waitSeconds = 1.0f);
 

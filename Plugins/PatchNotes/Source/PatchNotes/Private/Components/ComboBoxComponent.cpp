@@ -33,9 +33,9 @@ void ComboBoxComponent::selectElement(int32 index)
 	comboBox->SetSelectedItem(values[index]);
 }
 
-void ComboBoxComponent::setOnSelectionChanged(const TFunction<void(TSharedPtr<FString>)>& onSelectionChanged)
+void ComboBoxComponent::setOnSelectionChanged(const TFunction<void(TSharedPtr<FString>)>& onSelectionChangedFunction)
 {
-	this->onSelectionChanged = onSelectionChanged;
+	onSelectionChanged = onSelectionChangedFunction;
 }
 
 TSharedRef<SComboBox<TSharedPtr<FString>>> ComboBoxComponent::getComboBox()

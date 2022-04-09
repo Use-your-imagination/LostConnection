@@ -555,11 +555,11 @@ void FPatchNotesModule::addNote()
 {
 	FString configuration;
 	FString category;
-	FString element;
-	TArray<FString> notes;
+	FString elementValue;
+	TArray<FString> notesValues;
 	FString pathToConfigurationFile;
 
-	if (!this->collectData(configuration, category, element, notes))
+	if (!this->collectData(configuration, category, elementValue, notesValues))
 	{
 		return;
 	}
@@ -573,23 +573,23 @@ void FPatchNotesModule::addNote()
 		return;
 	}
 
-	Utility::updateConfigurationFileWithNotes(pathToConfigurationFile, category, element, notes);
+	Utility::updateConfigurationFileWithNotes(pathToConfigurationFile, category, elementValue, notesValues);
 
 	FMessageDialog::Open(EAppMsgType::Type::Ok, FText::FromName(TEXT("Note added successfully")));
 
-	this->notes->SetText(FText::GetEmpty());
+	notes->SetText(FText::GetEmpty());
 
-	this->element->SetText(FText::GetEmpty());
+	element->SetText(FText::GetEmpty());
 }
 
-bool FPatchNotesModule::collectData(FString& configuration, FString& category, FString& element, TArray<FString>& notes)
+bool FPatchNotesModule::collectData(FString& configuration, FString& category, FString& elementValue, TArray<FString>& notesValues)
 {
 	FString errors;
-	FString data = this->notes->GetText().ToString();
+	FString data = notes->GetText().ToString();
 
 	configuration = configurations->getCurrentSelectionString();
 	category = categories->getCurrentSelectionString();
-	element = this->element->GetText().ToString();
+	elementValue = element->GetText().ToString();
 
 	if (configuration.IsEmpty())
 	{
@@ -601,7 +601,7 @@ bool FPatchNotesModule::collectData(FString& configuration, FString& category, F
 		errors.Append(TEXT("Category can't be empty")).Append(LINE_TERMINATOR);
 	}
 
-	if (element.IsEmpty())
+	if (elementValue.IsEmpty())
 	{
 		errors.Append(TEXT("Element can't be empty")).Append(LINE_TERMINATOR);
 	}
@@ -611,7 +611,7 @@ bool FPatchNotesModule::collectData(FString& configuration, FString& category, F
 		errors.Append(TEXT("Notes can't be empty")).Append(LINE_TERMINATOR);
 	}
 
-	data.ParseIntoArray(notes, LINE_TERMINATOR);
+	data.ParseIntoArray(notesValues, LINE_TERMINATOR);
 
 	if (errors.Len())
 	{

@@ -22,7 +22,7 @@ public:
 
 	void selectElement(int32 index);
 
-	void setOnSelectionChanged(const TFunction<void(TSharedPtr<FString>)>& onSelectionChanged);
+	void setOnSelectionChanged(const TFunction<void(TSharedPtr<FString>)>& onSelectionChangedFunction);
 
 	TSharedRef<SComboBox<TSharedPtr<FString>>> getComboBox();
 
