@@ -10,11 +10,7 @@
 	"DocsURL": "https://github.com/Mebebonk/PatchNotesPluginPublic/wiki",
 	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/6905e8a2e0b345319e431036331e7ef3",
 	"SupportURL": "wirex2000@gmail.com",
-	"EngineVersion": [
-		"4.26.0",
-		"4.27.0",
-		"5.0.0"
-	],
+	"EngineVersion": "5.0.0",
 	"CanContainContent": false,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
