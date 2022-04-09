@@ -16,13 +16,13 @@ struct FDronePreview
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(Category = Components, EditDefaultsOnly)
+	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
 	USkeletalMesh* mesh;
 
-	UPROPERTY(Category = Animations, EditDefaultsOnly)
+	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UAnimInstance> animationBlueprint;
 
-	UPROPERTY(Category = Information, EditDefaultsOnly)
+	UPROPERTY(Category = Information, EditDefaultsOnly, BlueprintReadOnly)
 	UStringTable* droneInformation;
 
 	FDronePreview();
@@ -35,7 +35,7 @@ class LOSTCONNECTION_API UDronesPreviewDataAsset : public UPrimaryDataAsset
 	
 private:
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	FDronePreview SN4K3;
+	FDronePreview SN4K3PreviewData;
 
 public:
 	static FPrimaryAssetId getPrimaryAssetId();

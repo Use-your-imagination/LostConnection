@@ -5,9 +5,26 @@
 #include "CoreMinimal.h"
 
 #include "Engine/DataAsset.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
+
 #include "Utility/Enums.h"
 
 #include "DefaultsDataAsset.generated.h"
+
+USTRUCT(BlueprintType)
+struct FShootThroughSurface
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(Category = ShotThrough, EditDefaultsOnly, BlueprintReadOnly)
+	float flatDamageReducation;
+
+	UPROPERTY(Category = ShotThrough, EditDefaultsOnly, BlueprintReadOnly)
+	float percentDamageReduction;
+
+	FShootThroughSurface();
+};
 
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API UDefaultsDataAsset : public UPrimaryDataAsset
@@ -39,6 +56,9 @@ private:
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 maxEnergyAmmoCount;
 
+	UPROPERTY(Category = WorldDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TMap<TEnumAsByte<EPhysicalSurface>, FShootThroughSurface> shootThroughSurfaces;
+
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
 
@@ -48,6 +68,8 @@ public:
 	const TSubclassOf<class ADeathPlaceholder>& getDeathPlaceholder() const;
 
 	const FColor& operator [] (EWeaponRarity rarity) const;
+
+	const FShootThroughSurface& operator [] (const TWeakObjectPtr<UPhysicalMaterial>& physicalMaterial) const;
 
 	int32 getMaxSmallAmmoCount() const;
 

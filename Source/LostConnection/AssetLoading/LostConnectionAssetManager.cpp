@@ -229,11 +229,9 @@ const ULootDataAsset* ULostConnectionAssetManager::getLootDataAsset() const
 	return &this->getLoot();
 }
 
-TArray<const FDronePreview*> ULostConnectionAssetManager::getDronesPreview() const
+const UDronesPreviewDataAsset* ULostConnectionAssetManager::getDronesPreview() const
 {
-	UDronesPreviewDataAsset& asset = *GetPrimaryAssetObject<UDronesPreviewDataAsset>(UDronesPreviewDataAsset::getPrimaryAssetId());
-
-	return asset.getDronesPreview();
+	return GetPrimaryAssetObject<UDronesPreviewDataAsset>(assets[UDronesPreviewDataAsset::StaticClass()]);
 }
 
 TArray<const UBaseDroneDataAsset*> ULostConnectionAssetManager::getDrones() const

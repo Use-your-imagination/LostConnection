@@ -18,7 +18,7 @@ TArray<const FDronePreview*> UDronesPreviewDataAsset::getDronesPreview() const
 {
 	return
 	{
-		&SN4K3
+		&SN4K3PreviewData
 	};
 }
 

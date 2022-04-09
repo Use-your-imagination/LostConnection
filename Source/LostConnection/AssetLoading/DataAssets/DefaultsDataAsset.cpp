@@ -6,6 +6,13 @@
 #include "Weapons/BaseWeapon.h"
 #include "Constants/Constants.h"
 
+FShootThroughSurface::FShootThroughSurface() :
+	flatDamageReducation(100.0f),
+	percentDamageReduction(50.0f)
+{
+
+}
+
 FPrimaryAssetId UDefaultsDataAsset::getPrimaryAssetId()
 {
 	return FPrimaryAssetId(FPrimaryAssetType("Default"), "DefaultAssets");
@@ -42,6 +49,13 @@ const FColor& UDefaultsDataAsset::operator [] (EWeaponRarity rarity) const
 	}
 
 	return FColor::Emerald;
+}
+
+const FShootThroughSurface& UDefaultsDataAsset::operator [] (const TWeakObjectPtr<UPhysicalMaterial>& physicalMaterial) const
+{
+	check(physicalMaterial.IsValid());
+
+	return shootThroughSurfaces[UPhysicalMaterial::DetermineSurfaceType(physicalMaterial.Get())];
 }
 
 int32 UDefaultsDataAsset::getMaxSmallAmmoCount() const

@@ -104,10 +104,11 @@ public:
 
 	const ULootDataAsset& getLoot() const;
 
-	UFUNCTION(Category = "AssetLoading|Loot", BlueprintCallable, BlueprintPure)
+	UFUNCTION(Category = "AssetLoading|Loot", BlueprintCallable)
 	const ULootDataAsset* getLootDataAsset() const;
 
-	TArray<const FDronePreview*> getDronesPreview() const;
+	UFUNCTION(Category = "AssetLoading|Drones Preview", BlueprintCallable)
+	const UDronesPreviewDataAsset* getDronesPreview() const;
 
 	TArray<const UBaseDroneDataAsset*> getDrones() const;
 
