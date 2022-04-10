@@ -30,6 +30,13 @@
 			"notes": [
 				"Add framerate counter"
 			]
+		},
+		"Network latency":
+		{
+			"type": "item",
+			"notes": [
+				"Add network latency"
+			]
 		}
 	}
 }
