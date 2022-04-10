@@ -94,6 +94,10 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 			decreaseDamage(surface.percentDamageReduction, surface.flatDamageReducation);
 		}
 	}
+	else
+	{
+		destroyAmmo = true;
+	}
 
 	if (destroyAmmo || ailmentInflictorUtility->calculateTotalDamage() <= 0.0f)
 	{

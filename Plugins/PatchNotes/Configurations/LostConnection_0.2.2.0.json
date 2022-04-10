@@ -23,6 +23,13 @@
 				"You can press escape to close top level menu",
 				"You can press escape to open escape menu if all top level menus are closed"
 			]
+		},
+		"Framerate":
+		{
+			"type": "item",
+			"notes": [
+				"Add framerate counter"
+			]
 		}
 	}
 }
