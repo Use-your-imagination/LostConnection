@@ -36,33 +36,35 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		return;
 	}
 
-	if (!IsValid(this) || Cast<AAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor) || Cast<UCapsuleComponent>(OtherComp))
+	if (Cast<AAmmo>(OtherActor) || Cast<UBaseWeapon>(OtherActor) || Cast<UCapsuleComponent>(OtherComp))
 	{
 		return;
 	}
 
-	bool shotThrough = OtherActor->Implements<UShotThrough>();
+	bool isActorValid = IsValid(OtherActor);
+	bool shotThrough = isActorValid && OtherActor->Implements<UShotThrough>();
+	bool destroyAmmo = false;
+	auto decreaseDamage = [this](float percentDamageReduction, float flatDamageReduction)
+	{
+		ailmentInflictorUtility->appendMoreDamageCoefficient(-Utility::fromPercent(percentDamageReduction));
 
-	// TODO: remake shot through
+		ailmentInflictorUtility->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage() - flatDamageReduction);
+	};
 
-	if (IsValid(OtherActor) && lastTarget == OtherActor)
+	if (isActorValid && lastTarget == OtherActor)
 	{
 		return;
 	}
 
-	if (shotThrough && IsValid(OtherActor))
+	if (shotThrough)
 	{
 		IShotThrough::Execute_impactAction(OtherActor, this, SweepResult);
 
 		lastTarget = OtherActor;
 
-		ailmentInflictorUtility->setBaseDamage
-		(
-			ailmentInflictorUtility->getBaseDamage() *
-			(1.0f - Utility::fromPercent(IShotThrough::Execute_getPercentageDamageReduction(OtherActor))) - IShotThrough::Execute_getFlatDamageReduction(OtherActor)
-		);
+		decreaseDamage(IShotThrough::Execute_getPercentageDamageReduction(OtherActor), IShotThrough::Execute_getFlatDamageReduction(OtherActor));
 
-		if (ailmentInflictorUtility->getBaseDamage() > 0.0f)
+		if (ailmentInflictorUtility->calculateTotalDamage() > 0.0f)
 		{
 			UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 			(
@@ -79,12 +81,21 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 			onHit->SetNiagaraVariableBool("DeathState", false);
 		}
 	}
-	else
+	else if (SweepResult.PhysMaterial.IsValid())
 	{
-		ailmentInflictorUtility->setBaseDamage(0.0f);
+		const FShootThroughSurface& surface = ULostConnectionAssetManager::get().getDefaults()[SweepResult.PhysMaterial];
+
+		if (surface.percentDamageReduction == -1.0f)
+		{
+			destroyAmmo = true;
+		}
+		else
+		{
+			decreaseDamage(surface.percentDamageReduction, surface.flatDamageReducation);
+		}
 	}
 
-	if (ailmentInflictorUtility->getBaseDamage() <= 0.0f)
+	if (destroyAmmo || ailmentInflictorUtility->calculateTotalDamage() <= 0.0f)
 	{
 		mesh->SetVisibility(true);
 

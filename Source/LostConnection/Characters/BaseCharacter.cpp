@@ -742,6 +742,43 @@ void ABaseCharacter::detachDeathEvent(const TScriptInterface<IOnDeathEvent>& eve
 	deathEvents.Remove(event);
 }
 
+void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
+{
+	TArray<UBaseStatus*> statusesToRemove;
+
+	for (auto& status : statuses)
+	{
+		UBaseTriggerStatus* trigger = Cast<UBaseTriggerStatus>(status);
+
+		if (trigger)
+		{
+			if (trigger->applyEffect(this, hit) && trigger->getIsOnceTriggered())
+			{
+				statusesToRemove.Add(trigger);
+			}
+		}
+	}
+
+	for (const auto& statusToRemove : statusesToRemove)
+	{
+		statuses.Remove(statusToRemove);
+
+		statusToRemove->postRemove();
+	}
+
+	statusesToRemove.Empty();
+
+	if (inflictor->_getUObject()->Implements<UAilmentInflictor>())
+	{
+		IAilmentInflictor* ailmentInflictor = StaticCast<IAilmentInflictor*>(inflictor.GetInterface());
+
+		if ((hit.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(hit.PhysMaterial.Get()) == EPhysicalSurface::SurfaceType1) || ailmentInflictor->getCrushingHitProc())
+		{
+			InitializationUtility::createDefaultAilment(ailmentInflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
+		}
+	}
+}
+
 void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 {
 	if (swarm.IsValid())
@@ -834,43 +871,6 @@ float ABaseCharacter::getEnergyShieldPercentDealt(class IDamageInflictor* inflic
 	float capacity = energyShield->getCapacity();
 
 	return Utility::toPercent(1.0f - (capacity - inflictor->calculateTotalDamage()) / capacity);
-}
-
-void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
-{
-	TArray<UBaseStatus*> statusesToRemove;
-
-	for (auto& status : statuses)
-	{
-		UBaseTriggerStatus* trigger = Cast<UBaseTriggerStatus>(status);
-
-		if (trigger)
-		{
-			if (trigger->applyEffect(this, hit) && trigger->getIsOnceTriggered())
-			{
-				statusesToRemove.Add(trigger);
-			}
-		}
-	}
-
-	for (const auto& statusToRemove : statusesToRemove)
-	{
-		statuses.Remove(statusToRemove);
-
-		statusToRemove->postRemove();
-	}
-
-	statusesToRemove.Empty();
-
-	if (inflictor->_getUObject()->Implements<UAilmentInflictor>())
-	{
-		IAilmentInflictor* ailmentInflictor = StaticCast<IAilmentInflictor*>(inflictor.GetInterface());
-
-		if ((hit.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(hit.PhysMaterial.Get()) == EPhysicalSurface::SurfaceType1) || ailmentInflictor->getCrushingHitProc())
-		{
-			InitializationUtility::createDefaultAilment(ailmentInflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
-		}
-	}
 }
 
 USkeletalMeshComponent* ABaseCharacter::getMeshComponent()

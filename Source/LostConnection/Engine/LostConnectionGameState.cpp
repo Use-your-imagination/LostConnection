@@ -109,7 +109,7 @@ void ALostConnectionGameState::verteilenLootPoints(ILootPointsGiver* giver)
 {
 	if (!giver || !IsValid(giver->_getUObject()))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, L"Failed to receive loot points");
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("Failed to receive loot points"));
 
 		return;
 	}

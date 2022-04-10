@@ -315,6 +315,8 @@ public:
 
 	virtual void detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event) final override;
 
+	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
+
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void setCurrentHealth(float newCurrentHealth) final override;
 
@@ -344,8 +346,6 @@ public:
 	virtual float getLifePercentDealt(class IDamageInflictor* inflictor) const final override;
 
 	virtual float getEnergyShieldPercentDealt(class IDamageInflictor* inflictor) const final override;
-
-	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
 
 	virtual USkeletalMeshComponent* getMeshComponent() final override;
 
