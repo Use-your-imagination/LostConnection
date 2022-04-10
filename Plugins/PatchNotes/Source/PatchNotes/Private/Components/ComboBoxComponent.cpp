@@ -6,7 +6,7 @@ ComboBoxComponent::ComboBoxComponent(const TFunction<void()>& onOpening) :
 	onSelectionChanged([](TSharedPtr<FString>) {})
 {
 	comboBox = SNew(SComboBox<TSharedPtr<FString>>)
-		.OptionsSource(&this->values)
+		.OptionsSource(&values)
 		.OnGenerateWidget_Lambda([](TSharedPtr<FString> value) { return SNew(STextBlock).Text(FText::FromString(*value)).MinDesiredWidth(200.0f); })
 		.OnComboBoxOpening_Lambda(onOpening)
 		.OnSelectionChanged_Lambda
