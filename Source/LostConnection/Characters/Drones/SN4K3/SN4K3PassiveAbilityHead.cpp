@@ -144,11 +144,11 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 
 	capsule->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	
-	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Ignore);
+	capsule->SetCollisionResponseToChannel(UConstants::shotThroughChannel, ECollisionResponse::ECR_Ignore);
 
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
-	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Ignore);
+	mesh->SetCollisionResponseToChannel(UConstants::shotThroughChannel, ECollisionResponse::ECR_Ignore);
 
 	mesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
 

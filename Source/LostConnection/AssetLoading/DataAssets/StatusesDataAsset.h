@@ -33,5 +33,5 @@ public:
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 
-	~UStatusesDataAsset() = default;
+	virtual ~UStatusesDataAsset() = default;
 };

@@ -38,7 +38,7 @@ protected:
 	UMaterialInstanceDynamic* selectorMaterial;
 
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly)
-	AInventory* inventory;
+	TObjectPtr<AInventory> inventory;
 
 	UPROPERTY(Category = Engine, Replicated, BlueprintReadOnly)
 	class ALostConnectionPlayerController* playerController;
@@ -165,7 +165,7 @@ public:
 
 	UUserWidget* getCurrentUI() const;
 
-	AInventory* getInventory() const;
+	TObjectPtr<AInventory> getInventory() const;
 
 	const TSubclassOf<class ABaseDrone>& getDroneClass() const;
 
@@ -229,9 +229,7 @@ inline UBaseWeapon* ALostConnectionPlayerState::getSecondInactiveWeapon() const
 
 FORCEINLINE int32 ALostConnectionPlayerState::getSpareAmmo(EAmmoType type) const
 {
-	TArray<FAmmoData>& spareAmmo = inventory->getSpareAmmoArray();
-
-	for (const auto& data : spareAmmo)
+	for (const FAmmoData& data : inventory->getSpareAmmoArray())
 	{
 		if (data.ammoType == type)
 		{

@@ -39,6 +39,15 @@ private:
 	UPROPERTY(Category = Coefficients, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float splitLootPointsCoefficient;
 
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ABaseDroppedAmmo> smallAmmoClass;
+
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ABaseDroppedAmmo> largeAmmoClass;
+
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ABaseDroppedAmmo> energyAmmoClass;
+
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
 
@@ -65,7 +74,13 @@ public:
 
 	float getSplitLootPointsCoefficient() const;
 
+	const TSubclassOf<ABaseDroppedAmmo>& getSmallAmmoClass() const;
+
+	const TSubclassOf<ABaseDroppedAmmo>& getLargeAmmoClass() const;
+
+	const TSubclassOf<ABaseDroppedAmmo>& getEnergyAmmoClass() const;
+
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 
-	~ULootDataAsset() = default;
+	virtual ~ULootDataAsset() = default;
 };

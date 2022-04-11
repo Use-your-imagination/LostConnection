@@ -141,6 +141,8 @@ public:
 
 	int32 getMaxEnergyAmmoCount() const;
 
+	int32 getMaxAmmoCount(EAmmoType type) const;
+
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	~AInventory() = default;

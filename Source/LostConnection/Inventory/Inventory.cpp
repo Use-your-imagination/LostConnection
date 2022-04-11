@@ -295,6 +295,23 @@ int32 AInventory::getMaxEnergyAmmoCount() const
 	return maxEnergyAmmoCount;
 }
 
+int32 AInventory::getMaxAmmoCount(EAmmoType type) const
+{
+	switch (type)
+	{
+	case EAmmoType::small:
+		return this->getMaxSmallAmmoCount();
+
+	case EAmmoType::large:
+		return this->getMaxLargeAmmoCount();
+
+	case EAmmoType::energy:
+		return this->getMaxEnergyAmmoCount();
+	}
+
+	return 0;
+}
+
 bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);

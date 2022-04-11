@@ -44,6 +44,9 @@ public:
 
 	static constexpr int32 startZOrder = 1000;
 
+	static constexpr ECollisionChannel shotThroughChannel = ECollisionChannel::ECC_GameTraceChannel1;
+	static constexpr ECollisionChannel droneChannel = ECollisionChannel::ECC_GameTraceChannel2;
+
 public:
 	static const FName actionStringTablePath;
 	static const FString defaultActionMessageKey;
