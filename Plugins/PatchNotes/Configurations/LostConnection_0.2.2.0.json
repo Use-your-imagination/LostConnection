@@ -38,5 +38,16 @@
 				"Add network latency"
 			]
 		}
+	},
+	"Loot":
+	{
+		"type": "category",
+		"Ammo droping":
+		{
+			"type": "item",
+			"notes": [
+				"Added ammo droping from enemies"
+			]
+		}
 	}
 }

@@ -6,12 +6,24 @@
 
 void ABaseDroppedAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	this->pickup(Cast<ABaseDrone>(OtherActor));
+	drone = Cast<ABaseDrone>(OtherActor);
+
+	this->pickup();
 }
 
-void ABaseDroppedAmmo::pickup(TObjectPtr<ABaseDrone> drone)
+void ABaseDroppedAmmo::onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	TObjectPtr<AInventory> inventory = Utility::getPlayerState(drone)->getInventory();
+	drone.Reset();
+}
+
+void ABaseDroppedAmmo::pickup()
+{
+	if (!drone.IsValid())
+	{
+		return;
+	}
+
+	TObjectPtr<AInventory> inventory = Utility::getPlayerState(drone.Get())->getInventory();
 	int32 maxAmmo = inventory->getMaxAmmoCount(type);
 	int32 spareAmmo = drone->getSpareAmmo(type);
 	int32 neededAmmo = FMath::Min(currentAmount, maxAmmo - spareAmmo);
@@ -41,9 +53,11 @@ void ABaseDroppedAmmo::PostInitializeComponents()
 	currentAmount = amount;
 }
 
-ABaseDroppedAmmo::ABaseDroppedAmmo()
+ABaseDroppedAmmo::ABaseDroppedAmmo() :
+	lifetime(20.0f)
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.TickInterval = 1.0f;
 	bReplicates = false;
 
 	pickupArea = CreateDefaultSubobject<USphereComponent>("PickupArea");
@@ -52,11 +66,29 @@ ABaseDroppedAmmo::ABaseDroppedAmmo()
 
 	pickupArea->OnComponentBeginOverlap.AddDynamic(this, &ABaseDroppedAmmo::onBeginOverlap);
 
+	pickupArea->OnComponentEndOverlap.AddDynamic(this, &ABaseDroppedAmmo::onEndOverlap);
+
 	pickupArea->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
-	pickupArea->SetCollisionResponseToChannel(UConstants::droneChannel, ECollisionResponse::ECR_Overlap);
+	pickupArea->SetCollisionResponseToChannel(UConstants::droneInteractiveChannel, ECollisionResponse::ECR_Overlap);
 
 	SetRootComponent(pickupArea);
 
 	mesh->SetupAttachment(pickupArea);
+}
+
+void ABaseDroppedAmmo::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	lifetime -= DeltaTime;
+
+	if (lifetime <= 0.0f)
+	{
+		Destroy();
+	}
+	else
+	{
+		this->pickup();
+	}
 }

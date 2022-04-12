@@ -10,6 +10,7 @@
 #include "Weapons/Pistols/Gauss.h"
 #include "Engine/LostConnectionGameMode.h"
 #include "Statuses/Ailments/SwarmAilment.h"
+#include "Loot/LootManager.h"
 
 void ABaseBot::Tick(float DeltaTime)
 {
@@ -35,12 +36,15 @@ void ABaseBot::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 
 void ABaseBot::deathLogic()
 {
-	UWorld* world = GetWorld();
-	
+	TObjectPtr<UWorld> world = GetWorld();
+	TObjectPtr<ALootManager> manager = Cast<ALootManager>(UGameplayStatics::GetActorOfClass(world, ALootManager::StaticClass()));
+
 	if (!isAlly)
 	{
 		world->GetGameState<ALostConnectionGameState>()->verteilenLootPoints(this);
 	}
+
+	manager->spawnAmmo(this);
 
 	this->destroyAssociatedActors();
 
@@ -67,7 +71,10 @@ void ABaseBot::destroyAssociatedActors()
 	Destroy();
 }
 
-ABaseBot::ABaseBot()
+ABaseBot::ABaseBot() :
+	smallAmmoDropChance(45.0f),
+	largeAmmoDropChance(45.0f),
+	energyAmmoDropChance(45.0f)
 {
 	isAlly = false;
 }
@@ -75,4 +82,19 @@ ABaseBot::ABaseBot()
 int32 ABaseBot::getLootPoints() const
 {
 	return lootPointsReward;
+}
+
+float ABaseBot::getSmallAmmoDropChance() const
+{
+	return smallAmmoDropChance;
+}
+
+float ABaseBot::getLargeAmmoDropChance() const
+{
+	return largeAmmoDropChance;
+}
+
+float ABaseBot::getEnergyAmmoDropChance() const
+{
+	return energyAmmoDropChance;
 }

@@ -8,6 +8,7 @@
 
 #include "LootCreator.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
+#include "Interfaces/Loot/AmmoDropable.h"
 
 #include "LootManager.generated.h"
 
@@ -43,6 +44,9 @@ public:
 	
 	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
 	void addRandomWeapon(AInventory* playerInventory);
+
+	UFUNCTION(Category = Loot, BlueprintCallable)
+	void spawnAmmo(TScriptInterface<IAmmoDropable> ammoDropable);
 
 	const TArray<UBaseWeaponsLootFunction*>& getWeaponsLootFunctions() const;
 

@@ -4,6 +4,8 @@
 
 #include "Engine/LostConnectionPlayerState.h"
 #include "Constants/Constants.h"
+#include "Utility/Utility.h"
+#include "WorldPlaceables/BaseDroppedAmmo.h"
 
 void ALootManager::BeginPlay()
 {
@@ -53,6 +55,27 @@ void ALootManager::addRandomWeapon_Implementation(AInventory* playerInventory)
 	int32 otherLootPoints = weaponLootPoints * ULostConnectionAssetManager::get().getLoot().getSplitLootPointsCoefficient();
 
 	this->addRandomLoot(playerInventory, weaponLootPoints, otherLootPoints, otherLootPoints);
+}
+
+void ALootManager::spawnAmmo(TScriptInterface<IAmmoDropable> ammoDropable)
+{
+	const ULootDataAsset& loot = ULostConnectionAssetManager::get().getLoot();
+	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(this);
+
+	if (Utility::checkChanceProc(ammoDropable->getSmallAmmoDropChance()))
+	{
+		gameState->spawn<ABaseDroppedAmmo>(loot.getSmallAmmoClass(), ammoDropable->getCurrentPosition());
+	}
+
+	if (Utility::checkChanceProc(ammoDropable->getLargeAmmoDropChance()))
+	{
+		gameState->spawn<ABaseDroppedAmmo>(loot.getLargeAmmoClass(), ammoDropable->getCurrentPosition());
+	}
+
+	if (Utility::checkChanceProc(ammoDropable->getEnergyAmmoDropChance()))
+	{
+		gameState->spawn<ABaseDroppedAmmo>(loot.getEnergyAmmoClass(), ammoDropable->getCurrentPosition());
+	}
 }
 
 const TArray<UBaseWeaponsLootFunction*>& ALootManager::getWeaponsLootFunctions() const

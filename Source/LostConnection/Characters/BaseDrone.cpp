@@ -742,6 +742,8 @@ ABaseDrone::ABaseDrone() :
 	castPoint(100.0f),
 	isFullyDestruction(true)
 {
+	TObjectPtr<USkeletalMeshComponent> mesh = GetMesh();
+
 	isAlly = true;
 
 	BaseTurnRate = 45.0f;
@@ -763,6 +765,8 @@ ABaseDrone::ABaseDrone() :
 	FollowCamera->bUsePawnControlRotation = false;
 
 	JumpMaxCount = 2;
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(UConstants::droneInteractiveChannel, ECollisionResponse::ECR_Overlap);
 
 #pragma region BlueprintFunctionLibrary
 	secondaryHold = false;
