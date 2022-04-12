@@ -62,11 +62,15 @@ ABaseDroppedAmmo::ABaseDroppedAmmo() :
 
 	collisionBox = CreateDefaultSubobject<UBoxComponent>("CollisionBox");
 
-	collisionBox->SetBoxExtent(FVector(40.0, 30.0, 25.0));
+	collisionBox->SetBoxExtent(FVector(25.0, 14.0, 12.5));
 
 	collisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 
 	collisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+
+	collisionBox->SetSimulatePhysics(true);
+
+	collisionBox->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
 	SetRootComponent(collisionBox);
 
@@ -74,7 +78,7 @@ ABaseDroppedAmmo::ABaseDroppedAmmo() :
 
 	pickupArea->SetupAttachment(collisionBox);
 
-	pickupArea->SetSphereRadius(1500.0f);
+	pickupArea->SetSphereRadius(150.0f);
 
 	pickupArea->OnComponentBeginOverlap.AddDynamic(this, &ABaseDroppedAmmo::onBeginOverlap);
 
