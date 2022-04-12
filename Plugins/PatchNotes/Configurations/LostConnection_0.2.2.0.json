@@ -49,5 +49,16 @@
 				"Added ammo droping from enemies"
 			]
 		}
+	},
+	"Enviroment":
+	{
+		"type": "category",
+		"Collision":
+		{
+			"type": "item",
+			"notes": [
+				"Added phys mat to room meshes"
+			]
+		}
 	}
 }
