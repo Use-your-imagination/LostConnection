@@ -22,7 +22,7 @@ public:
 public:
 	static ALostConnectionGameState* getGameState(const AActor* actor);
 
-	static ALostConnectionPlayerState* getPlayerState(const APawn* pawn);
+	static TObjectPtr<ALostConnectionPlayerState> getPlayerState(const APawn* pawn);
 
 	static ALostConnectionPlayerController* getPlayerController(const APawn* pawn);
 
@@ -72,7 +72,7 @@ inline ALostConnectionGameState* Utility::getGameState(const AActor* actor)
 	return actor->GetWorld()->GetGameState<ALostConnectionGameState>();
 }
 
-inline ALostConnectionPlayerState* Utility::getPlayerState(const APawn* pawn)
+inline TObjectPtr<ALostConnectionPlayerState> Utility::getPlayerState(const APawn* pawn)
 {
 	return pawn->GetController()->GetPlayerState<ALostConnectionPlayerState>();
 }

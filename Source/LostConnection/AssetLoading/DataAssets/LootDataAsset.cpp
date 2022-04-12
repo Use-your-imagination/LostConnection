@@ -7,6 +7,7 @@
 #include "Weapons/BaseWeapon.h"
 #include "Modules/BasePersonalModule.h"
 #include "Modules/BaseWeaponModule.h"
+#include "WorldPlaceables/BaseDroppedAmmo.h"
 
 template<typename T>
 static TSubclassOf<T> findSubclass(const TArray<TSubclassOf<T>>& classes, const TSubclassOf<T>& subclass);
@@ -64,6 +65,21 @@ const TArray<TSubclassOf<UBaseWeaponModulesLootFunction>>& ULootDataAsset::getWe
 float ULootDataAsset::getSplitLootPointsCoefficient() const
 {
 	return splitLootPointsCoefficient;
+}
+
+const TSubclassOf<ABaseDroppedAmmo>& ULootDataAsset::getSmallAmmoClass() const
+{
+	return smallAmmoClass;
+}
+
+const TSubclassOf<ABaseDroppedAmmo>& ULootDataAsset::getLargeAmmoClass() const
+{
+	return largeAmmoClass;
+}
+
+const TSubclassOf<ABaseDroppedAmmo>& ULootDataAsset::getEnergyAmmoClass() const
+{
+	return energyAmmoClass;
 }
 
 FPrimaryAssetId ULootDataAsset::GetPrimaryAssetId() const

@@ -14,7 +14,7 @@ ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 
 	mesh->SetGenerateOverlapEvents(true);
 
-	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+	mesh->SetCollisionResponseToChannel(UConstants::shotThroughChannel, ECollisionResponse::ECR_Overlap);
 
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 

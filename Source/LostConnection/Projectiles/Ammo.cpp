@@ -81,7 +81,7 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 			onHit->SetNiagaraVariableBool("DeathState", false);
 		}
 	}
-	else if (SweepResult.PhysMaterial.IsValid())
+	else if (SweepResult.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(SweepResult.PhysMaterial.Get()) != EPhysicalSurface::SurfaceType_Default)
 	{
 		const FShootThroughSurface& surface = ULostConnectionAssetManager::get().getDefaults()[SweepResult.PhysMaterial];
 
@@ -93,10 +93,6 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		{
 			decreaseDamage(surface.percentDamageReduction, surface.flatDamageReducation);
 		}
-	}
-	else
-	{
-		destroyAmmo = true;
 	}
 
 	if (destroyAmmo || ailmentInflictorUtility->calculateTotalDamage() <= 0.0f)

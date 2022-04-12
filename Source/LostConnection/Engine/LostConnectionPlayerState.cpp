@@ -357,7 +357,7 @@ UUserWidget* ALostConnectionPlayerState::getCurrentUI() const
 	return currentUI;
 }
 
-AInventory* ALostConnectionPlayerState::getInventory() const
+TObjectPtr<AInventory> ALostConnectionPlayerState::getInventory() const
 {
 	return inventory;
 }
