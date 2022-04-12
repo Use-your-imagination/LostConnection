@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
 
 #include "Characters/BaseDrone.h"
 #include "WorldPlaceables/DroppedObject.h"
@@ -18,6 +19,9 @@ class LOSTCONNECTION_API ABaseDroppedAmmo : public ADroppedObject
 	GENERATED_BODY()
 	
 private:
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UBoxComponent> collisionBox;
+
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USphereComponent> pickupArea;
 

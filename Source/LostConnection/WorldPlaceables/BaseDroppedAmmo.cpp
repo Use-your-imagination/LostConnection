@@ -54,13 +54,25 @@ void ABaseDroppedAmmo::PostInitializeComponents()
 }
 
 ABaseDroppedAmmo::ABaseDroppedAmmo() :
-	lifetime(20.0f)
+	lifetime(60.0f)
 {
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.TickInterval = 1.0f;
 	bReplicates = false;
 
+	collisionBox = CreateDefaultSubobject<UBoxComponent>("CollisionBox");
+
+	collisionBox->SetBoxExtent(FVector(40.0, 30.0, 25.0));
+
+	collisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+	collisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+
+	SetRootComponent(collisionBox);
+
 	pickupArea = CreateDefaultSubobject<USphereComponent>("PickupArea");
+
+	pickupArea->SetupAttachment(collisionBox);
 
 	pickupArea->SetSphereRadius(1500.0f);
 
@@ -71,8 +83,6 @@ ABaseDroppedAmmo::ABaseDroppedAmmo() :
 	pickupArea->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
 	pickupArea->SetCollisionResponseToChannel(UConstants::droneInteractiveChannel, ECollisionResponse::ECR_Overlap);
-
-	SetRootComponent(pickupArea);
 
 	mesh->SetupAttachment(pickupArea);
 }
