@@ -64,17 +64,17 @@ void ALootManager::spawnAmmo(TScriptInterface<IAmmoDropable> ammoDropable)
 
 	if (Utility::checkChanceProc(ammoDropable->getSmallAmmoDropChance()))
 	{
-		gameState->spawn<ABaseDroppedAmmo>(loot.getSmallAmmoClass(), ammoDropable->getCurrentPosition());
+		gameState->spawn<ABaseDroppedAmmo>(loot.getSmallAmmoClass(), ammoDropable->getCurrentPosition())->FinishSpawning({}, true);
 	}
 
 	if (Utility::checkChanceProc(ammoDropable->getLargeAmmoDropChance()))
 	{
-		gameState->spawn<ABaseDroppedAmmo>(loot.getLargeAmmoClass(), ammoDropable->getCurrentPosition());
+		gameState->spawn<ABaseDroppedAmmo>(loot.getLargeAmmoClass(), ammoDropable->getCurrentPosition())->FinishSpawning({}, true);
 	}
 
 	if (Utility::checkChanceProc(ammoDropable->getEnergyAmmoDropChance()))
 	{
-		gameState->spawn<ABaseDroppedAmmo>(loot.getEnergyAmmoClass(), ammoDropable->getCurrentPosition());
+		gameState->spawn<ABaseDroppedAmmo>(loot.getEnergyAmmoClass(), ammoDropable->getCurrentPosition())->FinishSpawning({}, true);
 	}
 }
 
