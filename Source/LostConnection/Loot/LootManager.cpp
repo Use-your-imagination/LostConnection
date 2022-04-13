@@ -7,6 +7,7 @@
 #include "Constants/Constants.h"
 #include "Utility/Utility.h"
 #include "WorldPlaceables/BaseDroppedAmmo.h"
+#include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
 
 void ALootManager::BeginPlay()
 {
@@ -43,6 +44,28 @@ void ALootManager::addRandomLoot(AInventory* playerInventory, int32 weaponsLootP
 	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), UConstants::maxSpendLootPoints));
 }
 
+void ALootManager::spawnAmmo_Implementation(UObject* ammoDropable)
+{
+	const ULootDataAsset& loot = ULostConnectionAssetManager::get().getLoot();
+	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(this);
+	FTransform spawnTransform = UUtilityBlueprintFunctionLibrary::getAmmoDropableCurrentPosition(ammoDropable);
+
+	if (Utility::checkChanceProc(IAmmoDropable::Execute_getSmallAmmoDropChance(ammoDropable)))
+	{
+		gameState->spawn<ABaseDroppedAmmo>(loot.getSmallAmmoClass(), spawnTransform)->FinishSpawning({}, true);
+	}
+
+	if (Utility::checkChanceProc(IAmmoDropable::Execute_getLargeAmmoDropChance(ammoDropable)))
+	{
+		gameState->spawn<ABaseDroppedAmmo>(loot.getLargeAmmoClass(), spawnTransform)->FinishSpawning({}, true);
+	}
+
+	if (Utility::checkChanceProc(IAmmoDropable::Execute_getEnergyAmmoDropChance(ammoDropable)))
+	{
+		gameState->spawn<ABaseDroppedAmmo>(loot.getEnergyAmmoClass(), spawnTransform)->FinishSpawning({}, true);
+	}
+}
+
 ALootManager::ALootManager()
 {
 	bReplicates = true;
@@ -63,25 +86,9 @@ void ALootManager::addRandomWeapon_Implementation(AInventory* playerInventory)
 	this->addRandomLoot(playerInventory, weaponLootPoints, otherLootPoints, otherLootPoints);
 }
 
-void ALootManager::spawnAmmo_Implementation(TScriptInterface<IAmmoDropable> ammoDropable)
+void ALootManager::spawnAmmoCall(TScriptInterface<IAmmoDropable> ammoDropable)
 {
-	const ULootDataAsset& loot = ULostConnectionAssetManager::get().getLoot();
-	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(this);
-
-	if (Utility::checkChanceProc(ammoDropable->getSmallAmmoDropChance()))
-	{
-		gameState->spawn<ABaseDroppedAmmo>(loot.getSmallAmmoClass(), ammoDropable->getCurrentPosition())->FinishSpawning({}, true);
-	}
-
-	if (Utility::checkChanceProc(ammoDropable->getLargeAmmoDropChance()))
-	{
-		gameState->spawn<ABaseDroppedAmmo>(loot.getLargeAmmoClass(), ammoDropable->getCurrentPosition())->FinishSpawning({}, true);
-	}
-
-	if (Utility::checkChanceProc(ammoDropable->getEnergyAmmoDropChance()))
-	{
-		gameState->spawn<ABaseDroppedAmmo>(loot.getEnergyAmmoClass(), ammoDropable->getCurrentPosition())->FinishSpawning({}, true);
-	}
+	this->spawnAmmo(ammoDropable.GetObject());
 }
 
 const TArray<UBaseWeaponsLootFunction*>& ALootManager::getWeaponsLootFunctions() const

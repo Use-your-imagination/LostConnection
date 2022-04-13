@@ -8,7 +8,7 @@
 
 #include "AmmoDropable.generated.h"
 
-UINTERFACE(BlueprintType, Meta = (CannotImplementInterfaceInBlueprint))
+UINTERFACE(Blueprintable)
 class UAmmoDropable : public UInterface
 {
 	GENERATED_BODY()
@@ -21,11 +21,14 @@ class LOSTCONNECTION_API IAmmoDropable
 public:
 	IAmmoDropable() = default;
 
-	virtual float getSmallAmmoDropChance() const = 0;
-	
-	virtual float getLargeAmmoDropChance() const = 0;
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	float getSmallAmmoDropChance() const;
 
-	virtual float getEnergyAmmoDropChance() const = 0;
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	float getLargeAmmoDropChance() const;
 
-	virtual FTransform getCurrentPosition();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	float getEnergyAmmoDropChance() const;
+
+	FTransform getCurrentPosition() const;
 };

@@ -2,7 +2,7 @@
 
 #include "AmmoDropable.h"
 
-FTransform IAmmoDropable::getCurrentPosition()
+FTransform IAmmoDropable::getCurrentPosition() const
 {
 	if (TObjectPtr<AActor> actor = Cast<AActor>(this->_getUObject()))
 	{

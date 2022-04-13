@@ -53,11 +53,11 @@ public:
 
 	virtual int32 getLootPoints() const final override;
 
-	virtual float getSmallAmmoDropChance() const final override;
+	virtual float getSmallAmmoDropChance_Implementation() const final override;
 
-	virtual float getLargeAmmoDropChance() const final override;
+	virtual float getLargeAmmoDropChance_Implementation() const final override;
 
-	virtual float getEnergyAmmoDropChance() const final override;
+	virtual float getEnergyAmmoDropChance_Implementation() const final override;
 
 	virtual ~ABaseBot() = default;
 };

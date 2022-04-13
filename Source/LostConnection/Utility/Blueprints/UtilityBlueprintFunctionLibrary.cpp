@@ -17,6 +17,7 @@
 #include "Utility/MultiplayerUtility.h"
 #include "Engine/LostConnectionGameState.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
+#include "Interfaces/Loot/AmmoDropable.h"
 
 FString appendLootDropChance(int32 lootPoints, const UBaseLootFunction* lootFunction)
 {
@@ -251,4 +252,9 @@ FText UUtilityBlueprintFunctionLibrary::getWeaponModulesDropChance(int32 lootPoi
 	}
 
 	return FText::FromString(result);
+}
+
+FTransform UUtilityBlueprintFunctionLibrary::getAmmoDropableCurrentPosition(TScriptInterface<IAmmoDropable> ammoDropable)
+{
+	return ammoDropable->getCurrentPosition();
 }

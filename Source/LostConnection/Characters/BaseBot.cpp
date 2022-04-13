@@ -84,17 +84,17 @@ int32 ABaseBot::getLootPoints() const
 	return lootPointsReward;
 }
 
-float ABaseBot::getSmallAmmoDropChance() const
+float ABaseBot::getSmallAmmoDropChance_Implementation() const
 {
 	return smallAmmoDropChance;
 }
 
-float ABaseBot::getLargeAmmoDropChance() const
+float ABaseBot::getLargeAmmoDropChance_Implementation() const
 {
 	return largeAmmoDropChance;
 }
 
-float ABaseBot::getEnergyAmmoDropChance() const
+float ABaseBot::getEnergyAmmoDropChance_Implementation() const
 {
 	return energyAmmoDropChance;
 }
