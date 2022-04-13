@@ -43,7 +43,7 @@ public:
 	ALootManager();
 
 	UFUNCTION(Server, Reliable)
-	void init(TObjectPtr<APlayerController> playerController);
+	void init(APlayerController* playerController);
 	
 	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
 	void addRandomWeapon(AInventory* playerInventory);

@@ -50,7 +50,7 @@ ALootManager::ALootManager()
 	bOnlyRelevantToOwner = true;
 }
 
-void ALootManager::init_Implementation(TObjectPtr<APlayerController> playerController)
+void ALootManager::init_Implementation(APlayerController* playerController)
 {
 	this->SetOwner(playerController);
 }
