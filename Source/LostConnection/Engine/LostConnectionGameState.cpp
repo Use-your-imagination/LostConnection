@@ -130,7 +130,7 @@ void ALostConnectionGameState::dropAmmo(IAmmoDropable* ammoDropable)
 
 	for (const auto& i : managers)
 	{
-		TObjectPtr<ALootManager> manager = Cast<ALootManager>(manager);
+		TObjectPtr<ALootManager> manager = Cast<ALootManager>(i);
 
 		manager->spawnAmmoCall(ammoDropable->_getUObject());
 	}
