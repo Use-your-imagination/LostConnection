@@ -24,7 +24,7 @@ void ALostConnectionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetim
 
 void ALostConnectionPlayerController::onLootManagerInit()
 {
-	lootManager->SetOwner(this);
+	lootManager->init(this);
 }
 
 void ALostConnectionPlayerController::BeginPlay()
@@ -33,7 +33,7 @@ void ALostConnectionPlayerController::BeginPlay()
 
 	if (HasAuthority())
 	{
-		lootManager = Cast<ALootManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ALootManager::StaticClass()));
+		lootManager = GetWorld()->SpawnActor<ALootManager>();
 
 		this->onLootManagerInit();
 	}

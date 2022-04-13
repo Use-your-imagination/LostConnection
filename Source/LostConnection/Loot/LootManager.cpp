@@ -3,6 +3,7 @@
 #include "LootManager.h"
 
 #include "Engine/LostConnectionPlayerState.h"
+#include "Engine/LostConnectionPlayerController.h"
 #include "Constants/Constants.h"
 #include "Utility/Utility.h"
 #include "WorldPlaceables/BaseDroppedAmmo.h"
@@ -46,7 +47,12 @@ ALootManager::ALootManager()
 {
 	bReplicates = true;
 
-	bAlwaysRelevant = true;
+	bOnlyRelevantToOwner = true;
+}
+
+void ALootManager::init_Implementation(TObjectPtr<APlayerController> playerController)
+{
+	this->SetOwner(playerController);
 }
 
 void ALootManager::addRandomWeapon_Implementation(AInventory* playerInventory)
@@ -57,7 +63,7 @@ void ALootManager::addRandomWeapon_Implementation(AInventory* playerInventory)
 	this->addRandomLoot(playerInventory, weaponLootPoints, otherLootPoints, otherLootPoints);
 }
 
-void ALootManager::spawnAmmo(TScriptInterface<IAmmoDropable> ammoDropable)
+void ALootManager::spawnAmmo_Implementation(TScriptInterface<IAmmoDropable> ammoDropable)
 {
 	const ULootDataAsset& loot = ULostConnectionAssetManager::get().getLoot();
 	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(this);

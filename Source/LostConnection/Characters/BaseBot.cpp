@@ -37,14 +37,14 @@ void ABaseBot::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 void ABaseBot::deathLogic()
 {
 	TObjectPtr<UWorld> world = GetWorld();
-	TObjectPtr<ALootManager> manager = Cast<ALootManager>(UGameplayStatics::GetActorOfClass(world, ALootManager::StaticClass()));
+	TObjectPtr<ALostConnectionGameState> gameState = world->GetGameState<ALostConnectionGameState>();
 
 	if (!isAlly)
 	{
-		world->GetGameState<ALostConnectionGameState>()->verteilenLootPoints(this);
+		gameState->verteilenLootPoints(this);
 	}
 
-	manager->spawnAmmo(this);
+	gameState->dropAmmo(this);
 
 	this->destroyAssociatedActors();
 
@@ -56,9 +56,9 @@ void ABaseBot::deathLogic()
 
 void ABaseBot::destroyAssociatedActors()
 {
-	AAIController* controller = GetController<AAIController>();
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	AInventory* inventory = playerState->getInventory();
+	TObjectPtr<AAIController> controller = GetController<AAIController>();
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
+	TObjectPtr<AInventory> inventory = playerState->getInventory();
 
 	inventory->Destroy();
 

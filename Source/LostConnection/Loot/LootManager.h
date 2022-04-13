@@ -41,11 +41,14 @@ private:
 
 public:
 	ALootManager();
+
+	UFUNCTION(Server, Reliable)
+	void init(TObjectPtr<APlayerController> playerController);
 	
 	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
 	void addRandomWeapon(AInventory* playerInventory);
 
-	UFUNCTION(Category = Loot, BlueprintCallable)
+	UFUNCTION(Category = Loot, Client, Reliable, BlueprintCallable)
 	void spawnAmmo(TScriptInterface<IAmmoDropable> ammoDropable);
 
 	const TArray<UBaseWeaponsLootFunction*>& getWeaponsLootFunctions() const;

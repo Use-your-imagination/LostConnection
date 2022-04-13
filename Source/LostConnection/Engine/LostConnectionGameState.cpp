@@ -11,6 +11,7 @@
 #include "Utility/Utility.h"
 #include "Constants/Constants.h"
 #include "LostConnectionGameMode.h"
+#include "Loot/LootManager.h"
 
 void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -117,6 +118,22 @@ void ALostConnectionGameState::verteilenLootPoints(ILootPointsGiver* giver)
 	int32 lootPointsFromGiver = giver->getLootPoints();
 
 	this->giveEachPlayerLootPoints(lootPointsFromGiver);
+}
+
+void ALostConnectionGameState::dropAmmo(IAmmoDropable* ammoDropable)
+{
+	check(HasAuthority());
+	
+	TArray<AActor*> managers;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ALootManager::StaticClass(), managers);
+
+	for (const auto& i : managers)
+	{
+		TObjectPtr<ALootManager> manager = Cast<ALootManager>(manager);
+
+		manager->spawnAmmo(TScriptInterface<IAmmoDropable>(ammoDropable->_getUObject()));
+	}
 }
 
 int32& ALostConnectionGameState::getTotalBots()

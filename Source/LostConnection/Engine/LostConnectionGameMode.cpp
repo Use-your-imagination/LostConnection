@@ -9,7 +9,6 @@
 #include "LostConnectionGameState.h"
 #include "LostConnectionPlayerController.h"
 #include "Constants/Constants.h"
-#include "Loot/LootManager.h"
 
 #pragma warning(disable: 4458)
 
@@ -32,8 +31,6 @@ void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TAr
 void ALostConnectionGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GetWorld()->SpawnActor<ALootManager>();
 }
 
 ALostConnectionGameMode::ALostConnectionGameMode()

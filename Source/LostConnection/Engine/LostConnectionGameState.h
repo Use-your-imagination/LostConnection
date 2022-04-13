@@ -8,6 +8,7 @@
 
 #include "VFX/VFXManager.h"
 #include "Interfaces/Economy/LootPointsGiver.h"
+#include "Interfaces/Loot/AmmoDropable.h"
 
 #include "LostConnectionGameState.generated.h"
 
@@ -74,6 +75,8 @@ public:
 	void spawnVFXAtTransform(const FTransform& transform, UNiagaraSystem* vfx);
 
 	void verteilenLootPoints(ILootPointsGiver* giver);
+
+	void dropAmmo(IAmmoDropable* ammoDropable);
 
 	int32& getTotalBots();
 

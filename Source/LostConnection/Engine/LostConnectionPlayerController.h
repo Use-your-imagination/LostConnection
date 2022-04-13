@@ -18,7 +18,7 @@ class LOSTCONNECTION_API ALostConnectionPlayerController : public APlayerControl
 
 private:
 	UPROPERTY(ReplicatedUsing = onLootManagerInit)
-	ALootManager* lootManager;
+	TObjectPtr<ALootManager> lootManager;
 
 protected:
 	virtual void GetSeamlessTravelActorList(bool bToEntry, TArray<AActor*>& ActorList) override;
