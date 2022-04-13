@@ -84,9 +84,11 @@ ABaseDroppedAmmo::ABaseDroppedAmmo() :
 
 	pickupArea->OnComponentEndOverlap.AddDynamic(this, &ABaseDroppedAmmo::onEndOverlap);
 
+	pickupArea->SetCollisionObjectType(UConstants::droneInteractiveChannel);
+
 	pickupArea->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
-	pickupArea->SetCollisionResponseToChannel(UConstants::droneInteractiveChannel, ECollisionResponse::ECR_Overlap);
+	pickupArea->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
 	mesh->SetupAttachment(pickupArea);
 }
