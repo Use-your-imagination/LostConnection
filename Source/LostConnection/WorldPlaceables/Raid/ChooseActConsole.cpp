@@ -2,7 +2,7 @@
 
 #include "ChooseActConsole.h"
 
-void AChooseActConsole::action(ABaseDrone* player)
+void AChooseActConsole::action(TObjectPtr<ABaseDrone> player)
 {
 	// TODO: show change act UI
 }

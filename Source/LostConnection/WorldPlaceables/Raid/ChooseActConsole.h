@@ -21,7 +21,7 @@ class LOSTCONNECTION_API AChooseActConsole :
 public:
 	AChooseActConsole() = default;
 
-	virtual void action(ABaseDrone* player) final;
+	virtual void action(TObjectPtr<ABaseDrone> player) final;
 
 	virtual ~AChooseActConsole() = default;
 };

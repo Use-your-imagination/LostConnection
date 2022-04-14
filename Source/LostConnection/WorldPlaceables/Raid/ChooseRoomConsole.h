@@ -9,19 +9,19 @@
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Characters/BaseDrone.h"
 
-#include "ChooseLevelConsole.generated.h"
+#include "ChooseRoomConsole.generated.h"
 
 UCLASS(BlueprintType, Blueprintable)
-class LOSTCONNECTION_API AChooseLevelConsole :
+class LOSTCONNECTION_API AChooseRoomConsole :
 	public AActor,
 	public IActionable
 {
 	GENERATED_BODY()
 	
 public:	
-	AChooseLevelConsole() = default;
+	AChooseRoomConsole() = default;
 
-	virtual void action(ABaseDrone* player) final;
+	void action(TObjectPtr<ABaseDrone> player);
 
-	virtual ~AChooseLevelConsole() = default;
+	virtual ~AChooseRoomConsole() = default;
 };

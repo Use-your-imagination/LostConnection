@@ -78,7 +78,7 @@ void ADroppedWeapon::setMesh(USkeletalMesh* mesh)
 	magazine->SetStaticMesh(weapon->getMagazineMesh());
 }
 
-void ADroppedWeapon::action(ABaseDrone* player)
+void ADroppedWeapon::action(TObjectPtr<ABaseDrone> player)
 {
 	player->pickupWeapon(this);
 }

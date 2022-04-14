@@ -22,7 +22,7 @@ public:
 	IActionable() = default;
 
 	UFUNCTION()
-	virtual void action(class ABaseDrone* player) = 0;
+	virtual void action(TObjectPtr<class ABaseDrone> player) = 0;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FText getActionMessage() const;

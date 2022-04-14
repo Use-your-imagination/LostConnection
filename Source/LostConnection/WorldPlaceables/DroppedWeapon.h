@@ -45,7 +45,7 @@ public:
 
 	virtual void setMesh(USkeletalMesh* mesh) final override;
 
-	virtual void action(class ABaseDrone* player) final override;
+	virtual void action(TObjectPtr<class ABaseDrone> player) final override;
 
 	~ADroppedWeapon() = default;
 };
