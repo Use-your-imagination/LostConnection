@@ -13,6 +13,7 @@
 #include "LostConnectionGameMode.h"
 #include "Loot/LootManager.h"
 #include "WorldPlaceables/Utility/AISpawnPoint.h"
+#include "WorldPlaceables/Raid/ChooseRoomConsole.h"
 
 void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -50,6 +51,8 @@ void ALostConnectionGameState::clearRoom()
 	TArray<AActor*> aiSpawnPoints;
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAISpawnPoint::StaticClass(), aiSpawnPoints);
+
+	UGameplayStatics::GetActorOfClass(GetWorld(), AChooseRoomConsole::StaticClass())->Destroy();
 
 	for (AActor* aiSpawnPoint : aiSpawnPoints)
 	{
@@ -89,7 +92,7 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 	const UBaseActDataAsset& act = manager.getCurrentAct();
 	TArray<TSoftObjectPtr<UWorld>> rooms = act.getRooms();
 	TObjectPtr<AActor> waypoint = UGameplayStatics::GetActorOfClass(this, ALevelCreationWaypoint::StaticClass());
-	FVector spawnLocation = waypoint->GetActorLocation(); 
+	FVector spawnLocation = waypoint->GetActorLocation();
 	FRotator spawnRotation = waypoint->GetActorRotation();
 
 	Algo::ForEachIf
@@ -138,7 +141,7 @@ void ALostConnectionGameState::verteilenLootPoints(ILootPointsGiver* giver)
 void ALostConnectionGameState::dropAmmo(IAmmoDropable* ammoDropable)
 {
 	check(HasAuthority());
-	
+
 	TArray<AActor*> managers;
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ALootManager::StaticClass(), managers);

@@ -43,9 +43,9 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 
 void USN4K3FirstAbility::useAbility()
 {
-	ASN4K3* drone = Cast<ASN4K3>(caster);
-	UCapsuleComponent* capsule = drone->GetCapsuleComponent();
-	UCameraComponent* camera = drone->GetFollowCamera();
+	TObjectPtr<ASN4K3> drone = Cast<ASN4K3>(caster);
+	TObjectPtr<UCapsuleComponent> capsule = drone->GetCapsuleComponent();
+	TObjectPtr<UCameraComponent> camera = drone->GetFollowCamera();
 	bool isFalling = drone->GetMovementComponent()->IsFalling();
 	FVector offset = camera->GetComponentRotation().Vector();
 
@@ -56,7 +56,7 @@ void USN4K3FirstAbility::useAbility()
 		offset.Z = 0.0f;
 	}
 
-	drone->AddActorWorldOffset(offset * distance, true);
+	drone->AddActorWorldOffset(offset * distance, true, nullptr, ETeleportType::TeleportPhysics);
 
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 
