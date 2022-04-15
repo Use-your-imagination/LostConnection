@@ -140,6 +140,13 @@ TSharedRef<SWidget> FPatchNotesModule::makeMenu()
 						return;
 					}
 
+					if (currentConfiguration.IsEmpty())
+					{
+						FMessageDialog::Open(EAppMsgType::Type::Ok, FText::FromName(TEXT("Configuration can't be empty")));
+
+						return;
+					}
+
 					Async(EAsyncExecution::ThreadPool, [this, stylesFilePath, platform, fullPath, pathToConfigurationFile]()
 						{
 							Utility::runOnGameThread([this]() { generationProgressBar->SetVisibility(EVisibility::Visible); });
@@ -187,6 +194,13 @@ TSharedRef<SWidget> FPatchNotesModule::makeMenu()
 					if (!platformFile.FileExists(*outPath))
 					{
 						platformFile.CreateDirectoryTree(*outPath);
+					}
+
+					if (currentConfiguration.IsEmpty())
+					{
+						FMessageDialog::Open(EAppMsgType::Type::Ok, FText::FromName(TEXT("Configuration can't be empty")));
+
+						return;
 					}
 
 					Async(EAsyncExecution::ThreadPool, [this, &platformFile, htmlNotes, currentConfiguration, settings, stylesPath, outPath]()
