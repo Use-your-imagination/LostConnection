@@ -9,9 +9,10 @@
 class PATCHNOTES_API CreateConfigurationDialog : public BaseDialog
 {
 private:
-	FString configuration;
+	FString projectName;
 	const FString* pathToConfigurations;
 	const FString* pathToTemplate;
+	TFunction<void()> updateConfigurations;
 
 	TSharedPtr<SEditableTextBox> version;
 	TSharedPtr<FJsonObject> settings;

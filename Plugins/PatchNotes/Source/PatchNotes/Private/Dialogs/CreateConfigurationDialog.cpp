@@ -8,14 +8,11 @@
 
 void CreateConfigurationDialog::collectData(const FPatchNotesModule& module, Validation& validation)
 {
-	validation.checkConfiguration();
-
-	VALIDATION_CHECK();
-
-	configuration = Utility::getConfigurationName(module.getConfigurations()->getCurrentSelectionString());
+	settings = Utility::getJSON(module.getPathToSettingsFile());
+	projectName = settings->GetStringField(TEXT("projectName"));
 	pathToConfigurations = &module.getPathToConfigurations();
 	pathToTemplate = &module.getPathToTemplate();
-	settings = Utility::getJSON(module.getPathToSettingsFile());
+	updateConfigurations = [&module]() { const_cast<FPatchNotesModule&>(module).updateConfigurations(); };
 }
 
 TSharedPtr<SCustomDialog> CreateConfigurationDialog::createDialog()
@@ -27,13 +24,13 @@ TSharedPtr<SCustomDialog> CreateConfigurationDialog::createDialog()
 			SNew(SVerticalBox) 
 			+ SVerticalBox::Slot().HAlign(EHorizontalAlignment::HAlign_Center).VAlign(EVerticalAlignment::VAlign_Top).AutoHeight()
 			[
-				SNew(STextBlock).Text(FText::FromString(configuration)).MinDesiredWidth(200.0f)
+				SNew(STextBlock).Text(FText::FromString(projectName)).MinDesiredWidth(200.0f)
 			]
 			+ SVerticalBox::Slot().HAlign(EHorizontalAlignment::HAlign_Center).VAlign(EVerticalAlignment::VAlign_Top).AutoHeight()
 			[
 				SAssignNew(version, SEditableTextBox).HintText(FText::FromName(TEXT("Version"))).MinDesiredWidth(200.0f)
 			]
-			)
+		)
 		.Buttons
 		(
 			{
@@ -45,7 +42,7 @@ TSharedPtr<SCustomDialog> CreateConfigurationDialog::createDialog()
 						[this]()
 						{
 							IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
-							FString pathToNewConfiguration = (*pathToConfigurations) / FString::Printf(TEXT("%s_%s.json"), *configuration, *version->GetText().ToString());
+							FString pathToNewConfiguration = (*pathToConfigurations) / FString::Printf(TEXT("%s_%s.json"), *projectName, *version->GetText().ToString());
 							bool isTemplateExists = platformFile.FileExists(**pathToTemplate);
 
 							if (platformFile.FileExists(*pathToNewConfiguration))
@@ -81,6 +78,8 @@ TSharedPtr<SCustomDialog> CreateConfigurationDialog::createDialog()
 							}
 
 							Utility::modifyConfigurationFile(pathToNewConfiguration, configurationData);
+
+							updateConfigurations();
 						}
 					)
 				)
