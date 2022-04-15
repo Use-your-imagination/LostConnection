@@ -12,6 +12,7 @@
 #include "Constants/Constants.h"
 #include "LostConnectionGameMode.h"
 #include "Loot/LootManager.h"
+#include "WorldPlaceables/Utility/AISpawnPoint.h"
 
 void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -42,6 +43,18 @@ void ALostConnectionGameState::PostInitializeComponents()
 void ALostConnectionGameState::loadRoom(const TSoftObjectPtr<UWorld>& room, FVector location, FRotator rotation)
 {
 	ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, room, location, rotation, isLastRoomLoaded);
+}
+
+void ALostConnectionGameState::clearRoom()
+{
+	TArray<AActor*> aiSpawnPoints;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAISpawnPoint::StaticClass(), aiSpawnPoints);
+
+	for (AActor* aiSpawnPoint : aiSpawnPoints)
+	{
+		aiSpawnPoint->Destroy();
+	}
 }
 
 void ALostConnectionGameState::spawnVFXAtLocationMulticast_Implementation(const FVector& location, UNiagaraSystem* vfx)
@@ -76,6 +89,8 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 	const UBaseActDataAsset& act = manager.getCurrentAct();
 	TArray<TSoftObjectPtr<UWorld>> rooms = act.getRooms();
 	TObjectPtr<AActor> waypoint = UGameplayStatics::GetActorOfClass(this, ALevelCreationWaypoint::StaticClass());
+	FVector spawnLocation = waypoint->GetActorLocation(); 
+	FRotator spawnRotation = waypoint->GetActorRotation();
 
 	Algo::ForEachIf
 	(
@@ -89,9 +104,11 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 		rooms = MoveTemp(usedRooms);
 	}
 
-	this->loadRoom(Utility::getRandomValueFromArray(rooms), waypoint->GetActorLocation(), waypoint->GetActorRotation());
-
 	waypoint->Destroy();
+
+	this->clearRoom();
+
+	this->loadRoom(Utility::getRandomValueFromArray(rooms), spawnLocation, spawnRotation);
 }
 
 void ALostConnectionGameState::spawnVFXAtLocation_Implementation(const FVector& location, UNiagaraSystem* vfx)
@@ -170,7 +187,7 @@ void ALostConnectionGameState::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
-		ALostConnectionGameMode* gameMode = GetWorld()->GetAuthGameMode<ALostConnectionGameMode>();
+		TObjectPtr<ALostConnectionGameMode> gameMode = GetWorld()->GetAuthGameMode<ALostConnectionGameMode>();
 
 		if (!gameMode)
 		{

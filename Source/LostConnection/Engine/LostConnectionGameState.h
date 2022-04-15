@@ -37,7 +37,8 @@ private:
 	int32 currentWaveRemainingBots;
 
 private:
-	UVFXManager* manager;
+	UPROPERTY()
+	TObjectPtr<UVFXManager> manager;
 
 private:
 	TArray<TSoftObjectPtr<UWorld>> usedRooms;
@@ -52,6 +53,8 @@ protected:
 
 private:
 	void loadRoom(const TSoftObjectPtr<UWorld>& room, FVector location, FRotator rotation);
+
+	void clearRoom();
 
 	UFUNCTION(NetMulticast, Unreliable)
 	void spawnVFXAtLocationMulticast(const FVector& location, UNiagaraSystem* vfx);
