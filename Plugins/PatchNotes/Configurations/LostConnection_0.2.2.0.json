@@ -62,5 +62,16 @@
 				"Fixed SN4K3's head flying through environment"
 			]
 		}
+	},
+	"Maps":
+	{
+		"type": "category",
+		"Rooms":
+		{
+			"type": "item",
+			"notes": [
+				"Add rooms generation after full wave clear"
+			]
+		}
 	}
 }
