@@ -18,14 +18,16 @@ class LOSTCONNECTION_API ADroppedWeapon :
 	GENERATED_BODY()
 
 private:
+	UFUNCTION()
+	void onWeaponChange();
+
 	virtual void Tick(float DeltaTime) final override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	UFUNCTION()
-	virtual void onWeaponChange() final;
+	virtual void action(TObjectPtr<class ABaseDrone> player) final override;
 
 private:
 	UPROPERTY(ReplicatedUsing = onWeaponChange)
@@ -44,8 +46,6 @@ public:
 	UBaseWeapon* getWeapon();
 
 	virtual void setMesh(USkeletalMesh* mesh) final override;
-
-	virtual void action(TObjectPtr<class ABaseDrone> player) final override;
 
 	~ADroppedWeapon() = default;
 };

@@ -8,6 +8,14 @@
 
 #include "Characters/BaseDrone.h"
 
+void ADroppedWeapon::onWeaponChange()
+{
+	if (weapon)
+	{
+		this->setMesh(weapon->getWeaponMesh());
+	}
+}
+
 void ADroppedWeapon::Tick(float DeltaTime)
 {
 	if (HasAuthority())
@@ -37,12 +45,9 @@ bool ADroppedWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 	return wroteSomething;
 }
 
-void ADroppedWeapon::onWeaponChange()
+void ADroppedWeapon::action(TObjectPtr<ABaseDrone> player)
 {
-	if (weapon)
-	{
-		this->setMesh(weapon->getWeaponMesh());
-	}
+	player->pickupWeapon(this);
 }
 
 ADroppedWeapon::ADroppedWeapon()
@@ -76,9 +81,4 @@ void ADroppedWeapon::setMesh(USkeletalMesh* mesh)
 	magazine->AttachToComponent(this->mesh, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false), "magazine");
 
 	magazine->SetStaticMesh(weapon->getMagazineMesh());
-}
-
-void ADroppedWeapon::action(TObjectPtr<ABaseDrone> player)
-{
-	player->pickupWeapon(this);
 }

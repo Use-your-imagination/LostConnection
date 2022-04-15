@@ -32,6 +32,12 @@ void ABaseBot::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ABaseBot, lootPointsReward);
+
+	DOREPLIFETIME(ABaseBot, smallAmmoDropChance);
+
+	DOREPLIFETIME(ABaseBot, largeAmmoDropChance);
+
+	DOREPLIFETIME(ABaseBot, energyAmmoDropChance);
 }
 
 void ABaseBot::deathLogic()

@@ -6,6 +6,19 @@
 #include "Characters/BaseDrone.h"
 #include "Constants/Constants.h"
 
+void IActionable::doAction(ABaseDrone* player)
+{
+	if (this->isEnable())
+	{
+		this->action(player);
+	}
+}
+
+bool IActionable::isEnable() const
+{
+	return true;
+}
+
 FText IActionable::getActionMessage() const
 {
 	TArray<FInputActionKeyMapping> actionKey = UUtilityBlueprintFunctionLibrary::getActionMapping("Action");

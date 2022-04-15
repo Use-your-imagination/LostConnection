@@ -20,7 +20,7 @@ public:
 	~Utility() = default;
 
 public:
-	static ALostConnectionGameState* getGameState(const AActor* actor);
+	static TObjectPtr<ALostConnectionGameState> getGameState(const AActor* actor);
 
 	static TObjectPtr<ALostConnectionPlayerState> getPlayerState(const APawn* pawn);
 
@@ -67,7 +67,7 @@ public:
 	static void executeOnOwningClient(APawn* pawn, const FunctionT& function, Args&&... args);
 };
 
-inline ALostConnectionGameState* Utility::getGameState(const AActor* actor)
+inline TObjectPtr<ALostConnectionGameState> Utility::getGameState(const AActor* actor)
 {
 	return actor->GetWorld()->GetGameState<ALostConnectionGameState>();
 }

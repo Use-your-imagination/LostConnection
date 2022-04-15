@@ -11,17 +11,18 @@
 
 #include "ChooseActConsole.generated.h"
 
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(BlueprintType)
 class LOSTCONNECTION_API AChooseActConsole :
 	public AActor,
 	public IActionable
 {
 	GENERATED_BODY()
 
+protected:
+	void action(TObjectPtr<ABaseDrone> player) override;
+
 public:
 	AChooseActConsole() = default;
-
-	virtual void action(TObjectPtr<ABaseDrone> player) final;
 
 	virtual ~AChooseActConsole() = default;
 };

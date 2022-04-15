@@ -18,12 +18,18 @@ class LOSTCONNECTION_API IActionable
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void action(TObjectPtr<class ABaseDrone> player) = 0;
+
 public:
 	IActionable() = default;
 
 	UFUNCTION()
-	virtual void action(TObjectPtr<class ABaseDrone> player) = 0;
+	virtual void doAction(class ABaseDrone* player);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Actionable, BlueprintCallable)
+	virtual bool isEnable() const;
+
+	UFUNCTION(Category = Actionable, BlueprintCallable)
 	virtual FText getActionMessage() const;
 };

@@ -40,10 +40,10 @@ class LOSTCONNECTION_API ABaseDrone :
 
 protected:
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
-	USpringArmComponent* CameraOffset;
+	TObjectPtr<USpringArmComponent> CameraOffset;
 
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly)
-	UCameraComponent* FollowCamera;
+	TObjectPtr<UCameraComponent> FollowCamera;
 
 private:
 	virtual TArray<FInputActionBinding> initInputs();
@@ -305,9 +305,9 @@ public:
 	UFUNCTION(Category = Weapons, BlueprintCallable)
 	UBaseWeapon* getSecondInactiveWeapon() const;
 
-	USpringArmComponent* GetCameraOffset() const;
+	TObjectPtr<USpringArmComponent> GetCameraOffset() const;
 
-	UCameraComponent* GetFollowCamera() const;
+	TObjectPtr<UCameraComponent> GetFollowCamera() const;
 
 	UFUNCTION(BlueprintCallable)
 	FVector getStartActionLineTrace() const;
@@ -424,12 +424,12 @@ public:
 	friend class ALostConnectionPlayerController;
 };
 
-inline USpringArmComponent* ABaseDrone::GetCameraOffset() const
+inline TObjectPtr<USpringArmComponent> ABaseDrone::GetCameraOffset() const
 {
 	return CameraOffset;
 }
 
-inline UCameraComponent* ABaseDrone::GetFollowCamera() const
+inline TObjectPtr<UCameraComponent> ABaseDrone::GetFollowCamera() const
 {
 	return FollowCamera;
 }

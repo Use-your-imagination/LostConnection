@@ -445,9 +445,9 @@ void ABaseDrone::Tick(float DeltaTime)
 
 	if (HasAuthority() && GetController())
 	{
-		ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-		UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();
-		UBaseWeapon* secondaryWeapon = playerState->getSecondaryWeapon();
+		TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
+		TObjectPtr<UBaseWeapon> primaryWeapon = playerState->getPrimaryWeapon();
+		TObjectPtr<UBaseWeapon> secondaryWeapon = playerState->getSecondaryWeapon();
 
 		if (primaryWeapon)
 		{
@@ -936,7 +936,7 @@ void ABaseDrone::alternativeWeaponMode()
 
 void ABaseDrone::action()
 {
-	UWorld* world = GetWorld();
+	TObjectPtr<UWorld> world = GetWorld();
 
 	if (!world)
 	{
@@ -955,7 +955,7 @@ void ABaseDrone::action()
 
 	if (object)
 	{
-		object->action(this);
+		object->doAction(this);
 	}
 }
 

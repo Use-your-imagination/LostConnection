@@ -75,7 +75,7 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 	const UBaseActDataAsset& act = manager.getCurrentAct();
 	TArray<TSoftObjectPtr<UWorld>> rooms = act.getRooms();
-	AActor* waypoint = UGameplayStatics::GetActorOfClass(this, ALevelCreationWaypoint::StaticClass());
+	TObjectPtr<AActor> waypoint = UGameplayStatics::GetActorOfClass(this, ALevelCreationWaypoint::StaticClass());
 
 	Algo::ForEachIf
 	(
@@ -89,9 +89,7 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 		rooms = MoveTemp(usedRooms);
 	}
 
-	const TSoftObjectPtr<UWorld>& room = Utility::getRandomValueFromArray(rooms);
-
-	this->loadRoom(room, waypoint->GetActorLocation(), waypoint->GetActorRotation());
+	this->loadRoom(Utility::getRandomValueFromArray(rooms), waypoint->GetActorLocation(), waypoint->GetActorRotation());
 
 	waypoint->Destroy();
 }

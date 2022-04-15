@@ -11,17 +11,24 @@
 
 #include "ChooseRoomConsole.generated.h"
 
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(BlueprintType)
 class LOSTCONNECTION_API AChooseRoomConsole :
 	public AActor,
 	public IActionable
 {
 	GENERATED_BODY()
-	
-public:	
-	AChooseRoomConsole() = default;
 
-	void action(TObjectPtr<ABaseDrone> player);
+private:
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USkeletalMeshComponent> mesh;
+	
+protected:
+	void action(TObjectPtr<ABaseDrone> player) override;
+
+public:	
+	AChooseRoomConsole();
+
+	bool isEnable() const override;
 
 	virtual ~AChooseRoomConsole() = default;
 };
