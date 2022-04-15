@@ -22,5 +22,5 @@ AChooseRoomConsole::AChooseRoomConsole()
 
 bool AChooseRoomConsole::isEnable() const
 {
-	return !StaticCast<bool>(Utility::getGameState(this)->getRemainingBots());
+	return Utility::getGameState(this)->getRemainingBots() == 0;
 }
