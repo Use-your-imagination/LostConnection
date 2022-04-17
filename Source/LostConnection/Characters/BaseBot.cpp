@@ -4,7 +4,6 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Engine/Font.h"
 #include "AIController.h"
 
 #include "Weapons/Pistols/Gauss.h"
@@ -82,7 +81,20 @@ ABaseBot::ABaseBot() :
 	largeAmmoDropChance(45.0f),
 	energyAmmoDropChance(45.0f)
 {
+	static ConstructorHelpers::FClassFinder<AAIController> aiControllerFinder(TEXT("/Game/Engine/BP_LostConnectionAIController"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> mainBehaviorTree(TEXT("BehaviorTree'/Game/AI/Behavior/DefaultMain.DefaultMain'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> defaultOffensiveBehaviorTree(TEXT("BehaviorTree'/Game/AI/Behavior/DefaultOffensive.DefaultOffensive'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> defaultMovementBehaviorTree(TEXT("BehaviorTree'/Game/AI/Behavior/DefaultMovement.DefaultMovement'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> defaultOtherBehaviorTree(TEXT("BehaviorTree'/Game/AI/Behavior/DefaultOther.DefaultOther'"));
+
 	isAlly = false;
+	main = mainBehaviorTree.Object;
+	offensive = defaultOffensiveBehaviorTree.Object;
+	movement = defaultMovementBehaviorTree.Object;
+	other = defaultOtherBehaviorTree.Object;
+
+	AIControllerClass = aiControllerFinder.Class;
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 int32 ABaseBot::getLootPoints() const

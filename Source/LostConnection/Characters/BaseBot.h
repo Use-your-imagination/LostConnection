@@ -7,6 +7,7 @@
 #include "Components/MaterialBillboardComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 #include "BaseCharacter.h"
 #include "Utility/Utility.h"
@@ -35,6 +36,18 @@ protected:
 
 	UPROPERTY(Category = "Loot|Ammo", EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float energyAmmoDropChance;
+
+	UPROPERTY(Category = BehaviourTrees, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> main;
+
+	UPROPERTY(Category = BehaviourTrees, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> offensive;
+
+	UPROPERTY(Category = BehaviourTrees, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> movement;
+
+	UPROPERTY(Category = BehaviourTrees, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> other;
 
 protected:
 	virtual void Tick(float DeltaTime) override;

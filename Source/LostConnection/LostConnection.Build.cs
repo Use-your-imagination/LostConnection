@@ -10,9 +10,6 @@ public class LostConnection : ModuleRules
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        MinFilesUsingPrecompiledHeaderOverride = 1;
-        bUseUnity = false;
-
         PublicDependencyModuleNames.AddRange(new string[] 
         {
             "Core",
