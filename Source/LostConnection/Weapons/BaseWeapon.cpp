@@ -2,8 +2,6 @@
 
 #include "BaseWeapon.h"
 
-#include <chrono>
-
 #include "UObject/ConstructorHelpers.h"
 #include "Components/CapsuleComponent.h"
 #include "AIController.h"
@@ -32,9 +30,11 @@ FTransform UBaseWeapon::calculateAmmoTransform(ABaseDrone* drone, const FTransfo
 	}
 	else
 	{
+		// TODO: Change target to AITargeted
+
 		ABaseBot* bot = Cast<ABaseBot>(owner);
 		AAIController* controller = bot->GetController<AAIController>();
-		ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject("Drone"));
+		ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject(ULostConnectionAssetManager::get().getAI().getTargetKey()));
 
 		if (IsValid(target))
 		{

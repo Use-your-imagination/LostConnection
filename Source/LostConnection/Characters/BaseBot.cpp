@@ -20,6 +20,11 @@ void ABaseBot::BeginPlay()
 {
 	Super::BeginPlay();
 
+	mainTree->BlackboardAsset = mainBlackboard;
+	offensiveTree->BlackboardAsset = offensiveBlackboard;
+	movementTree->BlackboardAsset = movementBlackboard;
+	otherTree->BlackboardAsset = otherBlackboard;
+
 	if (HasAuthority())
 	{
 		this->changeToDefaultWeapon();
@@ -37,6 +42,23 @@ void ABaseBot::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 	DOREPLIFETIME(ABaseBot, largeAmmoDropChance);
 
 	DOREPLIFETIME(ABaseBot, energyAmmoDropChance);
+}
+
+void ABaseBot::destroyAssociatedActors()
+{
+	TObjectPtr<AAIController> controller = GetController<AAIController>();
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
+	TObjectPtr<AInventory> inventory = playerState->getInventory();
+
+	inventory->Destroy();
+
+	playerState->Destroy();
+
+	controller->UnPossess();
+
+	controller->Destroy();
+
+	Destroy();
 }
 
 void ABaseBot::deathLogic()
@@ -59,39 +81,34 @@ void ABaseBot::deathLogic()
 	}
 }
 
-void ABaseBot::destroyAssociatedActors()
-{
-	TObjectPtr<AAIController> controller = GetController<AAIController>();
-	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
-	TObjectPtr<AInventory> inventory = playerState->getInventory();
-
-	inventory->Destroy();
-
-	playerState->Destroy();
-
-	controller->UnPossess();
-
-	controller->Destroy();
-
-	Destroy();
-}
-
 ABaseBot::ABaseBot() :
 	smallAmmoDropChance(45.0f),
 	largeAmmoDropChance(45.0f),
 	energyAmmoDropChance(45.0f)
 {
-	static ConstructorHelpers::FClassFinder<AAIController> aiControllerFinder(TEXT("/Game/Engine/BP_LostConnectionAIController"));
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> mainBehaviorTree(TEXT("BehaviorTree'/Game/AI/Behavior/DefaultMain.DefaultMain'"));
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> defaultOffensiveBehaviorTree(TEXT("BehaviorTree'/Game/AI/Behavior/DefaultOffensive.DefaultOffensive'"));
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> defaultMovementBehaviorTree(TEXT("BehaviorTree'/Game/AI/Behavior/DefaultMovement.DefaultMovement'"));
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> defaultOtherBehaviorTree(TEXT("BehaviorTree'/Game/AI/Behavior/DefaultOther.DefaultOther'"));
+	static ConstructorHelpers::FClassFinder<AAIController> aiControllerFinder(TEXT("/Game/Engine/AIControllers/BP_LostConnectionAIController"));
+
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> mainTreeFinder(TEXT("BehaviorTree'/Game/AI/Base/BehaviorTrees/BaseMainTree.BaseMainTree'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> offensiveTreeFinder(TEXT("BehaviorTree'/Game/AI/Base/BehaviorTrees/BaseOffensiveTree.BaseOffensiveTree'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> movementTreeFinder(TEXT("BehaviorTree'/Game/AI/Base/BehaviorTrees/BaseMovementTree.BaseMovementTree'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> otherTreeFinder(TEXT("BehaviorTree'/Game/AI/Base/BehaviorTrees/BaseOtherTree.BaseOtherTree'"));
+
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> mainBlackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Blackboards/BaseMainBlackboard.BaseMainBlackboard'"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> offensiveBlackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Blackboards/BaseOffensiveBlackboard.BaseOffensiveBlackboard'"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> movementBlackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Blackboards/BaseMovementBlackboard.BaseMovementBlackboard'"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> otherBlackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Blackboards/BaseOtherBlackboard.BaseOtherBlackboard'"));
 
 	isAlly = false;
-	main = mainBehaviorTree.Object;
-	offensive = defaultOffensiveBehaviorTree.Object;
-	movement = defaultMovementBehaviorTree.Object;
-	other = defaultOtherBehaviorTree.Object;
+
+	mainTree = mainTreeFinder.Object;
+	offensiveTree = offensiveTreeFinder.Object;
+	movementTree = movementTreeFinder.Object;
+	otherTree = otherTreeFinder.Object;
+
+	mainBlackboard = mainBlackboardFinder.Object;
+	offensiveBlackboard = offensiveBlackboardFinder.Object;
+	movementBlackboard = movementBlackboardFinder.Object;
+	otherBlackboard = otherBlackboardFinder.Object;
 
 	AIControllerClass = aiControllerFinder.Class;
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;

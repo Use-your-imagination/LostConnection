@@ -28,10 +28,6 @@
 		{
 			"Name": "Metasound",
 			"Enabled": true
-		},
-		{
-			"Name": "StateTree",
-			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [

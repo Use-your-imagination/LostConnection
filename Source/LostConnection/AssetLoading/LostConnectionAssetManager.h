@@ -26,6 +26,9 @@ private:
 	static void startLatent(UObject* worldContext, const FLatentActionInfo& info, const TSharedPtr<FStreamableHandle>& handle);
 
 private:
+	template<typename AssetT>
+	const AssetT& getDataAsset() const;
+
 	TSharedPtr<FStreamableHandle>& loadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset, FStreamableDelegate delegate = FStreamableDelegate());
 
 	bool latentLoadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset, UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate = FStreamableDelegate());
@@ -61,6 +64,9 @@ public:
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
 	UPARAM(DisplayName = IsAlreadyLoaded) bool loadLoot(UObject* worldContext, FLatentActionInfo info);
+
+	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
+	UPARAM(DisplayName = IsAlreadyLoaded) bool loadAI(UObject* worldContext, FLatentActionInfo info);
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable, Meta = (Latent, LatentInfo = info, HidePin = worldContext, DefaultToSelf = worldContext))
 	UPARAM(DisplayName = IsAlreadyLoaded) bool loadDrone(TSubclassOf<UBaseDroneDataAsset> droneAsset, UObject* worldContext, FLatentActionInfo info);
@@ -104,8 +110,13 @@ public:
 
 	const ULootDataAsset& getLoot() const;
 
+	const UAIDataAsset& getAI() const;
+
 	UFUNCTION(Category = "AssetLoading|Loot", BlueprintCallable)
 	const ULootDataAsset* getLootDataAsset() const;
+
+	UFUNCTION(Category = "AssetLoading|AI", BlueprintCallable)
+	const UAIDataAsset* getAIDataAsset() const;
 
 	UFUNCTION(Category = "AssetLoading|Drones Preview", BlueprintCallable)
 	const UDronesPreviewDataAsset* getDronesPreview() const;

@@ -8,6 +8,7 @@
 #include "Components/TextRenderComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardData.h"
 
 #include "BaseCharacter.h"
 #include "Utility/Utility.h"
@@ -37,17 +38,29 @@ protected:
 	UPROPERTY(Category = "Loot|Ammo", EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float energyAmmoDropChance;
 
-	UPROPERTY(Category = BehaviourTrees, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBehaviorTree> main;
+	UPROPERTY(Category = BehaviorTrees, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> mainTree;
 
-	UPROPERTY(Category = BehaviourTrees, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBehaviorTree> offensive;
+	UPROPERTY(Category = BehaviorTrees, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> offensiveTree;
 
-	UPROPERTY(Category = BehaviourTrees, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBehaviorTree> movement;
+	UPROPERTY(Category = BehaviorTrees, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> movementTree;
 
-	UPROPERTY(Category = BehaviourTrees, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBehaviorTree> other;
+	UPROPERTY(Category = BehaviorTrees, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> otherTree;
+
+	UPROPERTY(Category = Blackboards, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBlackboardData> mainBlackboard;
+
+	UPROPERTY(Category = Blackboards, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBlackboardData> offensiveBlackboard;
+
+	UPROPERTY(Category = Blackboards, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBlackboardData> movementBlackboard;
+
+	UPROPERTY(Category = Blackboards, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBlackboardData> otherBlackboard;
 
 protected:
 	virtual void Tick(float DeltaTime) override;
@@ -57,9 +70,9 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
-	virtual void deathLogic() override;
-
 	virtual void destroyAssociatedActors();
+
+	virtual void deathLogic() override;
 
 public:
 	ABaseBot();

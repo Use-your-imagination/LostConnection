@@ -11,6 +11,12 @@
 #include "Weapons/BaseWeapon.h"
 #include "Utility/Utility.h"
 
+template<typename AssetT>
+const AssetT& ULostConnectionAssetManager::getDataAsset() const
+{
+	return *GetPrimaryAssetObject<AssetT>(assets[AssetT::StaticClass()]);
+}
+
 void ULostConnectionAssetManager::startLatent(UObject* worldContext, const FLatentActionInfo& info, const TSharedPtr<FStreamableHandle>& handle)
 {
 	FLatentActionManager& manager = GEngine->GetWorldFromContextObject(worldContext, EGetWorldErrorMode::Assert)->GetLatentActionManager();
@@ -110,6 +116,11 @@ bool ULostConnectionAssetManager::loadLoot(UObject* worldContext, FLatentActionI
 	return this->latentLoadAsset(ULootDataAsset::StaticClass(), worldContext, info);
 }
 
+bool ULostConnectionAssetManager::loadAI(UObject* worldContext, FLatentActionInfo info)
+{
+	return this->latentLoadAsset(UAIDataAsset::StaticClass(), worldContext, info);
+}
+
 bool ULostConnectionAssetManager::loadDrone(TSubclassOf<UBaseDroneDataAsset> droneAsset, UObject* worldContext, FLatentActionInfo info)
 {
 	return this->latentLoadAsset(droneAsset, worldContext, info);
@@ -194,14 +205,12 @@ TSubclassOf<UBaseWeapon> ULostConnectionAssetManager::getWeaponClass(TSubclassOf
 
 const TArray<TSubclassOf<UBaseWeapon>>& ULostConnectionAssetManager::getWeapons() const
 {
-	UWeaponsDataAsset& asset = *GetPrimaryAssetObject<UWeaponsDataAsset>(UWeaponsDataAsset::getPrimaryAssetId());
-
-	return asset.getWeapons();
+	return GetPrimaryAssetObject<UWeaponsDataAsset>(UWeaponsDataAsset::getPrimaryAssetId())->getWeapons();
 }
 
 const UStatusesDataAsset& ULostConnectionAssetManager::getStatuses() const
 {
-	return *GetPrimaryAssetObject<UStatusesDataAsset>(assets[UStatusesDataAsset::StaticClass()]);
+	return this->getDataAsset<UStatusesDataAsset>();
 }
 
 const UBaseActDataAsset& ULostConnectionAssetManager::getCurrentAct() const
@@ -211,17 +220,22 @@ const UBaseActDataAsset& ULostConnectionAssetManager::getCurrentAct() const
 
 const UUIDataAsset& ULostConnectionAssetManager::getUI() const
 {
-	return *GetPrimaryAssetObject<UUIDataAsset>(assets[UUIDataAsset::StaticClass()]);
+	return this->getDataAsset<UUIDataAsset>();
 }
 
 const UDefaultsDataAsset& ULostConnectionAssetManager::getDefaults() const
 {
-	return *GetPrimaryAssetObject<UDefaultsDataAsset>(assets[UDefaultsDataAsset::StaticClass()]);
+	return this->getDataAsset<UDefaultsDataAsset>();
 }
 
 const ULootDataAsset& ULostConnectionAssetManager::getLoot() const
 {
-	return *GetPrimaryAssetObject<ULootDataAsset>(assets[ULootDataAsset::StaticClass()]);
+	return this->getDataAsset<ULootDataAsset>();
+}
+
+const UAIDataAsset& ULostConnectionAssetManager::getAI() const
+{
+	return this->getDataAsset<UAIDataAsset>();
 }
 
 const ULootDataAsset* ULostConnectionAssetManager::getLootDataAsset() const
@@ -229,9 +243,14 @@ const ULootDataAsset* ULostConnectionAssetManager::getLootDataAsset() const
 	return &this->getLoot();
 }
 
+const UAIDataAsset* ULostConnectionAssetManager::getAIDataAsset() const
+{
+	return &this->getAI();
+}
+
 const UDronesPreviewDataAsset* ULostConnectionAssetManager::getDronesPreview() const
 {
-	return GetPrimaryAssetObject<UDronesPreviewDataAsset>(assets[UDronesPreviewDataAsset::StaticClass()]);
+	return &this->getDataAsset<UDronesPreviewDataAsset>();
 }
 
 TArray<const UBaseDroneDataAsset*> ULostConnectionAssetManager::getDrones() const
