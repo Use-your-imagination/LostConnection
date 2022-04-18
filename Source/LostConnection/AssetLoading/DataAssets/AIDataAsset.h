@@ -15,7 +15,7 @@ class LOSTCONNECTION_API UAIDataAsset : public UPrimaryDataAsset
 	
 private:
 	UPROPERTY(Category = "Constants|Blackboard", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	FName selfKey;
+	FName selfActorKey;
 
 	UPROPERTY(Category = "Constants|Blackboard", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	FName targetKey;

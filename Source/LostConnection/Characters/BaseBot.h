@@ -38,18 +38,6 @@ protected:
 	UPROPERTY(Category = "Loot|Ammo", EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float energyAmmoDropChance;
 
-	UPROPERTY(Category = BehaviorTrees, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBehaviorTree> mainTree;
-
-	UPROPERTY(Category = BehaviorTrees, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBehaviorTree> offensiveTree;
-
-	UPROPERTY(Category = BehaviorTrees, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBehaviorTree> movementTree;
-
-	UPROPERTY(Category = BehaviorTrees, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBehaviorTree> otherTree;
-
 	UPROPERTY(Category = Blackboards, EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UBlackboardData> mainBlackboard;
 
