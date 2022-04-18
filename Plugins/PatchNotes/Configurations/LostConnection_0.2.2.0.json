@@ -59,7 +59,8 @@
 			"notes": [
 				"Added phys mat to room meshes",
 				"Added room exit",
-				"Fixed SN4K3's head flying through environment"
+				"Fixed SN4K3's head flying through environment",
+				"Fixed shooting through walls"
 			]
 		}
 	},
