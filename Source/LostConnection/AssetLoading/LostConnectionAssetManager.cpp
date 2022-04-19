@@ -41,7 +41,7 @@ bool ULostConnectionAssetManager::latentLoadAsset(const TSubclassOf<UPrimaryData
 
 	TSharedPtr<FStreamableHandle>& asset = this->loadAsset(dataAsset);
 
-	this->startLatent(worldContext, info, asset);
+	ULostConnectionAssetManager::startLatent(worldContext, info, asset);
 
 	return false;
 }
@@ -57,7 +57,7 @@ bool ULostConnectionAssetManager::latentLoadAct(const TSubclassOf<UBaseActDataAs
 
 	currentActId = assets[dataAsset];
 
-	this->startLatent(worldContext, info, asset);
+	ULostConnectionAssetManager::startLatent(worldContext, info, asset);
 
 	return false;
 }

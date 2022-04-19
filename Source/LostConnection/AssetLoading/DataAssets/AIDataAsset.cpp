@@ -1,6 +1,5 @@
 // Copyright (c) 2022 Use-your-imagination
 
-
 #include "AIDataAsset.h"
 
 FPrimaryAssetId UAIDataAsset::getPrimaryAssetId()
