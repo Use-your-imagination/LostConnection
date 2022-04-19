@@ -7,7 +7,7 @@
 
 const FRotator UConstants::rotationRate = { 0.0f, 540.0f, 0.0f };
 
-const FString UConstants::projectVersion = "v0.2.2.0";
+const FString UConstants::projectVersion = "v0.2.3.0";
 
 const FName UConstants::actionStringTablePath = "/Game/Text/Actions.Actions";
 const FString UConstants::defaultActionMessageKey = "DefaultActionMessage";
