@@ -20,8 +20,6 @@ public:
 	static constexpr float jumpVelocity = 600.0f;
 	static const FRotator rotationRate;
 
-	static const FString projectVersion;
-
 	static constexpr float shootDistance = 20000.0f;
 
 	static constexpr float ammoSpeed = 5200.0f;

@@ -2,12 +2,12 @@
 
 #include "Constants.h"
 
+#include "Misc/NetworkVersion.h"
+
 #include "Weapons/BaseWeapon.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
 const FRotator UConstants::rotationRate = { 0.0f, 540.0f, 0.0f };
-
-const FString UConstants::projectVersion = "v0.2.3.0";
 
 const FName UConstants::actionStringTablePath = "/Game/Text/Actions.Actions";
 const FString UConstants::defaultActionMessageKey = "DefaultActionMessage";
@@ -15,7 +15,7 @@ const FString UConstants::actionHotkey = "ActionHotkey";
 
 FText UConstants::getProjectVersion()
 {
-	return FText::FromString(UConstants::projectVersion);
+	return FText::FromString(FNetworkVersion::GetProjectVersion());
 }
 
 int32 UConstants::getPersonalModulesLimit()
