@@ -1,0 +1,31 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Automation Toolchain",
+	"Description": "Routines automation",
+	"Category": "Code Plugin",
+	"CreatedBy": "LazyPanda07",
+	"CreatedByURL": "https://github.com/LazyPanda07",
+	"DocsURL": "https://github.com/LazyPanda07/AutomationToolchainPublic/wiki",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/7f1b072dcdb1460aa0591394cac984dc",
+	"SupportURL": "semengricenko@gmail.com",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"EngineVersion": "5.0.0",
+	"Modules": [
+		{
+			"Name": "AutomationToolchain",
+			"Type": "EditorNoCommandlet",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Mac",
+				"Linux",
+				"LinuxArm64"
+			]
+		}
+	]
+}
