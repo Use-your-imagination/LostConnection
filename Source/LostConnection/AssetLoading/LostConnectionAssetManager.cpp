@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Use-your-imagination
+// Copyright (c) 2021 Use Your Imagination
 
 #include "LostConnectionAssetManager.h"
 
@@ -236,6 +236,11 @@ const ULootDataAsset& ULostConnectionAssetManager::getLoot() const
 const UAIDataAsset& ULostConnectionAssetManager::getAI() const
 {
 	return this->getDataAsset<UAIDataAsset>();
+}
+
+const UBaseActDataAsset* ULostConnectionAssetManager::getCurrentActDataAsset() const
+{
+	return &this->getCurrentAct();
 }
 
 const ULootDataAsset* ULostConnectionAssetManager::getLootDataAsset() const

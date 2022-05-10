@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Use-your-imagination
+// Copyright (c) 2021 Use Your Imagination
 
 #include "BaseWeapon.h"
 
@@ -30,7 +30,7 @@ FTransform UBaseWeapon::calculateAmmoTransform(ABaseDrone* drone, const FTransfo
 	}
 	else
 	{
-		// TODO: Change target to AITargeted
+		// TODO: change target to AITargeted
 
 		ABaseBot* bot = Cast<ABaseBot>(owner);
 		AAIController* controller = bot->GetController<AAIController>();

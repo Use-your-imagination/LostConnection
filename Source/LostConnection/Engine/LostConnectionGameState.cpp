@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Use-your-imagination
+// Copyright (c) 2021 Use Your Imagination
 
 #include "LostConnectionGameState.h"
 
@@ -41,9 +41,9 @@ void ALostConnectionGameState::PostInitializeComponents()
 	manager = NewObject<UVFXManager>(this);
 }
 
-void ALostConnectionGameState::loadRoom(const TSoftObjectPtr<UWorld>& room, FVector location, FRotator rotation)
+void ALostConnectionGameState::loadRoom(const TSoftObjectPtr<UWorld>& room, FTransform&& spawnTransform)
 {
-	ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, room, location, rotation, isLastRoomLoaded);
+	ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, room, spawnTransform, isLastRoomLoaded);
 }
 
 void ALostConnectionGameState::clearRoom()
@@ -92,8 +92,7 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 	const UBaseActDataAsset& act = manager.getCurrentAct();
 	TArray<TSoftObjectPtr<UWorld>> rooms = act.getRooms();
 	TObjectPtr<AActor> waypoint = UGameplayStatics::GetActorOfClass(this, ALevelCreationWaypoint::StaticClass());
-	FVector spawnLocation = waypoint->GetActorLocation();
-	FRotator spawnRotation = waypoint->GetActorRotation();
+	FTransform spawnTransform = waypoint->GetActorTransform();
 
 	Algo::ForEachIf
 	(
@@ -111,7 +110,7 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 
 	this->clearRoom();
 
-	this->loadRoom(Utility::getRandomValueFromArray(rooms), spawnLocation, spawnRotation);
+	this->loadRoom(Utility::getRandomValueFromArray(rooms), MoveTemp(spawnTransform));
 }
 
 void ALostConnectionGameState::spawnVFXAtLocation_Implementation(const FVector& location, UNiagaraSystem* vfx)

@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Use-your-imagination
+// Copyright (c) 2021 Use Your Imagination
 
 #pragma once
 
@@ -14,22 +14,22 @@ class LOSTCONNECTION_API UBaseActDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(Category = Levels, EditDefaultsOnly)
-	TArray<TSoftObjectPtr<UWorld>> startingLocations;
+	UPROPERTY(Category = Levels, EditDefaultsOnly, BlueprintReadOnly)
+	TArray<TSoftObjectPtr<UWorld>> startingRooms;
 
-	UPROPERTY(Category = Levels, EditDefaultsOnly)
+	UPROPERTY(Category = Levels, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSoftObjectPtr<UWorld>> rooms;
 
-	UPROPERTY(Category = Levels, EditDefaultsOnly)
+	UPROPERTY(Category = Levels, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSoftObjectPtr<UWorld>> secretRooms;
 
-	UPROPERTY(Category = Levels, EditDefaultsOnly)
+	UPROPERTY(Category = Levels, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSoftObjectPtr<UWorld>> warehouses;
 
-	UPROPERTY(Category = Levels, EditDefaultsOnly)
+	UPROPERTY(Category = Levels, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSoftObjectPtr<UWorld>> bossRooms;
 
-	UPROPERTY(Category = AI, EditDefaultsOnly)
+	UPROPERTY(Category = AI, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSubclassOf<class ABaseBot>> bots;
 
 protected:

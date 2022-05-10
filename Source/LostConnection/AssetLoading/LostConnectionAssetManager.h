@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Use-your-imagination
+// Copyright (c) 2021 Use Your Imagination
 
 #pragma once
 
@@ -112,18 +112,21 @@ public:
 
 	const UAIDataAsset& getAI() const;
 
+	UFUNCTION(Category = "AssetLoading|Acts", BlueprintCallable)
+	const UBaseActDataAsset* getCurrentActDataAsset() const;
+
 	UFUNCTION(Category = "AssetLoading|Loot", BlueprintCallable)
 	const ULootDataAsset* getLootDataAsset() const;
 
 	UFUNCTION(Category = "AssetLoading|AI", BlueprintCallable)
 	const UAIDataAsset* getAIDataAsset() const;
 
-	UFUNCTION(Category = "AssetLoading|Drones Preview", BlueprintCallable)
+	UFUNCTION(Category = "AssetLoading|DronesPreview", BlueprintCallable)
 	const UDronesPreviewDataAsset* getDronesPreview() const;
 
 	TArray<const UBaseDroneDataAsset*> getDrones() const;
 
-	virtual FPrimaryAssetId GetPrimaryAssetIdForObject(UObject* object) const override;
+	FPrimaryAssetId GetPrimaryAssetIdForObject(UObject* object) const override;
 
 	~ULostConnectionAssetManager() = default;
 };

@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Use-your-imagination
+// Copyright (c) 2021 Use Your Imagination
 
 #pragma once
 
@@ -18,22 +18,22 @@ class LOSTCONNECTION_API ALostConnectionGameState : public AGameState
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 totalBots;
 
-	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 totalWaves;
 
-	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 remainingBots;
 
-	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 remainingWaves;
 
-	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 currentWaveTotalBots;
 
-	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = AI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 currentWaveRemainingBots;
 
 private:
@@ -52,7 +52,7 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 private:
-	void loadRoom(const TSoftObjectPtr<UWorld>& room, FVector location, FRotator rotation);
+	void loadRoom(const TSoftObjectPtr<UWorld>& room, FTransform&& spawnTransform);
 
 	void clearRoom();
 
