@@ -30,8 +30,6 @@ void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(ALostConnectionGameState, currentWaveTotalBots);
 
 	DOREPLIFETIME(ALostConnectionGameState, currentWaveRemainingBots);
-
-	DOREPLIFETIME(ALostConnectionGameState, isLastRoomLoaded);
 }
 
 void ALostConnectionGameState::PostInitializeComponents()
@@ -41,9 +39,9 @@ void ALostConnectionGameState::PostInitializeComponents()
 	manager = NewObject<UVFXManager>(this);
 }
 
-void ALostConnectionGameState::loadRoom(const TSoftObjectPtr<UWorld>& room, FTransform&& spawnTransform)
+void ALostConnectionGameState::loadRoom(FTransform&& spawnTransform)
 {
-	ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, room, spawnTransform, isLastRoomLoaded);
+	ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, lastLoadedRoom, spawnTransform, isRoomLoaded);
 }
 
 void ALostConnectionGameState::clearRoom()
@@ -110,7 +108,9 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 
 	this->clearRoom();
 
-	this->loadRoom(Utility::getRandomValueFromArray(rooms), MoveTemp(spawnTransform));
+	lastLoadedRoom = Utility::getRandomValueFromArray(rooms);
+
+	this->loadRoom(MoveTemp(spawnTransform));
 }
 
 void ALostConnectionGameState::spawnVFXAtLocation_Implementation(const FVector& location, UNiagaraSystem* vfx)
@@ -181,6 +181,11 @@ int32& ALostConnectionGameState::getCurrentWaveTotalBots()
 int32& ALostConnectionGameState::getCurrentWaveRemainingBots()
 {
 	return currentWaveRemainingBots;
+}
+
+const TSoftObjectPtr<UWorld>& ALostConnectionGameState::getLastLoadedRoom() const
+{
+	return lastLoadedRoom;
 }
 
 void ALostConnectionGameState::Tick(float DeltaTime)

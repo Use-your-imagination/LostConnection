@@ -42,17 +42,16 @@ private:
 
 private:
 	TArray<TSoftObjectPtr<UWorld>> usedRooms;
-
-	UPROPERTY(Category = RoomLoading, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	bool isLastRoomLoaded;
+	TSoftObjectPtr<UWorld> lastLoadedRoom;
+	bool isRoomLoaded;
 
 protected:
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	virtual void PostInitializeComponents() override;
+	void PostInitializeComponents() override;
 
 private:
-	void loadRoom(const TSoftObjectPtr<UWorld>& room, FTransform&& spawnTransform);
+	void loadRoom(FTransform&& spawnTransform);
 
 	void clearRoom();
 
@@ -92,6 +91,8 @@ public:
 	int32& getCurrentWaveTotalBots();
 
 	int32& getCurrentWaveRemainingBots();
+
+	const TSoftObjectPtr<UWorld>& getLastLoadedRoom() const;
 
 	template<typename T>
 	T* spawn(UClass* subclass, const FTransform& transform, ESpawnActorCollisionHandlingMethod spawnMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn);

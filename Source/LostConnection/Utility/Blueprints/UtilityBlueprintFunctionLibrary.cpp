@@ -258,3 +258,8 @@ FTransform UUtilityBlueprintFunctionLibrary::getAmmoDropableCurrentPosition(TScr
 {
 	return ammoDropable->getCurrentPosition();
 }
+
+FString UUtilityBlueprintFunctionLibrary::getRoomName(const TSoftObjectPtr<UWorld>& room)
+{
+	return room.GetAssetName();
+}

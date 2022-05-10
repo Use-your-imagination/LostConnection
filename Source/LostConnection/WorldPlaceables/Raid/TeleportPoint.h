@@ -8,18 +8,26 @@
 
 #include "TeleportPoint.generated.h"
 
+#pragma warning(disable: 4458)
+
 UCLASS()
 class LOSTCONNECTION_API ATeleportPoint : public AActor
 {
 	GENERATED_BODY()
 	
+private:
+	UPROPERTY(Category = UI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TSoftObjectPtr<UWorld> room;
+
 protected:
 	virtual void BeginPlay() override;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	ATeleportPoint();
 
-	UFUNCTION(Category = UI, BlueprintImplementableEvent)
+	UFUNCTION(Category = UI, BlueprintImplementableEvent, BlueprintCallable)
 	int32 getNestingLevel() const;
 
 	virtual ~ATeleportPoint() = default;
