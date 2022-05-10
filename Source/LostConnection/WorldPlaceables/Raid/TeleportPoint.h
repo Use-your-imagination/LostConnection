@@ -27,8 +27,13 @@ protected:
 public:
 	ATeleportPoint();
 
+	UFUNCTION(Server, Unreliable)
+	void teleport(APlayerController* controller);
+
 	UFUNCTION(Category = UI, BlueprintImplementableEvent, BlueprintCallable)
 	int32 getNestingLevel() const;
+
+	const TSoftObjectPtr<UWorld>& getRoom() const;
 
 	virtual ~ATeleportPoint() = default;
 };
