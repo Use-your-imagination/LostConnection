@@ -4,9 +4,6 @@
 
 #include "CoreMinimal.h"
 
-#include "Components/MaterialBillboardComponent.h"
-#include "Components/TextRenderComponent.h"
-#include "Materials/MaterialInstanceDynamic.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 
@@ -38,17 +35,11 @@ protected:
 	UPROPERTY(Category = "Loot|Ammo", EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	float energyAmmoDropChance;
 
-	UPROPERTY(Category = Blackboards, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBlackboardData> mainBlackboard;
+	UPROPERTY(Category = "AI|Assets", EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBlackboardData> blackboard;
 
-	UPROPERTY(Category = Blackboards, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBlackboardData> offensiveBlackboard;
-
-	UPROPERTY(Category = Blackboards, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBlackboardData> movementBlackboard;
-
-	UPROPERTY(Category = Blackboards, EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBlackboardData> otherBlackboard;
+	UPROPERTY(Category = "AI|Assets", EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> behaviorTree;
 
 protected:
 	virtual void Tick(float DeltaTime) override;
@@ -64,6 +55,15 @@ protected:
 
 public:
 	ABaseBot();
+
+	UFUNCTION(Category = Offensive, BlueprintNativeEvent, BlueprintCallable)
+	bool offensiveStage(const TScriptInterface<IAITargeted>& target);
+
+	UFUNCTION(Category = Offensive, BlueprintNativeEvent, BlueprintCallable)
+	bool movementStage(const FVector& movementPoint);
+
+	UFUNCTION(Category = Offensive, BlueprintNativeEvent, BlueprintCallable)
+	bool otherStage();
 
 	virtual int32 getLootPoints() const final override;
 

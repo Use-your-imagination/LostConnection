@@ -20,9 +20,13 @@ void ABaseBot::BeginPlay()
 {
 	Super::BeginPlay();
 
+	behaviorTree->BlackboardAsset = blackboard;
+
 	if (HasAuthority())
 	{
 		this->changeToDefaultWeapon();
+
+		GetController<AAIController>()->RunBehaviorTree(behaviorTree);
 	}
 }
 
@@ -81,22 +85,33 @@ ABaseBot::ABaseBot() :
 	largeAmmoDropChance(45.0f),
 	energyAmmoDropChance(45.0f)
 {
-	static ConstructorHelpers::FClassFinder<AAIController> aiControllerFinder(TEXT("/Game/Engine/AIControllers/BP_LostConnectionAIController"));
+	static ConstructorHelpers::FClassFinder<AAIController> aiControllerFinder(TEXT("/Game/Engine/AIControllers/BP_BaseAIController"));
 
-	static ConstructorHelpers::FObjectFinder<UBlackboardData> mainBlackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Blackboards/BaseMainBlackboard.BaseMainBlackboard'"));
-	static ConstructorHelpers::FObjectFinder<UBlackboardData> offensiveBlackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Blackboards/BaseOffensiveBlackboard.BaseOffensiveBlackboard'"));
-	static ConstructorHelpers::FObjectFinder<UBlackboardData> movementBlackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Blackboards/BaseMovementBlackboard.BaseMovementBlackboard'"));
-	static ConstructorHelpers::FObjectFinder<UBlackboardData> otherBlackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Blackboards/BaseOtherBlackboard.BaseOtherBlackboard'"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> blackboardFinder(TEXT("BlackboardData'/Game/AI/Base/BaseBlackboard.BaseBlackboard'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> behaviorTreeFinder(TEXT("BehaviorTree'/Game/AI/Base/BaseBehaviorTree.BaseBehaviorTree'"));
 
 	isAlly = false;
 
-	mainBlackboard = mainBlackboardFinder.Object;
-	offensiveBlackboard = offensiveBlackboardFinder.Object;
-	movementBlackboard = movementBlackboardFinder.Object;
-	otherBlackboard = otherBlackboardFinder.Object;
-
 	AIControllerClass = aiControllerFinder.Class;
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	blackboard = blackboardFinder.Object;
+	behaviorTree = behaviorTreeFinder.Object;
+}
+
+bool ABaseBot::offensiveStage_Implementation(const TScriptInterface<IAITargeted>& target)
+{
+	return true;
+}
+
+bool ABaseBot::movementStage_Implementation(const FVector& movementPoint)
+{
+	return true;
+}
+
+bool ABaseBot::otherStage_Implementation()
+{
+	return true;
 }
 
 int32 ABaseBot::getLootPoints() const

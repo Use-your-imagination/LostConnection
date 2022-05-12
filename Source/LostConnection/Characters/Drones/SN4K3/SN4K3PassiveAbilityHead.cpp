@@ -71,9 +71,9 @@ bool ASN4K3PassiveAbilityHead::ReplicateSubobjects(UActorChannel* Channel, FOutB
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	// wroteSomething |= Channel->ReplicateSubobject(ailmentInflictorUtility, *Bunch, *RepFlags);
-	// 
-	// wroteSomething |= ailmentInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	wroteSomething |= Channel->ReplicateSubobject(ailmentInflictorUtility, *Bunch, *RepFlags);
+	
+	wroteSomething |= ailmentInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 
 	return wroteSomething;
 }
@@ -187,7 +187,5 @@ void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
 
 UAilmentInflictorUtility* ASN4K3PassiveAbilityHead::getAilmentInflictorUtility() const
 {
-	return nullptr;
-
-	// return ailmentInflictorUtility;
+	return ailmentInflictorUtility;
 }
