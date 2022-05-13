@@ -12,6 +12,8 @@
 #include "Engine/LostConnectionPlayerState.h"
 #include "Engine/LostConnectionPlayerController.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogLostConnection, Display, All);
+
 class LOSTCONNECTION_API Utility
 {
 public:

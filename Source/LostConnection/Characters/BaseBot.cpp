@@ -5,6 +5,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "AIController.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "NavigationSystem.h"
 
 #include "Weapons/Pistols/Gauss.h"
 #include "Engine/LostConnectionGameMode.h"
@@ -20,11 +22,15 @@ void ABaseBot::BeginPlay()
 {
 	Super::BeginPlay();
 
-	behaviorTree->BlackboardAsset = blackboard;
-
 	if (HasAuthority())
 	{
 		this->changeToDefaultWeapon();
+
+		behaviorTree->BlackboardAsset = blackboard;
+
+		offensiveChain = this->initOffensiveChain();
+
+		movementChain = this->initMovementChain();
 
 		GetController<AAIController>()->RunBehaviorTree(behaviorTree);
 	}
@@ -80,10 +86,132 @@ void ABaseBot::deathLogic()
 	}
 }
 
+ActionsChain<TScriptInterface<IAITargeted>> ABaseBot::initOffensiveChain()
+{
+	ActionsChain<TScriptInterface<IAITargeted>> result;
+
+	result.addAction
+	(
+		[](const TScriptInterface<IAITargeted>& target) -> bool
+		{
+			return IsValid(target.GetObject());
+		},
+		[this](const TScriptInterface<IAITargeted>& target) -> bool
+		{
+			if (!movementChain.isExecutionEnd())
+			{
+				GetController<AAIController>()->StopMovement();
+
+				movementChain.resetExecution();
+			}
+
+			FRotator newRotation = GetActorRotation();
+
+			newRotation.Yaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Cast<AActor>(target.GetObject())->GetActorLocation()).Yaw;
+
+			SetActorRotation(newRotation);
+
+			return true;
+		}
+	);
+
+	result.addAction
+	(
+		[](const TScriptInterface<IAITargeted>& target) -> bool
+		{
+			return IsValid(target.GetObject());
+		},
+		[this](const TScriptInterface<IAITargeted>& target) -> bool
+		{
+			this->shoot();
+			
+			return true;
+		}
+	);
+
+	result.addAction
+	(
+		[](const TScriptInterface<IAITargeted>& target) -> bool
+		{
+			return true;
+		},
+		[this](const TScriptInterface<IAITargeted>& target) -> bool
+		{
+			if (resetTime)
+			{
+				resetTime = FMath::Max(0.0, resetTime - FApp::GetDeltaTime());
+			}
+			else
+			{
+				resetTime = 1.0;
+			}
+
+			return !StaticCast<bool>(resetTime);
+		}
+	);
+
+	result.addAction
+	(
+		[](const TScriptInterface<IAITargeted>& target) -> bool
+		{
+			return true;
+		},
+		[this](const TScriptInterface<IAITargeted>& target) -> bool
+		{
+			this->resetShoot();
+
+			return true;
+		}
+	);
+
+	return result;
+}
+
+ActionsChain<FVector> ABaseBot::initMovementChain()
+{
+	ActionsChain<FVector> result;
+
+	result.addAction
+	(
+		[](const FVector& movementPoint) -> bool
+		{
+			return true;
+		},
+		[this](const FVector& movementPoint) -> bool
+		{
+			TObjectPtr<AAIController> controller = GetController<AAIController>();
+			FAIRequestID id = controller->GetCurrentMoveRequestID();
+
+			if (id.IsValid())
+			{
+				return true;
+			}
+
+			TObjectPtr<UNavigationSystemV1> navigationSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
+
+			if (!navigationSystem)
+			{
+				return false;
+			}
+
+			FNavLocation moveToLocation;
+
+			navigationSystem->GetRandomReachablePointInRadius(GetActorLocation(), 1000.0f, moveToLocation);
+
+			controller->MoveToLocation(moveToLocation.Location, -1.0f, false);
+
+			return false;
+		}
+	);
+
+	return result;
+}
+
 ABaseBot::ABaseBot() :
 	smallAmmoDropChance(45.0f),
 	largeAmmoDropChance(45.0f),
-	energyAmmoDropChance(45.0f)
+	energyAmmoDropChance(45.0f),
+	resetTime(0.0)
 {
 	static ConstructorHelpers::FClassFinder<AAIController> aiControllerFinder(TEXT("/Game/Engine/AIControllers/BP_BaseAIController"));
 
@@ -101,17 +229,17 @@ ABaseBot::ABaseBot() :
 
 bool ABaseBot::offensiveStage_Implementation(const TScriptInterface<IAITargeted>& target)
 {
-	return true;
+	return offensiveChain.process(target);
 }
 
 bool ABaseBot::movementStage_Implementation(const FVector& movementPoint)
 {
-	return true;
+	return movementChain.process(movementPoint);
 }
 
 bool ABaseBot::otherStage_Implementation()
 {
-	return true;
+	return false;
 }
 
 int32 ABaseBot::getLootPoints() const

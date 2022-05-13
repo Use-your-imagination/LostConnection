@@ -11,6 +11,8 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 
+DEFINE_LOG_CATEGORY(LogLostConnection);
+
 SIZE_T Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<UBaseStatus>& statusClass)
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
