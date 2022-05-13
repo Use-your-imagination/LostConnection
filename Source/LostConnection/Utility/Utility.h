@@ -60,7 +60,7 @@ public:
 	static const T* findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones);
 
 	template<typename T>
-	static void processCooldown(T* cooldownableObject, float DeltaTime);
+	static void processCooldown(TObjectPtr<T> cooldownableObject, float DeltaTime);
 
 	template<typename T>
 	static T* setCurrentUI(const TSubclassOf<T>& widget, APawn* outer);
@@ -141,9 +141,9 @@ const T* Utility::findDroneAsset(const TArray<const class UBaseDroneDataAsset*>&
 }
 
 template<typename T>
-inline void Utility::processCooldown(T* cooldownableObject, float DeltaTime)
+inline void Utility::processCooldown(TObjectPtr<T> cooldownableObject, float DeltaTime)
 {
-	if (class ICooldownable* tem = Cast<class ICooldownable>(cooldownableObject))
+	if (TObjectPtr<class ICooldownable> tem = Cast<class ICooldownable>(cooldownableObject))
 	{
 		tem->processCooldown(DeltaTime);
 	}

@@ -14,6 +14,7 @@
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Interfaces/Gameplay/Actions/InputActions.h"
 #include "Constants/Constants.h"
+#include "Grapple/BaseGrappleHandler.h"
 
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbilityCast.h"
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbilityCast.h"
@@ -84,28 +85,34 @@ protected:
 	EAbilitySlot abilityId;
 
 	UPROPERTY(Category = Abilities, BlueprintReadOnly)
-	UBaseAbility* currentAbility;
+	TObjectPtr<UBaseAbility> currentAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBasePassiveAbility* passiveAbility;
+	TObjectPtr<UBasePassiveAbility> passiveAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBaseAbility* firstAbility;
+	TObjectPtr<UBaseAbility> firstAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBaseAbility* secondAbility;
+	TObjectPtr<UBaseAbility> secondAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBaseAbility* thirdAbility;
+	TObjectPtr<UBaseAbility> thirdAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBaseUltimateAbility* ultimateAbility;
+	TObjectPtr<UBaseUltimateAbility> ultimateAbility;
 
 	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> abilitiesAnimations;
+	TArray<TObjectPtr<UAnimMontage>> abilitiesAnimations;
 
 	UPROPERTY(Category = Death, EditDefaultsOnly, BlueprintReadOnly)
 	bool isFullyDestruction;
+
+	UPROPERTY(Category = Grapple, Replicated, BlueprintReadOnly)
+	TObjectPtr<UBaseGrappleHandler> grappleHandler;
+
+	UPROPERTY(Category = Grapple, EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UBaseGrappleHandler> grappleHandlerClass;
 
 	TWeakObjectPtr<ABaseCharacter> lastHealthBarTraceTarget;
 
@@ -190,6 +197,8 @@ protected:
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
+	virtual void PostInitializeComponents() override;
+
 	UFUNCTION()
 	void onAbilityUsed();
 
@@ -246,6 +255,12 @@ protected:
 	UFUNCTION()
 	void releaseWeaponSelector();
 
+	UFUNCTION()
+	void pressGrapple();
+
+	UFUNCTION()
+	void releaseGrapple();
+
 protected:
 	void destroyDrone();
 
@@ -258,13 +273,13 @@ protected:
 public:
 	ABaseDrone();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
 	void changeToPrimaryWeapon();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
 	void changeToSecondaryWeapon();
 
-	UFUNCTION(Server, Unreliable, BlueprintCallable)
+	UFUNCTION(Category = Ammo, Server, Unreliable, BlueprintCallable)
 	void pickupAmmo(EAmmoType type, int32 count);
 
 	UFUNCTION(Server, Reliable)
@@ -287,10 +302,10 @@ public:
 
 	void initDefaultUI();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
 	void setPrimaryWeapon(TSubclassOf<UBaseWeapon> primaryWeapon);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
 	void setSecondaryWeapon(TSubclassOf<UBaseWeapon> secondaryWeapon);
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
@@ -346,7 +361,7 @@ public:
 	
 	virtual void setCastPoint_Implementation(float newCastPoint) final override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Abilities, BlueprintCallable)
 	virtual void setCurrentAbility(UBaseAbility* ability) final override;
 
 	virtual float getEnergy() const final override;
@@ -396,27 +411,27 @@ public:
 
 	virtual void castPassiveAbilityVisual() override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Abilities, BlueprintCallable)
 	virtual void castPassiveAbilityLogic() override;
 
 	virtual void castFirstAbilityVisual() override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Abilities, BlueprintCallable)
 	virtual void castFirstAbilityLogic() override;
 
 	virtual void castSecondAbilityVisual() override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Abilities, BlueprintCallable)
 	virtual void castSecondAbilityLogic() override;
 
 	virtual void castThirdAbilityVisual() override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Abilities, BlueprintCallable)
 	virtual void castThirdAbilityLogic() override;
 
 	virtual void castUltimateAbilityVisual() override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Abilities, BlueprintCallable)
 	virtual void castUltimateAbilityLogic() override;
 
 	virtual ~ABaseDrone() = default;

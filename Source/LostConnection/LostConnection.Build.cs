@@ -23,7 +23,8 @@ public class LostConnection : ModuleRules
             "OnlineSubsystem",
             "OnlineSubsystemUtils",
             "AIModule",
-            "PhysicsCore"
+            "PhysicsCore",
+            "NavigationSystem"
         });
 
         PublicIncludePaths.AddRange(new string[]

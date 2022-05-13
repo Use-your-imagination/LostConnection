@@ -92,9 +92,12 @@ void ABaseCharacter::PostInitializeComponents()
 
 	if (HasAuthority())
 	{
-		energyShield = NewObject<UBaseEnergyShield>(this, energyShieldClass);
+		if (IsValid(energyShieldClass))
+		{
+			energyShield = NewObject<UBaseEnergyShield>(this, energyShieldClass);
 
-		energyShield->init(this);
+			energyShield->init(this);
+		}
 	}
 }
 

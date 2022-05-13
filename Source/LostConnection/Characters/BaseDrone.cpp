@@ -22,6 +22,12 @@
 using namespace std;
 
 template<typename T>
+static void setCooldown(TObjectPtr<T> cooldownableObject, float newCooldown = 0.0f)
+{
+	Cast<ICooldownable>(cooldownableObject)->startCooldown(newCooldown);
+}
+
+template<typename T>
 static void setCooldown(T* cooldownableObject, float newCooldown = 0.0f)
 {
 	Cast<ICooldownable>(cooldownableObject)->startCooldown(newCooldown);
@@ -106,6 +112,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 
 	FInputActionBinding	inventory("Inventory", IE_Pressed);
 
+	FInputActionBinding pressGrapple("Grapple", IE_Pressed);
+	FInputActionBinding releaseGrapple("Grapple", IE_Released);
+
 	pressZoomAction.ActionDelegate.GetDelegateForManualSet().BindLambda([this]()
 		{
 			MultiplayerUtility::runOnServerReliableWithMulticast(this, "pressZoom");
@@ -170,6 +179,10 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 			}
 		});
 
+	pressGrapple.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliable(this, "pressGrapple"); });
+
+	releaseGrapple.ActionDelegate.GetDelegateForManualSet().BindLambda([this]() { MultiplayerUtility::runOnServerUnreliable(this, "releaseGrapple"); });
+
 	result.Add(pressZoomAction);
 	result.Add(releaseZoomAction);
 
@@ -195,6 +208,9 @@ TArray<FInputActionBinding> ABaseDrone::initInputs()
 	result.Add(cancelAbility);
 
 	result.Add(inventory);
+
+	result.Add(pressGrapple);
+	result.Add(releaseGrapple);
 
 	return result;
 }
@@ -261,6 +277,8 @@ void ABaseDrone::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(ABaseDrone, slideCooldown);
 
 	DOREPLIFETIME(ABaseDrone, secondaryHold);
+
+	DOREPLIFETIME(ABaseDrone, grappleHandler);
 }
 
 bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -302,7 +320,27 @@ bool ABaseDrone::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 		wroteSomething |= ultimateAbility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
+	if (IsValid(grappleHandler))
+	{
+		wroteSomething |= Channel->ReplicateSubobject(grappleHandler, *Bunch, *RepFlags);
+
+		wroteSomething |= grappleHandler->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
 	return wroteSomething;
+}
+
+void ABaseDrone::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (HasAuthority())
+	{
+		if (IsValid(grappleHandlerClass))
+		{
+			grappleHandler = NewObject<UBaseGrappleHandler>(this, grappleHandlerClass);
+		}
+	}
 }
 
 void ABaseDrone::onAbilityUsed()
@@ -432,6 +470,8 @@ void ABaseDrone::BeginPlay()
 		thirdAbility->initAbility();
 
 		ultimateAbility->initAbility();
+
+		grappleHandler->init(this);
 
 		this->restoreAbilitiesCooldown();
 
@@ -650,6 +690,16 @@ void ABaseDrone::releaseWeaponSelector()
 	IInputActions::Execute_releaseWeaponSelectorAction(this);
 }
 
+void ABaseDrone::pressGrapple()
+{
+	grappleHandler->grappleActionPress();
+}
+
+void ABaseDrone::releaseGrapple()
+{
+	grappleHandler->grappleActionRelease();
+}
+
 void ABaseDrone::destroyDrone()
 {
 	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(ULostConnectionAssetManager::get().getDefaults().getDeathPlaceholder(), {});
@@ -742,6 +792,8 @@ ABaseDrone::ABaseDrone() :
 	castPoint(100.0f),
 	isFullyDestruction(true)
 {
+	static ConstructorHelpers::FClassFinder<UBaseGrappleHandler> grappleHandlerFinder(TEXT("/Game/Grapple/BP_BaseGrappleHandler"));
+
 	TObjectPtr<USkeletalMeshComponent> mesh = GetMesh();
 
 	isAlly = true;
@@ -767,6 +819,8 @@ ABaseDrone::ABaseDrone() :
 	JumpMaxCount = 2;
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(UConstants::droneInteractiveChannel, ECollisionResponse::ECR_Overlap);
+
+	grappleHandlerClass = grappleHandlerFinder.Class;
 
 #pragma region BlueprintFunctionLibrary
 	secondaryHold = false;
@@ -1295,7 +1349,7 @@ void ABaseDrone::castFirstAbilityLogic()
 	this->castAbility(firstAbility, [this]()
 		{
 			IFirstAbilityCast::Execute_castFirstAbilityEventLogic(this);
-		});	
+		});
 }
 
 void ABaseDrone::castSecondAbilityVisual()
