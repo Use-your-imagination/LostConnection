@@ -515,6 +515,8 @@ void ABaseDrone::Tick(float DeltaTime)
 		Utility::processCooldown(secondAbility, DeltaTime);
 		Utility::processCooldown(thirdAbility, DeltaTime);
 		Utility::processCooldown(ultimateAbility, DeltaTime);
+
+		grappleHandler->processCooldown(DeltaTime);
 	}
 
 	this->showBotHealthBar();

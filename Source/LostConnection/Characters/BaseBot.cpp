@@ -129,6 +129,8 @@ ActionsChain<TScriptInterface<IAITargeted>> ABaseBot::initOffensiveChain()
 		}
 	);
 
+	// TODO: Wrong false return in behavior tree
+
 	result.addAction
 	(
 		[](const TScriptInterface<IAITargeted>& target) -> bool
