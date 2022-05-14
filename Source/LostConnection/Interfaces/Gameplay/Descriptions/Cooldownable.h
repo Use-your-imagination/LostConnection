@@ -24,7 +24,7 @@ public:
 	/**
 	* @param startCooldown If Start Cooldown < 0.0 set cooldown to GetCooldown() return value otherwise set cooldown to Start Cooldown
 	*/
-	UFUNCTION(Category = Cooldown, BlueprintCallable, Server, Reliable)
+	UFUNCTION(Category = Cooldown, BlueprintCallable)
 	virtual void startCooldown(float startCooldown = -1.0f);
 
 	virtual void processCooldown(float DeltaTime);

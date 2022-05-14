@@ -2,7 +2,7 @@
 
 #include "Cooldownable.h"
 
-void ICooldownable::startCooldown_Implementation(float startCooldown)
+void ICooldownable::startCooldown(float startCooldown)
 {
 	if (startCooldown >= 0.0f)
 	{
