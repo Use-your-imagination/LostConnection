@@ -25,14 +25,14 @@ public:
 	* @param startCooldown If Start Cooldown < 0.0 set cooldown to GetCooldown() return value otherwise set cooldown to Start Cooldown
 	*/
 	UFUNCTION(Category = Cooldown, BlueprintCallable, Server, Reliable)
-	void startCooldown(float startCooldown = -1.0f);
+	virtual void startCooldown(float startCooldown = -1.0f);
 
-	void processCooldown(float DeltaTime);
+	virtual void processCooldown(float DeltaTime);
 
 	UFUNCTION(Category = Cooldown, BlueprintCallable)
-	bool isUsable() const;
+	virtual bool isUsable() const;
 
-	void resetCooldown();
+	virtual void resetCooldown();
 
 	UFUNCTION(Category = Cooldown, BlueprintCallable)
 	virtual float getCooldown() const = 0;
@@ -44,7 +44,7 @@ public:
 
 	// Value between 0 and 1
 	UFUNCTION(Category = Cooldown, BlueprintCallable)
-	float getCooldownState() const;
+	virtual float getCooldownState() const;
 };
 
 inline void ICooldownable::processCooldown(float DeltaTime)
