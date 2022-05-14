@@ -80,6 +80,7 @@ bool ActionsChain<Args...>::process(const Args&... args)
 	if (currentAction->condition(args...))
 	{
 		bool result = currentAction->action(args...);
+		bool isInverted = currentAction->isInverted;
 
 		if (result)
 		{
@@ -93,7 +94,7 @@ bool ActionsChain<Args...>::process(const Args&... args)
 			}
 		}
 		
-		return currentAction->isInverted ? !result : result;
+		return isInverted ? !result : result;
 	}
 
 	return false;
