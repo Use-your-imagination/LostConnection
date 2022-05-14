@@ -15,8 +15,9 @@ private:
 	{
 		TFunction<bool(const FunctionArgs&...)> condition;
 		TFunction<bool(const FunctionArgs&...)> action;
+		bool isInverted;
 
-		Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action);
+		Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action, bool isInverted);
 	};
 
 private:
@@ -28,7 +29,7 @@ public:
 
 	bool process(const Args&... args);
 
-	void addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action);
+	void addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action, bool isInverted = false);
 
 	void clear();
 
@@ -47,9 +48,10 @@ public:
 
 template<typename... Args>
 template<typename... FunctionArgs>
-ActionsChain<Args...>::Action<FunctionArgs...>::Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action) :
+ActionsChain<Args...>::Action<FunctionArgs...>::Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action, bool isInverted) :
 	condition(MoveTemp(condition)),
-	action(MoveTemp(action))
+	action(MoveTemp(action)),
+	isInverted(isInverted)
 {
 
 }
@@ -91,16 +93,16 @@ bool ActionsChain<Args...>::process(const Args&... args)
 			}
 		}
 		
-		return result;
+		return currentAction->isInverted ? !result : result;
 	}
 
 	return false;
 }
 
 template<typename... Args>
-void ActionsChain<Args...>::addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action)
+void ActionsChain<Args...>::addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action, bool isInverted)
 {
-	actions.Emplace(MoveTemp(condition), MoveTemp(action));
+	actions.Emplace(MoveTemp(condition), MoveTemp(action), isInverted);
 }
 
 template<typename... Args>

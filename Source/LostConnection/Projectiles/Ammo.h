@@ -33,28 +33,28 @@ private:
 
 private:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* mesh;
+	TObjectPtr<UStaticMeshComponent> mesh;
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* visibleMesh;
+	TObjectPtr<UStaticMeshComponent> visibleMesh;
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UNiagaraComponent* tracer;
+	TObjectPtr<UNiagaraComponent> tracer;
 
 	UPROPERTY(Category = Movement, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UProjectileMovementComponent* movement;
+	TObjectPtr<UProjectileMovementComponent> movement;
 
 	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UStaticMesh* brokenAmmoMeshAsset;
+	TObjectPtr<UStaticMesh> brokenAmmoMeshAsset;
 
 	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UNiagaraSystem* onHitAsset;
+	TObjectPtr<UNiagaraSystem> onHitAsset;
 
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float ammoSpeed;
 
 	UPROPERTY()
-	UAilmentInflictorUtility* ailmentInflictorUtility;
+	TObjectPtr<UAilmentInflictorUtility> ailmentInflictorUtility;
 
 	TWeakObjectPtr<class ABaseCharacter> owner;
 	AActor* lastTarget;
@@ -67,7 +67,7 @@ public:
 
 	virtual void copyProperties(class UBaseWeapon* weapon);
 
-	UStaticMeshComponent* getAmmoMeshComponent() const;
+	TObjectPtr<UStaticMeshComponent> getAmmoMeshComponent() const;
 
 	bool getIsAlly() const;
 

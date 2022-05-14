@@ -247,7 +247,7 @@ void AAmmo::copyProperties(UBaseWeapon* weapon)
 	}
 }
 
-UStaticMeshComponent* AAmmo::getAmmoMeshComponent() const
+TObjectPtr<UStaticMeshComponent> AAmmo::getAmmoMeshComponent() const
 {
 	return mesh;
 }

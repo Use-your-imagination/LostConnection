@@ -6,14 +6,16 @@
 
 #include "Network/NetworkObject.h"
 #include "BaseGrapple.h"
-#include "Engine/LostConnectionPlayerController.h"
+#include "Holders/Utility/CooldownableUtility.h"
 
 #include "BaseGrappleHandler.generated.h"
 
 #pragma warning(disable: 4458)
 
 UCLASS(BlueprintType, Blueprintable)
-class LOSTCONNECTION_API UBaseGrappleHandler : public UNetworkObject
+class LOSTCONNECTION_API UBaseGrappleHandler :
+	public UNetworkObject,
+	public ICooldownable
 {
 	GENERATED_BODY()
 	
@@ -23,6 +25,9 @@ private:
 
 	UPROPERTY(Category = Grapple, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class ABaseDrone> drone;
+
+	UPROPERTY(Category = Cooldown, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UCooldownableUtility> cooldown;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -38,7 +43,15 @@ public:
 	UFUNCTION(Category = Actions, BlueprintImplementableEvent)
 	void grappleActionRelease();
 
-	virtual UWorld* GetWorld() const override;
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+	UWorld* GetWorld() const override;
+
+	float getCooldown() const override;
+
+	float& getCurrentCooldownReference() override;
+
+	float getCurrentCooldown() const override;
 
 	virtual ~UBaseGrappleHandler() = default;
 };

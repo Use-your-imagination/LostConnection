@@ -147,7 +147,8 @@ ActionsChain<TScriptInterface<IAITargeted>> ABaseBot::initOffensiveChain()
 			}
 
 			return !StaticCast<bool>(resetTime);
-		}
+		},
+		true
 	);
 
 	result.addAction

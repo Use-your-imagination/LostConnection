@@ -19,7 +19,7 @@ class LOSTCONNECTION_API UBaseUltimateAbility :
 	
 protected:
 	UPROPERTY(Category = Cooldown, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UCooldownableUtility* cooldown;
+	TObjectPtr<UCooldownableUtility> cooldown;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
