@@ -22,6 +22,7 @@ public:
 	ICooldownable() = default;
 
 	/**
+	* Must be called on server
 	* @param startCooldown If Start Cooldown < 0.0 set cooldown to GetCooldown() return value otherwise set cooldown to Start Cooldown
 	*/
 	UFUNCTION(Category = Cooldown, BlueprintCallable)
