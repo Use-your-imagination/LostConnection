@@ -20,7 +20,10 @@ protected:
 public:	
 	ABaseGrapple() = default;
 
-	UFUNCTION(Category = Grapple, BlueprintImplementableEvent, BlueprintCallable)
+	UFUNCTION(Category = Grapple, BlueprintCallable, Server, Unreliable)
+	void callPullupLock();
+
+	UFUNCTION(Category = Grapple, BlueprintImplementableEvent)
 	void pullupLock();
 
 	virtual ~ABaseGrapple() = default;

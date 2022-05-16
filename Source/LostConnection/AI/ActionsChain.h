@@ -15,9 +15,9 @@ private:
 	{
 		TFunction<bool(const FunctionArgs&...)> condition;
 		TFunction<bool(const FunctionArgs&...)> action;
-		bool isInverted;
+		TFunction<bool(bool)> processBehaviorTree;
 
-		Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action, bool isInverted);
+		Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action, TFunction<bool(bool)>&& processBehaviorTree);
 	};
 
 private:
@@ -29,7 +29,12 @@ public:
 
 	bool process(const Args&... args);
 
-	void addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action, bool isInverted = false);
+	void addAction
+	(
+		TFunction<bool(const Args&...)>&& condition,
+		TFunction<bool(const Args&...)>&& action,
+		TFunction<bool(bool)>&& processBehaviorTree = [](bool isProcessingBehaviorTree) -> bool { return isProcessingBehaviorTree; }
+	);
 
 	void clear();
 
@@ -48,10 +53,10 @@ public:
 
 template<typename... Args>
 template<typename... FunctionArgs>
-ActionsChain<Args...>::Action<FunctionArgs...>::Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action, bool isInverted) :
+ActionsChain<Args...>::Action<FunctionArgs...>::Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action, TFunction<bool(bool)>&& processBehaviorTree) :
 	condition(MoveTemp(condition)),
 	action(MoveTemp(action)),
-	isInverted(isInverted)
+	processBehaviorTree(MoveTemp(processBehaviorTree))
 {
 
 }
@@ -80,7 +85,7 @@ bool ActionsChain<Args...>::process(const Args&... args)
 	if (currentAction->condition(args...))
 	{
 		bool result = currentAction->action(args...);
-		bool isInverted = currentAction->isInverted;
+		const TFunction<bool(bool)>& processBehaviorTree = currentAction->processBehaviorTree;
 
 		if (result)
 		{
@@ -94,16 +99,16 @@ bool ActionsChain<Args...>::process(const Args&... args)
 			}
 		}
 		
-		return isInverted ? !result : result;
+		return processBehaviorTree(result);
 	}
 
 	return false;
 }
 
 template<typename... Args>
-void ActionsChain<Args...>::addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action, bool isInverted)
+void ActionsChain<Args...>::addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action, TFunction<bool(bool)>&& processBehaviorTree)
 {
-	actions.Emplace(MoveTemp(condition), MoveTemp(action), isInverted);
+	actions.Emplace(MoveTemp(condition), MoveTemp(action), MoveTemp(processBehaviorTree));
 }
 
 template<typename... Args>
