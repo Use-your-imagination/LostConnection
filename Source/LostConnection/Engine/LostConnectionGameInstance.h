@@ -34,7 +34,7 @@ public:
 	static const FName serverNameKey;
 
 private:
-	IOnlineSubsystem* subsystem;
+	TObjectPtr<IOnlineSubsystem> subsystem;
 	IOnlineSessionPtr session;
 	TSharedPtr<FOnlineSessionSettings> sessionSettings;
 	TSharedPtr<FOnlineSessionSearch> searchSession;
@@ -50,18 +50,18 @@ private:
 public:
 	ULostConnectionGameInstance() = default;
 
-	void hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const TSoftObjectPtr<UWorld>& level);
+	void hostSession(TSharedPtr<const FUniqueNetId> userId, const FString& serverName, const TSoftObjectPtr<UWorld>& level);
 
 	void findLocalSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
-	void createSession(FName sessionName, TSoftObjectPtr<UWorld> level);
-
-	UFUNCTION(Category = Sessions, BlueprintCallable)
-	void destroySession(TSoftObjectPtr<UWorld> selfLevelToTravel, TSoftObjectPtr<UWorld> clientsLevelToTravel);
+	void createSession(const FString& serverName, TSoftObjectPtr<UWorld> level);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
 	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
+
+	UFUNCTION(Category = Sessions, BlueprintCallable)
+	void destroySession(TSoftObjectPtr<UWorld> selfLevelToTravel, TSoftObjectPtr<UWorld> clientsLevelToTravel);
 
 	UFUNCTION(Category = LevelLoading, BlueprintCallable)
 	void loadNextLevel(TSoftObjectPtr<UWorld> nextLevel);

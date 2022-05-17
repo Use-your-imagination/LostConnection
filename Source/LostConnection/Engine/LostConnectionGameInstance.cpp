@@ -14,17 +14,23 @@ const FName ULostConnectionGameInstance::serverNameKey = "ServerName";
 
 void ULostConnectionGameInstance::onCreateSession(FName sessionName, bool wasSuccessful)
 {
+	session->OnCreateSessionCompleteDelegates.Clear();
+
 	if (wasSuccessful)
 	{
+		session->OnStartSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onStartSession);
+
 		session->StartSession(sessionName);
 	}
 }
 
 void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSuccessful)
 {
+	session->OnStartSessionCompleteDelegates.Clear();
+
 	if (wasSuccessful)
 	{
-		APlayerController* controller = GetFirstLocalPlayerController();
+		TObjectPtr<APlayerController> controller = GetFirstLocalPlayerController();
 		FString levelName;
 
 		controller->SetInputMode(FInputModeGameOnly());
@@ -47,9 +53,9 @@ void ULostConnectionGameInstance::onFindSessions(bool wasSuccessful, TArray<FBlu
 		{
 			sessionsData->Empty();
 
-			for (const auto& i : searchSession->SearchResults)
+			for (const FOnlineSessionSearchResult& result : searchSession->SearchResults)
 			{
-				sessionsData->Add({ i });
+				sessionsData->Add({ result });
 			}
 		}
 
@@ -70,17 +76,12 @@ void ULostConnectionGameInstance::Init()
 
 		if (session.IsValid())
 		{
-			session->OnCreateSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onCreateSession);
-
-			session->OnStartSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onStartSession);
-
 			sessionSettings = MakeShareable(new FOnlineSessionSettings());
 
 			sessionSettings->bIsLANMatch = true;
 			sessionSettings->bUsesPresence = true;
 			sessionSettings->bShouldAdvertise = true;
 			sessionSettings->NumPublicConnections = 4;
-			sessionSettings->NumPrivateConnections = 0;
 			sessionSettings->bAllowJoinInProgress = true;
 			sessionSettings->bAllowJoinViaPresence = true;
 		}
@@ -93,38 +94,45 @@ void ULostConnectionGameInstance::initSearchSession()
 
 	searchSession->bIsLanQuery = true;
 	searchSession->MaxSearchResults = 5;
-	searchSession->PingBucketSize = 50;
+	searchSession->PingBucketSize = 100;
 
 	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 }
 
-void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, FName sessionName, const TSoftObjectPtr<UWorld>& level)
+void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, const FString& serverName, const TSoftObjectPtr<UWorld>& level)
 {
-	sessionSettings->Set(ULostConnectionGameInstance::serverNameKey, sessionName.ToString(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
+	sessionSettings->Set(ULostConnectionGameInstance::serverNameKey, serverName, EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
 	sessionSettings->Set(SETTING_MAPNAME, level.GetAssetName(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
-	session->CreateSession(*userId, sessionName, *sessionSettings);
+	session->CreateSession(*userId, NAME_GameSession, *sessionSettings);
 }
 
 void ULostConnectionGameInstance::findLocalSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
 {
-	session->OnFindSessionsCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onFindSessions, &sessionsData, widget);
-
 	this->initSearchSession();
 
 	session->FindSessions(*userId, searchSession.ToSharedRef());
 }
 
-void ULostConnectionGameInstance::createSession(FName sessionName, TSoftObjectPtr<UWorld> level)
+void ULostConnectionGameInstance::createSession(const FString& serverName, TSoftObjectPtr<UWorld> level)
 {
-	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionName, level);
+	session->OnCreateSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onCreateSession);
+
+	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), serverName, level);
+}
+
+void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
+{
+	session->OnFindSessionsCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onFindSessions, &sessionsData, widget);
+
+	this->findLocalSessions(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionsData, widget);
 }
 
 void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLevelToTravel, TSoftObjectPtr<UWorld> clientsLevelToTravel)
 {
-	ALostConnectionPlayerController* controller = GetWorld()->GetFirstPlayerController<ALostConnectionPlayerController>();
-	auto exitPlayer = [selfLevelToTravel, clientsLevelToTravel, controller](ALostConnectionPlayerController* player)
+	TObjectPtr<ALostConnectionPlayerController> controller = GetWorld()->GetFirstPlayerController<ALostConnectionPlayerController>();
+	auto exitPlayer = [selfLevelToTravel, clientsLevelToTravel, controller](TObjectPtr<ALostConnectionPlayerController> player)
 	{
 		TSoftObjectPtr<UWorld> levelToTravel = nullptr;
 
@@ -141,7 +149,7 @@ void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLeve
 
 		if (levelToTravel.IsNull())
 		{
-			UKismetSystemLibrary::QuitGame(player->GetWorld(), player, EQuitPreference::Type::Quit, false);
+			UKismetSystemLibrary::QuitGame(player, player, EQuitPreference::Type::Quit, false);
 		}
 		else
 		{
@@ -153,11 +161,9 @@ void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLeve
 	{
 		onDestroyDelegate.BindLambda([this, controller, exitPlayer](FName sessionName, bool wasSuccessful)
 			{
-				TArray<APlayerState*>& states = GetWorld()->GetGameState<ALostConnectionGameState>()->PlayerArray;
-
-				for (APlayerState* state : states)
+				for (TObjectPtr<APlayerState> state : GetWorld()->GetGameState<ALostConnectionGameState>()->PlayerArray)
 				{
-					ALostConnectionPlayerController* kickedPlayer = state->GetOwner<ALostConnectionPlayerController>();
+					TObjectPtr<ALostConnectionPlayerController> kickedPlayer = state->GetOwner<ALostConnectionPlayerController>();
 
 					if (IsValid(kickedPlayer) && controller != kickedPlayer)
 					{
@@ -176,12 +182,7 @@ void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLeve
 			});
 	}
 
-	session->DestroySession(FName(NAME_GameSession), onDestroyDelegate);
-}
-
-void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
-{
-	this->findLocalSessions(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionsData, widget);
+	session->DestroySession(NAME_GameSession, onDestroyDelegate);
 }
 
 void ULostConnectionGameInstance::loadNextLevel(TSoftObjectPtr<UWorld> nextLevel)

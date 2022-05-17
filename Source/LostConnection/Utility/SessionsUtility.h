@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "Online.h"
 #include "Net/UnrealNetwork.h"
 #include "FindSessionsCallbackProxy.h"
@@ -12,8 +13,8 @@
 
 #include "SessionsUtility.generated.h"
 
-UCLASS(MinimalApi)
-class USessionsUtility : public UOnlineBlueprintCallProxyBase
+UCLASS()
+class LOSTCONNECTION_API USessionsUtility : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
