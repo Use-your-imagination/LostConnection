@@ -75,3 +75,6 @@ DerivedDataCache/*
 
 # Generation bug
 *.ipch
+
+# Environment
+.env
