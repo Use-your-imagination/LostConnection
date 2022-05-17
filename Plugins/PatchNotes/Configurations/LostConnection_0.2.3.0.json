@@ -1,4 +1,15 @@
 ﻿{
 	"projectName": "LostConnection",
-	"projectVersion": "0.2.3.0"
+	"projectVersion": "0.2.3.0",
+	"Bug Fixes":
+	{
+		"type": "category",
+		"Multiplayer":
+		{
+			"type": "item",
+			"notes": [
+				"Fix multiplayer after moving to Unreal Engine 5"
+			]
+		}
+	}
 }
