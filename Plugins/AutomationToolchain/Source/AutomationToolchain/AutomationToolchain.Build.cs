@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright (c) 2022 Semyon Gritsenko
 
 using System;
 using System.IO;
@@ -31,7 +31,6 @@ public class AutomationToolchain : ModuleRules
 			{
 				"Projects",
 				"InputCore",
-				"EditorFramework",
 				"UnrealEd",
 				"ToolMenus",
 				"CoreUObject",

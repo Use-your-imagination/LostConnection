@@ -53,7 +53,7 @@ public:
 	* Executes Command with Parameters in PowerShell
 	*/
 	UFUNCTION(Category = "AutomationToolchain|OS", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool executePowershellCommand(const FString& command, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory);
+	static bool executePowerShellCommand(const FString& command, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory);
 
 	/**
 	* All actions execute from separate thread
@@ -87,6 +87,49 @@ public:
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
 	static bool createFileFromArray(const FString& pathToFolder, const FString& fileName, const FString& extension, const TArray<FString>& data);
+
+	/**
+	* Create binary file
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
+	static bool createBinaryFileFromArray(const FString& pathToFolder, const FString& fileName, const FString& extension, const TArray<uint8>& data);
+
+	/**
+	* Read text file
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
+	static bool readFile(const FString& pathToFile, UPARAM(ref) FString& data);
+
+	/**
+	* Read text file
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
+	static bool readFileInArray(const FString& pathToFile, UPARAM(ref) TArray<FString>& data);
+
+	/**
+	* Read binary file 
+	* Two last bytes are uninitialized
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
+	static bool readBinaryFileInArray(const FString& pathToFile, UPARAM(ref) TArray<uint8>& data);
+
+	/**
+	* Append data to end of file without new line with UTF8 encoding
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
+	static bool appendFile(const FString& pathToFile, const FString& appendData);
+
+	/**
+	* Append data to end of file without new line with UTF8 encoding
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
+	static bool appendFileFromArray(const FString& pathToFile, const TArray<FString>& appendData);
+
+	/**
+	* Append data to end of binary file
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
+	static bool appendBinaryFileFromArray(const FString& pathToFile, const TArray<uint8>& appendData);
 
 	/**
 	* Delete file
@@ -136,7 +179,7 @@ public:
 	* Iterate folder and each subfolder and call Delegate for each file
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
-	static void iterateFilesRecursive(const FString& pathToFolder, const FIterateFolderFunction& delegate);
+	static void iterateFilesRecursively(const FString& pathToFolder, const FIterateFolderFunction& delegate);
 
 	/**
 	* Iterate folder and call Delegate for each file or folder

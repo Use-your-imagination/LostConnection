@@ -8,6 +8,7 @@
 #include "Modules/ModuleManager.h"
 #include "Serialization/JsonSerializer.h"
 #include "Misc/NetworkVersion.h"
+#include "Runtime/Launch/Resources/Version.h"
 
 #include "AutomationToolchain.h"
 
@@ -55,8 +56,10 @@ bool UAutomationToolchainLibrary::executeProcess(const FString& url, const FStri
 		&code,
 		&outStd,
 		&errStd,
-		optionalWorkingDirectory.IsEmpty() ? nullptr : *optionalWorkingDirectory,
-		true
+		optionalWorkingDirectory.IsEmpty() ? nullptr : *optionalWorkingDirectory
+#if ENGINE_MAJOR_VERSION == 5
+		,true
+#endif
 	);
 }
 
@@ -79,7 +82,7 @@ bool UAutomationToolchainLibrary::executeShellCommand(const FString& command, co
 	return UAutomationToolchainLibrary::executeProcess(shellName, FString::Printf(TEXT("/C %s %s"), *command, *parameters), code, outStd, errStd, optionalWorkingDirectory);
 }
 
-bool UAutomationToolchainLibrary::executePowershellCommand(const FString& command, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory)
+bool UAutomationToolchainLibrary::executePowerShellCommand(const FString& command, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory)
 {
 #if PLATFORM_MAC
 	UE_LOG(LogAutomationToolchain, Warning, TEXT("Doesn't support macOS"));
@@ -127,6 +130,68 @@ bool UAutomationToolchainLibrary::createFile(const FString& pathToFolder, const 
 bool UAutomationToolchainLibrary::createFileFromArray(const FString& pathToFolder, const FString& fileName, const FString& extension, const TArray<FString>& data)
 {
 	return FFileHelper::SaveStringArrayToFile(data, *UAutomationToolchainLibrary::buildPath(pathToFolder, fileName, extension), FFileHelper::EEncodingOptions::ForceUTF8);
+}
+
+bool UAutomationToolchainLibrary::createBinaryFileFromArray(const FString& pathToFolder, const FString& fileName, const FString& extension, const TArray<uint8>& data)
+{
+	return FFileHelper::SaveArrayToFile(data, *UAutomationToolchainLibrary::buildPath(pathToFolder, fileName, extension));
+}
+
+bool UAutomationToolchainLibrary::readFile(const FString& pathToFile, FString& data)
+{
+	return FFileHelper::LoadFileToString(data, *pathToFile);
+}
+
+bool UAutomationToolchainLibrary::readFileInArray(const FString& pathToFile, TArray<FString>& data)
+{
+	return FFileHelper::LoadFileToStringArray(data, *pathToFile);
+}
+
+bool UAutomationToolchainLibrary::readBinaryFileInArray(const FString& pathToFile, TArray<uint8>& data)
+{
+	return FFileHelper::LoadFileToArray(data, *pathToFile);
+}
+
+bool UAutomationToolchainLibrary::appendFile(const FString& pathToFile, const FString& appendData)
+{
+	FString data;
+
+	if (FFileHelper::LoadFileToString(data, *pathToFile))
+	{
+		data += appendData;
+
+		return FFileHelper::SaveStringToFile(data, *pathToFile, FFileHelper::EEncodingOptions::ForceUTF8);
+	}
+
+	return false;
+}
+
+bool UAutomationToolchainLibrary::appendFileFromArray(const FString& pathToFile, const TArray<FString>& appendData)
+{
+	TArray<FString> data;
+
+	if (FFileHelper::LoadFileToStringArray(data, *pathToFile))
+	{
+		data.Append(appendData);
+
+		return FFileHelper::SaveStringArrayToFile(data, *pathToFile, FFileHelper::EEncodingOptions::ForceUTF8);
+	}
+
+	return false;
+}
+
+bool UAutomationToolchainLibrary::appendBinaryFileFromArray(const FString& pathToFile, const TArray<uint8>& appendData)
+{
+	TArray<uint8> data;
+
+	if (FFileHelper::LoadFileToArray(data, *pathToFile))
+	{
+		data.Append(appendData);
+
+		return FFileHelper::SaveArrayToFile(data, *pathToFile);
+	}
+
+	return false;
 }
 
 bool UAutomationToolchainLibrary::deleteFile(const FString& pathToFile)
@@ -185,7 +250,7 @@ void UAutomationToolchainLibrary::iterateFiles(const FString& pathToFolder, cons
 	});
 }
 
-void UAutomationToolchainLibrary::iterateFilesRecursive(const FString& pathToFolder, const FIterateFolderFunction& delegate)
+void UAutomationToolchainLibrary::iterateFilesRecursively(const FString& pathToFolder, const FIterateFolderFunction& delegate)
 {
 	IPlatformFile& platformFile = UAutomationToolchainLibrary::getPlatformFile();
 
