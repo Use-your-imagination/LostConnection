@@ -143,6 +143,11 @@ void FAutomationToolchainModule::executeToolchain()
 
 		action->execute();
 
+		if (!action->getContinueToolchain())
+		{
+			break;
+		}
+
 		processedActions++;
 
 		UAutomationToolchainLibrary::runOnMainThreadFunction([this, actionsToProcess, processedActions]()

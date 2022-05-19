@@ -16,8 +16,15 @@ class AUTOMATIONTOOLCHAIN_API UToolchainAction : public UObject
 {
 	GENERATED_BODY()
 	
+protected:
+	/**
+	* Set this variable to false to prevent executing next action in toolchain
+	*/
+	UPROPERTY(Category = Actions, BlueprintReadWrite)
+	bool continueToolchain;
+
 public:
-	UToolchainAction() = default;
+	UToolchainAction();
 
 	/**
 	* Method is called in separate thread
@@ -34,6 +41,8 @@ public:
 	*/
 	UFUNCTION(Category = Actions, BlueprintImplementableEvent, Meta = (DevelopmentOnly))
 	void execute();
+
+	bool getContinueToolchain() const;
 
 	virtual ~UToolchainAction() = default;
 };
