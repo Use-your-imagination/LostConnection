@@ -7,6 +7,7 @@
 #include "Constants/Constants.h"
 #include "Utility/Utility.h"
 #include "Characters/Drones/SN4K3/SN4K3.h"
+#include "WorldPlaceables/Raid/TeleportPoint.h"
 
 void ALostConnectionPlayerController::GetSeamlessTravelActorList(bool bToEntry, TArray<AActor*>& ActorList)
 {
@@ -74,4 +75,19 @@ void ALostConnectionPlayerController::respawnPlayer_Implementation(const FTransf
 void ALostConnectionPlayerController::save_Implementation()
 {
 
+}
+
+void ALostConnectionPlayerController::setMainTeleportFromLoadedRoom_Implementation(ATeleportPoint* teleportPoint)
+{
+	mainTeleportFromLoadedRoom = teleportPoint;
+
+	if (IsValid(teleportPoint))
+	{
+		Utility::getGameState(this)->notifyLevelLoading();
+	}
+}
+
+const TObjectPtr<ATeleportPoint> ALostConnectionPlayerController::getMainTeleportFromLoadedRoom() const
+{
+	return mainTeleportFromLoadedRoom;
 }

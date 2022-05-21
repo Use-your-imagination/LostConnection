@@ -9,33 +9,18 @@ void ATeleportPoint::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (HasAuthority())
+	room = Utility::getGameState(this)->getLastLoadedRoom();
+
+	if (this->getNestingLevel() == 0)
 	{
-		room = Utility::getGameState(this)->getLastLoadedRoom();
-
-		if (this->getNestingLevel() == 0)
-		{
-			TArray<TObjectPtr<AActor>> controllers;
-
-			UGameplayStatics::GetAllActorsOfClass(this, ALostConnectionPlayerController::StaticClass(), controllers);
-
-			for (TObjectPtr<AActor> controller : controllers)
-			{
-				this->teleport(Cast<APlayerController>(controller));
-			}
-		}
+		GetWorld()->GetFirstPlayerController<ALostConnectionPlayerController>()->setMainTeleportFromLoadedRoom(this);
 	}
-}
-
-void ATeleportPoint::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ATeleportPoint, room);
 }
 
 ATeleportPoint::ATeleportPoint()
 {
+	bReplicates = true;
+
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 }
 

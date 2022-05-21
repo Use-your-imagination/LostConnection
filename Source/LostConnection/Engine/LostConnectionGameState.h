@@ -51,7 +51,8 @@ protected:
 	void PostInitializeComponents() override;
 
 private:
-	void loadRoom(FTransform&& spawnTransform);
+	UFUNCTION(NetMulticast, Reliable)
+	void loadRoom(const TSoftObjectPtr<UWorld>& room, const FTransform& spawnTransform);
 
 	void clearRoom();
 
@@ -79,6 +80,9 @@ public:
 	void verteilenLootPoints(ILootPointsGiver* giver);
 
 	void dropAmmo(IAmmoDropable* ammoDropable);
+
+	UFUNCTION(Server, Reliable)
+	void notifyLevelLoading();
 
 	int32& getTotalBots();
 

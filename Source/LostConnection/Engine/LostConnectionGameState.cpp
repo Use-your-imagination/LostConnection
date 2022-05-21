@@ -14,6 +14,7 @@
 #include "Loot/LootManager.h"
 #include "WorldPlaceables/Utility/AISpawnPoint.h"
 #include "WorldPlaceables/Raid/ChooseRoomConsole.h"
+#include "WorldPlaceables/Raid/TeleportPoint.h"
 
 void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -39,8 +40,10 @@ void ALostConnectionGameState::PostInitializeComponents()
 	manager = NewObject<UVFXManager>(this);
 }
 
-void ALostConnectionGameState::loadRoom(FTransform&& spawnTransform)
+void ALostConnectionGameState::loadRoom_Implementation(const TSoftObjectPtr<UWorld>& room, const FTransform& spawnTransform)
 {
+	lastLoadedRoom = room;
+
 	ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, lastLoadedRoom, spawnTransform, isRoomLoaded);
 }
 
@@ -108,9 +111,7 @@ void ALostConnectionGameState::startRoomLoading_Implementation()
 
 	this->clearRoom();
 
-	lastLoadedRoom = Utility::getRandomValueFromArray(rooms);
-
-	this->loadRoom(MoveTemp(spawnTransform));
+	this->loadRoom(Utility::getRandomValueFromArray(rooms), MoveTemp(spawnTransform));
 }
 
 void ALostConnectionGameState::spawnVFXAtLocation_Implementation(const FVector& location, UNiagaraSystem* vfx)
@@ -150,6 +151,33 @@ void ALostConnectionGameState::dropAmmo(IAmmoDropable* ammoDropable)
 		TObjectPtr<ALootManager> manager = Cast<ALootManager>(i);
 
 		manager->spawnAmmoCall(ammoDropable->_getUObject());
+	}
+}
+
+void ALostConnectionGameState::notifyLevelLoading_Implementation()
+{
+	TArray<TObjectPtr<AActor>> actors;
+	TArray<TObjectPtr<ALostConnectionPlayerController>> controllers;
+
+	UGameplayStatics::GetAllActorsOfClass(this, ALostConnectionPlayerController::StaticClass(), actors);
+
+	for (TObjectPtr<AActor> actor : actors)
+	{
+		TObjectPtr<ALostConnectionPlayerController> controller = Cast<ALostConnectionPlayerController>(actor);
+
+		if (controller->getMainTeleportFromLoadedRoom().IsNull())
+		{
+			return;
+		}
+
+		controllers.Add(MoveTemp(controller));
+	}
+
+	for (TObjectPtr<ALostConnectionPlayerController> controller : controllers)
+	{
+		controller->getMainTeleportFromLoadedRoom()->teleport(controller);
+
+		controller->setMainTeleportFromLoadedRoom(nullptr);
 	}
 }
 

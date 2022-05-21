@@ -16,18 +16,16 @@ class LOSTCONNECTION_API ATeleportPoint : public AActor
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = UI, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = UI, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TSoftObjectPtr<UWorld> room;
 
 protected:
 	virtual void BeginPlay() override;
 
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 public:
 	ATeleportPoint();
 
-	UFUNCTION(Server, Unreliable)
+	UFUNCTION(Server, Reliable)
 	void teleport(APlayerController* controller);
 
 	UFUNCTION(Category = UI, BlueprintImplementableEvent, BlueprintCallable)

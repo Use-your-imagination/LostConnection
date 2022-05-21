@@ -20,6 +20,8 @@ private:
 	UPROPERTY(ReplicatedUsing = onLootManagerInit)
 	TObjectPtr<ALootManager> lootManager;
 
+	TObjectPtr<class ATeleportPoint> mainTeleportFromLoadedRoom;
+
 protected:
 	virtual void GetSeamlessTravelActorList(bool bToEntry, TArray<AActor*>& ActorList) override;
 
@@ -40,6 +42,11 @@ public:
 
 	UFUNCTION(Category = Save, Client, Reliable, BlueprintCallable)
 	void save();
+
+	UFUNCTION(Server, Reliable)
+	void setMainTeleportFromLoadedRoom(class ATeleportPoint* teleportPoint);
+
+	const TObjectPtr<class ATeleportPoint> getMainTeleportFromLoadedRoom() const;
 
 	virtual ~ALostConnectionPlayerController() = default;
 };
