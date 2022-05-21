@@ -146,6 +146,13 @@ int32 UJsonLibrary::getJsonInteger(const FString& fieldName, const FJsonDataObje
 	return jsonObject.data->GetIntegerField(fieldName);
 }
 
+int64 UJsonLibrary::getJsonInteger64(const FString& fieldName, const FJsonDataObject& jsonObject)
+{
+	bool result;
+
+	return UJsonLibrary::tryGetJsonInteger64(fieldName, jsonObject, result);
+}
+
 float UJsonLibrary::getJsonNumber(const FString& fieldName, const FJsonDataObject& jsonObject)
 {
 	return StaticCast<float>(jsonObject.data->GetNumberField(fieldName));
@@ -250,13 +257,22 @@ int32 UJsonLibrary::tryGetJsonInteger(const FString& fieldName, const FJsonDataO
 	return out;
 }
 
-float UJsonLibrary::tryGetJsonNumber(const FString& fieldName, const FJsonDataObject& jsonObject, bool& result)
+int64 UJsonLibrary::tryGetJsonInteger64(const FString& fieldName, const FJsonDataObject& jsonObject, bool& result)
 {
-	float out;
+	int64 out;
 
 	result = jsonObject.data->TryGetNumberField(fieldName, out);
 
 	return out;
+}
+
+float UJsonLibrary::tryGetJsonNumber(const FString& fieldName, const FJsonDataObject& jsonObject, bool& result)
+{
+	double out;
+
+	result = jsonObject.data->TryGetNumberField(fieldName, out);
+
+	return StaticCast<float>(out);
 }
 
 FString UJsonLibrary::tryGetJsonString(const FString& fieldName, const FJsonDataObject& jsonObject, bool& result)

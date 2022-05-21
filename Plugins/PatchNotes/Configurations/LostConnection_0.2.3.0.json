@@ -11,5 +11,27 @@
 				"Fix multiplayer after moving to Unreal Engine 5"
 			]
 		}
+	},
+	"Gameplay":
+	{
+		"type": "category",
+		"Room loading":
+		{
+			"type": "item",
+			"notes": [
+				"Add teleport between rooms"
+			]
+		}
+	},
+	"Global":
+	{
+		"type": "category",
+		"Lumen":
+		{
+			"type": "item",
+			"notes": [
+				"Add Lumen support"
+			]
+		}
 	}
 }

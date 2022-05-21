@@ -137,6 +137,12 @@ public:
 	static int32 getJsonInteger(const FString& fieldName, const FJsonDataObject& jsonObject);
 
 	/**
+	* Get integer64 from JsonDataObject
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Json", BlueprintCallable, BlueprintPure, Meta = (DevelopmentOnly, CompactNodeTitle = "Get"))
+	static int64 getJsonInteger64(const FString& fieldName, const FJsonDataObject& jsonObject);
+
+	/**
 	* Get float from JsonDataObject
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Json", BlueprintCallable, BlueprintPure, Meta = (DevelopmentOnly, CompactNodeTitle = "Get"))
@@ -197,6 +203,12 @@ public:
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Json", BlueprintCallable, BlueprintPure, Meta = (DevelopmentOnly, CompactNodeTitle = "Try Get"))
 	static int32 tryGetJsonInteger(const FString& fieldName, const FJsonDataObject& jsonObject, bool& result);
+
+	/**
+	* Try to get integer64 from JsonDataObject
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Json", BlueprintCallable, BlueprintPure, Meta = (DevelopmentOnly, CompactNodeTitle = "Try Get"))
+	static int64 tryGetJsonInteger64(const FString& fieldName, const FJsonDataObject& jsonObject, bool& result);
 
 	/**
 	* Try to get float from JsonDataObject
