@@ -33,5 +33,16 @@
 				"Add Lumen support"
 			]
 		}
+	},
+	"Settings":
+	{
+		"type": "category",
+		"Video settings":
+		{
+			"type": "item",
+			"notes": [
+				"Added new video settings"
+			]
+		}
 	}
 }
