@@ -141,12 +141,10 @@ void HTMLGenerator::generatePatchNotesHTML(const FString& fullOutPath, const FSt
 	{
 		const TSharedPtr<FJsonObject>* category = nullptr;
 
-		if (!categoryObject.Value->TryGetObject(category))
+		if (!categoryObject.Value->TryGetObject(category) || (*category)->Values.Num() == 1)
 		{
 			continue;
 		}
-
-		FString type = (*category)->GetStringField(TEXT("type"));
 
 		generator.addCategory(categoryObject.Key);
 

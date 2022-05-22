@@ -501,7 +501,24 @@ void FPatchNotesModule::initDefaults(IPlatformFile& platformFile, const FString&
 	{
 		initStyles();
 
-		Utility::getJSON(pathToSettingsFile)->TryGetStringField(TEXT("pathToTemplate"), pathToTemplate);
+		TSharedPtr<FJsonObject> settings = Utility::getJSON(pathToSettingsFile);
+
+		settings->TryGetStringField(TEXT("pathToTemplate"), pathToTemplate);
+
+		if (!pathToTemplate.IsEmpty())
+		{
+			bool isRelative;
+
+			if (!settings->TryGetBoolField(TEXT("isRelativePathToTemplate"), isRelative))
+			{
+				return;
+			}
+
+			if (isRelative)
+			{
+				pathToTemplate = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) / pathToTemplate;
+			}
+		}
 
 		return;
 	}
@@ -511,9 +528,9 @@ void FPatchNotesModule::initDefaults(IPlatformFile& platformFile, const FString&
 
 	object->SetStringField(TEXT("generatedFilesPath"), pluginFolder / TEXT("GeneratedFiles"));
 
-	object->SetBoolField(TEXT("openAfterUpdate"), true);
-
 	object->SetBoolField(TEXT("isRelativeGeneratedFilesPath"), false);
+
+	object->SetBoolField(TEXT("openAfterUpdate"), true);
 
 	object->SetStringField(TEXT("projectName"), FApp::GetProjectName());
 
@@ -522,6 +539,8 @@ void FPatchNotesModule::initDefaults(IPlatformFile& platformFile, const FString&
 	object->SetField(TEXT("pathToProjectLogo"), MakeShared<FJsonValueNull>());
 
 	object->SetField(TEXT("pathToTemplate"), MakeShared<FJsonValueNull>());
+
+	object->SetBoolField(TEXT("isRelativePathToTemplate"), false);
 
 	object->SetArrayField
 	(

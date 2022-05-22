@@ -1,0 +1,32 @@
+﻿{
+	"projectName": "LostConnection",
+	"projectVersion": "0.2.4",
+	"Gameplay":
+	{
+		"type": "category"
+	},
+	"Rooms":
+	{
+		"type": "category"
+	},
+	"UI":
+	{
+		"type": "category"
+	},
+	"Characters":
+	{
+		"type": "category"
+	},
+	"Weapons":
+	{
+		"type": "category"
+	},
+	"Modules":
+	{
+		"type": "category"
+	},
+	"Bug Fixes":
+	{
+		"type": "category"
+	}
+}
