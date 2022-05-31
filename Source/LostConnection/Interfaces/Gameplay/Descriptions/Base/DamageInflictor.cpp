@@ -6,7 +6,7 @@
 
 float IDamageInflictor::calculateTotalDamage() const
 {
-	TArray<float> increasedDamageCoefficients = this->getIncreasedDamageCoefficients();
+	TArray<float> increasedDamageCoefficients = this->getIncreaseDamageCoefficients();
 	TArray<float> moreDamageCoefficients = this->getMoreDamageCoefficients();
 
 	return (this->getBaseDamage() + this->getAddedDamage()) *

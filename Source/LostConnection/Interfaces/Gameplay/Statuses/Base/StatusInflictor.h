@@ -8,7 +8,7 @@
 
 #include "StatusInflictor.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE()
 class UStatusInflictor : public UDamageInflictor
 {
 	GENERATED_BODY()

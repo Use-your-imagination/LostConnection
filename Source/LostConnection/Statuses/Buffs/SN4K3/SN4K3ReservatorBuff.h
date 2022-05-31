@@ -18,7 +18,7 @@ class LOSTCONNECTION_API USN4K3ReservatorBuff :
 
 private:
 	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float naniteIncreasedDamage;
+	float naniteIncreaseDamage;
 
 	TMap<TWeakObjectPtr<UObject>, FSimpleDelegate> additionalNaniteDamage;
 
@@ -30,7 +30,7 @@ private:
 public:
 	USN4K3ReservatorBuff() = default;
 
-	void setNaniteIncreasedDamage(float naniteIncreasedDamage);
+	void setNaniteIncreaseDamage(float naniteIncreaseDamage);
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 

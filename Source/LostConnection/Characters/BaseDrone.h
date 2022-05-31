@@ -335,9 +335,9 @@ public:
 
 	bool getZooming() const;
 
-	virtual void addPersonalModule(UBasePersonalModule* module) final override;
+	virtual void addPersonalModule(TObjectPtr<UBasePersonalModule> module) final override;
 
-	virtual void addWeaponModule(UBaseWeaponModule* module) final override;
+	virtual void addWeaponModule(TObjectPtr<UBaseWeaponModule> module) final override;
 
 	virtual float getFlatDamageReduction_Implementation() const override;
 

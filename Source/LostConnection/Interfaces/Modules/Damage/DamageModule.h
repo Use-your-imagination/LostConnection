@@ -9,7 +9,7 @@
 
 #include "DamageModule.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType)
 class UDamageModule : public UInterface
 {
 	GENERATED_BODY()
@@ -22,11 +22,13 @@ class LOSTCONNECTION_API IDamageModule
 public:
 	IDamageModule() = default;
 
+	virtual bool applyCondition(TObjectPtr<AActor> caller) const;
+
 	virtual float getAddedDamage() const = 0;
 
-	virtual float getIncreasedDamage() const = 0;
+	virtual float getIncreaseDamageCoefficient() const = 0;
 
-	virtual float getMoreDamage() const = 0;
+	virtual float getMoreDamageCoefficient() const = 0;
 
 	virtual float getAdditionalDamage() const = 0;
 

@@ -23,7 +23,7 @@ class LOSTCONNECTION_API IWeaponModulesHolder
 public:
 	IWeaponModulesHolder() = default;
 
-	virtual void addWeaponModule(UBaseWeaponModule* module) = 0;
+	virtual void addWeaponModule(TObjectPtr<UBaseWeaponModule> module) = 0;
 
 	virtual TArray<UBaseWeaponModule*> getWeaponModules() const = 0;
 };

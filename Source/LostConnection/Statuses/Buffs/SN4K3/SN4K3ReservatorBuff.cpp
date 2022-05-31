@@ -18,12 +18,12 @@ void USN4K3ReservatorBuff::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(USN4K3ReservatorBuff, naniteIncreasedDamage);
+	DOREPLIFETIME(USN4K3ReservatorBuff, naniteIncreaseDamage);
 }
 
-void USN4K3ReservatorBuff::setNaniteIncreasedDamage(float naniteIncreasedDamage)
+void USN4K3ReservatorBuff::setNaniteIncreaseDamage(float naniteIncreaseDamage)
 {
-	this->naniteIncreasedDamage = naniteIncreasedDamage;
+	this->naniteIncreaseDamage = naniteIncreaseDamage;
 }
 
 void USN4K3ReservatorBuff::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
@@ -57,11 +57,11 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 		{
 			FSimpleDelegate reset;
 
-			reset.BindLambda([this, weapon]() { weapon->removeIncreasedDamageCoefficient(naniteIncreasedDamage); });
+			reset.BindLambda([this, weapon]() { weapon->removeIncreaseDamageCoefficient(naniteIncreaseDamage); });
 
 			additionalNaniteDamage.Add(weapon, MoveTemp(reset));
 
-			weapon->appendIncreasedDamageCoefficient(naniteIncreasedDamage);
+			weapon->appendIncreaseDamageCoefficient(naniteIncreaseDamage);
 		}
 	}
 
@@ -79,11 +79,11 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 				{
 					FSimpleDelegate reset;
 
-					reset.BindLambda([this, inflictor]() { inflictor->removeIncreasedDamageCoefficient(naniteIncreasedDamage); });
+					reset.BindLambda([this, inflictor]() { inflictor->removeIncreaseDamageCoefficient(naniteIncreaseDamage); });
 
 					additionalNaniteDamage.Add(ability, MoveTemp(reset));
 
-					inflictor->removeIncreasedDamageCoefficient(naniteIncreasedDamage);
+					inflictor->removeIncreaseDamageCoefficient(naniteIncreaseDamage);
 				}
 			}
 		}

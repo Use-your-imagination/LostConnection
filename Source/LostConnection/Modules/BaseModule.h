@@ -24,7 +24,7 @@ protected:
 	FText moduleDescription;
 
 	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly)
-	UTexture2D* moduleIconTexture;
+	TObjectPtr<UTexture2D> moduleIconTexture;
 
 public:
 	UBaseModule() = default;

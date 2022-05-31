@@ -1,6 +1,5 @@
 // Copyright (c) 2022 Use Your Imagination
 
-
 #include "BaseModule.h"
 
 const FText& UBaseModule::getItemName() const

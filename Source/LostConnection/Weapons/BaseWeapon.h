@@ -178,9 +178,9 @@ public:
 
 	void Tick(float DeltaTime);
 
-	void appendIncreasedDamageCoefficient(float coefficient);
+	void appendIncreaseDamageCoefficient(float coefficient);
 
-	void removeIncreasedDamageCoefficient(float coefficient);
+	void removeIncreaseDamageCoefficient(float coefficient);
 
 	void appendMoreDamageCoefficient(float coefficient);
 

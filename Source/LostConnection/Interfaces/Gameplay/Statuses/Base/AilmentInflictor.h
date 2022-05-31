@@ -9,7 +9,7 @@
 
 #include "AilmentInflictor.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE()
 class UAilmentInflictor : public UStatusInflictor
 {
 	GENERATED_BODY()

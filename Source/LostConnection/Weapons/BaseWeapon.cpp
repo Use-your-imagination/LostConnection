@@ -243,12 +243,12 @@ void UBaseWeapon::Tick(float DeltaTime)
 	}
 }
 
-void UBaseWeapon::appendIncreasedDamageCoefficient(float coefficient)
+void UBaseWeapon::appendIncreaseDamageCoefficient(float coefficient)
 {
 	increasedDamageCoefficients.Add(coefficient);
 }
 
-void UBaseWeapon::removeIncreasedDamageCoefficient(float coefficient)
+void UBaseWeapon::removeIncreaseDamageCoefficient(float coefficient)
 {
 	increasedDamageCoefficients.Remove(coefficient);
 }

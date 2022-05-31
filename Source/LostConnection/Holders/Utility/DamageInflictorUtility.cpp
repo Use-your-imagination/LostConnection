@@ -17,12 +17,12 @@ void UDamageInflictorUtility::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	DOREPLIFETIME(UDamageInflictorUtility, moreInflictorDamageCoefficients);
 }
 
-void UDamageInflictorUtility::appendIncreasedDamageCoefficient(float coefficient)
+void UDamageInflictorUtility::appendIncreaseDamageCoefficient(float coefficient)
 {
 	increasedInflictorDamageCoefficients.Add(coefficient);
 }
 
-void UDamageInflictorUtility::removeIncreasedDamageCoefficient(float coefficient)
+void UDamageInflictorUtility::removeIncreaseDamageCoefficient(float coefficient)
 {
 	increasedInflictorDamageCoefficients.RemoveSingle(coefficient);
 }
@@ -67,7 +67,7 @@ float UDamageInflictorUtility::getAdditionalDamage() const
 	return additionalInflictorDamage;
 }
 
-const TArray<float>& UDamageInflictorUtility::getIncreasedDamageCoefficients() const
+const TArray<float>& UDamageInflictorUtility::getIncreaseDamageCoefficients() const
 {
 	return increasedInflictorDamageCoefficients;
 }

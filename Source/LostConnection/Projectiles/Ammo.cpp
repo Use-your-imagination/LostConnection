@@ -131,23 +131,23 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	}
 }
 
-template<typename ImplementsModuleInterface, typename ModuleInterface, typename ModuleT>
+template<typename ModuleT>
 void AAmmo::applyModules(const TArray<ModuleT*>& modules)
 {
 	for (const auto& module : modules)
 	{
-		if (module->Implements<ImplementsModuleInterface>())
+		if (module->Implements<UDamageModule>())
 		{
-			const ModuleInterface* damageModule = Cast<ModuleInterface>(module);
+			IDamageModule* damageModule = Cast<IDamageModule>(module);
 
-			if (damageModule->getDamageType() != ailmentInflictorUtility->getDamageType())
+			if (!damageModule->applyCondition(this))
 			{
 				continue;
 			}
 
 			ailmentInflictorUtility->setAddedDamage(ailmentInflictorUtility->getAddedDamage() + damageModule->getAddedDamage());
-			ailmentInflictorUtility->appendIncreasedDamageCoefficient(damageModule->getIncreasedDamage());
-			ailmentInflictorUtility->appendMoreDamageCoefficient(damageModule->getMoreDamage());
+			ailmentInflictorUtility->appendIncreaseDamageCoefficient(damageModule->getIncreaseDamageCoefficient());
+			ailmentInflictorUtility->appendMoreDamageCoefficient(damageModule->getMoreDamageCoefficient());
 			ailmentInflictorUtility->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage() + damageModule->getAdditionalDamage());
 		}
 	}
@@ -215,7 +215,7 @@ void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTrans
 	FinishSpawning({}, true);
 }
 
-void AAmmo::copyProperties(UBaseWeapon* weapon)
+void AAmmo::copyProperties(TObjectPtr<UBaseWeapon> weapon)
 {
 	ailmentInflictorUtility->setBaseDamage(weapon->getBaseDamage());
 	
@@ -235,14 +235,14 @@ void AAmmo::copyProperties(UBaseWeapon* weapon)
 	{
 		if (owner->Implements<UPersonalModulesHolder>())
 		{
-			this->applyModules<UDamageModule, IDamageModule>(Cast<IPersonalModulesHolder>(owner)->getPersonalEquippedModules());
+			this->applyModules(Cast<IPersonalModulesHolder>(owner)->getPersonalEquippedModules());
 
-			this->applyModules<UDamageModule, IDamageModule>(Cast<IPersonalModulesHolder>(owner)->getPersonalUnequippedModules());
+			this->applyModules(Cast<IPersonalModulesHolder>(owner)->getPersonalUnequippedModules());
 		}
 
 		if (owner->Implements<UWeaponModulesHolder>())
 		{
-			this->applyModules<UWeaponDamageModule, IWeaponDamageModule>(Cast<IWeaponModulesHolder>(owner)->getWeaponModules());	
+			this->applyModules(Cast<IWeaponModulesHolder>(owner)->getWeaponModules());	
 		}
 	}
 }

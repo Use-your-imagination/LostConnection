@@ -25,7 +25,7 @@ void USN4K3Reservator::useSocketItem(ABaseCharacter* target)
 {
 	USN4K3ReservatorBuff* reservator = NewObject<USN4K3ReservatorBuff>(target);
 	
-	reservator->setNaniteIncreasedDamage(naniteIcreasedDamage);
+	reservator->setNaniteIncreaseDamage(naniteIcreasedDamage);
 
 	reservator->setDuration(buffDuration);
 	

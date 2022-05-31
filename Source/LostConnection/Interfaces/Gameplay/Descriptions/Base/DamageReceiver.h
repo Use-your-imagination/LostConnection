@@ -9,7 +9,7 @@
 
 #include "DamageReceiver.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType)
 class UDamageReceiver : public UInterface
 {
 	GENERATED_BODY()

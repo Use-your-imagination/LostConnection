@@ -38,9 +38,9 @@ public:
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	void appendIncreasedDamageCoefficient(float coefficient) override;
+	void appendIncreaseDamageCoefficient(float coefficient) override;
 
-	void removeIncreasedDamageCoefficient(float coefficient) override;
+	void removeIncreaseDamageCoefficient(float coefficient) override;
 
 	void appendMoreDamageCoefficient(float coefficient) override;
 
@@ -61,7 +61,7 @@ public:
 
 	float getAdditionalDamage() const override;
 
-	const TArray<float>& getIncreasedDamageCoefficients() const override;
+	const TArray<float>& getIncreaseDamageCoefficients() const override;
 
 	const TArray<float>& getMoreDamageCoefficients() const override;
 

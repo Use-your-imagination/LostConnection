@@ -10,7 +10,7 @@
 
 #include "AilmentReceiver.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE()
 class UAilmentReceiver : public UStatusReceiver
 {
 	GENERATED_BODY()

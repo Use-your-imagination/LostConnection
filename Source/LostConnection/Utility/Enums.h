@@ -67,7 +67,7 @@ enum class EAbilitySlot : uint8
 UENUM(BlueprintType)
 enum class ETypeOfDamage : uint8
 {
-	none UMETA(DisplayName = "None"),
+	any UMETA(DisplayName = "Any"),
 	physical UMETA(DisplayName = "Physical"),
 	nanite UMETA(DisplayName = "Nanite"),
 	fire UMETA(DisplayName = "Fire"),

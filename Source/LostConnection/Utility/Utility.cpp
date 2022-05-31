@@ -100,7 +100,7 @@ void Utility::resetDamageInflictor(IDamageInflictor* inflictor)
 
 	inflictor->setAdditionalDamage(0.0f);
 
-	const_cast<TArray<float>&>(inflictor->getIncreasedDamageCoefficients()).Empty();
+	const_cast<TArray<float>&>(inflictor->getIncreaseDamageCoefficients()).Empty();
 
 	const_cast<TArray<float>&>(inflictor->getMoreDamageCoefficients()).Empty();
 }

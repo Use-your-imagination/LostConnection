@@ -8,7 +8,7 @@
 
 #include "DamageInflictor.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType)
 class UDamageInflictor : public UInterface
 {
 	GENERATED_BODY()
@@ -21,9 +21,9 @@ class LOSTCONNECTION_API IDamageInflictor
 public:
 	IDamageInflictor() = default;
 
-	virtual void appendIncreasedDamageCoefficient(float coefficient) = 0;
+	virtual void appendIncreaseDamageCoefficient(float coefficient) = 0;
 
-	virtual void removeIncreasedDamageCoefficient(float coefficient) = 0;
+	virtual void removeIncreaseDamageCoefficient(float coefficient) = 0;
 
 	virtual void appendMoreDamageCoefficient(float coefficient) = 0;
 
@@ -43,7 +43,7 @@ public:
 
 	virtual float getAdditionalDamage() const = 0;
 
-	virtual const TArray<float>& getIncreasedDamageCoefficients() const = 0;
+	virtual const TArray<float>& getIncreaseDamageCoefficients() const = 0;
 
 	virtual const TArray<float>& getMoreDamageCoefficients() const = 0;
 };

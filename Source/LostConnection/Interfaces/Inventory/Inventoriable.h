@@ -35,6 +35,4 @@ public:
 
 	UFUNCTION(Category = Inventory, BlueprintCallable)
 	virtual const FColor& getBorderColor() const = 0;
-
-	// UNetworkObject* getObject() const;
 };

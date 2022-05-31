@@ -4,31 +4,20 @@
 
 #include "CoreMinimal.h"
 
-#include "UObject/Interface.h"
-#include "Interfaces/Gameplay/Statuses/Ailment.h"
+#include "DamageModule.h"
 
 #include "WeaponDamageModule.generated.h"
 
-UINTERFACE(MinimalAPI)
-class UWeaponDamageModule : public UInterface
+UINTERFACE()
+class UWeaponDamageModule : public UDamageModule
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IWeaponDamageModule
+class LOSTCONNECTION_API IWeaponDamageModule : public IDamageModule
 {
 	GENERATED_BODY()
 
 public:
 	IWeaponDamageModule() = default;
-
-	virtual float getAddedDamage() const = 0;
-
-	virtual float getIncreasedDamage() const = 0;
-
-	virtual float getMoreDamage() const = 0;
-
-	virtual float getAdditionalDamage() const = 0;
-	
-	virtual ETypeOfDamage getDamageType() const;
 };

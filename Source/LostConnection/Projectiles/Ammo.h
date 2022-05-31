@@ -28,7 +28,7 @@ private:
 	UFUNCTION()
 	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
-	template<typename ImplementsModuleInterface, typename ModuleInterface, typename ModuleT>
+	template<typename ModuleT>
 	void applyModules(const TArray<ModuleT*>& modules);
 
 private:
@@ -65,7 +65,7 @@ public:
 
 	void launch(const TWeakObjectPtr<class ABaseCharacter>& character, const FTransform& visibleAmmoRelativeTransform, const FRotator& spread);
 
-	virtual void copyProperties(class UBaseWeapon* weapon);
+	virtual void copyProperties(TObjectPtr<class UBaseWeapon> weapon);
 
 	TObjectPtr<UStaticMeshComponent> getAmmoMeshComponent() const;
 

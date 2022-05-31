@@ -1085,12 +1085,12 @@ bool ABaseDrone::getZooming() const
 	return zooming;
 }
 
-void ABaseDrone::addPersonalModule(UBasePersonalModule* module)
+void ABaseDrone::addPersonalModule(TObjectPtr<UBasePersonalModule> module)
 {
 	Utility::getPlayerState(this)->addPersonalModule(module);
 }
 
-void ABaseDrone::addWeaponModule(UBaseWeaponModule* module)
+void ABaseDrone::addWeaponModule(TObjectPtr<UBaseWeaponModule> module)
 {
 	Utility::getPlayerState(this)->addWeaponModule(module);
 }

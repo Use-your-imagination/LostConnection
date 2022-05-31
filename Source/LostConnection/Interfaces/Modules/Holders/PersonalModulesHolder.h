@@ -23,7 +23,7 @@ class LOSTCONNECTION_API IPersonalModulesHolder
 public:
 	IPersonalModulesHolder() = default;
 
-	virtual void addPersonalModule(UBasePersonalModule* module) = 0;
+	virtual void addPersonalModule(TObjectPtr<UBasePersonalModule> module) = 0;
 
 	virtual TArray<UBasePersonalModule*> getPersonalEquippedModules() const = 0;
 

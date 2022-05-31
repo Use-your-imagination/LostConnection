@@ -9,7 +9,7 @@
 
 #include "StatusReceiver.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE()
 class UStatusReceiver : public UDamageReceiver
 {
 	GENERATED_BODY()

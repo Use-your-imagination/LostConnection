@@ -31,14 +31,14 @@ bool UAilmentInflictorUtility::ReplicateSubobjects(UActorChannel* Channel, FOutB
 	return wroteSomething;
 }
 
-void UAilmentInflictorUtility::appendIncreasedDamageCoefficient(float coefficient)
+void UAilmentInflictorUtility::appendIncreaseDamageCoefficient(float coefficient)
 {
-	damageInflictorUtility->appendIncreasedDamageCoefficient(coefficient);
+	damageInflictorUtility->appendIncreaseDamageCoefficient(coefficient);
 }
 
-void UAilmentInflictorUtility::removeIncreasedDamageCoefficient(float coefficient)
+void UAilmentInflictorUtility::removeIncreaseDamageCoefficient(float coefficient)
 {
-	damageInflictorUtility->removeIncreasedDamageCoefficient(coefficient);
+	damageInflictorUtility->removeIncreaseDamageCoefficient(coefficient);
 }
 
 void UAilmentInflictorUtility::appendMoreDamageCoefficient(float coefficient)
@@ -81,9 +81,9 @@ float UAilmentInflictorUtility::getAdditionalDamage() const
 	return damageInflictorUtility->getAdditionalDamage();
 }
 
-const TArray<float>& UAilmentInflictorUtility::getIncreasedDamageCoefficients() const
+const TArray<float>& UAilmentInflictorUtility::getIncreaseDamageCoefficients() const
 {
-	return damageInflictorUtility->getIncreasedDamageCoefficients();
+	return damageInflictorUtility->getIncreaseDamageCoefficients();
 }
 
 const TArray<float>& UAilmentInflictorUtility::getMoreDamageCoefficients() const
