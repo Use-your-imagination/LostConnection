@@ -16,7 +16,7 @@ enum class EReplicationStructures
 };
 
 USTRUCT(BlueprintType)
-struct FAmmoData
+struct LOSTCONNECTION_API FAmmoData
 {
 	GENERATED_BODY()
 

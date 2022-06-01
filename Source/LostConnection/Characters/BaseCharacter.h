@@ -385,14 +385,14 @@ FORCEINLINE void ABaseCharacter::updateHealthBar()
 			FText::Format
 			(
 				FText::FromString("{0} | {1}"),
-				Utility::getFTextFromFloat(energyShield->getCurrentCapacity()),
-				Utility::getFTextFromFloat(currentHealth)
+				Utility::getTextFromFloat(energyShield->getCurrentCapacity()),
+				Utility::getTextFromFloat(currentHealth)
 			)
 		);
 	}
 	else
 	{
-		healthBarText->SetText(Utility::getFTextFromFloat(currentHealth));
+		healthBarText->SetText(Utility::getTextFromFloat(currentHealth));
 	}
 }
 

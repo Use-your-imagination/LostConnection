@@ -30,7 +30,7 @@ public:
 
 	static SIZE_T countStatuses(const class IStatusReceiver* target, const TSubclassOf<class UBaseStatus>& statusClass);
 
-	static FText getFTextFromFloat(float value);
+	static FText getTextFromFloat(float value);
 
 	static float toPercent(float coefficient);
 

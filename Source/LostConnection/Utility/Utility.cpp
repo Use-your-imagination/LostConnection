@@ -20,7 +20,7 @@ SIZE_T Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<U
 	return Algo::CountIf(statuses, [&statusClass](const UBaseStatus* status) { return UKismetMathLibrary::ClassIsChildOf(statusClass, status->StaticClass()); });
 }
 
-FText Utility::getFTextFromFloat(float value)
+FText Utility::getTextFromFloat(float value)
 {
 	static constexpr SIZE_T digits = 3;
 

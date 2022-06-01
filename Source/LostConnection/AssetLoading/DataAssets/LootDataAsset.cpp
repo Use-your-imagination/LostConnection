@@ -22,27 +22,17 @@ TSubclassOf<UBaseWeapon> ULootDataAsset::operator [] (const TSubclassOf<UBaseWea
 	return findSubclass(weapons, weapon);
 }
 
-TSubclassOf<UBasePersonalModule> ULootDataAsset::operator[](const TSubclassOf<UBasePersonalModule>& personalModule) const
-{
-	return findSubclass(personalModules, personalModule);
-}
-
-TSubclassOf<UBaseWeaponModule> ULootDataAsset::operator[](const TSubclassOf<UBaseWeaponModule>& weaponModule) const
-{
-	return findSubclass(weaponModules, weaponModule);
-}
-
 const TArray<TSubclassOf<UBaseWeapon>>& ULootDataAsset::getWeapons() const
 {
 	return weapons;
 }
 
-const TArray<TSubclassOf<UBasePersonalModule>>& ULootDataAsset::getPersonalModules() const
+const TMap<TSubclassOf<UBasePersonalModule>, FPersonalModulesCreator>& ULootDataAsset::getPersonalModules() const
 {
 	return personalModules;
 }
 
-const TArray<TSubclassOf<UBaseWeaponModule>>& ULootDataAsset::getWeaponModules() const
+const TMap<TSubclassOf<UBaseWeaponModule>, FWeaponModulesCreator>& ULootDataAsset::getWeaponModules() const
 {
 	return weaponModules;
 }

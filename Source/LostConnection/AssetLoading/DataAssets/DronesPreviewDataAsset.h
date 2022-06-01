@@ -11,19 +11,19 @@
 #include "DronesPreviewDataAsset.generated.h"
 
 USTRUCT(BlueprintType)
-struct FDronePreview
+struct LOSTCONNECTION_API FDronePreview
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
-	USkeletalMesh* mesh;
+	TObjectPtr<USkeletalMesh> mesh;
 
 	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UAnimInstance> animationBlueprint;
 
 	UPROPERTY(Category = Information, EditDefaultsOnly, BlueprintReadOnly)
-	UStringTable* droneInformation;
+	TObjectPtr<UStringTable> droneInformation;
 
 	FDronePreview();
 };

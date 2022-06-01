@@ -7,10 +7,10 @@
 #include "Modules/BasePersonalModule.h"
 #include "Interfaces/Modules/Damage/DamageModule.h"
 
-#include "IncreaseOutputDamageModule.generated.h"
+#include "Overclocking.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UIncreaseOutputDamageModule : 
+class LOSTCONNECTION_API UOverclocking :
 	public UBasePersonalModule,
 	public IDamageModule
 {
@@ -21,9 +21,9 @@ private:
 	float moreDamageCoefficient;
 	
 public:
-	UIncreaseOutputDamageModule() = default;
+	UOverclocking() = default;
 
-	bool applyCondition(TObjectPtr<AActor> caller) const override;
+	virtual bool applyCondition(TObjectPtr<AActor> caller) const override;
 
 	float getAddedDamage() const override;
 
@@ -33,5 +33,5 @@ public:
 
 	float getAdditionalDamage() const override;
 
-	~UIncreaseOutputDamageModule() = default;
+	~UOverclocking() = default;
 };
