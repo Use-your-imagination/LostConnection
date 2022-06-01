@@ -4,34 +4,20 @@
 
 #include "CoreMinimal.h"
 
-#include "Modules/BasePersonalModule.h"
+#include "Modules/Base/PersonalModules/BaseDamagePersonalModule.h"
 #include "Interfaces/Modules/Damage/DamageModule.h"
 
 #include "Overclocking.generated.h"
 
 UCLASS()
-class LOSTCONNECTION_API UOverclocking :
-	public UBasePersonalModule,
-	public IDamageModule
+class LOSTCONNECTION_API UOverclocking : public UBaseDamagePersonalModule
 {
 	GENERATED_BODY()
-
-private:
-	UPROPERTY(Category = Module, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float moreDamageCoefficient;
 	
 public:
 	UOverclocking() = default;
 
 	virtual bool applyCondition(TObjectPtr<AActor> caller) const override;
-
-	float getAddedDamage() const override;
-
-	float getIncreaseDamageCoefficient() const override;
-
-	float getMoreDamageCoefficient() const override;
-
-	float getAdditionalDamage() const override;
 
 	~UOverclocking() = default;
 };

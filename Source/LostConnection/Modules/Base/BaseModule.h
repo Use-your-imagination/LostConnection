@@ -6,10 +6,13 @@
 
 #include "Network/NetworkObject.h"
 #include "Interfaces/Inventory/Inventoriable.h"
+#include "Utility/Enums.h"
 
 #include "BaseModule.generated.h"
 
-UCLASS(BlueprintType, Blueprintable)
+#pragma warning(disable: 4458)
+
+UCLASS(Abstract, BlueprintType, Blueprintable)
 class LOSTCONNECTION_API UBaseModule :
 	public UNetworkObject,
 	public IInventoriable
@@ -26,8 +29,27 @@ protected:
 	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UTexture2D> moduleIconTexture;
 
+	UPROPERTY(Category = Stats, EditDefaultsOnly, BlueprintReadOnly)
+	float breakChance;
+
+	UPROPERTY(Category = Stats, BlueprintReadOnly, Replicated)
+	EModuleQuality quality;
+
+protected:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	int32 getMultiplier() const;
+
 public:
 	UBaseModule() = default;
+
+	virtual bool applyCondition(TObjectPtr<AActor> caller) const;
+
+	void setQuality(EModuleQuality quality);
+
+	float getBreakChance() const;
+
+	EModuleQuality getQuality() const;
 
 	virtual const FText& getItemName() const final override;
 

@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 
-#include "BaseModule.h"
+#include "Modules/Base/BaseModule.h"
 
 #include "BasePersonalModule.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class LOSTCONNECTION_API UBasePersonalModule : public UBaseModule
 {
 	GENERATED_BODY()

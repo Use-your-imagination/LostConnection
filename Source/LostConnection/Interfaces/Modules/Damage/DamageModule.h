@@ -22,8 +22,6 @@ class LOSTCONNECTION_API IDamageModule
 public:
 	IDamageModule() = default;
 
-	virtual bool applyCondition(TObjectPtr<AActor> caller) const;
-
 	virtual float getAddedDamage() const = 0;
 
 	virtual float getIncreaseDamageCoefficient() const = 0;

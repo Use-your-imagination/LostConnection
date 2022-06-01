@@ -5,8 +5,8 @@
 #include "Kismet/KismetMathLibrary.h"
 
 #include "Weapons/BaseWeapon.h"
-#include "Modules/BasePersonalModule.h"
-#include "Modules/BaseWeaponModule.h"
+#include "Modules/Base/PersonalModules/BasePersonalModule.h"
+#include "Modules/Base/WeaponModules/BaseWeaponModule.h"
 #include "WorldPlaceables/BaseDroppedAmmo.h"
 
 template<typename T>
@@ -27,12 +27,12 @@ const TArray<TSubclassOf<UBaseWeapon>>& ULootDataAsset::getWeapons() const
 	return weapons;
 }
 
-const TMap<TSubclassOf<UBasePersonalModule>, FPersonalModulesCreator>& ULootDataAsset::getPersonalModules() const
+const TMap<TSubclassOf<UBasePersonalModule>, TSubclassOf<UBasePersonalModule>>& ULootDataAsset::getPersonalModules() const
 {
 	return personalModules;
 }
 
-const TMap<TSubclassOf<UBaseWeaponModule>, FWeaponModulesCreator>& ULootDataAsset::getWeaponModules() const
+const TMap<TSubclassOf<UBaseWeaponModule>, TSubclassOf<UBaseWeaponModule>>& ULootDataAsset::getWeaponModules() const
 {
 	return weaponModules;
 }

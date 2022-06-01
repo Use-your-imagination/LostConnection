@@ -54,6 +54,16 @@ enum class EWeaponRarity : uint8
 };
 
 UENUM(BlueprintType)
+enum class EModuleQuality : uint8
+{
+	broken UMETA(DisplayName = "Broken"),
+	bronze UMETA(DisplayName = "Bronze"),
+	silver UMETA(DisplayName = "Silver"),
+	gold UMETA(DisplayName = "Gold"),
+	platinum UMETA(DisplayName = "Platinum")
+};
+
+UENUM(BlueprintType)
 enum class EAbilitySlot : uint8
 {
 	empty UMETA(DisplayName = "No ability"),

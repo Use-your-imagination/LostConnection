@@ -6,11 +6,11 @@
 
 #include "UObject/Interface.h"
 
-#include "Modules/BaseWeaponModule.h"
+#include "Modules/Base/WeaponModules/BaseWeaponModule.h"
 
 #include "WeaponModulesHolder.generated.h"
 
-UINTERFACE(BlueprintType, MinimalAPI)
+UINTERFACE(BlueprintType)
 class UWeaponModulesHolder : public UInterface
 {
 	GENERATED_BODY()

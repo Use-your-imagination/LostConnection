@@ -12,32 +12,6 @@
 
 #include "LootDataAsset.generated.h"
 
-USTRUCT(BlueprintType)
-struct LOSTCONNECTION_API FPersonalModulesCreator
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(Category = Modules, EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class UBasePersonalModule> brokenModule;
-
-	UPROPERTY(Category = Modules, EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class UBasePersonalModule> platinumModule;
-};
-
-USTRUCT(BlueprintType)
-struct LOSTCONNECTION_API FWeaponModulesCreator
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(Category = Modules, EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class UBaseWeaponModule> brokenModule;
-
-	UPROPERTY(Category = Modules, EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class UBaseWeaponModule> platinumModule;
-};
-
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API ULootDataAsset : public UPrimaryDataAsset
 {
@@ -47,11 +21,17 @@ private:
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<class UBaseWeapon>> weapons;
 
-	UPROPERTY(Category = "Modules|Personal", EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
-	TMap<TSubclassOf<class UBasePersonalModule>, FPersonalModulesCreator> personalModules;
+	/**
+	* Module class - Platinum module class
+	*/
+	UPROPERTY(Category = "Modules|Personal", EditDefaultsOnly, Meta = (AllowPrivateAccess = "true", AllowAbstract = "false"))
+	TMap<TSubclassOf<class UBasePersonalModule>, TSubclassOf<class UBasePersonalModule>> personalModules;
 
-	UPROPERTY(Category = "Modules|Weapon", EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
-	TMap<TSubclassOf<class UBaseWeaponModule>, FWeaponModulesCreator> weaponModules;
+	/**
+	* Weapon module class - Platinum weapon module class
+	*/
+	UPROPERTY(Category = "Modules|Weapon", EditDefaultsOnly, Meta = (AllowPrivateAccess = "true", AllowAbstract = "false"))
+	TMap<TSubclassOf<class UBaseWeaponModule>, TSubclassOf<class UBaseWeaponModule>> weaponModules;
 
 	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<UBaseWeaponsLootFunction>> weaponsLootFunctions;
@@ -84,9 +64,9 @@ public:
 
 	const TArray<TSubclassOf<class UBaseWeapon>>& getWeapons() const;
 
-	const TMap<TSubclassOf<class UBasePersonalModule>, FPersonalModulesCreator>& getPersonalModules() const;
+	const TMap<TSubclassOf<class UBasePersonalModule>, TSubclassOf<class UBasePersonalModule>>& getPersonalModules() const;
 
-	const TMap<TSubclassOf<class UBaseWeaponModule>, FWeaponModulesCreator>& getWeaponModules() const;
+	const TMap<TSubclassOf<class UBaseWeaponModule>, TSubclassOf<class UBaseWeaponModule>>& getWeaponModules() const;
 
 	const TArray<TSubclassOf<UBaseWeaponsLootFunction>>& getWeaponsLootFunctions() const;
 

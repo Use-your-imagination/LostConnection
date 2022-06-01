@@ -6,11 +6,11 @@
 
 #include "UObject/Interface.h"
 
-#include "Modules/BasePersonalModule.h"
+#include "Modules/Base/PersonalModules/BasePersonalModule.h"
 
 #include "PersonalModulesHolder.generated.h"
 
-UINTERFACE(BlueprintType, MinimalAPI)
+UINTERFACE(BlueprintType)
 class UPersonalModulesHolder : public UInterface
 {
 	GENERATED_BODY()

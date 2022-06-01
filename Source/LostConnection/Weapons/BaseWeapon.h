@@ -13,7 +13,7 @@
 #include "Network/NetworkObject.h"
 #include "Projectiles/Ammo.h"
 #include "Interfaces/Inventory/Inventoriable.h"
-#include "Modules/BaseWeaponModule.h"
+#include "Modules/Base/WeaponModules/BaseWeaponModule.h"
 #include "Utility/Enums.h"
 
 #include "BaseWeapon.generated.h"

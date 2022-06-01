@@ -16,8 +16,8 @@
 #include "Interfaces/Modules/Holders/WeaponModulesHolder.h"
 #include "Interfaces/Modules/Damage/DamageModule.h"
 #include "Interfaces/Modules/Damage/WeaponDamageModule.h"
-#include "Modules/BasePersonalModule.h"
-#include "Modules/BaseWeaponModule.h"
+#include "Modules/Base/PersonalModules/BasePersonalModule.h"
+#include "Modules/Base/WeaponModules/BaseWeaponModule.h"
 
 #pragma warning(disable: 4458)
 
@@ -136,11 +136,9 @@ void AAmmo::applyModules(const TArray<ModuleT*>& modules)
 {
 	for (const auto& module : modules)
 	{
-		if (module->Implements<UDamageModule>())
+		if (IDamageModule* damageModule = Cast<IDamageModule>(module))
 		{
-			IDamageModule* damageModule = Cast<IDamageModule>(module);
-
-			if (!damageModule->applyCondition(this))
+			if (!module->applyCondition(this))
 			{
 				continue;
 			}
