@@ -63,6 +63,11 @@ int32 UDefaultsDataAsset::getMaxEnergyAmmoCount() const
 	return maxEnergyAmmoCount;
 }
 
+float UDefaultsDataAsset::getResistHardcap() const
+{
+	return resistHardcap;
+}
+
 FPrimaryAssetId UDefaultsDataAsset::GetPrimaryAssetId() const
 {
 	return UDefaultsDataAsset::getPrimaryAssetId();

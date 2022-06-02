@@ -16,4 +16,7 @@ class LOSTCONNECTION_API UFormulaLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(Category = Maths, BlueprintCallable, BlueprintPure)
 	static float standardFormula(float base, float added, const TArray<float>& increaseCoefficients, const TArray<float>& moreCoefficients, float additional);
+
+	UFUNCTION(Category = Maths, BlueprintCallable, BlueprintPure)
+	static float calculateDamageAfterResist(float base, float added, const TArray<float>& increaseCoefficients, const TArray<float>& moreCoefficients, float additional, const TScriptInterface<IDamageInflictor>& inflictor);
 };

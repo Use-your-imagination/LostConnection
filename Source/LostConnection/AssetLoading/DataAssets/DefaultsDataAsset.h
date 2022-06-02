@@ -53,6 +53,9 @@ private:
 	UPROPERTY(Category = WorldDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TMap<TEnumAsByte<EPhysicalSurface>, FShootThroughSurface> shootThroughSurfaces;
 
+	UPROPERTY(Category = GameDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float resistHardcap;
+
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
 
@@ -72,6 +75,8 @@ public:
 	int32 getMaxLargeAmmoCount() const;
 
 	int32 getMaxEnergyAmmoCount() const;
+
+	float getResistHardcap() const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 
