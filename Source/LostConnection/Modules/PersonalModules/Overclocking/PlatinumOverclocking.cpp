@@ -4,7 +4,7 @@
 
 #include "Interfaces/Holders/DamageInflictorHolder.h"
 
-void UPlatinumOverclocking::uniqueAction(TObjectPtr<AActor> caller)
+void UPlatinumOverclocking::uniqueAction_Implementation(AActor* caller)
 {
 	// TODO: add more damage
 }

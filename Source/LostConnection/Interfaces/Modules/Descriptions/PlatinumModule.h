@@ -21,5 +21,6 @@ class LOSTCONNECTION_API IPlatinumModule
 public:
 	IPlatinumModule() = default;
 
-	virtual void uniqueAction(TObjectPtr<AActor> caller) = 0;
+	UFUNCTION(Category = PlatinumModule, BlueprintNativeEvent)
+	void uniqueAction(AActor* caller);
 };
