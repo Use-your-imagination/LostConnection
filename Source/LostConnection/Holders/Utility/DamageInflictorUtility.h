@@ -28,7 +28,7 @@ protected:
 	float additionalInflictorDamage;
 
 	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	TArray<float> increasedInflictorDamageCoefficients;
+	TArray<float> increaseInflictorDamageCoefficients;
 
 	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	TArray<float> moreInflictorDamageCoefficients;

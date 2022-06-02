@@ -143,7 +143,7 @@ protected:
 	float additionalDamage;
 
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
-	TArray<float> increasedDamageCoefficients;
+	TArray<float> increaseDamageCoefficients;
 
 	UPROPERTY(Category = Weapons, Replicated, BlueprintReadOnly)
 	TArray<float> moreDamageCoefficients;

@@ -33,22 +33,12 @@ const TSubclassOf<ADeathPlaceholder>& UDefaultsDataAsset::getDeathPlaceholder() 
 
 const FColor& UDefaultsDataAsset::operator [] (EWeaponRarity rarity) const
 {
-	switch (rarity)
-	{
-	case EWeaponRarity::normal:
-		return normalRarityWeaponColor;
+	return weaponsRarityColor[rarity];
+}
 
-	case EWeaponRarity::rare:
-		return rareRarityWeaponColor;
-
-	case EWeaponRarity::epic:
-		return epicRarityWeaponColor;
-
-	case EWeaponRarity::legendary:
-		return legendaryRarityWeaponColor;
-	}
-
-	return FColor::Emerald;
+const FColor& UDefaultsDataAsset::operator [] (EModuleQuality quality) const
+{
+	return modulesQualityColor[quality];
 }
 
 const FShootThroughSurface& UDefaultsDataAsset::operator [] (const TWeakObjectPtr<UPhysicalMaterial>& physicalMaterial) const

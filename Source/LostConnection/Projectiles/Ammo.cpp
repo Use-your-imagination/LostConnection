@@ -149,11 +149,6 @@ void AAmmo::applyModules(const TArray<ModuleT*>& modules)
 			ailmentInflictorUtility->appendMoreDamageCoefficient(damageModule->getMoreDamageCoefficient());
 			ailmentInflictorUtility->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage() + damageModule->getAdditionalDamage());
 		}
-
-		if (IPlatinumModule* platinumModule = Cast<IPlatinumModule>(module))
-		{
-			platinumModule->uniqueAction(this);
-		}
 	}
 }
 

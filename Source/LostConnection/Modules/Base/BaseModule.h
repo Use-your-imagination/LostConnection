@@ -29,9 +29,6 @@ protected:
 	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UTexture2D> moduleIconTexture;
 
-	UPROPERTY(Category = Stats, EditDefaultsOnly, BlueprintReadOnly)
-	float breakChance;
-
 	UPROPERTY(Category = Stats, BlueprintReadOnly, Replicated)
 	EModuleQuality quality;
 
@@ -46,8 +43,6 @@ public:
 	virtual bool applyCondition(TObjectPtr<AActor> caller) const;
 
 	void setQuality(EModuleQuality quality);
-
-	float getBreakChance() const;
 
 	EModuleQuality getQuality() const;
 

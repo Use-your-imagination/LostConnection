@@ -17,7 +17,5 @@ class LOSTCONNECTION_API UOverclocking : public UBaseDamagePersonalModule
 public:
 	UOverclocking() = default;
 
-	virtual bool applyCondition(TObjectPtr<AActor> caller) const override;
-
 	~UOverclocking() = default;
 };

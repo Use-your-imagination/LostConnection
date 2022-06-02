@@ -7,11 +7,6 @@
 
 bool UBaseDamagePersonalModule::applyCondition(TObjectPtr<AActor> caller) const
 {
-	if (!Super::applyCondition(caller))
-	{
-		return false;
-	}
-
 	if (IAilmentInflictorHolder* holder = Cast<IAilmentInflictorHolder>(caller))
 	{
 		return this->getDamageType() == holder->getAilmentInflictorUtility()->getDamageType();

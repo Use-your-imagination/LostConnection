@@ -34,22 +34,12 @@ int32 UBaseModule::getMultiplier() const
 
 bool UBaseModule::applyCondition(TObjectPtr<AActor> caller) const
 {
-	if (quality == EModuleQuality::broken && Utility::checkChanceProc(breakChance))
-	{
-		return false;
-	}
-
 	return true;
 }
 
 void UBaseModule::setQuality(EModuleQuality quality)
 {
 	this->quality = quality;
-}
-
-float UBaseModule::getBreakChance() const
-{
-	return quality == EModuleQuality::broken ? breakChance : 0.0f;
 }
 
 EModuleQuality UBaseModule::getQuality() const

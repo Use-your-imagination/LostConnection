@@ -2,15 +2,16 @@
 
 #include "DamageInflictor.h"
 
-#include "Algo/Accumulate.h"
+#include "Maths/FormulaLibrary.h"
 
 float IDamageInflictor::calculateTotalDamage() const
 {
-	TArray<float> increasedDamageCoefficients = this->getIncreaseDamageCoefficients();
-	TArray<float> moreDamageCoefficients = this->getMoreDamageCoefficients();
-
-	return (this->getBaseDamage() + this->getAddedDamage()) *
-		Algo::Accumulate(increasedDamageCoefficients, 1.0f) *
-		Algo::Accumulate(moreDamageCoefficients, 1.0f, [](float currentValue, float nextValue) { return currentValue * (1.0f + nextValue); }) +
-		this->getAdditionalDamage();
+	return UFormulaLibrary::standardFormula
+	(
+		this->getBaseDamage(),
+		this->getAddedDamage(),
+		this->getIncreaseDamageCoefficients(),
+		this->getMoreDamageCoefficients(),
+		this->getAdditionalDamage()
+	);
 }

@@ -476,8 +476,6 @@ void ABaseDrone::BeginPlay()
 		this->restoreAbilitiesCooldown();
 
 		this->restoreWeaponsCooldown();
-
-		this->addPersonalModule(NewObject<UBasePersonalModule>(Utility::getPlayerState(this), ULostConnectionAssetManager::get().getLoot().getPersonalModules().begin()->Value));
 	}
 }
 

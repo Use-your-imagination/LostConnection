@@ -2,7 +2,9 @@
 
 #include "PlatinumOverclocking.h"
 
+#include "Interfaces/Holders/DamageInflictorHolder.h"
+
 void UPlatinumOverclocking::uniqueAction(TObjectPtr<AActor> caller)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("Unique action"));
+	// TODO: add more damage
 }

@@ -73,7 +73,7 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(UBaseWeapon, additionalDamage);
 
-	DOREPLIFETIME(UBaseWeapon, increasedDamageCoefficients);
+	DOREPLIFETIME(UBaseWeapon, increaseDamageCoefficients);
 
 	DOREPLIFETIME(UBaseWeapon, moreDamageCoefficients);
 
@@ -245,12 +245,12 @@ void UBaseWeapon::Tick(float DeltaTime)
 
 void UBaseWeapon::appendIncreaseDamageCoefficient(float coefficient)
 {
-	increasedDamageCoefficients.Add(coefficient);
+	increaseDamageCoefficients.Add(coefficient);
 }
 
 void UBaseWeapon::removeIncreaseDamageCoefficient(float coefficient)
 {
-	increasedDamageCoefficients.Remove(coefficient);
+	increaseDamageCoefficients.Remove(coefficient);
 }
 
 void UBaseWeapon::appendMoreDamageCoefficient(float coefficient)
