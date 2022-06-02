@@ -19,5 +19,7 @@ class LOSTCONNECTION_API UPlatinumOverclocking :
 public:
 	UPlatinumOverclocking() = default;
 
+	void uniqueAction(TObjectPtr<AActor> caller) override;
+
 	virtual ~UPlatinumOverclocking() = default;
 };

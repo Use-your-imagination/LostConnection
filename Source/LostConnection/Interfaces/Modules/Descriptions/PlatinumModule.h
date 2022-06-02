@@ -19,4 +19,7 @@ class LOSTCONNECTION_API IPlatinumModule
 	GENERATED_BODY()
 
 public:
+	IPlatinumModule() = default;
+
+	virtual void uniqueAction(TObjectPtr<AActor> caller) = 0;
 };

@@ -26,20 +26,20 @@ bool UBaseDamagePersonalModule::applyCondition(TObjectPtr<AActor> caller) const
 
 float UBaseDamagePersonalModule::getAddedDamage() const
 {
-	return addedDamage;
+	return addedDamage * this->getMultiplier();
 }
 
 float UBaseDamagePersonalModule::getIncreaseDamageCoefficient() const
 {
-	return increaseDamageCoefficient;
+	return increaseDamageCoefficient * this->getMultiplier();
 }
 
 float UBaseDamagePersonalModule::getMoreDamageCoefficient() const
 {
-	return moreDamageCoefficient;
+	return moreDamageCoefficient * this->getMultiplier();
 }
 
 float UBaseDamagePersonalModule::getAdditionalDamage() const
 {
-	return additionalDamage;
+	return additionalDamage * this->getMultiplier();
 }

@@ -18,6 +18,7 @@
 #include "Interfaces/Modules/Damage/WeaponDamageModule.h"
 #include "Modules/Base/PersonalModules/BasePersonalModule.h"
 #include "Modules/Base/WeaponModules/BaseWeaponModule.h"
+#include "Interfaces/Modules/Descriptions/PlatinumModule.h"
 
 #pragma warning(disable: 4458)
 
@@ -147,6 +148,11 @@ void AAmmo::applyModules(const TArray<ModuleT*>& modules)
 			ailmentInflictorUtility->appendIncreaseDamageCoefficient(damageModule->getIncreaseDamageCoefficient());
 			ailmentInflictorUtility->appendMoreDamageCoefficient(damageModule->getMoreDamageCoefficient());
 			ailmentInflictorUtility->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage() + damageModule->getAdditionalDamage());
+		}
+
+		if (IPlatinumModule* platinumModule = Cast<IPlatinumModule>(module))
+		{
+			platinumModule->uniqueAction(this);
 		}
 	}
 }
