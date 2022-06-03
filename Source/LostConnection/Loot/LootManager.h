@@ -51,6 +51,12 @@ public:
 	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
 	void addRandomWeapon(AInventory* playerInventory);
 
+	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
+	void addRandomModule(AInventory* playerInventory);
+
+	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
+	void addRandomWeaponModule(AInventory* playerInventory);
+
 	UFUNCTION(Category = Loot, BlueprintCallable)
 	void spawnAmmoCall(TScriptInterface<IAmmoDropable> ammoDropable);
 

@@ -397,5 +397,7 @@ TArray<UInventoryCell*> upgradeModules(const TArray<UInventoryCell*>& modules)
 {
 	TArray<UInventoryCell*> result;
 
+	// TODO: upgrade modules
+
 	return result;
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "BaseLootFunction.h"
+#include "Utility/Enums.h"
 
 #include "BaseWeaponModulesLootFunction.generated.h"
 
@@ -15,6 +16,9 @@ class LOSTCONNECTION_API UBaseWeaponModulesLootFunction : public UBaseLootFuncti
 	
 public:
 	UBaseWeaponModulesLootFunction() = default;
+
+	UFUNCTION(Category = "Rarity", BlueprintNativeEvent)
+	EModuleQuality getModuleQuality() const;
 
 	virtual ~UBaseWeaponModulesLootFunction() = default;
 };

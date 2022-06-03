@@ -8,32 +8,41 @@
 #include "Utility/Utility.h"
 #include "Characters/BaseDrone.h"
 
-void LootCreator::createRandomWeapon(int32 lootPoints, AInventory* playerInventory, const TArray<UBaseWeaponsLootFunction*>& lootFunctions)
+template<typename T, typename LootFunctionT, typename RangeEnumT>
+bool LootCreator::createRandomLoot
+(
+	int32 lootPoints,
+	TObjectPtr<AInventory> playerInventory,
+	const TArray<LootFunctionT>& lootFunctions,
+	const TArray<TSubclassOf<T>>& classes,
+	const TFunction<RangeEnumT(LootFunctionT)>& getRangeEnum,
+	TSubclassOf<T>& classToCreate,
+	RangeEnumT& resultRange
+) const
 {
-	const TSubclassOf<UBaseWeapon>& weaponClass = Utility::getRandomValueFromArray(ULostConnectionAssetManager::get().getLoot().getWeapons());
-	TArray<TTuple<float, float, EWeaponRarity>> weaponRarityRanges;
+	TArray<TTuple<float, float, RangeEnumT>> ranges;
 
-	weaponRarityRanges.Reserve(lootFunctions.Num());
+	ranges.Reserve(lootFunctions.Num());
 
-	for (UBaseWeaponsLootFunction* lootFunction : lootFunctions)
+	for (LootFunctionT lootFunction : lootFunctions)
 	{
 		float chance = lootFunction->calculateLootChance(lootPoints);
-		EWeaponRarity rarity = lootFunction->getWeaponRarity();
+		RangeEnumT rarity = getRangeEnum(lootFunction);
 
-		if (weaponRarityRanges.Num())
+		if (ranges.Num())
 		{
-			float rangeEnd = weaponRarityRanges.Last().Get<1>();
+			float rangeEnd = ranges.Last().Get<1>();
 
-			weaponRarityRanges.Emplace(rangeEnd, rangeEnd + chance, rarity);
+			ranges.Emplace(rangeEnd, rangeEnd + chance, rarity);
 		}
 		else
 		{
-			weaponRarityRanges.Emplace(0.0f, chance, rarity);
+			ranges.Emplace(0.0f, chance, rarity);
 		}
 	}
 
 	float chance = FMath::FRandRange(0.0f, 100.0f);
-	TTuple<float, float, EWeaponRarity>* result = weaponRarityRanges.FindByPredicate([&chance](const TTuple<float, float, EWeaponRarity>& range)
+	TTuple<float, float, RangeEnumT>* it = ranges.FindByPredicate([&chance](const TTuple<float, float, EWeaponRarity>& range)
 		{
 			const float& begin = range.Get<0>();
 			const float& end = range.Get<1>();
@@ -42,19 +51,75 @@ void LootCreator::createRandomWeapon(int32 lootPoints, AInventory* playerInvento
 		}
 	);
 
-	if (result)
+	if (it)
 	{
-		UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerInventory->getPlayerState(), weaponClass);
+		classToCreate = Utility::getRandomValueFromArray(classes);
 
-		weapon->setWeaponRarity(result->Get<2>());
-
-		playerInventory->addUnequippedWeapon(weapon);
-
-		if (ABaseDrone* drone = playerInventory->getPlayerState()->GetPawn<ABaseDrone>())
-		{
-			weapon->setOwner(drone);
-
-			weapon->updateTimeBetweenShots();
-		}
+		resultRange = it->Get<RangeEnumT>();
 	}
+
+	return StaticCast<bool>(it);
+}
+
+LootCreator::LootCreator() :
+	weaponsGetter([](TObjectPtr<UBaseWeaponsLootFunction> function) { return function->getWeaponRarity(); }),
+	modulesGetter([](TObjectPtr<UBaseModulesLootFunction> function) { return function->getModuleQuality(); }),
+	weaponModulesGetter([](TObjectPtr<UBaseWeaponModulesLootFunction> function) { return function->getModuleQuality(); })
+{
+
+}
+
+void LootCreator::createRandomWeapon(int32 lootPoints, TObjectPtr<AInventory> playerInventory, const TArray<TObjectPtr<UBaseWeaponsLootFunction>>& lootFunctions) const
+{
+	static const TArray<TSubclassOf<UBaseWeapon>>& weapons = ULostConnectionAssetManager::get().getLoot().getWeapons();
+	TSubclassOf<UBaseWeapon> weaponClass;
+	EWeaponRarity rarity;
+
+	if (!this->createRandomLoot<UBaseWeapon, TObjectPtr<UBaseWeaponsLootFunction>, EWeaponRarity>(lootPoints, playerInventory, lootFunctions, weapons, weaponsGetter, weaponClass, rarity))
+	{
+		return;
+	}
+
+	TObjectPtr<UBaseWeapon> weapon = NewObject<UBaseWeapon>(playerInventory, weaponClass);
+
+	playerInventory->addUnequippedWeapon(weapon);
+
+	if (TObjectPtr<ABaseDrone> drone = playerInventory->getPlayerState()->GetPawn<ABaseDrone>())
+	{
+		weapon->setOwner(drone);
+
+		weapon->updateTimeBetweenShots();
+	}
+}
+
+void LootCreator::createRandomModule(int32 lootPoints, TObjectPtr<AInventory> playerInventory, const TArray<TObjectPtr<UBaseModulesLootFunction>>& lootFunctions) const
+{
+	static const TMap<TSubclassOf<UBasePersonalModule>, TSubclassOf<UBasePersonalModule>>& modules = ULostConnectionAssetManager::get().getLoot().getPersonalModules();
+	static TArray<TSubclassOf<UBasePersonalModule>> personalModules = []()
+	{
+		TArray<TSubclassOf<UBasePersonalModule>> result;
+
+		modules.GenerateKeyArray(personalModules);
+
+		return result;
+	}();
+	TSubclassOf<UBasePersonalModule> personalClass;
+	EModuleQuality quality;
+	
+	if (!this->createRandomLoot<UBasePersonalModule, TObjectPtr<UBaseModulesLootFunction>, EModuleQuality>(lootPoints, playerInventory, lootFunctions, personalModules, modulesGetter, personalClass, quality))
+	{
+		return;
+	}
+
+	if (quality == EModuleQuality::platinum)
+	{
+		personalClass = modules[personalClass];
+	}
+
+	playerInventory->addPersonalModule(NewObject<UBasePersonalModule>(playerInventory, personalClass));
+}
+
+void LootCreator::createRandomWeaponModule(int32 lootPoints, TObjectPtr<AInventory> playerInventory, const TArray<TObjectPtr<UBaseWeaponModulesLootFunction>>& lootFunctions) const
+{
+
 }

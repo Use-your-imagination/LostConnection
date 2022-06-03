@@ -11,10 +11,32 @@
 
 class LOSTCONNECTION_API LootCreator
 {
-public:
-	LootCreator() = default;
+private:
+	const TFunction<EWeaponRarity(TObjectPtr<UBaseWeaponsLootFunction>)> weaponsGetter;
+	const TFunction<EModuleQuality(TObjectPtr<UBaseModulesLootFunction>)> modulesGetter;
+	const TFunction<EModuleQuality(TObjectPtr<UBaseWeaponModulesLootFunction>)> weaponModulesGetter;
 
-	void createRandomWeapon(int32 lootPoints, AInventory* playerInventory, const TArray<UBaseWeaponsLootFunction*>& lootFunctions);
+private:
+	template<typename T, typename LootFunctionT, typename RangeEnumT>
+	bool createRandomLoot
+	(
+		int32 lootPoints,
+		TObjectPtr<AInventory> playerInventory,
+		const TArray<LootFunctionT>& lootFunctions,
+		const TArray<TSubclassOf<T>>& classes,
+		const TFunction<RangeEnumT(LootFunctionT)>& getRangeEnum,
+		TSubclassOf<T>& classToCreate,
+		RangeEnumT& resultRange
+	) const;
+
+public:
+	LootCreator();
+
+	void createRandomWeapon(int32 lootPoints, TObjectPtr<AInventory> playerInventory, const TArray<TObjectPtr<UBaseWeaponsLootFunction>>& lootFunctions) const;
+
+	void createRandomModule(int32 lootPoints, TObjectPtr<AInventory> playerInventory, const TArray<TObjectPtr<UBaseModulesLootFunction>>& lootFunctions) const;
+
+	void createRandomWeaponModule(int32 lootPoints, TObjectPtr<AInventory> playerInventory, const TArray<TObjectPtr<UBaseWeaponModulesLootFunction>>& lootFunctions) const;
 
 	~LootCreator() = default;
 };
