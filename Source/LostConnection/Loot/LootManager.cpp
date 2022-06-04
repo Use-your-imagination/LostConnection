@@ -41,6 +41,10 @@ void ALootManager::addRandomLoot(AInventory* playerInventory, int32 weaponsLootP
 {
 	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
 
+	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
+
+	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
+
 	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), UConstants::maxSpendLootPoints));
 }
 
@@ -84,6 +88,22 @@ void ALootManager::addRandomWeapon_Implementation(AInventory* playerInventory)
 	int32 otherLootPoints = weaponLootPoints * ULostConnectionAssetManager::get().getLoot().getSplitLootPointsCoefficient();
 
 	this->addRandomLoot(playerInventory, weaponLootPoints, otherLootPoints, otherLootPoints);
+}
+
+void ALootManager::addRandomModule_Implementation(AInventory* playerInventory)
+{
+	int32 moduleLootPoints = playerInventory->getLootPoints();
+	int32 otherLootPoints = moduleLootPoints * ULostConnectionAssetManager::get().getLoot().getSplitLootPointsCoefficient();
+
+	this->addRandomLoot(playerInventory, otherLootPoints, moduleLootPoints, otherLootPoints);
+}
+
+void ALootManager::addRandomWeaponModule_Implementation(AInventory* playerInventory)
+{
+	int32 weaponModuleLootPoints = playerInventory->getLootPoints();
+	int32 otherLootPoints = weaponModuleLootPoints * ULostConnectionAssetManager::get().getLoot().getSplitLootPointsCoefficient();
+
+	this->addRandomLoot(playerInventory, otherLootPoints, otherLootPoints, weaponModuleLootPoints);
 }
 
 void ALootManager::spawnAmmoCall(TScriptInterface<IAmmoDropable> ammoDropable)
