@@ -23,25 +23,25 @@ class LOSTCONNECTION_API AInventory : public AInfo
 	
 private:
 	UPROPERTY(Category = Player, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	class ALostConnectionPlayerState* playerState;
+	TObjectPtr<class ALostConnectionPlayerState> playerState;
 
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UInventoryCell* primaryWeaponCell;
+	TObjectPtr<UInventoryCell> primaryWeaponCell;
 
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UInventoryCell* secondaryWeaponCell;
+	TObjectPtr<UInventoryCell> secondaryWeaponCell;
 
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UInventoryCell* defaultWeaponCell;
+	TObjectPtr<UInventoryCell> defaultWeaponCell;
 
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UInventoryCell* firstInactiveWeaponCell;
+	TObjectPtr<UInventoryCell> firstInactiveWeaponCell;
 
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UInventoryCell* secondInactiveWeaponCell;
+	TObjectPtr<UInventoryCell> secondInactiveWeaponCell;
 
 	UPROPERTY(Category = "Inventory|Weapons", ReplicatedUsing = onUnequippedWeaponsUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UInventoryCell*> unequippedWeapons;
+	TArray<TObjectPtr<UInventoryCell>> unequippedWeapons;
 
 	UPROPERTY(Category = "Inventory|Economy", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 lootPoints;
@@ -50,13 +50,13 @@ private:
 	TArray<FAmmoData> spareAmmo;
 
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UInventoryCell*> personalEquippedModules;
+	TArray<TObjectPtr<UInventoryCell>> personalEquippedModules;
 
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UInventoryCell*> personalUnequippedModules;
+	TArray<TObjectPtr<UInventoryCell>> personalUnequippedModules;
 
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UInventoryCell*> weaponModules;
+	TArray<TObjectPtr<UInventoryCell>> weaponModules;
 
 	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 maxSmallAmmoCount;
@@ -70,7 +70,9 @@ private:
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	bool swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBaseWeapon* weapon);
+	bool swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>& slot, UBaseWeapon* weapon);
+
+	TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>>& modules);
 
 	UFUNCTION()
 	void onUnequippedWeaponsUpdate();
@@ -78,7 +80,7 @@ private:
 public:
 	AInventory();
 
-	void init(class ALostConnectionPlayerState* playerState);
+	void init(TObjectPtr<class ALostConnectionPlayerState> playerState);
 
 	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void addPersonalModule(UBasePersonalModule* module);
@@ -113,25 +115,25 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setMaxEnergyAmmoCount(int32 count);
 
-	UInventoryCell* getPrimaryWeaponCell() const;
+	TObjectPtr<UInventoryCell> getPrimaryWeaponCell() const;
 
-	UInventoryCell* getSecondaryWeaponCell() const;
+	TObjectPtr<UInventoryCell> getSecondaryWeaponCell() const;
 
-	UInventoryCell* getDefaultWeaponCell() const;
+	TObjectPtr<UInventoryCell> getDefaultWeaponCell() const;
 
-	UInventoryCell* getFirstInactiveWeaponCell() const;
+	TObjectPtr<UInventoryCell> getFirstInactiveWeaponCell() const;
 
-	UInventoryCell* getSecondInactiveWeaponCell() const;
+	TObjectPtr<UInventoryCell> getSecondInactiveWeaponCell() const;
 
 	int32 getLootPoints() const;
 
 	TArray<FAmmoData>& getSpareAmmoArray();
 
-	const TArray<UInventoryCell*>& getPersonalEquippedModules() const;
+	const TArray<TObjectPtr<UInventoryCell>>& getPersonalEquippedModules() const;
 
-	const TArray<UInventoryCell*>& getPersonalUnequippedModules() const;
+	const TArray<TObjectPtr<UInventoryCell>>& getPersonalUnequippedModules() const;
 
-	const TArray<UInventoryCell*>& getWeaponModules() const;
+	const TArray<TObjectPtr<UInventoryCell>>& getWeaponModules() const;
 
 	class ALostConnectionPlayerState* getPlayerState() const;
 

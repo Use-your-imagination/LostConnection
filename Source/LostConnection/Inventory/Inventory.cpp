@@ -10,8 +10,6 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Constants/Constants.h"
 
-static TArray<UInventoryCell*> upgradeModules(const TArray<UInventoryCell*>& modules);
-
 void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -47,16 +45,16 @@ void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(AInventory, maxEnergyAmmoCount);
 }
 
-bool AInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBaseWeapon* weapon)
+bool AInventory::swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>& slot, UBaseWeapon* weapon)
 {
-	UInventoryCell** weaponCell = unequippedWeapons.FindByPredicate([weapon](const UInventoryCell* cell)
+	TObjectPtr<UInventoryCell>* weaponCell = unequippedWeapons.FindByPredicate([weapon](const TObjectPtr<UInventoryCell>& cell)
 		{
 			return cell->getItem() == weapon;
 		});
 
 	if (weaponCell)
 	{
-		if (UBaseWeapon* slotWeapon = slot->getItem<UBaseWeapon>())
+		if (TObjectPtr<UBaseWeapon> slotWeapon = slot->getItem<UBaseWeapon>())
 		{
 			playerState->returnAmmoToSpare(slotWeapon);
 
@@ -71,6 +69,15 @@ bool AInventory::swapBetweenUnequippedWeaponsAndSlot(UInventoryCell*& slot, UBas
 	}
 
 	return StaticCast<bool>(weaponCell);
+}
+
+TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObjectPtr<UInventoryCell>>& modules)
+{
+	TArray<TObjectPtr<UInventoryCell>> modulesToRemove;
+
+
+
+	return modulesToRemove;
 }
 
 void AInventory::onUnequippedWeaponsUpdate()
@@ -102,7 +109,7 @@ AInventory::AInventory()
 	secondInactiveWeaponCell = CreateDefaultSubobject<UInventoryCell>("SecondInactiveWeaponCell");
 }
 
-void AInventory::init(ALostConnectionPlayerState* playerState)
+void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 	const UDefaultsDataAsset& defaults = manager.getDefaults();
@@ -119,9 +126,8 @@ void AInventory::init(ALostConnectionPlayerState* playerState)
 
 void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 {
-	UInventoryCell* personalModuleCell = NewObject<UInventoryCell>(this);
-	TArray<UInventoryCell*> modules;
-	TArray<UInventoryCell*> modulesToRemove;
+	TObjectPtr<UInventoryCell> personalModuleCell = NewObject<UInventoryCell>(this);
+	TArray<TObjectPtr<UInventoryCell>> modules;
 
 	personalModuleCell->setItem(module);
 
@@ -133,9 +139,7 @@ void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 
 	Algo::Copy(personalUnequippedModules, modules);
 
-	modulesToRemove = upgradeModules(modules);
-
-	for (UInventoryCell* moduleToRemove : modulesToRemove)
+	for (TObjectPtr<UInventoryCell> moduleToRemove : upgradeModules(modules))
 	{
 		if (!personalEquippedModules.Remove(moduleToRemove))
 		{
@@ -230,27 +234,27 @@ void AInventory::setMaxEnergyAmmoCount_Implementation(int32 count)
 	maxEnergyAmmoCount = count;
 }
 
-UInventoryCell* AInventory::getPrimaryWeaponCell() const
+TObjectPtr<UInventoryCell> AInventory::getPrimaryWeaponCell() const
 {
 	return primaryWeaponCell;
 }
 
-UInventoryCell* AInventory::getSecondaryWeaponCell() const
+TObjectPtr<UInventoryCell> AInventory::getSecondaryWeaponCell() const
 {
 	return secondaryWeaponCell;
 }
 
-UInventoryCell* AInventory::getDefaultWeaponCell() const
+TObjectPtr<UInventoryCell> AInventory::getDefaultWeaponCell() const
 {
 	return defaultWeaponCell;
 }
 
-UInventoryCell* AInventory::getFirstInactiveWeaponCell() const
+TObjectPtr<UInventoryCell> AInventory::getFirstInactiveWeaponCell() const
 {
 	return firstInactiveWeaponCell;
 }
 
-UInventoryCell* AInventory::getSecondInactiveWeaponCell() const
+TObjectPtr<UInventoryCell> AInventory::getSecondInactiveWeaponCell() const
 {
 	return secondInactiveWeaponCell;
 }
@@ -260,17 +264,17 @@ int32 AInventory::getLootPoints() const
 	return lootPoints;
 }
 
-const TArray<UInventoryCell*>& AInventory::getPersonalEquippedModules() const
+const TArray<TObjectPtr<UInventoryCell>>& AInventory::getPersonalEquippedModules() const
 {
 	return personalEquippedModules;
 }
 
-const TArray<UInventoryCell*>& AInventory::getPersonalUnequippedModules() const
+const TArray<TObjectPtr<UInventoryCell>>& AInventory::getPersonalUnequippedModules() const
 {
 	return personalUnequippedModules;
 }
 
-const TArray<UInventoryCell*>& AInventory::getWeaponModules() const
+const TArray<TObjectPtr<UInventoryCell>>& AInventory::getWeaponModules() const
 {
 	return weaponModules;
 }
@@ -391,13 +395,4 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	}
 
 	return wroteSomething;
-}
-
-TArray<UInventoryCell*> upgradeModules(const TArray<UInventoryCell*>& modules)
-{
-	TArray<UInventoryCell*> result;
-
-	// TODO: upgrade modules
-
-	return result;
 }
