@@ -23,9 +23,9 @@ void ALootManager::BeginPlay()
 }
 
 template<typename LootFunctionT>
-TArray<LootFunctionT*> ALootManager::createLootFunctions(const TArray<TSubclassOf<LootFunctionT>>& lootFunctionClasses)
+TArray<TObjectPtr<LootFunctionT>> ALootManager::createLootFunctions(const TArray<TSubclassOf<LootFunctionT>>& lootFunctionClasses)
 {
-	TArray<LootFunctionT*> result;
+	TArray<TObjectPtr<LootFunctionT>> result;
 
 	result.Reserve(lootFunctionClasses.Num());
 
@@ -41,9 +41,9 @@ void ALootManager::addRandomLoot(AInventory* playerInventory, int32 weaponsLootP
 {
 	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
 
-	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
+	lootCreator.createRandomModule(weaponsLootPoints, playerInventory, modulesLootFunctions);
 
-	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
+	lootCreator.createRandomWeaponModule(weaponsLootPoints, playerInventory, weaponModulesLootFunctions);
 
 	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), UConstants::maxSpendLootPoints));
 }

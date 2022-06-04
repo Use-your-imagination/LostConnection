@@ -42,7 +42,7 @@ bool LootCreator::createRandomLoot
 	}
 
 	float chance = FMath::FRandRange(0.0f, 100.0f);
-	TTuple<float, float, RangeEnumT>* it = ranges.FindByPredicate([&chance](const TTuple<float, float, EWeaponRarity>& range)
+	TTuple<float, float, RangeEnumT>* it = ranges.FindByPredicate([&chance](const TTuple<float, float, RangeEnumT>& range)
 		{
 			const float& begin = range.Get<0>();
 			const float& end = range.Get<1>();

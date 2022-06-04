@@ -2,7 +2,7 @@
 
 #include "BaseWeaponModulesLootFunction.h"
 
-EModuleQuality UBaseWeaponModulesLootFunction::getModuleQuality() const
+EModuleQuality UBaseWeaponModulesLootFunction::getModuleQuality_Implementation() const
 {
 	return EModuleQuality::broken;
 }

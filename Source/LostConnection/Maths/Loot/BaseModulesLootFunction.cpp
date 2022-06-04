@@ -2,7 +2,7 @@
 
 #include "BaseModulesLootFunction.h"
 
-EModuleQuality UBaseModulesLootFunction::getModuleQuality() const
+EModuleQuality UBaseModulesLootFunction::getModuleQuality_Implementation() const
 {
 	return EModuleQuality::broken;
 }

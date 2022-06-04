@@ -22,20 +22,20 @@ private:
 
 private:
 	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UBaseWeaponsLootFunction*> weaponsLootFunctions;
+	TArray<TObjectPtr<UBaseWeaponsLootFunction>> weaponsLootFunctions;
 
 	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UBaseModulesLootFunction*> modulesLootFunctions;
+	TArray<TObjectPtr<UBaseModulesLootFunction>> modulesLootFunctions;
 
 	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<UBaseWeaponModulesLootFunction*> weaponModulesLootFunctions;
+	TArray<TObjectPtr<UBaseWeaponModulesLootFunction>> weaponModulesLootFunctions;
 
 private:
 	void BeginPlay() override;
 
 private:
 	template<typename LootFunctionT>
-	TArray<LootFunctionT*> createLootFunctions(const TArray<TSubclassOf<LootFunctionT>>& lootFunctionClasses);
+	TArray<TObjectPtr<LootFunctionT>> createLootFunctions(const TArray<TSubclassOf<LootFunctionT>>& lootFunctionClasses);
 
 	void addRandomLoot(AInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints);
 
