@@ -10,6 +10,11 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Constants/Constants.h"
 
+static TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules);
+
+template<typename... Args>
+static TArray<TObjectPtr<UInventoryCell>*> fillModules(const TArray<TObjectPtr<UInventoryCell>>& modules, const Args&... args);
+
 void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -71,15 +76,6 @@ bool AInventory::swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>&
 	return StaticCast<bool>(weaponCell);
 }
 
-TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObjectPtr<UInventoryCell>>& modules)
-{
-	TArray<TObjectPtr<UInventoryCell>> modulesToRemove;
-
-
-
-	return modulesToRemove;
-}
-
 void AInventory::onUnequippedWeaponsUpdate()
 {
 	for (UEscapableWidget*& widget : playerState->getEscapableWidgets())
@@ -127,19 +123,12 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 {
 	TObjectPtr<UInventoryCell> personalModuleCell = NewObject<UInventoryCell>(this);
-	TArray<TObjectPtr<UInventoryCell>> modules;
 
 	personalModuleCell->setItem(module);
 
 	personalUnequippedModules.Add(personalModuleCell);
 
-	modules.Reserve(personalEquippedModules.Num() + personalUnequippedModules.Num());
-
-	Algo::Copy(personalEquippedModules, modules);
-
-	Algo::Copy(personalUnequippedModules, modules);
-
-	for (TObjectPtr<UInventoryCell> moduleToRemove : upgradeModules(modules))
+	for (TObjectPtr<UInventoryCell> moduleToRemove : upgradeModules(fillModules(personalEquippedModules, personalUnequippedModules)))
 	{
 		if (!personalEquippedModules.Remove(moduleToRemove))
 		{
@@ -150,16 +139,13 @@ void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 
 void AInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
 {
-	UInventoryCell* weaponModuleCell = NewObject<UInventoryCell>(this);
-	TArray<UInventoryCell*> modulesToRemove;
+	TObjectPtr<UInventoryCell> weaponModuleCell = NewObject<UInventoryCell>(this);
 
 	weaponModuleCell->setItem(module);
 
 	weaponModules.Add(weaponModuleCell);
 
-	modulesToRemove = upgradeModules(weaponModules);
-
-	for (UInventoryCell* moduleToRemove : modulesToRemove)
+	for (TObjectPtr<UInventoryCell> moduleToRemove : upgradeModules(fillModules(weaponModules)))
 	{
 		weaponModules.Remove(moduleToRemove);
 	}
@@ -395,4 +381,36 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	}
 
 	return wroteSomething;
+}
+
+TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules)
+{
+	TArray<TObjectPtr<UInventoryCell>> modulesToRemove;
+
+
+
+	return modulesToRemove;
+}
+
+template<typename... Args>
+TArray<TObjectPtr<UInventoryCell>*> fillModules(const TArray<TObjectPtr<UInventoryCell>>& modules, const Args&... args)
+{
+	TArray<TObjectPtr<UInventoryCell>*> result;
+
+	for (TObjectPtr<UInventoryCell> module : modules)
+	{
+		if (module->getItem<UBasePersonalModule>()->getQuality() == EModuleQuality::platinum)
+		{
+			continue;
+		}
+
+		result.Add(&module);
+	}
+
+	if constexpr (sizeof...(args))
+	{
+		result.Append(fillModules(args...));
+	}
+
+	return result;
 }

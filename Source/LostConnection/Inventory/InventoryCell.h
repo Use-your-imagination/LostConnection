@@ -21,7 +21,7 @@ private:
 	* Implements IInventoriable
 	*/
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UNetworkObject* item;
+	TObjectPtr<UNetworkObject> item;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -34,7 +34,7 @@ public:
 	IInventoriable* getItem() const;
 
 	template<typename T>
-	T* getItem() const;
+	TObjectPtr<T> getItem() const;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
@@ -42,7 +42,7 @@ public:
 };
 
 template<typename T>
-T* UInventoryCell::getItem() const
+TObjectPtr<T> UInventoryCell::getItem() const
 {
 	return Cast<T>(item);
 }
