@@ -10,8 +10,6 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Constants/Constants.h"
 
-static TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules);
-
 template<typename... Args>
 static TArray<TObjectPtr<UInventoryCell>*> fillModules(const TArray<TObjectPtr<UInventoryCell>>& modules, const Args&... args);
 
@@ -76,6 +74,86 @@ bool AInventory::swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>&
 	return StaticCast<bool>(weaponCell);
 }
 
+TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules)
+{
+	static int32 modulesToNextTier = ULostConnectionAssetManager::get().getDefaults().getModulesToNextTier();
+	TArray<TObjectPtr<UInventoryCell>> modulesToRemove;
+
+	for (TObjectPtr<UInventoryCell>* module : modules)
+	{
+		if (modulesToRemove.Contains(*module))
+		{
+			continue;
+		}
+
+		TObjectPtr<UBaseModule> baseModule = (*module)->getItem<UBaseModule>();
+		EModuleQuality quality = baseModule->getQuality();
+		TSubclassOf<UBaseModule> moduleClass = baseModule->StaticClass();
+		TArray<TObjectPtr<UInventoryCell>> currentQualityModules;
+
+		for (int32 i = 0; i < modulesToNextTier; i++)
+		{
+			TObjectPtr<UInventoryCell>* const* result = modules.FindByPredicate([&quality, &moduleClass, &currentQualityModules](TObjectPtr<UInventoryCell>* cell)
+				{
+					TObjectPtr<UBaseModule> tem = (*cell)->getItem<UBaseModule>();
+
+					return tem->getQuality() == quality &&
+						moduleClass == tem->StaticClass() &&
+						!currentQualityModules.Contains(*cell);
+				});
+
+			if (result)
+			{
+				currentQualityModules.Add(**result);
+			}
+		}
+
+		if (currentQualityModules.Num() != modulesToNextTier)
+		{
+			continue;
+		}
+
+		currentQualityModules.RemoveSingle(*module);
+
+		for (auto& i : currentQualityModules)
+		{
+			modulesToRemove.Add(i);
+		}
+
+		upgradeModule(*module);
+	}
+
+	return modulesToRemove;
+}
+
+void AInventory::upgradeModule(TObjectPtr<UInventoryCell>& moduleToUpgrade)
+{
+	TObjectPtr<UBaseModule> module = moduleToUpgrade->getItem<UBaseModule>();
+	EModuleQuality quality = module->getQuality();
+
+	if (quality == EModuleQuality::gold)
+	{
+		static const TMap<TSubclassOf<UBasePersonalModule>, TSubclassOf<UBasePersonalModule>>& personalModules = ULostConnectionAssetManager::get().getLoot().getPersonalModules();
+		static const TMap<TSubclassOf<UBaseWeaponModule>, TSubclassOf<UBaseWeaponModule>>& weaponModules = ULostConnectionAssetManager::get().getLoot().getWeaponModules();
+		TSubclassOf<UBaseModule> moduleClass;
+
+		if (const TSubclassOf<UBasePersonalModule>* platinumModuleClass = personalModules.Find(module->StaticClass()))
+		{
+			moduleClass = *platinumModuleClass;
+		}
+		else
+		{
+			moduleClass = weaponModules[module->StaticClass()];
+		}
+
+		moduleToUpgrade->setItem(NewObject<UBaseModule>(this, moduleClass));
+	}
+	else
+	{
+		module->setQuality(static_cast<EModuleQuality>(static_cast<int8>(quality) + 1));
+	}
+}
+
 void AInventory::onUnequippedWeaponsUpdate()
 {
 	for (UEscapableWidget*& widget : playerState->getEscapableWidgets())
@@ -128,7 +206,7 @@ void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 
 	personalUnequippedModules.Add(personalModuleCell);
 
-	for (TObjectPtr<UInventoryCell> moduleToRemove : upgradeModules(fillModules(personalEquippedModules, personalUnequippedModules)))
+	for (TObjectPtr<UInventoryCell> moduleToRemove : this->upgradeModules(fillModules(personalEquippedModules, personalUnequippedModules)))
 	{
 		if (!personalEquippedModules.Remove(moduleToRemove))
 		{
@@ -145,7 +223,7 @@ void AInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
 
 	weaponModules.Add(weaponModuleCell);
 
-	for (TObjectPtr<UInventoryCell> moduleToRemove : upgradeModules(fillModules(weaponModules)))
+	for (TObjectPtr<UInventoryCell> moduleToRemove : this->upgradeModules(fillModules(weaponModules)))
 	{
 		weaponModules.Remove(moduleToRemove);
 	}
@@ -381,15 +459,6 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	}
 
 	return wroteSomething;
-}
-
-TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules)
-{
-	TArray<TObjectPtr<UInventoryCell>> modulesToRemove;
-
-
-
-	return modulesToRemove;
 }
 
 template<typename... Args>

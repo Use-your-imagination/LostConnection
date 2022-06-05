@@ -56,6 +56,9 @@ private:
 	UPROPERTY(Category = GameDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float resistHardcap;
 
+	UPROPERTY(Category = GameDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	int32 modulesToNextTier;
+
 public:
 	static FPrimaryAssetId getPrimaryAssetId();
 
@@ -77,6 +80,8 @@ public:
 	int32 getMaxEnergyAmmoCount() const;
 
 	float getResistHardcap() const;
+
+	int32 getModulesToNextTier() const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

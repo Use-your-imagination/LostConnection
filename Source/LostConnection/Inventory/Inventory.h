@@ -72,6 +72,10 @@ private:
 
 	bool swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>& slot, UBaseWeapon* weapon);
 
+	TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules);
+
+	void upgradeModule(TObjectPtr<UInventoryCell>& moduleToUpgrade);
+
 	UFUNCTION()
 	void onUnequippedWeaponsUpdate();
 

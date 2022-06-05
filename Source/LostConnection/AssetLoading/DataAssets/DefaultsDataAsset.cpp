@@ -68,6 +68,11 @@ float UDefaultsDataAsset::getResistHardcap() const
 	return resistHardcap;
 }
 
+int32 UDefaultsDataAsset::getModulesToNextTier() const
+{
+	return modulesToNextTier;
+}
+
 FPrimaryAssetId UDefaultsDataAsset::GetPrimaryAssetId() const
 {
 	return UDefaultsDataAsset::getPrimaryAssetId();
