@@ -64,7 +64,5 @@ const UTexture2D* UBaseModule::getCellIcon() const
 
 const FColor& UBaseModule::getBorderColor() const
 {
-	// TODO: add color to modules
-
-	return FColor::Transparent;
+	return ULostConnectionAssetManager::get().getDefaults()[quality];
 }
