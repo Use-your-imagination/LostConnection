@@ -68,8 +68,6 @@ private:
 	int32 maxEnergyAmmoCount;
 
 private:
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 	bool swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>& slot, UBaseWeapon* weapon);
 
 	TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules);
@@ -78,6 +76,11 @@ private:
 
 	UFUNCTION()
 	void onUnequippedWeaponsUpdate();
+
+private:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	void BeginPlay() override;
 
 public:
 	AInventory();
@@ -137,7 +140,7 @@ public:
 
 	const TArray<TObjectPtr<UInventoryCell>>& getWeaponModules() const;
 
-	class ALostConnectionPlayerState* getPlayerState() const;
+	TObjectPtr<class ALostConnectionPlayerState> getPlayerState() const;
 
 	int32 getMaxSmallAmmoCount() const;
 

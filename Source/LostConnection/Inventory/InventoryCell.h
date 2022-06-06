@@ -36,6 +36,9 @@ public:
 	template<typename T>
 	TObjectPtr<T> getItem() const;
 
+	UFUNCTION(Category = Inventory, BlueprintCallable, Meta = (CompactDisplayName = "Is Empty"))
+	bool isEmpty() const;
+
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	~UInventoryCell() = default;

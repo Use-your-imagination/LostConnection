@@ -13,41 +13,6 @@
 template<typename... Args>
 static TArray<TObjectPtr<UInventoryCell>*> fillModules(const TArray<TObjectPtr<UInventoryCell>>& modules, const Args&... args);
 
-void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(AInventory, playerState);
-
-	DOREPLIFETIME(AInventory, primaryWeaponCell);
-
-	DOREPLIFETIME(AInventory, secondaryWeaponCell);
-
-	DOREPLIFETIME(AInventory, defaultWeaponCell);
-
-	DOREPLIFETIME(AInventory, firstInactiveWeaponCell);
-
-	DOREPLIFETIME(AInventory, secondInactiveWeaponCell);
-
-	DOREPLIFETIME(AInventory, unequippedWeapons);
-
-	DOREPLIFETIME(AInventory, lootPoints);
-
-	DOREPLIFETIME(AInventory, spareAmmo);
-
-	DOREPLIFETIME(AInventory, personalEquippedModules);
-
-	DOREPLIFETIME(AInventory, personalUnequippedModules);
-
-	DOREPLIFETIME(AInventory, weaponModules);
-
-	DOREPLIFETIME(AInventory, maxSmallAmmoCount);
-
-	DOREPLIFETIME(AInventory, maxLargeAmmoCount);
-
-	DOREPLIFETIME(AInventory, maxEnergyAmmoCount);
-}
-
 bool AInventory::swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>& slot, UBaseWeapon* weapon)
 {
 	TObjectPtr<UInventoryCell>* weaponCell = unequippedWeapons.FindByPredicate([weapon](const TObjectPtr<UInventoryCell>& cell)
@@ -162,6 +127,58 @@ void AInventory::onUnequippedWeaponsUpdate()
 	}
 }
 
+void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AInventory, playerState);
+
+	DOREPLIFETIME(AInventory, primaryWeaponCell);
+
+	DOREPLIFETIME(AInventory, secondaryWeaponCell);
+
+	DOREPLIFETIME(AInventory, defaultWeaponCell);
+
+	DOREPLIFETIME(AInventory, firstInactiveWeaponCell);
+
+	DOREPLIFETIME(AInventory, secondInactiveWeaponCell);
+
+	DOREPLIFETIME(AInventory, unequippedWeapons);
+
+	DOREPLIFETIME(AInventory, lootPoints);
+
+	DOREPLIFETIME(AInventory, spareAmmo);
+
+	DOREPLIFETIME(AInventory, personalEquippedModules);
+
+	DOREPLIFETIME(AInventory, personalUnequippedModules);
+
+	DOREPLIFETIME(AInventory, weaponModules);
+
+	DOREPLIFETIME(AInventory, maxSmallAmmoCount);
+
+	DOREPLIFETIME(AInventory, maxLargeAmmoCount);
+
+	DOREPLIFETIME(AInventory, maxEnergyAmmoCount);
+}
+
+void AInventory::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (!HasAuthority())
+	{
+		return;
+	}
+
+	const int32 personalModulesCount = 8;
+
+	for (int32 i = 0; i < personalModulesCount; i++)
+	{
+		personalEquippedModules.Add(NewObject<UInventoryCell>(this));
+	}
+}
+
 AInventory::AInventory()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -187,7 +204,7 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 	const UDefaultsDataAsset& defaults = manager.getDefaults();
-	UBaseWeapon* defaultWeapon = NewObject<UBaseWeapon>(this, manager.getWeaponClass(UGauss::StaticClass()));
+	TObjectPtr<UBaseWeapon> defaultWeapon = NewObject<UBaseWeapon>(this, manager.getWeaponClass(UGauss::StaticClass()));
 
 	this->playerState = playerState;
 
@@ -208,9 +225,9 @@ void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 
 	for (TObjectPtr<UInventoryCell> moduleToRemove : this->upgradeModules(fillModules(personalEquippedModules, personalUnequippedModules)))
 	{
-		if (!personalEquippedModules.Remove(moduleToRemove))
+		if (!personalEquippedModules.RemoveSingle(moduleToRemove))
 		{
-			personalUnequippedModules.Remove(moduleToRemove);
+			personalUnequippedModules.RemoveSingle(moduleToRemove);
 		}
 	}
 }
@@ -343,7 +360,7 @@ const TArray<TObjectPtr<UInventoryCell>>& AInventory::getWeaponModules() const
 	return weaponModules;
 }
 
-ALostConnectionPlayerState* AInventory::getPlayerState() const
+TObjectPtr<ALostConnectionPlayerState> AInventory::getPlayerState() const
 {
 	return playerState;
 }

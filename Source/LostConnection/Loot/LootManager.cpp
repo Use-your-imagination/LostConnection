@@ -37,7 +37,7 @@ TArray<TObjectPtr<LootFunctionT>> ALootManager::createLootFunctions(const TArray
 	return result;
 }
 
-void ALootManager::addRandomLoot(AInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints)
+void ALootManager::addRandomLoot(TObjectPtr<AInventory> playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints)
 {
 	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
 

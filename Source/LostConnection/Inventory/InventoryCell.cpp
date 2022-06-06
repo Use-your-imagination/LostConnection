@@ -19,6 +19,11 @@ IInventoriable* UInventoryCell::getItem() const
 	return Cast<IInventoriable>(item);
 }
 
+bool UInventoryCell::isEmpty() const
+{
+	return item.IsNull();
+}
+
 bool UInventoryCell::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);

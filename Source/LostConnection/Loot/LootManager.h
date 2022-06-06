@@ -37,7 +37,7 @@ private:
 	template<typename LootFunctionT>
 	TArray<TObjectPtr<LootFunctionT>> createLootFunctions(const TArray<TSubclassOf<LootFunctionT>>& lootFunctionClasses);
 
-	void addRandomLoot(AInventory* playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints);
+	void addRandomLoot(TObjectPtr<AInventory> playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints);
 
 	UFUNCTION(Client, Reliable)
 	void spawnAmmo(UObject* ammoDropable);
