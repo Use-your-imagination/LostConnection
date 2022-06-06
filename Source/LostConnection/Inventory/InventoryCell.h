@@ -17,10 +17,10 @@ class LOSTCONNECTION_API UInventoryCell : public UNetworkObject
 	GENERATED_BODY()
 	
 private:
-	/*
+	/**
 	* Implements IInventoriable
 	*/
-	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Replicated)
 	TObjectPtr<UNetworkObject> item;
 
 private:
@@ -31,7 +31,8 @@ public:
 
 	void setItem(IInventoriable* item);
 
-	IInventoriable* getItem() const;
+	UFUNCTION(Category = Inventory, BlueprintCallable)
+	TScriptInterface<IInventoriable> getItem() const;
 
 	template<typename T>
 	TObjectPtr<T> getItem() const;

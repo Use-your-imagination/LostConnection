@@ -99,7 +99,7 @@ void LootCreator::createRandomModule(int32 lootPoints, TObjectPtr<AInventory> pl
 	{
 		TArray<TSubclassOf<UBasePersonalModule>> result;
 
-		modules.GenerateKeyArray(personalModules);
+		modules.GenerateKeyArray(result);
 
 		return result;
 	}();

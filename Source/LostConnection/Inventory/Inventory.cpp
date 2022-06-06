@@ -11,7 +11,7 @@
 #include "Constants/Constants.h"
 
 template<typename... Args>
-static TArray<TObjectPtr<UInventoryCell>*> fillModules(const TArray<TObjectPtr<UInventoryCell>>& modules, const Args&... args);
+static TArray<TObjectPtr<UInventoryCell>*> fillModules(TArray<TObjectPtr<UInventoryCell>>& modules, Args&... args);
 
 bool AInventory::swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>& slot, UBaseWeapon* weapon)
 {
@@ -479,13 +479,13 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 }
 
 template<typename... Args>
-TArray<TObjectPtr<UInventoryCell>*> fillModules(const TArray<TObjectPtr<UInventoryCell>>& modules, const Args&... args)
+TArray<TObjectPtr<UInventoryCell>*> fillModules(TArray<TObjectPtr<UInventoryCell>>& modules, Args&... args)
 {
 	TArray<TObjectPtr<UInventoryCell>*> result;
 
-	for (TObjectPtr<UInventoryCell> module : modules)
+	for (TObjectPtr<UInventoryCell>& module : modules)
 	{
-		if (module->getItem<UBasePersonalModule>()->getQuality() == EModuleQuality::platinum)
+		if (module->isEmpty() || module->getItem<UBasePersonalModule>()->getQuality() == EModuleQuality::platinum)
 		{
 			continue;
 		}

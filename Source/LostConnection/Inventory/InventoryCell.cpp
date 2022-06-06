@@ -14,9 +14,9 @@ void UInventoryCell::setItem(IInventoriable* item)
 	this->item = Cast<UNetworkObject>(item);
 }
 
-IInventoriable* UInventoryCell::getItem() const
+TScriptInterface<IInventoriable> UInventoryCell::getItem() const
 {
-	return Cast<IInventoriable>(item);
+	return item.Get();
 }
 
 bool UInventoryCell::isEmpty() const
