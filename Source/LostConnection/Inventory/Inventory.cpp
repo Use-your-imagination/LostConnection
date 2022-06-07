@@ -215,6 +215,74 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 	defaultWeaponCell->setItem(defaultWeapon);
 }
 
+void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* module)
+{
+	if (TObjectPtr<UInventoryCell>* cell = personalEquippedModules.FindByKey<TObjectPtr<UInventoryCell>>(module))
+	{
+		TObjectPtr<UInventoryCell> newCell = NewObject<UInventoryCell>(this);
+
+		(*cell)->getItem();
+
+		newCell->setItem((*cell)->getItem().GetInterface());
+
+		personalUnequippedModules.Add(newCell);
+
+		(*cell)->setItem(nullptr);
+	}
+	else
+	{
+		int32 index = personalUnequippedModules.Find(TObjectPtr<UInventoryCell>(module));
+
+		for (TObjectPtr<UInventoryCell>& equippedModule : personalEquippedModules)
+		{
+			if (equippedModule->isEmpty())
+			{
+				equippedModule = personalEquippedModules[index];
+
+				personalUnequippedModules.RemoveAt(index);
+
+				break;
+			}
+		}
+	}
+}
+
+void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule, UInventoryCell* secondModule)
+{
+	auto findModule = [this](TObjectPtr<UInventoryCell> cell) -> TObjectPtr<UInventoryCell>&
+	{
+		TObjectPtr<UInventoryCell>* result = personalEquippedModules.FindByKey(cell);
+
+		if (!result)
+		{
+			result = personalUnequippedModules.FindByKey(cell);
+		}
+
+		return *result;
+	};
+	TObjectPtr<UInventoryCell>& first = findModule(firstModule);
+	TObjectPtr<UInventoryCell>& second = findModule(secondModule);
+
+	if (first->isEmpty() || second->isEmpty())
+	{
+		TObjectPtr<UInventoryCell>& empty = first->isEmpty() ? first : second;
+		TObjectPtr<UInventoryCell>& notEmpty = first->isEmpty() ? second : first;
+
+		empty->setItem(notEmpty->getItem().GetInterface());
+
+		notEmpty->setItem(nullptr);
+
+		if (int32 index = personalUnequippedModules.Find(notEmpty) != INDEX_NONE)
+		{
+			personalUnequippedModules.RemoveAt(index);
+		}
+	}
+	else
+	{
+		Swap(first, second);
+	}
+}
+
 void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 {
 	TObjectPtr<UInventoryCell> personalModuleCell = NewObject<UInventoryCell>(this);

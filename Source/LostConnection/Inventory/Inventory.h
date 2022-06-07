@@ -88,6 +88,12 @@ public:
 	void init(TObjectPtr<class ALostConnectionPlayerState> playerState);
 
 	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
+	void equipOrUnequipPersonalModule(UInventoryCell* module);
+
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
+	void swapPersonalModules(UInventoryCell* firstModule, UInventoryCell* secondModule);
+
+	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void addPersonalModule(UBasePersonalModule* module);
 
 	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
