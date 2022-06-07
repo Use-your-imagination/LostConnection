@@ -267,12 +267,13 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 	{
 		TObjectPtr<UInventoryCell>& empty = first->isEmpty() ? first : second;
 		TObjectPtr<UInventoryCell>& notEmpty = first->isEmpty() ? second : first;
+		int32 index = unequippedPersonalModules.Find(notEmpty);
 
 		empty->setItem(notEmpty->getItem().GetInterface());
 
 		notEmpty->setItem(nullptr);
 
-		if (int32 index = unequippedPersonalModules.Find(notEmpty) != INDEX_NONE)
+		if (index != INDEX_NONE)
 		{
 			unequippedPersonalModules.RemoveAt(index);
 		}
