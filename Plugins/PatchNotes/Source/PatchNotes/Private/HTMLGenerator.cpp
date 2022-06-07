@@ -233,6 +233,8 @@ void HTMLGenerator::updateIndexHTML(const FString& outPath, const FString& confi
 
 	FFileHelper::LoadFileToString(indexHTMLData, *(outPath / TEXT("index.html")));
 
+	indexHTMLData = indexHTMLData.Replace(TEXT("\r\n"), TEXT("\n"));
+
 	indexHTMLData.ParseIntoArray(rows, TEXT("\n"));
 
 	indexHTMLData.Empty();
