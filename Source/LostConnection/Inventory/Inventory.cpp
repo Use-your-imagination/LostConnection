@@ -248,7 +248,7 @@ void AInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
 
 void AInventory::addUnequippedWeapon_Implementation(UBaseWeapon* weapon)
 {
-	UInventoryCell* weaponCell = NewObject<UInventoryCell>(this);
+	TObjectPtr<UInventoryCell> weaponCell = NewObject<UInventoryCell>(this);
 
 	weaponCell->setItem(weapon);
 
