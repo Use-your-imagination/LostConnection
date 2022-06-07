@@ -26,13 +26,13 @@ protected:
 	bool isPreviousVisible;
 
 public:
-	virtual void init(class ALostConnectionPlayerState* playerState);
+	virtual void init(TObjectPtr<class ALostConnectionPlayerState> playerState);
 
 	void updateAsTop();
 
 	void updateAsPrevious(bool isVisible, bool isHitTestable);
 
-	UFUNCTION(Category = Net, BlueprintNativeEvent)
+	UFUNCTION(Category = Network, BlueprintNativeEvent)
 	void onNetUpdate();
 
 	void setZOrder(int32 zOrder);

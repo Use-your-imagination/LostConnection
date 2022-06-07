@@ -251,20 +251,20 @@ void ALostConnectionPlayerState::resetCurrentUI_Implementation()
 
 void ALostConnectionPlayerState::createEscapableWidget_Implementation(TSubclassOf<UEscapableWidget> widgetClass)
 {
-	UEscapableWidget* widget = CreateWidget<UEscapableWidget>(playerController, widgetClass);
+	TObjectPtr<UEscapableWidget> widget = CreateWidget<UEscapableWidget>(playerController.Get(), widgetClass);
 
 	widget->init(this);
 
 	this->addEscapableWidget(widget);
 }
 
-void ALostConnectionPlayerState::addEscapableWidget(UEscapableWidget* widget)
+void ALostConnectionPlayerState::addEscapableWidget(TObjectPtr<UEscapableWidget> widget)
 {
 	int32 nextZOrder = escapableWidgets.Num() ? escapableWidgets.Last()->getZOrder() + 1 : UConstants::startZOrder;
 
 	widget->setZOrder(nextZOrder);
 
-	for (UEscapableWidget* previousWidget : escapableWidgets)
+	for (TObjectPtr<UEscapableWidget> previousWidget : escapableWidgets)
 	{
 		previousWidget->updateAsPrevious(widget->getIsPreviousVisible(), widget->getIsPreviousHitTestable());
 	}
@@ -296,9 +296,9 @@ bool ALostConnectionPlayerState::popEscapableWidget()
 		return true;
 	}
 
-	UEscapableWidget*& widget = escapableWidgets.Last();
+	TObjectPtr<UEscapableWidget>& widget = escapableWidgets.Last();
 
-	for (UEscapableWidget* previousWidget : escapableWidgets)
+	for (TObjectPtr<UEscapableWidget> previousWidget : escapableWidgets)
 	{
 		if (previousWidget == widget)
 		{
@@ -377,7 +377,7 @@ int32 ALostConnectionPlayerState::getLootPoints() const
 	return inventory->getLootPoints();
 }
 
-TArray<UEscapableWidget*>& ALostConnectionPlayerState::getEscapableWidgets()
+TArray<TObjectPtr<UEscapableWidget>>& ALostConnectionPlayerState::getEscapableWidgets()
 {
 	return escapableWidgets;
 }

@@ -4,7 +4,7 @@
 
 #include "Engine/LostConnectionPlayerState.h"
 
-void UInventoryWidget::init(ALostConnectionPlayerState* playerState)
+void UInventoryWidget::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 {
 	Super::init(playerState);
 

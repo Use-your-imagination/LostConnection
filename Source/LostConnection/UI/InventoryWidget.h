@@ -17,10 +17,10 @@ class LOSTCONNECTION_API UInventoryWidget : public UEscapableWidget
 	
 private:
 	UPROPERTY(Category = Inventory, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	AInventory* inventory;
+	TObjectPtr<AInventory> inventory;
 
 public:
-	void init(class ALostConnectionPlayerState* playerState) override;
+	void init(TObjectPtr<class ALostConnectionPlayerState> playerState) override;
 
 	UFUNCTION(Category = Events, BlueprintNativeEvent)
 	void onShow();

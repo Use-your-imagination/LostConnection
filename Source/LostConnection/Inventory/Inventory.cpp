@@ -119,9 +119,9 @@ void AInventory::upgradeModule(TObjectPtr<UInventoryCell>& moduleToUpgrade)
 	}
 }
 
-void AInventory::onUnequippedWeaponsUpdate()
+void AInventory::onInventoryUpdate()
 {
-	for (UEscapableWidget*& widget : playerState->getEscapableWidgets())
+	for (TObjectPtr<UEscapableWidget>& widget : playerState->getEscapableWidgets())
 	{
 		widget->onNetUpdate();
 	}
@@ -149,9 +149,9 @@ void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(AInventory, spareAmmo);
 
-	DOREPLIFETIME(AInventory, personalEquippedModules);
+	DOREPLIFETIME(AInventory, equippedPersonalModules);
 
-	DOREPLIFETIME(AInventory, personalUnequippedModules);
+	DOREPLIFETIME(AInventory, unequippedPersonalModules);
 
 	DOREPLIFETIME(AInventory, weaponModules);
 
@@ -175,7 +175,7 @@ void AInventory::BeginPlay()
 
 	for (int32 i = 0; i < personalModulesCount; i++)
 	{
-		personalEquippedModules.Add(NewObject<UInventoryCell>(this));
+		equippedPersonalModules.Add(NewObject<UInventoryCell>(this));
 	}
 }
 
@@ -217,7 +217,7 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 
 void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* module)
 {
-	if (TObjectPtr<UInventoryCell>* cell = personalEquippedModules.FindByKey<TObjectPtr<UInventoryCell>>(module))
+	if (TObjectPtr<UInventoryCell>* cell = equippedPersonalModules.FindByKey<TObjectPtr<UInventoryCell>>(module))
 	{
 		TObjectPtr<UInventoryCell> newCell = NewObject<UInventoryCell>(this);
 
@@ -225,21 +225,21 @@ void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* mod
 
 		newCell->setItem((*cell)->getItem().GetInterface());
 
-		personalUnequippedModules.Add(newCell);
+		unequippedPersonalModules.Add(newCell);
 
 		(*cell)->setItem(nullptr);
 	}
 	else
 	{
-		int32 index = personalUnequippedModules.Find(TObjectPtr<UInventoryCell>(module));
+		int32 index = unequippedPersonalModules.Find(TObjectPtr<UInventoryCell>(module));
 
-		for (TObjectPtr<UInventoryCell>& equippedModule : personalEquippedModules)
+		for (TObjectPtr<UInventoryCell>& equippedModule : equippedPersonalModules)
 		{
 			if (equippedModule->isEmpty())
 			{
-				equippedModule = personalEquippedModules[index];
+				equippedModule = equippedPersonalModules[index];
 
-				personalUnequippedModules.RemoveAt(index);
+				unequippedPersonalModules.RemoveAt(index);
 
 				break;
 			}
@@ -251,11 +251,11 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 {
 	auto findModule = [this](TObjectPtr<UInventoryCell> cell) -> TObjectPtr<UInventoryCell>&
 	{
-		TObjectPtr<UInventoryCell>* result = personalEquippedModules.FindByKey(cell);
+		TObjectPtr<UInventoryCell>* result = equippedPersonalModules.FindByKey(cell);
 
 		if (!result)
 		{
-			result = personalUnequippedModules.FindByKey(cell);
+			result = unequippedPersonalModules.FindByKey(cell);
 		}
 
 		return *result;
@@ -272,9 +272,9 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 
 		notEmpty->setItem(nullptr);
 
-		if (int32 index = personalUnequippedModules.Find(notEmpty) != INDEX_NONE)
+		if (int32 index = unequippedPersonalModules.Find(notEmpty) != INDEX_NONE)
 		{
-			personalUnequippedModules.RemoveAt(index);
+			unequippedPersonalModules.RemoveAt(index);
 		}
 	}
 	else
@@ -289,13 +289,13 @@ void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 
 	personalModuleCell->setItem(module);
 
-	personalUnequippedModules.Add(personalModuleCell);
+	unequippedPersonalModules.Add(personalModuleCell);
 
-	for (TObjectPtr<UInventoryCell> moduleToRemove : this->upgradeModules(fillModules(personalEquippedModules, personalUnequippedModules)))
+	for (TObjectPtr<UInventoryCell> moduleToRemove : this->upgradeModules(fillModules(equippedPersonalModules, unequippedPersonalModules)))
 	{
-		if (!personalEquippedModules.RemoveSingle(moduleToRemove))
+		if (!equippedPersonalModules.RemoveSingle(moduleToRemove))
 		{
-			personalUnequippedModules.RemoveSingle(moduleToRemove);
+			unequippedPersonalModules.RemoveSingle(moduleToRemove);
 		}
 	}
 }
@@ -415,12 +415,12 @@ int32 AInventory::getLootPoints() const
 
 const TArray<TObjectPtr<UInventoryCell>>& AInventory::getPersonalEquippedModules() const
 {
-	return personalEquippedModules;
+	return equippedPersonalModules;
 }
 
 const TArray<TObjectPtr<UInventoryCell>>& AInventory::getPersonalUnequippedModules() const
 {
-	return personalUnequippedModules;
+	return unequippedPersonalModules;
 }
 
 const TArray<TObjectPtr<UInventoryCell>>& AInventory::getWeaponModules() const
@@ -514,7 +514,7 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 		}
 	}
 
-	for (TObjectPtr<UInventoryCell> cell : personalEquippedModules)
+	for (TObjectPtr<UInventoryCell> cell : equippedPersonalModules)
 	{
 		if (IsValid(cell))
 		{
@@ -523,7 +523,7 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 			wroteSomething |= cell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 		}
 	}
-	for (TObjectPtr<UInventoryCell> cell : personalUnequippedModules)
+	for (TObjectPtr<UInventoryCell> cell : unequippedPersonalModules)
 	{
 		if (IsValid(cell))
 		{

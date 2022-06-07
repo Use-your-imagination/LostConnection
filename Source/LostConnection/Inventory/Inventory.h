@@ -40,7 +40,7 @@ private:
 	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInventoryCell> secondInactiveWeaponCell;
 
-	UPROPERTY(Category = "Inventory|Weapons", ReplicatedUsing = onUnequippedWeaponsUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Weapons", ReplicatedUsing = onInventoryUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<TObjectPtr<UInventoryCell>> unequippedWeapons;
 
 	UPROPERTY(Category = "Inventory|Economy", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
@@ -49,11 +49,11 @@ private:
 	UPROPERTY(Category = "Inventory|Ammo", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<FAmmoData> spareAmmo;
 
-	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<TObjectPtr<UInventoryCell>> personalEquippedModules;
+	UPROPERTY(Category = "Inventory|Modules", ReplicatedUsing = onInventoryUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<TObjectPtr<UInventoryCell>> equippedPersonalModules;
 
-	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<TObjectPtr<UInventoryCell>> personalUnequippedModules;
+	UPROPERTY(Category = "Inventory|Modules", ReplicatedUsing = onInventoryUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	TArray<TObjectPtr<UInventoryCell>> unequippedPersonalModules;
 
 	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<TObjectPtr<UInventoryCell>> weaponModules;
@@ -75,7 +75,7 @@ private:
 	void upgradeModule(TObjectPtr<UInventoryCell>& moduleToUpgrade);
 
 	UFUNCTION()
-	void onUnequippedWeaponsUpdate();
+	void onInventoryUpdate();
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

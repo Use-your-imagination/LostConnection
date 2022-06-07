@@ -32,19 +32,19 @@ private:
 
 protected:
 	UPROPERTY(Category = UI, BlueprintReadOnly)
-	UUserWidget* currentUI;
+	TObjectPtr<UUserWidget> currentUI;
 
 	UPROPERTY(Category = UI, BlueprintReadOnly)
-	UMaterialInstanceDynamic* selectorMaterial;
+	TObjectPtr<UMaterialInstanceDynamic> selectorMaterial;
 
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly)
 	TObjectPtr<AInventory> inventory;
 
 	UPROPERTY(Category = Engine, Replicated, BlueprintReadOnly)
-	class ALostConnectionPlayerController* playerController;
+	TObjectPtr<class ALostConnectionPlayerController> playerController;
 
 	UPROPERTY(Category = UI, BlueprintReadOnly)
-	TArray<UEscapableWidget*> escapableWidgets;
+	TArray<TObjectPtr<UEscapableWidget>> escapableWidgets;
 
 protected:
 	UPROPERTY(Replicated)
@@ -54,7 +54,7 @@ protected:
 	TArray<FCooldownableWeaponsData> cooldownableWeapons;
 
 	UPROPERTY(Category = Respawn, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UCooldownableUtility* respawnCooldown;
+	TObjectPtr<UCooldownableUtility> respawnCooldown;
 
 	TSubclassOf<class ABaseDrone> droneClass;
 
@@ -140,7 +140,7 @@ public:
 	UFUNCTION(Client, Reliable)
 	void createEscapableWidget(TSubclassOf<UEscapableWidget> widgetClass);
 
-	void addEscapableWidget(UEscapableWidget* widget);
+	void addEscapableWidget(TObjectPtr<UEscapableWidget> widget);
 	
 	UFUNCTION(Category = EscapeMenu, BlueprintCallable)
 	UPARAM(DisplayName = IsEscapableWidgetWasPopped) bool popEscapableWidget();
@@ -173,7 +173,7 @@ public:
 
 	int32 getLootPoints() const;
 
-	TArray<UEscapableWidget*>& getEscapableWidgets();
+	TArray<TObjectPtr<UEscapableWidget>>& getEscapableWidgets();
 
 	virtual void Tick(float DeltaTime) override;
 

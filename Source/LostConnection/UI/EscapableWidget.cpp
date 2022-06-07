@@ -4,7 +4,7 @@
 
 #include "Engine/LostConnectionPlayerState.h"
 
-void UEscapableWidget::init(ALostConnectionPlayerState* playerState)
+void UEscapableWidget::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 {
 
 }
