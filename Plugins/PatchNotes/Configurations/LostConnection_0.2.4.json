@@ -3,7 +3,14 @@
 	"projectVersion": "0.2.4",
 	"Gameplay":
 	{
-		"type": "category"
+		"type": "category",
+		"Modules":
+		{
+			"type": "item",
+			"notes": [
+				"Add modules"
+			]
+		}
 	},
 	"Rooms":
 	{
@@ -23,7 +30,14 @@
 	},
 	"Modules":
 	{
-		"type": "category"
+		"type": "category",
+		"Overclocking":
+		{
+			"type": "item",
+			"notes": [
+				"Increase output damage by 20/40/80/160%"
+			]
+		}
 	},
 	"Bug Fixes":
 	{
