@@ -204,7 +204,7 @@ protected:
 	virtual void updateCharacterVisual();
 
 private:
-	UHealthBarWidget* getHealthBarWidget() const;
+	TObjectPtr<UHealthBarWidget> getHealthBarWidget() const;
 
 public:	
 	ABaseCharacter();

@@ -965,7 +965,7 @@ void ABaseDrone::changeWeapon()
 
 	if (currentWeapon)
 	{
-		currentWeapon->resetShoot(currentWeaponMesh, this);
+		currentWeapon->resetShoot(currentWeaponMesh);
 	}
 
 	if (currentWeapon == playerState->getPrimaryWeapon())

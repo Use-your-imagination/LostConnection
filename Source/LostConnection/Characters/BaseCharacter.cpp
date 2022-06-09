@@ -360,7 +360,7 @@ void ABaseCharacter::updateCharacterVisual()
 	}
 }
 
-UHealthBarWidget* ABaseCharacter::getHealthBarWidget() const
+TObjectPtr<UHealthBarWidget> ABaseCharacter::getHealthBarWidget() const
 {
 	return Cast<UHealthBarWidget>(healthBarWidget->GetWidget());
 }
@@ -640,7 +640,7 @@ void ABaseCharacter::resetShoot_Implementation()
 {
 	if (this->isWeaponEquipped())
 	{
-		currentWeapon->resetShoot(currentWeaponMesh, this);
+		currentWeapon->resetShoot(currentWeaponMesh);
 	}
 }
 

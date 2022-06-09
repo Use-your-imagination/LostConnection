@@ -16,11 +16,11 @@
 
 #pragma warning(disable: 4458)
 
-FTransform UBaseWeapon::calculateAmmoTransform(ABaseDrone* drone, const FTransform& weaponBarrelTransform)
+FTransform UBaseWeapon::calculateAmmoTransform(TObjectPtr<ABaseDrone> drone, const FTransform& weaponBarrelTransform)
 {
 	if (IsValid(drone))
 	{
-		UCameraComponent* camera = drone->GetFollowCamera();
+		TObjectPtr<UCameraComponent> camera = drone->GetFollowCamera();
 
 		return FTransform
 		(
@@ -32,9 +32,9 @@ FTransform UBaseWeapon::calculateAmmoTransform(ABaseDrone* drone, const FTransfo
 	{
 		// TODO: change target to AITargeted
 
-		ABaseBot* bot = Cast<ABaseBot>(owner);
-		AAIController* controller = bot->GetController<AAIController>();
-		ABaseDrone* target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject(ULostConnectionAssetManager::get().getAI().getTargetKey()));
+		TObjectPtr<ABaseBot> bot = Cast<ABaseBot>(owner);
+		TObjectPtr<AAIController> controller = bot->GetController<AAIController>();
+		TObjectPtr<ABaseDrone> target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject(ULostConnectionAssetManager::get().getAI().getTargetKey()));
 
 		if (IsValid(target))
 		{
@@ -49,7 +49,7 @@ FTransform UBaseWeapon::calculateAmmoTransform(ABaseDrone* drone, const FTransfo
 	return {};
 }
 
-FTransform UBaseWeapon::calculateVisibleAmmoTransform(ABaseDrone* drone, const FTransform& weaponBarrelTransform, const FTransform& ammoTransform)
+FTransform UBaseWeapon::calculateVisibleAmmoTransform(TObjectPtr<ABaseDrone> drone, const FTransform& weaponBarrelTransform, const FTransform& ammoTransform)
 {
 	if (!IsValid(drone))
 	{
@@ -118,13 +118,13 @@ void UBaseWeapon::shoot()
 		return;
 	}
 
-	ABaseDrone* drone = Cast<ABaseDrone>(owner);
+	TObjectPtr<ABaseDrone> drone = Cast<ABaseDrone>(owner);
 	int32 shotsCount = currentTimeBetweenShots ? FMath::FloorToInt(FMath::Abs(currentTimeBetweenShots / timeBetweenShots)) : 1;
 	int32 boneIndex = owner->getCurrentWeaponMeshComponent()->GetBoneIndex("barrel");
 	FTransform weaponBarrelTransform = owner->getCurrentWeaponMeshComponent()->GetBoneTransform(boneIndex);
 	FTransform ammoTransform = this->calculateAmmoTransform(drone, weaponBarrelTransform);
 	FTransform visibleAmmoTransform = this->calculateVisibleAmmoTransform(drone, weaponBarrelTransform, ammoTransform);
-	ALostConnectionGameState* gameState = Utility::getGameState(owner.Get());
+	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(owner.Get());
 	bool isAnyShot = false;
 
 	for (SIZE_T i = 0; i < shotsCount; i++)
@@ -134,7 +134,7 @@ void UBaseWeapon::shoot()
 			float currentSpreadDistance = this->calculateSpreadDistance();
 			float pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);
 			float yaw = FMath::Tan(FMath::Acos(pitch / currentSpreadDistance)) * pitch;
-			AAmmo* launchedAmmo = gameState->spawn<AAmmo>(ammoClass, ammoTransform);
+			TObjectPtr<AAmmo> launchedAmmo = gameState->spawn<AAmmo>(ammoClass, ammoTransform);
 			
 			launchedAmmo->copyProperties(this);
 
@@ -161,7 +161,7 @@ void UBaseWeapon::shoot()
 
 	if (shotsCount && isAnyShot)
 	{
-		UAnimMontage* shootAnimation = nullptr;
+		TObjectPtr<UAnimMontage> shootAnimation = nullptr;
 
 		if (IsValid(drone))
 		{
@@ -193,7 +193,7 @@ void UBaseWeapon::startShoot()
 	isShooting = true;
 }
 
-void UBaseWeapon::resetShoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character)
+void UBaseWeapon::resetShoot(TObjectPtr<USkeletalMeshComponent> currentVisibleWeaponMesh)
 {
 	isShooting = false;
 
@@ -305,17 +305,35 @@ void UBaseWeapon::setWeaponType_Implementation(EWeaponType newWeaponType)
 
 void UBaseWeapon::setWeaponRarity_Implementation(EWeaponRarity newRarity)
 {
+	if (!owner.IsValid())
+	{
+		return;
+	}
+
 	rarity = newRarity;
 
-	weaponModules.SetNum(UConstants::getWeaponModulesSize(rarity));
+	int32 newSize = UConstants::getWeaponModulesSize(rarity);
+	TObjectPtr<AInventory> inventory = Utility::getPlayerState(owner.Get())->getInventory();
+
+	if (newSize > weaponModules.Num())
+	{
+		while (newSize != weaponModules.Num())
+		{
+			weaponModules.Add(NewObject<UInventoryCell>(inventory));
+		}
+	}
+	else
+	{
+		weaponModules.SetNum(newSize);
+	}
 }
 
-USkeletalMesh* UBaseWeapon::getWeaponMesh() const
+TObjectPtr<USkeletalMesh> UBaseWeapon::getWeaponMesh() const
 {
 	return mesh;
 }
 
-UStaticMesh* UBaseWeapon::getMagazineMesh() const
+TObjectPtr<UStaticMesh> UBaseWeapon::getMagazineMesh() const
 {
 	return magazineMesh;
 }
@@ -385,11 +403,21 @@ float UBaseWeapon::getLength() const
 	return length;
 }
 
+const TArray<TObjectPtr<UInventoryCell>>& UBaseWeapon::getWeaponModules() const
+{
+	return weaponModules;
+}
+
+TArray<TObjectPtr<UInventoryCell>>& UBaseWeapon::getWeaponModules()
+{
+	return weaponModules;
+}
+
 bool UBaseWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	for (UBaseWeaponModule* weaponModule : weaponModules)
+	for (TObjectPtr<UInventoryCell> weaponModule : weaponModules)
 	{
 		if (IsValid(weaponModule))
 		{

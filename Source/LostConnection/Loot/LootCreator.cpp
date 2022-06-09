@@ -61,6 +61,16 @@ bool LootCreator::createRandomLoot
 	return StaticCast<bool>(it);
 }
 
+template<typename T>
+TObjectPtr<T> LootCreator::createModule(const TSubclassOf<T>& subclass, TObjectPtr<AInventory> playerInventory, EModuleQuality quality) const
+{
+	TObjectPtr<T> result = NewObject<T>(playerInventory, subclass);
+
+	result->setQuality(quality);
+
+	return result;
+}
+
 LootCreator::LootCreator() :
 	weaponsGetter([](TObjectPtr<UBaseWeaponsLootFunction> function) { return function->getWeaponRarity(); }),
 	modulesGetter([](TObjectPtr<UBaseModulesLootFunction> function) { return function->getModuleQuality(); }),
@@ -116,7 +126,7 @@ void LootCreator::createRandomModule(int32 lootPoints, TObjectPtr<AInventory> pl
 		personalClass = modules[personalClass];
 	}
 
-	playerInventory->addPersonalModule(NewObject<UBasePersonalModule>(playerInventory, personalClass));
+	playerInventory->addPersonalModule(this->createModule(personalClass, playerInventory, quality));
 }
 
 void LootCreator::createRandomWeaponModule(int32 lootPoints, TObjectPtr<AInventory> playerInventory, const TArray<TObjectPtr<UBaseWeaponModulesLootFunction>>& lootFunctions) const

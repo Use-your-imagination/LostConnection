@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Actor.h"
-#include "GameFramework/Character.h"
 #include "Animation/AnimMontage.h"
 #include "Animation/AimOffsetBlendSpace.h"
 #include "Animation/AnimSequence.h"
@@ -15,6 +14,7 @@
 #include "Interfaces/Inventory/Inventoriable.h"
 #include "Modules/Base/WeaponModules/BaseWeaponModule.h"
 #include "Utility/Enums.h"
+#include "Inventory/InventoryCell.h"
 
 #include "BaseWeapon.generated.h"
 
@@ -34,9 +34,9 @@ private:
 	bool isShooting;
 
 private:
-	FTransform calculateAmmoTransform(class ABaseDrone* drone, const FTransform& weaponBarrelTransform);
+	FTransform calculateAmmoTransform(TObjectPtr<class ABaseDrone> drone, const FTransform& weaponBarrelTransform);
 
-	FTransform calculateVisibleAmmoTransform(class ABaseDrone* drone, const FTransform& weaponBarrelTransform, const FTransform& ammoTransform);
+	FTransform calculateVisibleAmmoTransform(TObjectPtr<class ABaseDrone> drone, const FTransform& weaponBarrelTransform, const FTransform& ammoTransform);
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -51,40 +51,40 @@ protected:
 	FText weaponDescription;
 
 	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
-	USkeletalMesh* mesh;
+	TObjectPtr<USkeletalMesh> mesh;
 
-	UPROPERTY(Category = Components, EditDefaultsOnly, BlueprintReadOnly)
-	UStaticMesh* magazineMesh;
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UStaticMesh> magazineMesh;
 
 	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly)
-	UTexture2D* weaponCellIcon;
+	TObjectPtr<UTexture2D> weaponCellIcon;
 
 	UPROPERTY(Category = "Animations|States|Hip", EditDefaultsOnly, BlueprintReadOnly)
-	UAimOffsetBlendSpace* hipAimOffset;
+	TObjectPtr<UAimOffsetBlendSpace> hipAimOffset;
 
 	UPROPERTY(Category = "Animations|States|Hip", EditDefaultsOnly, BlueprintReadOnly)
-	UAnimSequence* hipBasePoseAnimation;
+	TObjectPtr<UAnimSequence> hipBasePoseAnimation;
 
 	UPROPERTY(Category = "Animations|States|Hip", EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* hipShootAnimation;
+	TObjectPtr<UAnimMontage> hipShootAnimation;
 
 	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
-	UAimOffsetBlendSpace* adsAimOffset;
+	TObjectPtr<UAimOffsetBlendSpace> adsAimOffset;
 
 	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
-	UAnimSequence* adsBasePoseAnimation;
+	TObjectPtr<UAnimSequence> adsBasePoseAnimation;
 
 	UPROPERTY(Category = "Animations|States|ADS", EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* adsShootAnimation;
+	TObjectPtr<UAnimMontage> adsShootAnimation;
 
 	UPROPERTY(Category = "Animations|Actions", EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* reloadAnimation;
+	TObjectPtr<UAnimMontage> reloadAnimation;
 
 	UPROPERTY(Category = "Animations|Actions", EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* switchFromAnimation;
+	TObjectPtr<UAnimMontage> switchFromAnimation;
 
 	UPROPERTY(Category = "Animations|Actions", EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* switchToAnimation;
+	TObjectPtr<UAnimMontage> switchToAnimation;
 
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	EAmmoType ammoType;
@@ -110,7 +110,7 @@ protected:
 	UPROPERTY(Category = Weapons, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	EWeaponType weaponType;
 
-	/*
+	/**
 	* spreadDistance * currentAccuracyMultiplier;
 	* pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);
 	* yaw = FMath::Tan(FMath::Acos(pitch / currentSpreadDistance)) * pitch;
@@ -128,7 +128,7 @@ protected:
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<AAmmo> ammoClass;
 
-	/*
+	/**
 	* float decreaseAccuracyMultiplier = 0.95f;
 	* currentAccuracyMultiplier += drawback;
 	* Tick: currentAccuracyMultiplier = FMath::Max(1.0f, currentAccuracyMultiplier * decreaseAccuracyMultiplier);
@@ -155,7 +155,7 @@ protected:
 	float currentAccuracyMultiplier;
 
 	UPROPERTY(Category = Modules, Replicated, BlueprintReadOnly)
-	TArray<UBaseWeaponModule*> weaponModules;
+	TArray<TObjectPtr<UInventoryCell>> weaponModules;
 
 	UPROPERTY(Category = Rarity, Replicated, BlueprintReadOnly)
 	EWeaponRarity rarity;
@@ -169,7 +169,7 @@ public:
 
 	void startShoot();
 
-	void resetShoot(USkeletalMeshComponent* currentVisibleWeaponMesh, ACharacter* character);
+	void resetShoot(TObjectPtr<USkeletalMeshComponent> currentVisibleWeaponMesh);
 
 	void alternativeMode();
 
@@ -186,7 +186,7 @@ public:
 
 	void removeMoreDamageCoefficient(float coefficient);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
 	void setOwner(class ABaseCharacter* owner);
 
 	UFUNCTION(Server, Reliable)
@@ -213,9 +213,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setWeaponRarity(EWeaponRarity newRarity);
 
-	USkeletalMesh* getWeaponMesh() const;
+	TObjectPtr<USkeletalMesh> getWeaponMesh() const;
 
-	UStaticMesh* getMagazineMesh() const;
+	TObjectPtr<UStaticMesh> getMagazineMesh() const;
 
 	EAmmoType getAmmoType() const;
 
@@ -242,6 +242,10 @@ public:
 	float getAdditionalCrushingHitChance() const;
 
 	float getLength() const;
+
+	const TArray<TObjectPtr<UInventoryCell>>& getWeaponModules() const;
+
+	TArray<TObjectPtr<UInventoryCell>>& getWeaponModules();
 
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 

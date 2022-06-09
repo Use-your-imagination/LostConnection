@@ -29,6 +29,9 @@ private:
 		RangeEnumT& resultRange
 	) const;
 
+	template<typename T>
+	TObjectPtr<T> createModule(const TSubclassOf<T>& subclass, TObjectPtr<AInventory> playerInventory, EModuleQuality quality) const;
+
 public:
 	LootCreator();
 

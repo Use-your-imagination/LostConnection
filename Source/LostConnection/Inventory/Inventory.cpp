@@ -217,11 +217,9 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 
 void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* module)
 {
-	if (TObjectPtr<UInventoryCell>* cell = equippedPersonalModules.FindByKey<TObjectPtr<UInventoryCell>>(module))
+	if (TObjectPtr<UInventoryCell>* cell = equippedPersonalModules.FindByKey(module))
 	{
 		TObjectPtr<UInventoryCell> newCell = NewObject<UInventoryCell>(this);
-
-		(*cell)->getItem();
 
 		newCell->setItem((*cell)->getItem().GetInterface());
 
@@ -231,17 +229,17 @@ void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* mod
 	}
 	else
 	{
-		int32 index = unequippedPersonalModules.Find(TObjectPtr<UInventoryCell>(module));
+		int32 index = unequippedPersonalModules.Find(module);
 
-		for (TObjectPtr<UInventoryCell>& equippedModule : equippedPersonalModules)
+		for (TObjectPtr<UInventoryCell> equippedModule : equippedPersonalModules)
 		{
 			if (equippedModule->isEmpty())
 			{
-				equippedModule = equippedPersonalModules[index];
+				equippedModule->setItem(unequippedPersonalModules[index]->getItem().GetInterface());
 
 				unequippedPersonalModules.RemoveAt(index);
 
-				break;
+				return;
 			}
 		}
 	}
@@ -281,6 +279,80 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 	else
 	{
 		Swap(first, second);
+	}
+}
+
+void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* module)
+{
+	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
+	TObjectPtr<UInventoryCell>* cell = modules.FindByKey(module);
+
+	if (cell)
+	{
+		(*cell)->setItem(nullptr);
+	}
+	else
+	{
+		for (TObjectPtr<UInventoryCell> weaponModule : modules)
+		{
+			if (weaponModule->isEmpty())
+			{
+				weaponModule->setItem(module->getItem().GetInterface());
+
+				return;
+			}
+		}
+	}
+}
+
+void AInventory::swapWeaponlModules_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* firstModule, UInventoryCell* secondModule)
+{
+	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
+	
+	auto findModule = [this, &modules](TObjectPtr<UInventoryCell> cell) -> TObjectPtr<UInventoryCell>&
+	{
+		TObjectPtr<UInventoryCell>* result = modules.FindByKey(cell);
+
+		if (!result)
+		{
+			result = weaponModules.FindByKey(cell);
+		}
+
+		return *result;
+	};
+	TObjectPtr<UInventoryCell>& first = findModule(firstModule);
+	TObjectPtr<UInventoryCell>& second = findModule(secondModule);
+	bool isSamePlace = (weaponModules.Contains(first) && weaponModules.Contains(second)) || (modules.Contains(first) && modules.Contains(second));
+
+	if (first->isEmpty() || second->isEmpty())
+	{
+		TObjectPtr<UInventoryCell>& empty = first->isEmpty() ? first : second;
+		TObjectPtr<UInventoryCell>& notEmpty = first->isEmpty() ? second : first;
+		
+		empty->setItem(notEmpty->getItem().GetInterface());
+
+		if (isSamePlace)
+		{
+			notEmpty->setItem(nullptr);
+		}
+	}
+	else
+	{
+		if (isSamePlace)
+		{
+			Swap(first, second);
+		}
+		else
+		{
+			if (modules.Contains(first))
+			{
+				first->setItem(second->getItem().GetInterface());
+			}
+			else
+			{
+				second->setItem(first->getItem().GetInterface());
+			}
+		}
 	}
 }
 
