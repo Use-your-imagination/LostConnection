@@ -10,6 +10,13 @@
 			"notes": [
 				"Add modules"
 			]
+		},
+		"Weapon Modules":
+		{
+			"type": "item",
+			"notes": [
+				"Add weapon modules"
+			]
 		}
 	},
 	"Rooms":
@@ -42,5 +49,16 @@
 	"Bug Fixes":
 	{
 		"type": "category"
+	},
+	"Weapon Modules":
+	{
+		"type": "category",
+		"Powder Heavy":
+		{
+			"type": "item",
+			"notes": [
+				"Increase output damage by 20/40/80/160%"
+			]
+		}
 	}
 }

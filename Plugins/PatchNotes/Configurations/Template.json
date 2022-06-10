@@ -28,5 +28,9 @@
 	"Bug Fixes":
 	{
 		"type": "category"
+	},
+	"Weapon Modules":
+	{
+		"type": "category"
 	}
 }

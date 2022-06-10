@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 
 #include "Modules/Base/PersonalModules/BaseDamagePersonalModule.h"
-#include "Interfaces/Modules/Damage/DamageModule.h"
 
 #include "Overclocking.generated.h"
 
