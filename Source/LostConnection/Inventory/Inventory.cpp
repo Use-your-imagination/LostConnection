@@ -85,7 +85,7 @@ TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObje
 			modulesToRemove.Add(i);
 		}
 
-		upgradeModule(*module);
+		this->upgradeModule(*module);
 	}
 
 	return modulesToRemove;
@@ -102,13 +102,13 @@ void AInventory::upgradeModule(TObjectPtr<UInventoryCell>& moduleToUpgrade)
 		static const TMap<TSubclassOf<UBaseWeaponModule>, TSubclassOf<UBaseWeaponModule>>& weaponModules = ULostConnectionAssetManager::get().getLoot().getWeaponModules();
 		TSubclassOf<UBaseModule> moduleClass;
 
-		if (const TSubclassOf<UBasePersonalModule>* platinumModuleClass = personalModules.Find(module->StaticClass()))
+		if (const TSubclassOf<UBasePersonalModule>* platinumModuleClass = personalModules.Find(module->GetClass()))
 		{
 			moduleClass = *platinumModuleClass;
 		}
 		else
 		{
-			moduleClass = weaponModules[module->StaticClass()];
+			moduleClass = weaponModules[module->GetClass()];
 		}
 
 		moduleToUpgrade->setItem(NewObject<UBaseModule>(this, moduleClass));
@@ -666,7 +666,7 @@ TArray<TObjectPtr<UInventoryCell>*> fillModules(TArray<TObjectPtr<UInventoryCell
 
 	for (TObjectPtr<UInventoryCell>& module : modules)
 	{
-		if (module->isEmpty() || module->getItem<UBasePersonalModule>()->getQuality() == EModuleQuality::platinum)
+		if (module->isEmpty() || module->getItem<UBaseModule>()->getQuality() == EModuleQuality::platinum)
 		{
 			continue;
 		}

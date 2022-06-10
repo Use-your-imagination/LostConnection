@@ -131,5 +131,27 @@ void LootCreator::createRandomModule(int32 lootPoints, TObjectPtr<AInventory> pl
 
 void LootCreator::createRandomWeaponModule(int32 lootPoints, TObjectPtr<AInventory> playerInventory, const TArray<TObjectPtr<UBaseWeaponModulesLootFunction>>& lootFunctions) const
 {
+	static const TMap<TSubclassOf<UBaseWeaponModule>, TSubclassOf<UBaseWeaponModule>>& modules = ULostConnectionAssetManager::get().getLoot().getWeaponModules();
+	static TArray<TSubclassOf<UBaseWeaponModule>> weaponModules = []()
+	{
+		TArray<TSubclassOf<UBaseWeaponModule>> result;
 
+		modules.GenerateKeyArray(result);
+
+		return result;
+	}();
+	TSubclassOf<UBaseWeaponModule> weaponModuleClass;
+	EModuleQuality quality;
+
+	if (!this->createRandomLoot<UBaseWeaponModule, TObjectPtr<UBaseWeaponModulesLootFunction>, EModuleQuality>(lootPoints, playerInventory, lootFunctions, weaponModules, weaponModulesGetter, weaponModuleClass, quality))
+	{
+		return;
+	}
+
+	if (quality == EModuleQuality::platinum)
+	{
+		weaponModuleClass = modules[weaponModuleClass];
+	}
+
+	playerInventory->addWeaponModule(this->createModule(weaponModuleClass, playerInventory, quality));
 }
