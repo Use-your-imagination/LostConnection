@@ -132,26 +132,6 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	}
 }
 
-template<typename ModuleT>
-void AAmmo::applyModules(const TArray<ModuleT*>& modules)
-{
-	for (const auto& module : modules)
-	{
-		if (IDamageModule* damageModule = Cast<IDamageModule>(module))
-		{
-			if (!module->applyCondition(this))
-			{
-				continue;
-			}
-
-			ailmentInflictorUtility->setAddedDamage(ailmentInflictorUtility->getAddedDamage() + damageModule->getAddedDamage());
-			ailmentInflictorUtility->appendIncreaseDamageCoefficient(damageModule->getIncreaseDamageCoefficient());
-			ailmentInflictorUtility->appendMoreDamageCoefficient(damageModule->getMoreDamageCoefficient());
-			ailmentInflictorUtility->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage() + damageModule->getAdditionalDamage());
-		}
-	}
-}
-
 AAmmo::AAmmo() :
 	ammoSpeed(UConstants::ammoSpeed)
 {
@@ -217,31 +197,31 @@ void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTrans
 void AAmmo::copyProperties(TObjectPtr<UBaseWeapon> weapon)
 {
 	ailmentInflictorUtility->setBaseDamage(weapon->getBaseDamage());
-	
+
 	ailmentInflictorUtility->setAddedDamage(weapon->getAddedDamage());
-	
+
 	ailmentInflictorUtility->setAdditionalDamage(weapon->getAdditionalDamage());
-	
+
 	ailmentInflictorUtility->damageType = weapon->getDamageType();
-	
+
 	ailmentInflictorUtility->setBaseCrushingHitChance(weapon->getBaseCrushingHitChance());
-	
+
 	ailmentInflictorUtility->setAdditionalCrushingHitChance(weapon->getAdditionalCrushingHitChance());
 
 	owner = weapon->getOwner();
 
 	if (owner.IsValid())
 	{
-		if (owner->Implements<UPersonalModulesHolder>())
+		if (IPersonalModulesHolder* holder = Cast<IPersonalModulesHolder>(owner))
 		{
-			this->applyModules(Cast<IPersonalModulesHolder>(owner)->getPersonalEquippedModules());
+			Utility::applyDamageModules(this, holder->getPersonalEquippedModules(), ailmentInflictorUtility);
 
-			this->applyModules(Cast<IPersonalModulesHolder>(owner)->getPersonalUnequippedModules());
+			Utility::applyDamageModules(this, holder->getPersonalUnequippedModules(), ailmentInflictorUtility);
 		}
 
-		if (owner->Implements<UWeaponModulesHolder>())
+		if (IWeaponModulesHolder* holder = Cast<IWeaponModulesHolder>(owner))
 		{
-			this->applyModules(Cast<IWeaponModulesHolder>(owner)->getWeaponModules());	
+			Utility::applyDamageModules(this, holder->getWeaponModules(), ailmentInflictorUtility);
 		}
 	}
 }

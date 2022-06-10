@@ -23,6 +23,9 @@ private:
 	UPROPERTY(Replicated)
 	TObjectPtr<UNetworkObject> item;
 
+	UPROPERTY(Category = State, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	bool isEquipped;
+
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -31,14 +34,20 @@ public:
 
 	void setItem(IInventoriable* item);
 
+	void equip();
+
+	void unequip();
+
+	UFUNCTION(Category = Inventory, BlueprintCallable, Meta = (CompactNodeTitle = "Is Empty"))
+	bool isEmpty() const;
+
 	UFUNCTION(Category = Inventory, BlueprintCallable)
 	TScriptInterface<IInventoriable> getItem() const;
 
 	template<typename T>
 	TObjectPtr<T> getItem() const;
 
-	UFUNCTION(Category = Inventory, BlueprintCallable, Meta = (CompactDisplayName = "Is Empty"))
-	bool isEmpty() const;
+	bool getIsEquipped() const;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 

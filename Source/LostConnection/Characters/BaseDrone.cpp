@@ -1283,49 +1283,19 @@ const TArray<UAnimMontage*>& ABaseDrone::getAbilitiesAnimations() const
 	return abilitiesAnimations;
 }
 
-TArray<UBasePersonalModule*> ABaseDrone::getPersonalEquippedModules() const
+const TArray<UInventoryCell*>& ABaseDrone::getPersonalEquippedModules() const
 {
-	const TArray<UInventoryCell*>& cells = Utility::getPlayerState(this)->getPersonalEquippedModules();
-	TArray<UBasePersonalModule*> result;
-
-	result.Reserve(cells.Num());
-
-	for (UInventoryCell* cell : cells)
-	{
-		result.Add(cell->getItem<UBasePersonalModule>());
-	}
-
-	return result;
+	return Utility::getPlayerState(this)->getPersonalEquippedModules();;
 }
 
-TArray<UBasePersonalModule*> ABaseDrone::getPersonalUnequippedModules() const
+const TArray<UInventoryCell*>& ABaseDrone::getPersonalUnequippedModules() const
 {
-	const TArray<UInventoryCell*>& cells = Utility::getPlayerState(this)->getPersonalUnequippedModules();
-	TArray<UBasePersonalModule*> result;
-
-	result.Reserve(cells.Num());
-
-	for (UInventoryCell* cell : cells)
-	{
-		result.Add(cell->getItem<UBasePersonalModule>());
-	}
-
-	return result;
+	return Utility::getPlayerState(this)->getPersonalUnequippedModules();
 }
 
-TArray<UBaseWeaponModule*> ABaseDrone::getWeaponModules() const
+const TArray<UInventoryCell*>& ABaseDrone::getWeaponModules() const
 {
-	const TArray<UInventoryCell*>& cells = Utility::getPlayerState(this)->getWeaponModules();
-	TArray<UBaseWeaponModule*> result;
-
-	result.Reserve(cells.Num());
-
-	for (UInventoryCell* cell : cells)
-	{
-		result.Add(cell->getItem<UBaseWeaponModule>());
-	}
-
-	return result;
+	return Utility::getPlayerState(this)->getWeaponModules();
 }
 
 void ABaseDrone::castPassiveAbilityVisual()

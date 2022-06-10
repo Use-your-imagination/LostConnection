@@ -226,6 +226,8 @@ void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* mod
 		unequippedPersonalModules.Add(newCell);
 
 		(*cell)->setItem(nullptr);
+
+		(*cell)->unequip();
 	}
 	else
 	{
@@ -236,6 +238,8 @@ void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* mod
 			if (equippedModule->isEmpty())
 			{
 				equippedModule->setItem(unequippedPersonalModules[index]->getItem().GetInterface());
+
+				equippedModule->equip();
 
 				unequippedPersonalModules.RemoveAt(index);
 
@@ -269,7 +273,11 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 
 		empty->setItem(notEmpty->getItem().GetInterface());
 
+		empty->equip();
+
 		notEmpty->setItem(nullptr);
+
+		notEmpty->unequip();
 
 		if (index != INDEX_NONE)
 		{
@@ -278,7 +286,23 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 	}
 	else
 	{
+		auto changeEquipState = [this](TObjectPtr<UInventoryCell>& cell)
+		{
+			if (equippedPersonalModules.Contains(cell))
+			{
+				cell->equip();
+			}
+			else
+			{
+				cell->unequip();
+			}
+		};
+
 		Swap(first, second);
+
+		changeEquipState(first);
+
+		changeEquipState(second);
 	}
 }
 
@@ -290,6 +314,8 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 	if (cell)
 	{
 		(*cell)->setItem(nullptr);
+
+		(*cell)->unequip();
 	}
 	else
 	{
@@ -298,6 +324,8 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 			if (weaponModule->isEmpty())
 			{
 				weaponModule->setItem(module->getItem().GetInterface());
+
+				weaponModule->equip();
 
 				return;
 			}
@@ -331,6 +359,10 @@ void AInventory::swapWeaponlModules_Implementation(UInventoryCell* selectedWeapo
 		
 		empty->setItem(notEmpty->getItem().GetInterface());
 
+		empty->equip();
+
+		notEmpty->unequip();
+
 		if (isSamePlace)
 		{
 			notEmpty->setItem(nullptr);
@@ -347,10 +379,18 @@ void AInventory::swapWeaponlModules_Implementation(UInventoryCell* selectedWeapo
 			if (modules.Contains(first))
 			{
 				first->setItem(second->getItem().GetInterface());
+
+				first->equip();
+
+				second->unequip();
 			}
 			else
 			{
 				second->setItem(first->getItem().GetInterface());
+
+				second->equip();
+
+				first->unequip();
 			}
 		}
 	}

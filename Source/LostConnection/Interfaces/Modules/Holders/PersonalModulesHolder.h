@@ -7,6 +7,7 @@
 #include "UObject/Interface.h"
 
 #include "Modules/Base/PersonalModules/BasePersonalModule.h"
+#include "Inventory/InventoryCell.h"
 
 #include "PersonalModulesHolder.generated.h"
 
@@ -25,7 +26,7 @@ public:
 
 	virtual void addPersonalModule(TObjectPtr<UBasePersonalModule> module) = 0;
 
-	virtual TArray<UBasePersonalModule*> getPersonalEquippedModules() const = 0;
+	virtual const TArray<UInventoryCell*>& getPersonalEquippedModules() const = 0;
 
-	virtual TArray<UBasePersonalModule*> getPersonalUnequippedModules() const = 0;
+	virtual const TArray<UInventoryCell*>& getPersonalUnequippedModules() const = 0;
 };

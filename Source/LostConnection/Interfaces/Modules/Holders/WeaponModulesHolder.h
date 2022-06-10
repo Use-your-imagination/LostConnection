@@ -7,6 +7,7 @@
 #include "UObject/Interface.h"
 
 #include "Modules/Base/WeaponModules/BaseWeaponModule.h"
+#include "Inventory/InventoryCell.h"
 
 #include "WeaponModulesHolder.generated.h"
 
@@ -25,5 +26,5 @@ public:
 
 	virtual void addWeaponModule(TObjectPtr<UBaseWeaponModule> module) = 0;
 
-	virtual TArray<UBaseWeaponModule*> getWeaponModules() const = 0;
+	virtual const TArray<UInventoryCell*>& getWeaponModules() const = 0;
 };

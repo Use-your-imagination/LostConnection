@@ -14,14 +14,29 @@ void UInventoryCell::setItem(IInventoriable* item)
 	this->item = Cast<UNetworkObject>(item);
 }
 
-TScriptInterface<IInventoriable> UInventoryCell::getItem() const
+void UInventoryCell::equip()
 {
-	return item.Get();
+	isEquipped = true;
+}
+
+void UInventoryCell::unequip()
+{
+	isEquipped = false;
 }
 
 bool UInventoryCell::isEmpty() const
 {
 	return item.IsNull();
+}
+
+TScriptInterface<IInventoriable> UInventoryCell::getItem() const
+{
+	return item.Get();
+}
+
+bool UInventoryCell::getIsEquipped() const
+{
+	return isEquipped;
 }
 
 bool UInventoryCell::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)

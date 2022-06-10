@@ -401,13 +401,13 @@ public:
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
 
 	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual TArray<UBasePersonalModule*> getPersonalEquippedModules() const final override;
+	virtual const TArray<UInventoryCell*>& getPersonalEquippedModules() const final override;
 
 	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual TArray<UBasePersonalModule*> getPersonalUnequippedModules() const final override;
+	virtual const TArray<UInventoryCell*>& getPersonalUnequippedModules() const final override;
 
 	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual TArray<UBaseWeaponModule*> getWeaponModules() const final override;
+	virtual const TArray<UInventoryCell*>& getWeaponModules() const final override;
 
 	virtual void castPassiveAbilityVisual() override;
 
