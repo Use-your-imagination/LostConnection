@@ -305,15 +305,10 @@ void UBaseWeapon::setWeaponType_Implementation(EWeaponType newWeaponType)
 
 void UBaseWeapon::setRarity_Implementation(EWeaponRarity newRarity)
 {
-	if (!owner.IsValid())
-	{
-		return;
-	}
-
 	rarity = newRarity;
 
 	int32 newSize = UConstants::getWeaponModulesSize(rarity);
-	TObjectPtr<AInventory> inventory = Utility::getPlayerState(owner.Get())->getInventory();
+	TObjectPtr<AInventory> inventory = Cast<AInventory>(GetOuter());
 
 	if (newSize > weaponModules.Num())
 	{

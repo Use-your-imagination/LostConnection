@@ -45,6 +45,8 @@ public:
 
 	static void resetDamageInflictor(class IDamageInflictor* inflictor);
 
+	static TObjectPtr<class UBaseWeapon> createWeapon(TSubclassOf<class UBaseWeapon> weaponClass, EWeaponRarity rarity, TObjectPtr<class AInventory> inventory);
+
 	template<typename T>
 	static bool checkChanceProc(const T& chance);
 

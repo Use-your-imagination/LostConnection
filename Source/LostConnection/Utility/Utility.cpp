@@ -10,6 +10,8 @@
 #include "Characters/BaseDrone.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "Weapons/BaseWeapon.h"
+#include "Inventory/Inventory.h"
 
 DEFINE_LOG_CATEGORY(LogLostConnection);
 
@@ -103,4 +105,13 @@ void Utility::resetDamageInflictor(IDamageInflictor* inflictor)
 	const_cast<TArray<float>&>(inflictor->getIncreaseDamageCoefficients()).Empty();
 
 	const_cast<TArray<float>&>(inflictor->getMoreDamageCoefficients()).Empty();
+}
+
+TObjectPtr<UBaseWeapon> Utility::createWeapon(TSubclassOf<UBaseWeapon> weaponClass, EWeaponRarity rarity, TObjectPtr<AInventory> inventory)
+{
+	TObjectPtr<UBaseWeapon> weapon = NewObject<UBaseWeapon>(inventory, weaponClass);
+
+	weapon->setRarity(rarity);
+
+	return weapon;
 }

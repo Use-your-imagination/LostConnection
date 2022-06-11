@@ -204,7 +204,7 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 	const UDefaultsDataAsset& defaults = manager.getDefaults();
-	TObjectPtr<UBaseWeapon> defaultWeapon = NewObject<UBaseWeapon>(this, manager.getWeaponClass(UGauss::StaticClass()));
+	TObjectPtr<UBaseWeapon> defaultWeapon = Utility::createWeapon(manager.getWeaponClass(UGauss::StaticClass()), EWeaponRarity::normal, this);
 
 	this->playerState = playerState;
 
@@ -308,6 +308,11 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 
 void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* module)
 {
+	if (!IsValid(selectedWeapon))
+	{
+		return;
+	}
+
 	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
 	TObjectPtr<UInventoryCell>* cell = modules.FindByKey(module);
 

@@ -961,7 +961,7 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 
 void ABaseDrone::changeWeapon()
 {
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
 
 	if (currentWeapon)
 	{
@@ -1030,36 +1030,16 @@ void ABaseDrone::initDefaultUI()
 
 void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primaryWeapon, EWeaponRarity rarity)
 {
-	if (!primaryWeapon)
-	{
-		UE_LOG(LogLostConnection, Error, TEXT("Primary weapon is null"));
-
-		return;
-	}
-
 	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
-	TObjectPtr<UBaseWeapon> weapon = NewObject<UBaseWeapon>(playerState, primaryWeapon);
-
-	weapon->setRarity(rarity);
-
-	playerState->setPrimaryWeapon(weapon);
+	
+	playerState->setPrimaryWeapon(Utility::createWeapon(primaryWeapon, rarity, playerState->getInventory()));
 }
 
 void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> secondaryWeapon, EWeaponRarity rarity)
 {
-	if (!secondaryWeapon)
-	{
-		UE_LOG(LogLostConnection, Error, TEXT("Secondary weapon is null"));
-
-		return;
-	}
-
 	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
-	TObjectPtr<UBaseWeapon> weapon = NewObject<UBaseWeapon>(playerState, secondaryWeapon);
-
-	weapon->setRarity(rarity);
-
-	playerState->setSecondaryWeapon(weapon);
+	
+	playerState->setSecondaryWeapon(Utility::createWeapon(secondaryWeapon, rarity, playerState->getInventory()));
 }
 
 FVector ABaseDrone::getStartActionLineTrace() const

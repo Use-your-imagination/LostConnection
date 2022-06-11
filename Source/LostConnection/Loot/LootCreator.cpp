@@ -27,17 +27,17 @@ bool LootCreator::createRandomLoot
 	for (LootFunctionT lootFunction : lootFunctions)
 	{
 		float chance = lootFunction->calculateLootChance(lootPoints);
-		RangeEnumT rarity = getRangeEnum(lootFunction);
+		RangeEnumT range = getRangeEnum(lootFunction);
 
 		if (ranges.Num())
 		{
 			float rangeEnd = ranges.Last().Get<1>();
 
-			ranges.Emplace(rangeEnd, rangeEnd + chance, rarity);
+			ranges.Emplace(rangeEnd, rangeEnd + chance, range);
 		}
 		else
 		{
-			ranges.Emplace(0.0f, chance, rarity);
+			ranges.Emplace(0.0f, chance, range);
 		}
 	}
 
@@ -90,16 +90,7 @@ void LootCreator::createRandomWeapon(int32 lootPoints, TObjectPtr<AInventory> pl
 		return;
 	}
 
-	TObjectPtr<UBaseWeapon> weapon = NewObject<UBaseWeapon>(playerInventory, weaponClass);
-
-	playerInventory->addUnequippedWeapon(weapon);
-
-	if (TObjectPtr<ABaseDrone> drone = playerInventory->getPlayerState()->GetPawn<ABaseDrone>())
-	{
-		weapon->setOwner(drone);
-
-		weapon->updateTimeBetweenShots();
-	}
+	playerInventory->addUnequippedWeapon(Utility::createWeapon(weaponClass, rarity, playerInventory));
 }
 
 void LootCreator::createRandomModule(int32 lootPoints, TObjectPtr<AInventory> playerInventory, const TArray<TObjectPtr<UBaseModulesLootFunction>>& lootFunctions) const

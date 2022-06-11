@@ -41,9 +41,9 @@ void ALootManager::addRandomLoot(TObjectPtr<AInventory> playerInventory, int32 w
 {
 	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
 
-	lootCreator.createRandomModule(weaponsLootPoints, playerInventory, modulesLootFunctions);
+	lootCreator.createRandomModule(modulesLootPoints, playerInventory, modulesLootFunctions);
 
-	lootCreator.createRandomWeaponModule(weaponsLootPoints, playerInventory, weaponModulesLootFunctions);
+	lootCreator.createRandomWeaponModule(weaponModulesLootPoints, playerInventory, weaponModulesLootFunctions);
 
 	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), UConstants::maxSpendLootPoints));
 }
