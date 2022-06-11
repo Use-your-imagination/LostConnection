@@ -127,6 +127,26 @@ void AInventory::onInventoryUpdate()
 	}
 }
 
+bool AInventory::containsItem(TObjectPtr<UInventoryCell> itemToFind, const TArray<TObjectPtr<UInventoryCell>>& cells)
+{
+	if (itemToFind->getItem() == nullptr)
+	{
+		return false;
+	}
+
+	TScriptInterface<IInventoriable> item = itemToFind->getItem();
+
+	for (const TObjectPtr<UInventoryCell>& cell : cells)
+	{
+		if (cell->getItem() == item)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -314,6 +334,12 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 	}
 
 	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
+
+	if (!AInventory::containsItem(module, modules))
+	{
+		return;
+	}
+
 	TObjectPtr<UInventoryCell>* cell = modules.FindByKey(module);
 
 	if (cell)
@@ -340,6 +366,11 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 
 void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* firstModule, UInventoryCell* secondModule)
 {
+	if (!IsValid(selectedWeapon))
+	{
+		return;
+	}
+
 	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
 	
 	auto findModule = [this, &modules](TObjectPtr<UInventoryCell> cell) -> TObjectPtr<UInventoryCell>&
@@ -356,6 +387,14 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 	TObjectPtr<UInventoryCell>& first = findModule(firstModule);
 	TObjectPtr<UInventoryCell>& second = findModule(secondModule);
 	bool isSamePlace = (weaponModules.Contains(first) && weaponModules.Contains(second)) || (modules.Contains(first) && modules.Contains(second));
+
+	if (!isSamePlace)
+	{
+		if (AInventory::containsItem(firstModule, modules) && AInventory::containsItem(secondModule, modules))
+		{
+			return;
+		}
+	}
 
 	if (first->isEmpty() || second->isEmpty())
 	{
