@@ -338,7 +338,7 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 	}
 }
 
-void AInventory::swapWeaponlModules_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* firstModule, UInventoryCell* secondModule)
+void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* firstModule, UInventoryCell* secondModule)
 {
 	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
 	

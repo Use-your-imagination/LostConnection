@@ -97,7 +97,7 @@ public:
 	void equipOrUnequipWeaponModule(UInventoryCell* selectedWeapon, UInventoryCell* module);
 
 	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
-	void swapWeaponlModules(UInventoryCell* selectedWeapon, UInventoryCell* firstModule, UInventoryCell* secondModule);
+	void swapWeaponModules(UInventoryCell* selectedWeapon, UInventoryCell* firstModule, UInventoryCell* secondModule);
 
 	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void addPersonalModule(UBasePersonalModule* module);
