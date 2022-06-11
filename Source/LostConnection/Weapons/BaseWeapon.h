@@ -211,7 +211,7 @@ public:
 	void setWeaponType(EWeaponType newWeaponType);
 
 	UFUNCTION(Server, Reliable)
-	void setWeaponRarity(EWeaponRarity newRarity);
+	void setRarity(EWeaponRarity newRarity);
 
 	TObjectPtr<USkeletalMesh> getWeaponMesh() const;
 

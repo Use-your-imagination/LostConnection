@@ -1028,7 +1028,7 @@ void ABaseDrone::initDefaultUI()
 		});
 }
 
-void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primaryWeapon)
+void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primaryWeapon, EWeaponRarity rarity)
 {
 	if (!primaryWeapon)
 	{
@@ -1037,13 +1037,15 @@ void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primar
 		return;
 	}
 
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, primaryWeapon);
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
+	TObjectPtr<UBaseWeapon> weapon = NewObject<UBaseWeapon>(playerState, primaryWeapon);
+
+	weapon->setRarity(rarity);
 
 	playerState->setPrimaryWeapon(weapon);
 }
 
-void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> secondaryWeapon)
+void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> secondaryWeapon, EWeaponRarity rarity)
 {
 	if (!secondaryWeapon)
 	{
@@ -1052,8 +1054,10 @@ void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> seco
 		return;
 	}
 
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	UBaseWeapon* weapon = NewObject<UBaseWeapon>(playerState, secondaryWeapon);
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
+	TObjectPtr<UBaseWeapon> weapon = NewObject<UBaseWeapon>(playerState, secondaryWeapon);
+
+	weapon->setRarity(rarity);
 
 	playerState->setSecondaryWeapon(weapon);
 }

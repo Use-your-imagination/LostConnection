@@ -303,10 +303,10 @@ public:
 	void initDefaultUI();
 
 	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
-	void setPrimaryWeapon(TSubclassOf<UBaseWeapon> primaryWeapon);
+	void setPrimaryWeapon(TSubclassOf<UBaseWeapon> primaryWeapon, EWeaponRarity rarity);
 
 	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
-	void setSecondaryWeapon(TSubclassOf<UBaseWeapon> secondaryWeapon);
+	void setSecondaryWeapon(TSubclassOf<UBaseWeapon> secondaryWeapon, EWeaponRarity rarity);
 
 	UFUNCTION(Category = Weapons, BlueprintCallable)
 	UBaseWeapon* getPrimaryWeapon() const;

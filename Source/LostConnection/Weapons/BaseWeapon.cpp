@@ -303,7 +303,7 @@ void UBaseWeapon::setWeaponType_Implementation(EWeaponType newWeaponType)
 	weaponType = newWeaponType;
 }
 
-void UBaseWeapon::setWeaponRarity_Implementation(EWeaponRarity newRarity)
+void UBaseWeapon::setRarity_Implementation(EWeaponRarity newRarity)
 {
 	if (!owner.IsValid())
 	{
