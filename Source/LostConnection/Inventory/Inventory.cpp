@@ -335,21 +335,13 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 
 	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
 
-	if (!AInventory::containsItem(module, modules))
+	if (weaponModules.Contains(module))
 	{
-		return;
-	}
+		if (AInventory::containsItem(module, modules))
+		{
+			return;
+		}
 
-	TObjectPtr<UInventoryCell>* cell = modules.FindByKey(module);
-
-	if (cell)
-	{
-		(*cell)->setItem(nullptr);
-
-		(*cell)->unequip();
-	}
-	else
-	{
 		for (TObjectPtr<UInventoryCell> weaponModule : modules)
 		{
 			if (weaponModule->isEmpty())
@@ -362,6 +354,14 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 			}
 		}
 	}
+	else
+	{
+		TObjectPtr<UInventoryCell>* cell = modules.FindByKey(module);
+
+		(*cell)->setItem(nullptr);
+
+		(*cell)->unequip();
+	}
 }
 
 void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* firstModule, UInventoryCell* secondModule)
@@ -372,7 +372,6 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 	}
 
 	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
-	
 	auto findModule = [this, &modules](TObjectPtr<UInventoryCell> cell) -> TObjectPtr<UInventoryCell>&
 	{
 		TObjectPtr<UInventoryCell>* result = modules.FindByKey(cell);
@@ -384,23 +383,24 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 
 		return *result;
 	};
+	auto checkDublicate = [this, &modules](TObjectPtr<UInventoryCell> cell)
+	{
+		return weaponModules.Contains(cell) && AInventory::containsItem(cell, modules);
+	};
 	TObjectPtr<UInventoryCell>& first = findModule(firstModule);
 	TObjectPtr<UInventoryCell>& second = findModule(secondModule);
 	bool isSamePlace = (weaponModules.Contains(first) && weaponModules.Contains(second)) || (modules.Contains(first) && modules.Contains(second));
 
-	if (!isSamePlace)
+	if (!isSamePlace && (checkDublicate(first) || checkDublicate(second)))
 	{
-		if (AInventory::containsItem(firstModule, modules) && AInventory::containsItem(secondModule, modules))
-		{
-			return;
-		}
+		return;
 	}
 
 	if (first->isEmpty() || second->isEmpty())
 	{
 		TObjectPtr<UInventoryCell>& empty = first->isEmpty() ? first : second;
 		TObjectPtr<UInventoryCell>& notEmpty = first->isEmpty() ? second : first;
-		
+
 		empty->setItem(notEmpty->getItem().GetInterface());
 
 		empty->equip();
