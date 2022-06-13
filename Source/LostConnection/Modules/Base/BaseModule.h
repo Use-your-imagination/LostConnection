@@ -33,9 +33,12 @@ protected:
 	EModuleQuality quality;
 
 protected:
+	int32 getMultiplier() const;
+
+protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	int32 getMultiplier() const;
+	virtual const FText& getItemDescription() const final override;
 
 public:
 	UBaseModule() = default;
@@ -47,8 +50,6 @@ public:
 	EModuleQuality getQuality() const;
 
 	virtual const FText& getItemName() const final override;
-
-	virtual const FText& getItemDescription() const final override;
 
 	virtual const UTexture2D* getCellIcon() const final override;
 

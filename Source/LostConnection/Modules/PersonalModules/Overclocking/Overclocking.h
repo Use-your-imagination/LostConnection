@@ -12,9 +12,14 @@ UCLASS()
 class LOSTCONNECTION_API UOverclocking : public UBaseDamagePersonalModule
 {
 	GENERATED_BODY()
+
+protected:
+	virtual TArray<FFormatArgumentValue> getFormatArguments() const override;
 	
 public:
 	UOverclocking() = default;
+
+	bool applyCondition(TObjectPtr<AActor> caller) const override;
 
 	~UOverclocking() = default;
 };

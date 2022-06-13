@@ -164,6 +164,9 @@ private:
 	UFUNCTION(Category = Weapons, BlueprintCallable, Meta = (AllowPrivateAccess = "true"))
 	float calculateSpreadDistance() const;
 
+protected:
+	virtual const FText& getItemDescription() const final override;
+
 public:
 	UBaseWeapon();
 
@@ -250,8 +253,6 @@ public:
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	virtual const FText& getItemName() const final override;
-
-	virtual const FText& getItemDescription() const final override;
 
 	virtual const UTexture2D* getCellIcon() const final override;
 
