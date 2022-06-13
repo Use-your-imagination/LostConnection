@@ -14,6 +14,11 @@ void IAilmentInflictor::setAdditionalCrushingHitChance(float additionalCrushingH
 
 }
 
+void IAilmentInflictor::setDamageType(ETypeOfDamage type)
+{
+
+}
+
 bool IAilmentInflictor::getCrushingHitProc() const
 {
 	return Utility::checkChanceProc(this->getBaseCrushingHitChance() + this->getAdditionalCrushingHitChance());

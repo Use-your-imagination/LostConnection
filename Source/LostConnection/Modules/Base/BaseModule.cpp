@@ -4,13 +4,6 @@
 
 #include "Utility/Utility.h"
 
-void UBaseModule::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(UBaseModule, quality);
-}
-
 int32 UBaseModule::getMultiplier() const
 {
 	switch (quality)
@@ -32,6 +25,18 @@ int32 UBaseModule::getMultiplier() const
 	return 0;
 }
 
+void UBaseModule::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UBaseModule, quality);
+}
+
+const FText& UBaseModule::getItemDescription() const
+{
+	return moduleDescription;
+}
+
 bool UBaseModule::applyCondition(TObjectPtr<AActor> caller) const
 {
 	return true;
@@ -50,11 +55,6 @@ EModuleQuality UBaseModule::getQuality() const
 const FText& UBaseModule::getItemName() const
 {
 	return moduleName;
-}
-
-const FText& UBaseModule::getItemDescription() const
-{
-	return moduleDescription;
 }
 
 const UTexture2D* UBaseModule::getCellIcon() const

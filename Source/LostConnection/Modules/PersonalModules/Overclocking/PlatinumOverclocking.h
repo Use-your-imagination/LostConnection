@@ -15,7 +15,14 @@ class LOSTCONNECTION_API UPlatinumOverclocking :
 	public IPlatinumModule
 {
 	GENERATED_BODY()
-	
+
+private:
+	UPROPERTY(Category = Overclocking, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float duration;
+
+private:
+	TArray<FFormatArgumentValue> getFormatArguments() const override;
+
 public:
 	UPlatinumOverclocking() = default;
 
