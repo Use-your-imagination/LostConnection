@@ -55,6 +55,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setAdditionalDamage(float newAdditionalDamage) override;
 
+	UFUNCTION(Server, Reliable)
+	void setDamageType(ETypeOfDamage type) override;
+
 	float getBaseDamage() const override;
 
 	float getAddedDamage() const override;

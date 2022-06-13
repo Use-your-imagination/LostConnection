@@ -66,6 +66,11 @@ void UAilmentInflictorUtility::setAdditionalDamage_Implementation(float newAddit
 	damageInflictorUtility->setAdditionalDamage_Implementation(newAdditionalDamage);
 }
 
+void UAilmentInflictorUtility::setDamageType_Implementation(ETypeOfDamage type)
+{
+	damageType = type;
+}
+
 float UAilmentInflictorUtility::getBaseDamage() const
 {
 	return damageInflictorUtility->getBaseDamage();

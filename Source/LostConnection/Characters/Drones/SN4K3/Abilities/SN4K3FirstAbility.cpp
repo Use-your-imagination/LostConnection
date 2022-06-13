@@ -38,13 +38,14 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 
 	// TODO: remake apply modules
 
-	TObjectPtr<UAilmentInflictorUtility> tem = NewObject<UAilmentInflictorUtility>(nullptr);
+	TObjectPtr<UAilmentInflictorUtility> tem = NewObject<UAilmentInflictorUtility>(ailmentInflictorUtility->GetOuter());
 
 	tem->setAddedDamage(ailmentInflictorUtility->getAddedDamage());
 	tem->setAdditionalCrushingHitChance(ailmentInflictorUtility->getAdditionalCrushingHitChance());
 	tem->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage());
 	tem->setBaseCrushingHitChance(ailmentInflictorUtility->getBaseCrushingHitChance());
 	tem->setBaseDamage(ailmentInflictorUtility->getBaseDamage());
+	tem->setDamageType(ailmentInflictorUtility->getDamageType());
 	
 	for (float increaseCoefficient : ailmentInflictorUtility->getIncreaseDamageCoefficients())
 	{
