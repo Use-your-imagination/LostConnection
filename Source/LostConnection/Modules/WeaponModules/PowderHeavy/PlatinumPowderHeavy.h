@@ -15,6 +15,13 @@ class LOSTCONNECTION_API UPlatinumPowderHeavy :
 	public IPlatinumModule
 {
 	GENERATED_BODY()
+
+private:
+	UPROPERTY(Category = PowderHeavy, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	float duration;
+
+private:
+	TArray<FFormatArgumentValue> getFormatArguments() const override;
 	
 public:
 	UPlatinumPowderHeavy() = default;

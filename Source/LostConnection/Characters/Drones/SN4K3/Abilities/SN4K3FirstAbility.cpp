@@ -10,6 +10,8 @@
 #include "Utility/InitializationUtility.h"
 #include "Utility/Utility.h"
 #include "SN4K3PassiveAbility.h"
+#include "Interfaces/Modules/Damage/DamageModule.h"
+#include "Modules/Base/BaseModule.h"
 
 void USN4K3FirstAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -34,9 +36,41 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 
 	ailmentInflictorUtility->setBaseCrushingHitChance(Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter());
 
-	target->takeDamageFromInflictor(ailmentInflictorUtility);
+	// TODO: remake apply modules
 
-	target->statusInflictorImpactAction(ailmentInflictorUtility, hit);
+	TObjectPtr<UAilmentInflictorUtility> tem = NewObject<UAilmentInflictorUtility>(nullptr);
+
+	tem->setAddedDamage(ailmentInflictorUtility->getAddedDamage());
+	tem->setAdditionalCrushingHitChance(ailmentInflictorUtility->getAdditionalCrushingHitChance());
+	tem->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage());
+	tem->setBaseCrushingHitChance(ailmentInflictorUtility->getBaseCrushingHitChance());
+	tem->setBaseDamage(ailmentInflictorUtility->getBaseDamage());
+	
+	for (float increaseCoefficient : ailmentInflictorUtility->getIncreaseDamageCoefficients())
+	{
+		tem->appendIncreaseDamageCoefficient(increaseCoefficient);
+	}
+
+	for (float moreCoefficient : ailmentInflictorUtility->getMoreDamageCoefficients())
+	{
+		tem->appendMoreDamageCoefficient(moreCoefficient);
+	}
+
+	if (IPersonalModulesHolder* holder = Cast<IPersonalModulesHolder>(caster))
+	{
+		Utility::applyDamageModules(Cast<AActor>(caster), holder->getPersonalEquippedModules(), tem);
+
+		Utility::applyDamageModules(Cast<AActor>(caster), holder->getPersonalUnequippedModules(), tem);
+	}
+
+	if (IWeaponModulesHolder* holder = Cast<IWeaponModulesHolder>(caster))
+	{
+		Utility::applyDamageModules(Cast<AActor>(caster), holder->getWeaponModules(), tem);
+	}
+
+	target->takeDamageFromInflictor(tem.Get());
+
+	target->statusInflictorImpactAction(tem.Get(), hit);
 
 	ICaster::Execute_applyFirstAbilityEvent(Cast<UObject>(caster), target);
 }

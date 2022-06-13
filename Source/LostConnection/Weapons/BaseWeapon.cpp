@@ -180,6 +180,11 @@ void UBaseWeapon::shoot()
 	}
 }
 
+const FText& UBaseWeapon::getItemDescription() const
+{
+	return weaponDescription;
+}
+
 UBaseWeapon::UBaseWeapon() :
 	currentMagazineSize(0),
 	ammoCost(1),
@@ -428,11 +433,6 @@ bool UBaseWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, 
 const FText& UBaseWeapon::getItemName() const
 {
 	return weaponName;
-}
-
-const FText& UBaseWeapon::getItemDescription() const
-{
-	return weaponDescription;
 }
 
 const UTexture2D* UBaseWeapon::getCellIcon() const

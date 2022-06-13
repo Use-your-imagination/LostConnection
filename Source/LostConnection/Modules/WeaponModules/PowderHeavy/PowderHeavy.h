@@ -12,9 +12,14 @@ UCLASS()
 class LOSTCONNECTION_API UPowderHeavy : public UBaseDamageWeaponModule
 {
 	GENERATED_BODY()
+
+protected:
+	virtual TArray<FFormatArgumentValue> getFormatArguments() const override;
 	
 public:
 	UPowderHeavy() = default;
+
+	bool applyCondition(TObjectPtr<AActor> caller) const override;
 
 	~UPowderHeavy() = default;
 };

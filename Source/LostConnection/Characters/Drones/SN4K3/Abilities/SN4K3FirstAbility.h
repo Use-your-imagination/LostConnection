@@ -21,7 +21,7 @@ private:
 	float distance;
 
 	UPROPERTY(Category = SN4K3, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UAilmentInflictorUtility* ailmentInflictorUtility;
+	TObjectPtr<UAilmentInflictorUtility> ailmentInflictorUtility;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

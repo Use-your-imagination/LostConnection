@@ -21,6 +21,11 @@ class LOSTCONNECTION_API IInventoriable
 {
 	GENERATED_BODY()
 
+protected:
+	virtual const FText& getItemDescription() const = 0;
+
+	virtual TArray<FFormatArgumentValue> getFormatArguments() const;
+
 public:
 	IInventoriable() = default;
 
@@ -28,7 +33,7 @@ public:
 	virtual const FText& getItemName() const = 0;
 
 	UFUNCTION(Category = Inventory, BlueprintCallable)
-	virtual const FText& getItemDescription() const = 0;
+	virtual FText getFormattedItemDescription() const;
 
 	UFUNCTION(Category = Inventory, BlueprintCallable)
 	virtual const UTexture2D* getCellIcon() const = 0;
