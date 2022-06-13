@@ -31,12 +31,12 @@ const TSubclassOf<ADeathPlaceholder>& UDefaultsDataAsset::getDeathPlaceholder() 
 	return deathPlaceholder;
 }
 
-const FColor& UDefaultsDataAsset::operator [] (EWeaponRarity rarity) const
+const FLinearColor& UDefaultsDataAsset::operator [] (EWeaponRarity rarity) const
 {
 	return weaponsRarityColor[rarity];
 }
 
-const FColor& UDefaultsDataAsset::operator [] (EModuleQuality quality) const
+const FLinearColor& UDefaultsDataAsset::operator [] (EModuleQuality quality) const
 {
 	return modulesQualityColor[quality];
 }

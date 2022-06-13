@@ -59,7 +59,4 @@ public:
 
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static int32 getWeaponModulesSize(EWeaponRarity rarity);
-
-	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
-	static const FColor& getRarityColor(EWeaponRarity rarity);
 };

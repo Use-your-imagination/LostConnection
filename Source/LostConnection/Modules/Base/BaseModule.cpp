@@ -62,7 +62,7 @@ const UTexture2D* UBaseModule::getCellIcon() const
 	return moduleIconTexture;
 }
 
-const FColor& UBaseModule::getBorderColor() const
+const FLinearColor& UBaseModule::getBorderColor() const
 {
 	return ULostConnectionAssetManager::get().getDefaults()[quality];
 }

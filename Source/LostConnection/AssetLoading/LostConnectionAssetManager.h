@@ -112,8 +112,17 @@ public:
 
 	const UAIDataAsset& getAI() const;
 
+	UFUNCTION(Category = "AssetLoading|Statuses", BlueprintCallable)
+	const UStatusesDataAsset* getStatusesDataAsset() const;
+
 	UFUNCTION(Category = "AssetLoading|Acts", BlueprintCallable)
 	const UBaseActDataAsset* getCurrentActDataAsset() const;
+
+	UFUNCTION(Category = "AssetLoading|UI", BlueprintCallable)
+	const UUIDataAsset* getUIDataAsset() const;
+
+	UFUNCTION(Category = "AssetLoading|Defaults", BlueprintCallable)
+	const UDefaultsDataAsset* getDefaultsDataAsset() const;
 
 	UFUNCTION(Category = "AssetLoading|Loot", BlueprintCallable)
 	const ULootDataAsset* getLootDataAsset() const;

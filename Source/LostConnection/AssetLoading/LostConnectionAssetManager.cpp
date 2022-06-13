@@ -238,9 +238,24 @@ const UAIDataAsset& ULostConnectionAssetManager::getAI() const
 	return this->getDataAsset<UAIDataAsset>();
 }
 
+const UStatusesDataAsset* ULostConnectionAssetManager::getStatusesDataAsset() const
+{
+	return &this->getStatuses();
+}
+
 const UBaseActDataAsset* ULostConnectionAssetManager::getCurrentActDataAsset() const
 {
 	return &this->getCurrentAct();
+}
+
+const UUIDataAsset* ULostConnectionAssetManager::getUIDataAsset() const
+{
+	return &this->getUI();
+}
+
+const UDefaultsDataAsset* ULostConnectionAssetManager::getDefaultsDataAsset() const
+{
+	return &this->getDefaults();
 }
 
 const ULootDataAsset* ULostConnectionAssetManager::getLootDataAsset() const

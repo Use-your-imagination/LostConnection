@@ -42,8 +42,3 @@ int32 UConstants::getWeaponModulesSize(EWeaponRarity rarity)
 
 	return 0;
 }
-
-const FColor& UConstants::getRarityColor(EWeaponRarity rarity)
-{
-	return ULostConnectionAssetManager::get().getDefaults()[rarity];
-}

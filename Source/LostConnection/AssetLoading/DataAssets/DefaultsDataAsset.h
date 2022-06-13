@@ -36,10 +36,10 @@ private:
 	TSubclassOf<class ADeathPlaceholder> deathPlaceholder;
 
 	UPROPERTY(Category = "UI|Weapons|Rarity", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TMap<EWeaponRarity, FColor> weaponsRarityColor;
+	TMap<EWeaponRarity, FLinearColor> weaponsRarityColor;
 
 	UPROPERTY(Category = "UI|Modules|Quality", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TMap<EModuleQuality, FColor> modulesQualityColor;
+	TMap<EModuleQuality, FLinearColor> modulesQualityColor;
 
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 maxSmallAmmoCount;
@@ -67,9 +67,9 @@ public:
 
 	const TSubclassOf<class ADeathPlaceholder>& getDeathPlaceholder() const;
 
-	const FColor& operator [] (EWeaponRarity rarity) const;
+	const FLinearColor& operator [] (EWeaponRarity rarity) const;
 
-	const FColor& operator [] (EModuleQuality quality) const;
+	const FLinearColor& operator [] (EModuleQuality quality) const;
 
 	const FShootThroughSurface& operator [] (const TWeakObjectPtr<UPhysicalMaterial>& physicalMaterial) const;
 

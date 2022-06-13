@@ -440,7 +440,7 @@ const UTexture2D* UBaseWeapon::getCellIcon() const
 	return weaponCellIcon;
 }
 
-const FColor& UBaseWeapon::getBorderColor() const
+const FLinearColor& UBaseWeapon::getBorderColor() const
 {
 	return ULostConnectionAssetManager::get().getDefaults()[rarity];
 }
