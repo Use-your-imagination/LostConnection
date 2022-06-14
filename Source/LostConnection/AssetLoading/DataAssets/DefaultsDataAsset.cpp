@@ -22,10 +22,8 @@ UDefaultsDataAsset::UDefaultsDataAsset() :
 	maxSmallAmmoCount(700),
 	maxLargeAmmoCount(240),
 	maxEnergyAmmoCount(50),
-	conversionAmmoCoefficient(1.0f),
 	maxSpendLootPoints(20'000),
 	maxShootDistance(20'000.0f),
-	ammoSpeed(5200.0f),
 	personalModulesLimit(8)
 {
 
@@ -76,6 +74,21 @@ float UDefaultsDataAsset::getResistHardcap() const
 int32 UDefaultsDataAsset::getModulesToNextTier() const
 {
 	return modulesToNextTier;
+}
+
+int32 UDefaultsDataAsset::getMaxSpendLootPoints() const
+{
+	return maxSpendLootPoints;
+}
+
+int32 UDefaultsDataAsset::getMaxShootDistance() const
+{
+	return maxShootDistance;
+}
+
+int32 UDefaultsDataAsset::getPersonalModulesLimit() const
+{
+	return personalModulesLimit;
 }
 
 FPrimaryAssetId UDefaultsDataAsset::GetPrimaryAssetId() const

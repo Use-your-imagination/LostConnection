@@ -50,12 +50,6 @@ private:
 	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 maxEnergyAmmoCount;
 
-	/**
-	* Convert max ammo count to default ammo count
-	*/
-	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float conversionAmmoCoefficient
-
 	UPROPERTY(Category = WorldDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TMap<TEnumAsByte<EPhysicalSurface>, FShootThroughSurface> shootThroughSurfaces;
 
@@ -70,9 +64,6 @@ private:
 
 	UPROPERTY(Category = WeaponDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float maxShootDistance;
-
-	UPROPERTY(Category = WeaponDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	float ammoSpeed;
 
 	UPROPERTY(Category = CharacterDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 personalModulesLimit;
@@ -100,6 +91,12 @@ public:
 	float getResistHardcap() const;
 
 	int32 getModulesToNextTier() const;
+
+	int32 getMaxSpendLootPoints() const;
+
+	int32 getMaxShootDistance() const;
+
+	int32 getPersonalModulesLimit() const;
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 

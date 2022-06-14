@@ -390,9 +390,9 @@ ABaseCharacter::ABaseCharacter() :
 	defaultMovementSpeed(450.0f),
 	sprintMovementSpeed(575.0f),
 	isDead(false),
-	defaultSmallAmmoCount(UConstants::defaultSmallAmmoMaxCount),
-	defaultLargeAmmoCount(UConstants::defaultLargeAmmoMaxCount),
-	defaultEnergyAmmoCount(UConstants::defaultEnergyAmmoMaxCount)
+	defaultSmallAmmoCount(700),
+	defaultLargeAmmoCount(240),
+	defaultEnergyAmmoCount(50)
 {
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_SatusState.NPS_SatusState'"));
 	static ConstructorHelpers::FClassFinder<UUserWidget> healthBarWidgetFinder(TEXT("/Game/UI/WidgetComponents/BP_HealthBarWidget"));

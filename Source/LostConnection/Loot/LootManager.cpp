@@ -39,13 +39,15 @@ TArray<TObjectPtr<LootFunctionT>> ALootManager::createLootFunctions(const TArray
 
 void ALootManager::addRandomLoot(TObjectPtr<AInventory> playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints)
 {
+	const int32 maxSpendLootPoints = ULostConnectionAssetManager::get().getDefaults().getMaxSpendLootPoints();
+
 	lootCreator.createRandomWeapon(weaponsLootPoints, playerInventory, weaponsLootFunctions);
 
 	lootCreator.createRandomModule(modulesLootPoints, playerInventory, modulesLootFunctions);
 
 	lootCreator.createRandomWeaponModule(weaponModulesLootPoints, playerInventory, weaponModulesLootFunctions);
 
-	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), UConstants::maxSpendLootPoints));
+	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), maxSpendLootPoints));
 }
 
 void ALootManager::spawnAmmo_Implementation(UObject* ammoDropable)

@@ -191,9 +191,7 @@ void AInventory::BeginPlay()
 		return;
 	}
 
-	const int32 personalModulesCount = 8;
-
-	for (int32 i = 0; i < personalModulesCount; i++)
+	for (int32 i = 0; i < ULostConnectionAssetManager::get().getDefaults().getPersonalModulesLimit(); i++)
 	{
 		equippedPersonalModules.Add(NewObject<UInventoryCell>(this));
 	}

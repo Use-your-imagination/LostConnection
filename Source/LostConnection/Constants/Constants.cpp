@@ -18,11 +18,6 @@ FText UConstants::getProjectVersion()
 	return FText::FromString(FNetworkVersion::GetProjectVersion());
 }
 
-int32 UConstants::getPersonalModulesLimit()
-{
-	return personalModulesLimit;
-}
-
 int32 UConstants::getWeaponModulesSize(EWeaponRarity rarity)
 {
 	switch (rarity)

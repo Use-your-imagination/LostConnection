@@ -23,6 +23,8 @@ public:
 	static constexpr int32 actorNetUpdateFrequency = 60;
 	static constexpr int32 minNetUpdateFrequency = 1;
 	
+	static constexpr float ammoSpeed = 5200.0f;
+
 	static constexpr float showHealthBarDistance = 5000.0f;
 
 	static constexpr int32 startZOrder = 1000;
@@ -38,9 +40,6 @@ public:
 public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static FText getProjectVersion();
-
-	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
-	static int32 getPersonalModulesLimit();
 
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static int32 getWeaponModulesSize(EWeaponRarity rarity);
