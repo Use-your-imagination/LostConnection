@@ -19,9 +19,14 @@ FPrimaryAssetId UDefaultsDataAsset::getPrimaryAssetId()
 }
 
 UDefaultsDataAsset::UDefaultsDataAsset() :
-	maxSmallAmmoCount(UConstants::defaultSmallAmmoMaxCount),
-	maxLargeAmmoCount(UConstants::defaultLargeAmmoMaxCount),
-	maxEnergyAmmoCount(UConstants::defaultEnergyAmmoMaxCount)
+	maxSmallAmmoCount(700),
+	maxLargeAmmoCount(240),
+	maxEnergyAmmoCount(50),
+	conversionAmmoCoefficient(1.0f),
+	maxSpendLootPoints(20'000),
+	maxShootDistance(20'000.0f),
+	ammoSpeed(5200.0f),
+	personalModulesLimit(8)
 {
 
 }

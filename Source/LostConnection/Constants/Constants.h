@@ -20,25 +20,10 @@ public:
 	static constexpr float jumpVelocity = 600.0f;
 	static const FRotator rotationRate;
 
-	static constexpr float shootDistance = 20000.0f;
-
-	static constexpr float ammoSpeed = 5200.0f;
-
 	static constexpr int32 actorNetUpdateFrequency = 60;
 	static constexpr int32 minNetUpdateFrequency = 1;
 	
-	static constexpr int32 defaultSmallAmmoMaxCount = 700;
-	static constexpr int32 defaultLargeAmmoMaxCount = 240;
-	static constexpr int32 defaultEnergyAmmoMaxCount = 50;
-
-	/// @brief Convert max ammo count to default ammo count
-	static constexpr float conversionAmmoCoefficient = 1.0f;
-
 	static constexpr float showHealthBarDistance = 5000.0f;
-
-	static constexpr int32 maxSpendLootPoints = 20000;
-
-	static constexpr int32 personalModulesLimit = 8;
 
 	static constexpr int32 startZOrder = 1000;
 
