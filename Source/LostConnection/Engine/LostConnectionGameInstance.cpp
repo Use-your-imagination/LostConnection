@@ -187,5 +187,7 @@ void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLeve
 
 void ULostConnectionGameInstance::loadNextLevel(TSoftObjectPtr<UWorld> nextLevel)
 {
-	GetWorld()->ServerTravel(nextLevel.GetAssetName() + options);
+	TObjectPtr<UWorld> world = GetWorld();
+
+	world->ServerTravel(nextLevel.GetAssetName() + world->GetAuthGameMode()->OptionsString, true);
 }
