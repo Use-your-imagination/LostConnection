@@ -21,7 +21,7 @@ void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TAr
 		{
 			continue;
 		}
-
+	
 		ActorList.Add(Cast<ALostConnectionPlayerState>(state)->getInventory());
 	}
 
@@ -77,7 +77,7 @@ void ALostConnectionGameMode::HandleSeamlessTravelPlayer(AController*& C)
 {
 	if (C->IsA<AAIController>())
 	{
-		C->GetPlayerState<ALostConnectionPlayerState>()->Destroy();
+		C->PlayerState->Destroy();
 
 		C->Destroy();
 
@@ -93,11 +93,11 @@ void ALostConnectionGameMode::HandleSeamlessTravelPlayer(AController*& C)
 	for (TObjectPtr<AActor> tem : inventories)
 	{
 		TObjectPtr<AInventory> inventory = Cast<AInventory>(tem);
-
+	
 		if (inventory->getPlayerState() == playerState)
 		{
 			travelledInventory = inventory;
-
+	
 			break;
 		}
 	}
@@ -105,8 +105,8 @@ void ALostConnectionGameMode::HandleSeamlessTravelPlayer(AController*& C)
 	Super::HandleSeamlessTravelPlayer(C);
 
 	playerState = C->GetPlayerState<ALostConnectionPlayerState>();
-
+	
 	playerState->setInventory(travelledInventory);
-
+	
 	travelledInventory->init(playerState);
 }

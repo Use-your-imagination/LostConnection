@@ -650,10 +650,12 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	timelines->Tick(DeltaTime);
 
-	if (HasAuthority() && !isDead)
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
+
+	if (HasAuthority() && !isDead && playerState)
 	{
 		TArray<TObjectPtr<UBaseStatus>> statusesToRemove;
-		TObjectPtr<UBaseWeapon> defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
+		TObjectPtr<UBaseWeapon> defaultWeapon = playerState->getDefaultWeapon();
 
 		if (defaultWeapon)
 		{

@@ -483,9 +483,10 @@ void ABaseDrone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (HasAuthority() && GetController())
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
+
+	if (HasAuthority() && !isDead && playerState)
 	{
-		TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
 		TObjectPtr<UBaseWeapon> primaryWeapon = playerState->getPrimaryWeapon();
 		TObjectPtr<UBaseWeapon> secondaryWeapon = playerState->getSecondaryWeapon();
 
