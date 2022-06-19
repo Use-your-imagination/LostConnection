@@ -48,5 +48,7 @@ public:
 
 	const TObjectPtr<class ATeleportPoint> getMainTeleportFromLoadedRoom() const;
 
+	void PostSeamlessTravel() override;
+
 	virtual ~ALostConnectionPlayerController() = default;
 };

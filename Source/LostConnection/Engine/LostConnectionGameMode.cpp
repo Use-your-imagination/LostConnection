@@ -3,26 +3,26 @@
 #include "LostConnectionGameMode.h"
 
 #include "UObject/ConstructorHelpers.h"
-#include "GameFramework/PlayerController.h"
-#include "GameFramework/PlayerState.h"
+#include "AIController.h"
 
 #include "LostConnectionGameState.h"
+#include "LostConnectionPlayerState.h"
 #include "LostConnectionPlayerController.h"
 #include "Constants/Constants.h"
+#include "Utility/Utility.h"
 
 #pragma warning(disable: 4458)
 
 void ALostConnectionGameMode::GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList)
 {
-	ActorList.Reserve(GameState->PlayerArray.Num());
-	
-	ActorList.Append(GameState->PlayerArray);
-	
-	if (bToTransition)
+	for (TObjectPtr<APlayerState> state : GameState->PlayerArray)
 	{
-		ActorList.Add(this);
-	
-		ActorList.Add(GameState);
+		if (!state->GetPlayerController())
+		{
+			continue;
+		}
+
+		ActorList.Add(Cast<ALostConnectionPlayerState>(state)->getInventory());
 	}
 
 	Super::GetSeamlessTravelActorList(bToTransition, ActorList);
@@ -39,7 +39,7 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	static ConstructorHelpers::FClassFinder<APlayerState> playerStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerState"));
 	static ConstructorHelpers::FClassFinder<AGameState> gameStateClassFinder(TEXT("/Game/Engine/BP_LostConnectionGameState"));
 	static ConstructorHelpers::FClassFinder<APlayerController> playerControllerClassFinder(TEXT("/Game/Engine/BP_LostConnectionPlayerController"));
-	
+
 	bUseSeamlessTravel = true;
 
 	NetUpdateFrequency = UConstants::minNetUpdateFrequency;
@@ -73,7 +73,40 @@ void ALostConnectionGameMode::PostSeamlessTravel()
 	Super::PostSeamlessTravel();
 }
 
-void ALostConnectionGameMode::HandleSeamlessTravelPlayer(AController*& controller)
+void ALostConnectionGameMode::HandleSeamlessTravelPlayer(AController*& C)
 {
-	Super::HandleSeamlessTravelPlayer(controller);
+	if (C->IsA<AAIController>())
+	{
+		C->GetPlayerState<ALostConnectionPlayerState>()->Destroy();
+
+		C->Destroy();
+
+		return;
+	}
+
+	TArray<TObjectPtr<AActor>> inventories;
+	TObjectPtr<ALostConnectionPlayerState> playerState = C->GetPlayerState<ALostConnectionPlayerState>();
+	TObjectPtr<AInventory> travelledInventory;
+
+	UGameplayStatics::GetAllActorsOfClass(this, AInventory::StaticClass(), inventories);
+
+	for (TObjectPtr<AActor> tem : inventories)
+	{
+		TObjectPtr<AInventory> inventory = Cast<AInventory>(tem);
+
+		if (inventory->getPlayerState() == playerState)
+		{
+			travelledInventory = inventory;
+
+			break;
+		}
+	}
+
+	Super::HandleSeamlessTravelPlayer(C);
+
+	playerState = C->GetPlayerState<ALostConnectionPlayerState>();
+
+	playerState->setInventory(travelledInventory);
+
+	travelledInventory->init(playerState);
 }

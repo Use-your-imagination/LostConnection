@@ -652,8 +652,8 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	if (HasAuthority() && !isDead)
 	{
-		TArray<UBaseStatus*> statusesToRemove;
-		UBaseWeapon* defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
+		TArray<TObjectPtr<UBaseStatus>> statusesToRemove;
+		TObjectPtr<UBaseWeapon> defaultWeapon = Utility::getPlayerState(this)->getDefaultWeapon();
 
 		if (defaultWeapon)
 		{

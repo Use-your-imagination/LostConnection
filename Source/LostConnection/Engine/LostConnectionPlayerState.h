@@ -163,6 +163,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setCurrentRespawnCooldown(float currentRespawnCooldown);
 
+	UFUNCTION(Server, Reliable)
+	void setInventory(AInventory* newInventory);
+
 	UUserWidget* getCurrentUI() const;
 
 	TObjectPtr<AInventory> getInventory() const;

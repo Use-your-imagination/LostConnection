@@ -82,7 +82,14 @@ inline TObjectPtr<ALostConnectionGameState> Utility::getGameState(const AActor* 
 
 inline TObjectPtr<ALostConnectionPlayerState> Utility::getPlayerState(const APawn* pawn)
 {
-	return pawn->GetController()->GetPlayerState<ALostConnectionPlayerState>();
+	TObjectPtr<AController> controller = pawn->GetController();
+
+	if (controller.IsNull())
+	{
+		return nullptr;
+	}
+
+	return controller->GetPlayerState<ALostConnectionPlayerState>();
 }
 
 inline ALostConnectionPlayerController* Utility::getPlayerController(const APawn* pawn)

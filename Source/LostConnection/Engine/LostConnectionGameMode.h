@@ -31,7 +31,7 @@ public:
 
 	AISpawnManager& getSpawnManager();
 
-	virtual void PostSeamlessTravel() override;
+	void PostSeamlessTravel() override;
 
-	virtual void HandleSeamlessTravelPlayer(AController*& controller) override;
+	void HandleSeamlessTravelPlayer(AController*& C) override;
 };

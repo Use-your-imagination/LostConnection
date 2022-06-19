@@ -426,7 +426,7 @@ public:
 	/**
 	* Invokes a callable to each element in Array
 	*/
-	UFUNCTION(Category = "Utility|For Each", BlueprintCallable, Meta = (DisplayName = "For Each Object", CompactNodeTitle = "ForEach"))
+	UFUNCTION(Category = "Utility|For Each", BlueprintCallable, Meta = (DisplayName = "For Each Actor", CompactNodeTitle = "ForEach"))
 	static UPARAM(DisplayName = Result) TArray<AActor*>& forEachActorArray(UPARAM(ref) TArray<AActor*>& array, const FActorCallable& callable);
 #pragma endregion
 
@@ -506,7 +506,7 @@ public:
 	/**
 	* Invokes a callable to each element in Array that returns true in predicate
 	*/
-	UFUNCTION(Category = "Utility|For Each", BlueprintCallable, Meta = (DisplayName = "For Each If Object", CompactNodeTitle = "ForEachIf"))
+	UFUNCTION(Category = "Utility|For Each", BlueprintCallable, Meta = (DisplayName = "For Each If Actor", CompactNodeTitle = "ForEachIf"))
 	static UPARAM(DisplayName = Result) TArray<AActor*>& forEachIfActorArray(UPARAM(ref) TArray<AActor*>& array, const FActorCallable& callable, const FActorPredicate& predicate);
 #pragma endregion
 
@@ -562,7 +562,7 @@ public:
 	/**
 	* Remove element if predicate returns true
 	*/
-	UFUNCTION(Category = "Utility|Remove If", BlueprintCallable, Meta = (DisplayName = "Remove If Object", CompactNodeTitle = "RemoveIf"))
+	UFUNCTION(Category = "Utility|Remove If", BlueprintCallable, Meta = (DisplayName = "Remove If Actor", CompactNodeTitle = "RemoveIf"))
 	static UPARAM(DisplayName = ResultArray) TArray<AActor*>& removeIfActorArray(UPARAM(ref) TArray<AActor*>& array, const FActorPredicate& predicate);
 #pragma endregion
 

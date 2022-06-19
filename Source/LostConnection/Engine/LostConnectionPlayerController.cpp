@@ -11,8 +11,6 @@
 
 void ALostConnectionPlayerController::GetSeamlessTravelActorList(bool bToEntry, TArray<AActor*>& ActorList)
 {
-	ActorList.Add(GetPawn());
-
 	Super::GetSeamlessTravelActorList(bToEntry, ActorList);
 }
 
@@ -90,4 +88,9 @@ void ALostConnectionPlayerController::setMainTeleportFromLoadedRoom_Implementati
 const TObjectPtr<ATeleportPoint> ALostConnectionPlayerController::getMainTeleportFromLoadedRoom() const
 {
 	return mainTeleportFromLoadedRoom;
+}
+
+void ALostConnectionPlayerController::PostSeamlessTravel()
+{
+	Super::PostSeamlessTravel();
 }

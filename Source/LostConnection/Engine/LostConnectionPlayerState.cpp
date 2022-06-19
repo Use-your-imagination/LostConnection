@@ -219,10 +219,10 @@ void ALostConnectionPlayerState::BeginPlay()
 
 	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
 
-	if (HasAuthority())
+	if (HasAuthority() && inventory.IsNull())
 	{
 		inventory = GetWorld()->SpawnActor<AInventory>();
-		
+
 		inventory->init(this);
 	}
 }
@@ -350,6 +350,16 @@ void ALostConnectionPlayerState::setDroneClass_Implementation(TSubclassOf<ABaseD
 void ALostConnectionPlayerState::setCurrentRespawnCooldown_Implementation(float currentRespawnCooldown)
 {
 	respawnCooldown->startCooldown(currentRespawnCooldown);
+}
+
+void ALostConnectionPlayerState::setInventory_Implementation(AInventory* newInventory)
+{
+	if (!inventory.IsNull())
+	{
+		inventory->Destroy();
+	}
+
+	inventory = newInventory;
 }
 
 UUserWidget* ALostConnectionPlayerState::getCurrentUI() const
