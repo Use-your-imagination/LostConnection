@@ -196,15 +196,15 @@ void Utility::applyDamageModules(TObjectPtr<AActor> caller, const TArray<UInvent
 		{
 			if (!module->applyCondition(caller))
 			{
-				return;
+				continue;
 			}
 
-			static const float unequipModuleEfficiencyCoefficient = 0.5f;
+			float efficiencyCoefficient = cell->getIsEquipped() ? 1.0f : 0.5f;
 
-			inflictor->setAddedDamage(inflictor->getAddedDamage() + damageModule->getAddedDamage() * unequipModuleEfficiencyCoefficient);
-			inflictor->appendIncreaseDamageCoefficient(damageModule->getIncreaseDamageCoefficient() * unequipModuleEfficiencyCoefficient);
-			inflictor->appendMoreDamageCoefficient(damageModule->getMoreDamageCoefficient() * unequipModuleEfficiencyCoefficient);
-			inflictor->setAdditionalDamage(inflictor->getAdditionalDamage() + damageModule->getAdditionalDamage() * unequipModuleEfficiencyCoefficient);
+			inflictor->setAddedDamage(inflictor->getAddedDamage() + damageModule->getAddedDamage() * efficiencyCoefficient);
+			inflictor->appendIncreaseDamageCoefficient(damageModule->getIncreaseDamageCoefficient() * efficiencyCoefficient);
+			inflictor->appendMoreDamageCoefficient(damageModule->getMoreDamageCoefficient() * efficiencyCoefficient);
+			inflictor->setAdditionalDamage(inflictor->getAdditionalDamage() + damageModule->getAdditionalDamage() * efficiencyCoefficient);
 		}
 	}
 }
