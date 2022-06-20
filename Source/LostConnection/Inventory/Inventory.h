@@ -67,7 +67,23 @@ private:
 	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	int32 maxEnergyAmmoCount;
 
+	/**
+	* Unequipped personal modules
+	* Same type as equipped modules
+	*/
+	UPROPERTY()
+	TArray<TObjectPtr<UInventoryCell>> activePersonalModules;
+
+	/**
+	* Unequipped weapon modules 
+	* Same type as equipped modules
+	*/
+	UPROPERTY()
+	TArray<TObjectPtr<UInventoryCell>> activeWeaponModules;
+
 private:
+	void updateActivePersonalModules();
+
 	bool swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>& slot, UBaseWeapon* weapon);
 
 	TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules);
@@ -89,6 +105,8 @@ public:
 	AInventory();
 
 	void init(TObjectPtr<class ALostConnectionPlayerState> playerState);
+
+	void updateActiveWeaponModules();
 
 	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)
 	void equipOrUnequipPersonalModule(UInventoryCell* module);
@@ -164,6 +182,10 @@ public:
 	int32 getMaxEnergyAmmoCount() const;
 
 	int32 getMaxAmmoCount(EAmmoType type) const;
+
+	const TArray<TObjectPtr<UInventoryCell>>& getActivePersonalModules() const;
+
+	const TArray<TObjectPtr<UInventoryCell>>& getActiveWeaponModules() const;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 

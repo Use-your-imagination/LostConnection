@@ -13,6 +13,29 @@
 template<typename... Args>
 static TArray<TObjectPtr<UInventoryCell>*> fillModules(TArray<TObjectPtr<UInventoryCell>>& modules, Args&... args);
 
+void AInventory::updateActivePersonalModules()
+{
+	activePersonalModules.Empty();
+
+	for (TObjectPtr<UInventoryCell> cell : equippedPersonalModules)
+	{
+		if (cell->isEmpty())
+		{
+			continue;
+		}
+
+		const FText& name = cell->getItem()->getItemName();
+
+		for (TObjectPtr<UInventoryCell> uneqippedCell : unequippedPersonalModules)
+		{
+			if (uneqippedCell->getItem()->getItemName().EqualTo(name, ETextComparisonLevel::Type::Quinary))
+			{
+				activePersonalModules.Add(uneqippedCell);
+			}
+		}
+	}
+}
+
 bool AInventory::swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>& slot, UBaseWeapon* weapon)
 {
 	TObjectPtr<UInventoryCell>* weaponCell = unequippedWeapons.FindByPredicate([weapon](const TObjectPtr<UInventoryCell>& cell)
@@ -233,6 +256,38 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 	defaultWeaponCell->setItem(defaultWeapon);
 }
 
+void AInventory::updateActiveWeaponModules()
+{
+	activeWeaponModules.Empty();
+
+	TObjectPtr<ABaseCharacter> character = playerState->GetPawn<ABaseCharacter>();
+
+	if (character.IsNull())
+	{
+		return;
+	}
+
+	TObjectPtr<UBaseWeapon> weapon = character->getCurrentWeapon();
+
+	if (weapon.IsNull())
+	{
+		return;
+	}
+
+	for (TObjectPtr<UInventoryCell>& cell : weaponModules)
+	{
+		const FText& name = cell->getItem()->getItemName();
+
+		for (TObjectPtr<UInventoryCell>& uneqippedCell : weapon->getWeaponModules())
+		{
+			if (uneqippedCell != cell && uneqippedCell->getItem()->getItemName().EqualTo(name, ETextComparisonLevel::Type::Quinary))
+			{
+				activeWeaponModules.Add(uneqippedCell);
+			}
+		}
+	}
+}
+
 void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* module)
 {
 	if (TObjectPtr<UInventoryCell>* cell = equippedPersonalModules.FindByKey(module))
@@ -261,10 +316,12 @@ void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* mod
 
 				unequippedPersonalModules.RemoveAt(index);
 
-				return;
+				break;
 			}
 		}
 	}
+
+	this->updateActivePersonalModules();
 }
 
 void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule, UInventoryCell* secondModule)
@@ -322,12 +379,16 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 
 		changeEquipState(second);
 	}
+
+	this->updateActivePersonalModules();
 }
 
 void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* module)
 {
 	if (!IsValid(selectedWeapon))
 	{
+		this->updateActiveWeaponModules();
+
 		return;
 	}
 
@@ -348,7 +409,7 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 
 				weaponModule->equip();
 
-				return;
+				break;
 			}
 		}
 	}
@@ -360,12 +421,16 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 
 		(*cell)->unequip();
 	}
+
+	this->updateActiveWeaponModules();
 }
 
 void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* firstModule, UInventoryCell* secondModule)
 {
 	if (!IsValid(selectedWeapon))
 	{
+		this->updateActiveWeaponModules();
+
 		return;
 	}
 
@@ -436,6 +501,8 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 			}
 		}
 	}
+
+	this->updateActiveWeaponModules();
 }
 
 void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
@@ -453,6 +520,8 @@ void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 			unequippedPersonalModules.RemoveSingle(moduleToRemove);
 		}
 	}
+
+	this->updateActivePersonalModules();
 }
 
 void AInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
@@ -467,6 +536,8 @@ void AInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
 	{
 		weaponModules.Remove(moduleToRemove);
 	}
+
+	this->updateActiveWeaponModules();
 }
 
 void AInventory::addUnequippedWeapon_Implementation(UBaseWeapon* weapon)
@@ -618,6 +689,16 @@ int32 AInventory::getMaxAmmoCount(EAmmoType type) const
 	}
 
 	return 0;
+}
+
+const TArray<TObjectPtr<UInventoryCell>>& AInventory::getActivePersonalModules() const
+{
+	return activePersonalModules;
+}
+
+const TArray<TObjectPtr<UInventoryCell>>& AInventory::getActiveWeaponModules() const
+{
+	return activeWeaponModules;
 }
 
 bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)

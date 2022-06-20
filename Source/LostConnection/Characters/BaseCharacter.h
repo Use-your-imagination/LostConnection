@@ -49,25 +49,25 @@ class LOSTCONNECTION_API ABaseCharacter :
 
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
-	USkeletalMeshComponent* currentWeaponMesh;
+	TObjectPtr<USkeletalMeshComponent> currentWeaponMesh;
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* magazine;
+	TObjectPtr<UStaticMeshComponent> magazine;
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
-	UNiagaraComponent* underStatusComponent;
+	TObjectPtr<UNiagaraComponent> underStatusComponent;
 
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
-	UWidgetComponent* healthBarWidget;
+	TObjectPtr<UWidgetComponent> healthBarWidget;
 
 	UPROPERTY(Category = Weapons, ReplicatedUsing = onCurrentWeaponChange, BlueprintReadOnly)
-	UBaseWeapon* currentWeapon;
+	TObjectPtr<UBaseWeapon> currentWeapon;
 
 	UPROPERTY(Category = Timelines, BlueprintReadWrite)
-	UTimelinesUtility* timelines;
+	TObjectPtr<UTimelinesUtility> timelines;
 
 	UPROPERTY(Category = EnergyShield, ReplicatedUsing = onEnergyShieldUpdate, BlueprintReadOnly)
-	UBaseEnergyShield* energyShield;
+	TObjectPtr<UBaseEnergyShield> energyShield;
 
 	UPROPERTY(Category = EnergyShield, EditDefaultsOnly, BlueprintReadOnly)
 	float startEnergyShieldCapacity;
@@ -270,9 +270,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool isWeaponEquipped() const;
 
-	USkeletalMeshComponent* getCurrentWeaponMeshComponent() const;
+	TObjectPtr<USkeletalMeshComponent> getCurrentWeaponMeshComponent() const;
 
-	UBaseWeapon* getCurrentWeapon() const;
+	TObjectPtr<UBaseWeapon> getCurrentWeapon() const;
 
 	UFUNCTION(BlueprintCallable)
 	virtual int32 getWeaponCount() const;

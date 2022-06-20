@@ -136,7 +136,7 @@ void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
 
 void ABaseCharacter::onCurrentWeaponChange()
 {
-	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	TObjectPtr<UAnimInstance> animInstance = GetMesh()->GetAnimInstance();
 
 	this->updateWeaponMesh();
 
@@ -145,6 +145,11 @@ void ABaseCharacter::onCurrentWeaponChange()
 		currentWeapon->setOwner(this);
 
 		currentWeapon->updateTimeBetweenShots();
+
+		if (TObjectPtr<AInventory> inventory =  Utility::getPlayerState(this)->getInventory())
+		{
+			inventory->updateActiveWeaponModules();
+		}
 	}
 
 	if (animInstance->Implements<UWeaponUser>())
@@ -571,12 +576,12 @@ float ABaseCharacter::getSprintMovementSpeed() const
 	return sprintMovementSpeed;
 }
 
-USkeletalMeshComponent* ABaseCharacter::getCurrentWeaponMeshComponent() const
+TObjectPtr<USkeletalMeshComponent> ABaseCharacter::getCurrentWeaponMeshComponent() const
 {
 	return currentWeaponMesh;
 }
 
-UBaseWeapon* ABaseCharacter::getCurrentWeapon() const
+TObjectPtr<UBaseWeapon> ABaseCharacter::getCurrentWeapon() const
 {
 	return currentWeapon;
 }
