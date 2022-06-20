@@ -406,8 +406,12 @@ public:
 	UFUNCTION(Category = Modules, BlueprintCallable)
 	virtual const TArray<UInventoryCell*>& getPersonalUnequippedModules() const final override;
 
+	virtual const TArray<TObjectPtr<UInventoryCell>>& getActivePersonalModules() const final override;
+
 	UFUNCTION(Category = Modules, BlueprintCallable)
 	virtual const TArray<UInventoryCell*>& getWeaponModules() const final override;
+
+	virtual const TArray<TObjectPtr<UInventoryCell>>& getActiveWeaponModules() const final override;
 
 	virtual void castPassiveAbilityVisual() override;
 

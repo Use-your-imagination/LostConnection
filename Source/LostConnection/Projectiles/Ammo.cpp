@@ -216,12 +216,14 @@ void AAmmo::copyProperties(TObjectPtr<UBaseWeapon> weapon)
 		{
 			Utility::applyDamageModules(this, holder->getPersonalEquippedModules(), ailmentInflictorUtility);
 
-			Utility::applyDamageModules(this, holder->getPersonalUnequippedModules(), ailmentInflictorUtility);
+			Utility::applyDamageModules(this, holder->getActivePersonalModules(), ailmentInflictorUtility);
 		}
 
 		if (IWeaponModulesHolder* holder = Cast<IWeaponModulesHolder>(owner))
 		{
 			Utility::applyDamageModules(this, holder->getWeaponModules(), ailmentInflictorUtility);
+
+			Utility::applyDamageModules(this, holder->getActiveWeaponModules(), ailmentInflictorUtility);
 		}
 	}
 }

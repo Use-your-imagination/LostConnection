@@ -61,12 +61,14 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 	{
 		Utility::applyDamageModules(Cast<AActor>(caster), holder->getPersonalEquippedModules(), tem);
 
-		Utility::applyDamageModules(Cast<AActor>(caster), holder->getPersonalUnequippedModules(), tem);
+		Utility::applyDamageModules(Cast<AActor>(caster), holder->getActivePersonalModules(), tem);
 	}
 
 	if (IWeaponModulesHolder* holder = Cast<IWeaponModulesHolder>(caster))
 	{
 		Utility::applyDamageModules(Cast<AActor>(caster), holder->getWeaponModules(), tem);
+
+		Utility::applyDamageModules(Cast<AActor>(caster), holder->getActiveWeaponModules(), tem);
 	}
 
 	target->takeDamageFromInflictor(tem.Get());

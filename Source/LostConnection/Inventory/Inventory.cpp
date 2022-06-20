@@ -101,12 +101,21 @@ TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObje
 			continue;
 		}
 
-		currentQualityModules.RemoveSingle(*module);
+		int32 possibleEquippedModuleIndex = 0;
 
-		for (auto& i : currentQualityModules)
+		for (int32 i = 1; i < currentQualityModules.Num(); i++)
 		{
-			modulesToRemove.Add(i);
+			if (!currentQualityModules[i]->getIsEquipped())
+			{
+				possibleEquippedModuleIndex = i;
+
+				break;
+			}
 		}
+
+		currentQualityModules.RemoveAt(possibleEquippedModuleIndex);
+
+		modulesToRemove.Append(MoveTemp(currentQualityModules));
 
 		this->upgradeModule(*module);
 	}

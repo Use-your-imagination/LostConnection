@@ -29,4 +29,6 @@ public:
 	virtual const TArray<UInventoryCell*>& getPersonalEquippedModules() const = 0;
 
 	virtual const TArray<UInventoryCell*>& getPersonalUnequippedModules() const = 0;
+
+	virtual const TArray<TObjectPtr<UInventoryCell>>& getActivePersonalModules() const = 0;
 };

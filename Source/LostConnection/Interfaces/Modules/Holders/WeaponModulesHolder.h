@@ -27,4 +27,6 @@ public:
 	virtual void addWeaponModule(TObjectPtr<UBaseWeaponModule> module) = 0;
 
 	virtual const TArray<UInventoryCell*>& getWeaponModules() const = 0;
+
+	virtual const TArray<TObjectPtr<UInventoryCell>>& getActiveWeaponModules() const = 0;
 };

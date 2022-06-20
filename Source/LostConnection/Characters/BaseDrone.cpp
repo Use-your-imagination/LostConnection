@@ -1278,9 +1278,19 @@ const TArray<UInventoryCell*>& ABaseDrone::getPersonalUnequippedModules() const
 	return Utility::getPlayerState(this)->getPersonalUnequippedModules();
 }
 
+const TArray<TObjectPtr<UInventoryCell>>& ABaseDrone::getActivePersonalModules() const
+{
+	return Utility::getPlayerState(this)->getInventory()->getActivePersonalModules();
+}
+
 const TArray<UInventoryCell*>& ABaseDrone::getWeaponModules() const
 {
 	return Utility::getPlayerState(this)->getWeaponModules();
+}
+
+const TArray<TObjectPtr<UInventoryCell>>& ABaseDrone::getActiveWeaponModules() const
+{
+	return Utility::getPlayerState(this)->getInventory()->getActiveWeaponModules();
 }
 
 void ABaseDrone::castPassiveAbilityVisual()
