@@ -10,6 +10,7 @@
 
 #include "Engine/LoadingScreenInfo.h"
 #include "UI/InventoryWidget.h"
+#include "UI/VideoSettingsWidget.h"
 
 #include "UtilityBlueprintFunctionLibrary.generated.h"
 
@@ -75,4 +76,10 @@ public:
 
 	UFUNCTION(Category = "Utility|Levels", BlueprintCallable, BlueprintPure)
 	static FString getRoomName(const TSoftObjectPtr<UWorld>& room);
+
+	UFUNCTION(Category = "Utility|VideoSettings", BlueprintCallable)
+	static void applyVideoSettings(const FVideoSettings& settings);
+
+	UFUNCTION(Category = "Utility|VideoSettings", BlueprintCallable)
+	static void addVideoSetting(UPARAM(ref) FVideoSettings& settings, UVideoSettingsWidget* widget, const FApplySettingsDelegate& delegate);
 };

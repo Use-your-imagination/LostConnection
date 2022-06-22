@@ -263,3 +263,20 @@ FString UUtilityBlueprintFunctionLibrary::getRoomName(const TSoftObjectPtr<UWorl
 {
 	return room.GetAssetName();
 }
+
+void UUtilityBlueprintFunctionLibrary::applyVideoSettings(const FVideoSettings& settings)
+{
+	TObjectPtr<UGameUserSettings> userSettings = UGameUserSettings::GetGameUserSettings();
+
+	for (const TPair<TObjectPtr<UVideoSettingsWidget>, FApplySettingsDelegate>& applier : settings.settingsAppliers)
+	{
+		applier.Value.Execute(userSettings, applier.Key->getVideoSettingValue()->GetSelectedIndex());
+	}
+
+	userSettings->ApplySettings(false);
+}
+
+void UUtilityBlueprintFunctionLibrary::addVideoSetting(FVideoSettings& settings, UVideoSettingsWidget* widget, const FApplySettingsDelegate& delegate)
+{
+	settings.settingsAppliers.Emplace(widget, delegate);
+}
