@@ -276,7 +276,7 @@ void UUtilityBlueprintFunctionLibrary::applyVideoSettings(const FVideoSettings& 
 	userSettings->ApplySettings(false);
 }
 
-void UUtilityBlueprintFunctionLibrary::addVideoSetting(FVideoSettings& settings, UVideoSettingsWidget* widget, FApplySettingsDelegate delegate)
+void UUtilityBlueprintFunctionLibrary::addVideoSetting(FVideoSettings& settings, UVideoSettingsWidget* widget, const FApplySettingsDelegate& delegate)
 {
 	settings.settingsAppliers.Emplace(widget, delegate);
 }

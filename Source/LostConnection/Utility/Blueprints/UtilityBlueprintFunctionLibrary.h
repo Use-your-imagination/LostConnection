@@ -81,5 +81,5 @@ public:
 	static void applyVideoSettings(const FVideoSettings& settings);
 
 	UFUNCTION(Category = "Utility|VideoSettings", BlueprintCallable)
-	static void addVideoSetting(UPARAM(ref) FVideoSettings& settings, UVideoSettingsWidget* widget, FApplySettingsDelegate delegate);
+	static void addVideoSetting(UPARAM(ref) FVideoSettings& settings, UVideoSettingsWidget* widget, const FApplySettingsDelegate& delegate);
 };
