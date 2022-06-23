@@ -2,16 +2,20 @@
 
 #include "VideoSettingsWidget.h"
 
-void UVideoSettingsWidget::NativeConstruct()
+void UVideoSettingsWidget::NativePreConstruct()
 {
-	Super::NativeConstruct();
+	Super::NativePreConstruct();
 
 	videoSettingName->SetText(settingName);
 
-	for (const FString& option : options)
+	for (const FText& option : options)
 	{
-		videoSettingValue->AddOption(option);
+		videoSettingValue->AddOption(option.ToString());
 	}
+
+	videoSettingName->SetToolTipText(settingNameToolTip);
+
+	videoSettingValue->SetToolTipText(optionsToolTip);
 }
 
 TObjectPtr<UComboBoxString> UVideoSettingsWidget::getVideoSettingValue() const

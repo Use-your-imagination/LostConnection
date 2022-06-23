@@ -29,10 +29,16 @@ private:
 	FText settingName;
 
 	UPROPERTY(Category = WidgetsContent, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TArray<FString> options;
+	TArray<FText> options;
+
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	FText settingNameToolTip;
+
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	FText optionsToolTip;
 
 private:
-	void NativeConstruct() override;
+	void NativePreConstruct() override;
 
 public:
 	TObjectPtr<UComboBoxString> getVideoSettingValue() const;
