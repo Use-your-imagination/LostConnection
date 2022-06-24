@@ -25,16 +25,16 @@ private:
 	UPROPERTY(Category = Widgets, BlueprintReadOnly, Meta = (BindWidget, AllowPrivateAccess = "true"))
 	TObjectPtr<UComboBoxString> videoSettingValue;
 
-	UPROPERTY(Category = WidgetsContent, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess = "true"))
 	FText settingName;
 
-	UPROPERTY(Category = WidgetsContent, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess = "true"))
 	TArray<FText> options;
 
-	UPROPERTY(Category = WidgetsContent, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess = "true"))
 	FText settingNameToolTip;
 
-	UPROPERTY(Category = WidgetsContent, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess = "true"))
 	FText optionsToolTip;
 
 private:
