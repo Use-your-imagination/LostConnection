@@ -11,7 +11,14 @@
 	},
 	"UI":
 	{
-		"type": "category"
+		"type": "category",
+		"Menus":
+		{
+			"type": "item",
+			"notes": [
+				"Update menus"
+			]
+		}
 	},
 	"Characters":
 	{
