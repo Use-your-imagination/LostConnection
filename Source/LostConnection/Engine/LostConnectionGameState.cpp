@@ -49,13 +49,16 @@ void ALostConnectionGameState::loadRoom_Implementation(const TSoftObjectPtr<UWor
 
 void ALostConnectionGameState::clearRoom()
 {
-	TArray<AActor*> aiSpawnPoints;
+	TArray<TObjectPtr<AActor>> aiSpawnPoints;
 
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAISpawnPoint::StaticClass(), aiSpawnPoints);
+	UGameplayStatics::GetAllActorsOfClass(this, AAISpawnPoint::StaticClass(), aiSpawnPoints);
 
-	UGameplayStatics::GetActorOfClass(GetWorld(), AChooseRoomConsole::StaticClass())->Destroy();
+	if (TObjectPtr<AActor> roomConsole = UGameplayStatics::GetActorOfClass(this, AChooseRoomConsole::StaticClass()))
+	{
+		roomConsole->Destroy();
+	}
 
-	for (AActor* aiSpawnPoint : aiSpawnPoints)
+	for (TObjectPtr<AActor> aiSpawnPoint : aiSpawnPoints)
 	{
 		aiSpawnPoint->Destroy();
 	}
