@@ -13,7 +13,7 @@ FString UIrradiationAilment::getStatusName() const
 	return "Irradiation";
 }
 
-SIZE_T UIrradiationAilment::getActiveStatusesCount() const
+int32 UIrradiationAilment::getActiveStatusesCount() const
 {
 	return Utility::countStatuses(target, StaticClass());
 }

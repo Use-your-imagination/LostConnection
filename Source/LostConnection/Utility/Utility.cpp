@@ -15,7 +15,7 @@
 
 DEFINE_LOG_CATEGORY(LogLostConnection);
 
-SIZE_T Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<UBaseStatus>& statusClass)
+int32 Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<UBaseStatus>& statusClass)
 {
 	const TArray<UBaseStatus*>& statuses = target->getStatuses();
 
@@ -24,7 +24,7 @@ SIZE_T Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<U
 
 FText Utility::getTextFromFloat(float value)
 {
-	static constexpr SIZE_T digits = 3;
+	static constexpr int32 digits = 3;
 
 	FString stringValue = FString::Printf(TEXT("%.0f"), value);
 	FString thousandSymbol = FText::FromStringTable("/Game/Text/Common.Common", "ThousandSymbol").ToString();

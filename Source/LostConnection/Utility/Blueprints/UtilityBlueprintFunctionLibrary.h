@@ -20,19 +20,19 @@ class LOSTCONNECTION_API UUtilityBlueprintFunctionLibrary : public UBlueprintFun
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
+	UFUNCTION(Category = "Utility|Strings", BlueprintCallable, BlueprintPure)
 	static FString firstSymbolToUpperCase(const FString& string);
 
-	UFUNCTION(Category = Utility, BlueprintCallable)
+	UFUNCTION(Category = "Utility|Hotkeys", BlueprintCallable)
 	static void rebindHotkeys(const TMap<FName, FString>& newHotkeys);
 
-	UFUNCTION(Category = Utility, BlueprintCallable)
+	UFUNCTION(Category = "Utility|Animations", BlueprintCallable)
 	static void cancelCurrentAbilityAnimation(const TScriptInterface<class ICaster>& caster);
 
-	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
+	UFUNCTION(Category = "Utility|Animations", BlueprintCallable, BlueprintPure)
 	static bool isAnyAnimationActive(const TScriptInterface<class ICaster>& caster);
 
-	UFUNCTION(Category = Utility, BlueprintCallable, BlueprintPure)
+	UFUNCTION(Category = "Utility|AllOf", BlueprintCallable, BlueprintPure)
 	static bool allOfFloat(const TArray<float>& values, float compareValue);
 
 	/**
@@ -82,4 +82,10 @@ public:
 
 	UFUNCTION(Category = "Utility|VideoSettings", BlueprintCallable)
 	static void addVideoSetting(UPARAM(ref) FVideoSettings& settings, UVideoSettingsWidget* widget, const FApplySettingsDelegate& delegate);
+
+	UFUNCTION(Category = "Utility|World", BlueprintCallable, BlueprintPure, Meta = (DefaultToSelf = "actor"))
+	static class ALostConnectionGameState* getLostConnectionGameState(AActor* actor);
+
+	UFUNCTION(Category = "Utility|World", BlueprintCallable, BlueprintPure, Meta = (DefaultToSelf = "pawn"))
+	static class ALostConnectionPlayerState* getLostConnectionPlayerState(APawn* pawn);
 };

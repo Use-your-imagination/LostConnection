@@ -21,7 +21,7 @@ class LOSTCONNECTION_API UCritAilment :
 private:
 	FString getStatusName() const override;
 
-	SIZE_T getActiveStatusesCount() const override;
+	int32 getActiveStatusesCount() const override;
 
 private:
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))

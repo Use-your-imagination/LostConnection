@@ -20,7 +20,7 @@ private:
 	TSubclassOf<UUserWidget> loadingScreenClass;
 	FCallbackDelegate onEndLoadCallback;
 	FCallbackDelegate onBeginLoadCallback;
-	UUserWidget* loadingScreen;
+	TObjectPtr<UUserWidget> loadingScreen;
 
 private:
 	void BeginPlay() override;

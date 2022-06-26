@@ -9,7 +9,7 @@ FString UBaseImpactStatus::getStatusName() const
 	PURE_VIRTUAL(UBaseImpactStatus::getStatusName, return "";);
 }
 
-SIZE_T UBaseImpactStatus::getActiveStatusesCount() const
+int32 UBaseImpactStatus::getActiveStatusesCount() const
 {
 	PURE_VIRTUAL(UBaseImpactStatus::getActiveStatusesCount, return 0;);
 }

@@ -16,7 +16,7 @@ class LOSTCONNECTION_API UBaseImpactStatus : public UBaseStatus
 protected:
 	virtual FString getStatusName() const override;
 
-	virtual SIZE_T getActiveStatusesCount() const;
+	virtual int32 getActiveStatusesCount() const;
 
 public:
 	UBaseImpactStatus() = default;

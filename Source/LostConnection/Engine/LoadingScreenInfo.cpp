@@ -21,7 +21,7 @@ void ALoadingScreenInfo::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+	static ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 
 	if (manager.isAssetsLoadingEnd())
 	{

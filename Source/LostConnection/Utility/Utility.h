@@ -29,7 +29,7 @@ public:
 
 	static ALostConnectionPlayerController* getPlayerController(const APawn* pawn);
 
-	static SIZE_T countStatuses(const class IStatusReceiver* target, const TSubclassOf<class UBaseStatus>& statusClass);
+	static int32 countStatuses(const class IStatusReceiver* target, const TSubclassOf<class UBaseStatus>& statusClass);
 
 	static FText getTextFromFloat(float value);
 

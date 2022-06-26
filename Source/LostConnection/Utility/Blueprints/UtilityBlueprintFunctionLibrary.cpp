@@ -18,6 +18,7 @@
 #include "Engine/LostConnectionGameState.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Interfaces/Loot/AmmoDropable.h"
+#include "Utility/Utility.h"
 
 FString appendLootDropChance(int32 lootPoints, const UBaseLootFunction* lootFunction)
 {
@@ -157,7 +158,7 @@ ULostConnectionAssetManager* UUtilityBlueprintFunctionLibrary::getAssetManager()
 
 ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo(ALostConnectionGameState* gameState, const FCallbackDelegate& onBeginLoadCallback, const FCallbackDelegate& onEndLoadCallback)
 {
-	ALoadingScreenInfo* info = gameState->spawn<ALoadingScreenInfo>({});
+	TObjectPtr<ALoadingScreenInfo> info = gameState->spawn<ALoadingScreenInfo>({});
 
 	info->setOnBeginLoadCallback(onBeginLoadCallback);
 
@@ -279,4 +280,14 @@ void UUtilityBlueprintFunctionLibrary::applyVideoSettings(const FVideoSettings& 
 void UUtilityBlueprintFunctionLibrary::addVideoSetting(FVideoSettings& settings, UVideoSettingsWidget* widget, const FApplySettingsDelegate& delegate)
 {
 	settings.settingsAppliers.Emplace(widget, delegate);
+}
+
+ALostConnectionGameState* UUtilityBlueprintFunctionLibrary::getLostConnectionGameState(AActor* actor)
+{
+	return Utility::getGameState(actor);
+}
+
+ALostConnectionPlayerState* UUtilityBlueprintFunctionLibrary::getLostConnectionPlayerState(APawn* pawn)
+{
+	return Utility::getPlayerState(pawn);
 }

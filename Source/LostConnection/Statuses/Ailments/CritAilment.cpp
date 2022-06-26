@@ -11,7 +11,7 @@ FString UCritAilment::getStatusName() const
 	return "Crit";
 }
 
-SIZE_T UCritAilment::getActiveStatusesCount() const
+int32 UCritAilment::getActiveStatusesCount() const
 {
 	return Utility::countStatuses(target, StaticClass());
 }

@@ -127,7 +127,7 @@ void UBaseWeapon::shoot()
 	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(owner.Get());
 	bool isAnyShot = false;
 
-	for (SIZE_T i = 0; i < shotsCount; i++)
+	for (int32 i = 0; i < shotsCount; i++)
 	{
 		if (currentMagazineSize >= ammoCost)
 		{
