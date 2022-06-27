@@ -18,6 +18,13 @@
 			"notes": [
 				"Update menus"
 			]
+		},
+		"Loading Screen":
+		{
+			"type": "item",
+			"notes": [
+				"Added seamless loading screen"
+			]
 		}
 	},
 	"Characters":
@@ -46,5 +53,17 @@
 	"Weapon Modules":
 	{
 		"type": "category"
+	},
+	"Video Settings":
+	{
+		"type": "category",
+		"Features":
+		{
+			"type": "item",
+			"notes": [
+				"Remade video settings menu",
+				"Added VSync, dynamic resolution, changing fullscreen mode"
+			]
+		}
 	}
 }
