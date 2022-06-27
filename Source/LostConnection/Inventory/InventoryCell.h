@@ -17,10 +17,7 @@ class LOSTCONNECTION_API UInventoryCell : public UNetworkObject
 	GENERATED_BODY()
 	
 private:
-	/**
-	* Implements IInventoriable
-	*/
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, Meta = (MustImplement = Inventoriable))
 	TObjectPtr<UNetworkObject> item;
 
 	UPROPERTY(Category = State, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))

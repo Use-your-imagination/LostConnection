@@ -34,6 +34,8 @@ USN4K3ThirdAbility::USN4K3ThirdAbility() :
 	period(1.0f)
 {
 	InitializationUtility::initAbilityId(__FILE__, id);
+
+	socketItem = CreateDefaultSubobject<USN4K3Reservator>("Reservator");
 }
 
 void USN4K3ThirdAbility::applyAbility(ABaseCharacter* target)
@@ -89,13 +91,6 @@ void USN4K3ThirdAbility::useAbility()
 	flagPointer = flag;
 
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
-}
-
-void USN4K3ThirdAbility::initAbility()
-{
-	Super::initAbility();
-
-	socketItem = NewObject<USN4K3Reservator>(this, ULostConnectionAssetManager::get().getStatuses().getDefaultSN4K3Reservator());
 }
 
 void USN4K3ThirdAbility::insert(const TScriptInterface<ISocketItem>& socketItem)

@@ -28,11 +28,8 @@ private:
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	float period;
 
-	/*
-	* Implements ISocketItem
-	*/
-	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	UNetworkObject* socketItem;
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (MustImplement = SocketItem, AllowPrivateAccess = "true"))
+	TObjectPtr<UNetworkObject> socketItem;
 
 	TWeakObjectPtr<class ASN4K3ThirdAbilityFlag> flagPointer;
 
@@ -45,8 +42,6 @@ public:
 	void applyAbility(class ABaseCharacter* target) override;
 
 	void useAbility() override;
-
-	void initAbility() override;
 
 	void insert(const TScriptInterface<ISocketItem>& socketItem) override;
 

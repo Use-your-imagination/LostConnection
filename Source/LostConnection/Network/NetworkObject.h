@@ -10,7 +10,7 @@
 
 #include "NetworkObject.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(BlueprintType, DefaultToInstanced)
 class LOSTCONNECTION_API UNetworkObject : public UObject
 {
 	GENERATED_BODY()
