@@ -22,49 +22,49 @@ class LOSTCONNECTION_API AInventory : public AInfo
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Player, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Player, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<class ALostConnectionPlayerState> playerState;
 
-	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UInventoryCell> primaryWeaponCell;
 
-	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UInventoryCell> secondaryWeaponCell;
 
-	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UInventoryCell> defaultWeaponCell;
 
-	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UInventoryCell> firstInactiveWeaponCell;
 
-	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Weapons", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UInventoryCell> secondInactiveWeaponCell;
 
-	UPROPERTY(Category = "Inventory|Weapons", ReplicatedUsing = onInventoryUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Weapons", ReplicatedUsing = onInventoryUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TArray<TObjectPtr<UInventoryCell>> unequippedWeapons;
 
-	UPROPERTY(Category = "Inventory|Economy", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Economy", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 lootPoints;
 
-	UPROPERTY(Category = "Inventory|Ammo", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Ammo", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TArray<FAmmoData> spareAmmo;
 
-	UPROPERTY(Category = "Inventory|Modules", ReplicatedUsing = onInventoryUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Modules", ReplicatedUsing = onInventoryUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TArray<TObjectPtr<UInventoryCell>> equippedPersonalModules;
 
-	UPROPERTY(Category = "Inventory|Modules", ReplicatedUsing = onInventoryUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Modules", ReplicatedUsing = onInventoryUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TArray<TObjectPtr<UInventoryCell>> unequippedPersonalModules;
 
-	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Modules", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TArray<TObjectPtr<UInventoryCell>> weaponModules;
 
-	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 maxSmallAmmoCount;
 
-	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 maxLargeAmmoCount;
 
-	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Inventory|Defaults", Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 maxEnergyAmmoCount;
 
 	/**

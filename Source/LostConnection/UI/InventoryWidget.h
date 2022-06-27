@@ -16,7 +16,7 @@ class LOSTCONNECTION_API UInventoryWidget : public UEscapableWidget
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Inventory, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Inventory, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<AInventory> inventory;
 
 public:

@@ -15,7 +15,7 @@ class LOSTCONNECTION_API AAISpawnPoint : public AInfo
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Components, VisibleAnywhere, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, VisibleAnywhere, Meta = (AllowPrivateAccess))
 	TObjectPtr<UArrowComponent> arrow;
 
 public:

@@ -19,22 +19,22 @@ class LOSTCONNECTION_API UVideoSettingsWidget : public UUserWidget
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Widgets, BlueprintReadOnly, Meta = (BindWidget, AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Widgets, BlueprintReadOnly, Meta = (BindWidget, AllowPrivateAccess))
 	TObjectPtr<UTextBlock> videoSettingName;
 
-	UPROPERTY(Category = Widgets, BlueprintReadOnly, Meta = (BindWidget, AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Widgets, BlueprintReadOnly, Meta = (BindWidget, AllowPrivateAccess))
 	TObjectPtr<UComboBoxString> videoSettingValue;
 
-	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess))
 	FText settingName;
 
-	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess))
 	TArray<FText> options;
 
-	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess))
 	FText settingNameToolTip;
 
-	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WidgetsContent, EditAnywhere, Meta = (AllowPrivateAccess))
 	FText optionsToolTip;
 
 private:

@@ -15,7 +15,7 @@
 
 #include "BaseBotCaster.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class LOSTCONNECTION_API ABaseBotCaster : 
 	public ABaseBot,
 	public ICaster,

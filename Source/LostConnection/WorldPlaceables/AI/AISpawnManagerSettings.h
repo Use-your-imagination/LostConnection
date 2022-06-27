@@ -14,8 +14,8 @@ struct LOSTCONNECTION_API FWaveSettings
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadOnly)
-	int32 botsInWave;
+	UPROPERTY(Category = Waves, EditDefaultsOnly, Meta = (AllowAbstract))
+	TMap<TSubclassOf<class ABaseBot>, int32> typeCount;
 };
 
 UCLASS(BlueprintType, Blueprintable)
@@ -24,7 +24,7 @@ class LOSTCONNECTION_API AAISpawnManagerSettings : public AInfo
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Waves, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Waves, EditDefaultsOnly, Meta = (AllowPrivateAccess))
 	TArray<FWaveSettings> waveSettings;
 
 public:

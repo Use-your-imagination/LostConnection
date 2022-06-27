@@ -14,7 +14,7 @@ class LOSTCONNECTION_API ABaseGrapple : public AActor
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(Category = Grapple, Instanced, BlueprintReadOnly, Meta = (ExposeOnSpawn = "true"))
+	UPROPERTY(Category = Grapple, Instanced, BlueprintReadOnly, Meta = (ExposeOnSpawn = true))
 	TObjectPtr<class UBaseGrappleHandler> handler;
 	
 public:	

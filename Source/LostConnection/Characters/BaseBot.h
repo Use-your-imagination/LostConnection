@@ -15,7 +15,7 @@
 
 #include "BaseBot.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class LOSTCONNECTION_API ABaseBot :
 	public ABaseCharacter,
 	public ILootPointsGiver,

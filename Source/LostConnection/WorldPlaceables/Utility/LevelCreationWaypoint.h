@@ -15,7 +15,7 @@ class LOSTCONNECTION_API ALevelCreationWaypoint : public AActor
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Components, VisibleAnywhere, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, VisibleAnywhere, Meta = (AllowPrivateAccess))
 	UArrowComponent* arrow;
 
 public:

@@ -19,16 +19,16 @@ class LOSTCONNECTION_API UUIDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<ULostConnectionUI> defaultUI;
 
-	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<UUserWidget> defaultDeathUI;
 
-	UPROPERTY(Category = "UI|Widgets", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "UI|Widgets", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<UInventoryWidget> inventoryWidget;
 
-	UPROPERTY(Category = Materials, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Materials, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	UMaterial* baseWeaponSelectorMaterial;
 
 public:

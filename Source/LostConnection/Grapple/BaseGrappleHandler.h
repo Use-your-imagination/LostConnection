@@ -20,13 +20,13 @@ class LOSTCONNECTION_API UBaseGrappleHandler :
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Grapple, EditDefaultsOnly, Replicated, BlueprintReadWrite, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Grapple, EditDefaultsOnly, Replicated, BlueprintReadWrite, Meta = (AllowPrivateAccess))
 	TSubclassOf<ABaseGrapple> grappleClass;
 
-	UPROPERTY(Category = Grapple, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Grapple, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<class ABaseDrone> drone;
 
-	UPROPERTY(Category = Cooldown, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Cooldown, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UCooldownableUtility> cooldown;
 
 private:

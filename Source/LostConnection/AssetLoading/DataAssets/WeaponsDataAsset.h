@@ -14,7 +14,7 @@ class LOSTCONNECTION_API UWeaponsDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Weapons, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Meta = (AllowPrivateAccess))
 	TArray<TSubclassOf<class UBaseWeapon>> weapons;
 
 public:

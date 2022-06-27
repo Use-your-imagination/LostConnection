@@ -18,40 +18,40 @@ class LOSTCONNECTION_API ULootDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Weapons, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Weapons, EditDefaultsOnly, Meta = (AllowPrivateAccess))
 	TArray<TSubclassOf<class UBaseWeapon>> weapons;
 
 	/**
 	* Module class - Platinum module class
 	*/
-	UPROPERTY(Category = "Modules|Personal", EditDefaultsOnly, Meta = (AllowPrivateAccess = "true", AllowAbstract = "false"))
+	UPROPERTY(Category = "Modules|Personal", EditDefaultsOnly, Meta = (AllowPrivateAccess, AllowAbstract = "false"))
 	TMap<TSubclassOf<class UBasePersonalModule>, TSubclassOf<class UBasePersonalModule>> personalModules;
 
 	/**
 	* Weapon module class - Platinum weapon module class
 	*/
-	UPROPERTY(Category = "Modules|Weapon", EditDefaultsOnly, Meta = (AllowPrivateAccess = "true", AllowAbstract = "false"))
+	UPROPERTY(Category = "Modules|Weapon", EditDefaultsOnly, Meta = (AllowPrivateAccess, AllowAbstract = "false"))
 	TMap<TSubclassOf<class UBaseWeaponModule>, TSubclassOf<class UBaseWeaponModule>> weaponModules;
 
-	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess))
 	TArray<TSubclassOf<UBaseWeaponsLootFunction>> weaponsLootFunctions;
 
-	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess))
 	TArray<TSubclassOf<UBaseModulesLootFunction>> modulesLootFunctions;
 
-	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = LootFunctions, EditDefaultsOnly, Meta = (AllowPrivateAccess))
 	TArray<TSubclassOf<UBaseWeaponModulesLootFunction>> weaponModulesLootFunctions;
 
-	UPROPERTY(Category = Coefficients, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Coefficients, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float splitLootPointsCoefficient;
 
-	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<class ABaseDroppedAmmo> smallAmmoClass;
 
-	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<class ABaseDroppedAmmo> largeAmmoClass;
 
-	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<class ABaseDroppedAmmo> energyAmmoClass;
 
 public:

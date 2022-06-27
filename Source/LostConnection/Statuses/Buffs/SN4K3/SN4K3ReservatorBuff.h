@@ -17,7 +17,7 @@ class LOSTCONNECTION_API USN4K3ReservatorBuff :
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = SN4K3, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float naniteIncreaseDamage;
 
 	TMap<TWeakObjectPtr<UObject>, FSimpleDelegate> additionalNaniteDamage;

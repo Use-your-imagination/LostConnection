@@ -15,7 +15,7 @@ class LOSTCONNECTION_API UStatusesDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Ailments, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Ailments, EditDefaultsOnly, Meta = (AllowPrivateAccess))
 	TMap<ETypeOfDamage, TSubclassOf<class UBaseStatus>> ailments;
 
 public:

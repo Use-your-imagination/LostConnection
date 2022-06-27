@@ -19,25 +19,25 @@ class LOSTCONNECTION_API ABaseDroppedAmmo : public ADroppedObject
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UBoxComponent> collisionBox;
 
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<USphereComponent> pickupArea;
 
-	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<USkeletalMesh> mid;
 
-	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Assets, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<USkeletalMesh> empty;
 
-	UPROPERTY(Category = Stats, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Stats, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 amount;
 
-	UPROPERTY(Category = Stats, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Stats, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	EAmmoType type;
 
-	UPROPERTY(Category = Stats, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Stats, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float lifetime;
 
 	TWeakObjectPtr<ABaseDrone> drone;

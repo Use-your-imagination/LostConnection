@@ -32,7 +32,7 @@
 
 #include "BaseCharacter.generated.h"
 
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(Abstract, BlueprintType, Blueprintable)
 class LOSTCONNECTION_API ABaseCharacter :
 	public ACharacter,
 	public IShotThrough,
@@ -73,7 +73,7 @@ protected:
 	float startEnergyShieldCapacity;
 
 private:
-	UPROPERTY(Category = Classes, EditDefaultsOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Classes, EditDefaultsOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<UBaseEnergyShield> energyShieldClass;
 
 protected:

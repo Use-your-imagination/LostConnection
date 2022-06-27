@@ -16,7 +16,7 @@ class LOSTCONNECTION_API ATeleportPoint : public AActor
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = UI, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = UI, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSoftObjectPtr<UWorld> room;
 
 protected:

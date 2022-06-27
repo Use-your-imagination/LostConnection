@@ -19,16 +19,16 @@ class LOSTCONNECTION_API UIrradiationAilment :
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Irradiation, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Irradiation, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float irradiationMultiplier;
 
-	UPROPERTY(Category = Irradiation, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Irradiation, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float irradiationMultiplierPerPercentEnergyShieldPool;
 
-	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float additionalIrradiationMultiplier;
 
-	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	UDamageInflictorUtility* damageInflictorUtility;
 
 private:

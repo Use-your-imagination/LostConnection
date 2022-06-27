@@ -34,7 +34,7 @@ class LOSTCONNECTION_API UDronesPreviewDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	FDronePreview SN4K3PreviewData;
 
 public:

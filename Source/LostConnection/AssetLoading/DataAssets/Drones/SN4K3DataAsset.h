@@ -16,13 +16,13 @@ class LOSTCONNECTION_API USN4K3DataAsset : public UBaseDroneDataAsset
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<UUserWidget> headUI;
 
-	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<class ASN4K3UltimateAbilityPlaceholder> ultimateAbilityPlaceholder;
 
-	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<class ASN4K3ThirdAbilityFlag> thirdAbilityFlag;
 
 public:

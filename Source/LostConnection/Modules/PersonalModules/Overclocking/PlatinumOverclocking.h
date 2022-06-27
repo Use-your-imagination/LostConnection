@@ -17,7 +17,7 @@ class LOSTCONNECTION_API UPlatinumOverclocking :
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Overclocking, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Overclocking, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float duration;
 
 private:

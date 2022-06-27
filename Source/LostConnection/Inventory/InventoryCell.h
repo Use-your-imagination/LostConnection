@@ -20,7 +20,7 @@ private:
 	UPROPERTY(Replicated, Meta = (MustImplement = Inventoriable))
 	TObjectPtr<UNetworkObject> item;
 
-	UPROPERTY(Category = State, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = State, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	bool isEquipped;
 
 private:

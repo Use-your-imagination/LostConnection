@@ -21,13 +21,13 @@ private:
 	LootCreator lootCreator;
 
 private:
-	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TArray<TObjectPtr<UBaseWeaponsLootFunction>> weaponsLootFunctions;
 
-	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TArray<TObjectPtr<UBaseModulesLootFunction>> modulesLootFunctions;
 
-	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Loot, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TArray<TObjectPtr<UBaseWeaponModulesLootFunction>> weaponModulesLootFunctions;
 
 private:

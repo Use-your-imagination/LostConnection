@@ -24,7 +24,7 @@
 
 #include "BaseDrone.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class LOSTCONNECTION_API ABaseDrone :
 	public ABaseCharacter,
 	public ICaster,

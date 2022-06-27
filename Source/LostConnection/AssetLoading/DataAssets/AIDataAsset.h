@@ -14,13 +14,13 @@ class LOSTCONNECTION_API UAIDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = "Constants|Blackboard", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Constants|Blackboard", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	FName selfActorKey;
 
-	UPROPERTY(Category = "Constants|Blackboard", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Constants|Blackboard", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	FName targetKey;
 
-	UPROPERTY(Category = "Constants|Blackboard", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Constants|Blackboard", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	FName movementPointKey;
 
 public:

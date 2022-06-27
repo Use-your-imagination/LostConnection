@@ -161,7 +161,7 @@ protected:
 	EWeaponRarity rarity;
 
 private:
-	UFUNCTION(Category = Weapons, BlueprintCallable, Meta = (AllowPrivateAccess = "true"))
+	UFUNCTION(Category = Weapons, BlueprintCallable, Meta = (AllowPrivateAccess))
 	float calculateSpreadDistance() const;
 
 protected:

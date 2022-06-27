@@ -14,7 +14,7 @@ class LOSTCONNECTION_API ARoomActorsSpawner : public AActor
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Spawning, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Spawning, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<AActor> actorClass;
 
 protected:

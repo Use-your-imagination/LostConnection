@@ -17,7 +17,7 @@ class LOSTCONNECTION_API UPlatinumPowderHeavy :
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = PowderHeavy, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = PowderHeavy, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float duration;
 
 private:

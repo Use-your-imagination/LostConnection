@@ -19,7 +19,7 @@ class LOSTCONNECTION_API AChooseRoomConsole :
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<USkeletalMeshComponent> mesh;
 	
 protected:

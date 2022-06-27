@@ -32,40 +32,40 @@ class LOSTCONNECTION_API UDefaultsDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Placeholders, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Placeholders, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<class ADeathPlaceholder> deathPlaceholder;
 
-	UPROPERTY(Category = "UI|Weapons|Rarity", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "UI|Weapons|Rarity", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TMap<EWeaponRarity, FLinearColor> weaponsRarityColor;
 
-	UPROPERTY(Category = "UI|Modules|Quality", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "UI|Modules|Quality", EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TMap<EModuleQuality, FLinearColor> modulesQualityColor;
 
-	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 maxSmallAmmoCount;
 
-	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 maxLargeAmmoCount;
 
-	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Ammo, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 maxEnergyAmmoCount;
 
-	UPROPERTY(Category = WorldDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WorldDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TMap<TEnumAsByte<EPhysicalSurface>, FShootThroughSurface> shootThroughSurfaces;
 
-	UPROPERTY(Category = GameDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = GameDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float resistHardcap;
 
-	UPROPERTY(Category = GameDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = GameDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 modulesToNextTier;
 
-	UPROPERTY(Category = GameDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = GameDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 maxSpendLootPoints;
 
-	UPROPERTY(Category = WeaponDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = WeaponDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float maxShootDistance;
 
-	UPROPERTY(Category = CharacterDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = CharacterDefaults, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	int32 personalModulesLimit;
 
 public:
