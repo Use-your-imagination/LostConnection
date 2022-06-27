@@ -24,5 +24,5 @@ protected:
 public:
 	AChooseActConsole() = default;
 
-	virtual ~AChooseActConsole() = default;
+	~AChooseActConsole() = default;
 };

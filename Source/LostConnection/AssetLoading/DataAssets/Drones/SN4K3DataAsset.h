@@ -39,5 +39,5 @@ public:
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 
-	virtual ~USN4K3DataAsset() = default;
+	~USN4K3DataAsset() = default;
 };

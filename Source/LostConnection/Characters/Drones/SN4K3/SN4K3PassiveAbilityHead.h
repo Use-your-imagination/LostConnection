@@ -63,5 +63,5 @@ public:
 
 	UAilmentInflictorUtility* getAilmentInflictorUtility() const override;
 
-	virtual ~ASN4K3PassiveAbilityHead() = default;
+	~ASN4K3PassiveAbilityHead() = default;
 };

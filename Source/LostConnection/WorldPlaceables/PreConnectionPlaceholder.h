@@ -23,5 +23,5 @@ protected:
 public:
 	APreConnectionPlaceholder();
 
-	virtual ~APreConnectionPlaceholder() = default;
+	~APreConnectionPlaceholder() = default;
 };

@@ -29,5 +29,5 @@ public:
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 
-	virtual ~UWeaponsDataAsset() = default;
+	~UWeaponsDataAsset() = default;
 };

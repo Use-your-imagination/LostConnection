@@ -72,7 +72,7 @@ public:
 
 	UAilmentInflictorUtility* getAilmentInflictorUtility() const override;
 
-	virtual ~AAmmo() = default;
+	~AAmmo() = default;
 
 	friend class AFakeAmmo;
 };

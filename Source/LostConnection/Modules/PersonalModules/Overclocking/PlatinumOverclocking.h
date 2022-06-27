@@ -28,5 +28,5 @@ public:
 
 	void uniqueAction_Implementation(AActor* caller) override;
 
-	virtual ~UPlatinumOverclocking() = default;
+	~UPlatinumOverclocking() = default;
 };

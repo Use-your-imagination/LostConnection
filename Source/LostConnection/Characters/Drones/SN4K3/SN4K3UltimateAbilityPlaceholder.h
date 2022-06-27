@@ -31,5 +31,5 @@ public:
 
 	float getPercentageDamageReduction_Implementation() const override;
 
-	virtual ~ASN4K3UltimateAbilityPlaceholder() = default;
+	~ASN4K3UltimateAbilityPlaceholder() = default;
 };

@@ -16,5 +16,5 @@ class LOSTCONNECTION_API UEmptyEnergyShield : public UBaseEnergyShield
 public:
 	UEmptyEnergyShield() = default;
 
-	virtual ~UEmptyEnergyShield() = default;
+	~UEmptyEnergyShield() = default;
 };

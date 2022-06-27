@@ -42,5 +42,5 @@ public:
 
 	void init(class ABaseCharacter* owner) override;
 
-	virtual ~UHeavyEnergyShield() = default;
+	~UHeavyEnergyShield() = default;
 };

@@ -62,5 +62,5 @@ public:
 
 	ETypeOfDamage getAilmentDamageType() const override;
 
-	virtual ~USwarmAilment() = default;
+	~USwarmAilment() = default;
 };

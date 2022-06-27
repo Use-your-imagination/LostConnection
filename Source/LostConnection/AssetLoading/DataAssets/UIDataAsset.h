@@ -47,5 +47,5 @@ public:
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 
-	virtual ~UUIDataAsset() = default;
+	~UUIDataAsset() = default;
 };

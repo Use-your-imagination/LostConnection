@@ -21,5 +21,5 @@ private:
 public:
 	ALevelCreationWaypoint();
 
-	virtual ~ALevelCreationWaypoint() = default;
+	~ALevelCreationWaypoint() = default;
 };

@@ -16,5 +16,5 @@ class LOSTCONNECTION_API UHipter : public UBaseWeapon
 public:
 	UHipter() = default;
 
-	virtual ~UHipter() = default;
+	~UHipter() = default;
 };

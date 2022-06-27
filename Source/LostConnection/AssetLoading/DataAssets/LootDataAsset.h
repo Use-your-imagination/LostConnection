@@ -84,5 +84,5 @@ public:
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 
-	virtual ~ULootDataAsset() = default;
+	~ULootDataAsset() = default;
 };

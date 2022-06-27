@@ -30,5 +30,5 @@ public:
 
 	bool isEnable() const override;
 
-	virtual ~AChooseRoomConsole() = default;
+	~AChooseRoomConsole() = default;
 };

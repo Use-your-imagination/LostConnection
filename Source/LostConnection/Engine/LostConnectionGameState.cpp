@@ -12,7 +12,7 @@
 #include "Constants/Constants.h"
 #include "LostConnectionGameMode.h"
 #include "Loot/LootManager.h"
-#include "WorldPlaceables/Utility/AISpawnPoint.h"
+#include "WorldPlaceables/AI/AISpawnPoint.h"
 #include "WorldPlaceables/Raid/ChooseRoomConsole.h"
 #include "WorldPlaceables/Raid/TeleportPoint.h"
 

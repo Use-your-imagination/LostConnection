@@ -6,7 +6,7 @@
 
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Characters/BaseBot.h"
-#include "WorldPlaceables/Utility/AISpawnPoint.h"
+#include "WorldPlaceables/AI/AISpawnPoint.h"
 #include "Utility/Utility.h"
 
 AISpawner::AISpawner()

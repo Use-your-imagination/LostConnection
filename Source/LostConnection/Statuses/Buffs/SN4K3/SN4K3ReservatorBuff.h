@@ -38,5 +38,5 @@ public:
 
 	void postRemove() override;
 
-	virtual ~USN4K3ReservatorBuff() = default;
+	~USN4K3ReservatorBuff() = default;
 };

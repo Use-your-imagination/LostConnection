@@ -51,5 +51,5 @@ public:
 
 	ETypeOfDamage getAilmentDamageType() const override;
 
-	virtual ~UBurnAilment() = default;
+	~UBurnAilment() = default;
 };

@@ -22,5 +22,5 @@ public:
 	UFUNCTION(Category = Text, BlueprintNativeEvent)
 	UTextBlock* getText();
 
-	virtual ~UHealthBarWidget() = default;
+	~UHealthBarWidget() = default;
 };

@@ -50,5 +50,5 @@ public:
 
 	void PostSeamlessTravel() override;
 
-	virtual ~ALostConnectionPlayerController() = default;
+	~ALostConnectionPlayerController() = default;
 };

@@ -14,11 +14,6 @@ const TSubclassOf<UBaseStatus>& UStatusesDataAsset::operator [] (ETypeOfDamage d
 	return ailments[damageType];
 }
 
-const TSubclassOf<USN4K3Reservator>& UStatusesDataAsset::getDefaultSN4K3Reservator() const
-{
-	return SN4K3Reservator;
-}
-
 FPrimaryAssetId UStatusesDataAsset::GetPrimaryAssetId() const
 {
 	return UStatusesDataAsset::getPrimaryAssetId();

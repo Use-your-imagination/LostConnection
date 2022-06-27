@@ -4,22 +4,22 @@
 
 #include "CoreMinimal.h"
 
-#include "GameFramework/Actor.h"
+#include "GameFramework/Info.h"
 #include "Components/ArrowComponent.h"
 
 #include "AISpawnPoint.generated.h"
 
 UCLASS(Blueprintable)
-class LOSTCONNECTION_API AAISpawnPoint : public AActor
+class LOSTCONNECTION_API AAISpawnPoint : public AInfo
 {
 	GENERATED_BODY()
 
 private:
 	UPROPERTY(Category = Components, VisibleAnywhere, Meta = (AllowPrivateAccess = "true"))
-	UArrowComponent* arrow;
+	TObjectPtr<UArrowComponent> arrow;
 
 public:
 	AAISpawnPoint();
 
-	virtual ~AAISpawnPoint() = default;
+	~AAISpawnPoint() = default;
 };

@@ -56,5 +56,5 @@ public:
 
 	ETypeOfDamage getAilmentDamageType() const override;
 
-	virtual ~UCritAilment() = default;
+	~UCritAilment() = default;
 };

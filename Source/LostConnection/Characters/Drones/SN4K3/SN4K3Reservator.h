@@ -42,5 +42,5 @@ public:
 
 	void restoreReserved(class ABaseCharacter* target) override;
 
-	virtual ~USN4K3Reservator() = default;
+	~USN4K3Reservator() = default;
 };

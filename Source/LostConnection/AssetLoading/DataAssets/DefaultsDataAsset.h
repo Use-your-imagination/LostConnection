@@ -100,5 +100,5 @@ public:
 
 	FPrimaryAssetId GetPrimaryAssetId() const override;
 
-	virtual ~UDefaultsDataAsset() = default;
+	~UDefaultsDataAsset() = default;
 };

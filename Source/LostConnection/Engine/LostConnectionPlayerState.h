@@ -180,7 +180,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual ~ALostConnectionPlayerState() = default;
+	~ALostConnectionPlayerState() = default;
 
 #pragma region Multiplayer
 private:

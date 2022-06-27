@@ -37,5 +37,5 @@ public:
 
 	void setRadius(float radius);
 
-	virtual ~ASN4K3ThirdAbilityFlag() = default;
+	~ASN4K3ThirdAbilityFlag() = default;
 };

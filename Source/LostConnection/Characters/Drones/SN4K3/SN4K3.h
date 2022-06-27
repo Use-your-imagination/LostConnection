@@ -36,5 +36,5 @@ public:
 
 	virtual bool checkUltimateAbilityCast() const override;
 
-	virtual ~ASN4K3() = default;
+	~ASN4K3() = default;
 };
