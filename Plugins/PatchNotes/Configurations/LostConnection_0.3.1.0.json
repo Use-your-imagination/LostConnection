@@ -34,7 +34,14 @@
 	},
 	"Bug Fixes":
 	{
-		"type": "category"
+		"type": "category",
+		"AI":
+		{
+			"type": "item",
+			"notes": [
+				"Fixed navigation on 2+ rooms"
+			]
+		}
 	},
 	"Weapon Modules":
 	{
