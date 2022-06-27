@@ -50,8 +50,22 @@ public:
 	UFUNCTION(Category = "Utility|AssetManager", BlueprintCallable, BlueprintPure)
 	static class ULostConnectionAssetManager* getAssetManager();
 
-	UFUNCTION(Category = "Utility|LoadingScreen", BlueprintCallable, Meta = (AutoCreateRefTerm = "onBeginLoadCallback, onEndLoadCallback"))
-	static ALoadingScreenInfo* createLoadingScreenInfo(class ALostConnectionGameState* gameState, const FCallbackDelegate& onBeginLoadCallback, const FCallbackDelegate& onEndLoadCallback);
+	/**
+	* Create actor with loading screen
+	* @param endCondition Condition for calling onEndLoadCallback and destroying this actor
+	* @param loadingScreenClass User widget for loading screen
+	* @param deleteLoadingScreenWidget Remove loading screen with actor destroying
+	*/
+	UFUNCTION(Category = "Utility|LoadingScreen", BlueprintCallable, Meta = (AutoCreateRefTerm = "onBeginLoadCallback, onEndLoadCallback, endCondition"))
+	static ALoadingScreenInfo* createLoadingScreenInfo
+	(
+		class ALostConnectionGameState* gameState,
+		const FCallbackDelegate& onBeginLoadCallback,
+		const FCallbackDelegate& onEndLoadCallback,
+		const FEndConditionDelegate& endCondition,
+		TSubclassOf<UUserWidget> loadingScreenClass,
+		bool deleteLoadingScreenWidget = true
+	);
 
 	UFUNCTION(Category = "Utility|Spawning", BlueprintCallable, Meta = (HidePin = worldContext, DefaultToSelf = worldContext))
 	static class ABaseDrone* spawnDrone(TSubclassOf<class ABaseDrone> droneClass, const FTransform& transform, APlayerController* controller, UObject* worldContext);

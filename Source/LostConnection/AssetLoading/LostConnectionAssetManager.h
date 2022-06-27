@@ -90,6 +90,9 @@ public:
 	float getCurrentPercentLoading() const;
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	bool isAssetsLoadingInProgress() const;
+
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	bool isAssetsLoadingEnd() const;
 
 	const TSubclassOf<class UBaseStatus>& operator [] (ETypeOfDamage damageType) const;

@@ -156,13 +156,41 @@ ULostConnectionAssetManager* UUtilityBlueprintFunctionLibrary::getAssetManager()
 	return &StaticCast<ULostConnectionAssetManager&>(UAssetManager::Get());
 }
 
-ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo(ALostConnectionGameState* gameState, const FCallbackDelegate& onBeginLoadCallback, const FCallbackDelegate& onEndLoadCallback)
+ALoadingScreenInfo* UUtilityBlueprintFunctionLibrary::createLoadingScreenInfo
+(
+	ALostConnectionGameState* gameState,
+	const FCallbackDelegate& onBeginLoadCallback,
+	const FCallbackDelegate& onEndLoadCallback,
+	const FEndConditionDelegate& endCondition,
+	TSubclassOf<UUserWidget> loadingScreenClass,
+	bool deleteLoadingScreenWidget
+)
 {
 	TObjectPtr<ALoadingScreenInfo> info = gameState->spawn<ALoadingScreenInfo>({});
+
+	if (loadingScreenClass)
+	{
+		info->setLoadingScreenClass(loadingScreenClass);
+	}
 
 	info->setOnBeginLoadCallback(onBeginLoadCallback);
 
 	info->setOnEndLoadCallback(onEndLoadCallback);
+
+	if (endCondition.IsBound())
+	{
+		info->setEndCondition(endCondition);
+	}
+	else
+	{
+		FEndConditionDelegate delegate;
+
+		delegate.BindUFunction(&ULostConnectionAssetManager::get(), "isAssetsLoadingEnd");
+
+		info->setEndCondition(delegate);
+	}
+
+	info->setDeleteLoadingScreenWidget(deleteLoadingScreenWidget);
 
 	info->FinishSpawning({}, true);
 

@@ -2,7 +2,9 @@
 
 #include "LoadingScreenInfo.h"
 
-#include "AssetLoading/LostConnectionAssetManager.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+
+#include "Utility/Utility.h"
 
 #pragma warning(disable: 4458)
 
@@ -10,9 +12,16 @@ void ALoadingScreenInfo::BeginPlay()
 {
 	Super::BeginPlay();
 
-	loadingScreen = NewObject<UUserWidget>(this, loadingScreenClass);
+	TArray<TObjectPtr<UUserWidget>> widgets;
 
-	loadingScreen->AddToViewport();
+	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, widgets, loadingScreenClass);
+
+	if (widgets.IsEmpty())
+	{
+		loadingScreen = NewObject<UUserWidget>(Utility::getGameState(this), loadingScreenClass);
+
+		loadingScreen->AddToViewport();
+	}
 
 	onBeginLoadCallback.ExecuteIfBound();
 }
@@ -21,11 +30,12 @@ void ALoadingScreenInfo::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	static ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-
-	if (manager.isAssetsLoadingEnd())
+	if (endCondition.Execute())
 	{
-		loadingScreen->RemoveFromViewport();
+		if (deleteLoadingScreenWidget)
+		{
+			loadingScreen->RemoveFromViewport();
+		}
 
 		onEndLoadCallback.ExecuteIfBound();
 
@@ -33,7 +43,8 @@ void ALoadingScreenInfo::Tick(float DeltaTime)
 	}
 }
 
-ALoadingScreenInfo::ALoadingScreenInfo()
+ALoadingScreenInfo::ALoadingScreenInfo() :
+	deleteLoadingScreenWidget(true)
 {
 	static ConstructorHelpers::FClassFinder<UUserWidget> loadingScreenFinder(TEXT("/Game/UI/UIs/BP_LoadingScreenUI"));
 
@@ -43,9 +54,9 @@ ALoadingScreenInfo::ALoadingScreenInfo()
 	loadingScreenClass = loadingScreenFinder.Class;
 }
 
-void ALoadingScreenInfo::setOnBeginLoadCallback(FCallbackDelegate&& onBeginLoadCallback)
+void ALoadingScreenInfo::setLoadingScreenClass(TSubclassOf<UUserWidget> loadingScreenClass)
 {
-	this->onBeginLoadCallback = MoveTemp(onBeginLoadCallback);
+	this->loadingScreenClass = loadingScreenClass;
 }
 
 void ALoadingScreenInfo::setOnBeginLoadCallback(const FCallbackDelegate& onBeginLoadCallback)
@@ -53,12 +64,17 @@ void ALoadingScreenInfo::setOnBeginLoadCallback(const FCallbackDelegate& onBegin
 	this->onBeginLoadCallback = onBeginLoadCallback;
 }
 
-void ALoadingScreenInfo::setOnEndLoadCallback(FCallbackDelegate&& onEndLoadCallback)
-{
-	this->onEndLoadCallback = MoveTemp(onEndLoadCallback);
-}
-
 void ALoadingScreenInfo::setOnEndLoadCallback(const FCallbackDelegate& onEndLoadCallback)
 {
 	this->onEndLoadCallback = onEndLoadCallback;
+}
+
+void ALoadingScreenInfo::setEndCondition(const FEndConditionDelegate& endCondition)
+{
+	this->endCondition = endCondition;
+}
+
+void ALoadingScreenInfo::setDeleteLoadingScreenWidget(bool deleteLoadingScreenWidget)
+{
+	this->deleteLoadingScreenWidget = deleteLoadingScreenWidget;
 }

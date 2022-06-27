@@ -11,6 +11,8 @@
 
 DECLARE_DYNAMIC_DELEGATE(FCallbackDelegate);
 
+DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FEndConditionDelegate);
+
 UCLASS(BlueprintType)
 class LOSTCONNECTION_API ALoadingScreenInfo : public AInfo
 {
@@ -20,6 +22,10 @@ private:
 	TSubclassOf<UUserWidget> loadingScreenClass;
 	FCallbackDelegate onEndLoadCallback;
 	FCallbackDelegate onBeginLoadCallback;
+	FEndConditionDelegate endCondition;
+	bool deleteLoadingScreenWidget;
+
+	UPROPERTY()
 	TObjectPtr<UUserWidget> loadingScreen;
 
 private:
@@ -30,13 +36,15 @@ private:
 public:
 	ALoadingScreenInfo();
 
-	void setOnBeginLoadCallback(FCallbackDelegate&& onBeginLoadCallback);
+	void setLoadingScreenClass(TSubclassOf<UUserWidget> loadingScreenClass);
 
 	void setOnBeginLoadCallback(const FCallbackDelegate& onBeginLoadCallback);
 
-	void setOnEndLoadCallback(FCallbackDelegate&& onEndLoadCallback);
-
 	void setOnEndLoadCallback(const FCallbackDelegate& onEndLoadCallback);
+
+	void setEndCondition(const FEndConditionDelegate& endCondition);
+
+	void setDeleteLoadingScreenWidget(bool deleteLoadingScreenWidget);
 
 	~ALoadingScreenInfo() = default;
 };

@@ -17,10 +17,11 @@ void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
 		return;
 	}
 
-	ALostConnectionPlayerController* playerController = GetController<ALostConnectionPlayerController>();
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	static ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+	TObjectPtr<ALostConnectionPlayerController> playerController = GetController<ALostConnectionPlayerController>();
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
 
-	if (ULostConnectionAssetManager::get().isAssetsLoadingEnd() && IsValid(playerController) && IsValid(playerState))
+	if (manager.isAssetsLoadingEnd() && playerController && playerState)
 	{
 		isAlreadySendRespawnRequest = true;
 
