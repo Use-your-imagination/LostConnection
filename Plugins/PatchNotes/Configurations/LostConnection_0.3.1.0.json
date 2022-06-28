@@ -39,17 +39,6 @@
 	{
 		"type": "category"
 	},
-	"Bug Fixes":
-	{
-		"type": "category",
-		"AI":
-		{
-			"type": "item",
-			"notes": [
-				"Fixed navigation on 2+ rooms"
-			]
-		}
-	},
 	"Weapon Modules":
 	{
 		"type": "category"
@@ -63,6 +52,24 @@
 			"notes": [
 				"Remade video settings menu",
 				"Added VSync, dynamic resolution, changing fullscreen mode"
+			]
+		}
+	},
+	"Bug Fixes":
+	{
+		"type": "category",
+		"AI":
+		{
+			"type": "item",
+			"notes": [
+				"Fixed navigation on 2+ rooms"
+			]
+		},
+		"Lag Spikes":
+		{
+			"type": "item",
+			"notes": [
+				"Fix lag spikes on first ability use"
 			]
 		}
 	}
