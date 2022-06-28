@@ -319,3 +319,17 @@ ALostConnectionPlayerState* UUtilityBlueprintFunctionLibrary::getLostConnectionP
 {
 	return Utility::getPlayerState(pawn);
 }
+
+void UUtilityBlueprintFunctionLibrary::setStandardDelegate(FStandardDelegateHolder& holder, const FStandardDelegate& delegate)
+{
+	holder.delegate = delegate;
+}
+
+bool UUtilityBlueprintFunctionLibrary::callStandardDelegate(const FStandardDelegateHolder& holder)
+{
+	const FStandardDelegate& delegate = holder.delegate;
+
+	delegate.ExecuteIfBound();
+
+	return delegate.IsBound();
+}

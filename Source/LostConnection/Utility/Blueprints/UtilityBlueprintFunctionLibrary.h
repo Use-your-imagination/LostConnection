@@ -11,6 +11,7 @@
 #include "Engine/LoadingScreenInfo.h"
 #include "UI/InventoryWidget.h"
 #include "UI/VideoSettingsWidget.h"
+#include "Utility/UtilityStructures.h"
 
 #include "UtilityBlueprintFunctionLibrary.generated.h"
 
@@ -102,4 +103,10 @@ public:
 
 	UFUNCTION(Category = "Utility|World", BlueprintCallable, BlueprintPure, Meta = (DefaultToSelf = "pawn"))
 	static class ALostConnectionPlayerState* getLostConnectionPlayerState(APawn* pawn);
+
+	UFUNCTION(Category = "Utility|Delegates", BlueprintCallable)
+	static void setStandardDelegate(UPARAM(ref) FStandardDelegateHolder& holder, const FStandardDelegate& delegate);
+
+	UFUNCTION(Category = "Utility|Delegates", BlueprintCallable)
+	static bool callStandardDelegate(const FStandardDelegateHolder& holder);
 };
