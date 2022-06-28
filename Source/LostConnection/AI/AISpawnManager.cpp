@@ -4,7 +4,7 @@
 
 #include "Kismet/GameplayStatics.h"
 
-#include "Characters/BaseBot.h"
+#include "Characters/AI/BaseBot.h"
 
 bool AISpawnManager::isBotsAlreadySpawned(UWorld* world)
 {

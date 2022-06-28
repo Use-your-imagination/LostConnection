@@ -3,7 +3,7 @@
 #include "Caster.h"
 
 #include "Characters/BaseDrone.h"
-#include "Characters/BaseBotCaster.h"
+#include "Characters/AI/BaseCasterBot.h"
 
 void ICaster::castAbility(UBaseAbility* ability, const TFunction<void()>& callback)
 {
@@ -69,7 +69,7 @@ void ICaster::cancelCurrentAbilityAnimation()
 		return;
 	}
 
-	ABaseBotCaster* bot = Cast<ABaseBotCaster>(this);
+	ABaseCasterBot* bot = Cast<ABaseCasterBot>(this);
 
 	if (bot)
 	{

@@ -7,7 +7,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 
-#include "BaseCharacter.h"
+#include "Characters/BaseCharacter.h"
 #include "Utility/Utility.h"
 #include "Interfaces/Economy/LootPointsGiver.h"
 #include "Interfaces/Loot/AmmoDropable.h"

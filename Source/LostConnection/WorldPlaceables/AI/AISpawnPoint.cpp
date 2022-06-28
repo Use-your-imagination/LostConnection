@@ -10,3 +10,8 @@ AAISpawnPoint::AAISpawnPoint()
 
 	arrow->SetArrowColor(FLinearColor::Red);
 }
+
+EBotType AAISpawnPoint::getBotSpawnType() const
+{
+	return botSpawnType;
+}

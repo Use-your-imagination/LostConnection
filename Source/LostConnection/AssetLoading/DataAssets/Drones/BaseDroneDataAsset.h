@@ -17,6 +17,9 @@ protected:
 	UPROPERTY(Category = Drone, EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class ABaseDrone> drone;
 
+	UPROPERTY(Category = VFX, EditDefaultsOnly)
+	TArray<TObjectPtr<class UNiagaraSystem>> effects;
+
 protected:
 	static FPrimaryAssetType getPrimaryAssetType();
 

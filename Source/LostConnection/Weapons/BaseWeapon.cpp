@@ -11,7 +11,7 @@
 #include "Engine/LostConnectionPlayerState.h"
 #include "Engine/LostConnectionGameState.h"
 #include "Characters/BaseDrone.h"
-#include "Characters/BaseBot.h"
+#include "Characters/AI/BaseBot.h"
 #include "Constants/Constants.h"
 
 #pragma warning(disable: 4458)

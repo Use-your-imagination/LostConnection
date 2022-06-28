@@ -2,7 +2,7 @@
 
 #include "BaseActDataAsset.h"
 
-#include "Characters/BaseBot.h"
+#include "Characters/AI/BaseBot.h"
 
 FPrimaryAssetType UBaseActDataAsset::getPrimaryAssetType()
 {
@@ -14,9 +14,33 @@ const TArray<TSoftObjectPtr<UWorld>>& UBaseActDataAsset::getRooms() const
 	return rooms;
 }
 
-const TArray<TSubclassOf<ABaseBot>>& UBaseActDataAsset::getBots() const
+const TArray<TSubclassOf<ABaseBot>>& UBaseActDataAsset::operator [] (EBotType type) const
 {
-	return bots;
+	static TArray<TSubclassOf<ABaseBot>> empty;
+
+	switch (type)
+	{
+	case EBotType::melee:
+		return meleeBots;
+
+	case EBotType::ranged:
+		return rangedBots;
+
+	case EBotType::sniper:
+		return sniperBots;
+
+	case EBotType::caster:
+		return casterBots;
+
+	case EBotType::support:
+		return supportBots;
+
+	case EBotType::assassin:
+		return assassinBots;
+
+	default:
+		return empty;
+	}
 }
 
 FPrimaryAssetId UBaseActDataAsset::GetPrimaryAssetId() const

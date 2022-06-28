@@ -14,7 +14,7 @@
 #include "Statuses/BaseTriggerStatus.h"
 #include "Statuses/Ailments/SwarmAilment.h"
 #include "Utility/InitializationUtility.h"
-#include "BaseBot.h"
+#include "AI/BaseBot.h"
 #include "BaseDrone.h"
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 #include "Constants/Constants.h"

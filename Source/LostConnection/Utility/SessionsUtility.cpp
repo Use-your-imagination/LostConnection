@@ -10,12 +10,12 @@ void USessionsUtility::getFindedSessionName(const FBlueprintSessionResult& sessi
 
 	if (it)
 	{
-		branches = EExecutionOutputs::Success;
+		branches = EExecutionOutputs::success;
 
 		sessionName = it->Data.ToString();
 	}
 	else
 	{
-		branches = EExecutionOutputs::Fail;
+		branches = EExecutionOutputs::fail;
 	}
 }

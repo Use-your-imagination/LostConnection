@@ -5,7 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "AssetLoading/LostConnectionAssetManager.h"
-#include "Characters/BaseBot.h"
+#include "Characters/AI/BaseBot.h"
 #include "WorldPlaceables/AI/AISpawnPoint.h"
 #include "Utility/Utility.h"
 
@@ -16,16 +16,15 @@ AISpawner::AISpawner()
 
 void AISpawner::spawn(UWorld* world, int32 count) const
 {
-	const TArray<TSubclassOf<ABaseBot>>& bots = ULostConnectionAssetManager::get().getCurrentAct().getBots();
-	TArray<AActor*> spawnPoints;
+	const TArray<TSubclassOf<ABaseBot>>& bots = ULostConnectionAssetManager::get().getCurrentAct()[EBotType::ranged];
+	TArray<TObjectPtr<AActor>> spawnPoints;
 
 	UGameplayStatics::GetAllActorsOfClass(world, AAISpawnPoint::StaticClass(), spawnPoints);
 
 	for (int32 i = 0; i < count; i++)
 	{
-		const TSubclassOf<ABaseBot>& botClass = Utility::getRandomValueFromArray(bots);
 		const auto& spawnPoint = Utility::getRandomValueFromArray(spawnPoints);
 
-		world->SpawnActor<ABaseBot>(botClass, spawnPoint->GetActorLocation(), spawnPoint->GetActorRotation(), spawnParameters);
+		world->SpawnActor<ABaseBot>(Utility::getRandomValueFromArray(bots), spawnPoint->GetActorLocation(), spawnPoint->GetActorRotation(), spawnParameters);
 	}
 }

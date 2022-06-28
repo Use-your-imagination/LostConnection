@@ -89,6 +89,17 @@ enum class ETypeOfDamage : uint8
 UENUM(BlueprintType)
 enum class EExecutionOutputs : uint8
 {
-	Success UMETA(DisplayName = "Success"),
-	Fail UMETA(DisplayName = "Fail")
+	success UMETA(DisplayName = "Success"),
+	fail UMETA(DisplayName = "Fail")
+};
+
+UENUM(BlueprintType)
+enum class EBotType : uint8
+{
+	melee UMETA(DisplayName = "Melee"),
+	ranged UMETA(DisplayName = "Ranged"),
+	sniper UMETA(DisplayName = "Sniper"),
+	caster UMETA(DisplayName = "Caster"),
+	support UMETA(DisplayName = "Support"),
+	assassin UMETA(DisplaName = "Assassin")
 };

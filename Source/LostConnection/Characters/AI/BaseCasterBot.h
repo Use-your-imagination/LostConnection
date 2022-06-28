@@ -6,6 +6,7 @@
 
 #include "BaseBot.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
+#include "Interfaces/AI/CasterBot.h"
 
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/PassiveAbilityCast.h"
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/FirstAbilityCast.h"
@@ -13,12 +14,13 @@
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/ThirdAbilityCast.h"
 #include "Interfaces/Gameplay/AnimatedActions/Abilities/UltimateAbilityCast.h"
 
-#include "BaseBotCaster.generated.h"
+#include "BaseCasterBot.generated.h"
 
 UCLASS(Abstract)
-class LOSTCONNECTION_API ABaseBotCaster : 
+class LOSTCONNECTION_API ABaseCasterBot : 
 	public ABaseBot,
 	public ICaster,
+	public ICasterBot,
 	public IPassiveAbilityCast,
 	public IFirstAbilityCast,
 	public ISecondAbilityCast,
@@ -105,7 +107,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	ABaseBotCaster();
+	ABaseCasterBot();
 
 	virtual void setEnergy_Implementation(float newEnergy) final override;
 
@@ -185,5 +187,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void castUltimateAbilityLogic() override;
 
-	virtual ~ABaseBotCaster() = default;
+	virtual ~ABaseCasterBot() = default;
 };

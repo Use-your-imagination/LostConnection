@@ -6,6 +6,8 @@
 
 #include "Engine/DataAsset.h"
 
+#include "Utility/Enums.h"
+
 #include "BaseActDataAsset.generated.h"
 
 UCLASS(BlueprintType)
@@ -29,8 +31,23 @@ protected:
 	UPROPERTY(Category = Levels, EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSoftObjectPtr<UWorld>> bossRooms;
 
-	UPROPERTY(Category = AI, EditDefaultsOnly, BlueprintReadOnly)
-	TArray<TSubclassOf<class ABaseBot>> bots;
+	UPROPERTY(Category = AI, EditDefaultsOnly, BlueprintReadOnly, Meta = (MustImplement = MeleeBot))
+	TArray<TSubclassOf<class ABaseBot>> meleeBots;
+
+	UPROPERTY(Category = AI, EditDefaultsOnly, BlueprintReadOnly, Meta = (MustImplement = RangedBot))
+	TArray<TSubclassOf<class ABaseBot>> rangedBots;
+
+	UPROPERTY(Category = AI, EditDefaultsOnly, BlueprintReadOnly, Meta = (MustImplement = SniperBot))
+	TArray<TSubclassOf<class ABaseBot>> sniperBots;
+
+	UPROPERTY(Category = AI, EditDefaultsOnly, BlueprintReadOnly, Meta = (MustImplement = CasterBot))
+	TArray<TSubclassOf<class ABaseBot>> casterBots;
+
+	UPROPERTY(Category = AI, EditDefaultsOnly, BlueprintReadOnly, Meta = (MustImplement = SupportBot))
+	TArray<TSubclassOf<class ABaseBot>> supportBots;
+
+	UPROPERTY(Category = AI, EditDefaultsOnly, BlueprintReadOnly, Meta = (MustImplement = AssassinBot))
+	TArray<TSubclassOf<class ABaseBot>> assassinBots;
 
 protected:
 	static FPrimaryAssetType getPrimaryAssetType();
@@ -38,9 +55,9 @@ protected:
 public:
 	UBaseActDataAsset() = default;
 
-	virtual const TArray<TSoftObjectPtr<UWorld>>& getRooms() const final;
+	const TArray<TSoftObjectPtr<UWorld>>& getRooms() const;
 
-	virtual const TArray<TSubclassOf<class ABaseBot>>& getBots() const final;
+	const TArray<TSubclassOf<class ABaseBot>>& operator [] (EBotType type) const;
 
 	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
 

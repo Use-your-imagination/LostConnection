@@ -13,7 +13,7 @@
 
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Characters/BaseDrone.h"
-#include "Characters/BaseBotCaster.h"
+#include "Characters/AI/BaseCasterBot.h"
 #include "Utility/MultiplayerUtility.h"
 #include "Engine/LostConnectionGameState.h"
 #include "AssetLoading/LostConnectionAssetManager.h"

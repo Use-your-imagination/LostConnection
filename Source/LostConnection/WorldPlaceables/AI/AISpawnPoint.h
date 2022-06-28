@@ -7,6 +7,8 @@
 #include "GameFramework/Info.h"
 #include "Components/ArrowComponent.h"
 
+#include "Utility/Enums.h"
+
 #include "AISpawnPoint.generated.h"
 
 UCLASS(Blueprintable)
@@ -18,8 +20,13 @@ private:
 	UPROPERTY(Category = Components, VisibleAnywhere, Meta = (AllowPrivateAccess))
 	TObjectPtr<UArrowComponent> arrow;
 
+	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	EBotType botSpawnType;
+
 public:
 	AAISpawnPoint();
+
+	EBotType getBotSpawnType() const;
 
 	~AAISpawnPoint() = default;
 };

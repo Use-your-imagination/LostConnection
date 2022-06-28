@@ -6,6 +6,8 @@
 
 #include "GameFramework/Info.h"
 
+#include "Utility/Enums.h"
+
 #include "AISpawnManagerSettings.generated.h"
 
 USTRUCT(BlueprintType)
@@ -14,8 +16,8 @@ struct LOSTCONNECTION_API FWaveSettings
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(Category = Waves, EditDefaultsOnly, Meta = (AllowAbstract))
-	TMap<TSubclassOf<class ABaseBot>, int32> typeCount;
+	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadWrite)
+	TMap<EBotType, int32> botsPerType;
 };
 
 UCLASS(BlueprintType, Blueprintable)
@@ -24,7 +26,7 @@ class LOSTCONNECTION_API AAISpawnManagerSettings : public AInfo
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(Category = Waves, EditDefaultsOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadWrite, Meta = (AllowPrivateAccess))
 	TArray<FWaveSettings> waveSettings;
 
 public:

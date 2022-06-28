@@ -1,45 +1,45 @@
 // Copyright (c) 2021 Use Your Imagination
 
-#include "BaseBotCaster.h"
+#include "BaseCasterBot.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
 
-void ABaseBotCaster::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void ABaseCasterBot::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABaseBotCaster, energy);
+	DOREPLIFETIME(ABaseCasterBot, energy);
 
-	DOREPLIFETIME(ABaseBotCaster, currentEnergy);
+	DOREPLIFETIME(ABaseCasterBot, currentEnergy);
 
-	DOREPLIFETIME(ABaseBotCaster, energyRestorationPerSecond);
+	DOREPLIFETIME(ABaseCasterBot, energyRestorationPerSecond);
 
-	DOREPLIFETIME(ABaseBotCaster, cooldownReduction);
+	DOREPLIFETIME(ABaseCasterBot, cooldownReduction);
 
-	DOREPLIFETIME(ABaseBotCaster, duration);
+	DOREPLIFETIME(ABaseCasterBot, duration);
 
-	DOREPLIFETIME(ABaseBotCaster, power);
+	DOREPLIFETIME(ABaseCasterBot, power);
 
-	DOREPLIFETIME(ABaseBotCaster, energyEfficiency);
+	DOREPLIFETIME(ABaseCasterBot, energyEfficiency);
 
-	DOREPLIFETIME(ABaseBotCaster, AOE);
+	DOREPLIFETIME(ABaseCasterBot, AOE);
 
-	DOREPLIFETIME(ABaseBotCaster, castPoint);
+	DOREPLIFETIME(ABaseCasterBot, castPoint);
 
-	DOREPLIFETIME(ABaseBotCaster, abilityId);
+	DOREPLIFETIME(ABaseCasterBot, abilityId);
 
-	DOREPLIFETIME(ABaseBotCaster, passiveAbility);
+	DOREPLIFETIME(ABaseCasterBot, passiveAbility);
 
-	DOREPLIFETIME(ABaseBotCaster, firstAbility);
+	DOREPLIFETIME(ABaseCasterBot, firstAbility);
 
-	DOREPLIFETIME(ABaseBotCaster, secondAbility);
+	DOREPLIFETIME(ABaseCasterBot, secondAbility);
 
-	DOREPLIFETIME(ABaseBotCaster, thirdAbility);
+	DOREPLIFETIME(ABaseCasterBot, thirdAbility);
 
-	DOREPLIFETIME(ABaseBotCaster, ultimateAbility);
+	DOREPLIFETIME(ABaseCasterBot, ultimateAbility);
 }
 
-bool ABaseBotCaster::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+bool ABaseCasterBot::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
@@ -81,7 +81,7 @@ bool ABaseBotCaster::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 	return wroteSomething;
 }
 
-void ABaseBotCaster::onAbilityUsed()
+void ABaseCasterBot::onAbilityUsed()
 {
 	switch (abilityId)
 	{
@@ -117,12 +117,12 @@ void ABaseBotCaster::onAbilityUsed()
 	}
 }
 
-bool ABaseBotCaster::checkPassiveAbilityCast() const
+bool ABaseCasterBot::checkPassiveAbilityCast() const
 {
 	return true;
 }
 
-bool ABaseBotCaster::checkFirstAbilityCast() const
+bool ABaseCasterBot::checkFirstAbilityCast() const
 {
 	if (firstAbility->getIsDisabled() ||
 		currentAbility ||
@@ -135,7 +135,7 @@ bool ABaseBotCaster::checkFirstAbilityCast() const
 	return true;
 }
 
-bool ABaseBotCaster::checkSecondAbilityCast() const
+bool ABaseCasterBot::checkSecondAbilityCast() const
 {
 	if (secondAbility->getIsDisabled() ||
 		currentAbility ||
@@ -148,7 +148,7 @@ bool ABaseBotCaster::checkSecondAbilityCast() const
 	return true;
 }
 
-bool ABaseBotCaster::checkThirdAbilityCast() const
+bool ABaseCasterBot::checkThirdAbilityCast() const
 {
 	if (thirdAbility->getIsDisabled() ||
 		currentAbility ||
@@ -161,7 +161,7 @@ bool ABaseBotCaster::checkThirdAbilityCast() const
 	return true;
 }
 
-bool ABaseBotCaster::checkUltimateAbilityCast() const
+bool ABaseCasterBot::checkUltimateAbilityCast() const
 {
 	if (ultimateAbility->getIsDisabled() ||
 		currentAbility ||
@@ -175,12 +175,12 @@ bool ABaseBotCaster::checkUltimateAbilityCast() const
 	return true;
 }
 
-float& ABaseBotCaster::getCurrentEnergy()
+float& ABaseCasterBot::getCurrentEnergy()
 {
 	return currentEnergy;
 }
 
-void ABaseBotCaster::BeginPlay()
+void ABaseCasterBot::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -198,17 +198,17 @@ void ABaseBotCaster::BeginPlay()
 	}
 }
 
-ABaseBotCaster::ABaseBotCaster()
+ABaseCasterBot::ABaseCasterBot()
 {
 
 }
 
-void ABaseBotCaster::setEnergy_Implementation(float newEnergy)
+void ABaseCasterBot::setEnergy_Implementation(float newEnergy)
 {
 	energy = newEnergy;
 }
 
-void ABaseBotCaster::setCurrentEnergy_Implementation(float newCurrentEnergy)
+void ABaseCasterBot::setCurrentEnergy_Implementation(float newCurrentEnergy)
 {
 	if (newCurrentEnergy > energy)
 	{
@@ -220,42 +220,42 @@ void ABaseBotCaster::setCurrentEnergy_Implementation(float newCurrentEnergy)
 	}
 }
 
-void ABaseBotCaster::setEnergyRestorationPerSecond_Implementation(float newEnergyRestorationPerSecond)
+void ABaseCasterBot::setEnergyRestorationPerSecond_Implementation(float newEnergyRestorationPerSecond)
 {
 	energyRestorationPerSecond = newEnergyRestorationPerSecond;
 }
 
-void ABaseBotCaster::setCooldownReduction_Implementation(float newCooldownReduction)
+void ABaseCasterBot::setCooldownReduction_Implementation(float newCooldownReduction)
 {
 	cooldownReduction = newCooldownReduction;
 }
 
-void ABaseBotCaster::setDuration_Implementation(float newDuration)
+void ABaseCasterBot::setDuration_Implementation(float newDuration)
 {
 	duration = newDuration;
 }
 
-void ABaseBotCaster::setPower_Implementation(float newPower)
+void ABaseCasterBot::setPower_Implementation(float newPower)
 {
 	power = newPower;
 }
 
-void ABaseBotCaster::setEnergyEfficiency_Implementation(float newEnergyEfficiency)
+void ABaseCasterBot::setEnergyEfficiency_Implementation(float newEnergyEfficiency)
 {
 	energyEfficiency = newEnergyEfficiency;
 }
 
-void ABaseBotCaster::setAOE_Implementation(float newAOE)
+void ABaseCasterBot::setAOE_Implementation(float newAOE)
 {
 	AOE = newAOE;
 }
 
-void ABaseBotCaster::setCastPoint_Implementation(float newCastPoint)
+void ABaseCasterBot::setCastPoint_Implementation(float newCastPoint)
 {
 	castPoint = newCastPoint;
 }
 
-void ABaseBotCaster::setCurrentAbility(UBaseAbility* ability)
+void ABaseCasterBot::setCurrentAbility(UBaseAbility* ability)
 {
 	if (ability)
 	{
@@ -269,92 +269,92 @@ void ABaseBotCaster::setCurrentAbility(UBaseAbility* ability)
 	this->onAbilityUsed();
 }
 
-float ABaseBotCaster::getEnergy() const
+float ABaseCasterBot::getEnergy() const
 {
 	return energy;
 }
 
-float ABaseBotCaster::getCurrentEnergy() const
+float ABaseCasterBot::getCurrentEnergy() const
 {
 	return currentEnergy;
 }
 
-float ABaseBotCaster::getEnergyRestorationPerSecond() const
+float ABaseCasterBot::getEnergyRestorationPerSecond() const
 {
 	return energyRestorationPerSecond;
 }
 
-float ABaseBotCaster::getCooldownReduction() const
+float ABaseCasterBot::getCooldownReduction() const
 {
 	return cooldownReduction;
 }
 
-float ABaseBotCaster::getDuration() const
+float ABaseCasterBot::getDuration() const
 {
 	return duration;
 }
 
-float ABaseBotCaster::getPower() const
+float ABaseCasterBot::getPower() const
 {
 	return power;
 }
 
-float ABaseBotCaster::getEnergyEfficiency() const
+float ABaseCasterBot::getEnergyEfficiency() const
 {
 	return energyEfficiency;
 }
 
-float ABaseBotCaster::getAOE() const
+float ABaseCasterBot::getAOE() const
 {
 	return AOE;
 }
 
-float ABaseBotCaster::getCastPoint() const
+float ABaseCasterBot::getCastPoint() const
 {
 	return castPoint;
 }
 
-UBaseAbility* ABaseBotCaster::getCurrentAbility() const
+UBaseAbility* ABaseCasterBot::getCurrentAbility() const
 {
 	return currentAbility;
 }
 
-UBasePassiveAbility* ABaseBotCaster::getPassiveAbility() const
+UBasePassiveAbility* ABaseCasterBot::getPassiveAbility() const
 {
 	return passiveAbility;
 }
 
-UBaseAbility* ABaseBotCaster::getFirstAbility() const
+UBaseAbility* ABaseCasterBot::getFirstAbility() const
 {
 	return firstAbility;
 }
 
-UBaseAbility* ABaseBotCaster::getSecondAbility() const
+UBaseAbility* ABaseCasterBot::getSecondAbility() const
 {
 	return secondAbility;
 }
 
-UBaseAbility* ABaseBotCaster::getThirdAbility() const
+UBaseAbility* ABaseCasterBot::getThirdAbility() const
 {
 	return thirdAbility;
 }
 
-UBaseUltimateAbility* ABaseBotCaster::getUltimateAbility() const
+UBaseUltimateAbility* ABaseCasterBot::getUltimateAbility() const
 {
 	return ultimateAbility;
 }
 
-const TArray<UAnimMontage*>& ABaseBotCaster::getAbilitiesAnimations() const
+const TArray<UAnimMontage*>& ABaseCasterBot::getAbilitiesAnimations() const
 {
 	return abilitiesAnimations;
 }
 
-void ABaseBotCaster::castPassiveAbilityVisual()
+void ABaseCasterBot::castPassiveAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castPassiveAbilityLogic()
+void ABaseCasterBot::castPassiveAbilityLogic()
 {
 	this->castAbility(passiveAbility, [this]()
 		{
@@ -362,12 +362,12 @@ void ABaseBotCaster::castPassiveAbilityLogic()
 		});
 }
 
-void ABaseBotCaster::castFirstAbilityVisual()
+void ABaseCasterBot::castFirstAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castFirstAbilityLogic()
+void ABaseCasterBot::castFirstAbilityLogic()
 {
 	this->castAbility(firstAbility, [this]()
 		{
@@ -375,12 +375,12 @@ void ABaseBotCaster::castFirstAbilityLogic()
 		});
 }
 
-void ABaseBotCaster::castSecondAbilityVisual()
+void ABaseCasterBot::castSecondAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castSecondAbilityLogic()
+void ABaseCasterBot::castSecondAbilityLogic()
 {
 	this->castAbility(secondAbility, [this]()
 		{
@@ -388,12 +388,12 @@ void ABaseBotCaster::castSecondAbilityLogic()
 		});
 }
 
-void ABaseBotCaster::castThirdAbilityVisual()
+void ABaseCasterBot::castThirdAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castThirdAbilityLogic()
+void ABaseCasterBot::castThirdAbilityLogic()
 {
 	this->castAbility(thirdAbility, [this]()
 		{
@@ -401,12 +401,12 @@ void ABaseBotCaster::castThirdAbilityLogic()
 		});
 }
 
-void ABaseBotCaster::castUltimateAbilityVisual()
+void ABaseCasterBot::castUltimateAbilityVisual()
 {
 
 }
 
-void ABaseBotCaster::castUltimateAbilityLogic()
+void ABaseCasterBot::castUltimateAbilityLogic()
 {
 	this->castAbility(ultimateAbility, [this]()
 		{
