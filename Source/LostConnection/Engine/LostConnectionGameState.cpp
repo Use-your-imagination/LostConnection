@@ -15,6 +15,7 @@
 #include "WorldPlaceables/AI/AISpawnPoint.h"
 #include "WorldPlaceables/Raid/ChooseRoomConsole.h"
 #include "WorldPlaceables/Raid/TeleportPoint.h"
+#include "WorldPlaceables/AI/AISpawnManagerSettings.h"
 
 void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -56,6 +57,11 @@ void ALostConnectionGameState::clearRoom()
 	if (TObjectPtr<AActor> roomConsole = UGameplayStatics::GetActorOfClass(this, AChooseRoomConsole::StaticClass()))
 	{
 		roomConsole->Destroy();
+	}
+
+	if (TObjectPtr<AActor> settings = UGameplayStatics::GetActorOfClass(this, AAISpawnManagerSettings::StaticClass()))
+	{
+		settings->Destroy();
 	}
 
 	for (TObjectPtr<AActor> aiSpawnPoint : aiSpawnPoints)

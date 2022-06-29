@@ -5,43 +5,38 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Characters/AI/BaseBot.h"
+#include "WorldPlaceables/AI/AISpawnManagerSettings.h"
 
-bool AISpawnManager::isBotsAlreadySpawned(UWorld* world)
+bool AISpawnManager::isBotsAlreadySpawned(TObjectPtr<UWorld> world)
 {
-	TArray<AActor*> tem;
+	TArray<TObjectPtr<AActor>> tem;
 
 	UGameplayStatics::GetAllActorsOfClass(world, ABaseBot::StaticClass(), tem);
 
 	return StaticCast<bool>(tem.Num());
 }
 
-void AISpawnManager::process(UWorld* world)
+void AISpawnManager::process(TObjectPtr<UWorld> world)
 {
-	if (!remainingAIToSpawn || AISpawnManager::isBotsAlreadySpawned(world))
+	if (AISpawnManager::isBotsAlreadySpawned(world))
 	{
 		return;
 	}
 
-	currentWaveTotalBots = 0;
+	TObjectPtr<AAISpawnManagerSettings> settings = Cast<AAISpawnManagerSettings>(UGameplayStatics::GetActorOfClass(world, AAISpawnManagerSettings::StaticClass()));
 
-	if (remainingWaves != 1)
+	if (settings->getWaveCount() == currentWave)
 	{
-		currentWaveTotalBots = spawnPerWave;
-	}
-	else
-	{
-		currentWaveTotalBots = remainingAIToSpawn;
+		return;
 	}
 
-	currentWaveRemainingBots = currentWaveTotalBots;
-
-	spawner.spawn(world, currentWaveTotalBots);
-
-	remainingWaves--;
+	spawner.spawn(world, currentWave++);
 }
 
 void AISpawnManager::init(int32 totalCount, int32 waves)
 {
+	currentWave = 0;
+
 	remainingAIToSpawn = totalCount;
 	remainingWaves = waves;
 

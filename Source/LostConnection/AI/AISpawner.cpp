@@ -7,6 +7,7 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Characters/AI/BaseBot.h"
 #include "WorldPlaceables/AI/AISpawnPoint.h"
+#include "WorldPlaceables/AI/AISpawnManagerSettings.h"
 #include "Utility/Utility.h"
 
 AISpawner::AISpawner()
@@ -14,17 +15,25 @@ AISpawner::AISpawner()
 	spawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 }
 
-void AISpawner::spawn(UWorld* world, int32 count) const
+void AISpawner::spawn(TObjectPtr<UWorld> world, int32 waveNumber) const
 {
-	const TArray<TSubclassOf<ABaseBot>>& bots = ULostConnectionAssetManager::get().getCurrentAct()[EBotType::ranged];
+	TObjectPtr<AAISpawnManagerSettings> settings = Cast<AAISpawnManagerSettings>(UGameplayStatics::GetActorOfClass(world, AAISpawnManagerSettings::StaticClass()));
 	TArray<TObjectPtr<AActor>> spawnPoints;
+	const FWaveSettings& waveSettings = settings->getWaveSettings(waveNumber);
 
 	UGameplayStatics::GetAllActorsOfClass(world, AAISpawnPoint::StaticClass(), spawnPoints);
 
-	for (int32 i = 0; i < count; i++)
+	for (const TPair<EBotType, int32>& pair : waveSettings.botsPerType)
 	{
-		const auto& spawnPoint = Utility::getRandomValueFromArray(spawnPoints);
+		const TArray<TSubclassOf<ABaseBot>>& bots = ULostConnectionAssetManager::get().getCurrentAct()[pair.Key];
 
-		world->SpawnActor<ABaseBot>(Utility::getRandomValueFromArray(bots), spawnPoint->GetActorLocation(), spawnPoint->GetActorRotation(), spawnParameters);
+		// TODO: Find valid spawn points
+
+		for (int32 i = 0; i < pair.Value; i++)
+		{
+			const auto& spawnPoint = Utility::getRandomValueFromArray(spawnPoints);
+
+			world->SpawnActor<ABaseBot>(Utility::getRandomValueFromArray(bots), spawnPoint->GetActorLocation(), spawnPoint->GetActorRotation(), spawnParameters);
+		}
 	}
 }

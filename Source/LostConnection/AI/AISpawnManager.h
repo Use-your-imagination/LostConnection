@@ -12,6 +12,7 @@ class LOSTCONNECTION_API AISpawnManager
 {
 private:
 	AISpawner spawner;
+	int32 currentWave;
 	int32 remainingAIToSpawn;
 	int32 remainingWaves;
 	int32 spawnPerWave;
@@ -19,10 +20,10 @@ private:
 	int32 currentWaveRemainingBots;
 
 private:
-	static bool isBotsAlreadySpawned(UWorld* world);
+	static bool isBotsAlreadySpawned(TObjectPtr<UWorld> world);
 
 private:
-	void process(UWorld* world);
+	void process(TObjectPtr<UWorld> world);
 
 public:
 	AISpawnManager() = default;
