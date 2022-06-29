@@ -57,7 +57,7 @@ private:
 public:
 	ABaseDroppedAmmo();
 
-	void Tick(float DeltaTime) override;
+	void Tick(float DeltaSeconds) override;
 
 	virtual ~ABaseDroppedAmmo() = default;
 };

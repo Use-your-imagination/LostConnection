@@ -12,7 +12,7 @@ private:
 public:
 	AISpawner();
 
-	void spawn(TObjectPtr<UWorld> world, int32 waveNumber) const;
+	void spawn(TObjectPtr<class AWavesController> wavesController, int32 waveNumber) const;
 
 	~AISpawner() = default;
 };

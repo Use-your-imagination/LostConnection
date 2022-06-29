@@ -297,7 +297,7 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	virtual void resetShoot() final override;
 
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void takeDamageFromInflictor(const TScriptInterface<class IDamageInflictor>& inflictor) final override;

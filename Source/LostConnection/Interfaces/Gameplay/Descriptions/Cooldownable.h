@@ -28,7 +28,7 @@ public:
 	UFUNCTION(Category = Cooldown, BlueprintCallable)
 	virtual void startCooldown(float startCooldown = -1.0f);
 
-	virtual void processCooldown(float DeltaTime);
+	virtual void processCooldown(float DeltaSeconds);
 
 	UFUNCTION(Category = Cooldown, BlueprintCallable)
 	virtual bool isUsable() const;
@@ -48,13 +48,13 @@ public:
 	virtual float getCooldownState() const;
 };
 
-inline void ICooldownable::processCooldown(float DeltaTime)
+inline void ICooldownable::processCooldown(float DeltaSeconds)
 {
 	float& currentCooldown = this->getCurrentCooldownReference();
 
 	if (currentCooldown)
 	{
-		currentCooldown = FMath::Max(0.0f, currentCooldown - DeltaTime);
+		currentCooldown = FMath::Max(0.0f, currentCooldown - DeltaSeconds);
 	}
 }
 

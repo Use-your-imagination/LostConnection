@@ -32,7 +32,7 @@ public:
 
 	int32 size() const;
 
-	void processTimers(float DeltaTime);
+	void processTimers(float DeltaSeconds);
 
 	const timerData& operator [] (int32 index) const;
 

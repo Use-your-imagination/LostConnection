@@ -132,13 +132,13 @@ void USN4K3UltimateAbility::useAbility()
 	Cast<USN4K3PassiveAbility>(drone->getPassiveAbility())->resetLastTimeAbilityUsed();
 }
 
-void USN4K3UltimateAbility::Tick(float DeltaTime)
+void USN4K3UltimateAbility::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	if (isUltimateAbilityUsed)
 	{
-		currentAbilityDuration += DeltaTime;
+		currentAbilityDuration += DeltaSeconds;
 
 		if (currentAbilityDuration >= abilityDuration)
 		{

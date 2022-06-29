@@ -33,10 +33,10 @@ int32 TimersUtility::size() const
 	return timers.Num();
 }
 
-void TimersUtility::processTimers(float DeltaTime)
+void TimersUtility::processTimers(float DeltaSeconds)
 {
 	TArray<timerData*> timersToInvoke;
-	auto body = [this, &DeltaTime, &timersToInvoke](int32 index)
+	auto body = [this, &DeltaSeconds, &timersToInvoke](int32 index)
 	{
 		timerData& timer = timers[index];
 
@@ -44,7 +44,7 @@ void TimersUtility::processTimers(float DeltaTime)
 
 		if (timer.firstDelay > 0.0f)
 		{
-			timer.firstDelay -= DeltaTime;
+			timer.firstDelay -= DeltaSeconds;
 
 			if (timer.firstDelay <= 0.0f)
 			{
@@ -57,7 +57,7 @@ void TimersUtility::processTimers(float DeltaTime)
 		}
 		else
 		{
-			timer.currentTime += DeltaTime;
+			timer.currentTime += DeltaSeconds;
 
 			if (timer.currentTime >= timer.rate)
 			{

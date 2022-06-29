@@ -2,13 +2,16 @@
 
 #include "AISpawnPoint.h"
 
-AAISpawnPoint::AAISpawnPoint()
+AAISpawnPoint::AAISpawnPoint() :
+	botSpawnType(EBotType::melee)
 {
 	PrimaryActorTick.bCanEverTick = false;
 
 	arrow = CreateDefaultSubobject<UArrowComponent>("Arrow");
 
 	arrow->SetArrowColor(FLinearColor::Red);
+
+	SetRootComponent(arrow);
 }
 
 EBotType AAISpawnPoint::getBotSpawnType() const

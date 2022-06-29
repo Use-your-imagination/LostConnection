@@ -218,7 +218,7 @@ protected:
 protected:
 	virtual void BeginPlay() override;
 
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	void MoveForward(float Value);
 

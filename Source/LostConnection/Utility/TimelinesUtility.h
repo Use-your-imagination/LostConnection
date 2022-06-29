@@ -20,7 +20,7 @@ private:
 public:
 	UTimelinesUtility() = default;
 
-	void Tick(float DeltaTime);
+	void Tick(float DeltaSeconds);
 
 	UFUNCTION(Category = Timelines, BlueprintCallable, Meta = (AutoCreateRefTerm = "finishCallback"))
 	void initAndStartTimeline(UCurveFloat* curve, const FOnTimelineFloat& function, const FOnTimelineEvent& finishCallback, float curveDuration = 5.0f);

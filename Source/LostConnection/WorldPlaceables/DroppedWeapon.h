@@ -21,7 +21,7 @@ private:
 	UFUNCTION()
 	void onWeaponChange();
 
-	virtual void Tick(float DeltaTime) final override;
+	virtual void Tick(float DeltaSeconds) final override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

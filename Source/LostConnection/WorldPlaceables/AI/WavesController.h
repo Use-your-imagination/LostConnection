@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 
-#include "GameFramework/Info.h"
+#include "GameFramework/Actor.h"
 
 #include "Utility/Enums.h"
+#include "AI/AISpawnManager.h"
 
-#include "AISpawnManagerSettings.generated.h"
+#include "WavesController.generated.h"
 
 USTRUCT(BlueprintType)
 struct LOSTCONNECTION_API FWaveSettings
@@ -21,7 +22,7 @@ public:
 };
 
 UCLASS(BlueprintType, Blueprintable)
-class LOSTCONNECTION_API AAISpawnManagerSettings : public AInfo
+class LOSTCONNECTION_API AWavesController : public AActor
 {
 	GENERATED_BODY()
 
@@ -29,13 +30,23 @@ private:
 	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadWrite, Meta = (AllowPrivateAccess))
 	TArray<FWaveSettings> waveSettings;
 
+private:
+	AISpawnManager spawnManager;
+
+protected:
+	void BeginPlay() override;
+
 public:
-	AAISpawnManagerSettings();
+	AWavesController();
 
 	UFUNCTION(Category = Waves, BlueprintCallable)
 	const FWaveSettings& getWaveSettings(int32 waveNumber) const;
 
+	void notify();
+
 	int32 getWaveCount() const;
 
-	~AAISpawnManagerSettings() = default;
+	AISpawnManager& getSpawnManager();
+
+	~AWavesController() = default;
 };

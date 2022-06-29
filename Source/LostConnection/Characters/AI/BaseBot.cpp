@@ -12,10 +12,11 @@
 #include "Engine/LostConnectionGameMode.h"
 #include "Statuses/Ailments/SwarmAilment.h"
 #include "Loot/LootManager.h"
+#include "WorldPlaceables/AI/WavesController.h"
 
-void ABaseBot::Tick(float DeltaTime)
+void ABaseBot::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 }
 
 void ABaseBot::BeginPlay()
@@ -68,8 +69,7 @@ void ABaseBot::destroyAssociatedActors()
 
 void ABaseBot::deathLogic()
 {
-	TObjectPtr<UWorld> world = GetWorld();
-	TObjectPtr<ALostConnectionGameState> gameState = world->GetGameState<ALostConnectionGameState>();
+	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(this);
 
 	if (!isAlly)
 	{
@@ -82,7 +82,7 @@ void ABaseBot::deathLogic()
 
 	if (!isAlly)
 	{
-		world->GetAuthGameMode<ALostConnectionGameMode>()->getSpawnManager().notify(world);
+		Cast<AWavesController>(UGameplayStatics::GetActorOfClass(this, AWavesController::StaticClass()))->getSpawnManager().notify();
 	}
 }
 

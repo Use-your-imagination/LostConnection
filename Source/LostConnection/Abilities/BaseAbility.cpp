@@ -32,7 +32,7 @@ void UBaseAbility::useAbility()
 	PURE_VIRTUAL(UBaseAbility::useAbility);
 }
 
-void UBaseAbility::Tick(float DeltaTime)
+void UBaseAbility::Tick(float DeltaSeconds)
 {
 
 }

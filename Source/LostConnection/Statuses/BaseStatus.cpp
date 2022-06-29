@@ -68,9 +68,9 @@ void UBaseStatus::postRemove()
 	target->setUnderStatusIntVariable(this->getStatusCountKey(), 0);
 }
 
-bool UBaseStatus::Tick(float DeltaTime)
+bool UBaseStatus::Tick(float DeltaSeconds)
 {
-	currentDuration += DeltaTime;
+	currentDuration += DeltaSeconds;
 
 	if (currentDuration >= duration)
 	{

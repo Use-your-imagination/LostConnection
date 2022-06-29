@@ -27,16 +27,16 @@ UBaseTickStatus::UBaseTickStatus() :
 
 }
 
-bool UBaseTickStatus::Tick(float DeltaTime)
+bool UBaseTickStatus::Tick(float DeltaSeconds)
 {
-	bool result = Super::Tick(DeltaTime);
+	bool result = Super::Tick(DeltaSeconds);
 
 	if (!result)
 	{
 		return result;
 	}
 
-	currentTickPeriod += DeltaTime;
+	currentTickPeriod += DeltaSeconds;
 
 	if (currentTickPeriod >= tickPeriod)
 	{

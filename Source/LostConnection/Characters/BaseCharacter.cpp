@@ -649,11 +649,11 @@ void ABaseCharacter::resetShoot_Implementation()
 	}
 }
 
-void ABaseCharacter::Tick(float DeltaTime)
+void ABaseCharacter::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
-	timelines->Tick(DeltaTime);
+	timelines->Tick(DeltaSeconds);
 
 	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
 
@@ -664,12 +664,12 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 		if (defaultWeapon)
 		{
-			defaultWeapon->Tick(DeltaTime);
+			defaultWeapon->Tick(DeltaSeconds);
 		}
 
 		for (auto& status : statuses)
 		{
-			if (!status->Tick(DeltaTime))
+			if (!status->Tick(DeltaSeconds))
 			{
 				statusesToRemove.Add(status);
 			}
@@ -684,9 +684,9 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 		statusesToRemove.Empty();
 
-		timers.processTimers(DeltaTime);
+		timers.processTimers(DeltaSeconds);
 
-		energyShield->Tick(DeltaTime);
+		energyShield->Tick(DeltaSeconds);
 	}
 }
 

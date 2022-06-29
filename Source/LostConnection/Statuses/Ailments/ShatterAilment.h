@@ -48,7 +48,7 @@ public:
 
 	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
 
-	bool Tick(float DeltaTime) override;
+	bool Tick(float DeltaSeconds) override;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 

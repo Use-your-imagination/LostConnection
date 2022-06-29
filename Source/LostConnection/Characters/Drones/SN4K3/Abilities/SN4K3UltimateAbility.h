@@ -53,7 +53,7 @@ public:
 
 	void useAbility() override;
 
-	void Tick(float DeltaTime) override;
+	void Tick(float DeltaSeconds) override;
 
 	~USN4K3UltimateAbility() = default;
 };

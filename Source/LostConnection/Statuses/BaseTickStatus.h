@@ -29,7 +29,7 @@ protected:
 public:
 	UBaseTickStatus();
 
-	virtual bool Tick(float DeltaTime) override;
+	virtual bool Tick(float DeltaSeconds) override;
 
 	virtual ~UBaseTickStatus() = default;
 };

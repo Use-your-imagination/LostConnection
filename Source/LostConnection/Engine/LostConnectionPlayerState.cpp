@@ -8,13 +8,13 @@
 #include "Utility/Utility.h"
 
 template<typename T>
-void ALostConnectionPlayerState::reduceCooldownableData(float DeltaTime, TArray<T>& cooldownableData)
+void ALostConnectionPlayerState::reduceCooldownableData(float DeltaSeconds, TArray<T>& cooldownableData)
 {
 	for (int32 i = 0; i < cooldownableData.Num(); i++)
 	{
 		float& remainingCooldown = cooldownableData[i].remainingCooldown;
 
-		remainingCooldown -= DeltaTime;
+		remainingCooldown -= DeltaSeconds;
 
 		if (remainingCooldown <= 0.0f)
 		{
@@ -392,17 +392,17 @@ TArray<TObjectPtr<UEscapableWidget>>& ALostConnectionPlayerState::getEscapableWi
 	return escapableWidgets;
 }
 
-void ALostConnectionPlayerState::Tick(float DeltaTime)
+void ALostConnectionPlayerState::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	if (HasAuthority())
 	{
-		ALostConnectionPlayerState::reduceCooldownableData(DeltaTime, cooldownableAbilities);
+		ALostConnectionPlayerState::reduceCooldownableData(DeltaSeconds, cooldownableAbilities);
 
-		ALostConnectionPlayerState::reduceCooldownableData(DeltaTime, cooldownableWeapons);
+		ALostConnectionPlayerState::reduceCooldownableData(DeltaSeconds, cooldownableWeapons);
 
-		respawnCooldown->processCooldown(DeltaTime);
+		respawnCooldown->processCooldown(DeltaSeconds);
 	}
 }
 

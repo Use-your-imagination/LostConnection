@@ -179,7 +179,7 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void updateTimeBetweenShots();
 
-	void Tick(float DeltaTime);
+	void Tick(float DeltaSeconds);
 
 	void appendIncreaseDamageCoefficient(float coefficient);
 

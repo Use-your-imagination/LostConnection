@@ -29,7 +29,7 @@ void USN4K3ResurrectDeathEvent::deathEventAction()
 	}
 
 	TSubclassOf<ABaseDrone> droneClass = Utility::findDroneClass(ULostConnectionAssetManager::get().getDrones(), ASN4K3::StaticClass());
-	ASN4K3* drone = Utility::getGameState(controller)->spawn<ASN4K3>(droneClass, respawnTransform);
+	TObjectPtr<ASN4K3> drone = Utility::getGameState(controller)->spawn<ASN4K3>(droneClass, respawnTransform);
 
 	controller->GetPlayerState<ALostConnectionPlayerState>()->resetCurrentUI();
 

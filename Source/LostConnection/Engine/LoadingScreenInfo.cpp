@@ -26,9 +26,9 @@ void ALoadingScreenInfo::BeginPlay()
 	onBeginLoadCallback.ExecuteIfBound();
 }
 
-void ALoadingScreenInfo::Tick(float DeltaTime)
+void ALoadingScreenInfo::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	if (endCondition.Execute())
 	{

@@ -170,9 +170,9 @@ bool ASN4K3PassiveAbilityHead::checkSpeedup_Implementation()
 	return true;
 }
 
-void ASN4K3PassiveAbilityHead::Tick(float DeltaTime)
+void ASN4K3PassiveAbilityHead::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	if (HasAuthority())
 	{

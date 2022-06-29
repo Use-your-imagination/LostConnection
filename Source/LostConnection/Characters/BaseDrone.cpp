@@ -479,9 +479,9 @@ void ABaseDrone::BeginPlay()
 	}
 }
 
-void ABaseDrone::Tick(float DeltaTime)
+void ABaseDrone::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
 
@@ -492,32 +492,32 @@ void ABaseDrone::Tick(float DeltaTime)
 
 		if (primaryWeapon)
 		{
-			primaryWeapon->Tick(DeltaTime);
+			primaryWeapon->Tick(DeltaSeconds);
 		}
 
 		if (secondaryWeapon)
 		{
-			secondaryWeapon->Tick(DeltaTime);
+			secondaryWeapon->Tick(DeltaSeconds);
 		}
 
 		if (slideCooldown)
 		{
-			slideCooldown = FMath::Max(0.0f, slideCooldown - DeltaTime);
+			slideCooldown = FMath::Max(0.0f, slideCooldown - DeltaSeconds);
 		}
 
-		passiveAbility->Tick(DeltaTime);
-		firstAbility->Tick(DeltaTime);
-		secondAbility->Tick(DeltaTime);
-		thirdAbility->Tick(DeltaTime);
-		ultimateAbility->Tick(DeltaTime);
+		passiveAbility->Tick(DeltaSeconds);
+		firstAbility->Tick(DeltaSeconds);
+		secondAbility->Tick(DeltaSeconds);
+		thirdAbility->Tick(DeltaSeconds);
+		ultimateAbility->Tick(DeltaSeconds);
 
-		Utility::processCooldown(passiveAbility, DeltaTime);
-		Utility::processCooldown(firstAbility, DeltaTime);
-		Utility::processCooldown(secondAbility, DeltaTime);
-		Utility::processCooldown(thirdAbility, DeltaTime);
-		Utility::processCooldown(ultimateAbility, DeltaTime);
+		Utility::processCooldown(passiveAbility, DeltaSeconds);
+		Utility::processCooldown(firstAbility, DeltaSeconds);
+		Utility::processCooldown(secondAbility, DeltaSeconds);
+		Utility::processCooldown(thirdAbility, DeltaSeconds);
+		Utility::processCooldown(ultimateAbility, DeltaSeconds);
 
-		grappleHandler->processCooldown(DeltaTime);
+		grappleHandler->processCooldown(DeltaSeconds);
 	}
 
 	this->showBotHealthBar();

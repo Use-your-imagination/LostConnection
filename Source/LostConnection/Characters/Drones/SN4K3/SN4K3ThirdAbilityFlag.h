@@ -24,7 +24,7 @@ private:
 	float radius;
 
 private:
-	void Tick(float DeltaTime) override;
+	void Tick(float DeltaSeconds) override;
 	
 public:
 	ASN4K3ThirdAbilityFlag();

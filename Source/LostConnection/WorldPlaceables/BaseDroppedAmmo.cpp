@@ -93,11 +93,11 @@ ABaseDroppedAmmo::ABaseDroppedAmmo() :
 	mesh->SetupAttachment(pickupArea);
 }
 
-void ABaseDroppedAmmo::Tick(float DeltaTime)
+void ABaseDroppedAmmo::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
-	lifetime -= DeltaTime;
+	lifetime -= DeltaSeconds;
 
 	if (lifetime <= 0.0f)
 	{

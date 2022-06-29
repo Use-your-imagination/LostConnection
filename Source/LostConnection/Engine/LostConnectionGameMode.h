@@ -6,17 +6,12 @@
 
 #include "GameFramework/GameMode.h"
 
-#include "AI/AISpawnManager.h"
-
 #include "LostConnectionGameMode.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API ALostConnectionGameMode : public AGameMode
 {
 	GENERATED_BODY()
-
-private:
-	AISpawnManager spawnManager;
 
 protected:
 	virtual void GetSeamlessTravelActorList(bool bToTransition, TArray<AActor*>& ActorList) override;
@@ -25,11 +20,6 @@ protected:
 
 public:
 	ALostConnectionGameMode();
-
-	UFUNCTION(Category = AI, BlueprintAuthorityOnly, BlueprintCallable)
-	void initRoomAI(int32 totalCount, int32 waves);
-
-	AISpawnManager& getSpawnManager();
 
 	void PostSeamlessTravel() override;
 

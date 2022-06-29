@@ -222,7 +222,7 @@ void UBaseWeapon::updateTimeBetweenShots_Implementation()
 	timeBetweenShots = 1.0f / StaticCast<float>(roundsPerSecond);
 }
 
-void UBaseWeapon::Tick(float DeltaTime)
+void UBaseWeapon::Tick(float DeltaSeconds)
 {
 	static constexpr float decreaseAccuracyMultiplier = 0.95f;
 	bool isReloading = owner.IsValid() && owner->getIsReloading();
@@ -233,11 +233,11 @@ void UBaseWeapon::Tick(float DeltaTime)
 	}
 	else if (isShooting && currentTimeBetweenShots)
 	{
-		currentTimeBetweenShots -= DeltaTime;
+		currentTimeBetweenShots -= DeltaSeconds;
 	}
 	else if (currentTimeBetweenShots)
 	{
-		currentTimeBetweenShots = FMath::Max(0.0f, currentTimeBetweenShots - DeltaTime);
+		currentTimeBetweenShots = FMath::Max(0.0f, currentTimeBetweenShots - DeltaSeconds);
 	}
 
 	currentAccuracyMultiplier = FMath::Max(1.0f, currentAccuracyMultiplier * decreaseAccuracyMultiplier);

@@ -47,7 +47,7 @@ protected:
 	double resetTime;
 
 protected:
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void BeginPlay() override;
 

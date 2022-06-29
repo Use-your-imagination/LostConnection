@@ -31,7 +31,7 @@ private:
 private:
 	void BeginPlay() override;
 	
-	void Tick(float DeltaTime) override;
+	void Tick(float DeltaSeconds) override;
 
 public:
 	ALoadingScreenInfo();

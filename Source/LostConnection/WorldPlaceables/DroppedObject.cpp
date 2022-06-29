@@ -7,9 +7,9 @@ void ADroppedObject::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ADroppedObject::Tick(float DeltaTime)
+void ADroppedObject::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 }
 
 ADroppedObject::ADroppedObject()

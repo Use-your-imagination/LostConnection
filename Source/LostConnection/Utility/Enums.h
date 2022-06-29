@@ -101,5 +101,6 @@ enum class EBotType : uint8
 	sniper UMETA(DisplayName = "Sniper"),
 	caster UMETA(DisplayName = "Caster"),
 	support UMETA(DisplayName = "Support"),
-	assassin UMETA(DisplaName = "Assassin")
+	assassin UMETA(DisplayName = "Assassin"),
+	size UMETA(Hidden)
 };

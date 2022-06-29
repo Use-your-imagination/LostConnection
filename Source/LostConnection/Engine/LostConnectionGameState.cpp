@@ -15,7 +15,7 @@
 #include "WorldPlaceables/AI/AISpawnPoint.h"
 #include "WorldPlaceables/Raid/ChooseRoomConsole.h"
 #include "WorldPlaceables/Raid/TeleportPoint.h"
-#include "WorldPlaceables/AI/AISpawnManagerSettings.h"
+#include "WorldPlaceables/AI/WavesController.h"
 
 void ALostConnectionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -59,9 +59,9 @@ void ALostConnectionGameState::clearRoom()
 		roomConsole->Destroy();
 	}
 
-	if (TObjectPtr<AActor> settings = UGameplayStatics::GetActorOfClass(this, AAISpawnManagerSettings::StaticClass()))
+	if (TObjectPtr<AActor> wavesController = UGameplayStatics::GetActorOfClass(this, AWavesController::StaticClass()))
 	{
-		settings->Destroy();
+		wavesController->Destroy();
 	}
 
 	for (TObjectPtr<AActor> aiSpawnPoint : aiSpawnPoints)
@@ -90,9 +90,8 @@ void ALostConnectionGameState::giveEachPlayerLootPoints_Implementation(int32 cou
 
 ALostConnectionGameState::ALostConnectionGameState()
 {
-	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.TickInterval = 1.0f;
-
+	PrimaryActorTick.bCanEverTick = false;
+	
 	NetUpdateFrequency = UConstants::minNetUpdateFrequency;
 }
 
@@ -223,29 +222,4 @@ int32& ALostConnectionGameState::getCurrentWaveRemainingBots()
 const TSoftObjectPtr<UWorld>& ALostConnectionGameState::getLastLoadedRoom() const
 {
 	return lastLoadedRoom;
-}
-
-void ALostConnectionGameState::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (HasAuthority())
-	{
-		TObjectPtr<ALostConnectionGameMode> gameMode = GetWorld()->GetAuthGameMode<ALostConnectionGameMode>();
-
-		if (!gameMode)
-		{
-			return;
-		}
-
-		AISpawnManager& spawnManager = gameMode->getSpawnManager();
-
-		remainingBots = spawnManager.getRemainingAIToSpawn();
-
-		remainingWaves = spawnManager.getRemainingWaves();
-
-		currentWaveTotalBots = spawnManager.getCurrentWaveTotalBots();
-
-		currentWaveRemainingBots = spawnManager.getCurrentWaveRemainingBots();
-	}
 }

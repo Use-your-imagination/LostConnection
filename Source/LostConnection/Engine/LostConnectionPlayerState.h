@@ -28,7 +28,7 @@ class LOSTCONNECTION_API ALostConnectionPlayerState : public APlayerState
 
 private:
 	template<typename T>
-	static void reduceCooldownableData(float DeltaTime, TArray<T>& cooldownableData);
+	static void reduceCooldownableData(float DeltaSeconds, TArray<T>& cooldownableData);
 
 protected:
 	UPROPERTY(Category = UI, BlueprintReadOnly)
@@ -178,7 +178,7 @@ public:
 
 	TArray<TObjectPtr<UEscapableWidget>>& getEscapableWidgets();
 
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	~ALostConnectionPlayerState() = default;
 

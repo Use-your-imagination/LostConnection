@@ -50,24 +50,6 @@ ALostConnectionGameMode::ALostConnectionGameMode()
 	GameStateClass = gameStateClassFinder.Class;
 }
 
-void ALostConnectionGameMode::initRoomAI(int32 totalCount, int32 waves)
-{
-	ALostConnectionGameState* gameState = GetGameState<ALostConnectionGameState>();
-
-	gameState->getTotalBots() = totalCount;
-
-	gameState->getTotalWaves() = waves;
-
-	spawnManager.init(totalCount, waves);
-
-	spawnManager.process(GetWorld());
-}
-
-AISpawnManager& ALostConnectionGameMode::getSpawnManager()
-{
-	return spawnManager;
-}
-
 void ALostConnectionGameMode::PostSeamlessTravel()
 {
 	Super::PostSeamlessTravel();

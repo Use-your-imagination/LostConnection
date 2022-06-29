@@ -53,7 +53,7 @@ public:
 
 	void useAbility() override;
 
-	void Tick(float DeltaTime) override;
+	void Tick(float DeltaSeconds) override;
 
 	float getCooldown() const override;
 

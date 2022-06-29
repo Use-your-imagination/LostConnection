@@ -81,11 +81,11 @@ bool UShatterAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit
 	return true;
 }
 
-bool UShatterAilment::Tick(float DeltaTime)
+bool UShatterAilment::Tick(float DeltaSeconds)
 {
-	tickPeriod = DeltaTime;
+	tickPeriod = DeltaSeconds;
 
-	return Super::Tick(DeltaTime);
+	return Super::Tick(DeltaSeconds);
 }
 
 bool UShatterAilment::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)

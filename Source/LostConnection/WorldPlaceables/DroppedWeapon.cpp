@@ -16,11 +16,11 @@ void ADroppedWeapon::onWeaponChange()
 	}
 }
 
-void ADroppedWeapon::Tick(float DeltaTime)
+void ADroppedWeapon::Tick(float DeltaSeconds)
 {
 	if (HasAuthority())
 	{
-		weapon->Tick(DeltaTime);
+		weapon->Tick(DeltaSeconds);
 	}
 }
 

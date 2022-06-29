@@ -3,67 +3,87 @@
 #include "AISpawnManager.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "Algo/Count.h"
+#include "Algo/Accumulate.h"
 
 #include "Characters/AI/BaseBot.h"
-#include "WorldPlaceables/AI/AISpawnManagerSettings.h"
+#include "WorldPlaceables/AI/WavesController.h"
 
-bool AISpawnManager::isBotsAlreadySpawned(TObjectPtr<UWorld> world)
+void AISpawnManager::process()
 {
-	TArray<TObjectPtr<AActor>> tem;
-
-	UGameplayStatics::GetAllActorsOfClass(world, ABaseBot::StaticClass(), tem);
-
-	return StaticCast<bool>(tem.Num());
-}
-
-void AISpawnManager::process(TObjectPtr<UWorld> world)
-{
-	if (AISpawnManager::isBotsAlreadySpawned(world))
+	if (currentWaveRemainingBots || (wavesController->getWaveCount() == currentWave + 1))
 	{
 		return;
 	}
 
-	TObjectPtr<AAISpawnManagerSettings> settings = Cast<AAISpawnManagerSettings>(UGameplayStatics::GetActorOfClass(world, AAISpawnManagerSettings::StaticClass()));
+	spawner.spawn(wavesController, ++currentWave);
+}
 
-	if (settings->getWaveCount() == currentWave)
+void AISpawnManager::updateCurrentWaveRemainingBots()
+{
+	TArray<TObjectPtr<AActor>> bots;
+
+	UGameplayStatics::GetAllActorsOfClass(wavesController, ABaseBot::StaticClass(), bots);
+
+	currentWaveRemainingBots = Algo::CountIf(bots, [](TObjectPtr<AActor> bot) { return !Cast<ABaseBot>(bot)->getIsAlly(); });
+}
+
+void AISpawnManager::init(TObjectPtr<AWavesController> wavesController)
+{
+	currentWave = -1;
+
+	this->wavesController = wavesController;
+
+	this->updateCurrentWaveRemainingBots();
+}
+
+void AISpawnManager::notify()
+{
+	this->updateCurrentWaveRemainingBots();
+
+	this->process();
+
+	this->updateCurrentWaveRemainingBots();
+
+	wavesController->notify();
+}
+
+int32 AISpawnManager::getRemainingBots() const
+{
+	return currentWave == -1 ? 0 : [this]() -> int32
 	{
-		return;
-	}
+		TArray<int32> values;
 
-	spawner.spawn(world, currentWave++);
-}
+		for (int32 i = currentWave + 1; i < wavesController->getWaveCount(); i++)
+		{
+			TArray<int32> tem;
 
-void AISpawnManager::init(int32 totalCount, int32 waves)
-{
-	currentWave = 0;
+			wavesController->getWaveSettings(i).botsPerType.GenerateValueArray(tem);
 
-	remainingAIToSpawn = totalCount;
-	remainingWaves = waves;
+			values.Append(tem);
+		}
 
-	spawnPerWave = totalCount / waves;
-}
-
-void AISpawnManager::notify(UWorld* world)
-{
-	remainingAIToSpawn--;
-	currentWaveRemainingBots--;
-
-	this->process(world);
-}
-
-int32 AISpawnManager::getRemainingAIToSpawn() const
-{
-	return remainingAIToSpawn;
+		return Algo::Accumulate(values, 0) + currentWaveRemainingBots;
+	}();
 }
 
 int32 AISpawnManager::getRemainingWaves() const
 {
-	return remainingWaves;
+	return currentWave == -1 ?
+		wavesController->getWaveCount() :
+		wavesController->getWaveCount() - currentWave - 1;
 }
 
 int32 AISpawnManager::getCurrentWaveTotalBots() const
 {
-	return currentWaveTotalBots;
+	return currentWave == -1 ? 0 : [this]() -> int32
+	{
+		TArray<int32> values;
+
+		wavesController->getWaveSettings(currentWave).botsPerType.GenerateValueArray(values);
+
+		return Algo::Accumulate(values, 0);
+	}();
 }
 
 int32 AISpawnManager::getCurrentWaveRemainingBots() const

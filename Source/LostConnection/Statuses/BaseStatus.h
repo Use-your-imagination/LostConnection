@@ -67,7 +67,7 @@ public:
 
 	virtual void postRemove();
 
-	virtual bool Tick(float DeltaTime);
+	virtual bool Tick(float DeltaSeconds);
 
 	void refreshDuration();
 

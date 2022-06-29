@@ -81,7 +81,7 @@ public:
 
 	virtual void onEndRechargeShield();
 
-	virtual void Tick(float DeltaTime);
+	virtual void Tick(float DeltaSeconds);
 
 	const FLinearColor& getEnergyShieldColor() const;
 

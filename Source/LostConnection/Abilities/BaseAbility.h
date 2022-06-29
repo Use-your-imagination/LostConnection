@@ -59,7 +59,7 @@ public:
 
 	virtual void useAbility();
 
-	virtual void Tick(float DeltaTime);
+	virtual void Tick(float DeltaSeconds);
 
 	virtual void initAbility();
 

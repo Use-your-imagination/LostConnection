@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "GameFramework/Info.h"
+#include "GameFramework/Actor.h"
 #include "Components/ArrowComponent.h"
 
 #include "Utility/Enums.h"
@@ -12,7 +12,7 @@
 #include "AISpawnPoint.generated.h"
 
 UCLASS(Blueprintable)
-class LOSTCONNECTION_API AAISpawnPoint : public AInfo
+class LOSTCONNECTION_API AAISpawnPoint : public AActor
 {
 	GENERATED_BODY()
 
@@ -20,7 +20,7 @@ private:
 	UPROPERTY(Category = Components, VisibleAnywhere, Meta = (AllowPrivateAccess))
 	TObjectPtr<UArrowComponent> arrow;
 
-	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = Waves, EditAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	EBotType botSpawnType;
 
 public:

@@ -12,27 +12,23 @@ class LOSTCONNECTION_API AISpawnManager
 {
 private:
 	AISpawner spawner;
+	TObjectPtr<class AWavesController> wavesController;
 	int32 currentWave;
-	int32 remainingAIToSpawn;
-	int32 remainingWaves;
-	int32 spawnPerWave;
-	int32 currentWaveTotalBots;
 	int32 currentWaveRemainingBots;
 
 private:
-	static bool isBotsAlreadySpawned(TObjectPtr<UWorld> world);
+	void process();
 
-private:
-	void process(TObjectPtr<UWorld> world);
+	void updateCurrentWaveRemainingBots();
 
 public:
 	AISpawnManager() = default;
 
-	void init(int32 totalCount, int32 waves);
+	void init(TObjectPtr<class AWavesController> wavesController);
 
-	void notify(UWorld* world);
+	void notify();
 
-	int32 getRemainingAIToSpawn() const;
+	int32 getRemainingBots() const;
 
 	int32 getRemainingWaves() const;
 
@@ -42,5 +38,5 @@ public:
 
 	~AISpawnManager() = default;
 
-	friend class ALostConnectionGameMode;
+	friend class AWavesController;
 };

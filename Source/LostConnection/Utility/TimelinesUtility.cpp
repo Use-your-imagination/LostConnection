@@ -2,11 +2,11 @@
 
 #include "TimelinesUtility.h"
 
-void UTimelinesUtility::Tick(float DeltaTime)
+void UTimelinesUtility::Tick(float DeltaSeconds)
 {
 	for (FTimeline& timeline : timelines)
 	{
-		timeline.TickTimeline(DeltaTime);
+		timeline.TickTimeline(DeltaSeconds);
 	}
 }
 

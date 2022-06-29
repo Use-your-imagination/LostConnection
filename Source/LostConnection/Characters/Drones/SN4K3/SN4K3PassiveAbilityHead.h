@@ -59,7 +59,7 @@ public:
 	UFUNCTION(Category = Checks, BlueprintNativeEvent, BlueprintCallable)
 	bool checkSpeedup();
 
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	UAilmentInflictorUtility* getAilmentInflictorUtility() const override;
 

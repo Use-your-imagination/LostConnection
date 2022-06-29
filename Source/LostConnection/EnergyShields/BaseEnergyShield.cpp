@@ -117,13 +117,13 @@ void UBaseEnergyShield::onEndRechargeShield()
 	isRecharging = false;
 }
 
-void UBaseEnergyShield::Tick(float DeltaTime)
+void UBaseEnergyShield::Tick(float DeltaSeconds)
 {
-	timers.processTimers(DeltaTime);
+	timers.processTimers(DeltaSeconds);
 
 	if (remainingTimeToRestoreShield)
 	{
-		remainingTimeToRestoreShield = FMath::Max(0.0f, remainingTimeToRestoreShield - DeltaTime);
+		remainingTimeToRestoreShield = FMath::Max(0.0f, remainingTimeToRestoreShield - DeltaSeconds);
 
 		if (!remainingTimeToRestoreShield)
 		{

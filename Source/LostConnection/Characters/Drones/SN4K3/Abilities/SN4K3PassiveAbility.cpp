@@ -57,9 +57,9 @@ void USN4K3PassiveAbility::useAbility()
 	this->applyAbility(Cast<ASN4K3>(caster));
 }
 
-void USN4K3PassiveAbility::Tick(float DeltaTime)
+void USN4K3PassiveAbility::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	static constexpr float coeff = 5.0f;
 
@@ -80,7 +80,7 @@ void USN4K3PassiveAbility::Tick(float DeltaTime)
 		type = directionTypes::decrease;
 	}
 
-	lastTimeAbilityUsed += DeltaTime;
+	lastTimeAbilityUsed += DeltaSeconds;
 
 	switch (type)
 	{

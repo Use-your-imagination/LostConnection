@@ -10,15 +10,15 @@
 
 #pragma warning(disable: 4458)
 
-void ASN4K3ThirdAbilityFlag::Tick(float DeltaTime)
+void ASN4K3ThirdAbilityFlag::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	if (HasAuthority())
 	{
-		lifetime -= DeltaTime;
+		lifetime -= DeltaSeconds;
 
-		currentTime += DeltaTime;
+		currentTime += DeltaSeconds;
 
 		if (currentTime >= period)
 		{

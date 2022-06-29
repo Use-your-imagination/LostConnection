@@ -8,9 +8,9 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Characters/Drones/SN4K3/SN4K3.h"
 
-void APreConnectionPlaceholder::Tick_Implementation(float DeltaTime)
+void APreConnectionPlaceholder::Tick_Implementation(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	if (isAlreadySendRespawnRequest || !GetController())
 	{
