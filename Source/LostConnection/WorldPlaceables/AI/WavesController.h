@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Actor.h"
+#include "NavigationInvokerComponent.h"
 
 #include "Utility/Enums.h"
 #include "AI/AISpawnManager.h"
@@ -27,6 +28,10 @@ class LOSTCONNECTION_API AWavesController : public AActor
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	TObjectPtr<UNavigationInvokerComponent> navigation;
+
+private:
 	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadWrite, Meta = (AllowPrivateAccess))
 	TArray<FWaveSettings> waveSettings;
 
@@ -43,6 +48,8 @@ public:
 	const FWaveSettings& getWaveSettings(int32 waveNumber) const;
 
 	void notify();
+
+	FWaveSettings& operator [] (int32 waveNumber);
 
 	int32 getWaveCount() const;
 

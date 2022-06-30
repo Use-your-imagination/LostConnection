@@ -26,6 +26,10 @@ void AWavesController::BeginPlay()
 AWavesController::AWavesController()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	navigation = CreateDefaultSubobject<UNavigationInvokerComponent>("Navigation");
+
+	navigation->SetGenerationRadii(10'000.0f, 10'000.0f);
 }
 
 const FWaveSettings& AWavesController::getWaveSettings(int32 waveNumber) const
@@ -44,6 +48,11 @@ void AWavesController::notify()
 	gameState->getCurrentWaveTotalBots() = spawnManager.getCurrentWaveTotalBots();
 
 	gameState->getCurrentWaveRemainingBots() = spawnManager.getCurrentWaveRemainingBots();
+}
+
+FWaveSettings& AWavesController::operator [] (int32 waveNumber)
+{
+	return waveSettings[waveNumber];
 }
 
 int32 AWavesController::getWaveCount() const
