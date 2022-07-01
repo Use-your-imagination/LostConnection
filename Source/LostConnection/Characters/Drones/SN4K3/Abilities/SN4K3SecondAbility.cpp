@@ -9,7 +9,7 @@
 #include "Utility/InitializationUtility.h"
 #include "SN4K3PassiveAbility.h"
 #include "Statuses/Ailments/SwarmAilment.h"
-#include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/DeathEventsHolder.h"
 #include "Utility/Utility.h"
 
 #pragma warning(disable: 4701)

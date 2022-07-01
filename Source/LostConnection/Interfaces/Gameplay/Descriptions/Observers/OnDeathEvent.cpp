@@ -2,11 +2,11 @@
 
 #include "OnDeathEvent.h"
 
-#include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/DeathEventsHolder.h"
 
 void IOnDeathEvent::initDeathEvent(IDeathEventsHolder* holder)
 {
-	TWeakInterfacePtr<IDeathEventsHolder>& currentHolder = this->getDeathEventsHolder();
+	auto& currentHolder = this->getDeathEventsHolder();
 
 	if (currentHolder.IsValid())
 	{
@@ -18,5 +18,5 @@ void IOnDeathEvent::initDeathEvent(IDeathEventsHolder* holder)
 	if (currentHolder.IsValid())
 	{
 		currentHolder->attachDeathEvent(this->_getUObject());
-	}	
+	}
 }

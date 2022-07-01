@@ -4,7 +4,7 @@
 
 #include "Kismet/GameplayStatics.h"
 
-#include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/DeathEventsHolder.h"
 #include "SN4K3PassiveAbilityHead.h"
 #include "SN4K3.h"
 #include "Engine/LostConnectionGameState.h"

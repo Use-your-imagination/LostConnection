@@ -6,7 +6,7 @@
 
 #include "UObject/NoExportTypes.h"
 
-#include "Interfaces/Gameplay/Descriptions/Observers/GameplayEvents/OnDeathEvent.h"
+#include "Interfaces/Gameplay/Descriptions/Observers/OnDeathEvent.h"
 #include "Network/NetworkObject.h"
 #include "Engine/LostConnectionPlayerController.h"
 

@@ -25,7 +25,7 @@
 #include "Interfaces/Gameplay/AnimatedActions/Shoot.h"
 #include "Interfaces/Gameplay/AnimatedActions/Death.h"
 #include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
-#include "Interfaces/Gameplay/Descriptions/ObserverHolders/GameplayEvents/DeathEventsHolder.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/DeathEventsHolder.h"
 #include "Interfaces/Gameplay/Descriptions/AITargeted.h"
 #include "Interfaces/Gameplay/Timelines/DeathTimeline.h"
 #include "UI/HealthBarWidget.h"

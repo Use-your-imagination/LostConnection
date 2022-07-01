@@ -9,7 +9,7 @@
 
 #include "OnDeathEvent.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType)
 class UOnDeathEvent : public UInterface
 {
 	GENERATED_BODY()

@@ -5,13 +5,12 @@
 #include "CoreMinimal.h"
 
 #include "UObject/Interface.h"
-#include "UObject/WeakInterfacePtr.h"
 
-#include "Interfaces/Gameplay/Descriptions/Observers/GameplayEvents/OnDeathEvent.h"
+#include "Interfaces/Gameplay/Descriptions/Observers/OnDeathEvent.h"
 
 #include "DeathEventsHolder.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType)
 class UDeathEventsHolder : public UInterface
 {
 	GENERATED_BODY()

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Abilities/BaseAbility.h"
-#include "Interfaces/Gameplay/Descriptions/Observers/GameplayEvents/OnDeathEvent.h"
+#include "Interfaces/Gameplay/Descriptions/Observers/OnDeathEvent.h"
 
 #include "SN4K3SecondAbility.generated.h"
 
