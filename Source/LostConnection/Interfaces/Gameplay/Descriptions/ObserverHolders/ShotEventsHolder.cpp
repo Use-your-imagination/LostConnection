@@ -4,9 +4,7 @@
 
 void IShotEventsHolder::notifyShotEvents() const
 {
-	const auto& events = this->getShotEvents();
-
-	for (const auto& event : events)
+	for (const auto& event : this->getShotEvents())
 	{
 		event->shotEventAction();
 	}

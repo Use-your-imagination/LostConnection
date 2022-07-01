@@ -4,9 +4,7 @@
 
 void IDeathEventsHolder::notifyDeathEvents() const
 {
-	const auto& events = this->getDeathEvents();
-
-	for (const auto& event : events)
+	for (const auto& event : this->getDeathEvents())
 	{
 		event->deathEventAction();
 	}
