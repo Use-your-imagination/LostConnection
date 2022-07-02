@@ -19,15 +19,12 @@ class LOSTCONNECTION_API IOnShotEvent
 {
 	GENERATED_BODY()
 
-protected:
-	virtual TWeakInterfacePtr<class IShotEventsHolder>& getShotEventsHolder() = 0;
-
 public:
 	IOnShotEvent() = default;
 
-	virtual void initShotEvent(class IShotEventsHolder* holder);
-
 	virtual void shotEventAction() = 0;
 
-	virtual class IShotEventsHolder* getShotEventsHolder() const = 0;
+	virtual TWeakInterfacePtr<class IShotEventsHolder>& getShotEventsHolder() = 0;
+
+	virtual class IShotEventsHolder* getShotEventsHolder() const;
 };

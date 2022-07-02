@@ -19,15 +19,12 @@ class LOSTCONNECTION_API IOnHitEvent
 {
 	GENERATED_BODY()
 
-protected:
-	virtual TWeakInterfacePtr<class IHitEventsHolder>& getHitEventsHolder() = 0;
-
 public:
 	IOnHitEvent() = default;
 
-	virtual void initHitEvent(class IHitEventsHolder* holder);
-
 	virtual void hitEventAction() = 0;
 
-	virtual class IHitEventsHolder* getHitEventsHolder() const = 0;
+	virtual TWeakInterfacePtr<class IHitEventsHolder>& getHitEventsHolder() = 0;
+
+	virtual class IHitEventsHolder* getHitEventsHolder() const;
 };

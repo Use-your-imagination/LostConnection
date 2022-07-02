@@ -4,19 +4,9 @@
 
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/WaveEndEventsHolder.h"
 
-void IOnWaveEndEvent::initWaveEndEvent(class IWaveEndEventsHolder* holder)
+IWaveEndEventsHolder* IOnWaveEndEvent::getWaveEndEventsHolder() const
 {
-	auto& currentHolder = this->getWaveEndEventsHolder();
+	TWeakInterfacePtr<IWaveEndEventsHolder>& holder = const_cast<IOnWaveEndEvent*>(this)->getWaveEndEventsHolder();
 
-	if (currentHolder.IsValid())
-	{
-		currentHolder->detachWaveEndEvent(this->_getUObject());
-	}
-
-	currentHolder = holder;
-
-	if (currentHolder.IsValid())
-	{
-		currentHolder->attachWaveEndEvent(this->_getUObject());
-	}
+	return holder.IsValid() ? holder.Get() : nullptr;
 }

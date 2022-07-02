@@ -4,19 +4,9 @@
 
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/WaveBeginEventsHolder.h"
 
-void IOnWaveBeginEvent::initWaveBeginEvent(class IWaveBeginEventsHolder* holder)
+IWaveBeginEventsHolder* IOnWaveBeginEvent::getWaveBeginEventsHolder() const
 {
-	auto& currentHolder = this->getWaveBeginEventsHolder();
+	TWeakInterfacePtr<IWaveBeginEventsHolder>& holder = const_cast<IOnWaveBeginEvent*>(this)->getWaveBeginEventsHolder();
 
-	if (currentHolder.IsValid())
-	{
-		currentHolder->detachWaveBeginEvent(this->_getUObject());
-	}
-
-	currentHolder = holder;
-
-	if (currentHolder.IsValid())
-	{
-		currentHolder->attachWaveBeginEvent(this->_getUObject());
-	}
+	return holder.IsValid() ? holder.Get() : nullptr;
 }

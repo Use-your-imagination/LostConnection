@@ -20,14 +20,17 @@ class LOSTCONNECTION_API IWaveBeginEventsHolder
 {
 	GENERATED_BODY()
 		
+protected:
+	virtual TArray<TScriptInterface<IOnWaveBeginEvent>>& getWaveBeginEvents() = 0;
+
 public:
 	IWaveBeginEventsHolder() = default;
 
-	virtual void attachWaveBeginEvent(const TScriptInterface<IOnWaveBeginEvent>& event) = 0;
+	virtual void attachWaveBeginEvent(const TScriptInterface<IOnWaveBeginEvent>& event);
 
-	virtual void detachWaveBeginEvent(const TScriptInterface<IOnWaveBeginEvent>& event) = 0;
+	virtual void detachWaveBeginEvent(const TScriptInterface<IOnWaveBeginEvent>& event);
 
 	virtual void notifyWaveBeginEvents() const;
 
-	virtual const TArray<TScriptInterface<IOnWaveBeginEvent>>& getWaveBeginEvents() const = 0;
+	virtual const TArray<TScriptInterface<IOnWaveBeginEvent>>& getWaveBeginEvents() const;
 };

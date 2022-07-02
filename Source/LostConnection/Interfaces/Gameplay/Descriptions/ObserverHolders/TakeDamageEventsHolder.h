@@ -20,14 +20,17 @@ class LOSTCONNECTION_API ITakeDamageEventsHolder
 {
 	GENERATED_BODY()
 
+protected:
+	virtual TArray<TScriptInterface<IOnTakeDamageEvent>>& getTakeDamageEvents() = 0;
+
 public:
 	ITakeDamageEventsHolder() = default;
 
-	virtual void attachTakeDamageEvent(const TScriptInterface<IOnTakeDamageEvent>& event) = 0;
+	virtual void attachTakeDamageEvent(const TScriptInterface<IOnTakeDamageEvent>& event);
 
-	virtual void detachTakeDamageEvent(const TScriptInterface<IOnTakeDamageEvent>& event) = 0;
+	virtual void detachTakeDamageEvent(const TScriptInterface<IOnTakeDamageEvent>& event);
 
 	virtual void notifyTakeDamageEvents() const;
 
-	virtual const TArray<TScriptInterface<IOnTakeDamageEvent>>& getTakeDamageEvents() const = 0;
+	virtual const TArray<TScriptInterface<IOnTakeDamageEvent>>& getTakeDamageEvents() const;
 };

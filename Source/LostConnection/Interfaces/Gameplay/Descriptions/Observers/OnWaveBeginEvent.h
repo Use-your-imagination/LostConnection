@@ -19,15 +19,12 @@ class LOSTCONNECTION_API IOnWaveBeginEvent
 {
 	GENERATED_BODY()
 
-protected:
-	virtual TWeakInterfacePtr<class IWaveBeginEventsHolder>& getWaveBeginEventsHolder() = 0;
-
 public:
 	IOnWaveBeginEvent() = default;
 
-	virtual void initWaveBeginEvent(class IWaveBeginEventsHolder* holder);
-
 	virtual void waveBeginEventAction() = 0;
 
-	virtual class IWaveBeginEventsHolder* getWaveBeginEventsHolder() const = 0;
+	virtual TWeakInterfacePtr<class IWaveBeginEventsHolder>& getWaveBeginEventsHolder() = 0;
+
+	virtual class IWaveBeginEventsHolder* getWaveBeginEventsHolder() const;
 };

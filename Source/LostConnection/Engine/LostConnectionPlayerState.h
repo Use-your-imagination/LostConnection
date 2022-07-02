@@ -104,12 +104,6 @@ public:
 
 	UBaseWeapon* getSecondInactiveWeapon() const;
 
-	TArray<UInventoryCell*>& getPersonalEquippedModules();
-
-	TArray<UInventoryCell*>& getPersonalUnequippedModules();
-
-	TArray<UInventoryCell*>& getWeaponModules();
-
 	const TArray<UInventoryCell*>& getPersonalEquippedModules() const;
 
 	const TArray<UInventoryCell*>& getPersonalUnequippedModules() const;

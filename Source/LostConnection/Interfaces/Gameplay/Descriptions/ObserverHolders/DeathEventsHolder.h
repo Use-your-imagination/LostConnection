@@ -24,6 +24,8 @@ protected:
 	virtual TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() = 0;
 
 public:
+	IDeathEventsHolder() = default;
+
 	virtual void attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event);
 
 	virtual void detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event);

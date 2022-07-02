@@ -20,14 +20,17 @@ class LOSTCONNECTION_API IHitEventsHolder
 {
 	GENERATED_BODY()
 
+protected:
+	virtual TArray<TScriptInterface<IOnHitEvent>>& getHitEvents() = 0;
+
 public:
 	IHitEventsHolder() = default;
 
-	virtual void attachHitEvent(const TScriptInterface<IOnHitEvent>& event) = 0;
+	virtual void attachHitEvent(const TScriptInterface<IOnHitEvent>& event);
 
-	virtual void detachHitEvent(const TScriptInterface<IOnHitEvent>& event) = 0;
+	virtual void detachHitEvent(const TScriptInterface<IOnHitEvent>& event);
 
 	virtual void notifyHitEvents() const;
 
-	virtual const TArray<TScriptInterface<IOnHitEvent>>& getHitEvents() const = 0;
+	virtual const TArray<TScriptInterface<IOnHitEvent>>& getHitEvents() const;
 };

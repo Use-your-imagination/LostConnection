@@ -163,21 +163,6 @@ void ALostConnectionPlayerState::setPlayerController_Implementation(ALostConnect
 	playerController = newPlayerController;
 }
 
-TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules()
-{
-	return inventory->getPersonalEquippedModules();
-}
-
-TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalUnequippedModules()
-{
-	return inventory->getPersonalUnequippedModules();
-}
-
-TArray<UInventoryCell*>& ALostConnectionPlayerState::getWeaponModules()
-{
-	return inventory->getWeaponModules();
-}
-
 const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
 {
 	return inventory->getPersonalEquippedModules();

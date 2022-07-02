@@ -648,21 +648,6 @@ int32 AInventory::getLootPoints() const
 	return lootPoints;
 }
 
-TArray<TObjectPtr<UInventoryCell>>& AInventory::getPersonalEquippedModules()
-{
-	return equippedPersonalModules;
-}
-
-TArray<TObjectPtr<UInventoryCell>>& AInventory::getPersonalUnequippedModules()
-{
-	return unequippedPersonalModules;
-}
-
-TArray<TObjectPtr<UInventoryCell>>& AInventory::getWeaponModules()
-{
-	return weaponModules;
-}
-
 const TArray<TObjectPtr<UInventoryCell>>& AInventory::getPersonalEquippedModules() const
 {
 	return equippedPersonalModules;

@@ -19,15 +19,12 @@ class LOSTCONNECTION_API IOnTakeDamageEvent
 {
 	GENERATED_BODY()
 
-protected:
-	virtual TWeakInterfacePtr<class ITakeDamageEventsHolder>& getTakeDamageEventsHolder() = 0;
-
 public:
 	IOnTakeDamageEvent() = default;
 
-	virtual void initTakeDamageEvent(class ITakeDamageEventsHolder* holder);
-
 	virtual void takeDamageEventAction() = 0;
 
-	virtual class ITakeDamageEventsHolder* getTakeDamageEventsHolder() const = 0;
+	virtual TWeakInterfacePtr<class ITakeDamageEventsHolder>& getTakeDamageEventsHolder() = 0;
+
+	virtual class ITakeDamageEventsHolder* getTakeDamageEventsHolder() const;
 };

@@ -20,14 +20,17 @@ class LOSTCONNECTION_API IShotEventsHolder
 {
 	GENERATED_BODY()
 
+protected:
+	virtual TArray<TScriptInterface<IOnShotEvent>>& getShotEvents() = 0;
+
 public:
 	IShotEventsHolder() = default;
 
-	virtual void attachShotEvent(const TScriptInterface<IOnShotEvent>& event) = 0;
+	virtual void attachShotEvent(const TScriptInterface<IOnShotEvent>& event);
 
-	virtual void detachShotEvent(const TScriptInterface<IOnShotEvent>& event) = 0;
+	virtual void detachShotEvent(const TScriptInterface<IOnShotEvent>& event) ;
 
 	virtual void notifyShotEvents() const;
 
-	virtual const TArray<TScriptInterface<IOnShotEvent>>& getShotEvents() const = 0;
+	virtual const TArray<TScriptInterface<IOnShotEvent>>& getShotEvents() const ;
 };

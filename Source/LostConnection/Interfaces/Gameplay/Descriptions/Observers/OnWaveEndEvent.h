@@ -19,15 +19,12 @@ class LOSTCONNECTION_API IOnWaveEndEvent
 {
 	GENERATED_BODY()
 
-protected:
-	virtual TWeakInterfacePtr<class IWaveEndEventsHolder>& getWaveEndEventsHolder() = 0;
-
 public:
 	IOnWaveEndEvent() = default;
 
-	virtual void initWaveEndEvent(class IWaveEndEventsHolder* holder);
-
 	virtual void waveEndEventAction() = 0;
 
-	virtual class IWaveEndEventsHolder* getWaveEndEventsHolder() const = 0;
+	virtual TWeakInterfacePtr<class IWaveEndEventsHolder>& getWaveEndEventsHolder() = 0;
+
+	virtual class IWaveEndEventsHolder* getWaveEndEventsHolder() const;
 };

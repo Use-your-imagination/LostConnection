@@ -4,19 +4,9 @@
 
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/HitEventsHolder.h"
 
-void IOnHitEvent::initHitEvent(IHitEventsHolder* holder)
+IHitEventsHolder* IOnHitEvent::getHitEventsHolder() const
 {
-	auto& currentHolder = this->getHitEventsHolder();
+	TWeakInterfacePtr<IHitEventsHolder>& holder = const_cast<IOnHitEvent*>(this)->getHitEventsHolder();
 
-	if (currentHolder.IsValid())
-	{
-		currentHolder->detachHitEvent(this->_getUObject());
-	}
-
-	currentHolder = holder;
-
-	if (currentHolder.IsValid())
-	{
-		currentHolder->attachHitEvent(this->_getUObject());
-	}
+	return holder.IsValid() ? holder.Get() : nullptr;
 }

@@ -4,19 +4,9 @@
 
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/TakeDamageEventsHolder.h"
 
-void IOnTakeDamageEvent::initTakeDamageEvent(class ITakeDamageEventsHolder* holder)
+ITakeDamageEventsHolder* IOnTakeDamageEvent::getTakeDamageEventsHolder() const
 {
-	auto& currentHolder = this->getTakeDamageEventsHolder();
+	TWeakInterfacePtr<ITakeDamageEventsHolder>& holder = const_cast<IOnTakeDamageEvent*>(this)->getTakeDamageEventsHolder();
 
-	if (currentHolder.IsValid())
-	{
-		currentHolder->detachTakeDamageEvent(this->_getUObject());
-	}
-
-	currentHolder = holder;
-
-	if (currentHolder.IsValid())
-	{
-		currentHolder->attachTakeDamageEvent(this->_getUObject());
-	}
+	return holder.IsValid() ? holder.Get() : nullptr;
 }

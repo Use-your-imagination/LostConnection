@@ -4,19 +4,9 @@
 
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/ShotEventsHolder.h"
 
-void IOnShotEvent::initShotEvent(class IShotEventsHolder* holder)
+IShotEventsHolder* IOnShotEvent::getShotEventsHolder() const
 {
-	auto& currentHolder = this->getShotEventsHolder();
+	TWeakInterfacePtr<IShotEventsHolder>& holder = const_cast<IOnShotEvent*>(this)->getShotEventsHolder();
 
-	if (currentHolder.IsValid())
-	{
-		currentHolder->detachShotEvent(this->_getUObject());
-	}
-
-	currentHolder = holder;
-
-	if (currentHolder.IsValid())
-	{
-		currentHolder->attachShotEvent(this->_getUObject());
-	}
+	return holder.IsValid() ? holder.Get() : nullptr;
 }

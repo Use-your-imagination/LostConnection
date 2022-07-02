@@ -44,6 +44,9 @@ class LOSTCONNECTION_API ABaseCharacter :
 	public IDeath,
 	public IAilmentReceiver,
 	public IDeathEventsHolder,
+	public IHitEventsHolder,
+	public IShotEventsHolder,
+	public ITakeDamageEventsHolder,
 	public IAITargeted,
 	public IDeathTimeline,
 	public IPersonalModulesHolder,
@@ -221,6 +224,12 @@ private:
 
 protected:
 	virtual TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() final override;
+
+	virtual TArray<TScriptInterface<IOnHitEvent>>& getHitEvents() final override;
+
+	virtual TArray<TScriptInterface<IOnShotEvent>>& getShotEvents() final override;
+
+	virtual TArray<TScriptInterface<IOnTakeDamageEvent>>& getTakeDamageEvents() final override;
 
 public:	
 	ABaseCharacter();

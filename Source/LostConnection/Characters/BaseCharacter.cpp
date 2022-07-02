@@ -378,6 +378,21 @@ TArray<TScriptInterface<IOnDeathEvent>>& ABaseCharacter::getDeathEvents()
 	return deathEvents;
 }
 
+TArray<TScriptInterface<IOnHitEvent>>& ABaseCharacter::getHitEvents()
+{
+	return hitEvents;
+}
+
+TArray<TScriptInterface<IOnShotEvent>>& ABaseCharacter::getShotEvents()
+{
+	return shotEvents;
+}
+
+TArray<TScriptInterface<IOnTakeDamageEvent>>& ABaseCharacter::getTakeDamageEvents()
+{
+	return takeDamageEvents;
+}
+
 void ABaseCharacter::runReloadLogic()
 {
 	Utility::executeOnlyOnServerFromMulticast(this, [this]()
