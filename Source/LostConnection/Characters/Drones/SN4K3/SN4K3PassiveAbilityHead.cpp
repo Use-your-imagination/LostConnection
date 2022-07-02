@@ -97,11 +97,11 @@ void ASN4K3PassiveAbilityHead::explode()
 		{
 			FHitResult characterHit(character, character->GetMesh(), character->GetActorLocation(), {});
 
-			USN4K3ResurrectDeathEvent* resurrect = NewObject<USN4K3ResurrectDeathEvent>(character);
-
-			resurrect->initDeathEvent(character);
+			TObjectPtr<USN4K3ResurrectDeathEvent> resurrect = NewObject<USN4K3ResurrectDeathEvent>(character);
 
 			resurrect->init(controller, respawnTransform);
+
+			character->attachDeathEvent(resurrect.Get());
 
 			character->statusInflictorImpactAction(ailmentInflictorUtility, characterHit);
 
@@ -109,7 +109,7 @@ void ASN4K3PassiveAbilityHead::explode()
 
 			character->getTimers().addTimer
 			(
-				[character, resurrect]() { character->detachDeathEvent(resurrect); },
+				[character, resurrect]() { character->detachDeathEvent(resurrect.Get()); },
 				0.0f,
 				false,
 				character->getSwarm()->getRemainingDuration()

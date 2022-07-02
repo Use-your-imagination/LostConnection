@@ -167,6 +167,12 @@ public:
 
 	TArray<FAmmoData>& getSpareAmmoArray();
 
+	TArray<TObjectPtr<UInventoryCell>>& getPersonalEquippedModules();
+
+	TArray<TObjectPtr<UInventoryCell>>& getPersonalUnequippedModules();
+
+	TArray<TObjectPtr<UInventoryCell>>& getWeaponModules();
+
 	const TArray<TObjectPtr<UInventoryCell>>& getPersonalEquippedModules() const;
 
 	const TArray<TObjectPtr<UInventoryCell>>& getPersonalUnequippedModules() const;

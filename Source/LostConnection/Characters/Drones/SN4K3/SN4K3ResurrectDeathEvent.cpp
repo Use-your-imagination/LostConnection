@@ -10,12 +10,7 @@
 #include "Engine/LostConnectionGameState.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-TWeakInterfacePtr<IDeathEventsHolder>& USN4K3ResurrectDeathEvent::getDeathEventsHolder()
-{
-	return holder;
-}
-
-void USN4K3ResurrectDeathEvent::init(ALostConnectionPlayerController* controller, const FTransform& respawnTransform)
+void USN4K3ResurrectDeathEvent::init(TObjectPtr<ALostConnectionPlayerController> controller, const FTransform& respawnTransform)
 {
 	this->respawnTransform = respawnTransform;
 	this->controller = controller;
@@ -38,7 +33,7 @@ void USN4K3ResurrectDeathEvent::deathEventAction()
 	drone->FinishSpawning({}, true);
 }
 
-IDeathEventsHolder* USN4K3ResurrectDeathEvent::getDeathEventsHolder() const
+TWeakInterfacePtr<IDeathEventsHolder>& USN4K3ResurrectDeathEvent::getDeathEventsHolder()
 {
-	return holder.IsValid() ? holder.Get() : nullptr;
+	return holder;
 }

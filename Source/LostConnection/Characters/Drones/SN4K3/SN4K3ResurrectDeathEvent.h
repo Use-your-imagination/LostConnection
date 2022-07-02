@@ -24,19 +24,16 @@ class LOSTCONNECTION_API USN4K3ResurrectDeathEvent :
 private:
 	TWeakInterfacePtr<class IDeathEventsHolder> holder;
 	FTransform respawnTransform;
-	ALostConnectionPlayerController* controller;
-
-private:
-	TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() override;
+	TObjectPtr<ALostConnectionPlayerController> controller;
 	
 public:
 	USN4K3ResurrectDeathEvent() = default;
 
-	void init(ALostConnectionPlayerController* controller, const FTransform& respawnTransform);
+	void init(TObjectPtr<ALostConnectionPlayerController> controller, const FTransform& respawnTransform);
 
 	void deathEventAction() override;
 
-	class IDeathEventsHolder* getDeathEventsHolder() const override;
+	TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() override;
 
 	~USN4K3ResurrectDeathEvent() = default;
 };

@@ -1070,16 +1070,6 @@ bool ABaseDrone::getZooming() const
 	return zooming;
 }
 
-void ABaseDrone::addPersonalModule(TObjectPtr<UBasePersonalModule> module)
-{
-	Utility::getPlayerState(this)->addPersonalModule(module);
-}
-
-void ABaseDrone::addWeaponModule(TObjectPtr<UBaseWeaponModule> module)
-{
-	Utility::getPlayerState(this)->addWeaponModule(module);
-}
-
 float ABaseDrone::getFlatDamageReduction_Implementation() const
 {
 	return 10.0f;
@@ -1266,31 +1256,6 @@ UBaseUltimateAbility* ABaseDrone::getUltimateAbility() const
 const TArray<UAnimMontage*>& ABaseDrone::getAbilitiesAnimations() const
 {
 	return abilitiesAnimations;
-}
-
-const TArray<UInventoryCell*>& ABaseDrone::getPersonalEquippedModules() const
-{
-	return Utility::getPlayerState(this)->getPersonalEquippedModules();;
-}
-
-const TArray<UInventoryCell*>& ABaseDrone::getPersonalUnequippedModules() const
-{
-	return Utility::getPlayerState(this)->getPersonalUnequippedModules();
-}
-
-const TArray<TObjectPtr<UInventoryCell>>& ABaseDrone::getActivePersonalModules() const
-{
-	return Utility::getPlayerState(this)->getInventory()->getActivePersonalModules();
-}
-
-const TArray<UInventoryCell*>& ABaseDrone::getWeaponModules() const
-{
-	return Utility::getPlayerState(this)->getWeaponModules();
-}
-
-const TArray<TObjectPtr<UInventoryCell>>& ABaseDrone::getActiveWeaponModules() const
-{
-	return Utility::getPlayerState(this)->getInventory()->getActiveWeaponModules();
 }
 
 void ABaseDrone::castPassiveAbilityVisual()

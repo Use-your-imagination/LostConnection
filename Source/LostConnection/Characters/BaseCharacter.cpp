@@ -27,6 +27,9 @@
 
 #pragma warning(disable: 4458)
 
+static TArray<UInventoryCell*> emptyCells = {};
+static TArray<TObjectPtr<UInventoryCell>> emptyObjectCells = {};
+
 void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -146,7 +149,7 @@ void ABaseCharacter::onCurrentWeaponChange()
 
 		currentWeapon->updateTimeBetweenShots();
 
-		if (TObjectPtr<AInventory> inventory =  Utility::getPlayerState(this)->getInventory())
+		if (TObjectPtr<AInventory> inventory = Utility::getPlayerState(this)->getInventory())
 		{
 			inventory->updateActiveWeaponModules();
 		}
@@ -368,6 +371,11 @@ void ABaseCharacter::updateCharacterVisual()
 TObjectPtr<UHealthBarWidget> ABaseCharacter::getHealthBarWidget() const
 {
 	return Cast<UHealthBarWidget>(healthBarWidget->GetWidget());
+}
+
+TArray<TScriptInterface<IOnDeathEvent>>& ABaseCharacter::getDeathEvents()
+{
+	return deathEvents;
 }
 
 void ABaseCharacter::runReloadLogic()
@@ -742,16 +750,6 @@ void ABaseCharacter::applySwarmAilment(USwarmAilment* swarm)
 	this->swarm = swarm;
 }
 
-void ABaseCharacter::attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event)
-{
-	deathEvents.Add(event);
-}
-
-void ABaseCharacter::detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event)
-{
-	deathEvents.Remove(event);
-}
-
 void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
 {
 	TArray<UBaseStatus*> statusesToRemove;
@@ -893,11 +891,6 @@ UCapsuleComponent* ABaseCharacter::getCapsuleComponent()
 	return GetCapsuleComponent();
 }
 
-const TArray<TScriptInterface<IOnDeathEvent>>& ABaseCharacter::getDeathEvents() const
-{
-	return deathEvents;
-}
-
 void ABaseCharacter::deathTimelineUpdate_Implementation(float value)
 {
 
@@ -906,4 +899,64 @@ void ABaseCharacter::deathTimelineUpdate_Implementation(float value)
 void ABaseCharacter::deathTimelineFinished_Implementation()
 {
 
+}
+
+const TArray<UInventoryCell*>& ABaseCharacter::getPersonalEquippedModules() const
+{
+	if (TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this))
+	{
+		return playerState->getPersonalEquippedModules();
+	}
+
+	UE_LOG(LogLostConnection, Warning, TEXT("Can't get player state in function: %s"), __FUNCTION__);
+
+	return emptyCells;
+}
+
+const TArray<UInventoryCell*>& ABaseCharacter::getPersonalUnequippedModules() const
+{
+	if (TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this))
+	{
+		return playerState->getPersonalUnequippedModules();
+	}
+
+	UE_LOG(LogLostConnection, Warning, TEXT("Can't get player state in function: %s"), __FUNCTION__);
+
+	return emptyCells;
+}
+
+const TArray<TObjectPtr<UInventoryCell>>& ABaseCharacter::getActivePersonalModules() const
+{
+	if (TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this))
+	{
+		return playerState->getInventory()->getActivePersonalModules();
+	}
+
+	UE_LOG(LogLostConnection, Warning, TEXT("Can't get player state in function: %s"), __FUNCTION__);
+
+	return emptyObjectCells;
+}
+
+const TArray<UInventoryCell*>& ABaseCharacter::getWeaponModules() const
+{
+	if (TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this))
+	{
+		return playerState->getWeaponModules();
+	}
+
+	UE_LOG(LogLostConnection, Warning, TEXT("Can't get player state in function: %s"), __FUNCTION__);
+
+	return emptyCells;
+}
+
+const TArray<TObjectPtr<UInventoryCell>>& ABaseCharacter::getActiveWeaponModules() const
+{
+	if (TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this))
+	{
+		return playerState->getInventory()->getActiveWeaponModules();
+	}
+
+	UE_LOG(LogLostConnection, Warning, TEXT("Can't get player state in function: %s"), __FUNCTION__);
+
+	return emptyObjectCells;
 }

@@ -12,7 +12,6 @@
 #include "Components/TimelineComponent.h"
 #include "Components/WidgetComponent.h"
 
-#include "Engine/LostConnectionPlayerState.h"
 #include "WorldPlaceables/DroppedWeapon.h"
 #include "Utility/TimersUtility.h"
 #include "Utility/TimelinesUtility.h"
@@ -26,6 +25,9 @@
 #include "Interfaces/Gameplay/AnimatedActions/Death.h"
 #include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/DeathEventsHolder.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/HitEventsHolder.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/ShotEventsHolder.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/TakeDamageEventsHolder.h"
 #include "Interfaces/Gameplay/Descriptions/AITargeted.h"
 #include "Interfaces/Gameplay/Timelines/DeathTimeline.h"
 #include "UI/HealthBarWidget.h"
@@ -43,7 +45,9 @@ class LOSTCONNECTION_API ABaseCharacter :
 	public IAilmentReceiver,
 	public IDeathEventsHolder,
 	public IAITargeted,
-	public IDeathTimeline
+	public IDeathTimeline,
+	public IPersonalModulesHolder,
+	public IWeaponModulesHolder
 {
 	GENERATED_BODY()
 
@@ -127,6 +131,15 @@ protected:
 	UPROPERTY()
 	TArray<TScriptInterface<IOnDeathEvent>> deathEvents;
 
+	UPROPERTY()
+	TArray<TScriptInterface<IOnHitEvent>> hitEvents;
+
+	UPROPERTY()
+	TArray<TScriptInterface<IOnShotEvent>> shotEvents;
+
+	UPROPERTY()
+	TArray<TScriptInterface<IOnTakeDamageEvent>> takeDamageEvents;
+
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Reloading, BlueprintReadWrite)
 	bool isReloading;
@@ -205,6 +218,9 @@ protected:
 
 private:
 	TObjectPtr<UHealthBarWidget> getHealthBarWidget() const;
+
+protected:
+	virtual TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() final override;
 
 public:	
 	ABaseCharacter();
@@ -311,10 +327,6 @@ public:
 
 	virtual void applySwarmAilment(class USwarmAilment* swarm) final override;
 
-	virtual void attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event) final override;
-
-	virtual void detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event) final override;
-
 	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
@@ -351,13 +363,21 @@ public:
 
 	virtual UCapsuleComponent* getCapsuleComponent() final override;
 
-	virtual const TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() const final override;
-
 	UFUNCTION(Category = Timelines, BlueprintNativeEvent, BlueprintCallable)
 	void deathTimelineUpdate(float value) override;
 
 	UFUNCTION(Category = Timelines, BlueprintNativeEvent, BlueprintCallable)
 	void deathTimelineFinished() override;
+
+	virtual const TArray<UInventoryCell*>& getPersonalEquippedModules() const final override;
+
+	virtual const TArray<UInventoryCell*>& getPersonalUnequippedModules() const final override;
+
+	virtual const TArray<TObjectPtr<UInventoryCell>>& getActivePersonalModules() const final override;
+
+	virtual const TArray<UInventoryCell*>& getWeaponModules() const final override;
+
+	virtual const TArray<TObjectPtr<UInventoryCell>>& getActiveWeaponModules() const final override;
 
 	virtual ~ABaseCharacter() = default;
 };

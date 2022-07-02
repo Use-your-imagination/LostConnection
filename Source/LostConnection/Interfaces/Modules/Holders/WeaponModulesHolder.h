@@ -11,7 +11,7 @@
 
 #include "WeaponModulesHolder.generated.h"
 
-UINTERFACE(BlueprintType)
+UINTERFACE(BlueprintType, Meta = (CannotImplementInterfaceInBlueprint))
 class UWeaponModulesHolder : public UInterface
 {
 	GENERATED_BODY()
@@ -24,8 +24,9 @@ class LOSTCONNECTION_API IWeaponModulesHolder
 public:
 	IWeaponModulesHolder() = default;
 
-	virtual void addWeaponModule(TObjectPtr<UBaseWeaponModule> module) = 0;
+	virtual void addWeaponModule(TObjectPtr<UBaseWeaponModule> module);
 
+	UFUNCTION(Category = Modules, BlueprintCallable)
 	virtual const TArray<UInventoryCell*>& getWeaponModules() const = 0;
 
 	virtual const TArray<TObjectPtr<UInventoryCell>>& getActiveWeaponModules() const = 0;

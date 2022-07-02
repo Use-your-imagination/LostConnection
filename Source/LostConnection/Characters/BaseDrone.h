@@ -9,7 +9,6 @@
 #include "Components/InputComponent.h"
 
 #include "BaseCharacter.h"
-#include "WorldPlaceables/DroppedWeapon.h"
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
 #include "Interfaces/Gameplay/Actions/InputActions.h"
@@ -33,9 +32,7 @@ class LOSTCONNECTION_API ABaseDrone :
 	public ISecondAbilityCast,
 	public IThirdAbilityCast,
 	public IUltimateAbilityCast,
-	public IInputActions,
-	public IPersonalModulesHolder,
-	public IWeaponModulesHolder
+	public IInputActions
 {
 	GENERATED_BODY()
 
@@ -335,10 +332,6 @@ public:
 
 	bool getZooming() const;
 
-	virtual void addPersonalModule(TObjectPtr<UBasePersonalModule> module) final override;
-
-	virtual void addWeaponModule(TObjectPtr<UBaseWeaponModule> module) final override;
-
 	virtual float getFlatDamageReduction_Implementation() const override;
 
 	virtual float getPercentageDamageReduction_Implementation() const override;
@@ -399,19 +392,6 @@ public:
 	UBaseUltimateAbility* getUltimateAbility() const final override;
 
 	virtual const TArray<UAnimMontage*>& getAbilitiesAnimations() const final override;
-
-	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual const TArray<UInventoryCell*>& getPersonalEquippedModules() const final override;
-
-	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual const TArray<UInventoryCell*>& getPersonalUnequippedModules() const final override;
-
-	virtual const TArray<TObjectPtr<UInventoryCell>>& getActivePersonalModules() const final override;
-
-	UFUNCTION(Category = Modules, BlueprintCallable)
-	virtual const TArray<UInventoryCell*>& getWeaponModules() const final override;
-
-	virtual const TArray<TObjectPtr<UInventoryCell>>& getActiveWeaponModules() const final override;
 
 	virtual void castPassiveAbilityVisual() override;
 

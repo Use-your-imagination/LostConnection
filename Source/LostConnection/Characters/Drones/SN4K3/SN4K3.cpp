@@ -96,9 +96,9 @@ bool ASN4K3::checkSecondAbilityCast() const
 
 	bool result;
 	FHitResult hit;
-	UWorld* world = this->GetWorld();
-	ABaseCharacter* target = nullptr;
-	USN4K3SecondAbility* ability = Cast<USN4K3SecondAbility>(secondAbility);
+	TObjectPtr<UWorld> world = this->GetWorld();
+	TObjectPtr<ABaseCharacter> target = nullptr;
+	TObjectPtr<USN4K3SecondAbility> ability = Cast<USN4K3SecondAbility>(secondAbility);
 	FCollisionQueryParams ignoreParameters;
 
 	ignoreParameters.AddIgnoredActor(this);
@@ -111,7 +111,7 @@ bool ASN4K3::checkSecondAbilityCast() const
 
 	if (result)
 	{
-		ability->initDeathEvent(target);
+		target->attachDeathEvent(ability.Get());
 	}
 
 	return result;

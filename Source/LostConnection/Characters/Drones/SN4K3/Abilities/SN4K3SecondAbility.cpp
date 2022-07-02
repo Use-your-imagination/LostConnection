@@ -14,11 +14,6 @@
 
 #pragma warning(disable: 4701)
 
-TWeakInterfacePtr<IDeathEventsHolder>& USN4K3SecondAbility::getDeathEventsHolder()
-{
-	return holder;
-}
-
 void USN4K3SecondAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -94,7 +89,7 @@ void USN4K3SecondAbility::deathEventAction()
 	}
 }
 
-IDeathEventsHolder* USN4K3SecondAbility::getDeathEventsHolder() const
+TWeakInterfacePtr<IDeathEventsHolder>& USN4K3SecondAbility::getDeathEventsHolder()
 {
-	return holder.IsValid() ? holder.Get() : nullptr;
+	return holder;
 }

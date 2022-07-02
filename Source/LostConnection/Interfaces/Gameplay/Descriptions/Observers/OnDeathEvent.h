@@ -19,15 +19,12 @@ class LOSTCONNECTION_API IOnDeathEvent
 {
 	GENERATED_BODY()
 
-protected:
-	virtual TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() = 0;
-
 public:
 	IOnDeathEvent() = default;
 
-	virtual void initDeathEvent(class IDeathEventsHolder* holder);
-
 	virtual void deathEventAction() = 0;
 
-	virtual class IDeathEventsHolder* getDeathEventsHolder() const = 0;
+	virtual TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() = 0;
+
+	virtual class IDeathEventsHolder* getDeathEventsHolder() const;
 };

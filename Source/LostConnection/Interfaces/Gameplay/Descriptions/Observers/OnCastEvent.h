@@ -19,15 +19,14 @@ class LOSTCONNECTION_API IOnCastEvent
 {
 	GENERATED_BODY()
 
-protected:
-	virtual TWeakInterfacePtr<class ICastEventsHolder>& getCastEventsHolder() = 0;
-
 public:
 	IOnCastEvent() = default;
 
 	virtual void initCastEvent(class ICastEventsHolder* holder);
 
 	virtual void castEventAction() = 0;
+
+	virtual TWeakInterfacePtr<class ICastEventsHolder>& getCastEventsHolder() = 0;
 
 	virtual class ICastEventsHolder* getCastEventsHolder() const = 0;
 };

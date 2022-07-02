@@ -35,9 +35,6 @@ private:
 	float naniteMeterCoefficient;
 
 private:
-	TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() override;
-
-private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
@@ -51,7 +48,7 @@ public:
 
 	void deathEventAction() override;
 
-	class IDeathEventsHolder* getDeathEventsHolder() const override;
+	TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() override;
 
 	~USN4K3SecondAbility() = default;
 };

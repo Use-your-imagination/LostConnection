@@ -20,14 +20,17 @@ class LOSTCONNECTION_API ICastEventsHolder
 {
 	GENERATED_BODY()
 
+protected:
+	virtual TArray<TScriptInterface<IOnCastEvent>>& getCastEvents() = 0;
+
 public:
 	ICastEventsHolder() = default;
 
-	virtual void attachCastEvent(const TScriptInterface<IOnCastEvent>& event) = 0;
+	virtual void attachCastEvent(const TScriptInterface<IOnCastEvent>& event);
 
-	virtual void detachCastEvent(const TScriptInterface<IOnCastEvent>& event) = 0;
+	virtual void detachCastEvent(const TScriptInterface<IOnCastEvent>& event);
 
 	virtual void notifyCastEvents() const;
 
-	virtual const TArray<TScriptInterface<IOnCastEvent>>& getCastEvents() const = 0;
+	virtual const TArray<TScriptInterface<IOnCastEvent>>& getCastEvents() const;
 };

@@ -20,12 +20,15 @@ class LOSTCONNECTION_API IDeathEventsHolder
 {
 	GENERATED_BODY()
 
-public:
-	virtual void attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event) = 0;
+protected:
+	virtual TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() = 0;
 
-	virtual void detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event) = 0;
+public:
+	virtual void attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event);
+
+	virtual void detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event);
 
 	virtual void notifyDeathEvents() const;
 
-	virtual const TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() const = 0;
+	virtual const TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() const;
 };

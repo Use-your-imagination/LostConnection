@@ -4,19 +4,9 @@
 
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/DeathEventsHolder.h"
 
-void IOnDeathEvent::initDeathEvent(IDeathEventsHolder* holder)
+IDeathEventsHolder* IOnDeathEvent::getDeathEventsHolder() const
 {
-	auto& currentHolder = this->getDeathEventsHolder();
+	TWeakInterfacePtr<IDeathEventsHolder>& holder = const_cast<IOnDeathEvent*>(this)->getDeathEventsHolder();
 
-	if (currentHolder.IsValid())
-	{
-		currentHolder->detachDeathEvent(this->_getUObject());
-	}
-
-	currentHolder = holder;
-
-	if (currentHolder.IsValid())
-	{
-		currentHolder->attachDeathEvent(this->_getUObject());
-	}
+	return holder.IsValid() ? holder.Get() : nullptr;
 }
