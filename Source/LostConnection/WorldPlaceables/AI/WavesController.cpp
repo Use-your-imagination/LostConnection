@@ -2,6 +2,8 @@
 
 #include "WavesController.h"
 
+#include "NavigationSystem.h"
+
 #include "Utility/Utility.h"
 #include "AI/AISpawnManager.h"
 
@@ -14,6 +16,11 @@ void AWavesController::BeginPlay()
 		Destroy();
 
 		return;
+	}
+
+	if (TObjectPtr<UNavigationSystemV1> navigationSystem = UNavigationSystemV1::GetCurrent(GetWorld()))
+	{
+		navigationSystem->Build();
 	}
 
 	spawnManager.init(this);
