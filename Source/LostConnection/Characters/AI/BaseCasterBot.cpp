@@ -198,6 +198,11 @@ void ABaseCasterBot::BeginPlay()
 	}
 }
 
+TArray<TScriptInterface<IOnCastEvent>>& ABaseCasterBot::getCastEvents()
+{
+	return castEvents;
+}
+
 ABaseCasterBot::ABaseCasterBot()
 {
 

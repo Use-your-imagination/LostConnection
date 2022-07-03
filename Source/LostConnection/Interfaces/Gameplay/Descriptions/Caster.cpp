@@ -5,12 +5,12 @@
 #include "Characters/BaseDrone.h"
 #include "Characters/AI/BaseCasterBot.h"
 
-void ICaster::castAbility(UBaseAbility* ability, const TFunction<void()>& callback)
+void ICaster::castAbility(TObjectPtr<UBaseAbility> ability, const TFunction<void()>& callback)
 {
-	TObjectPtr<AActor> actor = Cast<AActor>(this->_getUObject());
-
-	Utility::executeOnlyOnServerFromMulticast(actor, [this, ability, callback]()
+	Utility::executeOnlyOnServerFromMulticast(Cast<AActor>(this->_getUObject()), [this, ability, callback]()
 		{
+			this->notifyCastEvents();
+
 			this->getCurrentEnergy() -= ability->getCost();
 
 			ability->useAbility();

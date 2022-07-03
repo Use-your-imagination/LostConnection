@@ -215,11 +215,7 @@ void ABaseCharacter::onCurrentHealthChange()
 
 		if (HasAuthority() && !isDead)
 		{
-			Algo::ForEach
-			(
-				deathEvents,
-				[](const TScriptInterface<IOnDeathEvent>& event) { event->deathEventAction(); }
-			);
+			this->notifyDeathEvents();
 
 			isDead = true;
 
@@ -346,7 +342,7 @@ void ABaseCharacter::deathLogic()
 		return;
 	}
 
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
 
 	playerState->returnAmmoToSpare(playerState->getPrimaryWeapon());
 
@@ -713,9 +709,9 @@ void ABaseCharacter::Tick(float DeltaSeconds)
 	}
 }
 
-void ABaseCharacter::takeDamageFromInflictor(const TScriptInterface<IDamageInflictor>& inflictor)
+void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterface<IDamageInflictor>& inflictor)
 {
-	check(HasAuthority());
+	this->notifyTakeDamageEvents();
 
 	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor);
 
@@ -733,7 +729,9 @@ void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& 
 {
 	if (isAlly != ammo->getIsAlly())
 	{
-		takeDamageFromInflictor(ammo->getAilmentInflictorUtility());
+		this->notifyHitEvents();
+
+		this->takeDamageFromInflictor(ammo->getAilmentInflictorUtility());
 
 		this->statusInflictorImpactAction(ammo->getAilmentInflictorUtility(), hit);
 	}

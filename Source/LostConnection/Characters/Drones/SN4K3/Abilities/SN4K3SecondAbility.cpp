@@ -56,14 +56,14 @@ void USN4K3SecondAbility::useAbility()
 
 void USN4K3SecondAbility::deathEventAction()
 {
-	ABaseCharacter* target = Cast<ABaseCharacter>(holder.GetObject());
+	TObjectPtr<ABaseCharacter> target = Cast<ABaseCharacter>(holder.GetObject());
 	TWeakObjectPtr<USwarmAilment> swarm = target->getSwarm();
 
 	if (swarm.IsValid())
 	{
-		ASN4K3* drone = Cast<ASN4K3>(caster);
+		TObjectPtr<ASN4K3> drone = Cast<ASN4K3>(caster);
 
-		if (!IsValid(drone))
+		if (drone)
 		{
 			return;
 		}

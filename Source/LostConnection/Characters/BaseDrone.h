@@ -113,6 +113,9 @@ protected:
 
 	TWeakObjectPtr<ABaseCharacter> lastHealthBarTraceTarget;
 
+	UPROPERTY()
+	TArray<TScriptInterface<IOnCastEvent>> castEvents;
+
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, Replicated, BlueprintReadWrite)
 	bool secondaryHold;
@@ -198,6 +201,8 @@ protected:
 
 	UFUNCTION()
 	void onAbilityUsed();
+
+	virtual TArray<TScriptInterface<IOnCastEvent>>& getCastEvents() final override;
 
 protected:
 	virtual bool checkPassiveAbilityCast() const override;

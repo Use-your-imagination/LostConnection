@@ -83,28 +83,33 @@ protected:
 	EAbilitySlot abilityId;
 
 	UPROPERTY(Category = Abilities, BlueprintReadOnly)
-	UBaseAbility* currentAbility;
+	TObjectPtr<UBaseAbility> currentAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBasePassiveAbility* passiveAbility;
+	TObjectPtr<UBasePassiveAbility> passiveAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBaseAbility* firstAbility;
+	TObjectPtr<UBaseAbility> firstAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBaseAbility* secondAbility;
+	TObjectPtr<UBaseAbility> secondAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBaseAbility* thirdAbility;
+	TObjectPtr<UBaseAbility> thirdAbility;
 
 	UPROPERTY(Category = Abilities, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UBaseUltimateAbility* ultimateAbility;
+	TObjectPtr<UBaseUltimateAbility> ultimateAbility;
 
 	UPROPERTY(Category = Animations, EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> abilitiesAnimations;
+	TArray<TObjectPtr<UAnimMontage>> abilitiesAnimations;
+
+	UPROPERTY()
+	TArray<TScriptInterface<IOnCastEvent>> castEvents;
 
 protected:
 	virtual void BeginPlay() override;
+
+	virtual TArray<TScriptInterface<IOnCastEvent>>& getCastEvents() final override;
 
 public:
 	ABaseCasterBot();

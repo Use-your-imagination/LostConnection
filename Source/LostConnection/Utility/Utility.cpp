@@ -81,9 +81,9 @@ TSubclassOf<ABaseDrone> Utility::findDroneClass(const TArray<const UBaseDroneDat
 	return result;
 }
 
-void Utility::executeOnlyOnServerFromMulticast(AActor* actor, const TFunction<void()>& function)
+void Utility::executeOnlyOnServerFromMulticast(TObjectPtr<AActor> actor, const TFunction<void()>& function)
 {
-	if (IsValid(actor) && actor->HasAuthority())
+	if (actor && actor->HasAuthority())
 	{
 		function();
 	}

@@ -234,16 +234,16 @@ protected:
 public:	
 	ABaseCharacter();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Reload, BlueprintCallable)
 	void runReloadLogic();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Death, BlueprintCallable)
 	void runDeathLogic();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
 	void changeToDefaultWeapon();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Health, BlueprintCallable)
 	void restoreHealth(float amount);
 
 	bool isDamaged() const;
@@ -256,10 +256,10 @@ public:
 
 	void updateHealthBar();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Health, Server, Reliable, BlueprintCallable)
 	void setHealth(float newHealth);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Health, Server, Reliable, BlueprintCallable)
 	void setReservedHealth(float newReservedHealth);
 
 	UFUNCTION(Server, Reliable)
@@ -268,7 +268,7 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setSprintMovementSpeed(float speed);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Ally, Server, Reliable, BlueprintCallable)
 	void setIsAlly(bool newIsAlly);
 
 	UFUNCTION(Server, Reliable)
@@ -287,19 +287,19 @@ public:
 
 	float getSprintMovementSpeed() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Ammo, BlueprintCallable)
 	int32 getSpareAmmo(EAmmoType type) const;
 
 	bool getIsReloading() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Weapons, BlueprintCallable)
 	bool isWeaponEquipped() const;
 
 	TObjectPtr<USkeletalMeshComponent> getCurrentWeaponMeshComponent() const;
 
 	TObjectPtr<UBaseWeapon> getCurrentWeapon() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = Weapons, BlueprintCallable)
 	virtual int32 getWeaponCount() const;
 
 	const TWeakObjectPtr<class USwarmAilment>& getSwarm() const;
@@ -316,15 +316,15 @@ public:
 
 	TimersUtility& getTimers();
 
-	UFUNCTION(Server, Unreliable, BlueprintCallable)
+	UFUNCTION(Category = Weapons, Server, Unreliable, BlueprintCallable)
 	virtual void shoot() final override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
 	virtual void resetShoot() final override;
 
 	virtual void Tick(float DeltaSeconds) override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Server, Reliable)
 	virtual void takeDamageFromInflictor(const TScriptInterface<class IDamageInflictor>& inflictor) final override;
 
 	virtual void impactAction_Implementation(AAmmo* ammo, const FHitResult& hit) override;
@@ -338,10 +338,10 @@ public:
 
 	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Category = Health, Server, Reliable, BlueprintCallable)
 	virtual void setCurrentHealth(float newCurrentHealth) final override;
 
-	UFUNCTION(NetMulticast, Reliable)
+	UFUNCTION(Category = Statuses, NetMulticast, Reliable)
 	virtual void setUnderStatusIntVariable(const FString& key, int32 value) final override;
 
 	virtual float getCurrentHealth() const final override;

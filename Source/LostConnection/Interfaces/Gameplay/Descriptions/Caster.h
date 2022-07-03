@@ -8,23 +8,26 @@
 
 #include "Abilities/BasePassiveAbility.h"
 #include "Abilities/BaseUltimateAbility.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/CastEventsHolder.h"
 
 #include "Caster.generated.h"
 
 UINTERFACE(BlueprintType)
-class UCaster : public UInterface
+class UCaster : public UCastEventsHolder
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API ICaster
+class LOSTCONNECTION_API ICaster : public ICastEventsHolder
 {
 	GENERATED_BODY()
 
 protected:
-	void castAbility(UBaseAbility* ability, const TFunction<void()>& callback);
+	void castAbility(TObjectPtr<UBaseAbility> ability, const TFunction<void()>& callback);
 
 	virtual float& getCurrentEnergy() = 0;
+
+	virtual TArray<TScriptInterface<IOnCastEvent>>& getCastEvents() = 0;
 
 public:
 	ICaster() = default;

@@ -379,6 +379,11 @@ void ABaseDrone::onAbilityUsed()
 	}
 }
 
+TArray<TScriptInterface<IOnCastEvent>>& ABaseDrone::getCastEvents()
+{
+	return castEvents;
+}
+
 bool ABaseDrone::checkPassiveAbilityCast() const
 {
 	return true;
