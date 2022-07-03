@@ -225,16 +225,6 @@ void ABaseDrone::slideTimerUpdate_Implementation()
 
 }
 
-void ABaseDrone::wallrunTimerUpdate_Implementation()
-{
-
-}
-
-void ABaseDrone::wallrunCooldown_Implementation()
-{
-
-}
-
 void ABaseDrone::setSlideCooldown_Implementation(float newSlideCooldown)
 {
 	slideCooldown = newSlideCooldown;
@@ -852,12 +842,6 @@ ABaseDrone::ABaseDrone() :
 	zooming = false;
 
 	zoomBlocked = false;
-
-	wallrun = false;
-
-	wallrunBlocked = false;
-
-	wallrunForward = FRotator(0.0f);
 
 	isSlideCooldown = false;
 

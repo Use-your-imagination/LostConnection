@@ -148,21 +148,6 @@ protected:
 	UPROPERTY(Category = Zoom, BlueprintReadWrite)
 	FTimerHandle zoomUpdateHandle;
 
-	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
-	bool wallrun;
-
-	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
-	bool wallrunBlocked;
-
-	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
-	FVector currentWallNormal;
-
-	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
-	FRotator wallrunForward;
-
-	UPROPERTY(Category = Wallrun, BlueprintReadWrite)
-	FTimerHandle wallrunUpdateHandle;
-
 	UPROPERTY(Category = Slide, BlueprintReadWrite)
 	bool isSlideCooldown;
 
@@ -179,18 +164,12 @@ protected:
 
 	UFUNCTION(Category = Slide, BlueprintNativeEvent, BlueprintCallable)
 	void slideTimerUpdate();
-
-	UFUNCTION(Category = Wallrun, BlueprintNativeEvent, BlueprintCallable)
-	void wallrunTimerUpdate();
-
-	UFUNCTION(Category = Wallrun, BlueprintNativeEvent, BlueprintCallable)
-	void wallrunCooldown();
 #pragma endregion
 
 public:
 #pragma region BlueprintFunctionLibrarySetters
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void setSlideCooldown(float newSlideCooldown) final;
+	UFUNCTION(Category = Slide, Server, Reliable, BlueprintCallable)
+	void setSlideCooldown(float newSlideCooldown);
 #pragma endregion
 
 	UPROPERTY(Category = Camera, BlueprintReadOnly)
