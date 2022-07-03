@@ -7,6 +7,7 @@
 #include "Algo/Accumulate.h"
 
 #include "Characters/AI/BaseBot.h"
+#include "Characters/BaseDrone.h"
 #include "WorldPlaceables/AI/WavesController.h"
 
 void AISpawnManager::process()
@@ -15,6 +16,8 @@ void AISpawnManager::process()
 	{
 		return;
 	}
+
+	this->processBeginEvents();
 
 	spawner.spawn(wavesController, ++currentWave);
 }
@@ -26,6 +29,45 @@ void AISpawnManager::updateCurrentWaveRemainingBots()
 	UGameplayStatics::GetAllActorsOfClass(wavesController, ABaseBot::StaticClass(), bots);
 
 	currentWaveRemainingBots = Algo::CountIf(bots, [](TObjectPtr<AActor> bot) { return !Cast<ABaseBot>(bot)->getIsAlly(); });
+}
+
+TArray<TObjectPtr<AActor>> AISpawnManager::getDrones() const
+{
+	TArray<TObjectPtr<AActor>> drones;
+
+	UGameplayStatics::GetAllActorsOfClass(wavesController, ABaseDrone::StaticClass(), drones);
+
+	return drones;
+}
+
+void AISpawnManager::processBeginEvents() const
+{
+	const FWaveSettings& waveSettings = wavesController->getWaveSettings(currentWave);
+
+	for (const auto& eventClass : waveSettings.beginWaveEvents)
+	{
+		Cast<IOnWaveBeginEvent>(NewObject<UNetworkObject>(wavesController, eventClass))->waveBeginEventAction();
+	}
+
+	for (const auto& drone : this->getDrones())
+	{
+		Cast<ABaseDrone>(drone)->notifyWaveBeginEvents();
+	}
+}
+
+void AISpawnManager::processEndEvents() const
+{
+	const FWaveSettings& waveSettings = wavesController->getWaveSettings(currentWave);
+
+	for (const auto& eventClass : waveSettings.endWaveEvents)
+	{
+		Cast<IOnWaveEndEvent>(NewObject<UNetworkObject>(wavesController, eventClass))->waveEndEventAction();
+	}
+
+	for (const auto& drone : this->getDrones())
+	{
+		Cast<ABaseDrone>(drone)->notifyWaveEndEvents();
+	}
 }
 
 void AISpawnManager::init(TObjectPtr<AWavesController> wavesController)
@@ -40,6 +82,11 @@ void AISpawnManager::init(TObjectPtr<AWavesController> wavesController)
 void AISpawnManager::notify()
 {
 	this->updateCurrentWaveRemainingBots();
+
+	if (!currentWaveRemainingBots || currentWave != -1)
+	{
+		this->processEndEvents();
+	}
 
 	this->process();
 

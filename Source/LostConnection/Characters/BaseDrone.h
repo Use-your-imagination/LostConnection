@@ -11,6 +11,8 @@
 #include "BaseCharacter.h"
 #include "Interfaces/Gameplay/Descriptions/Actionable.h"
 #include "Interfaces/Gameplay/Descriptions/Caster.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/WaveBeginEventsHolder.h"
+#include "Interfaces/Gameplay/Descriptions/ObserverHolders/WaveEndEventsHolder.h"
 #include "Interfaces/Gameplay/Actions/InputActions.h"
 #include "Constants/Constants.h"
 #include "Grapple/BaseGrappleHandler.h"
@@ -32,7 +34,9 @@ class LOSTCONNECTION_API ABaseDrone :
 	public ISecondAbilityCast,
 	public IThirdAbilityCast,
 	public IUltimateAbilityCast,
-	public IInputActions
+	public IInputActions,
+	public IWaveBeginEventsHolder,
+	public IWaveEndEventsHolder
 {
 	GENERATED_BODY()
 
@@ -115,6 +119,12 @@ protected:
 
 	UPROPERTY()
 	TArray<TScriptInterface<IOnCastEvent>> castEvents;
+
+	UPROPERTY()
+	TArray<TScriptInterface<IOnWaveBeginEvent>> waveBeginEvents;
+
+	UPROPERTY()
+	TArray<TScriptInterface<IOnWaveEndEvent>> waveEndEvents;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, Replicated, BlueprintReadWrite)
@@ -203,6 +213,10 @@ protected:
 	void onAbilityUsed();
 
 	virtual TArray<TScriptInterface<IOnCastEvent>>& getCastEvents() final override;
+
+	virtual TArray<TScriptInterface<IOnWaveBeginEvent>>& getWaveBeginEvents() final override;
+
+	virtual TArray<TScriptInterface<IOnWaveEndEvent>>& getWaveEndEvents() final override;
 
 protected:
 	virtual bool checkPassiveAbilityCast() const override;

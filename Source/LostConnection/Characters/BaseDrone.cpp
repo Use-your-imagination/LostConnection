@@ -384,6 +384,16 @@ TArray<TScriptInterface<IOnCastEvent>>& ABaseDrone::getCastEvents()
 	return castEvents;
 }
 
+TArray<TScriptInterface<IOnWaveBeginEvent>>& ABaseDrone::getWaveBeginEvents()
+{
+	return waveBeginEvents;
+}
+
+TArray<TScriptInterface<IOnWaveEndEvent>>& ABaseDrone::getWaveEndEvents()
+{
+	return waveEndEvents;
+}
+
 bool ABaseDrone::checkPassiveAbilityCast() const
 {
 	return true;
@@ -1037,14 +1047,14 @@ void ABaseDrone::initDefaultUI()
 void ABaseDrone::setPrimaryWeapon_Implementation(TSubclassOf<UBaseWeapon> primaryWeapon, EWeaponRarity rarity)
 {
 	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
-	
+
 	playerState->setPrimaryWeapon(Utility::createWeapon(primaryWeapon, rarity, playerState->getInventory()));
 }
 
 void ABaseDrone::setSecondaryWeapon_Implementation(TSubclassOf<UBaseWeapon> secondaryWeapon, EWeaponRarity rarity)
 {
 	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
-	
+
 	playerState->setSecondaryWeapon(Utility::createWeapon(secondaryWeapon, rarity, playerState->getInventory()));
 }
 

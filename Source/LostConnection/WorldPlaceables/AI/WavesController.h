@@ -9,6 +9,9 @@
 
 #include "Utility/Enums.h"
 #include "AI/AISpawnManager.h"
+#include "Network/NetworkObject.h"
+#include "Interfaces/Gameplay/Descriptions/Observers/OnWaveBeginEvent.h"
+#include "Interfaces/Gameplay/Descriptions/Observers/OnWaveEndEvent.h"
 
 #include "WavesController.generated.h"
 
@@ -20,6 +23,12 @@ struct LOSTCONNECTION_API FWaveSettings
 public:
 	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadWrite)
 	TMap<EBotType, int32> botsPerType;
+
+	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadWrite, Meta = (MustImplement = OnWaveBeginEvent))
+	TArray<TSubclassOf<UNetworkObject>> beginWaveEvents;
+
+	UPROPERTY(Category = Waves, EditDefaultsOnly, BlueprintReadWrite, Meta = (MustImplement = OnWaveEndEvent))
+	TArray<TSubclassOf<UNetworkObject>> endWaveEvents;
 };
 
 UCLASS(BlueprintType, Blueprintable)

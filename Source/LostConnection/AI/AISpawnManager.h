@@ -21,6 +21,12 @@ private:
 
 	void updateCurrentWaveRemainingBots();
 
+	TArray<TObjectPtr<AActor>> getDrones() const;
+
+	void processBeginEvents() const;
+
+	void processEndEvents() const;
+
 public:
 	AISpawnManager() = default;
 

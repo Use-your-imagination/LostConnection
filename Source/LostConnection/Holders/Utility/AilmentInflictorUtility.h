@@ -28,7 +28,7 @@ protected:
 	ETypeOfDamage damageType;
 
 	UPROPERTY(Category = AilmentInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	UDamageInflictorUtility* damageInflictorUtility;
+	TObjectPtr<UDamageInflictorUtility> damageInflictorUtility;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
