@@ -63,7 +63,7 @@ void USN4K3SecondAbility::deathEventAction()
 	{
 		TObjectPtr<ASN4K3> drone = Cast<ASN4K3>(caster);
 
-		if (drone)
+		if (drone.IsNull())
 		{
 			return;
 		}

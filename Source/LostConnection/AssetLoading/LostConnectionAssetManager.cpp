@@ -186,12 +186,12 @@ float ULostConnectionAssetManager::getCurrentPercentLoading() const
 
 bool ULostConnectionAssetManager::isAssetsLoadingInProgress() const
 {
-	return Algo::AnyOf(handles, [](const auto& data) { return !data.Value->HasLoadCompleted(); });
+	return Algo::AnyOf(handles, [](const auto& data) { return data.Value.IsValid() && !data.Value->HasLoadCompleted(); });
 }
 
 bool ULostConnectionAssetManager::isAssetsLoadingEnd() const
 {
-	return Algo::AllOf(handles, [](const auto& data) { return data.Value->HasLoadCompleted(); });
+	return Algo::AllOf(handles, [](const auto& data) { return data.Value.IsValid() && data.Value->HasLoadCompleted(); });
 }
 
 const TSubclassOf<UBaseStatus>& ULostConnectionAssetManager::operator [] (ETypeOfDamage damageType) const

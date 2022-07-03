@@ -17,9 +17,11 @@ void AISpawnManager::process()
 		return;
 	}
 
+	currentWave++;
+
 	this->processBeginEvents();
 
-	spawner.spawn(wavesController, ++currentWave);
+	spawner.spawn(wavesController, currentWave);
 }
 
 void AISpawnManager::updateCurrentWaveRemainingBots()
@@ -83,7 +85,7 @@ void AISpawnManager::notify()
 {
 	this->updateCurrentWaveRemainingBots();
 
-	if (!currentWaveRemainingBots || currentWave != -1)
+	if (!currentWaveRemainingBots && currentWave != -1)
 	{
 		this->processEndEvents();
 	}

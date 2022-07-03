@@ -289,7 +289,9 @@ void AInventory::updateActiveWeaponModules()
 
 		for (TObjectPtr<UInventoryCell>& uneqippedCell : weapon->getWeaponModules())
 		{
-			if (uneqippedCell != cell && uneqippedCell->getItem()->getItemName().EqualTo(name, ETextComparisonLevel::Type::Quinary))
+			TScriptInterface<IInventoriable> currentWeaponModule = uneqippedCell->getItem();
+
+			if (currentWeaponModule && (uneqippedCell != cell) && currentWeaponModule->getItemName().EqualTo(name, ETextComparisonLevel::Type::Quinary))
 			{
 				activeWeaponModules.Add(uneqippedCell);
 			}
@@ -714,35 +716,35 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	if (IsValid(primaryWeaponCell))
+	if (primaryWeaponCell)
 	{
 		wroteSomething |= Channel->ReplicateSubobject(primaryWeaponCell, *Bunch, *RepFlags);
 
 		wroteSomething |= primaryWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (IsValid(secondaryWeaponCell))
+	if (secondaryWeaponCell)
 	{
 		wroteSomething |= Channel->ReplicateSubobject(secondaryWeaponCell, *Bunch, *RepFlags);
 
 		wroteSomething |= secondaryWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (IsValid(defaultWeaponCell))
+	if (defaultWeaponCell)
 	{
 		wroteSomething |= Channel->ReplicateSubobject(defaultWeaponCell, *Bunch, *RepFlags);
 
 		wroteSomething |= defaultWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (IsValid(firstInactiveWeaponCell))
+	if (firstInactiveWeaponCell)
 	{
 		wroteSomething |= Channel->ReplicateSubobject(firstInactiveWeaponCell, *Bunch, *RepFlags);
 
 		wroteSomething |= firstInactiveWeaponCell->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (IsValid(secondInactiveWeaponCell))
+	if (secondInactiveWeaponCell)
 	{
 		wroteSomething |= Channel->ReplicateSubobject(secondInactiveWeaponCell, *Bunch, *RepFlags);
 
@@ -751,7 +753,7 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 
 	for (TObjectPtr<UInventoryCell> cell : unequippedWeapons)
 	{
-		if (IsValid(cell))
+		if (cell)
 		{
 			wroteSomething |= Channel->ReplicateSubobject(cell, *Bunch, *RepFlags);
 
@@ -761,7 +763,7 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 
 	for (TObjectPtr<UInventoryCell> cell : equippedPersonalModules)
 	{
-		if (IsValid(cell))
+		if (cell)
 		{
 			wroteSomething |= Channel->ReplicateSubobject(cell, *Bunch, *RepFlags);
 
@@ -770,7 +772,7 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 	}
 	for (TObjectPtr<UInventoryCell> cell : unequippedPersonalModules)
 	{
-		if (IsValid(cell))
+		if (cell)
 		{
 			wroteSomething |= Channel->ReplicateSubobject(cell, *Bunch, *RepFlags);
 
@@ -780,7 +782,7 @@ bool AInventory::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 
 	for (TObjectPtr<UInventoryCell> cell : weaponModules)
 	{
-		if (IsValid(cell))
+		if (cell)
 		{
 			wroteSomething |= Channel->ReplicateSubobject(cell, *Bunch, *RepFlags);
 
