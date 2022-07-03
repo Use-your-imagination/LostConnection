@@ -67,7 +67,7 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 		if (ailmentInflictorUtility->calculateTotalDamage() > 0.0f)
 		{
-			UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
+			TObjectPtr<UNiagaraComponent> onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 			(
 				GetWorld(),
 				onHitAsset,
@@ -114,7 +114,7 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 		tracer->Deactivate();
 
-		UNiagaraComponent* onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
+		TObjectPtr<UNiagaraComponent> onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(
 			GetWorld(),
 			onHitAsset,

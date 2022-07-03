@@ -3,7 +3,14 @@
 	"projectVersion": "0.3.1.0",
 	"Gameplay":
 	{
-		"type": "category"
+		"type": "category",
+		"Wallrun":
+		{
+			"type": "item",
+			"notes": [
+				"Remove wallrun"
+			]
+		}
 	},
 	"Rooms":
 	{
