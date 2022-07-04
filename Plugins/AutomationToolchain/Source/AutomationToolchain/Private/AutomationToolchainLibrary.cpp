@@ -343,9 +343,9 @@ const FString& UAutomationToolchainLibrary::getProjectVersion()
 	return FNetworkVersion::GetProjectVersion();
 }
 
-FString UAutomationToolchainLibrary::appendPath(const FString& path, const FString& next)
+FString UAutomationToolchainLibrary::appendPath(const FString& startPath, const FString& next)
 {
-	return path / next;
+	return startPath / next;
 }
 
 FString UAutomationToolchainLibrary::getPathToStagedBuildsFolder()

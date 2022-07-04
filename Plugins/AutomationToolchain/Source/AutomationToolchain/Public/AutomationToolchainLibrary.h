@@ -39,7 +39,7 @@ public:
 	* Executes process from Url with parameters
 	*/
 	UFUNCTION(Category = "AutomationToolchain|OS", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool executeProcess(const FString& url, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory);
+	static bool executeProcess(const FString& url, const FString& parameters, UPARAM(ref) int32& code, UPARAM(ref) FString& outStd, UPARAM(ref) FString& errStd, const FString& optionalWorkingDirectory);
 
 	/**
 	* Executes Command with Parameters in OS shell
@@ -47,13 +47,13 @@ public:
 	* Doesn't support Linux
 	*/
 	UFUNCTION(Category = "AutomationToolchain|OS", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool executeShellCommand(const FString& command, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory);
+	static bool executeShellCommand(const FString& command, const FString& parameters, UPARAM(ref) int32& code, UPARAM(ref) FString& outStd, UPARAM(ref) FString& errStd, const FString& optionalWorkingDirectory);
 
 	/**
 	* Executes Command with Parameters in PowerShell
 	*/
 	UFUNCTION(Category = "AutomationToolchain|OS", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool executePowerShellCommand(const FString& command, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory);
+	static bool executePowerShellCommand(const FString& command, const FString& parameters, UPARAM(ref) int32& code, UPARAM(ref) FString& outStd, UPARAM(ref) FString& errStd, const FString& optionalWorkingDirectory);
 
 	/**
 	* All actions execute from separate thread
@@ -161,13 +161,13 @@ public:
 	* Find files with given Extension
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, BlueprintPure, Meta = (DevelopmentOnly))
-	static void findFiles(const FString& pathToFolder, const FString& extension, TArray<FString>& files);
+	static void findFiles(const FString& pathToFolder, const FString& extension, UPARAM(ref) TArray<FString>& files);
 
 	/**
 	* Find files recursively with given Extension
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, BlueprintPure, Meta = (DevelopmentOnly))
-	static void findFilesRecursively(const FString& pathToFolder, const FString& extension, TArray<FString>& files);
+	static void findFilesRecursively(const FString& pathToFolder, const FString& extension, UPARAM(ref) TArray<FString>& files);
 
 	/**
 	* Iterate folder and call Delegate for each file
@@ -244,8 +244,8 @@ public:
 	/**
 	* Append path
 	*/
-	UFUNCTION(Category = "AutomationToolchain|Utility", BlueprintCallable, BlueprintPure, Meta = (DevelopmentOnly))
-	static FString appendPath(const FString& path, const FString& next);
+	UFUNCTION(Category = "AutomationToolchain|Utility", BlueprintCallable, BlueprintPure, Meta = (CommutativeAssociativeBinaryOperator, DevelopmentOnly))
+	static FString appendPath(const FString& startPath, const FString& next);
 
 	/**
 	* Get path to StagedBuilds folder from settings file

@@ -19,7 +19,7 @@ class AUTOMATIONTOOLCHAIN_API UToolchainDataAsset : public UDataAsset
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Toolchain, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = Toolchain, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<UToolchainAction>> actions;
 
 public:
