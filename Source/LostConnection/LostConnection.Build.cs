@@ -34,6 +34,6 @@ public class LostConnection : ModuleRules
             Path.Combine(EngineDirectory, "Plugins", "Online", "OnlineSubsystem", "Source", "Public")
         });
 
-        DynamicallyLoadedModuleNames.Add("OnlineSubsystemNull");
+        DynamicallyLoadedModuleNames.Add("OnlineSubsystemSteam");
     }
 }

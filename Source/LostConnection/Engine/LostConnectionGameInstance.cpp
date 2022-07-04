@@ -9,7 +9,9 @@
 #include "LostConnectionPlayerState.h"
 #include "Constants/Constants.h"
 
-const FString ULostConnectionGameInstance::options = "?listen?bIsLanMatch=1";
+// ?bIsLanMatch=1
+
+const FString ULostConnectionGameInstance::options = "?listen";
 const FName ULostConnectionGameInstance::serverNameKey = "ServerName";
 
 void ULostConnectionGameInstance::onCreateSession(FName sessionName, bool wasSuccessful)
@@ -78,7 +80,7 @@ void ULostConnectionGameInstance::Init()
 		{
 			sessionSettings = MakeShareable(new FOnlineSessionSettings());
 
-			sessionSettings->bIsLANMatch = true;
+			sessionSettings->bUseLobbiesIfAvailable = true;
 			sessionSettings->bUsesPresence = true;
 			sessionSettings->bShouldAdvertise = true;
 			sessionSettings->NumPublicConnections = 4;
@@ -92,8 +94,8 @@ void ULostConnectionGameInstance::initSearchSession()
 {
 	searchSession = MakeShareable(new FOnlineSessionSearch());
 
-	searchSession->bIsLanQuery = true;
-	searchSession->MaxSearchResults = 5;
+	// searchSession->bIsLanQuery = true;
+	searchSession->MaxSearchResults = 10;
 	searchSession->PingBucketSize = 100;
 
 	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
