@@ -200,16 +200,28 @@ public:
 	static FString getFullPath(const FString& path);
 
 	/**
-	* Delete folder
+	* Delete folder recursively
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Folders", BlueprintCallable, Meta = (DevelopmentOnly))
 	static bool deleteFolder(const FString& pathToFolder);
 
 	/**
-	* Delete folders
+	* Delete folders recursively
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Folders", BlueprintCallable, Meta = (DevelopmentOnly))
 	static TArray<bool> deleteFolders(const TArray<FString>& pathToFolders);
+
+	/**
+	* Delete empty folder
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Folders", BlueprintCallable, Meta = (DevelopmentOnly))
+	static bool deleteEmptyFolder(const FString& pathToFolder);
+
+	/**
+	* Delete empty folders
+	*/
+	UFUNCTION(Category = "AutomationToolchain|Folders", BlueprintCallable, Meta = (DevelopmentOnly))
+	static TArray<bool> deleteEmptyFolders(const TArray<FString>& pathToFolders);
 
 	/**
 	* Get path to plugin folder
