@@ -39,7 +39,7 @@ public:
 	* Executes process from Url with parameters
 	*/
 	UFUNCTION(Category = "AutomationToolchain|OS", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool executeProcess(const FString& url, const FString& parameters, UPARAM(ref) int32& code, UPARAM(ref) FString& outStd, UPARAM(ref) FString& errStd, const FString& optionalWorkingDirectory);
+	static bool executeProcess(const FString& url, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory);
 
 	/**
 	* Executes Command with Parameters in OS shell
@@ -47,13 +47,13 @@ public:
 	* Doesn't support Linux
 	*/
 	UFUNCTION(Category = "AutomationToolchain|OS", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool executeShellCommand(const FString& command, const FString& parameters, UPARAM(ref) int32& code, UPARAM(ref) FString& outStd, UPARAM(ref) FString& errStd, const FString& optionalWorkingDirectory);
+	static bool executeShellCommand(const FString& command, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory);
 
 	/**
 	* Executes Command with Parameters in PowerShell
 	*/
 	UFUNCTION(Category = "AutomationToolchain|OS", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool executePowerShellCommand(const FString& command, const FString& parameters, UPARAM(ref) int32& code, UPARAM(ref) FString& outStd, UPARAM(ref) FString& errStd, const FString& optionalWorkingDirectory);
+	static bool executePowerShellCommand(const FString& command, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory);
 
 	/**
 	* All actions execute from separate thread
@@ -98,20 +98,20 @@ public:
 	* Read text file
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool readFile(const FString& pathToFile, UPARAM(ref) FString& data);
+	static bool readFile(const FString& pathToFile, FString& data);
 
 	/**
 	* Read text file
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool readFileInArray(const FString& pathToFile, UPARAM(ref) TArray<FString>& data);
+	static bool readFileInArray(const FString& pathToFile, TArray<FString>& data);
 
 	/**
 	* Read binary file 
 	* Two last bytes are uninitialized
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool readBinaryFileInArray(const FString& pathToFile, UPARAM(ref) TArray<uint8>& data);
+	static bool readBinaryFileInArray(const FString& pathToFile, TArray<uint8>& data);
 
 	/**
 	* Append data to end of file without new line with UTF8 encoding
@@ -161,13 +161,13 @@ public:
 	* Find files with given Extension
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, BlueprintPure, Meta = (DevelopmentOnly))
-	static void findFiles(const FString& pathToFolder, const FString& extension, UPARAM(ref) TArray<FString>& files);
+	static void findFiles(const FString& pathToFolder, const FString& extension, TArray<FString>& files);
 
 	/**
 	* Find files recursively with given Extension
 	*/
 	UFUNCTION(Category = "AutomationToolchain|Files", BlueprintCallable, BlueprintPure, Meta = (DevelopmentOnly))
-	static void findFilesRecursively(const FString& pathToFolder, const FString& extension, UPARAM(ref) TArray<FString>& files);
+	static void findFilesRecursively(const FString& pathToFolder, const FString& extension, TArray<FString>& files);
 
 	/**
 	* Iterate folder and call Delegate for each file
