@@ -33,7 +33,7 @@ void ATeleportPoint::teleport_Implementation(APlayerController* controller)
 		return;
 	}
 
-	pawn->SetActorLocation(GetActorLocation());
+	pawn->SetActorLocation(GetActorLocation(), false, nullptr, ETeleportType::TeleportPhysics);
 }
 
 const TSoftObjectPtr<UWorld>& ATeleportPoint::getRoom() const

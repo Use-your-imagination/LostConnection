@@ -34,14 +34,14 @@ private:
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	void setCollisionResponseToPawnChannel(class ABaseCharacter* target, ECollisionResponse response);
+	void setCollisionResponseToPawnChannel(TObjectPtr<class ABaseCharacter> target, ECollisionResponse response);
 
 public:
 	USN4K3UltimateAbility();
 
 	bool getIsUltimateAbilityUsed() const;
 
-	UAnimMontage* getReturnAnimation() const;
+	TObjectPtr<UAnimMontage> getReturnAnimation() const;
 
 	float getAbilityDuration() const;
 

@@ -18,12 +18,12 @@ class LOSTCONNECTION_API ASN4K3UltimateAbilityPlaceholder :
 	GENERATED_BODY()
 
 private:
-	USN4K3UltimateAbility* ability;
+	TObjectPtr<USN4K3UltimateAbility> ability;
 
 public:
 	ASN4K3UltimateAbilityPlaceholder();
 
-	void setAbility(USN4K3UltimateAbility* ability);
+	void setAbility(TObjectPtr<USN4K3UltimateAbility> ability);
 
 	void impactAction_Implementation(class AAmmo* ammo, const FHitResult& hit) override;
 

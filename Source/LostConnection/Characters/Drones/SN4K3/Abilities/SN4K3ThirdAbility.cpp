@@ -59,7 +59,7 @@ void USN4K3ThirdAbility::useAbility()
 
 	ASN4K3* drone = Cast<ASN4K3>(caster);
 	FVector tem = drone->GetActorForwardVector() * 200;
-	const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
+	TObjectPtr<const USN4K3DataAsset> data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
 	USN4K3Reservator* defaultReservator = Cast<USN4K3Reservator>(socketItem);
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;

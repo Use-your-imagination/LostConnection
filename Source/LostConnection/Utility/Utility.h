@@ -60,7 +60,7 @@ public:
 	static const T& getRandomValueFromArray(const TArray<T>& values);
 
 	template<typename T>
-	static const T* findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones);
+	static TObjectPtr<const T> findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones);
 
 	template<typename T>
 	static void processCooldown(TObjectPtr<T> cooldownableObject, float DeltaSeconds);
@@ -136,15 +136,13 @@ const T& Utility::getRandomValueFromArray(const TArray<T>& values)
 }
 
 template<typename T>
-const T* Utility::findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones)
+TObjectPtr<const T> Utility::findDroneAsset(const TArray<const class UBaseDroneDataAsset*>& drones)
 {
 	TSubclassOf<class UBaseDroneDataAsset> data = T::StaticClass();
 
 	for (const auto& i : drones)
 	{
-		const T* tem = Cast<const T>(i);
-
-		if (tem)
+		if (TObjectPtr<const T> tem = Cast<const T>(i))
 		{
 			return tem;
 		}

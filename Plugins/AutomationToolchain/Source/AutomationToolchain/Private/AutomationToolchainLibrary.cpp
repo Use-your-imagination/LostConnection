@@ -203,8 +203,6 @@ TArray<bool> UAutomationToolchainLibrary::deleteFiles(const TArray<FString>& pat
 {
 	TArray<bool> result;
 
-	result.Reserve(pathToFiles.Num());
-
 	for (const FString& pathToFile : pathToFiles)
 	{
 		result.Add(UAutomationToolchainLibrary::deleteFile(pathToFile));
@@ -294,6 +292,23 @@ void UAutomationToolchainLibrary::iterateFolderRecursive(const FString& pathToFo
 FString UAutomationToolchainLibrary::getFullPath(const FString& path)
 {
 	return FPaths::ConvertRelativePathToFull(path);
+}
+
+bool UAutomationToolchainLibrary::deleteFolder(const FString& pathToFolder)
+{
+	return UAutomationToolchainLibrary::getPlatformFile().DeleteDirectory(*pathToFolder);
+}
+
+TArray<bool> UAutomationToolchainLibrary::deleteFolders(const TArray<FString>& pathToFolders)
+{
+	TArray<bool> result;
+
+	for (const FString& pathToFolder : pathToFolders)
+	{
+		result.Add(UAutomationToolchainLibrary::deleteFolder(pathToFolder));
+	}
+
+	return result;
 }
 
 FString UAutomationToolchainLibrary::getAutomationToolchainPluginFolderFullPath()

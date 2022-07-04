@@ -23,14 +23,14 @@ ASN4K3UltimateAbilityPlaceholder::ASN4K3UltimateAbilityPlaceholder()
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 }
 
-void ASN4K3UltimateAbilityPlaceholder::setAbility(USN4K3UltimateAbility* ability)
+void ASN4K3UltimateAbilityPlaceholder::setAbility(TObjectPtr<USN4K3UltimateAbility> ability)
 {
 	this->ability = ability;
 }
 
 void ASN4K3UltimateAbilityPlaceholder::impactAction_Implementation(AAmmo* ammo, const FHitResult& hit)
 {
-	ASN4K3* drone = Cast<ASN4K3>(ability->getCaster());
+	TObjectPtr<ASN4K3> drone = Cast<ASN4K3>(ability->getCaster());
 
 	if (drone->getIsAlly() == ammo->getIsAlly())
 	{

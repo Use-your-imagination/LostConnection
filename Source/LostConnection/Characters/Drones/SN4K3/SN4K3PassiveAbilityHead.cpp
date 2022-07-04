@@ -23,7 +23,7 @@ void ASN4K3PassiveAbilityHead::BeginPlay()
 
 	Utility::executeOnOwningClient(this, [this]()
 		{
-			const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
+			TObjectPtr<const USN4K3DataAsset> data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
 
 			Utility::setCurrentUI(data->getHeadUI(), this);
 		});

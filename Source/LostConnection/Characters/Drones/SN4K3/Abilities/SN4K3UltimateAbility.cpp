@@ -23,7 +23,7 @@ void USN4K3UltimateAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(USN4K3UltimateAbility, currentAbilityDuration);
 }
 
-void USN4K3UltimateAbility::setCollisionResponseToPawnChannel(ABaseCharacter* target, ECollisionResponse response)
+void USN4K3UltimateAbility::setCollisionResponseToPawnChannel(TObjectPtr<ABaseCharacter> target, ECollisionResponse response)
 {
 	target->GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, response);
 
@@ -35,7 +35,7 @@ USN4K3UltimateAbility::USN4K3UltimateAbility()
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
-UAnimMontage* USN4K3UltimateAbility::getReturnAnimation() const
+TObjectPtr<UAnimMontage> USN4K3UltimateAbility::getReturnAnimation() const
 {
 	return returnAnimation;
 }
@@ -57,7 +57,7 @@ const TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder>& USN4K3UltimateAbility::g
 
 void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 {
-	ASN4K3* drone = Cast<ASN4K3>(target);
+	TObjectPtr<ASN4K3> drone = Cast<ASN4K3>(target);
 	FVector returnPosition;
 
 	this->setCollisionResponseToPawnChannel(drone, ECollisionResponse::ECR_Block);
@@ -84,7 +84,7 @@ void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 
 	ultimatePlaceholder = nullptr;
 
-	drone->SetActorLocation(returnPosition);
+	drone->SetActorLocation(returnPosition, false, nullptr, ETeleportType::TeleportPhysics);
 
 	isUltimateAbilityUsed = !isUltimateAbilityUsed;
 
@@ -93,7 +93,7 @@ void USN4K3UltimateAbility::applyAbility(ABaseCharacter* target)
 
 void USN4K3UltimateAbility::useAbility()
 {
-	ASN4K3* drone = Cast<ASN4K3>(caster);
+	TObjectPtr<ASN4K3> drone = Cast<ASN4K3>(caster);
 
 	if (isUltimateAbilityUsed)
 	{
@@ -109,7 +109,7 @@ void USN4K3UltimateAbility::useAbility()
 	}
 
 	FVector tem = drone->GetActorLocation();
-	const USN4K3DataAsset* data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
+	TObjectPtr<const USN4K3DataAsset> data = Utility::findDroneAsset<USN4K3DataAsset>(ULostConnectionAssetManager::get().getDrones());
 
 	tem.Z += drone->GetMesh()->GetRelativeLocation().Z;
 
@@ -119,7 +119,7 @@ void USN4K3UltimateAbility::useAbility()
 
 	cooldown->startCooldown();
 
-	ASN4K3UltimateAbilityPlaceholder* placeholder = Utility::getGameState(drone)->spawn<ASN4K3UltimateAbilityPlaceholder>(data->getUltimateAbilityPlaceholder(), FTransform(drone->GetMesh()->GetComponentRotation(), MoveTemp(tem)));
+	TObjectPtr<ASN4K3UltimateAbilityPlaceholder> placeholder = Utility::getGameState(drone)->spawn<ASN4K3UltimateAbilityPlaceholder>(data->getUltimateAbilityPlaceholder(), FTransform(drone->GetMesh()->GetComponentRotation(), MoveTemp(tem)));
 
 	placeholder->setAbility(this);
 
