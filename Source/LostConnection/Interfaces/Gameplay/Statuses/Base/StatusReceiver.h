@@ -9,7 +9,7 @@
 
 #include "StatusReceiver.generated.h"
 
-UINTERFACE()
+UINTERFACE(BlueprintType)
 class UStatusReceiver : public UDamageReceiver
 {
 	GENERATED_BODY()

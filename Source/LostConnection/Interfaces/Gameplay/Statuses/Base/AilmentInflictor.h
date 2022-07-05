@@ -9,7 +9,7 @@
 
 #include "AilmentInflictor.generated.h"
 
-UINTERFACE()
+UINTERFACE(BlueprintType)
 class UAilmentInflictor : public UStatusInflictor
 {
 	GENERATED_BODY()

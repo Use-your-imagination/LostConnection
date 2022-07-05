@@ -18,7 +18,7 @@
 
 void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ABaseCharacter* target = Cast<ABaseCharacter>(OtherActor);
+	TObjectPtr<ABaseCharacter> target = Cast<ABaseCharacter>(OtherActor);
 
 	if (!target || isAlly == target->getIsAlly())
 	{

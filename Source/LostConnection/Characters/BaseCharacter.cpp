@@ -765,11 +765,11 @@ void ABaseCharacter::applySwarmAilment(USwarmAilment* swarm)
 
 void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
 {
-	TArray<UBaseStatus*> statusesToRemove;
+	TArray<TObjectPtr<UBaseStatus>> statusesToRemove;
 
 	for (auto& status : statuses)
 	{
-		UBaseTriggerStatus* trigger = Cast<UBaseTriggerStatus>(status);
+		TObjectPtr<UBaseTriggerStatus> trigger = Cast<UBaseTriggerStatus>(status);
 
 		if (trigger)
 		{
@@ -789,10 +789,8 @@ void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusI
 
 	statusesToRemove.Empty();
 
-	if (inflictor->_getUObject()->Implements<UAilmentInflictor>())
+	if (TScriptInterface<IAilmentInflictor> ailmentInflictor = Cast<IAilmentInflictor>(inflictor))
 	{
-		IAilmentInflictor* ailmentInflictor = StaticCast<IAilmentInflictor*>(inflictor.GetInterface());
-
 		if ((hit.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(hit.PhysMaterial.Get()) == EPhysicalSurface::SurfaceType1) || ailmentInflictor->getCrushingHitProc())
 		{
 			InitializationUtility::createDefaultAilment(ailmentInflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);

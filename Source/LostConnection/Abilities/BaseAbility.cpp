@@ -47,7 +47,7 @@ void UBaseAbility::setCost_Implementation(float newCost)
 	cost = newCost;
 }
 
-void UBaseAbility::setCaster(ICaster* caster)
+void UBaseAbility::setCaster(const TScriptInterface<ICaster>& caster)
 {
 	this->caster = caster;
 }
@@ -97,7 +97,7 @@ float UBaseAbility::getCancelBlendOutTime() const
 	return cancelBlendOutTime;
 }
 
-UAnimMontage* UBaseAbility::getAnimation()
+TObjectPtr<UAnimMontage> UBaseAbility::getAnimation()
 {
 	return animation;
 }
@@ -107,7 +107,7 @@ EAbilitySlot UBaseAbility::getId() const
 	return id;
 }
 
-ICaster* UBaseAbility::getCaster() const
+const TScriptInterface<ICaster>& UBaseAbility::getCaster() const
 {
 	return caster;
 }

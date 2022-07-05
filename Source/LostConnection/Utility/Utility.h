@@ -15,6 +15,9 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogLostConnection, Display, All);
 
+template<typename T, typename U>
+auto Cast(const TScriptInterface<U>& interface);
+
 class LOSTCONNECTION_API Utility
 {
 public:
@@ -204,5 +207,18 @@ void Utility::applyDamageModules(TObjectPtr<AActor> caller, const TArray<UInvent
 			inflictor->appendMoreDamageCoefficient(damageModule->getMoreDamageCoefficient() * efficiencyCoefficient);
 			inflictor->setAdditionalDamage(inflictor->getAdditionalDamage() + damageModule->getAdditionalDamage() * efficiencyCoefficient);
 		}
+	}
+}
+
+template<typename T, typename U>
+auto Cast(const TScriptInterface<U>& interface)
+{
+	if constexpr (std::is_base_of_v<UObject, T>)
+	{
+		return TObjectPtr<T>(Cast<T>(interface.GetObject()));
+	}
+	else
+	{
+		return TScriptInterface<T>(interface.GetObject());
 	}
 }

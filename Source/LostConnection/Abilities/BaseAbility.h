@@ -28,7 +28,7 @@ protected:
 	float cost;
 
 	UPROPERTY(Category = UI, EditDefaultsOnly, BlueprintReadOnly)
-	UTexture2D* icon;
+	TObjectPtr<UTexture2D> icon;
 
 	UPROPERTY(Category = AbilityState, EditDefaultsOnly, BlueprintReadOnly)
 	bool isCancelable;
@@ -43,11 +43,11 @@ protected:
 	float cancelBlendOutTime;
 
 	UPROPERTY(Category = AbilityAnimation, EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* animation;
+	TObjectPtr<UAnimMontage> animation;
 
 	EAbilitySlot id;
 
-	class ICaster* caster;
+	TScriptInterface<class ICaster> caster;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -64,35 +64,35 @@ public:
 	virtual void initAbility();
 
 	UFUNCTION(Server, Reliable)
-	virtual void setCost(float newCost) final;
+	void setCost(float newCost);
 
-	virtual void setCaster(class ICaster* caster) final;
-
-	UFUNCTION(Server, Reliable)
-	virtual void disable() final;
+	void setCaster(const TScriptInterface<class ICaster>& caster);
 
 	UFUNCTION(Server, Reliable)
-	virtual void enable() final;
+	void disable();
 
-	virtual float getCost() const final;
+	UFUNCTION(Server, Reliable)
+	void enable();
 
-	virtual bool getIsDisabled() const final;
+	float getCost() const;
 
-	virtual const FText& getName() const final;
+	bool getIsDisabled() const;
 
-	virtual const FText& getDescription() const final;
+	const FText& getName() const;
 
-	virtual bool getIsCancelable() const final;
+	const FText& getDescription() const;
 
-	virtual bool getIsGrounded() const final;
+	bool getIsCancelable() const;
 
-	virtual float getCancelBlendOutTime() const final;
+	bool getIsGrounded() const;
 
-	virtual UAnimMontage* getAnimation() final;
+	float getCancelBlendOutTime() const;
 
-	virtual EAbilitySlot getId() const final;
+	TObjectPtr<UAnimMontage> getAnimation();
 
-	virtual class ICaster* getCaster() const final;
+	EAbilitySlot getId() const;
+
+	const TScriptInterface<class ICaster>& getCaster() const;
 
 	virtual ~UBaseAbility() = default;
 };

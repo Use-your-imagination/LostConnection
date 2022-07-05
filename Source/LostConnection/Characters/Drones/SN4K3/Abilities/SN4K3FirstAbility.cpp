@@ -57,14 +57,14 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 		tem->appendMoreDamageCoefficient(moreCoefficient);
 	}
 
-	if (IPersonalModulesHolder* holder = Cast<IPersonalModulesHolder>(caster))
+	if (TScriptInterface<IPersonalModulesHolder> holder = Cast<IPersonalModulesHolder>(caster))
 	{
 		Utility::applyDamageModules(Cast<AActor>(caster), holder->getPersonalEquippedModules(), tem);
 
 		Utility::applyDamageModules(Cast<AActor>(caster), holder->getActivePersonalModules(), tem);
 	}
 
-	if (IWeaponModulesHolder* holder = Cast<IWeaponModulesHolder>(caster))
+	if (TScriptInterface<IWeaponModulesHolder> holder = Cast<IWeaponModulesHolder>(caster))
 	{
 		Utility::applyDamageModules(Cast<AActor>(caster), holder->getWeaponModules(), tem);
 
@@ -75,7 +75,7 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 
 	target->statusInflictorImpactAction(tem.Get(), hit);
 
-	ICaster::Execute_applyFirstAbilityEvent(Cast<UObject>(caster), target);
+	ICaster::Execute_applyFirstAbilityEvent(caster.GetObject(), target);
 }
 
 void USN4K3FirstAbility::useAbility()

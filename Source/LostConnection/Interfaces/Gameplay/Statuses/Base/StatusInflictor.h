@@ -8,7 +8,7 @@
 
 #include "StatusInflictor.generated.h"
 
-UINTERFACE()
+UINTERFACE(BlueprintType)
 class UStatusInflictor : public UDamageInflictor
 {
 	GENERATED_BODY()
