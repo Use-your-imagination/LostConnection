@@ -86,6 +86,7 @@ void ULostConnectionGameInstance::Init()
 			sessionSettings->NumPublicConnections = 4;
 			sessionSettings->bAllowJoinInProgress = true;
 			sessionSettings->bAllowJoinViaPresence = true;
+			sessionSettings->bAllowInvites = true;
 		}
 	}
 }
@@ -95,7 +96,7 @@ void ULostConnectionGameInstance::initSearchSession()
 	searchSession = MakeShareable(new FOnlineSessionSearch());
 
 	// searchSession->bIsLanQuery = true;
-	searchSession->MaxSearchResults = std::numeric_limits<int32>::max();
+	searchSession->MaxSearchResults = 10;
 	searchSession->PingBucketSize = 1000;
 
 	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
