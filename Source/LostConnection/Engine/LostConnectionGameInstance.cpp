@@ -95,8 +95,8 @@ void ULostConnectionGameInstance::initSearchSession()
 	searchSession = MakeShareable(new FOnlineSessionSearch());
 
 	// searchSession->bIsLanQuery = true;
-	searchSession->MaxSearchResults = 10;
-	searchSession->PingBucketSize = 100;
+	searchSession->MaxSearchResults = std::numeric_limits<int32>::max();
+	searchSession->PingBucketSize = 1000;
 
 	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 }

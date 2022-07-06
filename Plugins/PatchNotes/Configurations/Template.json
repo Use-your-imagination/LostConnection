@@ -3,7 +3,14 @@
 	"projectVersion": "template",
 	"Gameplay":
 	{
-		"type": "category"
+		"type": "category",
+		"AI":
+		{
+			"type": "item",
+			"notes": [
+				"Improve AI behavior"
+			]
+		}
 	},
 	"Characters":
 	{

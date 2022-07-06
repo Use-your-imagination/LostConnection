@@ -4,37 +4,41 @@
 
 #include "CoreMinimal.h"
 
+#include "AIActions/AIAction.h"
 #include "Utility/Utility.h"
 
 template<typename... Args>
 class LOSTCONNECTION_API ActionsChain
 {
 private:
-	template<typename... FunctionArgs>
-	struct Action
-	{
-		TFunction<bool(const FunctionArgs&...)> condition;
-		TFunction<bool(const FunctionArgs&...)> action;
-		TFunction<bool(bool)> processBehaviorTree;
-
-		Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action, TFunction<bool(bool)>&& processBehaviorTree);
-	};
-
-private:
-	TArray<Action<Args...>> actions;
-	Action<Args...>* currentAction;
+	TArray<TSharedPtr<AIAction<Args...>>> actions;
+	int32 activeIndex;
 
 public:
 	ActionsChain();
 
 	bool process(const Args&... args);
 
+	/**
+	* Add action to chain of actions.
+	* If action returns true chain move to next action
+	* @param condition Condition for run action
+	* @param action Action to execute
+	* @param processBehaviorTree For Selector true means return to start, for sequence true means execute next AI node
+	*/
 	void addAction
 	(
 		TFunction<bool(const Args&...)>&& condition,
 		TFunction<bool(const Args&...)>&& action,
 		TFunction<bool(bool)>&& processBehaviorTree = [](bool isProcessingBehaviorTree) -> bool { return isProcessingBehaviorTree; }
 	);
+
+	void addAction(const TSharedPtr<AIAction<Args...>>& action);
+
+	void addAction(TSharedPtr<AIAction<Args...>>&& action);
+
+	template<template<typename> typename AIActionT, typename... ConstructArgs>
+	void addAction(ConstructArgs&&... args);
 
 	void clear();
 
@@ -52,18 +56,8 @@ public:
 };
 
 template<typename... Args>
-template<typename... FunctionArgs>
-ActionsChain<Args...>::Action<FunctionArgs...>::Action(TFunction<bool(const FunctionArgs&...)>&& condition, TFunction<bool(const FunctionArgs&...)>&& action, TFunction<bool(bool)>&& processBehaviorTree) :
-	condition(MoveTemp(condition)),
-	action(MoveTemp(action)),
-	processBehaviorTree(MoveTemp(processBehaviorTree))
-{
-
-}
-
-template<typename... Args>
 ActionsChain<Args...>::ActionsChain() :
-	currentAction(nullptr)
+	activeIndex(0)
 {
 
 }
@@ -71,34 +65,32 @@ ActionsChain<Args...>::ActionsChain() :
 template<typename... Args>
 bool ActionsChain<Args...>::process(const Args&... args)
 {
-	if (!currentAction && this->isNotEmpty())
-	{
-		currentAction = &actions[0];
-	}
-	else if (this->isEmpty())
+	if (this->isEmpty())
 	{
 		UE_LOG(LogLostConnection, Error, TEXT("Actions not initialized %s %s"), __FILE__, __LINE__);
 
 		return false;
 	}
 
-	if (currentAction->condition(args...))
+	TSharedPtr<AIAction<Args...>>& currentAction = actions[activeIndex];
+
+	if (currentAction->executeCondition(args...))
 	{
-		bool result = currentAction->action(args...);
-		const TFunction<bool(bool)>& processBehaviorTree = currentAction->processBehaviorTree;
+		bool result = currentAction->executeAction(args...);
+		const TFunction<bool(bool)>& processBehaviorTree = currentAction->getProcessBehaviorTree();
 
 		if (result)
 		{
-			if (currentAction != &actions.Last())
+			if (activeIndex != actions.Num() - 1)
 			{
-				currentAction++;
+				activeIndex++;
 			}
 			else
 			{
-				currentAction = nullptr;
+				activeIndex = 0;
 			}
 		}
-		
+
 		return processBehaviorTree(result);
 	}
 
@@ -108,7 +100,26 @@ bool ActionsChain<Args...>::process(const Args&... args)
 template<typename... Args>
 void ActionsChain<Args...>::addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action, TFunction<bool(bool)>&& processBehaviorTree)
 {
-	actions.Emplace(MoveTemp(condition), MoveTemp(action), MoveTemp(processBehaviorTree));
+	actions.Add(MakeShared<AIAction<Args...>>(MoveTemp(condition), MoveTemp(action), MoveTemp(processBehaviorTree)));
+}
+
+template<typename... Args>
+void ActionsChain<Args...>::addAction(const TSharedPtr<AIAction<Args...>>& action)
+{
+	actions.Add(action);
+}
+
+template<typename... Args>
+void ActionsChain<Args...>::addAction(TSharedPtr<AIAction<Args...>>&& action)
+{
+	actions.Add(MoveTemp(action));
+}
+
+template<typename... Args>
+template<template<typename> typename AIActionT, typename... ConstructArgs>
+void ActionsChain<Args...>::addAction(ConstructArgs&&... args)
+{
+	actions.Add(MakeShared<AIActionT<Args...>>(Forward<ConstructArgs>(args)...));
 }
 
 template<typename... Args>
@@ -122,7 +133,7 @@ void ActionsChain<Args...>::clear()
 template<typename... Args>
 void ActionsChain<Args...>::resetExecution()
 {
-	currentAction = nullptr;
+	activeIndex = 0;
 }
 
 template<typename... Args>
@@ -146,5 +157,5 @@ bool ActionsChain<Args...>::isNotEmpty() const
 template<typename... Args>
 bool ActionsChain<Args...>::isExecutionEnd() const
 {
-	return !StaticCast<bool>(currentAction);
+	return !activeIndex;
 }

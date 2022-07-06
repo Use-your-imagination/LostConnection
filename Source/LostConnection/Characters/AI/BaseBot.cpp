@@ -12,6 +12,7 @@
 #include "Engine/LostConnectionGameMode.h"
 #include "Statuses/Ailments/SwarmAilment.h"
 #include "Loot/LootManager.h"
+#include "AI/AIActions/WaitAction.h"
 #include "WorldPlaceables/AI/WavesController.h"
 
 void ABaseBot::Tick(float DeltaSeconds)
@@ -107,7 +108,7 @@ ActionsChain<TScriptInterface<IAITargeted>> ABaseBot::initOffensiveChain()
 
 			FRotator newRotation = GetActorRotation();
 
-			newRotation.Yaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Cast<AActor>(target.GetObject())->GetActorLocation()).Yaw;
+			newRotation.Yaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Cast<AActor>(target)->GetActorLocation()).Yaw;
 
 			SetActorRotation(newRotation);
 
@@ -121,7 +122,7 @@ ActionsChain<TScriptInterface<IAITargeted>> ABaseBot::initOffensiveChain()
 		{
 			return IsValid(target.GetObject());
 		},
-		[this](const TScriptInterface<IAITargeted>& target) -> bool
+		[this](const TScriptInterface<IAITargeted>&) -> bool
 		{
 			this->shoot();
 			
@@ -129,35 +130,15 @@ ActionsChain<TScriptInterface<IAITargeted>> ABaseBot::initOffensiveChain()
 		}
 	);
 
-	result.addAction
-	(
-		[](const TScriptInterface<IAITargeted>& target) -> bool
-		{
-			return true;
-		},
-		[this](const TScriptInterface<IAITargeted>& target) -> bool
-		{
-			if (resetTime)
-			{
-				resetTime = FMath::Max(0.0, resetTime - FApp::GetDeltaTime());
-			}
-			else
-			{
-				resetTime = 1.0;
-			}
-
-			return !StaticCast<bool>(resetTime);
-		},
-		[](bool) { return true; }
-	);
+	result.addAction<WaitAction>(0.5);
 
 	result.addAction
 	(
-		[](const TScriptInterface<IAITargeted>& target) -> bool
+		[](const TScriptInterface<IAITargeted>&) -> bool
 		{
 			return true;
 		},
-		[this](const TScriptInterface<IAITargeted>& target) -> bool
+		[this](const TScriptInterface<IAITargeted>&) -> bool
 		{
 			this->resetShoot();
 
@@ -174,36 +155,37 @@ ActionsChain<FVector> ABaseBot::initMovementChain()
 
 	result.addAction
 	(
-		[](const FVector& movementPoint) -> bool
+		[](const FVector&) -> bool
 		{
 			return true;
 		},
-		[this](const FVector& movementPoint) -> bool
+		[this](const FVector&) -> bool
 		{
 			TObjectPtr<AAIController> controller = GetController<AAIController>();
-			FAIRequestID id = controller->GetCurrentMoveRequestID();
-
-			if (id.IsValid())
+			
+			if (controller->GetCurrentMoveRequestID().IsValid())
 			{
 				return true;
 			}
 
 			TObjectPtr<UNavigationSystemV1> navigationSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
 
-			if (!navigationSystem)
+			if (navigationSystem.IsNull())
 			{
 				return false;
 			}
 
 			FNavLocation moveToLocation;
 
-			navigationSystem->GetRandomReachablePointInRadius(GetActorLocation(), 1000.0f, moveToLocation);
+			navigationSystem->GetRandomReachablePointInRadius(GetActorLocation(), 400.0f, moveToLocation);
 
 			controller->MoveToLocation(moveToLocation.Location, -1.0f, false);
 
-			return false;
+			return true;
 		}
 	);
+
+	result.addAction<WaitAction>(0.5);
 
 	return result;
 }
