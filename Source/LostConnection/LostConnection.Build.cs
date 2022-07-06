@@ -20,11 +20,13 @@ public class LostConnection : ModuleRules
             "SlateCore",
             "UMG",
             "Niagara",
-            "OnlineSubsystem",
-            "OnlineSubsystemUtils",
             "AIModule",
             "PhysicsCore",
-            "NavigationSystem"
+            "NavigationSystem",
+            "OnlineSubsystem",
+            "OnlineSubsystemUtils",
+            "Networking",
+            "Sockets"
         });
 
         PublicIncludePaths.AddRange(new string[]
