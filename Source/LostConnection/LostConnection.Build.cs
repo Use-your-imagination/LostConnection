@@ -24,9 +24,7 @@ public class LostConnection : ModuleRules
             "PhysicsCore",
             "NavigationSystem",
             "OnlineSubsystem",
-            "OnlineSubsystemUtils",
-            "Networking",
-            "Sockets"
+            "OnlineSubsystemUtils"
         });
 
         PublicIncludePaths.AddRange(new string[]
