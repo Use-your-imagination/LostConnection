@@ -9,9 +9,8 @@
 #include "LostConnectionPlayerState.h"
 #include "Constants/Constants.h"
 
-// ?bIsLanMatch=1
 
-const FString ULostConnectionGameInstance::options = "?listen";
+const FString ULostConnectionGameInstance::options = "?listen?bIsLanMatch=1";
 const FName ULostConnectionGameInstance::serverNameKey = "ServerName";
 
 void ULostConnectionGameInstance::onCreateSession(FName sessionName, bool wasSuccessful)
@@ -80,13 +79,13 @@ void ULostConnectionGameInstance::Init()
 		{
 			sessionSettings = MakeShareable(new FOnlineSessionSettings());
 
-			sessionSettings->bUseLobbiesIfAvailable = true;
+			// sessionSettings->bUseLobbiesIfAvailable = true;
 			sessionSettings->bUsesPresence = true;
+			sessionSettings->bIsLANMatch = true;
 			sessionSettings->bShouldAdvertise = true;
 			sessionSettings->NumPublicConnections = 4;
 			sessionSettings->bAllowJoinInProgress = true;
 			sessionSettings->bAllowJoinViaPresence = true;
-			sessionSettings->bAllowInvites = true;
 		}
 	}
 }
@@ -95,7 +94,7 @@ void ULostConnectionGameInstance::initSearchSession()
 {
 	searchSession = MakeShareable(new FOnlineSessionSearch());
 
-	// searchSession->bIsLanQuery = true;
+	searchSession->bIsLanQuery = true;
 	searchSession->MaxSearchResults = std::numeric_limits<int32>::max();
 	searchSession->PingBucketSize = 1000;
 
