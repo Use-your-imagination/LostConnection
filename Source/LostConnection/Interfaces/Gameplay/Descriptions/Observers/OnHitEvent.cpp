@@ -4,9 +4,7 @@
 
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/HitEventsHolder.h"
 
-IHitEventsHolder* IOnHitEvent::getHitEventsHolder() const
+TScriptInterface<IHitEventsHolder> IOnHitEvent::getHitEventsHolder() const
 {
-	TWeakInterfacePtr<IHitEventsHolder>& holder = const_cast<IOnHitEvent*>(this)->getHitEventsHolder();
-
-	return holder.IsValid() ? holder.Get() : nullptr;
+	return const_cast<IOnHitEvent*>(this)->getHitEventsHolder().GetObject();
 }

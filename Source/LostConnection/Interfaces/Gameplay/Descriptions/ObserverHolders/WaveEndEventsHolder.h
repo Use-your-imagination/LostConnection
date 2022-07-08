@@ -26,11 +26,11 @@ protected:
 public:
 	IWaveEndEventsHolder() = default;
 
-	virtual void attachWaveEndEvent(const TScriptInterface<IOnWaveEndEvent>& event);
+	virtual void attachWaveEndEvent(TScriptInterface<IOnWaveEndEvent> event);
 
-	virtual void detachWaveEndEvent(const TScriptInterface<IOnWaveEndEvent>& event);
+	virtual void detachWaveEndEvent(TScriptInterface<IOnWaveEndEvent> event);
 
-	virtual void notifyWaveEndEvents() const;
+	virtual void notifyWaveEndEvents(TObjectPtr<UWorld> world) const;
 
 	virtual const TArray<TScriptInterface<IOnWaveEndEvent>>& getWaveEndEvents() const;
 };

@@ -4,19 +4,7 @@
 
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/CastEventsHolder.h"
 
-void IOnCastEvent::initCastEvent(class ICastEventsHolder* holder)
+TScriptInterface<ICastEventsHolder> IOnCastEvent::getCastEventsHolder() const
 {
-	auto& currentHolder = this->getCastEventsHolder();
-
-	if (currentHolder.IsValid())
-	{
-		currentHolder->detachCastEvent(this->_getUObject());
-	}
-
-	currentHolder = holder;
-
-	if (currentHolder.IsValid())
-	{
-		currentHolder->attachCastEvent(this->_getUObject());
-	}
+	return const_cast<IOnCastEvent*>(this)->getCastEventsHolder().GetObject();
 }

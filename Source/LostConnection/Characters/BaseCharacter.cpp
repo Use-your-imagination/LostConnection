@@ -209,18 +209,23 @@ void ABaseCharacter::onCurrentHealthChange()
 {
 	if (currentHealth == 0.0f)
 	{
-		this->setHealthBarVisibility(ESlateVisibility::Hidden);
-
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
-
 		if (HasAuthority() && !isDead)
 		{
-			this->notifyDeathEvents();
+			this->notifyDeathEvents(this);
+
+			if (currentHealth != 0.0f)
+			{
+				return;
+			}
 
 			isDead = true;
 
 			MultiplayerUtility::runOnServerReliableWithMulticast(this, "death");
 		}
+
+		this->setHealthBarVisibility(ESlateVisibility::Hidden);
+
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	}
 	else if (this->isDamaged() && !Utility::isYourPawn(this))
 	{
@@ -711,7 +716,7 @@ void ABaseCharacter::Tick(float DeltaSeconds)
 
 void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterface<IDamageInflictor>& inflictor)
 {
-	this->notifyTakeDamageEvents();
+	this->notifyTakeDamageEvents(this);
 
 	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor);
 
@@ -729,7 +734,7 @@ void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& 
 {
 	if (isAlly != ammo->getIsAlly())
 	{
-		this->notifyHitEvents();
+		this->notifyHitEvents(ammo->getOwner(), this);
 
 		this->takeDamageFromInflictor(ammo->getAilmentInflictorUtility());
 

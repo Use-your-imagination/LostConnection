@@ -7,6 +7,8 @@
 #include "UObject/Interface.h"
 #include "UObject/WeakInterfacePtr.h"
 
+#include "Interfaces/Gameplay/Descriptions/Base/DamageReceiver.h"
+
 #include "OnTakeDamageEvent.generated.h"
 
 UINTERFACE(BlueprintType)
@@ -22,9 +24,9 @@ class LOSTCONNECTION_API IOnTakeDamageEvent
 public:
 	IOnTakeDamageEvent() = default;
 
-	virtual void takeDamageEventAction() = 0;
+	virtual void takeDamageEventAction(TScriptInterface<IDamageReceiver> receiver) = 0;
 
 	virtual TWeakInterfacePtr<class ITakeDamageEventsHolder>& getTakeDamageEventsHolder() = 0;
 
-	virtual class ITakeDamageEventsHolder* getTakeDamageEventsHolder() const;
+	virtual TScriptInterface<class ITakeDamageEventsHolder> getTakeDamageEventsHolder() const;
 };

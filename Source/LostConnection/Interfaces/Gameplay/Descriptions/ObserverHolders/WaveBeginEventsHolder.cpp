@@ -2,7 +2,7 @@
 
 #include "WaveBeginEventsHolder.h"
 
-void IWaveBeginEventsHolder::attachWaveBeginEvent(const TScriptInterface<IOnWaveBeginEvent>& event)
+void IWaveBeginEventsHolder::attachWaveBeginEvent(TScriptInterface<IOnWaveBeginEvent> event)
 {
 	auto& currentHolder = event->getWaveBeginEventsHolder();
 
@@ -16,16 +16,16 @@ void IWaveBeginEventsHolder::attachWaveBeginEvent(const TScriptInterface<IOnWave
 	this->getWaveBeginEvents().Add(event);
 }
 
-void IWaveBeginEventsHolder::detachWaveBeginEvent(const TScriptInterface<IOnWaveBeginEvent>& event)
+void IWaveBeginEventsHolder::detachWaveBeginEvent(TScriptInterface<IOnWaveBeginEvent> event)
 {
 	this->getWaveBeginEvents().RemoveSingle(event);
 }
 
-void IWaveBeginEventsHolder::notifyWaveBeginEvents() const
+void IWaveBeginEventsHolder::notifyWaveBeginEvents(TObjectPtr<UWorld> world) const
 {
 	for (const auto& event : this->getWaveBeginEvents())
 	{
-		event->waveBeginEventAction();
+		event->waveBeginEventAction(world);
 	}
 }
 

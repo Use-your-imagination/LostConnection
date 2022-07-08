@@ -22,9 +22,9 @@ class LOSTCONNECTION_API IOnHitEvent
 public:
 	IOnHitEvent() = default;
 
-	virtual void hitEventAction() = 0;
+	virtual void hitEventAction(TWeakObjectPtr<class ABaseCharacter> hitter, TObjectPtr<class ABaseCharacter> target) = 0;
 
 	virtual TWeakInterfacePtr<class IHitEventsHolder>& getHitEventsHolder() = 0;
 
-	virtual class IHitEventsHolder* getHitEventsHolder() const;
+	virtual TScriptInterface<class IHitEventsHolder> getHitEventsHolder() const;
 };

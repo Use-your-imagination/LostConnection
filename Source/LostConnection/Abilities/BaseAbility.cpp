@@ -47,7 +47,7 @@ void UBaseAbility::setCost_Implementation(float newCost)
 	cost = newCost;
 }
 
-void UBaseAbility::setCaster(const TScriptInterface<ICaster>& caster)
+void UBaseAbility::setCaster(TScriptInterface<ICaster> caster)
 {
 	this->caster = caster;
 }
@@ -107,7 +107,7 @@ EAbilitySlot UBaseAbility::getId() const
 	return id;
 }
 
-const TScriptInterface<ICaster>& UBaseAbility::getCaster() const
+TScriptInterface<ICaster> UBaseAbility::getCaster() const
 {
 	return caster;
 }

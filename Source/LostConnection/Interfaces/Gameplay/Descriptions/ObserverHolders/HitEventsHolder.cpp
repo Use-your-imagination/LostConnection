@@ -2,7 +2,9 @@
 
 #include "HitEventsHolder.h"
 
-void IHitEventsHolder::attachHitEvent(const TScriptInterface<IOnHitEvent>& event)
+#include "Characters/BaseCharacter.h"
+
+void IHitEventsHolder::attachHitEvent(TScriptInterface<IOnHitEvent> event)
 {
 	auto& currentHolder = event->getHitEventsHolder();
 
@@ -16,16 +18,16 @@ void IHitEventsHolder::attachHitEvent(const TScriptInterface<IOnHitEvent>& event
 	this->getHitEvents().Add(event);
 }
 
-void IHitEventsHolder::detachHitEvent(const TScriptInterface<IOnHitEvent>& event)
+void IHitEventsHolder::detachHitEvent(TScriptInterface<IOnHitEvent> event)
 {
 	this->getHitEvents().RemoveSingle(event);
 }
 
-void IHitEventsHolder::notifyHitEvents() const
+void IHitEventsHolder::notifyHitEvents(TWeakObjectPtr<ABaseCharacter> hitter, TObjectPtr<ABaseCharacter> target) const
 {
 	for (const auto& event : this->getHitEvents())
 	{
-		event->hitEventAction();
+		event->hitEventAction(hitter, target);
 	}
 }
 

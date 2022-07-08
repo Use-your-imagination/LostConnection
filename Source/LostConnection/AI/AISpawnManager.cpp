@@ -44,31 +44,33 @@ TArray<TObjectPtr<AActor>> AISpawnManager::getDrones() const
 
 void AISpawnManager::processBeginEvents() const
 {
+	TObjectPtr<UWorld> world = wavesController->GetWorld();
 	const FWaveSettings& waveSettings = wavesController->getWaveSettings(currentWave);
 
 	for (const auto& eventClass : waveSettings.beginWaveEvents)
 	{
-		Cast<IOnWaveBeginEvent>(NewObject<UNetworkObject>(wavesController, eventClass))->waveBeginEventAction();
+		Cast<IOnWaveBeginEvent>(NewObject<UNetworkObject>(wavesController, eventClass))->waveBeginEventAction(world);
 	}
 
 	for (const auto& drone : this->getDrones())
 	{
-		Cast<ABaseDrone>(drone)->notifyWaveBeginEvents();
+		Cast<ABaseDrone>(drone)->notifyWaveBeginEvents(world);
 	}
 }
 
 void AISpawnManager::processEndEvents() const
 {
+	TObjectPtr<UWorld> world = wavesController->GetWorld();
 	const FWaveSettings& waveSettings = wavesController->getWaveSettings(currentWave);
 
 	for (const auto& eventClass : waveSettings.endWaveEvents)
 	{
-		Cast<IOnWaveEndEvent>(NewObject<UNetworkObject>(wavesController, eventClass))->waveEndEventAction();
+		Cast<IOnWaveEndEvent>(NewObject<UNetworkObject>(wavesController, eventClass))->waveEndEventAction(world);
 	}
 
 	for (const auto& drone : this->getDrones())
 	{
-		Cast<ABaseDrone>(drone)->notifyWaveEndEvents();
+		Cast<ABaseDrone>(drone)->notifyWaveEndEvents(world);
 	}
 }
 

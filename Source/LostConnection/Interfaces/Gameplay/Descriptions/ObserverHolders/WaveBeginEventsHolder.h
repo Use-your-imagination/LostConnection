@@ -26,11 +26,11 @@ protected:
 public:
 	IWaveBeginEventsHolder() = default;
 
-	virtual void attachWaveBeginEvent(const TScriptInterface<IOnWaveBeginEvent>& event);
+	virtual void attachWaveBeginEvent(TScriptInterface<IOnWaveBeginEvent> event);
 
-	virtual void detachWaveBeginEvent(const TScriptInterface<IOnWaveBeginEvent>& event);
+	virtual void detachWaveBeginEvent(TScriptInterface<IOnWaveBeginEvent> event);
 
-	virtual void notifyWaveBeginEvents() const;
+	virtual void notifyWaveBeginEvents(TObjectPtr<UWorld> world) const;
 
 	virtual const TArray<TScriptInterface<IOnWaveBeginEvent>>& getWaveBeginEvents() const;
 };

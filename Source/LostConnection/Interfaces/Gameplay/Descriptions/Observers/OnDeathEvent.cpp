@@ -4,9 +4,7 @@
 
 #include "Interfaces/Gameplay/Descriptions/ObserverHolders/DeathEventsHolder.h"
 
-IDeathEventsHolder* IOnDeathEvent::getDeathEventsHolder() const
+TScriptInterface<IDeathEventsHolder> IOnDeathEvent::getDeathEventsHolder() const
 {
-	TWeakInterfacePtr<IDeathEventsHolder>& holder = const_cast<IOnDeathEvent*>(this)->getDeathEventsHolder();
-
-	return holder.IsValid() ? holder.Get() : nullptr;
+	return const_cast<IOnDeathEvent*>(this)->getDeathEventsHolder().GetObject();
 }

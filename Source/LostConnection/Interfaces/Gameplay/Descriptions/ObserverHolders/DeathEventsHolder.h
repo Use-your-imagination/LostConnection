@@ -26,11 +26,11 @@ protected:
 public:
 	IDeathEventsHolder() = default;
 
-	virtual void attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event);
+	virtual void attachDeathEvent(TScriptInterface<IOnDeathEvent> event);
 
-	virtual void detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event);
+	virtual void detachDeathEvent(TScriptInterface<IOnDeathEvent> event);
 
-	virtual void notifyDeathEvents() const;
+	virtual void notifyDeathEvents(TObjectPtr<class ABaseCharacter> character) const;
 
 	virtual const TArray<TScriptInterface<IOnDeathEvent>>& getDeathEvents() const;
 };

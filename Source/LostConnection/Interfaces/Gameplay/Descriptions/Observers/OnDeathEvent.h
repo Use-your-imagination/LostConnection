@@ -22,9 +22,9 @@ class LOSTCONNECTION_API IOnDeathEvent
 public:
 	IOnDeathEvent() = default;
 
-	virtual void deathEventAction() = 0;
+	virtual void deathEventAction(TObjectPtr<class ABaseCharacter> character) = 0;
 
 	virtual TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() = 0;
 
-	virtual class IDeathEventsHolder* getDeathEventsHolder() const;
+	virtual TScriptInterface<class IDeathEventsHolder> getDeathEventsHolder() const;
 };

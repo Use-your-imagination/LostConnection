@@ -2,7 +2,7 @@
 
 #include "TakeDamageEventsHolder.h"
 
-void ITakeDamageEventsHolder::attachTakeDamageEvent(const TScriptInterface<IOnTakeDamageEvent>& event)
+void ITakeDamageEventsHolder::attachTakeDamageEvent(TScriptInterface<IOnTakeDamageEvent> event)
 {
 	auto& currentHolder = event->getTakeDamageEventsHolder();
 
@@ -16,16 +16,16 @@ void ITakeDamageEventsHolder::attachTakeDamageEvent(const TScriptInterface<IOnTa
 	this->getTakeDamageEvents().Add(event);
 }
 
-void ITakeDamageEventsHolder::detachTakeDamageEvent(const TScriptInterface<IOnTakeDamageEvent>& event)
+void ITakeDamageEventsHolder::detachTakeDamageEvent(TScriptInterface<IOnTakeDamageEvent> event)
 {
 	this->getTakeDamageEvents().RemoveSingle(event);
 }
 
-void ITakeDamageEventsHolder::notifyTakeDamageEvents() const
+void ITakeDamageEventsHolder::notifyTakeDamageEvents(TScriptInterface<IDamageReceiver> receiver) const
 {
 	for (const auto& event : this->getTakeDamageEvents())
 	{
-		event->takeDamageEventAction();
+		event->takeDamageEventAction(receiver);
 	}
 }
 

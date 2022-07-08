@@ -22,9 +22,9 @@ class LOSTCONNECTION_API IOnWaveEndEvent
 public:
 	IOnWaveEndEvent() = default;
 
-	virtual void waveEndEventAction() = 0;
+	virtual void waveEndEventAction(TObjectPtr<UWorld> world) = 0;
 
 	virtual TWeakInterfacePtr<class IWaveEndEventsHolder>& getWaveEndEventsHolder() = 0;
 
-	virtual class IWaveEndEventsHolder* getWaveEndEventsHolder() const;
+	virtual TScriptInterface<class IWaveEndEventsHolder> getWaveEndEventsHolder() const;
 };

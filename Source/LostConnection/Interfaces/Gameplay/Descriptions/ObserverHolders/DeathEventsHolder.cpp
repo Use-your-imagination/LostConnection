@@ -2,7 +2,9 @@
 
 #include "DeathEventsHolder.h"
 
-void IDeathEventsHolder::attachDeathEvent(const TScriptInterface<IOnDeathEvent>& event)
+#include "Characters/BaseCharacter.h"
+
+void IDeathEventsHolder::attachDeathEvent(TScriptInterface<IOnDeathEvent> event)
 {
 	auto& currentHolder = event->getDeathEventsHolder();
 
@@ -16,16 +18,16 @@ void IDeathEventsHolder::attachDeathEvent(const TScriptInterface<IOnDeathEvent>&
 	this->getDeathEvents().Add(event);
 }
 
-void IDeathEventsHolder::detachDeathEvent(const TScriptInterface<IOnDeathEvent>& event)
+void IDeathEventsHolder::detachDeathEvent(TScriptInterface<IOnDeathEvent> event)
 {
 	this->getDeathEvents().RemoveSingle(event);
 }
 
-void IDeathEventsHolder::notifyDeathEvents() const
+void IDeathEventsHolder::notifyDeathEvents(TObjectPtr<ABaseCharacter> character) const
 {
 	for (const auto& event : this->getDeathEvents())
 	{
-		event->deathEventAction();
+		event->deathEventAction(character);
 	}
 }
 

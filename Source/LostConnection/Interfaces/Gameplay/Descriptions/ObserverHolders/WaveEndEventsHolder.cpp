@@ -2,7 +2,7 @@
 
 #include "WaveEndEventsHolder.h"
 
-void IWaveEndEventsHolder::attachWaveEndEvent(const TScriptInterface<IOnWaveEndEvent>& event)
+void IWaveEndEventsHolder::attachWaveEndEvent(TScriptInterface<IOnWaveEndEvent> event)
 {
 	auto& currentHolder = event->getWaveEndEventsHolder();
 
@@ -16,16 +16,16 @@ void IWaveEndEventsHolder::attachWaveEndEvent(const TScriptInterface<IOnWaveEndE
 	this->getWaveEndEvents().Add(event);
 }
 
-void IWaveEndEventsHolder::detachWaveEndEvent(const TScriptInterface<IOnWaveEndEvent>& event)
+void IWaveEndEventsHolder::detachWaveEndEvent(TScriptInterface<IOnWaveEndEvent> event)
 {
 	this->getWaveEndEvents().RemoveSingle(event);
 }
 
-void IWaveEndEventsHolder::notifyWaveEndEvents() const
+void IWaveEndEventsHolder::notifyWaveEndEvents(TObjectPtr<UWorld> world) const
 {
 	for (const auto& event : this->getWaveEndEvents())
 	{
-		event->waveEndEventAction();
+		event->waveEndEventAction(world);
 	}
 }
 

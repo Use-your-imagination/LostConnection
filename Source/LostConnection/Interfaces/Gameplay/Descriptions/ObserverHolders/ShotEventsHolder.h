@@ -26,11 +26,11 @@ protected:
 public:
 	IShotEventsHolder() = default;
 
-	virtual void attachShotEvent(const TScriptInterface<IOnShotEvent>& event);
+	virtual void attachShotEvent(TScriptInterface<IOnShotEvent> event);
 
-	virtual void detachShotEvent(const TScriptInterface<IOnShotEvent>& event) ;
+	virtual void detachShotEvent(TScriptInterface<IOnShotEvent> event) ;
 
-	virtual void notifyShotEvents() const;
+	virtual void notifyShotEvents(TWeakInterfacePtr<IDamageInflictor> inflictor) const;
 
-	virtual const TArray<TScriptInterface<IOnShotEvent>>& getShotEvents() const ;
+	virtual const TArray<TScriptInterface<IOnShotEvent>>& getShotEvents() const;
 };

@@ -2,7 +2,9 @@
 
 #include "CastEventsHolder.h"
 
-void ICastEventsHolder::attachCastEvent(const TScriptInterface<IOnCastEvent>& event)
+#include "Interfaces/Gameplay/Descriptions/Caster.h"
+
+void ICastEventsHolder::attachCastEvent(TScriptInterface<IOnCastEvent> event)
 {
 	auto& currentHolder = event->getCastEventsHolder();
 
@@ -16,16 +18,16 @@ void ICastEventsHolder::attachCastEvent(const TScriptInterface<IOnCastEvent>& ev
 	this->getCastEvents().Add(event);
 }
 
-void ICastEventsHolder::detachCastEvent(const TScriptInterface<IOnCastEvent>& event)
+void ICastEventsHolder::detachCastEvent(TScriptInterface<IOnCastEvent> event)
 {
 	this->getCastEvents().RemoveSingle(event);
 }
 
-void ICastEventsHolder::notifyCastEvents() const
+void ICastEventsHolder::notifyCastEvents(TScriptInterface<ICaster> caster) const
 {
 	for (const auto& event : this->getCastEvents())
 	{
-		event->castEventAction();
+		event->castEventAction(caster);
 	}
 }
 

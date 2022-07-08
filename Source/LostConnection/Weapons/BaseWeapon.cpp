@@ -131,7 +131,7 @@ void UBaseWeapon::shoot()
 	{
 		if (currentMagazineSize >= ammoCost)
 		{
-			owner->notifyShotEvents();
+			owner->notifyShotEvents(owner);
 
 			float currentSpreadDistance = this->calculateSpreadDistance();
 			float pitch = FMath::RandRange(-currentSpreadDistance, currentSpreadDistance);

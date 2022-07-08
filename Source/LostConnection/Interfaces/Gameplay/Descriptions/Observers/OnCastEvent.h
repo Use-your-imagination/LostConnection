@@ -22,11 +22,9 @@ class LOSTCONNECTION_API IOnCastEvent
 public:
 	IOnCastEvent() = default;
 
-	virtual void initCastEvent(class ICastEventsHolder* holder);
-
-	virtual void castEventAction() = 0;
+	virtual void castEventAction(const TScriptInterface<class ICaster>& caster) = 0;
 
 	virtual TWeakInterfacePtr<class ICastEventsHolder>& getCastEventsHolder() = 0;
 
-	virtual class ICastEventsHolder* getCastEventsHolder() const = 0;
+	virtual TScriptInterface<class ICastEventsHolder> getCastEventsHolder() const;
 };

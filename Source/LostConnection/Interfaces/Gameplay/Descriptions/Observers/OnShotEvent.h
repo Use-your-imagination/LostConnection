@@ -7,6 +7,8 @@
 #include "UObject/Interface.h"
 #include "UObject/WeakInterfacePtr.h"
 
+#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+
 #include "OnShotEvent.generated.h"
 
 UINTERFACE(BlueprintType)
@@ -22,9 +24,9 @@ class LOSTCONNECTION_API IOnShotEvent
 public:
 	IOnShotEvent() = default;
 
-	virtual void shotEventAction() = 0;
+	virtual void shotEventAction(TWeakInterfacePtr<IDamageInflictor> inflictor) = 0;
 
 	virtual TWeakInterfacePtr<class IShotEventsHolder>& getShotEventsHolder() = 0;
 
-	virtual class IShotEventsHolder* getShotEventsHolder() const;
+	virtual TScriptInterface<class IShotEventsHolder> getShotEventsHolder() const;
 };

@@ -26,11 +26,11 @@ protected:
 public:
 	ICastEventsHolder() = default;
 
-	virtual void attachCastEvent(const TScriptInterface<IOnCastEvent>& event);
+	virtual void attachCastEvent(TScriptInterface<IOnCastEvent> event);
 
-	virtual void detachCastEvent(const TScriptInterface<IOnCastEvent>& event);
+	virtual void detachCastEvent(TScriptInterface<IOnCastEvent> event);
 
-	virtual void notifyCastEvents() const;
+	virtual void notifyCastEvents(TScriptInterface<class ICaster> caster) const;
 
 	virtual const TArray<TScriptInterface<IOnCastEvent>>& getCastEvents() const;
 };

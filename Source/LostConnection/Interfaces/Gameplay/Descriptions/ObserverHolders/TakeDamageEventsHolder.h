@@ -26,11 +26,11 @@ protected:
 public:
 	ITakeDamageEventsHolder() = default;
 
-	virtual void attachTakeDamageEvent(const TScriptInterface<IOnTakeDamageEvent>& event);
+	virtual void attachTakeDamageEvent(TScriptInterface<IOnTakeDamageEvent> event);
 
-	virtual void detachTakeDamageEvent(const TScriptInterface<IOnTakeDamageEvent>& event);
+	virtual void detachTakeDamageEvent(TScriptInterface<IOnTakeDamageEvent> event);
 
-	virtual void notifyTakeDamageEvents() const;
+	virtual void notifyTakeDamageEvents(TScriptInterface<IDamageReceiver> receiver) const;
 
 	virtual const TArray<TScriptInterface<IOnTakeDamageEvent>>& getTakeDamageEvents() const;
 };

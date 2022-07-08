@@ -66,7 +66,7 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setCost(float newCost);
 
-	void setCaster(const TScriptInterface<class ICaster>& caster);
+	void setCaster(TScriptInterface<class ICaster> caster);
 
 	UFUNCTION(Server, Reliable)
 	void disable();
@@ -92,7 +92,7 @@ public:
 
 	EAbilitySlot getId() const;
 
-	const TScriptInterface<class ICaster>& getCaster() const;
+	TScriptInterface<class ICaster> getCaster() const;
 
 	virtual ~UBaseAbility() = default;
 };

@@ -26,11 +26,11 @@ protected:
 public:
 	IHitEventsHolder() = default;
 
-	virtual void attachHitEvent(const TScriptInterface<IOnHitEvent>& event);
+	virtual void attachHitEvent(TScriptInterface<IOnHitEvent> event);
 
-	virtual void detachHitEvent(const TScriptInterface<IOnHitEvent>& event);
+	virtual void detachHitEvent(TScriptInterface<IOnHitEvent> event);
 
-	virtual void notifyHitEvents() const;
+	virtual void notifyHitEvents(TWeakObjectPtr<class ABaseCharacter> hitter, TObjectPtr<class ABaseCharacter> target) const;
 
 	virtual const TArray<TScriptInterface<IOnHitEvent>>& getHitEvents() const;
 };
