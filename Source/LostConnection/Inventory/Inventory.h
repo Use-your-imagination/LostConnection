@@ -88,7 +88,7 @@ private:
 
 	TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules);
 
-	void upgradeModule(TObjectPtr<UInventoryCell>& moduleToUpgrade);
+	void upgradeModule(TObjectPtr<UInventoryCell> moduleToUpgrade);
 
 	UFUNCTION()
 	void onInventoryUpdate();

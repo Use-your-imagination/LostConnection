@@ -76,7 +76,7 @@ TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObje
 
 		TObjectPtr<UBaseModule> baseModule = (*module)->getItem<UBaseModule>();
 		EModuleQuality quality = baseModule->getQuality();
-		TSubclassOf<UBaseModule> moduleClass = baseModule->StaticClass();
+		TSubclassOf<UBaseModule> moduleClass = baseModule->GetClass();
 		TArray<TObjectPtr<UInventoryCell>> currentQualityModules;
 
 		for (int32 i = 0; i < modulesToNextTier; i++)
@@ -86,7 +86,7 @@ TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObje
 					TObjectPtr<UBaseModule> tem = (*cell)->getItem<UBaseModule>();
 
 					return tem->getQuality() == quality &&
-						moduleClass == tem->StaticClass() &&
+						moduleClass == tem->GetClass() &&
 						!currentQualityModules.Contains(*cell);
 				});
 
@@ -101,29 +101,31 @@ TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObje
 			continue;
 		}
 
-		int32 possibleEquippedModuleIndex = 0;
+		TObjectPtr<UInventoryCell> possibleEquippedModule = currentQualityModules[0];
 
 		for (int32 i = 1; i < currentQualityModules.Num(); i++)
 		{
-			if (!currentQualityModules[i]->getIsEquipped())
+			const TObjectPtr<UInventoryCell>& tem = currentQualityModules[i];
+
+			if (tem->getIsEquipped())
 			{
-				possibleEquippedModuleIndex = i;
+				possibleEquippedModule = tem;
 
 				break;
 			}
 		}
 
-		currentQualityModules.RemoveAt(possibleEquippedModuleIndex);
+		currentQualityModules.RemoveSingle(possibleEquippedModule);
 
 		modulesToRemove.Append(MoveTemp(currentQualityModules));
 
-		this->upgradeModule(*module);
+		this->upgradeModule(possibleEquippedModule);
 	}
 
 	return modulesToRemove;
 }
 
-void AInventory::upgradeModule(TObjectPtr<UInventoryCell>& moduleToUpgrade)
+void AInventory::upgradeModule(TObjectPtr<UInventoryCell> moduleToUpgrade)
 {
 	TObjectPtr<UBaseModule> module = moduleToUpgrade->getItem<UBaseModule>();
 	EModuleQuality quality = module->getQuality();
