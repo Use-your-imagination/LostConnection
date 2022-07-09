@@ -4,28 +4,24 @@
 
 #include "CoreMinimal.h"
 
-#include "AIAction.h"
+#include "StateMachineAction.h"
 
 template<typename... Args>
-class LOSTCONNECTION_API WaitAction : public AIAction<Args...>
+class LOSTCONNECTION_API WaitAction : public StateMachineAction<Args...>
 {
 private:
 	double waitSeconds;
 	double currentTime;
-	bool resetState;
 
 public:
-	/**
-	* @param resetState Value that returns to start in behavior tree
-	*/
-	WaitAction(double secondsToWait, bool resetState = true);
+	WaitAction(double secondsToWait);
 
 	~WaitAction() = default;
 };
 
 template<typename... Args>
-WaitAction<Args...>::WaitAction(double secondsToWait, bool resetState) :
-	AIAction
+WaitAction<Args...>::WaitAction(double secondsToWait) :
+	StateMachineAction
 	(
 		[](const Args&...) -> bool
 		{
@@ -43,12 +39,10 @@ WaitAction<Args...>::WaitAction(double secondsToWait, bool resetState) :
 			}
 
 			return !StaticCast<bool>(currentTime);
-		},
-		[this](bool) { return this->resetState; }
+		}
 	),
 	waitSeconds(secondsToWait),
-	currentTime(secondsToWait),
-	resetState(resetState)
+	currentTime(secondsToWait)
 {
 
 }

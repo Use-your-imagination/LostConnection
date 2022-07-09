@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 
-#include "AIActions/AIAction.h"
+#include "StateMachineActions/StateMachineAction.h"
 #include "Utility/Utility.h"
 
 template<typename... Args>
-class LOSTCONNECTION_API ActionsChain
+class LOSTCONNECTION_API StateMachine
 {
 private:
-	TArray<TSharedPtr<AIAction<Args...>>> actions;
+	TArray<TSharedPtr<StateMachineAction<Args...>>> actions;
 	int32 activeIndex;
 
 public:
-	ActionsChain();
+	StateMachine();
 
 	bool process(const Args&... args);
 
@@ -24,18 +24,16 @@ public:
 	* If action returns true chain move to next action
 	* @param condition Condition for run action
 	* @param action Action to execute
-	* @param processBehaviorTree For Selector true means return to start, for sequence true means execute next AI node
 	*/
 	void addAction
 	(
 		TFunction<bool(const Args&...)>&& condition,
-		TFunction<bool(const Args&...)>&& action,
-		TFunction<bool(bool)>&& processBehaviorTree = [](bool isProcessingBehaviorTree) -> bool { return isProcessingBehaviorTree; }
+		TFunction<bool(const Args&...)>&& action
 	);
 
-	void addAction(const TSharedPtr<AIAction<Args...>>& action);
+	void addAction(const TSharedPtr<StateMachineAction<Args...>>& action);
 
-	void addAction(TSharedPtr<AIAction<Args...>>&& action);
+	void addAction(TSharedPtr<StateMachineAction<Args...>>&& action);
 
 	template<template<typename> typename AIActionT, typename... ConstructArgs>
 	void addAction(ConstructArgs&&... args);
@@ -52,18 +50,18 @@ public:
 
 	bool isExecutionEnd() const;
 
-	~ActionsChain() = default;
+	~StateMachine() = default;
 };
 
 template<typename... Args>
-ActionsChain<Args...>::ActionsChain() :
+StateMachine<Args...>::StateMachine() :
 	activeIndex(0)
 {
 
 }
 
 template<typename... Args>
-bool ActionsChain<Args...>::process(const Args&... args)
+bool StateMachine<Args...>::process(const Args&... args)
 {
 	if (this->isEmpty())
 	{
@@ -72,14 +70,11 @@ bool ActionsChain<Args...>::process(const Args&... args)
 		return false;
 	}
 
-	TSharedPtr<AIAction<Args...>>& currentAction = actions[activeIndex];
+	TSharedPtr<StateMachineAction<Args...>>& currentAction = actions[activeIndex];
 
 	if (currentAction->executeCondition(args...))
 	{
-		bool result = currentAction->executeAction(args...);
-		const TFunction<bool(bool)>& processBehaviorTree = currentAction->getProcessBehaviorTree();
-
-		if (result)
+		if (currentAction->executeAction(args...))
 		{
 			if (activeIndex != actions.Num() - 1)
 			{
@@ -89,41 +84,43 @@ bool ActionsChain<Args...>::process(const Args&... args)
 			{
 				activeIndex = 0;
 			}
+
+			return true;
 		}
 
-		return processBehaviorTree(result);
+		return false;
 	}
 
 	return false;
 }
 
 template<typename... Args>
-void ActionsChain<Args...>::addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action, TFunction<bool(bool)>&& processBehaviorTree)
+void StateMachine<Args...>::addAction(TFunction<bool(const Args&...)>&& condition, TFunction<bool(const Args&...)>&& action)
 {
-	actions.Add(MakeShared<AIAction<Args...>>(MoveTemp(condition), MoveTemp(action), MoveTemp(processBehaviorTree)));
+	actions.Add(MakeShared<StateMachineAction<Args...>>(MoveTemp(condition), MoveTemp(action)));
 }
 
 template<typename... Args>
-void ActionsChain<Args...>::addAction(const TSharedPtr<AIAction<Args...>>& action)
+void StateMachine<Args...>::addAction(const TSharedPtr<StateMachineAction<Args...>>& action)
 {
 	actions.Add(action);
 }
 
 template<typename... Args>
-void ActionsChain<Args...>::addAction(TSharedPtr<AIAction<Args...>>&& action)
+void StateMachine<Args...>::addAction(TSharedPtr<StateMachineAction<Args...>>&& action)
 {
 	actions.Add(MoveTemp(action));
 }
 
 template<typename... Args>
 template<template<typename> typename AIActionT, typename... ConstructArgs>
-void ActionsChain<Args...>::addAction(ConstructArgs&&... args)
+void StateMachine<Args...>::addAction(ConstructArgs&&... args)
 {
 	actions.Add(MakeShared<AIActionT<Args...>>(Forward<ConstructArgs>(args)...));
 }
 
 template<typename... Args>
-void ActionsChain<Args...>::clear()
+void StateMachine<Args...>::clear()
 {
 	actions.Empty();
 
@@ -131,31 +128,31 @@ void ActionsChain<Args...>::clear()
 }
 
 template<typename... Args>
-void ActionsChain<Args...>::resetExecution()
+void StateMachine<Args...>::resetExecution()
 {
 	activeIndex = 0;
 }
 
 template<typename... Args>
-int32 ActionsChain<Args...>::size() const
+int32 StateMachine<Args...>::size() const
 {
 	return actions.Num();
 }
 
 template<typename... Args>
-bool ActionsChain<Args...>::isEmpty() const
+bool StateMachine<Args...>::isEmpty() const
 {
 	return actions.IsEmpty();
 }
 
 template<typename... Args>
-bool ActionsChain<Args...>::isNotEmpty() const
+bool StateMachine<Args...>::isNotEmpty() const
 {
 	return !actions.IsEmpty();
 }
 
 template<typename... Args>
-bool ActionsChain<Args...>::isExecutionEnd() const
+bool StateMachine<Args...>::isExecutionEnd() const
 {
 	return !activeIndex;
 }

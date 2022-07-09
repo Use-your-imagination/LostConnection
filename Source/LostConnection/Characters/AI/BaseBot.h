@@ -11,7 +11,6 @@
 #include "Utility/Utility.h"
 #include "Interfaces/Economy/LootPointsGiver.h"
 #include "Interfaces/Loot/AmmoDropable.h"
-#include "AI/ActionsChain.h"
 
 #include "BaseBot.generated.h"
 
@@ -42,10 +41,6 @@ protected:
 	UPROPERTY(Category = "AI|Assets", EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UBehaviorTree> behaviorTree;
 
-	ActionsChain<TScriptInterface<IAITargeted>> offensiveChain;
-	ActionsChain<FVector> movementChain;
-	double resetTime;
-
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -58,22 +53,8 @@ protected:
 
 	virtual void deathLogic() override;
 
-protected:
-	virtual ActionsChain<TScriptInterface<IAITargeted>> initOffensiveChain();
-
-	virtual ActionsChain<FVector> initMovementChain();
-
 public:
 	ABaseBot();
-
-	UFUNCTION(Category = Offensive, BlueprintNativeEvent, BlueprintCallable)
-	bool offensiveStage(const TScriptInterface<IAITargeted>& target);
-
-	UFUNCTION(Category = Offensive, BlueprintNativeEvent, BlueprintCallable)
-	bool movementStage(const FVector& movementPoint);
-
-	UFUNCTION(Category = Offensive, BlueprintNativeEvent, BlueprintCallable)
-	bool otherStage();
 
 	virtual int32 getLootPoints() const final override;
 

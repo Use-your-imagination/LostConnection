@@ -12,7 +12,6 @@
 #include "Engine/LostConnectionGameMode.h"
 #include "Statuses/Ailments/SwarmAilment.h"
 #include "Loot/LootManager.h"
-#include "AI/AIActions/WaitAction.h"
 #include "WorldPlaceables/AI/WavesController.h"
 
 void ABaseBot::Tick(float DeltaSeconds)
@@ -29,10 +28,6 @@ void ABaseBot::BeginPlay()
 		this->changeToDefaultWeapon();
 
 		behaviorTree->BlackboardAsset = blackboard;
-
-		offensiveChain = this->initOffensiveChain();
-
-		movementChain = this->initMovementChain();
 
 		GetController<AAIController>()->RunBehaviorTree(behaviorTree);
 	}
@@ -87,114 +82,10 @@ void ABaseBot::deathLogic()
 	}
 }
 
-ActionsChain<TScriptInterface<IAITargeted>> ABaseBot::initOffensiveChain()
-{
-	ActionsChain<TScriptInterface<IAITargeted>> result;
-
-	result.addAction
-	(
-		[](const TScriptInterface<IAITargeted>& target) -> bool
-		{
-			return IsValid(target.GetObject());
-		},
-		[this](const TScriptInterface<IAITargeted>& target) -> bool
-		{
-			if (!movementChain.isExecutionEnd())
-			{
-				GetController<AAIController>()->StopMovement();
-
-				movementChain.resetExecution();
-			}
-
-			FRotator newRotation = GetActorRotation();
-
-			newRotation.Yaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Cast<AActor>(target)->GetActorLocation()).Yaw;
-
-			SetActorRotation(newRotation);
-
-			return true;
-		}
-	);
-
-	result.addAction
-	(
-		[](const TScriptInterface<IAITargeted>& target) -> bool
-		{
-			return IsValid(target.GetObject());
-		},
-		[this](const TScriptInterface<IAITargeted>&) -> bool
-		{
-			this->shoot();
-			
-			return true;
-		}
-	);
-
-	result.addAction<WaitAction>(0.5);
-
-	result.addAction
-	(
-		[](const TScriptInterface<IAITargeted>&) -> bool
-		{
-			return true;
-		},
-		[this](const TScriptInterface<IAITargeted>&) -> bool
-		{
-			this->resetShoot();
-
-			return true;
-		}
-	);
-
-	return result;
-}
-
-ActionsChain<FVector> ABaseBot::initMovementChain()
-{
-	ActionsChain<FVector> result;
-
-	result.addAction
-	(
-		[](const FVector&) -> bool
-		{
-			return true;
-		},
-		[this](const FVector&) -> bool
-		{
-			TObjectPtr<AAIController> controller = GetController<AAIController>();
-			
-			if (controller->GetCurrentMoveRequestID().IsValid())
-			{
-				return true;
-			}
-
-			TObjectPtr<UNavigationSystemV1> navigationSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
-
-			if (navigationSystem.IsNull())
-			{
-				return false;
-			}
-
-			FNavLocation moveToLocation;
-
-			navigationSystem->GetRandomReachablePointInRadius(GetActorLocation(), 400.0f, moveToLocation);
-
-			controller->MoveToLocation(moveToLocation.Location, -1.0f, false);
-
-			return true;
-		}
-	);
-
-	result.addAction<WaitAction>(0.5);
-
-	return result;
-}
-
 ABaseBot::ABaseBot() :
 	smallAmmoDropChance(45.0f),
 	largeAmmoDropChance(45.0f),
-	energyAmmoDropChance(45.0f),
-	resetTime(0.0)
+	energyAmmoDropChance(45.0f)
 {
 	static ConstructorHelpers::FClassFinder<AAIController> aiControllerFinder(TEXT("/Game/Engine/AIControllers/BP_BaseAIController"));
 
@@ -208,21 +99,6 @@ ABaseBot::ABaseBot() :
 
 	blackboard = blackboardFinder.Object;
 	behaviorTree = behaviorTreeFinder.Object;
-}
-
-bool ABaseBot::offensiveStage_Implementation(const TScriptInterface<IAITargeted>& target)
-{
-	return offensiveChain.process(target);
-}
-
-bool ABaseBot::movementStage_Implementation(const FVector& movementPoint)
-{
-	return movementChain.process(movementPoint);
-}
-
-bool ABaseBot::otherStage_Implementation()
-{
-	return false;
 }
 
 int32 ABaseBot::getLootPoints() const
