@@ -21,6 +21,7 @@ public class LostConnection : ModuleRules
             "UMG",
             "Niagara",
             "AIModule",
+            "GameplayTasks",
             "PhysicsCore",
             "NavigationSystem",
             "OnlineSubsystem",
