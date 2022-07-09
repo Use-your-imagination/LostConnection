@@ -23,7 +23,7 @@ void IShotEventsHolder::detachShotEvent(TScriptInterface<IOnShotEvent> event)
 	this->getShotEvents().RemoveSingle(event);
 }
 
-void IShotEventsHolder::notifyShotEvents(TWeakInterfacePtr<IDamageInflictor> inflictor) const
+void IShotEventsHolder::notifyShotEvents(TScriptInterface<IDamageInflictor> inflictor) const
 {
 	for (const auto& event : this->getShotEvents())
 	{

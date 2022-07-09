@@ -24,7 +24,7 @@ class LOSTCONNECTION_API IOnShotEvent
 public:
 	IOnShotEvent() = default;
 
-	virtual void shotEventAction(TWeakInterfacePtr<IDamageInflictor> inflictor) = 0;
+	virtual void shotEventAction(TScriptInterface<IDamageInflictor> inflictor) = 0;
 
 	virtual TWeakInterfacePtr<class IShotEventsHolder>& getShotEventsHolder() = 0;
 

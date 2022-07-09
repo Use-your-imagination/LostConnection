@@ -54,10 +54,9 @@ void USN4K3SecondAbility::useAbility()
 	Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->resetLastTimeAbilityUsed();
 }
 
-void USN4K3SecondAbility::deathEventAction()
+void USN4K3SecondAbility::deathEventAction(TObjectPtr<ABaseCharacter> character)
 {
-	TObjectPtr<ABaseCharacter> target = Cast<ABaseCharacter>(holder.GetObject());
-	TWeakObjectPtr<USwarmAilment> swarm = target->getSwarm();
+	TWeakObjectPtr<USwarmAilment> swarm = character->getSwarm();
 
 	if (swarm.IsValid())
 	{
@@ -68,9 +67,9 @@ void USN4K3SecondAbility::deathEventAction()
 			return;
 		}
 
-		float distance = (target->GetActorLocation() - drone->GetActorLocation()).Size();
+		float distance = (character->GetActorLocation() - drone->GetActorLocation()).Size();
 		float distanceCofficient;
-		float health = target->getHealth() * Utility::fromPercent(swarm->getThreshold()) * (naniteMeterCoefficient * Utility::fromPercent(thresholdedHealthHeal));
+		float health = character->getHealth() * Utility::fromPercent(swarm->getThreshold()) * (naniteMeterCoefficient * Utility::fromPercent(thresholdedHealthHeal));
 
 		if (UKismetMathLibrary::InRange_FloatFloat(distance, maxHealDistance.X, maxHealDistance.Y))
 		{

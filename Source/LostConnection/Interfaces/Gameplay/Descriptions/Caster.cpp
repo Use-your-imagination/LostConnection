@@ -9,7 +9,7 @@ void ICaster::castAbility(TObjectPtr<UBaseAbility> ability, const TFunction<void
 {
 	Utility::executeOnlyOnServerFromMulticast(Cast<AActor>(this->_getUObject()), [this, ability, callback]()
 		{
-			this->notifyCastEvents(this);
+			this->notifyCastEvents(this->_getUObject());
 
 			this->getCurrentEnergy() -= ability->getCost();
 

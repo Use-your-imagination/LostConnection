@@ -28,9 +28,9 @@ public:
 
 	virtual void attachShotEvent(TScriptInterface<IOnShotEvent> event);
 
-	virtual void detachShotEvent(TScriptInterface<IOnShotEvent> event) ;
+	virtual void detachShotEvent(TScriptInterface<IOnShotEvent> event);
 
-	virtual void notifyShotEvents(TWeakInterfacePtr<IDamageInflictor> inflictor) const;
+	virtual void notifyShotEvents(TScriptInterface<IDamageInflictor> inflictor) const;
 
 	virtual const TArray<TScriptInterface<IOnShotEvent>>& getShotEvents() const;
 };

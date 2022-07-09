@@ -46,7 +46,7 @@ public:
 
 	void useAbility() override;
 
-	void deathEventAction() override;
+	void deathEventAction(TObjectPtr<class ABaseCharacter> character) override;
 
 	TWeakInterfacePtr<class IDeathEventsHolder>& getDeathEventsHolder() override;
 

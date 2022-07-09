@@ -16,7 +16,7 @@ void USN4K3ResurrectDeathEvent::init(TObjectPtr<ALostConnectionPlayerController>
 	this->controller = controller;
 }
 
-void USN4K3ResurrectDeathEvent::deathEventAction()
+void USN4K3ResurrectDeathEvent::deathEventAction(TObjectPtr<ABaseCharacter> character)
 {
 	if (!IsValid(controller) || controller->GetPawn<ASN4K3>())
 	{
