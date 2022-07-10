@@ -2,6 +2,7 @@
 
 #include "BTComposite_RandomizedSelector.h"
 
+#include "LostConnectionStyle.h"
 #include "Utility/Utility.h"
 
 UBTComposite_RandomizedSelector::UBTComposite_RandomizedSelector()
@@ -63,6 +64,8 @@ int32 UBTComposite_RandomizedSelector::GetNextChildHandler(FBehaviorTreeSearchDa
 #if WITH_EDITOR
 FName UBTComposite_RandomizedSelector::GetNodeIconName() const
 {
-	return FName("BTEditor.Graph.BTNode.Composite.Selector.Icon");
+	FLostConnectionStyle::get();
+
+	return FName("LostConnectionStyle.Editor.AI.RandomizedSelector.Icon");
 }
 #endif
