@@ -104,6 +104,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 void UBaseWeapon::shoot()
 {
+	static int32 lagThreshold = 3;
+
 	if (!owner.IsValid() || owner->getIsReloading())
 	{
 		return;
@@ -116,6 +118,11 @@ void UBaseWeapon::shoot()
 	else if (weaponType == EWeaponType::delay)
 	{
 		return;
+	}
+
+	if (currentTimeBetweenShots > timeBetweenShots * lagThreshold)
+	{
+		currentTimeBetweenShots = timeBetweenShots * lagThreshold;
 	}
 
 	TObjectPtr<ABaseDrone> drone = Cast<ABaseDrone>(owner);

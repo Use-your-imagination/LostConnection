@@ -22,7 +22,7 @@ class LOSTCONNECTION_API UBTComposite_RandomizedSelector : public UBTCompositeNo
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(Category = Randomized, EditAnywhere)
+	UPROPERTY(Category = Random, EditAnywhere)
 	TArray<float> executionChances;
 
 	UPROPERTY()

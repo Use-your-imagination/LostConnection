@@ -4,8 +4,6 @@
 
 #include "Styling/SlateStyleRegistry.h"
 
-#include "Utility/Utility.h"
-
 TSharedRef<FSlateStyleSet> FLostConnectionStyle::create()
 {
 	FSlateStyleSet& coreStyleSet = const_cast<FSlateStyleSet&>(static_cast<const FSlateStyleSet&>(FCoreStyle::Get()));
