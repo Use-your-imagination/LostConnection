@@ -45,7 +45,7 @@ USwarmAilment::USwarmAilment()
 	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
-void USwarmAilment::increaseThreshold(IDamageInflictor* inflictor)
+void USwarmAilment::increaseThreshold(const TScriptInterface<IDamageInflictor>& inflictor)
 {
 	threshold += target->getTotalLifePercentDealt(inflictor) * thresholdPerTotalLifePercentPool;
 }
@@ -62,14 +62,14 @@ void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInf
 		return;
 	}
 
-	const TArray<UBaseStatus*>& statuses = target->getStatuses();
-	IAilmentReceiver* ailmentReceiver = StaticCast<IAilmentReceiver*>(target.GetInterface());
+	const TArray<TObjectPtr<UBaseStatus>>& statuses = target->getStatuses();
+	TScriptInterface<IAilmentReceiver> ailmentReceiver = Cast<IAilmentReceiver>(target);
 
-	for (UBaseStatus* status : statuses)
+	for (TObjectPtr<UBaseStatus> status : statuses)
 	{
-		if (USwarmAilment* swarm = Cast<USwarmAilment>(status))
+		if (TObjectPtr<USwarmAilment> swarm = Cast<USwarmAilment>(status))
 		{
-			swarm->increaseThreshold(StaticCast<IStatusInflictor*>(inflictor.GetInterface()));
+			swarm->increaseThreshold(Cast<IDamageInflictor>(inflictor));
 
 			swarm->refreshDuration();
 

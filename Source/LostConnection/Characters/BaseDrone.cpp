@@ -892,7 +892,7 @@ void ABaseDrone::dropWeapon_Implementation()
 
 	droppedWeapon->setWeapon(currentWeapon);
 
-	currentWeapon->setOwner(nullptr);
+	currentWeapon->setDamageInstigator(nullptr);
 
 	if (currentWeapon == primaryWeapon)
 	{
@@ -1001,15 +1001,15 @@ void ABaseDrone::action()
 
 	FHitResult hit;
 	FCollisionQueryParams ignoreParameters;
-	IActionable* object = nullptr;
+	TScriptInterface<IActionable> object;
 
 	ignoreParameters.AddIgnoredActor(this);
 
 	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace(), ECollisionChannel::ECC_Visibility, ignoreParameters);
 
-	object = Cast<IActionable>(hit.GetActor());
+	object = hit.GetActor();
 
-	if (object)
+	if (object.GetInterface())
 	{
 		object->doAction(this);
 	}

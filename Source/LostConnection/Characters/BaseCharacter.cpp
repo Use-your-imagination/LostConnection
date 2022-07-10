@@ -145,7 +145,7 @@ void ABaseCharacter::onCurrentWeaponChange()
 
 	if (currentWeapon)
 	{
-		currentWeapon->setOwner(this);
+		currentWeapon->setDamageInstigator(GetController());
 
 		currentWeapon->updateTimeBetweenShots();
 
@@ -718,6 +718,7 @@ void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterfa
 {
 	this->notifyTakeDamageEvents(this);
 
+	TObjectPtr<AController> instigator = inflictor->getDamageInstigator();
 	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor);
 
 	if (tem < 0.0f)
@@ -728,6 +729,8 @@ void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterfa
 	{
 		this->setCurrentHealth(tem);
 	}
+
+	TakeDamage(inflictor->calculateTotalDamage(), FDamageEvent(), instigator, instigator->GetPawn());
 }
 
 void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& hit)
@@ -758,7 +761,7 @@ void ABaseCharacter::spawnStatusVFX_Implementation(UNiagaraSystem* statusVFX, co
 	);
 }
 
-void ABaseCharacter::addStatus(UBaseStatus* status)
+void ABaseCharacter::addStatus(TObjectPtr<UBaseStatus> status)
 {
 	statuses.Add(status);
 }
@@ -838,7 +841,7 @@ float ABaseCharacter::getCurrentHealth() const
 	return currentHealth;
 }
 
-const TArray<UBaseStatus*>& ABaseCharacter::getStatuses() const
+const TArray<TObjectPtr<UBaseStatus>>& ABaseCharacter::getStatuses() const
 {
 	return statuses;
 }
@@ -878,19 +881,19 @@ float ABaseCharacter::getEnergyShieldPool() const
 	return energyShield->getCapacity();
 }
 
-float ABaseCharacter::getTotalLifePercentDealt(IDamageInflictor* inflictor) const
+float ABaseCharacter::getTotalLifePercentDealt(const TScriptInterface<IDamageInflictor>& inflictor) const
 {
 	float pool = this->getTotalLifePool();
 
 	return Utility::toPercent(1.0f - (pool - inflictor->calculateTotalDamage()) / pool);
 }
 
-float ABaseCharacter::getLifePercentDealt(class IDamageInflictor* inflictor) const
+float ABaseCharacter::getLifePercentDealt(const TScriptInterface<IDamageInflictor>& inflictor) const
 {
 	return Utility::toPercent(1.0f - (health - inflictor->calculateTotalDamage()) / health);
 }
 
-float ABaseCharacter::getEnergyShieldPercentDealt(class IDamageInflictor* inflictor) const
+float ABaseCharacter::getEnergyShieldPercentDealt(const TScriptInterface<IDamageInflictor>& inflictor) const
 {
 	float capacity = energyShield->getCapacity();
 

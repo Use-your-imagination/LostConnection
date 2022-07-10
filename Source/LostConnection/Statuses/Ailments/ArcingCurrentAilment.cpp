@@ -41,7 +41,7 @@ UArcingCurrentAilment::UArcingCurrentAilment()
 	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
-void UArcingCurrentAilment::increaseDamageConversion(IDamageInflictor* inflictor)
+void UArcingCurrentAilment::increaseDamageConversion(const TScriptInterface<IDamageInflictor> inflictor)
 {
 	damageConversionPercent += target->getTotalLifePercentDealt(inflictor) * damageConvertPercentPerTotalLifePercentPool;
 }

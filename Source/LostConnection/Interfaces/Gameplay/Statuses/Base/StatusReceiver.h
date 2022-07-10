@@ -24,11 +24,11 @@ public:
 
 	virtual void spawnStatusVFX(UNiagaraSystem* statusVFX, const FHitResult& hit) = 0;
 
-	virtual void addStatus(UBaseStatus* status) = 0;
+	virtual void addStatus(TObjectPtr<UBaseStatus> status) = 0;
 
 	virtual void setUnderStatusIntVariable(const FString& key, int32 value) = 0;
 
 	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) = 0;
 
-	virtual const TArray<UBaseStatus*>& getStatuses() const = 0;
+	virtual const TArray<TObjectPtr<UBaseStatus>>& getStatuses() const = 0;
 };

@@ -176,20 +176,15 @@ AAmmo::AAmmo() :
 	movement->SetIsReplicated(true);
 }
 
-void AAmmo::launch(const TWeakObjectPtr<ABaseCharacter>& character, const FTransform& visibleAmmoRelativeTransform, const FRotator& spread)
+void AAmmo::launch(const FTransform& visibleAmmoRelativeTransform, const FRotator& spread)
 {
-	if (!character.IsValid())
-	{
-		return;
-	}
-
-	isAlly = character->getIsAlly();
+	isAlly = ailmentInflictorUtility->getDamageInstigator()->GetPawn<ABaseCharacter>()->getIsAlly();
 
 	mesh->AddRelativeRotation(spread);
 
 	visibleMesh->SetRelativeTransform(visibleAmmoRelativeTransform);
 
-	visibleMesh->AddRelativeRotation({ 0.0f, 270.0f ,0.0f });
+	visibleMesh->AddRelativeRotation({ 0.0f, 270.0f, 0.0f });
 
 	FinishSpawning({}, true);
 }
@@ -208,23 +203,20 @@ void AAmmo::copyProperties(TObjectPtr<UBaseWeapon> weapon)
 
 	ailmentInflictorUtility->setAdditionalCrushingHitChance(weapon->getAdditionalCrushingHitChance());
 
-	owner = weapon->getOwner();
+	TObjectPtr<AController> damageInstigator = ailmentInflictorUtility->getDamageInstigator();
 
-	if (owner.IsValid())
+	if (TScriptInterface<IPersonalModulesHolder> holder = damageInstigator->GetPawn())
 	{
-		if (IPersonalModulesHolder* holder = Cast<IPersonalModulesHolder>(owner))
-		{
-			Utility::applyDamageModules(this, holder->getPersonalEquippedModules(), ailmentInflictorUtility);
+		Utility::applyDamageModules(this, holder->getPersonalEquippedModules(), ailmentInflictorUtility);
 
-			Utility::applyDamageModules(this, holder->getActivePersonalModules(), ailmentInflictorUtility);
-		}
+		Utility::applyDamageModules(this, holder->getActivePersonalModules(), ailmentInflictorUtility);
+	}
 
-		if (IWeaponModulesHolder* holder = Cast<IWeaponModulesHolder>(owner))
-		{
-			Utility::applyDamageModules(this, holder->getWeaponModules(), ailmentInflictorUtility);
+	if (TScriptInterface<IWeaponModulesHolder> holder = damageInstigator->GetPawn())
+	{
+		Utility::applyDamageModules(this, holder->getWeaponModules(), ailmentInflictorUtility);
 
-			Utility::applyDamageModules(this, holder->getActiveWeaponModules(), ailmentInflictorUtility);
-		}
+		Utility::applyDamageModules(this, holder->getActiveWeaponModules(), ailmentInflictorUtility);
 	}
 }
 
@@ -238,9 +230,9 @@ bool AAmmo::getIsAlly() const
 	return isAlly;
 }
 
-const TWeakObjectPtr<ABaseCharacter>& AAmmo::getOwner() const
+TWeakObjectPtr<ABaseCharacter> AAmmo::getOwner() const
 {
-	return owner;
+	return ailmentInflictorUtility->getDamageInstigator()->GetPawn<ABaseCharacter>();
 }
 
 UAilmentInflictorUtility* AAmmo::getAilmentInflictorUtility() const

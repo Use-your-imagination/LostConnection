@@ -80,6 +80,8 @@ public:
 
 	float getAdditionalCrushingHitChance() const override;
 
+	TObjectPtr<AController> getDamageInstigator() const override;
+
 	~UAilmentInflictorUtility() = default;
 
 	friend class AAmmo;

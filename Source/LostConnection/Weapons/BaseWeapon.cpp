@@ -32,8 +32,8 @@ FTransform UBaseWeapon::calculateAmmoTransform(TObjectPtr<ABaseDrone> drone, con
 	{
 		// TODO: change target to AITargeted
 
-		TObjectPtr<ABaseBot> bot = Cast<ABaseBot>(owner);
-		TObjectPtr<AAIController> controller = bot->GetController<AAIController>();
+		TObjectPtr<ABaseBot> bot = damageInstigator->GetPawn<ABaseBot>();
+		TObjectPtr<AAIController> controller = Cast<AAIController>(damageInstigator);
 		TObjectPtr<ABaseDrone> target = Cast<ABaseDrone>(controller->GetBlackboardComponent()->GetValueAsObject(ULostConnectionAssetManager::get().getAI().getTargetKey()));
 
 		if (IsValid(target))
@@ -100,13 +100,17 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseWeapon, weaponModules);
 
 	DOREPLIFETIME(UBaseWeapon, rarity);
+
+	DOREPLIFETIME(UBaseWeapon, damageInstigator);
 }
 
 void UBaseWeapon::shoot()
 {
 	static int32 lagThreshold = 3;
 
-	if (!owner.IsValid() || owner->getIsReloading())
+	TWeakObjectPtr<ABaseCharacter> owner = this->getOwner();
+
+	if (owner->getIsReloading())
 	{
 		return;
 	}
@@ -145,7 +149,7 @@ void UBaseWeapon::shoot()
 			
 			launchedAmmo->copyProperties(this);
 
-			launchedAmmo->launch(owner, visibleAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
+			launchedAmmo->launch(visibleAmmoTransform, { pitch, FMath::RandRange(-yaw, yaw), 0.0f });
 
 			currentMagazineSize -= ammoCost;
 
@@ -199,7 +203,7 @@ UBaseWeapon::UBaseWeapon() :
 	ammoCost(1),
 	length(100.0f)
 {
-	
+	damageInstigator = Cast<AInventory>(GetOutermostObject())->getPlayerState()->GetPlayerController();
 }
 
 void UBaseWeapon::startShoot()
@@ -234,6 +238,8 @@ void UBaseWeapon::updateTimeBetweenShots_Implementation()
 void UBaseWeapon::Tick(float DeltaSeconds)
 {
 	static constexpr float decreaseAccuracyMultiplier = 0.95f;
+
+	TWeakObjectPtr<ABaseCharacter> owner = this->getOwner();
 	bool isReloading = owner.IsValid() && owner->getIsReloading();
 
 	if (isReloading)
@@ -277,9 +283,9 @@ void UBaseWeapon::removeMoreDamageCoefficient(float coefficient)
 	moreDamageCoefficients.Remove(coefficient);
 }
 
-void UBaseWeapon::setOwner_Implementation(ABaseCharacter* owner)
+void UBaseWeapon::setDamageInstigator_Implementation(AController* newDamageInstigator)
 {
-	this->owner = owner;
+	damageInstigator = newDamageInstigator;
 }
 
 void UBaseWeapon::setAmmoType_Implementation(EAmmoType newAmmoType)
@@ -392,9 +398,14 @@ EWeaponType UBaseWeapon::getWeaponType() const
 	return weaponType;
 }
 
-const TWeakObjectPtr<ABaseCharacter>& UBaseWeapon::getOwner() const
+TWeakObjectPtr<ABaseCharacter> UBaseWeapon::getOwner() const
 {
-	return owner;
+	return damageInstigator->GetPawn<ABaseCharacter>();
+}
+
+TObjectPtr<AController> UBaseWeapon::getDamageInstigator() const
+{
+	return damageInstigator;
 }
 
 float UBaseWeapon::getBaseCrushingHitChance() const

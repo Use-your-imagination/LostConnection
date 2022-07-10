@@ -34,7 +34,7 @@ UShatterAilment::UShatterAilment()
 
 void UShatterAilment::updateDuration(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target)
 {
-	duration += target->getTotalLifePercentDealt(inflictor) / Utility::fromPercent(durationConversionPercent);
+	duration += target->getTotalLifePercentDealt(Cast<IDamageInflictor>(inflictor)) / Utility::fromPercent(durationConversionPercent);
 }
 
 void UShatterAilment::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)

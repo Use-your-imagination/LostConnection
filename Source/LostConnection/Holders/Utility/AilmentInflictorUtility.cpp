@@ -120,3 +120,8 @@ float UAilmentInflictorUtility::getAdditionalCrushingHitChance() const
 {
 	return additionalCrushingHitChance;
 }
+
+TObjectPtr<AController> UAilmentInflictorUtility::getDamageInstigator() const
+{
+	return damageInflictorUtility->getDamageInstigator();
+}

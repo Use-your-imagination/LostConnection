@@ -4,22 +4,7 @@
 
 #include "Interfaces/Holders/DamageInflictorHolder.h"
 
-void IDamageReceiver::takeDamageFromInflictorHolder(const IDamageInflictorHolder* inflictorHolder)
+void IDamageReceiver::takeDamageFromInflictorHolder(const TScriptInterface<IDamageInflictorHolder>& inflictorHolder)
 {
-	this->takeDamageFromInflictor(TScriptInterface<IDamageInflictor>(inflictorHolder->getDamageInflictorUtility()));
-}
-
-float IDamageReceiver::getTotalLifePercentDealt(IDamageInflictorHolder* inflictorHolder) const
-{
-	return this->getTotalLifePercentDealt(inflictorHolder->getDamageInflictorUtility());
-}
-
-float IDamageReceiver::getLifePercentDealt(IDamageInflictorHolder* inflictorHolder) const
-{
-	return this->getLifePercentDealt(inflictorHolder->getDamageInflictorUtility());
-}
-
-float IDamageReceiver::getEnergyShieldPercentDealt(IDamageInflictorHolder* inflictorHolder) const
-{
-	return this->getEnergyShieldPercentDealt(inflictorHolder->getDamageInflictorUtility());
+	this->takeDamageFromInflictor(inflictorHolder->getDamageInflictorUtility());
 }

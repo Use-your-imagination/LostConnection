@@ -29,8 +29,6 @@ void ALostConnectionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 
 	DOREPLIFETIME(ALostConnectionPlayerState, inventory);
 
-	DOREPLIFETIME(ALostConnectionPlayerState, playerController);
-
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableAbilities);
 
 	DOREPLIFETIME(ALostConnectionPlayerState, cooldownableWeapons);
@@ -158,11 +156,6 @@ void ALostConnectionPlayerState::setMaxEnergyAmmoCount(int32 count)
 	inventory->setMaxEnergyAmmoCount(count);
 }
 
-void ALostConnectionPlayerState::setPlayerController_Implementation(ALostConnectionPlayerController* newPlayerController)
-{
-	playerController = newPlayerController;
-}
-
 const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
 {
 	return inventory->getPersonalEquippedModules();
@@ -208,11 +201,6 @@ int32 ALostConnectionPlayerState::getMaxEnergyAmmoCount() const
 	return inventory->getMaxEnergyAmmoCount();
 }
 
-ALostConnectionPlayerController* ALostConnectionPlayerState::getPlayerController() const
-{
-	return playerController;
-}
-
 void ALostConnectionPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
@@ -236,7 +224,7 @@ ALostConnectionPlayerState::ALostConnectionPlayerState()
 
 void ALostConnectionPlayerState::init_Implementation()
 {
-	inventory->SetOwner(playerController);
+	inventory->SetOwner(GetPlayerController());
 }
 
 void ALostConnectionPlayerState::resetCurrentUI_Implementation()
@@ -251,7 +239,7 @@ void ALostConnectionPlayerState::resetCurrentUI_Implementation()
 
 void ALostConnectionPlayerState::createEscapableWidget_Implementation(TSubclassOf<UEscapableWidget> widgetClass)
 {
-	TObjectPtr<UEscapableWidget> widget = CreateWidget<UEscapableWidget>(playerController.Get(), widgetClass);
+	TObjectPtr<UEscapableWidget> widget = CreateWidget<UEscapableWidget>(GetPlayerController(), widgetClass);
 
 	widget->init(this);
 
@@ -289,9 +277,9 @@ bool ALostConnectionPlayerState::popEscapableWidget()
 	{
 		this->getCurrentUI()->SetVisibility(ESlateVisibility::Visible);
 
-		playerController->SetInputMode(FInputModeGameOnly());
+		GetPlayerController()->SetInputMode(FInputModeGameOnly());
 
-		playerController->SetShowMouseCursor(false);
+		GetPlayerController()->SetShowMouseCursor(false);
 
 		return true;
 	}

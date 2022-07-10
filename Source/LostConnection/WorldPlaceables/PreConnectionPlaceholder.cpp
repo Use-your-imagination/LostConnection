@@ -27,8 +27,6 @@ void APreConnectionPlaceholder::Tick_Implementation(float DeltaSeconds)
 
 		playerState->setDroneClass(ASN4K3::StaticClass());
 
-		playerState->setPlayerController(playerController);
-
 		playerState->init();
 
 		playerController->respawnPlayer(playerController->GetPawn()->GetActorTransform());

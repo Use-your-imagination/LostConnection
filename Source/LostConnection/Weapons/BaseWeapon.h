@@ -28,7 +28,6 @@ class LOSTCONNECTION_API UBaseWeapon :
 	GENERATED_BODY()
 		
 private:
-	TWeakObjectPtr<class ABaseCharacter> owner;
 	float timeBetweenShots;
 	float currentTimeBetweenShots;
 	bool isShooting;
@@ -160,6 +159,9 @@ protected:
 	UPROPERTY(Category = Rarity, Replicated, BlueprintReadOnly)
 	EWeaponRarity rarity;
 
+	UPROPERTY(Category = Instigator, Replicated, BlueprintReadOnly)
+	TObjectPtr<AController> damageInstigator;
+
 private:
 	UFUNCTION(Category = Weapons, BlueprintCallable, Meta = (AllowPrivateAccess))
 	float calculateSpreadDistance() const;
@@ -190,7 +192,7 @@ public:
 	void removeMoreDamageCoefficient(float coefficient);
 
 	UFUNCTION(Category = Weapons, Server, Reliable, BlueprintCallable)
-	void setOwner(class ABaseCharacter* owner);
+	void setDamageInstigator(AController* newDamageInstigator);
 
 	UFUNCTION(Server, Reliable)
 	void setAmmoType(EAmmoType newAmmoType);
@@ -238,7 +240,9 @@ public:
 
 	EWeaponType getWeaponType() const;
 
-	const TWeakObjectPtr<class ABaseCharacter>& getOwner() const;
+	TWeakObjectPtr<class ABaseCharacter> getOwner() const;
+
+	TObjectPtr<AController> getDamageInstigator() const;
 
 	float getBaseCrushingHitChance() const;
 

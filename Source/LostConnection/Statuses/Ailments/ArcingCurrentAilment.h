@@ -43,12 +43,12 @@ private:
 	float damageConversionPercent;
 
 	UPROPERTY(Category = ArcingCurrent, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	UDamageInflictorUtility* damageInflictorUtility;
+	TObjectPtr<UDamageInflictorUtility> damageInflictorUtility;
 
 public:
 	UArcingCurrentAilment();
 
-	void increaseDamageConversion(IDamageInflictor* inflictor);
+	void increaseDamageConversion(const TScriptInterface<IDamageInflictor> inflictor);
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 

@@ -53,14 +53,13 @@ private:
 	UPROPERTY()
 	TObjectPtr<UAilmentInflictorUtility> ailmentInflictorUtility;
 
-	TWeakObjectPtr<class ABaseCharacter> owner;
-	AActor* lastTarget;
+	TObjectPtr<AActor> lastTarget;
 	bool isAlly;
 
 public:
 	AAmmo();
 
-	void launch(const TWeakObjectPtr<class ABaseCharacter>& character, const FTransform& visibleAmmoRelativeTransform, const FRotator& spread);
+	void launch(const FTransform& visibleAmmoRelativeTransform, const FRotator& spread);
 
 	virtual void copyProperties(TObjectPtr<class UBaseWeapon> weapon);
 
@@ -68,7 +67,7 @@ public:
 
 	bool getIsAlly() const;
 
-	const TWeakObjectPtr<class ABaseCharacter>& getOwner() const;
+	TWeakObjectPtr<class ABaseCharacter> getOwner() const;
 
 	UAilmentInflictorUtility* getAilmentInflictorUtility() const override;
 

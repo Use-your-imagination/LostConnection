@@ -40,9 +40,6 @@ protected:
 	UPROPERTY(Category = Inventory, Replicated, BlueprintReadOnly)
 	TObjectPtr<AInventory> inventory;
 
-	UPROPERTY(Category = Engine, Replicated, BlueprintReadOnly)
-	TObjectPtr<class ALostConnectionPlayerController> playerController;
-
 	UPROPERTY(Category = UI, BlueprintReadOnly)
 	TArray<TObjectPtr<UEscapableWidget>> escapableWidgets;
 
@@ -91,9 +88,6 @@ public:
 
 	void setMaxEnergyAmmoCount(int32 count);
 
-	UFUNCTION(Server, Reliable)
-	void setPlayerController(class ALostConnectionPlayerController* newPlayerController);
-
 	UBaseWeapon* getPrimaryWeapon() const;
 
 	UBaseWeapon* getSecondaryWeapon() const;
@@ -123,9 +117,7 @@ public:
 	int32 getMaxLargeAmmoCount() const;
 
 	int32 getMaxEnergyAmmoCount() const;
-
-	class ALostConnectionPlayerController* getPlayerController() const;
-
+	
 	void BeginPlay() override;
 
 public:

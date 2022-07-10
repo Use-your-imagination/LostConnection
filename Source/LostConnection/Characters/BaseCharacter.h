@@ -127,7 +127,7 @@ protected:
 	TArray<FName> physicsBones;
 
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
-	TArray<UBaseStatus*> statuses;
+	TArray<TObjectPtr<UBaseStatus>> statuses;
 
 	TWeakObjectPtr<class USwarmAilment> swarm;
 
@@ -332,7 +332,7 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void spawnStatusVFX(UNiagaraSystem* statusVFX, const FHitResult& hit) final override;
 
-	virtual void addStatus(class UBaseStatus* status) final override;
+	virtual void addStatus(TObjectPtr<class UBaseStatus> status) final override;
 
 	virtual void applySwarmAilment(class USwarmAilment* swarm) final override;
 
@@ -346,7 +346,7 @@ public:
 
 	virtual float getCurrentHealth() const final override;
 
-	virtual const TArray<UBaseStatus*>& getStatuses() const final override;
+	virtual const TArray<TObjectPtr<UBaseStatus>>& getStatuses() const final override;
 
 	virtual bool getIsAlly() const final override;
 
@@ -362,11 +362,11 @@ public:
 
 	virtual float getEnergyShieldPool() const override;
 
-	virtual float getTotalLifePercentDealt(class IDamageInflictor* inflictor) const final override;
+	virtual float getTotalLifePercentDealt(const TScriptInterface<class IDamageInflictor>& inflictor) const final override;
 
-	virtual float getLifePercentDealt(class IDamageInflictor* inflictor) const final override;
+	virtual float getLifePercentDealt(const TScriptInterface<class IDamageInflictor>& inflictor) const final override;
 
-	virtual float getEnergyShieldPercentDealt(class IDamageInflictor* inflictor) const final override;
+	virtual float getEnergyShieldPercentDealt(const TScriptInterface<class IDamageInflictor>& inflictor) const final override;
 
 	virtual USkeletalMeshComponent* getMeshComponent() final override;
 
