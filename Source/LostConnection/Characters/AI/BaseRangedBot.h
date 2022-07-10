@@ -17,7 +17,7 @@ class LOSTCONNECTION_API ABaseRangedBot :
 	GENERATED_BODY()
 	
 public:
-	ABaseRangedBot() = default;
+	ABaseRangedBot();
 
 	virtual ~ABaseRangedBot() = default;
 };
