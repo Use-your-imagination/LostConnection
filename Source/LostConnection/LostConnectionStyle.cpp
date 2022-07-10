@@ -8,23 +8,24 @@
 
 TSharedRef<FSlateStyleSet> FLostConnectionStyle::create()
 {
+	FSlateStyleSet& coreStyleSet = const_cast<FSlateStyleSet&>(static_cast<const FSlateStyleSet&>(FCoreStyle::Get()));
 	TSharedRef<FSlateStyleSet> style = MakeShareable(new FSlateStyleSet(FLostConnectionStyle::getStyleSetName()));
-	FSlateImageBrush* imageBrush = nullptr;
+	FSlateImageBrush* randomziedSelectorIcon = nullptr;
 
 	style->SetContentRoot(FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir() / "Assets" / "Editor"));
 
-	imageBrush = new FSlateImageBrush(style->RootToContentDir(*(FString("AI") / "RandomizedSelector"), TEXT(".png")), FVector2D(24.0));
+	randomziedSelectorIcon = new FSlateImageBrush(style->RootToContentDir(*(FString("AI") / "RandomizedSelector"), TEXT(".png")), FVector2D(24.0));
 
 	style->Set
 	(
 		"LostConnectionStyle.Editor.AI.RandomizedSelector.Icon",
-		imageBrush
+		randomziedSelectorIcon
 	);
 
-	const_cast<FSlateStyleSet&>(static_cast<const FSlateStyleSet&>(FCoreStyle::Get())).Set
+	coreStyleSet.Set
 	(
 		"LostConnectionStyle.Editor.AI.RandomizedSelector.Icon",
-		imageBrush
+		randomziedSelectorIcon
 	);
 
 	return style;
