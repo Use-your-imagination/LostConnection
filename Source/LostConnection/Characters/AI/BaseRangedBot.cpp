@@ -4,9 +4,9 @@
 
 ABaseRangedBot::ABaseRangedBot()
 {
-	static ConstructorHelpers::FObjectFinder<UBlackboardData> blackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Ranged/BaseRangedBlackboard.BaseRangedBlackboard'"));
 	static ConstructorHelpers::FObjectFinder<UBehaviorTree> behaviorTreeFinder(TEXT("BehaviorTree'/Game/AI/Base/Ranged/BaseRangedBehaviorTree.BaseRangedBehaviorTree'"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> blackboardFinder(TEXT("BlackboardData'/Game/AI/Base/Ranged/BaseRangedBlackboard.BaseRangedBlackboard'"));
 
-	blackboard = blackboardFinder.Object;
 	behaviorTree = behaviorTreeFinder.Object;
+	blackboard = blackboardFinder.Object;
 }

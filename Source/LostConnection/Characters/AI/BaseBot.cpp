@@ -27,9 +27,7 @@ void ABaseBot::BeginPlay()
 	{
 		this->changeToDefaultWeapon();
 
-		behaviorTree->BlackboardAsset = blackboard;
-
-		GetController<AAIController>()->RunBehaviorTree(behaviorTree);
+		this->runDefaultBehavior();
 	}
 }
 
@@ -44,6 +42,15 @@ void ABaseBot::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 	DOREPLIFETIME(ABaseBot, largeAmmoDropChance);
 
 	DOREPLIFETIME(ABaseBot, energyAmmoDropChance);
+}
+
+void ABaseBot::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	behaviorTree->BlackboardAsset = blackboard;
+
+	chasingBehaviorTree->BlackboardAsset = chasingBlackboard;
 }
 
 void ABaseBot::destroyAssociatedActors()
@@ -89,16 +96,32 @@ ABaseBot::ABaseBot() :
 {
 	static ConstructorHelpers::FClassFinder<AAIController> aiControllerFinder(TEXT("/Game/Engine/AIControllers/BP_BaseAIController"));
 
-	static ConstructorHelpers::FObjectFinder<UBlackboardData> blackboardFinder(TEXT("BlackboardData'/Game/AI/Base/BaseBlackboard.BaseBlackboard'"));
 	static ConstructorHelpers::FObjectFinder<UBehaviorTree> behaviorTreeFinder(TEXT("BehaviorTree'/Game/AI/Base/BaseBehaviorTree.BaseBehaviorTree'"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> blackboardFinder(TEXT("BlackboardData'/Game/AI/Base/BaseBlackboard.BaseBlackboard'"));
+
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> chasingBehaviorTreeFinder(TEXT("BehaviorTree'/Game/AI/Base/BaseChasingBehaviorTree.BaseChasingBehaviorTree'"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> chasingBlackboardFinder(TEXT("BlackboardData'/Game/AI/Base/BaseChasingBlackboard.BaseChasingBlackboard'"));
 
 	isAlly = false;
 
 	AIControllerClass = aiControllerFinder.Class;
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
-	blackboard = blackboardFinder.Object;
 	behaviorTree = behaviorTreeFinder.Object;
+	blackboard = blackboardFinder.Object;
+
+	chasingBehaviorTree = chasingBehaviorTreeFinder.Object;
+	chasingBlackboard = chasingBlackboardFinder.Object;
+}
+
+void ABaseBot::runDefaultBehavior_Implementation()
+{
+	GetController<AAIController>()->RunBehaviorTree(behaviorTree);
+}
+
+void ABaseBot::runChasingBehavior_Implementation()
+{
+	GetController<AAIController>()->RunBehaviorTree(chasingBehaviorTree);
 }
 
 int32 ABaseBot::getLootPoints() const

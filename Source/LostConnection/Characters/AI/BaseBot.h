@@ -36,10 +36,16 @@ protected:
 	float energyAmmoDropChance;
 
 	UPROPERTY(Category = "AI|Assets", EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBehaviorTree> behaviorTree;
+
+	UPROPERTY(Category = "AI|Assets", EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UBlackboardData> blackboard;
 
 	UPROPERTY(Category = "AI|Assets", EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<UBehaviorTree> behaviorTree;
+	TObjectPtr<UBehaviorTree> chasingBehaviorTree;
+
+	UPROPERTY(Category = "AI|Assets", EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UBlackboardData> chasingBlackboard;
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;
@@ -48,6 +54,8 @@ protected:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	void PostInitializeComponents() override;
+
 protected:
 	virtual void destroyAssociatedActors();
 
@@ -55,6 +63,12 @@ protected:
 
 public:
 	ABaseBot();
+
+	UFUNCTION(Category = Behavior, Server, Reliable, BlueprintCallable)
+	void runDefaultBehavior();
+
+	UFUNCTION(Category = Behavior, Server, Reliable, BlueprintCallable)
+	void runChasingBehavior();
 
 	virtual int32 getLootPoints() const final override;
 
