@@ -254,17 +254,16 @@ AInventory::AInventory()
 
 void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 {
+	this->playerState = playerState;
+
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 	const UDefaultsDataAsset& defaults = manager.getDefaults();
-	TObjectPtr<UBaseWeapon> defaultWeapon = Utility::createWeapon(manager.getWeaponClass(UGauss::StaticClass()), EWeaponRarity::normal, this);
-
-	this->playerState = playerState;
 
 	maxSmallAmmoCount = defaults.getMaxSmallAmmoCount();
 	maxLargeAmmoCount = defaults.getMaxLargeAmmoCount();
 	maxEnergyAmmoCount = defaults.getMaxEnergyAmmoCount();
 
-	defaultWeaponCell->setItem(defaultWeapon);
+	defaultWeaponCell->setItem(Utility::createWeapon(manager.getWeaponClass(UGauss::StaticClass()), EWeaponRarity::normal, this));
 }
 
 void AInventory::updateActiveWeaponModules()

@@ -36,6 +36,8 @@ private:
 public:
 	UAilmentInflictorUtility();
 
+	void setDamageInstigator(AController* damageInstigator);
+
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	void appendIncreaseDamageCoefficient(float coefficient) override;

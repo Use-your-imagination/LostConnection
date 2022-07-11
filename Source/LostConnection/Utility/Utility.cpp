@@ -113,5 +113,7 @@ TObjectPtr<UBaseWeapon> Utility::createWeapon(TSubclassOf<UBaseWeapon> weaponCla
 
 	weapon->setRarity(rarity);
 
+	weapon->setDamageInstigator(inventory->getPlayerState()->GetOwningController());
+
 	return weapon;
 }

@@ -40,7 +40,12 @@ private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	UDamageInflictorUtility();
+	UDamageInflictorUtility() = default;
+
+	UFUNCTION(Server, Reliable)
+	void setDamageInstigator(AController* newDamageInstigator);
+
+	void PostInitProperties() override;
 
 	void appendIncreaseDamageCoefficient(float coefficient) override;
 

@@ -224,7 +224,7 @@ ALostConnectionPlayerState::ALostConnectionPlayerState()
 
 void ALostConnectionPlayerState::init_Implementation()
 {
-	inventory->SetOwner(GetPlayerController());
+	inventory->SetOwner(GetOwningController());
 }
 
 void ALostConnectionPlayerState::resetCurrentUI_Implementation()

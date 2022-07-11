@@ -2,6 +2,8 @@
 
 #include "DamageInflictorUtility.h"
 
+#include "Utility/Utility.h"
+
 void UDamageInflictorUtility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -19,9 +21,24 @@ void UDamageInflictorUtility::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	DOREPLIFETIME(UDamageInflictorUtility, damageInstigator);
 }
 
-UDamageInflictorUtility::UDamageInflictorUtility()
+void UDamageInflictorUtility::setDamageInstigator_Implementation(AController* newDamageInstigator)
 {
-	damageInstigator = Cast<APawn>(GetOutermostObject())->GetController();
+	damageInstigator = newDamageInstigator;
+}
+
+void UDamageInflictorUtility::PostInitProperties()
+{
+	Super::PostInitProperties();
+
+	if (TObjectPtr<APawn> pawn = Cast<APawn>(GetOutermostObject()))
+	{
+		TObjectPtr<AController> controller = pawn->GetController();
+
+		if (controller && controller->HasAuthority())
+		{
+			damageInstigator = controller;
+		}
+	}
 }
 
 void UDamageInflictorUtility::appendIncreaseDamageCoefficient(float coefficient)
@@ -86,7 +103,7 @@ const TArray<float>& UDamageInflictorUtility::getMoreDamageCoefficients() const
 
 TObjectPtr<AController> UDamageInflictorUtility::getDamageInstigator() const
 {
-	return nullptr;
+	return damageInstigator;
 }
 
 bool UDamageInflictorUtility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)

@@ -872,10 +872,10 @@ void ABaseDrone::pickupAmmo_Implementation(EAmmoType type, int32 count)
 
 void ABaseDrone::dropWeapon_Implementation()
 {
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();
-	UBaseWeapon* secondaryWeapon = playerState->getSecondaryWeapon();
-	UBaseWeapon* defaultWeapon = playerState->getDefaultWeapon();
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
+	TObjectPtr<UBaseWeapon> primaryWeapon = playerState->getPrimaryWeapon();
+	TObjectPtr<UBaseWeapon> secondaryWeapon = playerState->getSecondaryWeapon();
+	TObjectPtr<UBaseWeapon> defaultWeapon = playerState->getDefaultWeapon();
 
 	if (!currentWeapon || currentWeapon == defaultWeapon)
 	{
@@ -886,7 +886,7 @@ void ABaseDrone::dropWeapon_Implementation()
 
 	location.Z -= GetMesh()->SkeletalMesh->GetImportedBounds().BoxExtent.Z / 2;
 
-	ADroppedWeapon* droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>({ currentWeaponMesh->GetComponentRotation(), location + currentWeapon->getLength() * GetActorForwardVector() });
+	TObjectPtr<ADroppedWeapon> droppedWeapon = Utility::getGameState(this)->spawn<ADroppedWeapon>({ currentWeaponMesh->GetComponentRotation(), location + currentWeapon->getLength() * GetActorForwardVector() });
 
 	playerState->returnAmmoToSpare(currentWeapon);
 
@@ -915,15 +915,17 @@ void ABaseDrone::pickupWeapon_Implementation(ADroppedWeapon* weaponToEquip)
 		return;
 	}
 
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(this);
-	UBaseWeapon* primaryWeapon = playerState->getPrimaryWeapon();
-	UBaseWeapon* secondaryWeapon = playerState->getSecondaryWeapon();
-	UBaseWeapon* defaultWeapon = playerState->getDefaultWeapon();
-	AInventory* inventory = playerState->getInventory();
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(this);
+	TObjectPtr<UBaseWeapon> primaryWeapon = playerState->getPrimaryWeapon();
+	TObjectPtr<UBaseWeapon> secondaryWeapon = playerState->getSecondaryWeapon();
+	TObjectPtr<UBaseWeapon> defaultWeapon = playerState->getDefaultWeapon();
+	TObjectPtr<AInventory> inventory = playerState->getInventory();
 
-	UBaseWeapon* weapon = weaponToEquip->getWeapon();
+	TObjectPtr<UBaseWeapon> weapon = weaponToEquip->getWeapon();
 
-	weapon->Rename(nullptr, playerState);
+	weapon->Rename(nullptr, inventory);
+
+	weapon->setDamageInstigator(playerState->GetPlayerController());
 
 	if (currentWeapon)
 	{

@@ -20,6 +20,11 @@ UAilmentInflictorUtility::UAilmentInflictorUtility()
 	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
+void UAilmentInflictorUtility::setDamageInstigator(AController* damageInstigator)
+{
+	damageInflictorUtility->setDamageInstigator(damageInstigator);
+}
+
 bool UAilmentInflictorUtility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);

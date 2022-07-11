@@ -203,7 +203,7 @@ UBaseWeapon::UBaseWeapon() :
 	ammoCost(1),
 	length(100.0f)
 {
-	damageInstigator = Cast<AInventory>(GetOutermostObject())->getPlayerState()->GetPlayerController();
+
 }
 
 void UBaseWeapon::startShoot()
@@ -400,7 +400,7 @@ EWeaponType UBaseWeapon::getWeaponType() const
 
 TWeakObjectPtr<ABaseCharacter> UBaseWeapon::getOwner() const
 {
-	return damageInstigator->GetPawn<ABaseCharacter>();
+	return damageInstigator ? damageInstigator->GetPawn<ABaseCharacter>() : nullptr;
 }
 
 TObjectPtr<AController> UBaseWeapon::getDamageInstigator() const

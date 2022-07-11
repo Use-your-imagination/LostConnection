@@ -22,13 +22,13 @@ class LOSTCONNECTION_API ASN4K3PassiveAbilityHead :
 
 private:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	UNiagaraSystem* explosionParticles;
+	TObjectPtr<UNiagaraSystem> explosionParticles;
 
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float explosionRadius;
 
 	UPROPERTY(Category = Utility, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	UAilmentInflictorUtility* ailmentInflictorUtility;
+	TObjectPtr<UAilmentInflictorUtility> ailmentInflictorUtility;
 
 	bool isExploded;
 

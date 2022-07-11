@@ -27,6 +27,8 @@ void ASN4K3PassiveAbilityHead::BeginPlay()
 
 			Utility::setCurrentUI(data->getHeadUI(), this);
 		});
+
+	ailmentInflictorUtility->setDamageInstigator(GetController());
 }
 
 void ASN4K3PassiveAbilityHead::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -81,17 +83,17 @@ bool ASN4K3PassiveAbilityHead::ReplicateSubobjects(UActorChannel* Channel, FOutB
 void ASN4K3PassiveAbilityHead::explode()
 {
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
-	TArray<AActor*> enemies;
-	ALostConnectionPlayerController* controller = Utility::getPlayerController(this);
+	TArray<TObjectPtr<AActor>> enemies;
+	TObjectPtr<ALostConnectionPlayerController> controller = Utility::getPlayerController(this);
 	FTransform respawnTransform = GetActorTransform();
-	ALostConnectionGameState* gameState = Utility::getGameState(this);
+	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(this);
 	gameState->spawnVFXAtLocation(GetMesh()->GetComponentLocation(), explosionParticles);
 
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetMesh()->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, enemies);
 
-	for (AActor* enemy : enemies)
+	for (TObjectPtr<AActor> enemy : enemies)
 	{
-		ABaseCharacter* character = Cast<ABaseCharacter>(enemy);
+		TObjectPtr<ABaseCharacter> character = Cast<ABaseCharacter>(enemy);
 
 		if (!character->getIsAlly())
 		{
@@ -139,8 +141,8 @@ ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
 	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 
-	UCapsuleComponent* capsule = GetCapsuleComponent();
-	USkeletalMeshComponent* mesh = GetMesh();
+	TObjectPtr<UCapsuleComponent> capsule = GetCapsuleComponent();
+	TObjectPtr<USkeletalMeshComponent> mesh = GetMesh();
 
 	capsule->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	

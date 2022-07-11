@@ -191,6 +191,8 @@ void AAmmo::launch(const FTransform& visibleAmmoRelativeTransform, const FRotato
 
 void AAmmo::copyProperties(TObjectPtr<UBaseWeapon> weapon)
 {
+	TObjectPtr<AController> damageInstigator = weapon->getDamageInstigator();
+
 	ailmentInflictorUtility->setBaseDamage(weapon->getBaseDamage());
 
 	ailmentInflictorUtility->setAddedDamage(weapon->getAddedDamage());
@@ -203,7 +205,7 @@ void AAmmo::copyProperties(TObjectPtr<UBaseWeapon> weapon)
 
 	ailmentInflictorUtility->setAdditionalCrushingHitChance(weapon->getAdditionalCrushingHitChance());
 
-	TObjectPtr<AController> damageInstigator = ailmentInflictorUtility->getDamageInstigator();
+	ailmentInflictorUtility->setDamageInstigator(damageInstigator);
 
 	if (TScriptInterface<IPersonalModulesHolder> holder = damageInstigator->GetPawn())
 	{
