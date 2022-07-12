@@ -3,7 +3,14 @@
 	"projectVersion": "0.3.2.0",
 	"Gameplay":
 	{
-		"type": "category"
+		"type": "category",
+		"AI":
+		{
+			"type": "item",
+			"notes": [
+				"Improve AI behavior"
+			]
+		}
 	},
 	"Rooms":
 	{
