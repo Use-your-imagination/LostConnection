@@ -17,7 +17,7 @@ class LOSTCONNECTION_API ABaseSupportBot :
 	GENERATED_BODY()
 	
 public:
-	ABaseSupportBot() = default;
+	ABaseSupportBot();
 
 	virtual ~ABaseSupportBot() = default;
 };

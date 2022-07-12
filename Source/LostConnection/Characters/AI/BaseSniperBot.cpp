@@ -2,4 +2,7 @@
 
 #include "BaseSniperBot.h"
 
-
+ABaseSniperBot::ABaseSniperBot()
+{
+	isChaser = false;
+}

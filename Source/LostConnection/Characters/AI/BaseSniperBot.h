@@ -17,7 +17,7 @@ class LOSTCONNECTION_API ABaseSniperBot :
 	GENERATED_BODY()
 	
 public:
-	ABaseSniperBot() = default;
+	ABaseSniperBot();
 
 	virtual ~ABaseSniperBot() = default;
 };

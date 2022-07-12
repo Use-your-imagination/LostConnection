@@ -23,6 +23,9 @@ class LOSTCONNECTION_API ABaseBot :
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(Category = Behavior, EditDefaultsOnly, BlueprintReadOnly)
+	bool isChaser;
+
 	UPROPERTY(Category = Economy, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	int32 lootPointsReward;
 

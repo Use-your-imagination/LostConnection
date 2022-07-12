@@ -90,6 +90,7 @@ void ABaseBot::deathLogic()
 }
 
 ABaseBot::ABaseBot() :
+	isChaser(true),
 	smallAmmoDropChance(45.0f),
 	largeAmmoDropChance(45.0f),
 	energyAmmoDropChance(45.0f)

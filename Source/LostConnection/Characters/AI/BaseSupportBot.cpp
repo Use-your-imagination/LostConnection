@@ -2,4 +2,7 @@
 
 #include "BaseSupportBot.h"
 
-
+ABaseSupportBot::ABaseSupportBot()
+{
+	isChaser = false;
+}
