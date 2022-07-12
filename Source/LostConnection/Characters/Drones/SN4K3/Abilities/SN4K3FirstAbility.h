@@ -29,6 +29,8 @@ private:
 public:
 	USN4K3FirstAbility();
 
+	void initAbility(const TObjectPtr<AController>& instigator) override;
+
 	void applyAbility(class ABaseCharacter* target) override;
 
 	void useAbility() override;

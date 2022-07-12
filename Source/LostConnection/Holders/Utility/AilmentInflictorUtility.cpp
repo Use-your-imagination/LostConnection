@@ -20,7 +20,7 @@ UAilmentInflictorUtility::UAilmentInflictorUtility()
 	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
-void UAilmentInflictorUtility::setDamageInstigator(AController* damageInstigator)
+void UAilmentInflictorUtility::setDamageInstigator(const TObjectPtr<AController>& damageInstigator)
 {
 	damageInflictorUtility->setDamageInstigator(damageInstigator);
 }
@@ -126,7 +126,7 @@ float UAilmentInflictorUtility::getAdditionalCrushingHitChance() const
 	return additionalCrushingHitChance;
 }
 
-TObjectPtr<AController> UAilmentInflictorUtility::getDamageInstigator() const
+const TObjectPtr<AController>& UAilmentInflictorUtility::getDamageInstigator() const
 {
 	return damageInflictorUtility->getDamageInstigator();
 }

@@ -451,7 +451,9 @@ void ABaseDrone::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GetController() && !Utility::getPlayerState(this)->getCurrentUI())
+	TObjectPtr<AController> controller = GetController();
+
+	if (controller && !Utility::getPlayerState(this)->getCurrentUI())
 	{
 		this->initDefaultUI();
 	}
@@ -466,15 +468,15 @@ void ABaseDrone::BeginPlay()
 				}
 			}, 1.0f);
 
-		passiveAbility->initAbility();
+		passiveAbility->initAbility(controller);
 
-		firstAbility->initAbility();
+		firstAbility->initAbility(controller);
 
-		secondAbility->initAbility();
+		secondAbility->initAbility(controller);
 
-		thirdAbility->initAbility();
+		thirdAbility->initAbility(controller);
 
-		ultimateAbility->initAbility();
+		ultimateAbility->initAbility(controller);
 
 		grappleHandler->init(this);
 

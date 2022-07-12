@@ -14,6 +14,8 @@ void UBaseAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(UBaseAbility, cost);
 
 	DOREPLIFETIME(UBaseAbility, isDisabled);
+
+	DOREPLIFETIME(UBaseAbility, instigator);
 }
 
 UBaseAbility::UBaseAbility() :
@@ -37,9 +39,9 @@ void UBaseAbility::Tick(float DeltaSeconds)
 
 }
 
-void UBaseAbility::initAbility()
+void UBaseAbility::initAbility(const TObjectPtr<AController>& instigator)
 {
-
+	this->instigator = instigator;
 }
 
 void UBaseAbility::setCost_Implementation(float newCost)
@@ -107,7 +109,16 @@ EAbilitySlot UBaseAbility::getId() const
 	return id;
 }
 
-TScriptInterface<ICaster> UBaseAbility::getCaster() const
+const TScriptInterface<ICaster>& UBaseAbility::getCaster() const
 {
 	return caster;
+}
+
+bool UBaseAbility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	wroteSomething |= Channel->ReplicateSubobject(instigator, *Bunch, *RepFlags);
+
+	return wroteSomething;
 }

@@ -13,11 +13,6 @@ FString UIrradiationAilment::getStatusName() const
 	return "Irradiation";
 }
 
-int32 UIrradiationAilment::getActiveStatusesCount() const
-{
-	return Utility::countStatuses(target, StaticClass());
-}
-
 void UIrradiationAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -66,7 +61,7 @@ void UIrradiationAilment::applyStatus_Implementation(const TScriptInterface<ISta
 	Super::applyStatus_Implementation(inflictor, target, hit);
 }
 
-bool UIrradiationAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UIrradiationAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	if (!Super::applyEffect(target, hit))
 	{

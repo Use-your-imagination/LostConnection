@@ -74,10 +74,10 @@ void UArcingCurrentAilment::applyStatus_Implementation(const TScriptInterface<IS
 		Super::applyStatus_Implementation(inflictor, target, hit);
 	}
 
-	this->applyEffect(StaticCast<IAilmentReceiver*>(target.GetInterface()), hit);
+	this->applyEffect(target, hit);
 }
 
-bool UArcingCurrentAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UArcingCurrentAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
 

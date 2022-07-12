@@ -19,5 +19,5 @@ public:
 public:
 	static void initAbilityId(const FString& abilityClassName, EAbilitySlot& id);
 
-	static UBaseStatus* createDefaultAilment(ETypeOfDamage damageType, IAilmentReceiver* target);
+	static TObjectPtr<UBaseStatus> createDefaultAilment(ETypeOfDamage damageType, const TScriptInterface<IAilmentReceiver>& target);
 };

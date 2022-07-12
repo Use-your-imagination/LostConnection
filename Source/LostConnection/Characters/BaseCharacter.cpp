@@ -145,8 +145,6 @@ void ABaseCharacter::onCurrentWeaponChange()
 
 	if (currentWeapon)
 	{
-		currentWeapon->setDamageInstigator(GetController());
-
 		currentWeapon->updateTimeBetweenShots();
 
 		if (TObjectPtr<AInventory> inventory = Utility::getPlayerState(this)->getInventory())
@@ -718,7 +716,7 @@ void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterfa
 {
 	this->notifyTakeDamageEvents(this);
 
-	TObjectPtr<AController> instigator = inflictor->getDamageInstigator();
+	const TObjectPtr<AController>& instigator = inflictor->getDamageInstigator();
 	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor);
 
 	if (tem < 0.0f)
@@ -801,7 +799,14 @@ void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusI
 	{
 		if ((hit.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(hit.PhysMaterial.Get()) == EPhysicalSurface::SurfaceType1) || ailmentInflictor->getCrushingHitProc())
 		{
-			InitializationUtility::createDefaultAilment(ailmentInflictor->getDamageType(), this)->applyStatus(inflictor, this, hit);
+			TObjectPtr<UBaseStatus> ailment = InitializationUtility::createDefaultAilment(ailmentInflictor->getDamageType(), this);
+			
+			if (TScriptInterface<IDamageInflictorHolder> damageInflictor = ailment.Get())
+			{
+				damageInflictor->getDamageInflictorUtility()->setDamageInstigator(inflictor->getDamageInstigator());
+			}
+
+			ailment->applyStatus(inflictor, this, hit);
 		}
 	}
 }

@@ -8,3 +8,18 @@ void IDamageReceiver::takeDamageFromInflictorHolder(const TScriptInterface<IDama
 {
 	this->takeDamageFromInflictor(inflictorHolder->getDamageInflictorUtility());
 }
+
+float IDamageReceiver::getTotalLifePercentDealt(IDamageInflictorHolder* inflictor) const
+{
+	return this->getTotalLifePercentDealt(inflictor->getDamageInflictorUtility());
+}
+
+float IDamageReceiver::getLifePercentDealt(IDamageInflictorHolder* inflictor) const
+{
+	return this->getLifePercentDealt(inflictor->getDamageInflictorUtility());
+}
+
+float IDamageReceiver::getEnergyShieldPercentDealt(IDamageInflictorHolder* inflictor) const
+{
+	return this->getEnergyShieldPercentDealt(inflictor->getDamageInflictorUtility());
+}

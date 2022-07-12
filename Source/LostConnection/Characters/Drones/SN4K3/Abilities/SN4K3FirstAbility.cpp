@@ -30,6 +30,13 @@ USN4K3FirstAbility::USN4K3FirstAbility() :
 	InitializationUtility::initAbilityId(__FILE__, id);
 }
 
+void USN4K3FirstAbility::initAbility(const TObjectPtr<AController>& instigator)
+{
+	Super::initAbility(instigator);
+
+	ailmentInflictorUtility->setDamageInstigator(instigator);
+}
+
 void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 {
 	FHitResult hit(target, target->getMeshComponent(), target->GetActorLocation(), {});
@@ -46,6 +53,8 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 	tem->setBaseCrushingHitChance(ailmentInflictorUtility->getBaseCrushingHitChance());
 	tem->setBaseDamage(ailmentInflictorUtility->getBaseDamage());
 	tem->setDamageType(ailmentInflictorUtility->getDamageType());
+
+	tem->setDamageInstigator(ailmentInflictorUtility->getDamageInstigator());
 	
 	for (float increaseCoefficient : ailmentInflictorUtility->getIncreaseDamageCoefficients())
 	{

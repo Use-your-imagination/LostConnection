@@ -34,22 +34,20 @@ void USN4K3ReservatorBuff::applyStatus_Implementation(const TScriptInterface<ISt
 	}
 	else
 	{
-		IAilmentReceiver* receiver = StaticCast<IAilmentReceiver*>(target.GetInterface());
-
-		this->target = receiver;
+		this->target = target;
 		
 		target->addStatus(this);
 
-		this->applyEffect(receiver, hit);
+		this->applyEffect(target, hit);
 	}
 }
 
-bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool USN4K3ReservatorBuff::applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	ABaseCharacter* character = Cast<ABaseCharacter>(target);
+	TObjectPtr<ABaseCharacter> character = Cast<ABaseCharacter>(target);
 	
 	TArray<TWeakObjectPtr<UBaseWeapon>> weapons = character->getWeapons();
-	ICaster* caster = Cast<ICaster>(character);
+	TScriptInterface<ICaster> caster = character.Get();
 
 	for (auto& weapon : weapons)
 	{
@@ -73,7 +71,7 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 		{
 			if (ability.IsValid())
 			{
-				IAilmentInflictor* inflictor = Cast<IAilmentInflictor>(ability);
+				TScriptInterface<IAilmentInflictor> inflictor = ability.Get();
 
 				if (inflictor && (inflictor->getDamageType() == ETypeOfDamage::nanite))
 				{
@@ -94,7 +92,7 @@ bool USN4K3ReservatorBuff::applyEffect(IStatusReceiver* target, const FHitResult
 
 void USN4K3ReservatorBuff::postRemove()
 {
-	ABaseCharacter* character = Cast<ABaseCharacter>(target);
+	TObjectPtr<ABaseCharacter> character = Cast<ABaseCharacter>(target);
 
 	for (const auto& data : additionalNaniteDamage)
 	{

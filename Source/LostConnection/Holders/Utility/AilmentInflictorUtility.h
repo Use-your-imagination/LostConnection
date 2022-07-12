@@ -36,7 +36,7 @@ private:
 public:
 	UAilmentInflictorUtility();
 
-	void setDamageInstigator(AController* damageInstigator);
+	void setDamageInstigator(const TObjectPtr<AController>& damageInstigator);
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
@@ -82,7 +82,7 @@ public:
 
 	float getAdditionalCrushingHitChance() const override;
 
-	TObjectPtr<AController> getDamageInstigator() const override;
+	const TObjectPtr<AController>& getDamageInstigator() const override;
 
 	~UAilmentInflictorUtility() = default;
 

@@ -34,7 +34,7 @@ public:
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
-	bool applyEffect(IStatusReceiver* target, const FHitResult& hit) override;
+	bool applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit) override;
 
 	void postRemove() override;
 

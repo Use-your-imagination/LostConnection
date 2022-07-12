@@ -31,7 +31,7 @@ void InitializationUtility::initAbilityId(const FString& abilityClassName, EAbil
 	}
 }
 
-UBaseStatus* InitializationUtility::createDefaultAilment(ETypeOfDamage damageType, IAilmentReceiver* target)
+TObjectPtr<UBaseStatus> InitializationUtility::createDefaultAilment(ETypeOfDamage damageType, const TScriptInterface<IAilmentReceiver>& target)
 {
-	return NewObject<UBaseStatus>(target->_getUObject(), ULostConnectionAssetManager::get()[damageType]);
+	return NewObject<UBaseStatus>(target.GetObject(), ULostConnectionAssetManager::get()[damageType]);
 }

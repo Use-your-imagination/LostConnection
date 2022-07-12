@@ -47,5 +47,5 @@ public:
 
 	virtual const TArray<float>& getMoreDamageCoefficients() const = 0;
 
-	virtual TObjectPtr<AController> getDamageInstigator() const = 0;
+	virtual const TObjectPtr<AController>& getDamageInstigator() const = 0;
 };

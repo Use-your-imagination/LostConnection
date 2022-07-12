@@ -105,9 +105,9 @@ void ASN4K3PassiveAbilityHead::explode()
 
 			character->attachDeathEvent(resurrect.Get());
 
-			character->statusInflictorImpactAction(ailmentInflictorUtility, characterHit);
+			character->statusInflictorImpactAction(ailmentInflictorUtility.Get(), characterHit);
 
-			character->takeDamageFromInflictor(ailmentInflictorUtility);
+			character->takeDamageFromInflictor(ailmentInflictorUtility.Get());
 
 			character->getTimers().addTimer
 			(

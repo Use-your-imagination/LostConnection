@@ -54,7 +54,7 @@ void UShatterAilment::applyStatus_Implementation(const TScriptInterface<IStatusI
 	this->updateDuration(inflictor, target);
 }
 
-bool UShatterAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UShatterAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	if (!Super::applyEffect(target, hit))
 	{

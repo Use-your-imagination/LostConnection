@@ -45,4 +45,10 @@ public:
 	virtual USkeletalMeshComponent* getMeshComponent() = 0;
 
 	virtual UCapsuleComponent* getCapsuleComponent() = 0;
+
+	float getTotalLifePercentDealt(class IDamageInflictorHolder* inflictor) const;
+
+	float getLifePercentDealt(class IDamageInflictorHolder* inflictor) const;
+
+	float getEnergyShieldPercentDealt(class IDamageInflictorHolder* inflictor) const;
 };

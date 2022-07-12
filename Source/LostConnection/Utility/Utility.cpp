@@ -15,11 +15,11 @@
 
 DEFINE_LOG_CATEGORY(LogLostConnection);
 
-int32 Utility::countStatuses(const IStatusReceiver* target, const TSubclassOf<UBaseStatus>& statusClass)
+int32 Utility::countStatuses(const TScriptInterface<IStatusReceiver>& target, const TSubclassOf<UBaseStatus>& statusClass)
 {
-	const TArray<UBaseStatus*>& statuses = target->getStatuses();
+	const TArray<TObjectPtr<UBaseStatus>>& statuses = target->getStatuses();
 
-	return Algo::CountIf(statuses, [&statusClass](const UBaseStatus* status) { return UKismetMathLibrary::ClassIsChildOf(statusClass, status->StaticClass()); });
+	return Algo::CountIf(statuses, [&statusClass](const TObjectPtr<UBaseStatus>& status) { return UKismetMathLibrary::ClassIsChildOf(statusClass, status->GetClass()); });
 }
 
 FText Utility::getTextFromFloat(float value)

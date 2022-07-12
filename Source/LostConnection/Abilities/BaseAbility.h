@@ -45,6 +45,9 @@ protected:
 	UPROPERTY(Category = AbilityAnimation, EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UAnimMontage> animation;
 
+	UPROPERTY(Category = Instigator, Replicated, BlueprintReadOnly)
+	TObjectPtr<AController> instigator;
+
 	EAbilitySlot id;
 
 	TScriptInterface<class ICaster> caster;
@@ -61,7 +64,7 @@ public:
 
 	virtual void Tick(float DeltaSeconds);
 
-	virtual void initAbility();
+	virtual void initAbility(const TObjectPtr<AController>& instigator);
 
 	UFUNCTION(Server, Reliable)
 	void setCost(float newCost);
@@ -92,7 +95,9 @@ public:
 
 	EAbilitySlot getId() const;
 
-	TScriptInterface<class ICaster> getCaster() const;
+	const TScriptInterface<class ICaster>& getCaster() const;
+
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	virtual ~UBaseAbility() = default;
 };

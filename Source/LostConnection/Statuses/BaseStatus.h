@@ -43,7 +43,7 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	float currentDuration;
 
-	class IStatusReceiver* target;
+	TScriptInterface<class IStatusReceiver> target;
 	float inflictorDamage;
 	float inflictorAddedDamage;
 	float inflictorAdditionalDamage;
@@ -52,10 +52,10 @@ protected:
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
-	UNiagaraSystem* onApplyStatus;
+	TObjectPtr<UNiagaraSystem> onApplyStatus;
 
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
-	UNiagaraSystem* onApplyEffect;
+	TObjectPtr<UNiagaraSystem> onApplyEffect;
 
 public:
 	UBaseStatus() = default;
@@ -63,7 +63,7 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void applyStatus(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
 
-	virtual bool applyEffect(class IStatusReceiver* target, const FHitResult& hit);
+	virtual bool applyEffect(const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit);
 
 	virtual void postRemove();
 
@@ -73,9 +73,9 @@ public:
 
 	void setDuration(float duration);
 
-	UNiagaraSystem* getOnApplyStatus() const;
+	const TObjectPtr<UNiagaraSystem>& getOnApplyStatus() const;
 
-	UNiagaraSystem* getOnApplyEffect() const;
+	const TObjectPtr<UNiagaraSystem>& getOnApplyEffect() const;
 
 	float getCurrentDuration() const;
 

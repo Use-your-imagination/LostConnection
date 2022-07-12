@@ -11,11 +11,6 @@ FString UCritAilment::getStatusName() const
 	return "Crit";
 }
 
-int32 UCritAilment::getActiveStatusesCount() const
-{
-	return Utility::countStatuses(target, StaticClass());
-}
-
 void UCritAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -64,7 +59,7 @@ void UCritAilment::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 	Super::applyStatus_Implementation(inflictor, target, hit);
 }
 
-bool UCritAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UCritAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	if (!Super::applyEffect(target, hit))
 	{

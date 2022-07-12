@@ -32,12 +32,12 @@ FString UBaseStatus::getStatusName() const
 
 int32 UBaseStatus::calculateUnderStatusEffect() const
 {
-	return 1;
+	return Utility::countStatuses(target, GetClass());
 }
 
 void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	this->target = StaticCast<IStatusReceiver*>(target.GetInterface());
+	this->target = target;
 
 	inflictorDamage = inflictor->getBaseDamage();
 
@@ -56,7 +56,7 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 	target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
 }
 
-bool UBaseStatus::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UBaseStatus::applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	target->spawnStatusVFX(onApplyEffect, hit);
 
@@ -90,12 +90,12 @@ void UBaseStatus::setDuration(float duration)
 	this->duration = duration;
 }
 
-UNiagaraSystem* UBaseStatus::getOnApplyStatus() const
+const TObjectPtr<UNiagaraSystem>& UBaseStatus::getOnApplyStatus() const
 {
 	return onApplyStatus;
 }
 
-UNiagaraSystem* UBaseStatus::getOnApplyEffect() const
+const TObjectPtr<UNiagaraSystem>& UBaseStatus::getOnApplyEffect() const
 {
 	return onApplyEffect;
 }

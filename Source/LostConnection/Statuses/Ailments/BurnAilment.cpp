@@ -11,11 +11,6 @@ FString UBurnAilment::getStatusName() const
 	return "Burn";
 }
 
-int32 UBurnAilment::calculateUnderStatusEffect() const
-{
-	return Utility::countStatuses(target, StaticClass());
-}
-
 void UBurnAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -49,7 +44,7 @@ void UBurnAilment::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 	damageInflictorUtility->setBaseDamage((inflictorDamage * burnDamageCoefficient) / (duration / tickPeriod));
 }
 
-bool UBurnAilment::applyEffect(IStatusReceiver* target, const FHitResult& hit)
+bool UBurnAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
 	if (!Super::applyEffect(target, hit))
 	{

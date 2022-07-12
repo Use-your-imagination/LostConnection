@@ -186,15 +186,17 @@ void ABaseCasterBot::BeginPlay()
 
 	if (HasAuthority())
 	{
-		passiveAbility->initAbility();
+		TObjectPtr<AController> controller = GetController();
 
-		firstAbility->initAbility();
+		passiveAbility->initAbility(controller);
 
-		secondAbility->initAbility();
+		firstAbility->initAbility(controller);
 
-		thirdAbility->initAbility();
+		secondAbility->initAbility(controller);
 
-		ultimateAbility->initAbility();
+		thirdAbility->initAbility(controller);
+
+		ultimateAbility->initAbility(controller);
 	}
 }
 

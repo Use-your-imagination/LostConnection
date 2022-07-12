@@ -33,7 +33,7 @@ protected:
 	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	TArray<float> moreInflictorDamageCoefficients;
 
-	UPROPERTY(Category = Instigator, Replicated, BlueprintReadOnly)
+	UPROPERTY()
 	TObjectPtr<AController> damageInstigator;
 
 private:
@@ -44,8 +44,6 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void setDamageInstigator(AController* newDamageInstigator);
-
-	void PostInitProperties() override;
 
 	void appendIncreaseDamageCoefficient(float coefficient) override;
 
@@ -74,9 +72,9 @@ public:
 
 	const TArray<float>& getMoreDamageCoefficients() const override;
 
-	TObjectPtr<AController> getDamageInstigator() const override;
-
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+	const TObjectPtr<AController>& getDamageInstigator() const override;
 
 	~UDamageInflictorUtility() = default;
 };

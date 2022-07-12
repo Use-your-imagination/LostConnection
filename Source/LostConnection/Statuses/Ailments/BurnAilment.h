@@ -21,8 +21,6 @@ class LOSTCONNECTION_API UBurnAilment :
 private:
 	FString getStatusName() const override;
 
-	int32 calculateUnderStatusEffect() const override;
-
 private:
 	UPROPERTY(Category = Burn, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float burnDamageCoefficient;
@@ -43,7 +41,7 @@ public:
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
-	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+	bool applyEffect(const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 

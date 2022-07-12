@@ -21,8 +21,6 @@ class LOSTCONNECTION_API UCritAilment :
 private:
 	FString getStatusName() const override;
 
-	int32 getActiveStatusesCount() const override;
-
 private:
 	UPROPERTY(Category = Crit, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float damageMultiplierPercent;
@@ -34,7 +32,7 @@ private:
 	float critMultiplier;
 
 	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	UDamageInflictorUtility* damageInflictorUtility;
+	TObjectPtr<UDamageInflictorUtility> damageInflictorUtility;
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -48,7 +46,7 @@ public:
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
-	bool applyEffect(class IStatusReceiver* target, const FHitResult& hit) override;
+	bool applyEffect(const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
