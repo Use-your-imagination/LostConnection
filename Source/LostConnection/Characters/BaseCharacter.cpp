@@ -728,6 +728,11 @@ void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterfa
 		this->setCurrentHealth(tem);
 	}
 
+	if (TObjectPtr<AController> controller = GetController())
+	{
+		controller->TakeDamage(inflictor->calculateTotalDamage(), FDamageEvent(), instigator, instigator->GetPawn());
+	}
+
 	TakeDamage(inflictor->calculateTotalDamage(), FDamageEvent(), instigator, instigator->GetPawn());
 }
 
