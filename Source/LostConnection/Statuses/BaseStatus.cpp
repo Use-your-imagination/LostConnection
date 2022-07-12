@@ -32,7 +32,7 @@ FString UBaseStatus::getStatusName() const
 
 int32 UBaseStatus::calculateUnderStatusEffect() const
 {
-	return Utility::countStatuses(target, GetClass());
+	return 1;
 }
 
 void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)

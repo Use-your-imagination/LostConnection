@@ -45,26 +45,7 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 
 	// TODO: remake apply modules
 
-	TObjectPtr<UAilmentInflictorUtility> tem = NewObject<UAilmentInflictorUtility>(ailmentInflictorUtility->GetOuter());
-
-	tem->setAddedDamage(ailmentInflictorUtility->getAddedDamage());
-	tem->setAdditionalCrushingHitChance(ailmentInflictorUtility->getAdditionalCrushingHitChance());
-	tem->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage());
-	tem->setBaseCrushingHitChance(ailmentInflictorUtility->getBaseCrushingHitChance());
-	tem->setBaseDamage(ailmentInflictorUtility->getBaseDamage());
-	tem->setDamageType(ailmentInflictorUtility->getDamageType());
-
-	tem->setDamageInstigator(ailmentInflictorUtility->getDamageInstigator());
-	
-	for (float increaseCoefficient : ailmentInflictorUtility->getIncreaseDamageCoefficients())
-	{
-		tem->appendIncreaseDamageCoefficient(increaseCoefficient);
-	}
-
-	for (float moreCoefficient : ailmentInflictorUtility->getMoreDamageCoefficients())
-	{
-		tem->appendMoreDamageCoefficient(moreCoefficient);
-	}
+	TObjectPtr<UAilmentInflictorUtility> tem = DuplicateObject<UAilmentInflictorUtility>(ailmentInflictorUtility, ailmentInflictorUtility->GetOuter());
 
 	if (TScriptInterface<IPersonalModulesHolder> holder = Cast<IPersonalModulesHolder>(caster))
 	{
