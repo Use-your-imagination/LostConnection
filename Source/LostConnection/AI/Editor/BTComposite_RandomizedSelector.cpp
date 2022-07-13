@@ -12,11 +12,6 @@ UBTComposite_RandomizedSelector::UBTComposite_RandomizedSelector()
 
 int32 UBTComposite_RandomizedSelector::GetNextChildHandler(FBehaviorTreeSearchData& SearchData, int32 PrevChild, EBTNodeResult::Type LastResult) const
 {
-	if (LastResult == EBTNodeResult::Type::Succeeded)
-	{
-		return BTSpecialChild::ReturnToParent;
-	}
-
 	if (PrevChild == BTSpecialChild::NotInitialized)
 	{
 #if UE_BUILD_DEVELOPMENT
@@ -39,15 +34,26 @@ int32 UBTComposite_RandomizedSelector::GetNextChildHandler(FBehaviorTreeSearchDa
 #if UE_BUILD_DEVELOPMENT
 		if (Algo::AnyOf(realExecutionChances, [](float chance) { return chance > 100.0f; }))
 		{
-			UE_LOG(LogLostConnection, Warning, TEXT("Last node has chance > 100%"));
+			UE_LOG(LogLostConnection, Warning, TEXT("Last node has chance > 100%%"));
 		}
 		else if (realExecutionChances.Last() < 100.0f)
 		{
-			UE_LOG(LogLostConnection, Error, TEXT("Last node has chance < 100%"));
+			UE_LOG(LogLostConnection, Error, TEXT("Last node has chance < 100%%"));
 		}
 #endif // UE_BUILD_DEVELOPMENT
 
-		PrevChild = 0;
+		for (int32 i = 0; i < GetChildrenNum(); i++)
+		{
+			if (Utility::checkChanceProc(realExecutionChances[i]))
+			{
+				return i;
+			}
+		}
+	}
+
+	if (LastResult == EBTNodeResult::Type::Succeeded)
+	{
+		return BTSpecialChild::ReturnToParent;
 	}
 
 	for (int32 i = PrevChild; i < GetChildrenNum(); i++)
