@@ -47,7 +47,7 @@ IPlatformFile& UAutomationToolchainLibrary::getPlatformFile()
 	return FPlatformFileManager::Get().GetPlatformFile();
 }
 
-bool UAutomationToolchainLibrary::executeProcess(const FString& url, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory)
+bool UAutomationToolchainLibrary::executeProcess(const FString& url, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory, bool closeWithEditor)
 {
 	return FPlatformProcess::ExecProcess
 	(
@@ -56,10 +56,8 @@ bool UAutomationToolchainLibrary::executeProcess(const FString& url, const FStri
 		&code,
 		&outStd,
 		&errStd,
-		optionalWorkingDirectory.IsEmpty() ? nullptr : *optionalWorkingDirectory
-#if ENGINE_MAJOR_VERSION == 5
-		,true
-#endif
+		optionalWorkingDirectory.IsEmpty() ? nullptr : *optionalWorkingDirectory,
+		closeWithEditor
 	);
 }
 

@@ -39,7 +39,7 @@ public:
 	* Executes process from Url with parameters
 	*/
 	UFUNCTION(Category = "AutomationToolchain|OS", BlueprintCallable, Meta = (DevelopmentOnly))
-	static bool executeProcess(const FString& url, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory);
+	static bool executeProcess(const FString& url, const FString& parameters, int32& code, FString& outStd, FString& errStd, const FString& optionalWorkingDirectory, bool closeWithEditor = true);
 
 	/**
 	* Executes Command with Parameters in OS shell

@@ -1,4 +1,4 @@
 ﻿{
-	"pathToStagedBuildsFolder": "C:/dev/LostConnection/Saved/StagedBuilds",
-	"isRelativePathToStagedBuilds": false
+	"pathToStagedBuildsFolder": "Saved/StagedBuilds",
+	"isRelativePathToStagedBuilds": true
 }
