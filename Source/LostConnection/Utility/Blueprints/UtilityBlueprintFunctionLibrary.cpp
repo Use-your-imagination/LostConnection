@@ -19,6 +19,7 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "Interfaces/Loot/AmmoDropable.h"
 #include "Utility/Utility.h"
+#include "Constants/Constants.h"
 
 FString appendLootDropChance(int32 lootPoints, const UBaseLootFunction* lootFunction)
 {
@@ -332,4 +333,39 @@ bool UUtilityBlueprintFunctionLibrary::callStandardDelegate(const FStandardDeleg
 	delegate.ExecuteIfBound();
 
 	return delegate.IsBound();
+}
+
+TArray<FStatDescription> UUtilityBlueprintFunctionLibrary::getStatDescriptions(ABaseDrone* drone)
+{
+	if (!IsValid(drone))
+	{
+		UE_LOG(LogLostConnection, Error, TEXT("Can't get stat descriptions from invalid drone"));
+
+		return {};
+	}
+
+	const TMap<FString, float> statKeys =
+	{
+		{ "Health", drone->getHealth(), },
+		{ "Energy", drone->getEnergy(), },
+		{ "EnergyRestoration", drone->getEnergyRestorationPerSecond(), },
+		{ "AOE", drone->getAOE(), },
+		{ "CastPoint", drone->getCastPoint(), },
+		{ "CooldownReduction", drone->getCooldownReduction(), },
+		{ "Duration", drone->getDuration(), },
+		{ "EnergyEfficiency", drone->getEnergyEfficiency(), },
+		{ "Power", drone->getPower() }
+	};
+	TArray<FStatDescription> result;
+
+	for (const TPair<FString, float>& stat : statKeys)
+	{
+		FText statName = FText::Format(FText::FromString("{0}:"), FText::FromStringTable(UConstants::statsStringTablePath, stat.Key + "Stat"));
+		FText statTooltip = FText::FromStringTable(UConstants::statsStringTablePath, stat.Key + "Description");
+		FText valueToolip = FText::Format(FText::FromStringTable(UConstants::statsStringTablePath, stat.Key + "Value"), stat.Value);
+
+		result.Emplace(statName, stat.Value, statTooltip, valueToolip);
+	}
+
+	return result;
 }

@@ -37,6 +37,8 @@ public:
 	static const FString defaultActionMessageKey;
 	static const FString actionHotkey;
 
+	static const FName statsStringTablePath;
+
 public:
 	UFUNCTION(Category = Constants, BlueprintCallable, BlueprintPure)
 	static FText getProjectVersion();

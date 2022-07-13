@@ -109,4 +109,7 @@ public:
 
 	UFUNCTION(Category = "Utility|Delegates", BlueprintCallable)
 	static bool callStandardDelegate(const FStandardDelegateHolder& holder);
+
+	UFUNCTION(Category = "Utility|Stats", BlueprintCallable, BlueprintPure)
+	static TArray<FStatDescription> getStatDescriptions(class ABaseDrone* drone);
 };

@@ -18,7 +18,14 @@
 	},
 	"UI":
 	{
-		"type": "category"
+		"type": "category",
+		"Stats":
+		{
+			"type": "item",
+			"notes": [
+				"Add stats showcase in inventory general information tab"
+			]
+		}
 	},
 	"Characters":
 	{

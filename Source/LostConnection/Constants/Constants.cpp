@@ -13,6 +13,8 @@ const FName UConstants::actionStringTablePath = "/Game/Text/Actions.Actions";
 const FString UConstants::defaultActionMessageKey = "DefaultActionMessage";
 const FString UConstants::actionHotkey = "ActionHotkey";
 
+const FName UConstants::statsStringTablePath = "/Game/Text/Stats.Stats";
+
 FText UConstants::getProjectVersion()
 {
 	return FText::FromString(FNetworkVersion::GetProjectVersion());
