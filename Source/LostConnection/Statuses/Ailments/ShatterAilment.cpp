@@ -65,14 +65,11 @@ bool UShatterAilment::applyEffect(const TScriptInterface<IStatusReceiver>& targe
 
 	targetTotalLifePool = target->getTotalLifePool();
 
-	damageInflictorUtility->setBaseDamage
-	(
-		targetTotalLifePool * Utility::fromPercent
+	damageInflictorUtility->getDamage().baseDamage = targetTotalLifePool * 
+		Utility::fromPercent
 		(
-			(currentTargetLocation - previousLocation).Size() / 100.0f *
-			damagePercentPerMeter
-		)
-	);
+			(currentTargetLocation - previousLocation).Size() / 100.0f *damagePercentPerMeter
+		);
 
 	target->takeDamageFromInflictor(this);
 

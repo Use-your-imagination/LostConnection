@@ -19,22 +19,25 @@ bool UBaseDamagePersonalModule::applyCondition(TObjectPtr<AActor> caller) const
 	return false;
 }
 
-float UBaseDamagePersonalModule::getAddedDamage() const
+void UBaseDamagePersonalModule::affect(FDamageStructure& damage)
 {
-	return addedDamage * this->getMultiplier();
-}
+	float multiplier = this->getMultiplier();
+	TArray<float> increase = moduleDamage.increaseDamageCoefficients;
+	TArray<float> more = moduleDamage.moreDamageCoefficients;
+	auto applyMultiplier = [multiplier](TArray<float>& coefficients)
+	{
+		for (auto& coefficient : coefficients)
+		{
+			coefficient *= multiplier;
+		}
+	};
 
-float UBaseDamagePersonalModule::getIncreaseDamageCoefficient() const
-{
-	return increaseDamageCoefficient * this->getMultiplier();
-}
+	applyMultiplier(increase);
+	applyMultiplier(more);
 
-float UBaseDamagePersonalModule::getMoreDamageCoefficient() const
-{
-	return moreDamageCoefficient * this->getMultiplier();
-}
-
-float UBaseDamagePersonalModule::getAdditionalDamage() const
-{
-	return additionalDamage * this->getMultiplier();
+	damage.baseDamage += moduleDamage.baseDamage * multiplier;
+	damage.addedDamage += moduleDamage.addedDamage * multiplier;
+	damage.additionalDamage += moduleDamage.additionalDamage * multiplier;
+	damage.increaseDamageCoefficients.Append(MoveTemp(increase));
+	damage.moreDamageCoefficients.Append(MoveTemp(more));
 }

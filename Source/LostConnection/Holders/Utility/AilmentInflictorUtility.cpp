@@ -31,74 +31,24 @@ bool UAilmentInflictorUtility::ReplicateSubobjects(UActorChannel* Channel, FOutB
 
 	wroteSomething |= Channel->ReplicateSubobject(damageInflictorUtility, *Bunch, *RepFlags);
 
-	damageInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	wroteSomething |= damageInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
 
 	return wroteSomething;
 }
 
-void UAilmentInflictorUtility::appendIncreaseDamageCoefficient(float coefficient)
+float UAilmentInflictorUtility::calculateTotalDamage() const
 {
-	damageInflictorUtility->appendIncreaseDamageCoefficient(coefficient);
+	return damageInflictorUtility->calculateTotalDamage();
 }
 
-void UAilmentInflictorUtility::removeIncreaseDamageCoefficient(float coefficient)
+FDamageStructure& UAilmentInflictorUtility::getDamage()
 {
-	damageInflictorUtility->removeIncreaseDamageCoefficient(coefficient);
-}
-
-void UAilmentInflictorUtility::appendMoreDamageCoefficient(float coefficient)
-{
-	damageInflictorUtility->appendMoreDamageCoefficient(coefficient);
-}
-
-void UAilmentInflictorUtility::removeMoreDamageCoefficient(float coefficient)
-{
-	damageInflictorUtility->removeMoreDamageCoefficient(coefficient);
-}
-
-void UAilmentInflictorUtility::setBaseDamage_Implementation(float newDamage)
-{
-	damageInflictorUtility->setBaseDamage_Implementation(newDamage);
-}
-
-void UAilmentInflictorUtility::setAddedDamage_Implementation(float newAddedDamage)
-{
-	damageInflictorUtility->setAddedDamage_Implementation(newAddedDamage);
-}
-
-void UAilmentInflictorUtility::setAdditionalDamage_Implementation(float newAdditionalDamage)
-{
-	damageInflictorUtility->setAdditionalDamage_Implementation(newAdditionalDamage);
+	return damageInflictorUtility->getDamage();
 }
 
 void UAilmentInflictorUtility::setDamageType_Implementation(ETypeOfDamage type)
 {
 	damageType = type;
-}
-
-float UAilmentInflictorUtility::getBaseDamage() const
-{
-	return damageInflictorUtility->getBaseDamage();
-}
-
-float UAilmentInflictorUtility::getAddedDamage() const
-{
-	return damageInflictorUtility->getAddedDamage();
-}
-
-float UAilmentInflictorUtility::getAdditionalDamage() const
-{
-	return damageInflictorUtility->getAdditionalDamage();
-}
-
-const TArray<float>& UAilmentInflictorUtility::getIncreaseDamageCoefficients() const
-{
-	return damageInflictorUtility->getIncreaseDamageCoefficients();
-}
-
-const TArray<float>& UAilmentInflictorUtility::getMoreDamageCoefficients() const
-{
-	return damageInflictorUtility->getMoreDamageCoefficients();
 }
 
 void UAilmentInflictorUtility::setBaseCrushingHitChance_Implementation(float crushingHitChance)

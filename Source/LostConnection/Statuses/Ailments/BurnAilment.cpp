@@ -41,7 +41,7 @@ void UBurnAilment::applyStatus_Implementation(const TScriptInterface<IStatusInfl
 
 	Super::applyStatus_Implementation(inflictor, target, hit);
 
-	damageInflictorUtility->setBaseDamage((inflictorDamage * burnDamageCoefficient) / (duration / tickPeriod));
+	damageInflictorUtility->getDamage().baseDamage = (damage.baseDamage * burnDamageCoefficient) / (duration / tickPeriod);
 }
 
 bool UBurnAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)

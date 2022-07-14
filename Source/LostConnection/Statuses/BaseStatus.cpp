@@ -39,15 +39,7 @@ void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInfli
 {
 	this->target = target;
 
-	inflictorDamage = inflictor->getBaseDamage();
-
-	inflictorAddedDamage = inflictor->getAddedDamage();
-
-	inflictorAdditionalDamage = inflictor->getAdditionalDamage();
-
-	inflictorMoreDamageCoefficients = inflictor->getMoreDamageCoefficients();
-
-	inflictorIncreaseDamageCoefficients = inflictor->getIncreaseDamageCoefficients();
+	damage = inflictor->getDamage();
 
 	target->addStatus(this);
 

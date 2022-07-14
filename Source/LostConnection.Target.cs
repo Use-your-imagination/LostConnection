@@ -10,5 +10,7 @@ public class LostConnectionTarget : TargetRules
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		ExtraModuleNames.Add("LostConnection");
+
+		bUsesSteam = true;
 	}
 }

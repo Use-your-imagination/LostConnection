@@ -96,15 +96,17 @@ bool Utility::isYourPawn(APawn* pawn)
 
 void Utility::resetDamageInflictor(IDamageInflictor* inflictor)
 {
-	inflictor->setBaseDamage(0.0f);
+	FDamageStructure& damage = inflictor->getDamage();
 
-	inflictor->setAddedDamage(0.0f);
+	damage.baseDamage = 0.0f;
 
-	inflictor->setAdditionalDamage(0.0f);
+	damage.addedDamage = 0.0f;
 
-	const_cast<TArray<float>&>(inflictor->getIncreaseDamageCoefficients()).Empty();
+	damage.additionalDamage = 0.0f;
 
-	const_cast<TArray<float>&>(inflictor->getMoreDamageCoefficients()).Empty();
+	damage.increaseDamageCoefficients.Empty();
+
+	damage.moreDamageCoefficients.Empty();
 }
 
 TObjectPtr<UBaseWeapon> Utility::createWeapon(TSubclassOf<UBaseWeapon> weaponClass, EWeaponRarity rarity, TObjectPtr<AInventory> inventory)

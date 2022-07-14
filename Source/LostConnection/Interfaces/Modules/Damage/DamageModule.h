@@ -4,31 +4,23 @@
 
 #include "CoreMinimal.h"
 
-#include "UObject/Interface.h"
+#include "Interfaces/Gameplay/Descriptions/DamageAffecter.h"
 #include "Interfaces/Gameplay/Statuses/Ailment.h"
 
 #include "DamageModule.generated.h"
 
 UINTERFACE(BlueprintType)
-class UDamageModule : public UInterface
+class UDamageModule : public UDamageAffecter
 {
 	GENERATED_BODY()
 };
 
-class LOSTCONNECTION_API IDamageModule
+class LOSTCONNECTION_API IDamageModule : public IDamageAffecter
 {
 	GENERATED_BODY()
 
 public:
 	IDamageModule() = default;
-
-	virtual float getAddedDamage() const = 0;
-
-	virtual float getIncreaseDamageCoefficient() const = 0;
-
-	virtual float getMoreDamageCoefficient() const = 0;
-
-	virtual float getAdditionalDamage() const = 0;
 
 	virtual ETypeOfDamage getDamageType() const;
 };

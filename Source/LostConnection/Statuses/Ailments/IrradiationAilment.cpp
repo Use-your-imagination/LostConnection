@@ -38,7 +38,7 @@ void UIrradiationAilment::initDamage()
 		}
 	}
 
-	damageInflictorUtility->setBaseDamage(inflictorDamage * Utility::fromPercent(irradiationMultiplier));
+	damageInflictorUtility->getDamage().baseDamage = damage.baseDamage * Utility::fromPercent(irradiationMultiplier);
 }
 
 UIrradiationAilment::UIrradiationAilment()
@@ -83,7 +83,7 @@ bool UIrradiationAilment::applyEffect(const TScriptInterface<IStatusReceiver>& t
 
 	Utility::resetDamageInflictor(damageInflictorUtility);
 
-	damageInflictorUtility->setBaseDamage(inflictorDamage);
+	damageInflictorUtility->getDamage().baseDamage = damage.baseDamage;
 
 	additionalIrradiationMultiplier = target->getEnergyShieldPercentDealt(this) / irradiationMultiplierPerPercentEnergyShieldPool;
 

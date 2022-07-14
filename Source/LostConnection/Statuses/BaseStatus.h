@@ -44,11 +44,8 @@ protected:
 	float currentDuration;
 
 	TScriptInterface<class IStatusReceiver> target;
-	float inflictorDamage;
-	float inflictorAddedDamage;
-	float inflictorAdditionalDamage;
-	TArray<float> inflictorMoreDamageCoefficients;
-	TArray<float> inflictorIncreaseDamageCoefficients;
+
+	FDamageStructure damage;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)

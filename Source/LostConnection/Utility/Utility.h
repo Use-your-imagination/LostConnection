@@ -73,9 +73,6 @@ public:
 
 	template<typename FunctionT, typename... Args>
 	static void executeOnOwningClient(APawn* pawn, const FunctionT& function, Args&&... args);
-
-	template<typename InflictorT>
-	static void applyDamageModules(TObjectPtr<AActor> caller, const TArray<UInventoryCell*>& modules, TObjectPtr<InflictorT> inflictor);
 };
 
 inline TObjectPtr<ALostConnectionGameState> Utility::getGameState(const AActor* actor)
@@ -183,30 +180,6 @@ void Utility::executeOnOwningClient(APawn* pawn, const FunctionT& function, Args
 	if (controller && controller == UGameplayStatics::GetPlayerController(pawn, 0))
 	{
 		function(Forward(args)...);
-	}
-}
-
-template<typename InflictorT>
-void Utility::applyDamageModules(TObjectPtr<AActor> caller, const TArray<UInventoryCell*>& modules, TObjectPtr<InflictorT> inflictor)
-{
-	for (const auto& cell : modules)
-	{
-		TObjectPtr<class UBaseModule> module = cell->getItem<class UBaseModule>();
-
-		if (IDamageModule* damageModule = Cast<IDamageModule>(module))
-		{
-			if (!module->applyCondition(caller))
-			{
-				continue;
-			}
-
-			float efficiencyCoefficient = cell->getIsEquipped() ? 1.0f : 0.5f;
-
-			inflictor->setAddedDamage(inflictor->getAddedDamage() + damageModule->getAddedDamage() * efficiencyCoefficient);
-			inflictor->appendIncreaseDamageCoefficient(damageModule->getIncreaseDamageCoefficient() * efficiencyCoefficient);
-			inflictor->appendMoreDamageCoefficient(damageModule->getMoreDamageCoefficient() * efficiencyCoefficient);
-			inflictor->setAdditionalDamage(inflictor->getAdditionalDamage() + damageModule->getAdditionalDamage() * efficiencyCoefficient);
-		}
 	}
 }
 

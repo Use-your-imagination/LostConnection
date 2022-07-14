@@ -40,41 +40,18 @@ public:
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	void appendIncreaseDamageCoefficient(float coefficient) override;
-
-	void removeIncreaseDamageCoefficient(float coefficient) override;
-
-	void appendMoreDamageCoefficient(float coefficient) override;
-
-	void removeMoreDamageCoefficient(float coefficient) override;
-
-	UFUNCTION(Server, Reliable)
-	void setBaseDamage(float newDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAddedDamage(float newAddedDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAdditionalDamage(float newAdditionalDamage) override;
+	float calculateTotalDamage() const override;
 
 	UFUNCTION(Server, Reliable)
 	void setDamageType(ETypeOfDamage type) override;
-
-	float getBaseDamage() const override;
-
-	float getAddedDamage() const override;
-
-	float getAdditionalDamage() const override;
-
-	const TArray<float>& getIncreaseDamageCoefficients() const override;
-
-	const TArray<float>& getMoreDamageCoefficients() const override;
 
 	UFUNCTION(Server, Reliable)
 	void setBaseCrushingHitChance(float crushingHitChance) override;
 
 	UFUNCTION(Server, Reliable)
 	void setAdditionalCrushingHitChance(float newAdditionalCrushingHitChance) override;
+
+	FDamageStructure& getDamage() override;
 
 	ETypeOfDamage getDamageType() const override;
 

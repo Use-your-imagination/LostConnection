@@ -36,7 +36,7 @@ void UCritAilment::initDamage()
 		}
 	}
 
-	damageInflictorUtility->setBaseDamage(inflictorDamage * Utility::fromPercent(damageMultiplierPercent));
+	damageInflictorUtility->getDamage().baseDamage = damage.baseDamage * Utility::fromPercent(damageMultiplierPercent);
 }
 
 UCritAilment::UCritAilment()
@@ -72,7 +72,7 @@ bool UCritAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, 
 
 	Utility::resetDamageInflictor(damageInflictorUtility);
 
-	damageInflictorUtility->setBaseDamage(inflictorDamage);
+	damageInflictorUtility->getDamage().baseDamage = damage.baseDamage;
 
 	critMultiplier = target->getTotalLifePercentDealt(this) * damageMultiplierPerTotalLifePercentPool;
 

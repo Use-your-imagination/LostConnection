@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 
-#include "Network/NetworkObject.h"
-
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
 
 #include "DamageInflictorUtility.generated.h"
@@ -19,21 +17,12 @@ class LOSTCONNECTION_API UDamageInflictorUtility :
 
 protected:
 	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	float baseInflictorDamage;
+	FDamageStructure damage;
 
-	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	float addedInflictorDamage;
+	UPROPERTY(Category = Affecters, Replicated, BlueprintReadOnly, Meta = (MustImplement = DamageAffecter))
+	TArray<TObjectPtr<UNetworkObject>> damageAffecters;
 
-	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	float additionalInflictorDamage;
-
-	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	TArray<float> increaseInflictorDamageCoefficients;
-
-	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
-	TArray<float> moreInflictorDamageCoefficients;
-
-	UPROPERTY()
+	UPROPERTY(Category = Instigator, Replicated, BlueprintReadOnly)
 	TObjectPtr<AController> damageInstigator;
 
 private:
@@ -45,34 +34,11 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setDamageInstigator(AController* newDamageInstigator);
 
-	void appendIncreaseDamageCoefficient(float coefficient) override;
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	void removeIncreaseDamageCoefficient(float coefficient) override;
+	float calculateTotalDamage() const override;
 
-	void appendMoreDamageCoefficient(float coefficient) override;
-
-	void removeMoreDamageCoefficient(float coefficient) override;
-
-	UFUNCTION(Server, Reliable)
-	void setBaseDamage(float newDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAddedDamage(float newAddedDamage) override;
-
-	UFUNCTION(Server, Reliable)
-	void setAdditionalDamage(float newAdditionalDamage) override;
-
-	float getBaseDamage() const override;
-
-	float getAddedDamage() const override;
-
-	float getAdditionalDamage() const override;
-
-	const TArray<float>& getIncreaseDamageCoefficients() const override;
-
-	const TArray<float>& getMoreDamageCoefficients() const override;
-
-	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+	FDamageStructure& getDamage() override;
 
 	const TObjectPtr<AController>& getDamageInstigator() const override;
 

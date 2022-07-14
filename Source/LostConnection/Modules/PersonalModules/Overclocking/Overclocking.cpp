@@ -2,11 +2,13 @@
 
 #include "Overclocking.h"
 
+#include "Algo/Accumulate.h"
+
 #include "Utility/Utility.h"
 
 TArray<FFormatArgumentValue> UOverclocking::getFormatArguments() const
 {
-	return { Utility::toPercent(this->getIncreaseDamageCoefficient()) };
+	return { Utility::toPercent(Algo::Accumulate(moduleDamage.increaseDamageCoefficients, 0.0f)) };
 }
 
 bool UOverclocking::applyCondition(TObjectPtr<AActor> caller) const

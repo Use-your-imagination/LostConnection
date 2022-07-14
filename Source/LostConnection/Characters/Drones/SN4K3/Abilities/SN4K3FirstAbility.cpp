@@ -43,23 +43,9 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 
 	ailmentInflictorUtility->setBaseCrushingHitChance(Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter());
 
-	// TODO: remake apply modules
+	// TODO: Apply
 
 	TObjectPtr<UAilmentInflictorUtility> tem = DuplicateObject<UAilmentInflictorUtility>(ailmentInflictorUtility, ailmentInflictorUtility->GetOuter());
-
-	if (TScriptInterface<IPersonalModulesHolder> holder = Cast<IPersonalModulesHolder>(caster))
-	{
-		Utility::applyDamageModules(Cast<AActor>(caster), holder->getPersonalEquippedModules(), tem);
-
-		Utility::applyDamageModules(Cast<AActor>(caster), holder->getActivePersonalModules(), tem);
-	}
-
-	if (TScriptInterface<IWeaponModulesHolder> holder = Cast<IWeaponModulesHolder>(caster))
-	{
-		Utility::applyDamageModules(Cast<AActor>(caster), holder->getWeaponModules(), tem);
-
-		Utility::applyDamageModules(Cast<AActor>(caster), holder->getActiveWeaponModules(), tem);
-	}
 
 	target->takeDamageFromInflictor(tem.Get());
 

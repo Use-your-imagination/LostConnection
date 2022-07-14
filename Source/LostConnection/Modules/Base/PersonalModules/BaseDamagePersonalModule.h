@@ -18,29 +18,14 @@ class LOSTCONNECTION_API UBaseDamagePersonalModule :
 
 protected:
 	UPROPERTY(Category = Module, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	float addedDamage;
-
-	UPROPERTY(Category = Module, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	float increaseDamageCoefficient;
-
-	UPROPERTY(Category = Module, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	float moreDamageCoefficient;
-
-	UPROPERTY(Category = Module, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	float additionalDamage;
+	FDamageStructure moduleDamage;
 	
 public:
 	UBaseDamagePersonalModule() = default;
 
 	virtual bool applyCondition(TObjectPtr<AActor> caller) const override;
 
-	virtual float getAddedDamage() const final override;
-
-	virtual float getIncreaseDamageCoefficient() const final override;
-
-	virtual float getMoreDamageCoefficient() const final override;
-
-	virtual float getAdditionalDamage() const final override;
+	void affect(FDamageStructure& damage) override;
 
 	virtual ~UBaseDamagePersonalModule() = default;
 };

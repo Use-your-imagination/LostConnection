@@ -47,9 +47,11 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	bool destroyAmmo = false;
 	auto decreaseDamage = [this](float percentDamageReduction, float flatDamageReduction)
 	{
-		ailmentInflictorUtility->appendMoreDamageCoefficient(-Utility::fromPercent(percentDamageReduction));
+		FDamageStructure& damage = ailmentInflictorUtility->getDamage();
 
-		ailmentInflictorUtility->setAdditionalDamage(ailmentInflictorUtility->getAdditionalDamage() - flatDamageReduction);
+		damage.moreDamageCoefficients.Add(-Utility::fromPercent(percentDamageReduction));
+
+		damage.additionalDamage -= flatDamageReduction;
 	};
 
 	if (isActorValid && lastTarget == OtherActor)
@@ -193,11 +195,13 @@ void AAmmo::copyProperties(TObjectPtr<UBaseWeapon> weapon)
 {
 	TObjectPtr<AController> damageInstigator = weapon->getDamageInstigator();
 
-	ailmentInflictorUtility->setBaseDamage(weapon->getBaseDamage());
+	FDamageStructure& damage = ailmentInflictorUtility->getDamage();
 
-	ailmentInflictorUtility->setAddedDamage(weapon->getAddedDamage());
+	damage.baseDamage = weapon->getBaseDamage();
 
-	ailmentInflictorUtility->setAdditionalDamage(weapon->getAdditionalDamage());
+	damage.addedDamage = weapon->getAddedDamage();
+
+	damage.additionalDamage = weapon->getAdditionalDamage();
 
 	ailmentInflictorUtility->damageType = weapon->getDamageType();
 
@@ -206,20 +210,6 @@ void AAmmo::copyProperties(TObjectPtr<UBaseWeapon> weapon)
 	ailmentInflictorUtility->setAdditionalCrushingHitChance(weapon->getAdditionalCrushingHitChance());
 
 	ailmentInflictorUtility->setDamageInstigator(damageInstigator);
-
-	if (TScriptInterface<IPersonalModulesHolder> holder = damageInstigator->GetPawn())
-	{
-		Utility::applyDamageModules(this, holder->getPersonalEquippedModules(), ailmentInflictorUtility);
-
-		Utility::applyDamageModules(this, holder->getActivePersonalModules(), ailmentInflictorUtility);
-	}
-
-	if (TScriptInterface<IWeaponModulesHolder> holder = damageInstigator->GetPawn())
-	{
-		Utility::applyDamageModules(this, holder->getWeaponModules(), ailmentInflictorUtility);
-
-		Utility::applyDamageModules(this, holder->getActiveWeaponModules(), ailmentInflictorUtility);
-	}
 }
 
 TObjectPtr<UStaticMeshComponent> AAmmo::getAmmoMeshComponent() const

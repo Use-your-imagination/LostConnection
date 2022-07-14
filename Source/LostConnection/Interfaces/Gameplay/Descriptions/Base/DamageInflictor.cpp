@@ -2,16 +2,34 @@
 
 #include "DamageInflictor.h"
 
-#include "Maths/FormulaLibrary.h"
+#include "Interfaces/Gameplay/Descriptions/DamageAffecter.h"
 
-float IDamageInflictor::calculateTotalDamage() const
+FDamageStructure::FDamageStructure(const FDamageStructure& base, const TArray<TObjectPtr<UNetworkObject>>& affecters) :
+	FDamageStructure(base)
 {
-	return UFormulaLibrary::standardFormula
-	(
-		this->getBaseDamage(),
-		this->getAddedDamage(),
-		this->getIncreaseDamageCoefficients(),
-		this->getMoreDamageCoefficients(),
-		this->getAdditionalDamage()
-	);
+	for (const TObjectPtr<UNetworkObject>& affecter : affecters)
+	{
+		Cast<IDamageAffecter>(affecter)->affect(*this);
+	}
+}
+
+FDamageStructure::FDamageStructure(const FDamageStructure& other)
+{
+	(*this) = other;
+}
+
+FDamageStructure& FDamageStructure::operator = (const FDamageStructure& other)
+{
+	baseDamage = other.baseDamage;
+	addedDamage = other.addedDamage;
+	additionalDamage = other.additionalDamage;
+	increaseDamageCoefficients = other.increaseDamageCoefficients;
+	moreDamageCoefficients = other.moreDamageCoefficients;
+
+	return *this;
+}
+
+const FDamageStructure& IDamageInflictor::getDamage() const
+{
+	return const_cast<IDamageInflictor*>(this)->getDamage();
 }

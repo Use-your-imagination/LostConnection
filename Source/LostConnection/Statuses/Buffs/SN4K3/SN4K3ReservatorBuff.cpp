@@ -77,11 +77,11 @@ bool USN4K3ReservatorBuff::applyEffect(const TScriptInterface<IStatusReceiver>& 
 				{
 					FSimpleDelegate reset;
 
-					reset.BindLambda([this, inflictor]() { inflictor->removeIncreaseDamageCoefficient(naniteIncreaseDamage); });
+					reset.BindLambda([this, inflictor]() { inflictor->getDamage().increaseDamageCoefficients.RemoveSingle(naniteIncreaseDamage); });
 
 					additionalNaniteDamage.Add(ability, MoveTemp(reset));
 
-					inflictor->removeIncreaseDamageCoefficient(naniteIncreaseDamage);
+					inflictor->getDamage().increaseDamageCoefficients.Add(naniteIncreaseDamage);
 				}
 			}
 		}

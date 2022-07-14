@@ -6,7 +6,43 @@
 
 #include "UObject/Interface.h"
 
+#include "Network/NetworkObject.h"
+
 #include "DamageInflictor.generated.h"
+
+USTRUCT(BlueprintType)
+struct LOSTCONNECTION_API FDamageStructure
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, BlueprintReadOnly)
+	float baseDamage;
+
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, BlueprintReadOnly)
+	float addedDamage;
+
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, BlueprintReadOnly)
+	float additionalDamage;
+
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, BlueprintReadOnly)
+	TArray<float> increaseDamageCoefficients;
+
+	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, BlueprintReadOnly)
+	TArray<float> moreDamageCoefficients;
+
+public:
+	FDamageStructure() = default;
+
+	/**
+	* @param affecters Must be Array<IDamageAffecter*>
+	*/
+	FDamageStructure(const FDamageStructure& base, const TArray<TObjectPtr<class UNetworkObject>>& affecters);
+
+	FDamageStructure(const FDamageStructure& other);
+
+	FDamageStructure& operator = (const FDamageStructure& other);
+};
 
 UINTERFACE(BlueprintType)
 class UDamageInflictor : public UInterface
@@ -21,31 +57,11 @@ class LOSTCONNECTION_API IDamageInflictor
 public:
 	IDamageInflictor() = default;
 
-	virtual float calculateTotalDamage() const;
-
-	virtual void appendIncreaseDamageCoefficient(float coefficient) = 0;
-
-	virtual void removeIncreaseDamageCoefficient(float coefficient) = 0;
-
-	virtual void appendMoreDamageCoefficient(float coefficient) = 0;
-
-	virtual void removeMoreDamageCoefficient(float coefficient) = 0;
-
-	virtual void setBaseDamage(float damage) = 0;
-
-	virtual void setAddedDamage(float addedDamage) = 0;
-
-	virtual void setAdditionalDamage(float additionalDamage) = 0;
-
-	virtual float getBaseDamage() const = 0;
-
-	virtual float getAddedDamage() const = 0;
-
-	virtual float getAdditionalDamage() const = 0;
-
-	virtual const TArray<float>& getIncreaseDamageCoefficients() const = 0;
-
-	virtual const TArray<float>& getMoreDamageCoefficients() const = 0;
+	virtual float calculateTotalDamage() const = 0;
 
 	virtual const TObjectPtr<AController>& getDamageInstigator() const = 0;
+
+	virtual FDamageStructure& getDamage() = 0;
+
+	virtual const FDamageStructure& getDamage() const;
 };

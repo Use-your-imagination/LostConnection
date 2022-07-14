@@ -2,11 +2,13 @@
 
 #include "PowderHeavy.h"
 
+#include "Algo/Accumulate.h"
+
 #include "Utility/Utility.h"
 
 TArray<FFormatArgumentValue> UPowderHeavy::getFormatArguments() const
 {
-	return { Utility::toPercent(this->getIncreaseDamageCoefficient()) };
+	return { Utility::toPercent(Algo::Accumulate(moduleDamage.increaseDamageCoefficients, 0.0f)) };
 }
 
 bool UPowderHeavy::applyCondition(TObjectPtr<AActor> caller) const
