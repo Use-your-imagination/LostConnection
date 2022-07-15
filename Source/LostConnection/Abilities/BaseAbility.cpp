@@ -14,8 +14,6 @@ void UBaseAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(UBaseAbility, cost);
 
 	DOREPLIFETIME(UBaseAbility, isDisabled);
-
-	DOREPLIFETIME(UBaseAbility, instigator);
 }
 
 UBaseAbility::UBaseAbility() :
