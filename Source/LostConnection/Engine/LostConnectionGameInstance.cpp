@@ -79,7 +79,7 @@ void ULostConnectionGameInstance::onJoinSession(FName sessionName, EOnJoinSessio
 
 			onSuccess.ExecuteIfBound();
 
-			playerController->ClientTravel(connectString, ETravelType::TRAVEL_Absolute, true);
+			playerController->ClientTravel(connectString, ETravelType::TRAVEL_Absolute);
 
 			return;
 		}

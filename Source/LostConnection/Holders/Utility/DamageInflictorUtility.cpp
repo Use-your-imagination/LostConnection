@@ -12,8 +12,6 @@ void UDamageInflictorUtility::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	DOREPLIFETIME(UDamageInflictorUtility, damage);
 
 	DOREPLIFETIME(UDamageInflictorUtility, damageAffecters);
-
-	DOREPLIFETIME(UDamageInflictorUtility, damageInstigator);
 }
 
 void UDamageInflictorUtility::setDamageInstigator_Implementation(AController* newDamageInstigator)
@@ -24,8 +22,6 @@ void UDamageInflictorUtility::setDamageInstigator_Implementation(AController* ne
 bool UDamageInflictorUtility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(damageInstigator, *Bunch, *RepFlags);
 
 	for (const auto& damageAffecter : damageAffecters)
 	{

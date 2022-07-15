@@ -7,6 +7,8 @@ void UInventoryCell::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UInventoryCell, item);
+
+	DOREPLIFETIME(UInventoryCell, isEquipped);
 }
 
 void UInventoryCell::setItem(IInventoriable* item)

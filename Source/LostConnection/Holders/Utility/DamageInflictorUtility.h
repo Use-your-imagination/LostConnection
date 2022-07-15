@@ -22,7 +22,7 @@ protected:
 	UPROPERTY(Category = Affecters, Replicated, BlueprintReadOnly, Meta = (MustImplement = DamageAffecter))
 	TArray<TObjectPtr<UNetworkObject>> damageAffecters;
 
-	UPROPERTY(Category = Instigator, Replicated, BlueprintReadOnly)
+	UPROPERTY()
 	TObjectPtr<AController> damageInstigator;
 
 private:

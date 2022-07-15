@@ -45,12 +45,13 @@ protected:
 	UPROPERTY(Category = AbilityAnimation, EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UAnimMontage> animation;
 
-	UPROPERTY(Category = Instigator, Replicated, BlueprintReadOnly)
+	UPROPERTY()
+	TScriptInterface<class ICaster> caster;
+
+	UPROPERTY()
 	TObjectPtr<AController> instigator;
 
 	EAbilitySlot id;
-
-	TScriptInterface<class ICaster> caster;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -96,8 +97,6 @@ public:
 	EAbilitySlot getId() const;
 
 	const TScriptInterface<class ICaster>& getCaster() const;
-
-	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	virtual ~UBaseAbility() = default;
 };

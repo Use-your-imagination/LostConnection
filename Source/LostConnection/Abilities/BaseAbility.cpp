@@ -113,12 +113,3 @@ const TScriptInterface<ICaster>& UBaseAbility::getCaster() const
 {
 	return caster;
 }
-
-bool UBaseAbility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(instigator, *Bunch, *RepFlags);
-
-	return wroteSomething;
-}
