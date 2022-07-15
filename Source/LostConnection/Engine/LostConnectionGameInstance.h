@@ -10,6 +10,7 @@
 #include "FindSessionsCallbackProxy.h"
 
 #include "Interfaces/Multiplayer/InitSessions.h"
+#include "Utility/UtilityStructures.h"
 
 #include "LostConnectionGameInstance.generated.h"
 
@@ -26,6 +27,8 @@ private:
 	void onStartSession(FName sessionName, bool wasSuccessful);
 
 	void onFindSessions(bool wasSuccessful, TArray<FBlueprintSessionResult>* sessionsData, TScriptInterface<IInitSessions> widget);
+
+	void onJoinSession(FName sessionName, EOnJoinSessionCompleteResult::Type type, FStandardDelegate onSuccess, FStandardDelegate onFail);
 
 private:
 	static const FString options;
@@ -52,13 +55,16 @@ public:
 
 	void hostSession(TSharedPtr<const FUniqueNetId> userId, const FString& serverName, const TSoftObjectPtr<UWorld>& level);
 
-	void findLocalSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
+	void findOnlineSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
 	void createSession(const FString& serverName, TSoftObjectPtr<UWorld> level);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
 	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
+
+	UFUNCTION(Category = Sessions, BlueprintCallable)
+	void joinSession(const FBlueprintSessionResult& sessionToJoin, const FStandardDelegate& onSuccess, const FStandardDelegate& onFail);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
 	void destroySession(TSoftObjectPtr<UWorld> selfLevelToTravel, TSoftObjectPtr<UWorld> clientsLevelToTravel);

@@ -4,12 +4,8 @@
 
 #include "Kismet/GameplayStatics.h"
 
-#include "LostConnectionPlayerController.h"
-#include "LostConnectionGameState.h"
-#include "LostConnectionPlayerState.h"
+#include "Utility/Utility.h"
 #include "Constants/Constants.h"
-
-// ?bIsLanMatch=1
 
 const FString ULostConnectionGameInstance::options = "?listen";
 const FName ULostConnectionGameInstance::serverNameKey = "ServerName";
@@ -68,6 +64,70 @@ void ULostConnectionGameInstance::onFindSessions(bool wasSuccessful, TArray<FBlu
 	}
 }
 
+void ULostConnectionGameInstance::onJoinSession(FName sessionName, EOnJoinSessionCompleteResult::Type type, FStandardDelegate onSuccess, FStandardDelegate onFail)
+{
+	session->OnJoinSessionCompleteDelegates.Clear();
+
+	if (type == EOnJoinSessionCompleteResult::Type::Success)
+	{
+		TObjectPtr<APlayerController> playerController = GetFirstLocalPlayerController();
+		FString connectString;
+
+		if (session->GetResolvedConnectString(NAME_GameSession, connectString) && playerController)
+		{
+			UE_LOG(LogLostConnection, Warning, TEXT("Join session: traveling to %s"), *connectString);
+
+			onSuccess.ExecuteIfBound();
+
+			playerController->ClientTravel(connectString, ETravelType::TRAVEL_Absolute, true);
+
+			return;
+		}
+		else
+		{
+			UE_LOG(LogLostConnection, Error, TEXT("Connect string: %s, player controller: %d"), *connectString, StaticCast<bool>(playerController));
+		}
+	}
+	else
+	{
+		using EOnJoinSessionCompleteResult::Type;
+
+		FString error;
+
+		switch (type)
+		{
+		case Type::AlreadyInSession:
+			error = "Already in session";
+
+			break;
+
+		case Type::CouldNotRetrieveAddress:
+			error = "Could not retrieve address";
+
+			break;
+
+		case Type::SessionDoesNotExist:
+			error = "Session does not exist";
+
+			break;
+
+		case Type::SessionIsFull:
+			error = "Session is full";
+
+			break;
+
+		case Type::UnknownError:
+			error = "Unknown error";
+
+			break;
+		}
+
+		UE_LOG(LogLostConnection, Warning, TEXT("Can't join to session. %s"), *error);
+	}
+
+	onFail.ExecuteIfBound();
+}
+
 void ULostConnectionGameInstance::Init()
 {
 	subsystem = IOnlineSubsystem::Get();
@@ -81,7 +141,7 @@ void ULostConnectionGameInstance::Init()
 			sessionSettings = MakeShareable(new FOnlineSessionSettings());
 
 			sessionSettings->bUseLobbiesIfAvailable = true;
-			// sessionSettings->bUsesPresence = true;
+			sessionSettings->bUsesPresence = true;
 			sessionSettings->bShouldAdvertise = true;
 			sessionSettings->NumPublicConnections = 4;
 			sessionSettings->bAllowJoinInProgress = true;
@@ -97,7 +157,7 @@ void ULostConnectionGameInstance::initSearchSession()
 	searchSession->MaxSearchResults = std::numeric_limits<int32>::max();
 	searchSession->PingBucketSize = 100;
 
-	// searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
+	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
 }
 
 void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, const FString& serverName, const TSoftObjectPtr<UWorld>& level)
@@ -109,7 +169,7 @@ void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> use
 	session->CreateSession(*userId, NAME_GameSession, *sessionSettings);
 }
 
-void ULostConnectionGameInstance::findLocalSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
+void ULostConnectionGameInstance::findOnlineSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
 {
 	this->initSearchSession();
 
@@ -127,7 +187,14 @@ void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& 
 {
 	session->OnFindSessionsCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onFindSessions, &sessionsData, widget);
 
-	this->findLocalSessions(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionsData, widget);
+	this->findOnlineSessions(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionsData, widget);
+}
+
+void ULostConnectionGameInstance::joinSession(const FBlueprintSessionResult& sessionToJoin, const FStandardDelegate& onSuccess, const FStandardDelegate& onFail)
+{
+	session->OnJoinSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onJoinSession, onSuccess, onFail);
+
+	session->JoinSession(*GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), NAME_GameSession, sessionToJoin.OnlineResult);
 }
 
 void ULostConnectionGameInstance::destroySession(TSoftObjectPtr<UWorld> selfLevelToTravel, TSoftObjectPtr<UWorld> clientsLevelToTravel)
