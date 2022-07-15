@@ -155,9 +155,12 @@ void AInventory::upgradeModule(TObjectPtr<UInventoryCell> moduleToUpgrade)
 
 void AInventory::onInventoryUpdate()
 {
-	for (TObjectPtr<UEscapableWidget>& widget : playerState->getEscapableWidgets())
+	if (playerState)
 	{
-		widget->onNetUpdate();
+		for (TObjectPtr<UEscapableWidget>& widget : playerState->getEscapableWidgets())
+		{
+			widget->onNetUpdate();
+		}
 	}
 }
 
