@@ -355,7 +355,9 @@ FString UAutomationToolchainLibrary::getPathToStagedBuildsFolder()
 		return "";
 	}
 
-	return settings->GetStringField("pathToStagedBuildsFolder");
+	return UAutomationToolchainLibrary::getIsRelativePathToStagedBuilds() ?
+		FPaths::ProjectDir() / settings->GetStringField("pathToStagedBuildsFolder") :
+		settings->GetStringField("pathToStagedBuildsFolder");
 }
 
 bool UAutomationToolchainLibrary::getIsRelativePathToStagedBuilds()
