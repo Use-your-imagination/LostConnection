@@ -47,13 +47,13 @@ ALostConnectionPlayerController::ALostConnectionPlayerController()
 
 void ALostConnectionPlayerController::respawnPlayer_Implementation(const FTransform& respawnTransform)
 {
-	APawn* pawn = GetPawn();
+	TObjectPtr<APawn> pawn = GetPawn();
 	FTransform spawnTransform(respawnTransform);
-	ALostConnectionPlayerState* playerState = GetPlayerState<ALostConnectionPlayerState>();
+	TObjectPtr<ALostConnectionPlayerState> playerState = GetPlayerState<ALostConnectionPlayerState>();
 
 	pawn->Destroy();
 
-	ABaseDrone* drone = Utility::getGameState(this)->spawn<ABaseDrone>
+	TObjectPtr<ABaseDrone> drone = Utility::getGameState(this)->spawn<ABaseDrone>
 	(
 		Utility::findDroneClass
 		(

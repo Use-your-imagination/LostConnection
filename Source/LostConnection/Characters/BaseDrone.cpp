@@ -469,14 +469,16 @@ void ABaseDrone::BeginPlay()
 			}, 1.0f);
 
 		passiveAbility->initAbility(controller);
-
 		firstAbility->initAbility(controller);
-
 		secondAbility->initAbility(controller);
-
 		thirdAbility->initAbility(controller);
-
 		ultimateAbility->initAbility(controller);
+
+		passiveAbility->setCaster(this);
+		firstAbility->setCaster(this);
+		secondAbility->setCaster(this);
+		thirdAbility->setCaster(this);
+		ultimateAbility->setCaster(this);
 
 		grappleHandler->init(this);
 

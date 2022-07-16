@@ -64,12 +64,6 @@ ASN4K3::ASN4K3()
 	secondAbility = CreateDefaultSubobject<USN4K3SecondAbility>("SecondAbility");
 	thirdAbility = CreateDefaultSubobject<USN4K3ThirdAbility>("ThirdAbility");
 	ultimateAbility = CreateDefaultSubobject<USN4K3UltimateAbility>("UltimateAbility");
-
-	passiveAbility->setCaster(this);
-	firstAbility->setCaster(this);
-	secondAbility->setCaster(this);
-	thirdAbility->setCaster(this);
-	ultimateAbility->setCaster(this);
 }
 
 void ASN4K3::playUltimateReturnAnimation()
