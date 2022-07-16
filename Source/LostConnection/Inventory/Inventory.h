@@ -106,6 +106,7 @@ public:
 
 	void init(TObjectPtr<class ALostConnectionPlayerState> playerState);
 
+	UFUNCTION(Server, Reliable)
 	void updateActiveWeaponModules();
 
 	UFUNCTION(Category = Inventory, Server, Reliable, BlueprintCallable)

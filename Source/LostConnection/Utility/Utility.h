@@ -82,19 +82,12 @@ inline TObjectPtr<ALostConnectionGameState> Utility::getGameState(const AActor* 
 
 inline TObjectPtr<ALostConnectionPlayerState> Utility::getPlayerState(const APawn* pawn)
 {
-	TObjectPtr<AController> controller = pawn->GetController();
-
-	if (controller.IsNull())
-	{
-		return nullptr;
-	}
-
-	return controller->GetPlayerState<ALostConnectionPlayerState>();
+	return pawn->GetPlayerState<ALostConnectionPlayerState>();
 }
 
 inline ALostConnectionPlayerController* Utility::getPlayerController(const APawn* pawn)
 {
-	return Cast<ALostConnectionPlayerController>(pawn->GetController());
+	return pawn->GetController<ALostConnectionPlayerController>();
 }
 
 inline float Utility::toPercent(float coefficient)

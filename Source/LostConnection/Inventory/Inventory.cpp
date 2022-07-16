@@ -269,7 +269,7 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 	defaultWeaponCell->setItem(Utility::createWeapon(manager.getWeaponClass(UGauss::StaticClass()), EWeaponRarity::normal, this));
 }
 
-void AInventory::updateActiveWeaponModules()
+void AInventory::updateActiveWeaponModules_Implementation()
 {
 	activeWeaponModules.Empty();
 
