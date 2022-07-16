@@ -99,8 +99,6 @@ private:
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	void BeginPlay() override;
-
 public:
 	AInventory();
 

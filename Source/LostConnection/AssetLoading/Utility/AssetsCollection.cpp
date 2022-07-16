@@ -2,6 +2,12 @@
 
 #include "AssetsCollection.h"
 
+template<typename DataAssetT>
+TPair<TSubclassOf<UPrimaryDataAsset>, FPrimaryAssetId> AssetsCollection::getCreationData()
+{
+	return TPair<TSubclassOf<UPrimaryDataAsset>, FPrimaryAssetId>{ DataAssetT::StaticClass(), DataAssetT::getPrimaryAssetId() };
+}
+
 AssetsCollection::AssetsCollection()
 {
 	loadData.Add(AssetsCollection::getCreationData<UStatusesDataAsset>());

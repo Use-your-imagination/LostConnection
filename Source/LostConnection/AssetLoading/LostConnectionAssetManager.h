@@ -75,6 +75,9 @@ public:
 	UPARAM(DisplayName = IsAlreadyLoaded) bool loadAct(TSubclassOf<UBaseActDataAsset> actAsset, UObject* worldContext, FLatentActionInfo info);
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	void syncLoadAsset(TSubclassOf<UPrimaryDataAsset> dataAsset);
+
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	void unloadDronesPreview();
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
@@ -94,6 +97,9 @@ public:
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	bool isAssetsLoadingEnd() const;
+	
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	bool isAssetLoaded(TSubclassOf<UPrimaryDataAsset> dataAsset) const;
 
 	const TSubclassOf<class UBaseStatus>& operator [] (ETypeOfDamage damageType) const;
 

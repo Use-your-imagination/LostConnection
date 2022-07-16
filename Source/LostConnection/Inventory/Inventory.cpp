@@ -219,21 +219,6 @@ void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(AInventory, maxEnergyAmmoCount);
 }
 
-void AInventory::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (!HasAuthority())
-	{
-		return;
-	}
-
-	for (int32 i = 0; i < ULostConnectionAssetManager::get().getDefaults().getPersonalModulesLimit(); i++)
-	{
-		equippedPersonalModules.Add(NewObject<UInventoryCell>(this));
-	}
-}
-
 AInventory::AInventory()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -260,6 +245,17 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 	this->playerState = playerState;
 
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+
+	if (!manager.isAssetLoaded(UDefaultsDataAsset::StaticClass()))
+	{
+		manager.syncLoadAsset(UDefaultsDataAsset::StaticClass());
+	}
+
+	if (!manager.isAssetLoaded(UWeaponsDataAsset::StaticClass()))
+	{
+		manager.syncLoadAsset(UWeaponsDataAsset::StaticClass());
+	}
+
 	const UDefaultsDataAsset& defaults = manager.getDefaults();
 
 	maxSmallAmmoCount = defaults.getMaxSmallAmmoCount();
@@ -267,6 +263,11 @@ void AInventory::init(TObjectPtr<ALostConnectionPlayerState> playerState)
 	maxEnergyAmmoCount = defaults.getMaxEnergyAmmoCount();
 
 	defaultWeaponCell->setItem(Utility::createWeapon(manager.getWeaponClass(UGauss::StaticClass()), EWeaponRarity::normal, this));
+
+	for (int32 i = 0; i < ULostConnectionAssetManager::get().getDefaults().getPersonalModulesLimit(); i++)
+	{
+		equippedPersonalModules.Add(NewObject<UInventoryCell>(this));
+	}
 }
 
 void AInventory::updateActiveWeaponModules()

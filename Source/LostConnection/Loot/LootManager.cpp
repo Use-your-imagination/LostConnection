@@ -15,6 +15,11 @@ void ALootManager::BeginPlay()
 
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 
+	if (!manager.isAssetLoaded(ULootDataAsset::StaticClass()))
+	{
+		manager.syncLoadAsset(ULootDataAsset::StaticClass());
+	}
+
 	weaponsLootFunctions = createLootFunctions(manager.getLoot().getWeaponsLootFunctions());
 
 	modulesLootFunctions = createLootFunctions(manager.getLoot().getModulesLootFunctions());

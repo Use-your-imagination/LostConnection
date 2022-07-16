@@ -45,6 +45,74 @@ bool ALostConnectionPlayerState::ReplicateSubobjects(UActorChannel* Channel, FOu
 	return wroteSomething;
 }
 
+void ALostConnectionPlayerState::BeginPlay()
+{
+	Super::BeginPlay();
+
+	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+
+	if (!manager.isAssetLoaded(UUIDataAsset::StaticClass()))
+	{
+		manager.syncLoadAsset(UUIDataAsset::StaticClass());
+	}
+
+	selectorMaterial = UMaterialInstanceDynamic::Create(manager.getUI().getBaseWeaponSelectorMaterial(), this);
+
+	if (HasAuthority() && inventory.IsNull())
+	{
+		inventory = GetWorld()->SpawnActor<AInventory>();
+
+		inventory->init(this);
+	}
+}
+
+ALostConnectionPlayerState::ALostConnectionPlayerState()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
+}
+
+void ALostConnectionPlayerState::init_Implementation()
+{
+	inventory->SetOwner(GetOwningController());
+}
+
+void ALostConnectionPlayerState::resetCurrentUI_Implementation()
+{
+	if (IsValid(currentUI))
+	{
+		currentUI->RemoveFromViewport();
+	}
+
+	currentUI = nullptr;
+}
+
+void ALostConnectionPlayerState::createEscapableWidget_Implementation(TSubclassOf<UEscapableWidget> widgetClass)
+{
+	TObjectPtr<UEscapableWidget> widget = CreateWidget<UEscapableWidget>(GetPlayerController(), widgetClass);
+
+	widget->init(this);
+
+	this->addEscapableWidget(widget);
+}
+
+void ALostConnectionPlayerState::addEscapableWidget(TObjectPtr<UEscapableWidget> widget)
+{
+	int32 nextZOrder = escapableWidgets.Num() ? escapableWidgets.Last()->getZOrder() + 1 : UConstants::startZOrder;
+
+	widget->setZOrder(nextZOrder);
+
+	for (TObjectPtr<UEscapableWidget> previousWidget : escapableWidgets)
+	{
+		previousWidget->updateAsPrevious(widget->getIsPreviousVisible(), widget->getIsPreviousHitTestable());
+	}
+
+	escapableWidgets.Add_GetRef(widget)->updateAsTop();
+
+	escapableWidgets.Last()->AddToViewport(nextZOrder);
+}
+
 void ALostConnectionPlayerState::addPersonalModule(UBasePersonalModule* module)
 {
 	inventory->addPersonalModule(module);
@@ -121,147 +189,6 @@ void ALostConnectionPlayerState::returnAmmoToSpare_Implementation(UBaseWeapon* w
 	currentWeaponSpareAmmo = tem;
 }
 
-void ALostConnectionPlayerState::setPrimaryWeapon(UBaseWeapon* weapon)
-{
-	inventory->setPrimaryWeaponCell(weapon);
-}
-
-void ALostConnectionPlayerState::setSecondaryWeapon(UBaseWeapon* weapon)
-{
-	inventory->setPrimaryWeaponCell(weapon);
-}
-
-void ALostConnectionPlayerState::setFirstInactiveWeapon(UBaseWeapon* weapon)
-{
-	inventory->setFirstInactiveWeaponCell(weapon);
-}
-
-void ALostConnectionPlayerState::setSecondInactiveWeapon(UBaseWeapon* weapon)
-{
-	inventory->setSecondInactiveWeaponCell(weapon);
-}
-
-void ALostConnectionPlayerState::setMaxSmallAmmoCount(int32 count)
-{
-	inventory->setMaxSmallAmmoCount(count);
-}
-
-void ALostConnectionPlayerState::setMaxLargeAmmoCount(int32 count)
-{
-	inventory->setMaxLargeAmmoCount(count);
-}
-
-void ALostConnectionPlayerState::setMaxEnergyAmmoCount(int32 count)
-{
-	inventory->setMaxEnergyAmmoCount(count);
-}
-
-const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
-{
-	return inventory->getPersonalEquippedModules();
-}
-
-const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalUnequippedModules() const
-{
-	return inventory->getPersonalUnequippedModules();
-}
-
-const TArray<UInventoryCell*>& ALostConnectionPlayerState::getWeaponModules() const
-{
-	return inventory->getWeaponModules();
-}
-
-TArray<FAmmoData>& ALostConnectionPlayerState::getSpareAmmoArray()
-{
-	return inventory->getSpareAmmoArray();
-}
-
-const TArray<FCooldownableAbilitiesData>& ALostConnectionPlayerState::getCooldownableAbilities() const
-{
-	return cooldownableAbilities;
-}
-
-const TArray<FCooldownableWeaponsData>& ALostConnectionPlayerState::getCooldownableWeapons() const
-{
-	return cooldownableWeapons;
-}
-
-int32 ALostConnectionPlayerState::getMaxSmallAmmoCount() const
-{
-	return inventory->getMaxSmallAmmoCount();
-}
-
-int32 ALostConnectionPlayerState::getMaxLargeAmmoCount() const
-{
-	return inventory->getMaxLargeAmmoCount();
-}
-
-int32 ALostConnectionPlayerState::getMaxEnergyAmmoCount() const
-{
-	return inventory->getMaxEnergyAmmoCount();
-}
-
-void ALostConnectionPlayerState::BeginPlay()
-{
-	Super::BeginPlay();
-
-	selectorMaterial = UMaterialInstanceDynamic::Create(ULostConnectionAssetManager::get().getUI().getBaseWeaponSelectorMaterial(), this);
-
-	if (HasAuthority() && inventory.IsNull())
-	{
-		inventory = GetWorld()->SpawnActor<AInventory>();
-
-		inventory->init(this);
-	}
-}
-
-ALostConnectionPlayerState::ALostConnectionPlayerState()
-{
-	PrimaryActorTick.bCanEverTick = true;
-
-	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
-}
-
-void ALostConnectionPlayerState::init_Implementation()
-{
-	inventory->SetOwner(GetOwningController());
-}
-
-void ALostConnectionPlayerState::resetCurrentUI_Implementation()
-{
-	if (IsValid(currentUI))
-	{
-		currentUI->RemoveFromViewport();
-	}
-
-	currentUI = nullptr;
-}
-
-void ALostConnectionPlayerState::createEscapableWidget_Implementation(TSubclassOf<UEscapableWidget> widgetClass)
-{
-	TObjectPtr<UEscapableWidget> widget = CreateWidget<UEscapableWidget>(GetPlayerController(), widgetClass);
-
-	widget->init(this);
-
-	this->addEscapableWidget(widget);
-}
-
-void ALostConnectionPlayerState::addEscapableWidget(TObjectPtr<UEscapableWidget> widget)
-{
-	int32 nextZOrder = escapableWidgets.Num() ? escapableWidgets.Last()->getZOrder() + 1 : UConstants::startZOrder;
-
-	widget->setZOrder(nextZOrder);
-
-	for (TObjectPtr<UEscapableWidget> previousWidget : escapableWidgets)
-	{
-		previousWidget->updateAsPrevious(widget->getIsPreviousVisible(), widget->getIsPreviousHitTestable());
-	}
-
-	escapableWidgets.Add_GetRef(widget)->updateAsTop();
-
-	escapableWidgets.Last()->AddToViewport(nextZOrder);
-}
-
 bool ALostConnectionPlayerState::popEscapableWidget()
 {
 	if (!escapableWidgets.Num())
@@ -316,6 +243,41 @@ void ALostConnectionPlayerState::spendLootPoints_Implementation(int32 count)
 	inventory->setLootPoints(inventory->getLootPoints() - count);
 }
 
+void ALostConnectionPlayerState::setPrimaryWeapon(UBaseWeapon* weapon)
+{
+	inventory->setPrimaryWeaponCell(weapon);
+}
+
+void ALostConnectionPlayerState::setSecondaryWeapon(UBaseWeapon* weapon)
+{
+	inventory->setPrimaryWeaponCell(weapon);
+}
+
+void ALostConnectionPlayerState::setFirstInactiveWeapon(UBaseWeapon* weapon)
+{
+	inventory->setFirstInactiveWeaponCell(weapon);
+}
+
+void ALostConnectionPlayerState::setSecondInactiveWeapon(UBaseWeapon* weapon)
+{
+	inventory->setSecondInactiveWeaponCell(weapon);
+}
+
+void ALostConnectionPlayerState::setMaxSmallAmmoCount(int32 count)
+{
+	inventory->setMaxSmallAmmoCount(count);
+}
+
+void ALostConnectionPlayerState::setMaxLargeAmmoCount(int32 count)
+{
+	inventory->setMaxLargeAmmoCount(count);
+}
+
+void ALostConnectionPlayerState::setMaxEnergyAmmoCount(int32 count)
+{
+	inventory->setMaxEnergyAmmoCount(count);
+}
+
 void ALostConnectionPlayerState::setCurrentUI_Implementation(TSubclassOf<UUserWidget> widget, APawn* outer)
 {
 	this->resetCurrentUI();
@@ -348,6 +310,51 @@ void ALostConnectionPlayerState::setInventory_Implementation(AInventory* newInve
 	}
 
 	inventory = newInventory;
+}
+
+const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalEquippedModules() const
+{
+	return inventory->getPersonalEquippedModules();
+}
+
+const TArray<UInventoryCell*>& ALostConnectionPlayerState::getPersonalUnequippedModules() const
+{
+	return inventory->getPersonalUnequippedModules();
+}
+
+const TArray<UInventoryCell*>& ALostConnectionPlayerState::getWeaponModules() const
+{
+	return inventory->getWeaponModules();
+}
+
+TArray<FAmmoData>& ALostConnectionPlayerState::getSpareAmmoArray()
+{
+	return inventory->getSpareAmmoArray();
+}
+
+const TArray<FCooldownableAbilitiesData>& ALostConnectionPlayerState::getCooldownableAbilities() const
+{
+	return cooldownableAbilities;
+}
+
+const TArray<FCooldownableWeaponsData>& ALostConnectionPlayerState::getCooldownableWeapons() const
+{
+	return cooldownableWeapons;
+}
+
+int32 ALostConnectionPlayerState::getMaxSmallAmmoCount() const
+{
+	return inventory->getMaxSmallAmmoCount();
+}
+
+int32 ALostConnectionPlayerState::getMaxLargeAmmoCount() const
+{
+	return inventory->getMaxLargeAmmoCount();
+}
+
+int32 ALostConnectionPlayerState::getMaxEnergyAmmoCount() const
+{
+	return inventory->getMaxEnergyAmmoCount();
 }
 
 UUserWidget* ALostConnectionPlayerState::getCurrentUI() const

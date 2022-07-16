@@ -43,9 +43,3 @@ public:
 
 	const FPrimaryAssetId& operator [] (const TSubclassOf<UPrimaryDataAsset>& dataAsset) const;
 };
-
-template<typename DataAssetT>
-TPair<TSubclassOf<UPrimaryDataAsset>, FPrimaryAssetId> AssetsCollection::getCreationData()
-{
-	return TPair<TSubclassOf<UPrimaryDataAsset>, FPrimaryAssetId>{ DataAssetT::StaticClass(), DataAssetT::getPrimaryAssetId() };
-}

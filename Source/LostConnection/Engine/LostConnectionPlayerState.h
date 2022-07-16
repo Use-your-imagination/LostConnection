@@ -62,7 +62,22 @@ protected:
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
+	void BeginPlay() override;
+
 public:
+	ALostConnectionPlayerState();
+
+	UFUNCTION(Server, Reliable)
+	void init();
+
+	UFUNCTION(Client, Reliable)
+	void resetCurrentUI();
+
+	UFUNCTION(Client, Reliable)
+	void createEscapableWidget(TSubclassOf<UEscapableWidget> widgetClass);
+
+	void addEscapableWidget(TObjectPtr<UEscapableWidget> widget);
+
 	void addPersonalModule(UBasePersonalModule* module);
 
 	void addWeaponModule(UBaseWeaponModule* module);
@@ -73,6 +88,18 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void returnAmmoToSpare(UBaseWeapon* weapon);
+	
+	UFUNCTION(Category = EscapeMenu, BlueprintCallable)
+	UPARAM(DisplayName = IsEscapableWidgetWasPopped) bool popEscapableWidget();
+
+	UFUNCTION(Server, Reliable)
+	void restoreRespawnCooldown();
+
+	UFUNCTION(Server, Reliable)
+	void increaseLootPoints(int32 count);
+
+	UFUNCTION(Server, Reliable)
+	void spendLootPoints(int32 count);
 
 	void setPrimaryWeapon(UBaseWeapon* weapon);
 
@@ -87,6 +114,18 @@ public:
 	void setMaxLargeAmmoCount(int32 count);
 
 	void setMaxEnergyAmmoCount(int32 count);
+
+	UFUNCTION(Client, Reliable)
+	void setCurrentUI(TSubclassOf<UUserWidget> widget, APawn* outer);
+
+	UFUNCTION(Server, Reliable)
+	void setDroneClass(TSubclassOf<class ABaseDrone> newDroneClass);
+
+	UFUNCTION(Server, Reliable)
+	void setCurrentRespawnCooldown(float currentRespawnCooldown);
+
+	UFUNCTION(Server, Reliable)
+	void setInventory(AInventory* newInventory);
 
 	UBaseWeapon* getPrimaryWeapon() const;
 
@@ -117,46 +156,6 @@ public:
 	int32 getMaxLargeAmmoCount() const;
 
 	int32 getMaxEnergyAmmoCount() const;
-	
-	void BeginPlay() override;
-
-public:
-	ALostConnectionPlayerState();
-
-	UFUNCTION(Server, Reliable)
-	void init();
-
-	UFUNCTION(Client, Reliable)
-	void resetCurrentUI();
-
-	UFUNCTION(Client, Reliable)
-	void createEscapableWidget(TSubclassOf<UEscapableWidget> widgetClass);
-
-	void addEscapableWidget(TObjectPtr<UEscapableWidget> widget);
-	
-	UFUNCTION(Category = EscapeMenu, BlueprintCallable)
-	UPARAM(DisplayName = IsEscapableWidgetWasPopped) bool popEscapableWidget();
-
-	UFUNCTION(Server, Reliable)
-	void restoreRespawnCooldown();
-
-	UFUNCTION(Server, Reliable)
-	void increaseLootPoints(int32 count);
-
-	UFUNCTION(Server, Reliable)
-	void spendLootPoints(int32 count);
-
-	UFUNCTION(Client, Reliable)
-	void setCurrentUI(TSubclassOf<UUserWidget> widget, APawn* outer);
-
-	UFUNCTION(Server, Reliable)
-	void setDroneClass(TSubclassOf<class ABaseDrone> newDroneClass);
-
-	UFUNCTION(Server, Reliable)
-	void setCurrentRespawnCooldown(float currentRespawnCooldown);
-
-	UFUNCTION(Server, Reliable)
-	void setInventory(AInventory* newInventory);
 
 	UUserWidget* getCurrentUI() const;
 
@@ -170,7 +169,7 @@ public:
 
 	TArray<TObjectPtr<UEscapableWidget>>& getEscapableWidgets();
 
-	virtual void Tick(float DeltaSeconds) override;
+	void Tick(float DeltaSeconds) override;
 
 	~ALostConnectionPlayerState() = default;
 

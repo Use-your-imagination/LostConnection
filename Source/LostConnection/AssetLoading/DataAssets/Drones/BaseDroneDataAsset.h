@@ -8,7 +8,7 @@
 
 #include "BaseDroneDataAsset.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Abstract, BlueprintType)
 class LOSTCONNECTION_API UBaseDroneDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()

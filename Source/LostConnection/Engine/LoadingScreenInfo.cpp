@@ -32,7 +32,7 @@ void ALoadingScreenInfo::Tick(float DeltaSeconds)
 
 	if (endCondition.Execute())
 	{
-		if (deleteLoadingScreenWidget)
+		if (deleteLoadingScreenWidget && loadingScreen)
 		{
 			loadingScreen->RemoveFromViewport();
 		}

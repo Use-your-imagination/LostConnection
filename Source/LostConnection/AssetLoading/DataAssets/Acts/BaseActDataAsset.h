@@ -10,7 +10,7 @@
 
 #include "BaseActDataAsset.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Abstract, BlueprintType)
 class LOSTCONNECTION_API UBaseActDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()

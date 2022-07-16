@@ -47,7 +47,7 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void init(APlayerController* playerController);
-	
+
 	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
 	void addRandomWeapon(AInventory* playerInventory);
 

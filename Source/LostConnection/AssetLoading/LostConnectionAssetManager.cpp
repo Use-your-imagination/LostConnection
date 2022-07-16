@@ -29,7 +29,7 @@ void ULostConnectionAssetManager::startLatent(UObject* worldContext, const FLate
 
 TSharedPtr<FStreamableHandle>& ULostConnectionAssetManager::loadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset, FStreamableDelegate delegate)
 {
-	return handles.Add(dataAsset.Get()->GetFName(), LoadPrimaryAsset(assets[dataAsset], {}, delegate));
+	return handles.Add(dataAsset->GetFName(), LoadPrimaryAsset(assets[dataAsset], {}, delegate));
 }
 
 bool ULostConnectionAssetManager::latentLoadAsset(const TSubclassOf<UPrimaryDataAsset>& dataAsset, UObject* worldContext, const FLatentActionInfo& info, FStreamableDelegate delegate)
@@ -131,6 +131,20 @@ bool ULostConnectionAssetManager::loadAct(TSubclassOf<UBaseActDataAsset> actAsse
 	return this->latentLoadAct(actAsset, worldContext, info);
 }
 
+void ULostConnectionAssetManager::syncLoadAsset(TSubclassOf<UPrimaryDataAsset> dataAsset)
+{
+	const TSharedPtr<FStreamableHandle>* it = handles.Find(dataAsset.Get()->GetFName());
+
+	if (it)
+	{
+		(*it)->WaitUntilComplete();
+	}
+	else
+	{
+		handles.Add(dataAsset->GetFName(), LoadPrimaryAsset(assets[dataAsset]))->WaitUntilComplete();
+	}
+}
+
 void ULostConnectionAssetManager::unloadDronesPreview()
 {
 	this->unloadAsset(UDronesPreviewDataAsset::StaticClass());
@@ -192,6 +206,13 @@ bool ULostConnectionAssetManager::isAssetsLoadingInProgress() const
 bool ULostConnectionAssetManager::isAssetsLoadingEnd() const
 {
 	return Algo::AllOf(handles, [](const auto& data) { return data.Value.IsValid() && data.Value->HasLoadCompleted(); });
+}
+
+bool ULostConnectionAssetManager::isAssetLoaded(TSubclassOf<UPrimaryDataAsset> dataAsset) const
+{
+	const TSharedPtr<FStreamableHandle>* it = handles.Find(dataAsset.Get()->GetFName());
+
+	return it && (*it)->HasLoadCompleted();
 }
 
 const TSubclassOf<UBaseStatus>& ULostConnectionAssetManager::operator [] (ETypeOfDamage damageType) const
