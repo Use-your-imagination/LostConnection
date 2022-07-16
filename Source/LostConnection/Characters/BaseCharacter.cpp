@@ -147,9 +147,12 @@ void ABaseCharacter::onCurrentWeaponChange()
 	{
 		currentWeapon->updateTimeBetweenShots();
 
-		if (TObjectPtr<AInventory> inventory = Utility::getPlayerState(this)->getInventory())
+		if (HasAuthority())
 		{
-			inventory->updateActiveWeaponModules();
+			if (TObjectPtr<AInventory> inventory = Utility::getPlayerState(this)->getInventory())
+			{
+				inventory->updateActiveWeaponModules();
+			}
 		}
 	}
 

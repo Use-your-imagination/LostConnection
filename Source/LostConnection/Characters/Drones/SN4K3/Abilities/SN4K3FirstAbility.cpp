@@ -43,7 +43,7 @@ void USN4K3FirstAbility::applyAbility(ABaseCharacter* target)
 
 	ailmentInflictorUtility->setBaseCrushingHitChance(Cast<USN4K3PassiveAbility>(Cast<ASN4K3>(caster)->getPassiveAbility())->getNaniteMeter());
 
-	// TODO: Apply
+	// TODO: apply
 
 	TObjectPtr<UAilmentInflictorUtility> tem = DuplicateObject<UAilmentInflictorUtility>(ailmentInflictorUtility, ailmentInflictorUtility->GetOuter());
 
