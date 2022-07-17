@@ -23,7 +23,4 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool getIsAlly() const = 0;
-
-	UFUNCTION(BlueprintCallable)
-	virtual bool getIsDead() const = 0;
 };

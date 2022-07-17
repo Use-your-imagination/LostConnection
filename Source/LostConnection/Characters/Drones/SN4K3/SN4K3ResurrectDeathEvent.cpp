@@ -10,21 +10,21 @@
 #include "Engine/LostConnectionGameState.h"
 #include "AssetLoading/LostConnectionAssetManager.h"
 
-void USN4K3ResurrectDeathEvent::init(TObjectPtr<ALostConnectionPlayerController> controller, const FTransform& respawnTransform)
+void USN4K3ResurrectDeathEvent::init(TObjectPtr<ALostConnectionPlayerController> controller, const FVector& respawnLocation)
 {
-	this->respawnTransform = respawnTransform;
+	this->respawnLocation = respawnLocation;
 	this->controller = controller;
 }
 
 void USN4K3ResurrectDeathEvent::deathEventAction(TObjectPtr<ABaseCharacter> character)
 {
-	if (!IsValid(controller) || controller->GetPawn<ASN4K3>())
+	if (controller.IsNull() || controller->GetPawn<ASN4K3>())
 	{
 		return;
 	}
 
 	TSubclassOf<ABaseDrone> droneClass = Utility::findDroneClass(ULostConnectionAssetManager::get().getDrones(), ASN4K3::StaticClass());
-	TObjectPtr<ASN4K3> drone = Utility::getGameState(controller)->spawn<ASN4K3>(droneClass, respawnTransform);
+	TObjectPtr<ASN4K3> drone = Utility::getGameState(controller)->spawn<ASN4K3>(droneClass, FTransform(respawnLocation));
 
 	controller->GetPlayerState<ALostConnectionPlayerState>()->resetCurrentUI();
 

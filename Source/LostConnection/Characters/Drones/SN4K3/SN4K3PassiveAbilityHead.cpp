@@ -85,13 +85,14 @@ void ASN4K3PassiveAbilityHead::explode()
 	static TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes = { UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn) };
 	TArray<TObjectPtr<AActor>> enemies;
 	TObjectPtr<ALostConnectionPlayerController> controller = Utility::getPlayerController(this);
-	FTransform respawnTransform = GetActorTransform();
+	FVector respawnLocation = GetActorLocation();
 	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(this);
+
 	gameState->spawnVFXAtLocation(GetMesh()->GetComponentLocation(), explosionParticles);
 
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetMesh()->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, enemies);
 
-	for (TObjectPtr<AActor> enemy : enemies)
+	for (const TObjectPtr<AActor>& enemy : enemies)
 	{
 		TObjectPtr<ABaseCharacter> character = Cast<ABaseCharacter>(enemy);
 
@@ -101,7 +102,7 @@ void ASN4K3PassiveAbilityHead::explode()
 
 			TObjectPtr<USN4K3ResurrectDeathEvent> resurrect = NewObject<USN4K3ResurrectDeathEvent>(character);
 
-			resurrect->init(controller, respawnTransform);
+			resurrect->init(controller, respawnLocation);
 
 			character->attachDeathEvent(resurrect.Get());
 
@@ -126,11 +127,11 @@ void ASN4K3PassiveAbilityHead::destroyHead()
 {
 	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
 
-	ADeathPlaceholder* placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
+	TObjectPtr<ADeathPlaceholder> placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
 
 	GetController()->Possess(placeholder);
 
-	placeholder->FinishSpawning({ FRotator::ZeroRotator, GetActorLocation() });
+	placeholder->FinishSpawning(FTransform(GetActorLocation()));
 
 	Destroy();
 }
@@ -178,7 +179,7 @@ void ASN4K3PassiveAbilityHead::Tick(float DeltaSeconds)
 
 	if (HasAuthority())
 	{
-		if (isExploded && IsValid(GetController()))
+		if (isExploded && GetController())
 		{
 			this->destroyHead();
 

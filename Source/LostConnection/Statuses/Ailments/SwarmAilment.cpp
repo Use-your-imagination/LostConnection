@@ -19,7 +19,7 @@ int32 USwarmAilment::calculateUnderStatusEffect() const
 
 void USwarmAilment::updateSwarmHealthBar()
 {
-	if (ABaseCharacter* tem = Cast<ABaseCharacter>(target->_getUObject()))
+	if (TObjectPtr<ABaseCharacter> tem = Cast<ABaseCharacter>(target))
 	{
 		tem->updateCharacterVisualCall();
 	}
@@ -48,6 +48,8 @@ USwarmAilment::USwarmAilment()
 void USwarmAilment::increaseThreshold(const TScriptInterface<IDamageInflictor>& inflictor)
 {
 	threshold += target->getTotalLifePercentDealt(inflictor) * thresholdPerTotalLifePercentPool;
+
+	this->updateSwarmHealthBar();
 }
 
 float USwarmAilment::getThreshold() const

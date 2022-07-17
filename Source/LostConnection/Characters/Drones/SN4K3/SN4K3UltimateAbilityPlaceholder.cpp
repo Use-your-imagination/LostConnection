@@ -49,3 +49,8 @@ float ASN4K3UltimateAbilityPlaceholder::getPercentageDamageReduction_Implementat
 {
 	return 10.0;
 }
+
+bool ASN4K3UltimateAbilityPlaceholder::getIsAlly() const
+{
+	return true;
+}

@@ -53,24 +53,40 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, currentWeapon);
 
 	DOREPLIFETIME(ABaseCharacter, statuses);
+
+	DOREPLIFETIME(ABaseCharacter, swarm);
 }
 
 bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	if (IsValid(currentWeapon))
+	if (currentWeapon)
 	{
 		wroteSomething |= Channel->ReplicateSubobject(currentWeapon, *Bunch, *RepFlags);
 
 		wroteSomething |= currentWeapon->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (IsValid(energyShield))
+	if (energyShield)
 	{
 		wroteSomething |= Channel->ReplicateSubobject(energyShield, *Bunch, *RepFlags);
 
 		wroteSomething |= energyShield->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	for (const auto& status : statuses)
+	{
+		wroteSomething |= Channel->ReplicateSubobject(status, *Bunch, *RepFlags);
+
+		wroteSomething |= status->ReplicateSubobjects(Channel, Bunch, RepFlags);
+	}
+
+	if (swarm.IsValid())
+	{
+		wroteSomething |= Channel->ReplicateSubobject(swarm.Get(), *Bunch, *RepFlags);
+
+		wroteSomething |= swarm->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
 	return wroteSomething;
@@ -164,7 +180,7 @@ void ABaseCharacter::onCurrentWeaponChange()
 
 void ABaseCharacter::onEnergyShieldUpdate()
 {
-	UHealthBarWidget* widget = this->getHealthBarWidget();
+	TObjectPtr<UHealthBarWidget> widget = this->getHealthBarWidget();
 
 	if (widget)
 	{
@@ -178,7 +194,7 @@ void ABaseCharacter::onEnergyShieldUpdate()
 			Cast<ABaseDrone>(this)->initDefaultUI();
 		}
 
-		ULostConnectionUI* ui = Cast<ULostConnectionUI>(Utility::getPlayerState(this)->getCurrentUI());
+		TObjectPtr<ULostConnectionUI> ui = Cast<ULostConnectionUI>(Utility::getPlayerState(this)->getCurrentUI());
 
 		if (ui)
 		{
@@ -191,16 +207,16 @@ void ABaseCharacter::onEnergyShieldUpdate()
 
 void ABaseCharacter::onHealthChange()
 {
-	UHealthBarWidget* widget = this->getHealthBarWidget();
+	TObjectPtr<UHealthBarWidget> widget = this->getHealthBarWidget();
 
-	if (!widget)
+	if (widget.IsNull())
 	{
 		return;
 	}
 
-	UMaterialInstanceDynamic* healthBarMaterial = widget->getImage()->GetDynamicMaterial();
+	TObjectPtr<UMaterialInstanceDynamic> healthBarMaterial = widget->getImage()->GetDynamicMaterial();
 
-	if (IsValid(healthBarMaterial) && IsValid(energyShield))
+	if (healthBarMaterial && energyShield)
 	{
 		healthBarMaterial->SetScalarParameterValue("LifeToShieldMultiplier", health / energyShield->getCapacity());
 	}
@@ -359,7 +375,7 @@ void ABaseCharacter::updateCharacterVisual()
 {
 	if (swarm.IsValid())
 	{
-		UHealthBarWidget* widget = this->getHealthBarWidget();
+		TObjectPtr<UHealthBarWidget> widget = this->getHealthBarWidget();
 
 		if (!widget)
 		{
@@ -862,11 +878,6 @@ const TArray<TObjectPtr<UBaseStatus>>& ABaseCharacter::getStatuses() const
 bool ABaseCharacter::getIsAlly() const
 {
 	return isAlly;
-}
-
-bool ABaseCharacter::getIsDead() const
-{
-	return isDead;
 }
 
 float ABaseCharacter::getFlatDamageReduction_Implementation() const

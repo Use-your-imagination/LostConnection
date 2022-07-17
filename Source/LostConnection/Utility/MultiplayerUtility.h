@@ -14,11 +14,11 @@ public:
 	~MultiplayerUtility() = default;
 
 public:
-	static void runOnServerReliableWithMulticast(APawn* caller, const FName& methodName);
+	static void runOnServerReliableWithMulticast(TObjectPtr<APawn> caller, const FName& methodName);
 
-	static void runOnServerUnreliableWithMulticast(APawn* caller, const FName& methodName);
+	static void runOnServerUnreliableWithMulticast(TObjectPtr<APawn> caller, const FName& methodName);
 
-	static void runOnServerReliable(APawn* caller, const FName& methodName);
+	static void runOnServerReliable(TObjectPtr<APawn> caller, const FName& methodName);
 
-	static void runOnServerUnreliable(APawn* caller, const FName& methodName);
+	static void runOnServerUnreliable(TObjectPtr<APawn> caller, const FName& methodName);
 };

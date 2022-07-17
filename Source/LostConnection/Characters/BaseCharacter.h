@@ -129,6 +129,7 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	TArray<TObjectPtr<UBaseStatus>> statuses;
 
+	UPROPERTY(Replicated)
 	TWeakObjectPtr<class USwarmAilment> swarm;
 
 	UPROPERTY()
@@ -349,8 +350,6 @@ public:
 	virtual const TArray<TObjectPtr<UBaseStatus>>& getStatuses() const final override;
 
 	virtual bool getIsAlly() const final override;
-
-	virtual bool getIsDead() const final override;
 
 	virtual float getFlatDamageReduction_Implementation() const override;
 

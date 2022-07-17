@@ -37,7 +37,7 @@ private:
 	float threshold;
 
 	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	UDamageInflictorUtility* damageInflictorUtility;
+	TObjectPtr<UDamageInflictorUtility> damageInflictorUtility;
 
 private:
 	void updateSwarmHealthBar();

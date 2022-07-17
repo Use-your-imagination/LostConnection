@@ -5,9 +5,9 @@
 #include "Characters/BaseDrone.h"
 #include "Utility/Utility.h"
 
-void MultiplayerUtility::runOnServerReliableWithMulticast(APawn* caller, const FName& methodName)
+void MultiplayerUtility::runOnServerReliableWithMulticast(TObjectPtr<APawn> caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(caller);
 
 	if (playerState)
 	{
@@ -19,9 +19,9 @@ void MultiplayerUtility::runOnServerReliableWithMulticast(APawn* caller, const F
 	}
 }
 
-void MultiplayerUtility::runOnServerUnreliableWithMulticast(APawn* caller, const FName& methodName)
+void MultiplayerUtility::runOnServerUnreliableWithMulticast(TObjectPtr<APawn> caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(caller);
 
 	if (playerState)
 	{
@@ -33,9 +33,9 @@ void MultiplayerUtility::runOnServerUnreliableWithMulticast(APawn* caller, const
 	}
 }
 
-void MultiplayerUtility::runOnServerReliable(APawn* caller, const FName& methodName)
+void MultiplayerUtility::runOnServerReliable(TObjectPtr<APawn> caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(caller);
 
 	if (playerState)
 	{
@@ -47,9 +47,9 @@ void MultiplayerUtility::runOnServerReliable(APawn* caller, const FName& methodN
 	}
 }
 
-void MultiplayerUtility::runOnServerUnreliable(APawn* caller, const FName& methodName)
+void MultiplayerUtility::runOnServerUnreliable(TObjectPtr<APawn> caller, const FName& methodName)
 {
-	ALostConnectionPlayerState* playerState = Utility::getPlayerState(caller);
+	TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(caller);
 
 	if (playerState)
 	{
