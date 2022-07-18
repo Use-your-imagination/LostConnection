@@ -20,7 +20,7 @@ public:
 	static constexpr float jumpVelocity = 600.0f;
 	static const FRotator rotationRate;
 
-	static constexpr int32 actorNetUpdateFrequency = 30;
+	static constexpr int32 actorNetUpdateFrequency = 60;
 	static constexpr int32 minNetUpdateFrequency = 1;
 	
 	static constexpr float ammoSpeed = 5200.0f;
