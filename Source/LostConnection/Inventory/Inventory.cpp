@@ -157,11 +157,21 @@ void AInventory::onInventoryUpdate()
 {
 	if (playerState)
 	{
-		for (TObjectPtr<UEscapableWidget>& widget : playerState->getEscapableWidgets())
+		for (const TObjectPtr<UEscapableWidget>& widget : playerState->getEscapableWidgets())
 		{
-			widget->onNetUpdate();
+			if (TObjectPtr<UInventoryWidget> inventoryWidget = Cast<UInventoryWidget>(widget))
+			{
+				inventoryWidget->onNetUpdate();
+
+				break;
+			}
 		}
 	}
+}
+
+void AInventory::updateInventoryWidget_Implementation()
+{
+	this->onInventoryUpdate();
 }
 
 bool AInventory::containsItem(TObjectPtr<UInventoryCell> itemToFind, const TArray<TObjectPtr<UInventoryCell>>& cells)
@@ -302,6 +312,8 @@ void AInventory::updateActiveWeaponModules()
 			}
 		}
 	}
+
+	this->updateInventoryWidget();
 }
 
 void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* module)

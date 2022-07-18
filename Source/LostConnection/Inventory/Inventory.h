@@ -93,6 +93,9 @@ private:
 	UFUNCTION()
 	void onInventoryUpdate();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void updateInventoryWidget();
+
 private:
 	static bool containsItem(TObjectPtr<UInventoryCell> itemToFind, const TArray<TObjectPtr<UInventoryCell>>& cells);
 
