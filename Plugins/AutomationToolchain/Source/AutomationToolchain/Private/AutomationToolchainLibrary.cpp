@@ -122,12 +122,12 @@ FString UAutomationToolchainLibrary::createFolderTree(const FString& pathToLastF
 
 bool UAutomationToolchainLibrary::createFile(const FString& pathToFolder, const FString& fileName, const FString& extension, const FString& data)
 {
-	return FFileHelper::SaveStringToFile(data, *UAutomationToolchainLibrary::buildPath(pathToFolder, fileName, extension), FFileHelper::EEncodingOptions::ForceUTF8);
+	return FFileHelper::SaveStringToFile(data, *UAutomationToolchainLibrary::buildPath(pathToFolder, fileName, extension), FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
 }
 
 bool UAutomationToolchainLibrary::createFileFromArray(const FString& pathToFolder, const FString& fileName, const FString& extension, const TArray<FString>& data)
 {
-	return FFileHelper::SaveStringArrayToFile(data, *UAutomationToolchainLibrary::buildPath(pathToFolder, fileName, extension), FFileHelper::EEncodingOptions::ForceUTF8);
+	return FFileHelper::SaveStringArrayToFile(data, *UAutomationToolchainLibrary::buildPath(pathToFolder, fileName, extension), FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
 }
 
 bool UAutomationToolchainLibrary::createBinaryFileFromArray(const FString& pathToFolder, const FString& fileName, const FString& extension, const TArray<uint8>& data)
@@ -158,7 +158,7 @@ bool UAutomationToolchainLibrary::appendFile(const FString& pathToFile, const FS
 	{
 		data += appendData;
 
-		return FFileHelper::SaveStringToFile(data, *pathToFile, FFileHelper::EEncodingOptions::ForceUTF8);
+		return FFileHelper::SaveStringToFile(data, *pathToFile, FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
 	}
 
 	return false;
@@ -172,7 +172,7 @@ bool UAutomationToolchainLibrary::appendFileFromArray(const FString& pathToFile,
 	{
 		data.Append(appendData);
 
-		return FFileHelper::SaveStringArrayToFile(data, *pathToFile, FFileHelper::EEncodingOptions::ForceUTF8);
+		return FFileHelper::SaveStringArrayToFile(data, *pathToFile, FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
 	}
 
 	return false;
