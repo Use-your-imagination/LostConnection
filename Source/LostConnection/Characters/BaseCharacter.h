@@ -129,8 +129,8 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	TArray<TObjectPtr<UBaseStatus>> statuses;
 
-	UPROPERTY(Replicated)
-	TWeakObjectPtr<class USwarmAilment> swarm;
+	UPROPERTY(Category = Ailments, ReplicatedUsing = updateCharacterVisual, BlueprintReadOnly)
+	TObjectPtr<class USwarmAilment> swarm;
 
 	UPROPERTY()
 	TArray<TScriptInterface<IOnDeathEvent>> deathEvents;
@@ -218,7 +218,9 @@ protected:
 
 protected:
 	UFUNCTION()
-	virtual void updateCharacterVisual();
+	void updateCharacterVisual();
+
+	virtual void updateHealthBarWidget();
 
 private:
 	TObjectPtr<UHealthBarWidget> getHealthBarWidget() const;
@@ -303,7 +305,7 @@ public:
 	UFUNCTION(Category = Weapons, BlueprintCallable)
 	virtual int32 getWeaponCount() const;
 
-	const TWeakObjectPtr<class USwarmAilment>& getSwarm() const;
+	const TObjectPtr<class USwarmAilment>& getSwarm() const;
 
 	virtual TArray<TWeakObjectPtr<UBaseWeapon>> getWeapons() const;
 
@@ -335,7 +337,7 @@ public:
 
 	virtual void addStatus(TObjectPtr<class UBaseStatus> status) final override;
 
-	virtual void applySwarmAilment(class USwarmAilment* swarm) final override;
+	virtual void applySwarmAilment(const TObjectPtr<class USwarmAilment>& swarm) final override;
 
 	virtual void statusInflictorImpactAction(const TScriptInterface<class IStatusInflictor>& inflictor, const FHitResult& hit) final override;
 
