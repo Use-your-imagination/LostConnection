@@ -284,11 +284,6 @@ FText UUtilityBlueprintFunctionLibrary::getWeaponModulesDropChance(int32 lootPoi
 	return FText::FromString(result);
 }
 
-FTransform UUtilityBlueprintFunctionLibrary::getAmmoDropableCurrentPosition(TScriptInterface<IAmmoDropable> ammoDropable)
-{
-	return ammoDropable->getCurrentPosition();
-}
-
 FString UUtilityBlueprintFunctionLibrary::getRoomName(const TSoftObjectPtr<UWorld>& room)
 {
 	return room.GetAssetName();

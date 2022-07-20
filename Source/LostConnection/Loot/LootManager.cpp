@@ -55,25 +55,25 @@ void ALootManager::addRandomLoot(TObjectPtr<AInventory> playerInventory, int32 w
 	playerInventory->getPlayerState()->spendLootPoints(FMath::Min(FMath::Max3(weaponsLootPoints, modulesLootPoints, weaponModulesLootPoints), maxSpendLootPoints));
 }
 
-void ALootManager::spawnAmmo_Implementation(UObject* ammoDropable)
+void ALootManager::spawnAmmo_Implementation(const TScriptInterface<IAmmoDropable>& ammoDropable)
 {
 	const ULootDataAsset& loot = ULostConnectionAssetManager::get().getLoot();
-	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(this);
-	FTransform spawnTransform = UUtilityBlueprintFunctionLibrary::getAmmoDropableCurrentPosition(ammoDropable);
+	TObjectPtr<UWorld> world = GetWorld();
+	FTransform spawnTransform = ammoDropable->getCurrentPosition();
 
-	if (Utility::checkChanceProc(IAmmoDropable::Execute_getSmallAmmoDropChance(ammoDropable)))
+	if (Utility::checkChanceProc(IAmmoDropable::Execute_getSmallAmmoDropChance(ammoDropable.GetObject())))
 	{
-		gameState->spawn<ABaseDroppedAmmo>(loot.getSmallAmmoClass(), spawnTransform)->FinishSpawning({}, true);
+		world->SpawnActor<ABaseDroppedAmmo>(loot.getSmallAmmoClass(), spawnTransform);
 	}
 
-	if (Utility::checkChanceProc(IAmmoDropable::Execute_getLargeAmmoDropChance(ammoDropable)))
+	if (Utility::checkChanceProc(IAmmoDropable::Execute_getLargeAmmoDropChance(ammoDropable.GetObject())))
 	{
-		gameState->spawn<ABaseDroppedAmmo>(loot.getLargeAmmoClass(), spawnTransform)->FinishSpawning({}, true);
+		world->SpawnActor<ABaseDroppedAmmo>(loot.getLargeAmmoClass(), spawnTransform);
 	}
 
-	if (Utility::checkChanceProc(IAmmoDropable::Execute_getEnergyAmmoDropChance(ammoDropable)))
+	if (Utility::checkChanceProc(IAmmoDropable::Execute_getEnergyAmmoDropChance(ammoDropable.GetObject())))
 	{
-		gameState->spawn<ABaseDroppedAmmo>(loot.getEnergyAmmoClass(), spawnTransform)->FinishSpawning({}, true);
+		world->SpawnActor<ABaseDroppedAmmo>(loot.getEnergyAmmoClass(), spawnTransform);
 	}
 }
 
@@ -113,9 +113,9 @@ void ALootManager::addRandomWeaponModule_Implementation(AInventory* playerInvent
 	this->addRandomLoot(playerInventory, otherLootPoints, otherLootPoints, weaponModuleLootPoints);
 }
 
-void ALootManager::spawnAmmoCall(TScriptInterface<IAmmoDropable> ammoDropable)
+void ALootManager::spawnAmmoCall_Implementation(const TScriptInterface<IAmmoDropable>& ammoDropable)
 {
-	this->spawnAmmo(ammoDropable.GetObject());
+	this->spawnAmmo(ammoDropable);
 }
 
 const TArray<UBaseWeaponsLootFunction*>& ALootManager::getWeaponsLootFunctions() const

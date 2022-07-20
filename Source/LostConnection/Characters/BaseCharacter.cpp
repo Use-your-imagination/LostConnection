@@ -444,22 +444,24 @@ ABaseCharacter::ABaseCharacter() :
 	defaultLargeAmmoCount(240),
 	defaultEnergyAmmoCount(50)
 {
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_SatusState.NPS_SatusState'"));
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_StatusState.NPS_StatusState'"));
 	static ConstructorHelpers::FClassFinder<UUserWidget> healthBarWidgetFinder(TEXT("/Game/UI/WidgetComponents/BP_HealthBarWidget"));
 
 	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 	bReplicates = true;
 
-	UCapsuleComponent* capsule = GetCapsuleComponent();
-	USkeletalMeshComponent* mesh = GetMesh();
-	UCharacterMovementComponent* movement = GetCharacterMovement();
+	TObjectPtr<UCapsuleComponent> capsule = GetCapsuleComponent();
+	TObjectPtr<USkeletalMeshComponent> mesh = GetMesh();
+	TObjectPtr<UCharacterMovementComponent> movement = GetCharacterMovement();
 
 	capsule->InitCapsuleSize(42.0f, 96.0f);
 
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
 	capsule->SetIsReplicated(true);
+
+	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	mesh->SetGenerateOverlapEvents(true);
 
@@ -468,6 +470,8 @@ ABaseCharacter::ABaseCharacter() :
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
 	mesh->SetIsReplicated(true);
+
+	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	movement->bOrientRotationToMovement = true;
 	movement->RotationRate = UConstants::rotationRate;

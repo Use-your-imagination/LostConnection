@@ -27,12 +27,13 @@ ADroppedObject::ADroppedObject()
 	mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
-	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
+
+	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Ignore);
 
 	vfx->SetupAttachment(mesh);
 }
 
-void ADroppedObject::setMesh(USkeletalMesh* mesh)
+void ADroppedObject::setMesh(const TObjectPtr<USkeletalMesh>& mesh)
 {
 	this->mesh->SetSkeletalMesh(mesh);
 }

@@ -97,7 +97,7 @@ bool ASN4K3::checkSecondAbilityCast() const
 
 	ignoreParameters.AddIgnoredActor(this);
 
-	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace() + (ability->getDistance() * this->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Camera, ignoreParameters);
+	world->LineTraceSingleByChannel(hit, this->getStartActionLineTrace(), this->getEndActionLineTrace() + (ability->getDistance() * this->GetFollowCamera()->GetForwardVector()), ECollisionChannel::ECC_Visibility, ignoreParameters);
 
 	target = Cast<ABaseCharacter>(hit.GetActor());
 

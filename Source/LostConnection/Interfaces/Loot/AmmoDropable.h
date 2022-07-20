@@ -8,7 +8,7 @@
 
 #include "AmmoDropable.generated.h"
 
-UINTERFACE(Blueprintable)
+UINTERFACE(BlueprintType, Blueprintable)
 class UAmmoDropable : public UInterface
 {
 	GENERATED_BODY()
