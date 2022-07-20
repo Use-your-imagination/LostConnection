@@ -47,7 +47,7 @@ public:
 
 	float getCurrentAbilityDuration() const;
 
-	const TWeakObjectPtr<class ASN4K3UltimateAbilityPlaceholder>& getUltimatePlaceholder() const;
+	TWeakObjectPtr<class ASN4K3UltimateAbilityPlaceholder> getUltimatePlaceholder() const;
 
 	void applyAbility(class ABaseCharacter* target) override;
 

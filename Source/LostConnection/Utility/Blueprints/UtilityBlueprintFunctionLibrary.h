@@ -86,9 +86,6 @@ public:
 	UFUNCTION(Category = "Utility|UI", BlueprintCallable, BlueprintPure)
 	static FText getWeaponModulesDropChance(int32 lootPoints, const TArray<class UBaseWeaponModulesLootFunction*>& weaponModulesLootFunctions);
 
-	UFUNCTION(Category = "Loot|Ammo", BlueprintCallable, BlueprintPure, Meta = (DisplayName = "Get Current Position"))
-	static FTransform getAmmoDropableCurrentPosition(TScriptInterface<class IAmmoDropable> ammoDropable);
-
 	UFUNCTION(Category = "Utility|Levels", BlueprintCallable, BlueprintPure)
 	static FString getRoomName(const TSoftObjectPtr<UWorld>& room);
 

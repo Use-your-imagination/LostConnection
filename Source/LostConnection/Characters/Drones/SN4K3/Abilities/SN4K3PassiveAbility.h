@@ -30,7 +30,7 @@ private:
 	int32 naniteMeter;
 
 	UPROPERTY(Category = SN4K3, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	UCooldownableUtility* cooldown;
+	TObjectPtr<UCooldownableUtility> cooldown;
 
 	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TSubclassOf<ASN4K3PassiveAbilityHead> headClass;

@@ -31,11 +31,11 @@ private:
 
 private:
 	UPROPERTY(ReplicatedUsing = onWeaponChange)
-	UBaseWeapon* weapon;
+	TObjectPtr<UBaseWeapon> weapon;
 
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* magazine;
+	TObjectPtr<UStaticMeshComponent> magazine;
 
 public:
 	ADroppedWeapon();
@@ -45,7 +45,7 @@ public:
 
 	UBaseWeapon* getWeapon();
 
-	virtual void setMesh(USkeletalMesh* mesh) final override;
+	void setMesh(const TObjectPtr<USkeletalMesh>& mesh) override;
 
 	~ADroppedWeapon() = default;
 };

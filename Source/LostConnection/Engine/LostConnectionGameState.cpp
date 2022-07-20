@@ -146,19 +146,17 @@ void ALostConnectionGameState::verteilenLootPoints(ILootPointsGiver* giver)
 	this->giveEachPlayerLootPoints(lootPointsFromGiver);
 }
 
-void ALostConnectionGameState::dropAmmo(IAmmoDropable* ammoDropable)
+void ALostConnectionGameState::dropAmmo(const TScriptInterface<IAmmoDropable>& ammoDropable)
 {
 	check(HasAuthority());
 
-	TArray<AActor*> managers;
+	TArray<TObjectPtr<AActor>> managers;
 
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ALootManager::StaticClass(), managers);
+	UGameplayStatics::GetAllActorsOfClass(this, ALootManager::StaticClass(), managers);
 
-	for (const auto& i : managers)
+	for (const TObjectPtr<AActor>& manager : managers)
 	{
-		TObjectPtr<ALootManager> manager = Cast<ALootManager>(i);
-
-		manager->spawnAmmoCall(ammoDropable->_getUObject());
+		Cast<ALootManager>(manager)->spawnAmmoCall(ammoDropable);
 	}
 }
 

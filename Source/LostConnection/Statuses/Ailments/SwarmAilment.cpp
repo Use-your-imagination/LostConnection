@@ -17,7 +17,7 @@ int32 USwarmAilment::calculateUnderStatusEffect() const
 	return FMath::Max<int32>(1, StaticCast<int32>(this->getThreshold() / percentsPerSatellite));
 }
 
-void USwarmAilment::updateSwarmHealthBar()
+void USwarmAilment::onThresholdUpdate()
 {
 	if (TObjectPtr<ABaseCharacter> tem = Cast<ABaseCharacter>(target))
 	{
@@ -49,7 +49,7 @@ void USwarmAilment::increaseThreshold(const TScriptInterface<IDamageInflictor>& 
 {
 	threshold += target->getTotalLifePercentDealt(inflictor) * thresholdPerTotalLifePercentPool;
 
-	this->updateSwarmHealthBar();
+	this->onThresholdUpdate();
 }
 
 float USwarmAilment::getThreshold() const
@@ -71,9 +71,11 @@ void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInf
 	{
 		if (TObjectPtr<USwarmAilment> swarm = Cast<USwarmAilment>(status))
 		{
+			swarm->refreshDuration();
+
 			swarm->increaseThreshold(Cast<IDamageInflictor>(inflictor));
 
-			swarm->refreshDuration();
+			swarm->onThresholdUpdate();
 
 			target->setUnderStatusIntVariable
 			(
@@ -81,8 +83,6 @@ void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInf
 				this->calculateUnderStatusEffect()
 			);
 			
-			swarm->updateSwarmHealthBar();
-
 			return;
 		}
 	}
@@ -93,7 +93,7 @@ void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInf
 
 	threshold = baseThreshold;
 
-	this->updateSwarmHealthBar();
+	this->onThresholdUpdate();
 }
 
 void USwarmAilment::postRemove()
@@ -102,7 +102,7 @@ void USwarmAilment::postRemove()
 
 	threshold = 0.0f;
 
-	this->updateSwarmHealthBar();
+	this->onThresholdUpdate();
 }
 
 bool USwarmAilment::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)

@@ -122,7 +122,7 @@ void FAutomationToolchainModule::initSettings()
 
 	FJsonSerializer::Serialize(object.ToSharedRef(), TJsonWriterFactory<>::Create(&defaultSettings));
 
-	FFileHelper::SaveStringToFile(defaultSettings, *pathToSettingsFile, FFileHelper::EEncodingOptions::ForceUTF8);
+	FFileHelper::SaveStringToFile(defaultSettings, *pathToSettingsFile, FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
 }
 
 void FAutomationToolchainModule::executeToolchain()

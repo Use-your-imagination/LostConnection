@@ -23,5 +23,5 @@ class LOSTCONNECTION_API IAilmentReceiver : public IStatusReceiver
 public:
 	IAilmentReceiver() = default;
 
-	virtual void applySwarmAilment(class USwarmAilment* swarm) = 0;
+	virtual void applySwarmAilment(const TObjectPtr<class USwarmAilment>& swarm) = 0;
 };

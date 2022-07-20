@@ -40,7 +40,7 @@ private:
 	void addRandomLoot(TObjectPtr<AInventory> playerInventory, int32 weaponsLootPoints, int32 modulesLootPoints, int32 weaponModulesLootPoints);
 
 	UFUNCTION(Client, Reliable)
-	void spawnAmmo(UObject* ammoDropable);
+	void spawnAmmo(const TScriptInterface<IAmmoDropable>& ammoDropable);
 
 public:
 	ALootManager();
@@ -57,8 +57,8 @@ public:
 	UFUNCTION(Category = Loot, Server, Reliable, BlueprintCallable)
 	void addRandomWeaponModule(AInventory* playerInventory);
 
-	UFUNCTION(Category = Loot, BlueprintCallable)
-	void spawnAmmoCall(TScriptInterface<IAmmoDropable> ammoDropable);
+	UFUNCTION(Server, Reliable)
+	void spawnAmmoCall(const TScriptInterface<IAmmoDropable>& ammoDropable);
 
 	const TArray<UBaseWeaponsLootFunction*>& getWeaponsLootFunctions() const;
 

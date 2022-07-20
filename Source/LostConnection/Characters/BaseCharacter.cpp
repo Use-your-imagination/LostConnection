@@ -22,7 +22,6 @@
 #include "Interfaces/Animations/WeaponUser.h"
 #include "EnergyShields/EmptyEnergyShield.h"
 #include "Utility/Blueprints/UtilityBlueprintFunctionLibrary.h"
-
 #include "Utility/MultiplayerUtility.h"
 
 #pragma warning(disable: 4458)
@@ -82,9 +81,9 @@ bool ABaseCharacter::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunc
 		wroteSomething |= status->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
 
-	if (swarm.IsValid())
+	if (swarm)
 	{
-		wroteSomething |= Channel->ReplicateSubobject(swarm.Get(), *Bunch, *RepFlags);
+		wroteSomething |= Channel->ReplicateSubobject(swarm, *Bunch, *RepFlags);
 
 		wroteSomething |= swarm->ReplicateSubobjects(Channel, Bunch, RepFlags);
 	}
@@ -373,15 +372,20 @@ void ABaseCharacter::deathLogic()
 
 void ABaseCharacter::updateCharacterVisual()
 {
-	if (swarm.IsValid())
+	this->updateHealthBarWidget();
+}
+
+void ABaseCharacter::updateHealthBarWidget()
+{
+	TObjectPtr<UHealthBarWidget> widget = this->getHealthBarWidget();
+
+	if (widget.IsNull())
 	{
-		TObjectPtr<UHealthBarWidget> widget = this->getHealthBarWidget();
+		return;
+	}
 
-		if (!widget)
-		{
-			return;
-		}
-
+	if (swarm)
+	{
 		widget->getImage()->GetDynamicMaterial()->SetScalarParameterValue("ThresholdPercent", swarm->getThreshold());
 	}
 }
@@ -440,22 +444,24 @@ ABaseCharacter::ABaseCharacter() :
 	defaultLargeAmmoCount(240),
 	defaultEnergyAmmoCount(50)
 {
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_SatusState.NPS_SatusState'"));
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> underStatusFinder(TEXT("NiagaraSystem'/Game/Assets/FX/Statuses/Common/NPS_StatusState.NPS_StatusState'"));
 	static ConstructorHelpers::FClassFinder<UUserWidget> healthBarWidgetFinder(TEXT("/Game/UI/WidgetComponents/BP_HealthBarWidget"));
 
 	PrimaryActorTick.bCanEverTick = true;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 	bReplicates = true;
 
-	UCapsuleComponent* capsule = GetCapsuleComponent();
-	USkeletalMeshComponent* mesh = GetMesh();
-	UCharacterMovementComponent* movement = GetCharacterMovement();
+	TObjectPtr<UCapsuleComponent> capsule = GetCapsuleComponent();
+	TObjectPtr<USkeletalMeshComponent> mesh = GetMesh();
+	TObjectPtr<UCharacterMovementComponent> movement = GetCharacterMovement();
 
 	capsule->InitCapsuleSize(42.0f, 96.0f);
 
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
 	capsule->SetIsReplicated(true);
+
+	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	mesh->SetGenerateOverlapEvents(true);
 
@@ -464,6 +470,8 @@ ABaseCharacter::ABaseCharacter() :
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 
 	mesh->SetIsReplicated(true);
+
+	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	movement->bOrientRotationToMovement = true;
 	movement->RotationRate = UConstants::rotationRate;
@@ -632,7 +640,7 @@ int32 ABaseCharacter::getWeaponCount() const
 	return StaticCast<bool>(Utility::getPlayerState(this)->getDefaultWeapon());
 }
 
-const TWeakObjectPtr<USwarmAilment>& ABaseCharacter::getSwarm() const
+const TObjectPtr<USwarmAilment>& ABaseCharacter::getSwarm() const
 {
 	return swarm;
 }
@@ -788,9 +796,11 @@ void ABaseCharacter::addStatus(TObjectPtr<UBaseStatus> status)
 	statuses.Add(status);
 }
 
-void ABaseCharacter::applySwarmAilment(USwarmAilment* swarm)
+void ABaseCharacter::applySwarmAilment(const TObjectPtr<USwarmAilment>& swarm)
 {
 	this->swarm = swarm;
+
+	this->updateCharacterVisual();
 }
 
 void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusInflictor>& inflictor, const FHitResult& hit)
@@ -837,7 +847,7 @@ void ABaseCharacter::statusInflictorImpactAction(const TScriptInterface<IStatusI
 
 void ABaseCharacter::setCurrentHealth_Implementation(float newCurrentHealth)
 {
-	if (swarm.IsValid())
+	if (swarm)
 	{
 		float newPercentHealth = Utility::toPercent(newCurrentHealth / health);
 

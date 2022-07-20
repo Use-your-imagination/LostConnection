@@ -79,7 +79,7 @@ public:
 
 	void verteilenLootPoints(ILootPointsGiver* giver);
 
-	void dropAmmo(IAmmoDropable* ammoDropable);
+	void dropAmmo(const TScriptInterface<IAmmoDropable>& ammoDropable);
 
 	UFUNCTION(Server, Reliable)
 	void notifyLevelLoading();

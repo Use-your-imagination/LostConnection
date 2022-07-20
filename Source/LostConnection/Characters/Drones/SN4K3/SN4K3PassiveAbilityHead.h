@@ -24,13 +24,11 @@ private:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UNiagaraSystem> explosionParticles;
 
-	UPROPERTY(Category = SN4K3, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = SN4K3, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float explosionRadius;
 
-	UPROPERTY(Category = Utility, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = SN4K3, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UAilmentInflictorUtility> ailmentInflictorUtility;
-
-	bool isExploded;
 
 protected:
 	virtual void BeginPlay() override;
@@ -58,8 +56,6 @@ public:
 
 	UFUNCTION(Category = Checks, BlueprintNativeEvent, BlueprintCallable)
 	bool checkSpeedup();
-
-	virtual void Tick(float DeltaSeconds) override;
 
 	UAilmentInflictorUtility* getAilmentInflictorUtility() const override;
 

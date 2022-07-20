@@ -20,10 +20,10 @@ class LOSTCONNECTION_API ADroppedObject : public AActor
 	
 protected:
 	UPROPERTY(Category = Components, VisibleAnywhere, BlueprintReadOnly)
-	USkeletalMeshComponent* mesh;
+	TObjectPtr<USkeletalMeshComponent> mesh;
 
 	UPROPERTY(Category = Particles, VisibleAnywhere, BlueprintReadOnly)
-	UNiagaraComponent* vfx;
+	TObjectPtr<UNiagaraComponent> vfx;
 
 protected:
 	virtual void BeginPlay() override;
@@ -33,7 +33,7 @@ protected:
 public:	
 	ADroppedObject();
 
-	virtual void setMesh(USkeletalMesh* mesh);
+	virtual void setMesh(const TObjectPtr<USkeletalMesh>& mesh);
 
 	virtual ~ADroppedObject() = default;
 };

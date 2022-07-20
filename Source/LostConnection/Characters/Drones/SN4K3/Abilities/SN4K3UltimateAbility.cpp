@@ -50,7 +50,7 @@ float USN4K3UltimateAbility::getCurrentAbilityDuration() const
 	return currentAbilityDuration;
 }
 
-const TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder>& USN4K3UltimateAbility::getUltimatePlaceholder() const
+TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder> USN4K3UltimateAbility::getUltimatePlaceholder() const
 {
 	return ultimatePlaceholder;
 }

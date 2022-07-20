@@ -59,7 +59,8 @@ ADroppedWeapon::ADroppedWeapon()
 	magazine->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
 	magazine->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
-	magazine->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
+
+	magazine->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 }
 
 void ADroppedWeapon::setWeapon_Implementation(UBaseWeapon* newWeapon)
@@ -74,7 +75,7 @@ UBaseWeapon* ADroppedWeapon::getWeapon()
 	return weapon;
 }
 
-void ADroppedWeapon::setMesh(USkeletalMesh* mesh)
+void ADroppedWeapon::setMesh(const TObjectPtr<USkeletalMesh>& mesh)
 {
 	this->mesh->SetSkeletalMesh(mesh);
 

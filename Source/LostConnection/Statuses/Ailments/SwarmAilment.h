@@ -33,14 +33,15 @@ private:
 	UPROPERTY(Category = Swarm, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float percentsPerSatellite;
 
-	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	UPROPERTY(Category = Swarm, ReplicatedUsing = onThresholdUpdate, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float threshold;
 
 	UPROPERTY(Category = Swarm, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	TObjectPtr<UDamageInflictorUtility> damageInflictorUtility;
 
 private:
-	void updateSwarmHealthBar();
+	UFUNCTION()
+	void onThresholdUpdate();
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
