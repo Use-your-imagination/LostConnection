@@ -170,7 +170,7 @@ protected:
 #pragma endregion
 
 protected:
-	UFUNCTION()
+	UFUNCTION(Category = Weapons, BlueprintNativeEvent)
 	void onCurrentWeaponChange();
 
 	UFUNCTION()

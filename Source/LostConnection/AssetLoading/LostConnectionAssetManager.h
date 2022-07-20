@@ -78,6 +78,9 @@ public:
 	void syncLoadAsset(TSubclassOf<UPrimaryDataAsset> dataAsset);
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)
+	void syncLoadActAsset(TSubclassOf<UBaseActDataAsset> dataAsset);
+
+	UFUNCTION(Category = AssetLoading, BlueprintCallable)
 	void unloadDronesPreview();
 
 	UFUNCTION(Category = AssetLoading, BlueprintCallable)

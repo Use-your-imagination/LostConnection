@@ -19,6 +19,7 @@ void AISpawner::spawn(TObjectPtr<AWavesController> wavesController, int32 waveNu
 {
 	TMap<EBotType, TArray<TObjectPtr<AAISpawnPoint>>> spawnPointsByType;
 	const FWaveSettings& waveSettings = wavesController->getWaveSettings(waveNumber);
+	const UBaseActDataAsset& currentAct = ULostConnectionAssetManager::get().getCurrentAct();
 
 	for (int32 i = 0; i < StaticCast<int32>(EBotType::size); i++)
 	{
@@ -30,7 +31,7 @@ void AISpawner::spawn(TObjectPtr<AWavesController> wavesController, int32 waveNu
 
 		UGameplayStatics::GetAllActorsOfClass(wavesController, AAISpawnPoint::StaticClass(), spawnPoints);
 
-		for (TObjectPtr<AActor> tem : spawnPoints)
+		for (const TObjectPtr<AActor>& tem : spawnPoints)
 		{
 			TObjectPtr<AAISpawnPoint> spawnPoint = Cast<AAISpawnPoint>(tem);
 
@@ -40,7 +41,7 @@ void AISpawner::spawn(TObjectPtr<AWavesController> wavesController, int32 waveNu
 
 	for (const TPair<EBotType, int32>& pair : waveSettings.botsPerType)
 	{
-		const TArray<TSubclassOf<ABaseBot>>& bots = ULostConnectionAssetManager::get().getCurrentAct()[pair.Key];
+		const TArray<TSubclassOf<ABaseBot>>& bots = currentAct[pair.Key];
 		const TArray<TObjectPtr<AAISpawnPoint>>& spawnPoints = spawnPointsByType[pair.Key];
 
 		for (int32 i = 0; i < pair.Value; i++)

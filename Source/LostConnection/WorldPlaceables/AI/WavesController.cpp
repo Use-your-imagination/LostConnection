@@ -23,6 +23,11 @@ void AWavesController::BeginPlay()
 		navigationSystem->Build();
 	}
 
+	if (!ULostConnectionAssetManager::get().isAssetLoaded(URuinedCityActDataAsset::StaticClass()))
+	{
+		ULostConnectionAssetManager::get().syncLoadActAsset(URuinedCityActDataAsset::StaticClass());
+	}
+
 	spawnManager.init(this);
 
 	Utility::getGameState(this)->getTotalWaves() = this->getWaveCount();

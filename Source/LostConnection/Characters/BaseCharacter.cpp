@@ -152,7 +152,7 @@ void ABaseCharacter::deathMaterialTimerUpdate_Implementation()
 
 }
 
-void ABaseCharacter::onCurrentWeaponChange()
+void ABaseCharacter::onCurrentWeaponChange_Implementation()
 {
 	TObjectPtr<UAnimInstance> animInstance = GetMesh()->GetAnimInstance();
 

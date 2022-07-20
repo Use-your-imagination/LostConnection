@@ -145,6 +145,22 @@ void ULostConnectionAssetManager::syncLoadAsset(TSubclassOf<UPrimaryDataAsset> d
 	}
 }
 
+void ULostConnectionAssetManager::syncLoadActAsset(TSubclassOf<UBaseActDataAsset> dataAsset)
+{
+	const TSharedPtr<FStreamableHandle>* it = handles.Find(dataAsset.Get()->GetFName());
+
+	if (it)
+	{
+		(*it)->WaitUntilComplete();
+	}
+	else
+	{
+		currentActId = assets[dataAsset];
+
+		handles.Add(dataAsset->GetFName(), LoadPrimaryAsset(assets[dataAsset]))->WaitUntilComplete();
+	}
+}
+
 void ULostConnectionAssetManager::unloadDronesPreview()
 {
 	this->unloadAsset(UDronesPreviewDataAsset::StaticClass());
