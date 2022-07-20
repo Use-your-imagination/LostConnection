@@ -10,6 +10,13 @@
 			"notes": [
 				"Improve AI behavior"
 			]
+		},
+		"Coop":
+		{
+			"type": "item",
+			"notes": [
+				"Add coop"
+			]
 		}
 	},
 	"Rooms":
@@ -41,7 +48,14 @@
 	},
 	"Bug Fixes":
 	{
-		"type": "category"
+		"type": "category",
+		"SN4K3 passive ability":
+		{
+			"type": "item",
+			"notes": [
+				"Fixed wrong spawning"
+			]
+		}
 	},
 	"Weapon Modules":
 	{

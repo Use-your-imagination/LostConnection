@@ -23,9 +23,16 @@ void AWavesController::BeginPlay()
 		navigationSystem->Build();
 	}
 
-	if (!ULostConnectionAssetManager::get().isAssetLoaded(URuinedCityActDataAsset::StaticClass()))
+	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
+
+	if (!manager.isAssetLoaded(URuinedCityActDataAsset::StaticClass()))
 	{
-		ULostConnectionAssetManager::get().syncLoadActAsset(URuinedCityActDataAsset::StaticClass());
+		manager.syncLoadActAsset(URuinedCityActDataAsset::StaticClass());
+	}
+
+	if (!manager.isAssetLoaded(UAIDataAsset::StaticClass()))
+	{
+		manager.syncLoadAsset(UAIDataAsset::StaticClass());
 	}
 
 	spawnManager.init(this);
