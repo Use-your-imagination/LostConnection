@@ -64,8 +64,6 @@ void ASN4K3PassiveAbilityHead::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ASN4K3PassiveAbilityHead, explosionRadius);
-
 	DOREPLIFETIME(ASN4K3PassiveAbilityHead, ailmentInflictorUtility);
 }
 
@@ -86,9 +84,8 @@ void ASN4K3PassiveAbilityHead::explode()
 	TArray<TObjectPtr<AActor>> enemies;
 	TObjectPtr<ALostConnectionPlayerController> controller = Utility::getPlayerController(this);
 	FVector respawnLocation = GetActorLocation();
-	TObjectPtr<ALostConnectionGameState> gameState = Utility::getGameState(this);
-
-	gameState->spawnVFXAtLocation(GetMesh()->GetComponentLocation(), explosionParticles);
+	
+	Utility::getGameState(this)->spawnVFXAtLocation(GetMesh()->GetComponentLocation(), explosionParticles);
 
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetMesh()->GetComponentLocation(), explosionRadius, traceObjectTypes, ABaseCharacter::StaticClass(), {}, enemies);
 
@@ -120,14 +117,12 @@ void ASN4K3PassiveAbilityHead::explode()
 		}
 	}
 
-	isExploded = true;
+	this->destroyHead();
 }
 
 void ASN4K3PassiveAbilityHead::destroyHead()
 {
-	ULostConnectionAssetManager& manager = ULostConnectionAssetManager::get();
-
-	TObjectPtr<ADeathPlaceholder> placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(manager.getDefaults().getDeathPlaceholder(), {});
+	TObjectPtr<ADeathPlaceholder> placeholder = Utility::getGameState(this)->spawn<ADeathPlaceholder>(ULostConnectionAssetManager::get().getDefaults().getDeathPlaceholder(), {});
 
 	GetController()->Possess(placeholder);
 
@@ -136,10 +131,9 @@ void ASN4K3PassiveAbilityHead::destroyHead()
 	Destroy();
 }
 
-ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead() :
-	isExploded(false)
+ASN4K3PassiveAbilityHead::ASN4K3PassiveAbilityHead()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	NetUpdateFrequency = UConstants::actorNetUpdateFrequency;
 
 	TObjectPtr<UCapsuleComponent> capsule = GetCapsuleComponent();
@@ -171,21 +165,6 @@ bool ASN4K3PassiveAbilityHead::checkExplode_Implementation()
 bool ASN4K3PassiveAbilityHead::checkSpeedup_Implementation()
 {
 	return true;
-}
-
-void ASN4K3PassiveAbilityHead::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	if (HasAuthority())
-	{
-		if (isExploded && GetController())
-		{
-			this->destroyHead();
-
-			return;
-		}
-	}
 }
 
 UAilmentInflictorUtility* ASN4K3PassiveAbilityHead::getAilmentInflictorUtility() const

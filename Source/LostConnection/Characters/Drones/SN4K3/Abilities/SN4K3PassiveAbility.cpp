@@ -49,7 +49,7 @@ void USN4K3PassiveAbility::applyAbility(ABaseCharacter* target)
 
 	head->FinishSpawning({}, true);
 
-	ICaster::Execute_applyPassiveAbilityEvent(Cast<UObject>(caster), target);
+	ICaster::Execute_applyPassiveAbilityEvent(caster.GetObject(), target);
 }
 
 void USN4K3PassiveAbility::useAbility()

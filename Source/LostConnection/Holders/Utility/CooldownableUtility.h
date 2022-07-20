@@ -4,23 +4,18 @@
 
 #include "CoreMinimal.h"
 
-#include "UObject/NoExportTypes.h"
-#include "Net/UnrealNetwork.h"
-
+#include "Network/NetworkObject.h"
 #include "Interfaces/Gameplay/Descriptions/Cooldownable.h"
 
 #include "CooldownableUtility.generated.h"
 
 UCLASS(BlueprintType, DefaultToInstanced, EditInlineNew)
 class LOSTCONNECTION_API UCooldownableUtility : 
-	public UObject,
+	public UNetworkObject,
 	public ICooldownable
 {
 	GENERATED_BODY()
 	
-private:
-	bool IsSupportedForNetworking() const override;
-
 private:
 	UPROPERTY(Category = Cooldown, EditDefaultsOnly, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float cooldown;

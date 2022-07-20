@@ -20,7 +20,7 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 {
 	TObjectPtr<ABaseCharacter> target = Cast<ABaseCharacter>(OtherActor);
 
-	if (!target || isAlly == target->getIsAlly())
+	if (target.IsNull() || isAlly == target->getIsAlly())
 	{
 		return;
 	}
@@ -30,7 +30,7 @@ void ASN4K3::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 
 void ASN4K3::deathLogic()
 {
-	const TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder>& placeholder = Cast<USN4K3UltimateAbility>(ultimateAbility)->getUltimatePlaceholder();
+	TWeakObjectPtr<ASN4K3UltimateAbilityPlaceholder> placeholder = Cast<USN4K3UltimateAbility>(ultimateAbility)->getUltimatePlaceholder();
 
 	if (placeholder.IsValid())
 	{

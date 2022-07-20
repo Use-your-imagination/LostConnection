@@ -2,11 +2,6 @@
 
 #include "CooldownableUtility.h"
 
-bool UCooldownableUtility::IsSupportedForNetworking() const
-{
-	return true;
-}
-
 void UCooldownableUtility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
