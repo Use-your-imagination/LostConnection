@@ -37,7 +37,7 @@ public:
 	static const FName serverNameKey;
 
 private:
-	TObjectPtr<IOnlineSubsystem> subsystem;
+	IOnlineSubsystem* subsystem;
 	IOnlineSessionPtr session;
 	TSharedPtr<FOnlineSessionSettings> sessionSettings;
 	TSharedPtr<FOnlineSessionSearch> searchSession;
