@@ -12,5 +12,7 @@ public class LostConnectionTarget : TargetRules
 		ExtraModuleNames.Add("LostConnection");
 
 		bUsesSteam = true;
+
+		MemoryPerActionGB = 1.5;
 	}
 }

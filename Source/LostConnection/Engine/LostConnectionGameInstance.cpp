@@ -7,7 +7,7 @@
 #include "Utility/Utility.h"
 #include "Constants/Constants.h"
 
-const FString ULostConnectionGameInstance::options = "?listen";
+// const FString ULostConnectionGameInstance::hostSessionOptions = "?listen";
 const FName ULostConnectionGameInstance::serverNameKey = "ServerName";
 
 void ULostConnectionGameInstance::onCreateSession(FName sessionName, bool wasSuccessful)
@@ -37,7 +37,7 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 
 		sessionSettings->Get(SETTING_MAPNAME, levelName);
 
-		GetWorld()->ServerTravel(levelName + options, true);
+		GetWorld()->ServerTravel(levelName + hostSessionOptions, true);
 	}
 }
 
@@ -125,6 +125,68 @@ void ULostConnectionGameInstance::onJoinSession(FName sessionName, EOnJoinSessio
 	onFail.ExecuteIfBound();
 }
 
+void ULostConnectionGameInstance::onJoinSessionWithInvite(FName sessionName, EOnJoinSessionCompleteResult::Type type)
+{
+	if (type == EOnJoinSessionCompleteResult::Type::Success)
+	{
+		TObjectPtr<APlayerController> playerController = GetFirstLocalPlayerController();
+		FString connectString;
+
+		if (session->GetResolvedConnectString(NAME_GameSession, connectString) && playerController)
+		{
+			UE_LOG(LogLostConnection, Warning, TEXT("Join session: traveling to %s"), *connectString);
+
+			this->onJoinSuccess();
+
+			playerController->ClientTravel(connectString, ETravelType::TRAVEL_Absolute);
+
+			return;
+		}
+		else
+		{
+			UE_LOG(LogLostConnection, Error, TEXT("Connect string: %s, player controller: %d"), *connectString, StaticCast<bool>(playerController));
+		}
+	}
+	else
+	{
+		using EOnJoinSessionCompleteResult::Type;
+
+		FString error;
+
+		switch (type)
+		{
+		case Type::AlreadyInSession:
+			error = "Already in session";
+
+			break;
+
+		case Type::CouldNotRetrieveAddress:
+			error = "Could not retrieve address";
+
+			break;
+
+		case Type::SessionDoesNotExist:
+			error = "Session does not exist";
+
+			break;
+
+		case Type::SessionIsFull:
+			error = "Session is full";
+
+			break;
+
+		case Type::UnknownError:
+			error = "Unknown error";
+
+			break;
+		}
+
+		UE_LOG(LogLostConnection, Warning, TEXT("Can't join to session. %s"), *error);
+	}
+
+	this->onJoinFail();
+}
+
 void ULostConnectionGameInstance::onInviteAccepted(const bool wasSuccessful, const int32 controllerId, FUniqueNetIdPtr userId, const FOnlineSessionSearchResult& inviteResult)
 {
 	bool isConnected = false;
@@ -170,6 +232,8 @@ void ULostConnectionGameInstance::Init()
 			session->OnSessionUserInviteAcceptedDelegates.AddUObject(this, &ULostConnectionGameInstance::onInviteAccepted);
 
 			session->OnSessionInviteReceivedDelegates.AddUObject(this, &ULostConnectionGameInstance::onInviteReceived);
+
+			session->OnJoinSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onJoinSessionWithInvite);
 		}
 	}
 }

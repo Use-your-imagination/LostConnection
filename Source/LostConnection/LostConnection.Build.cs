@@ -36,5 +36,11 @@ public class LostConnection : ModuleRules
         });
 
         DynamicallyLoadedModuleNames.Add("OnlineSubsystemSteam");
+
+        if (Target.Type == TargetType.Editor)
+        {
+            MinFilesUsingPrecompiledHeaderOverride = 1;
+            bUseUnity = false;
+        }
     }
 }

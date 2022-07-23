@@ -30,12 +30,15 @@ private:
 
 	void onJoinSession(FName sessionName, EOnJoinSessionCompleteResult::Type type, FStandardDelegate onSuccess, FStandardDelegate onFail);
 
+	void onJoinSessionWithInvite(FName sessionName, EOnJoinSessionCompleteResult::Type type);
+
 	void onInviteAccepted(const bool wasSuccessful, const int32 controllerId, FUniqueNetIdPtr userId, const FOnlineSessionSearchResult& inviteResult);
 
 	void onInviteReceived(const FUniqueNetId& UserId, const FUniqueNetId& FromId, const FString& AppId, const FOnlineSessionSearchResult& InviteResult);
 
 private:
-	static const FString options;
+	UPROPERTY(Category = Options, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
+	FString hostSessionOptions;
 
 public:
 	static const FName serverNameKey;
@@ -53,6 +56,13 @@ private:
 	void Init() override;
 
 	void initSearchSession();
+
+protected:
+	UFUNCTION(Category = Join, BlueprintImplementableEvent)
+	void onJoinSuccess();
+
+	UFUNCTION(Category = Join, BlueprintImplementableEvent)
+	void onJoinFail();
 
 public:
 	ULostConnectionGameInstance() = default;

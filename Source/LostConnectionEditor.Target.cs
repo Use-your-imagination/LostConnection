@@ -10,5 +10,7 @@ public class LostConnectionEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		ExtraModuleNames.Add("LostConnection");
+
+		MemoryPerActionGB = 0.9;
 	}
 }
