@@ -57,10 +57,7 @@ void ULostConnectionGameInstance::onFindSessions(bool wasSuccessful, TArray<FBlu
 			}
 		}
 
-		if (widget)
-		{
-			IInitSessions::Execute_initSessionList(widget.GetObject());
-		}
+		IInitSessions::Execute_initSessionList(widget.GetObject());
 	}
 }
 
@@ -128,6 +125,28 @@ void ULostConnectionGameInstance::onJoinSession(FName sessionName, EOnJoinSessio
 	onFail.ExecuteIfBound();
 }
 
+void ULostConnectionGameInstance::onInviteAccepted(const bool wasSuccessful, const int32 controllerId, FUniqueNetIdPtr userId, const FOnlineSessionSearchResult& inviteResult)
+{
+	bool isConnected = false;
+
+	if (wasSuccessful)
+	{
+		if (inviteResult.IsValid())
+		{
+			isConnected = session->JoinSession(controllerId, NAME_GameSession, inviteResult);
+		}
+	}
+
+	UE_LOG(LogLostConnection, Warning, TEXT("Accepted, wasSuccessful: %d, inviteResult.IsValid(): %d, isConnected: %d"), wasSuccessful, inviteResult.IsValid(), isConnected);
+}
+
+void ULostConnectionGameInstance::onInviteReceived(const FUniqueNetId& UserId, const FUniqueNetId& FromId, const FString& AppId, const FOnlineSessionSearchResult& InviteResult)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Red, "Fok u");
+
+	UE_LOG(LogLostConnection, Warning, TEXT("user id: %s, from id: %s, app id: %s, invite result ping: %d"), *UserId.ToString(), *FromId.ToString(), *AppId, InviteResult.PingInMs);
+}
+
 void ULostConnectionGameInstance::Init()
 {
 	subsystem = IOnlineSubsystem::Get();
@@ -142,10 +161,15 @@ void ULostConnectionGameInstance::Init()
 
 			sessionSettings->bUseLobbiesIfAvailable = true;
 			sessionSettings->bUsesPresence = true;
+			sessionSettings->bAllowInvites = true;
 			sessionSettings->bShouldAdvertise = true;
 			sessionSettings->NumPublicConnections = 4;
 			sessionSettings->bAllowJoinInProgress = true;
 			sessionSettings->bAllowJoinViaPresence = true;
+
+			session->OnSessionUserInviteAcceptedDelegates.AddUObject(this, &ULostConnectionGameInstance::onInviteAccepted);
+
+			session->OnSessionInviteReceivedDelegates.AddUObject(this, &ULostConnectionGameInstance::onInviteReceived);
 		}
 	}
 }

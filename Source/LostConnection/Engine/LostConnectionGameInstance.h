@@ -30,6 +30,10 @@ private:
 
 	void onJoinSession(FName sessionName, EOnJoinSessionCompleteResult::Type type, FStandardDelegate onSuccess, FStandardDelegate onFail);
 
+	void onInviteAccepted(const bool wasSuccessful, const int32 controllerId, FUniqueNetIdPtr userId, const FOnlineSessionSearchResult& inviteResult);
+
+	void onInviteReceived(const FUniqueNetId& UserId, const FUniqueNetId& FromId, const FString& AppId, const FOnlineSessionSearchResult& InviteResult);
+
 private:
 	static const FString options;
 
@@ -37,7 +41,7 @@ public:
 	static const FName serverNameKey;
 
 private:
-	IOnlineSubsystem* subsystem;
+	TObjectPtr<IOnlineSubsystem> subsystem;
 	IOnlineSessionPtr session;
 	TSharedPtr<FOnlineSessionSettings> sessionSettings;
 	TSharedPtr<FOnlineSessionSearch> searchSession;

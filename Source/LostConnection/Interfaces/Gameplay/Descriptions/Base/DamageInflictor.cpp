@@ -4,6 +4,14 @@
 
 #include "Interfaces/Gameplay/Descriptions/DamageAffecter.h"
 
+FDamageStructure::FDamageStructure() :
+	baseDamage(0.0f),
+	addedDamage(0.0f),
+	additionalDamage(0.0f)
+{
+
+}
+
 FDamageStructure::FDamageStructure(const FDamageStructure& base, const TArray<TObjectPtr<UNetworkObject>>& affecters) :
 	FDamageStructure(base)
 {

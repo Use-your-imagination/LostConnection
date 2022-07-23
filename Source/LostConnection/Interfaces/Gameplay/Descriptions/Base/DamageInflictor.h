@@ -32,7 +32,7 @@ public:
 	TArray<float> moreDamageCoefficients;
 
 public:
-	FDamageStructure() = default;
+	FDamageStructure();
 
 	/**
 	* @param affecters Must be Array<IDamageAffecter*>
