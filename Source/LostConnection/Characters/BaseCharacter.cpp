@@ -459,8 +459,6 @@ ABaseCharacter::ABaseCharacter() :
 
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
-	capsule->SetIsReplicated(true);
-
 	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	mesh->SetGenerateOverlapEvents(true);
@@ -468,8 +466,6 @@ ABaseCharacter::ABaseCharacter() :
 	mesh->SetCollisionResponseToChannel(UConstants::shotThroughChannel, ECollisionResponse::ECR_Overlap);
 
 	mesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
-
-	mesh->SetIsReplicated(true);
 
 	mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
