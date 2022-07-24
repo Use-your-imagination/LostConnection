@@ -39,10 +39,14 @@ void ABaseDroppedAmmo::pickup()
 	else if (currentAmount < amount * 0.67f && currentAmount > amount * 0.33f)
 	{
 		mesh->SetSkeletalMesh(mid);
+
+		this->onAmmoMeshChange(mid);
 	}
 	else if (currentAmount <= amount * 0.33f)
 	{
 		mesh->SetSkeletalMesh(empty);
+
+		this->onAmmoMeshChange(empty);
 	}
 }
 

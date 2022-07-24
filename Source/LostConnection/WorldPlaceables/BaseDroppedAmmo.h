@@ -54,6 +54,10 @@ private:
 
 	void PostInitializeComponents() override;
 
+protected:
+	UFUNCTION(Category = Visual, BlueprintImplementableEvent)
+	void onAmmoMeshChange(USkeletalMesh* currentMesh);
+
 public:
 	ABaseDroppedAmmo();
 

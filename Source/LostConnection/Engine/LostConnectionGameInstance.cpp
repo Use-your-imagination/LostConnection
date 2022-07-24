@@ -7,8 +7,6 @@
 #include "Utility/Utility.h"
 #include "Constants/Constants.h"
 
-const FName ULostConnectionGameInstance::serverNameKey = "ServerName";
-
 void ULostConnectionGameInstance::onCreateSession(FName sessionName, bool wasSuccessful)
 {
 	session->OnCreateSessionCompleteDelegates.Clear();
@@ -37,26 +35,6 @@ void ULostConnectionGameInstance::onStartSession(FName sessionName, bool wasSucc
 		sessionSettings->Get(SETTING_MAPNAME, levelName);
 
 		GetWorld()->ServerTravel(levelName + hostSessionOptions, true);
-	}
-}
-
-void ULostConnectionGameInstance::onFindSessions(bool wasSuccessful, TArray<FBlueprintSessionResult>* sessionsData, TScriptInterface<IInitSessions> widget)
-{
-	session->OnFindSessionsCompleteDelegates.Clear();
-
-	if (wasSuccessful)
-	{
-		if (searchSession.IsValid())
-		{
-			sessionsData->Empty();
-
-			for (const FOnlineSessionSearchResult& result : searchSession->SearchResults)
-			{
-				sessionsData->Add({ result });
-			}
-		}
-
-		IInitSessions::Execute_initSessionList(widget.GetObject());
 	}
 }
 
@@ -133,8 +111,6 @@ void ULostConnectionGameInstance::onInviteAccept(const bool wasSuccessful, const
 		return;
 	}
 
-	UE_LOG(LogLostConnection, Warning, TEXT("Ping: %d"), inviteResult.PingInMs);
-
 	this->onInviteAcceptProcess({ inviteResult });
 }
 
@@ -163,44 +139,18 @@ void ULostConnectionGameInstance::Init()
 	}
 }
 
-void ULostConnectionGameInstance::initSearchSession()
+void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, const TSoftObjectPtr<UWorld>& level)
 {
-	searchSession = MakeShareable(new FOnlineSessionSearch());
-
-	searchSession->MaxSearchResults = 2000;
-	searchSession->PingBucketSize = 100;
-
-	searchSession->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Type::Equals);
-}
-
-void ULostConnectionGameInstance::hostSession(TSharedPtr<const FUniqueNetId> userId, const FString& serverName, const TSoftObjectPtr<UWorld>& level)
-{
-	sessionSettings->Set(ULostConnectionGameInstance::serverNameKey, serverName, EOnlineDataAdvertisementType::Type::ViaOnlineService);
-
 	sessionSettings->Set(SETTING_MAPNAME, level.GetAssetName(), EOnlineDataAdvertisementType::Type::ViaOnlineService);
 
 	session->CreateSession(*userId, NAME_GameSession, *sessionSettings);
 }
 
-void ULostConnectionGameInstance::findOnlineSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
-{
-	this->initSearchSession();
-
-	session->FindSessions(*userId, searchSession.ToSharedRef());
-}
-
-void ULostConnectionGameInstance::createSession(const FString& serverName, TSoftObjectPtr<UWorld> level)
+void ULostConnectionGameInstance::createSession(TSoftObjectPtr<UWorld> level)
 {
 	session->OnCreateSessionCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onCreateSession);
 
-	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), serverName, level);
-}
-
-void ULostConnectionGameInstance::findSessions(TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget)
-{
-	session->OnFindSessionsCompleteDelegates.AddUObject(this, &ULostConnectionGameInstance::onFindSessions, &sessionsData, widget);
-
-	this->findOnlineSessions(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), sessionsData, widget);
+	this->hostSession(GetFirstGamePlayer()->GetPreferredUniqueNetId().GetUniqueNetId(), level);
 }
 
 void ULostConnectionGameInstance::joinSession(const FBlueprintSessionResult& sessionToJoin, const FStandardDelegate& onSuccess, const FStandardDelegate& onFail)

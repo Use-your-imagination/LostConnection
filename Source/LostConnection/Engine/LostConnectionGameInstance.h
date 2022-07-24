@@ -26,11 +26,7 @@ private:
 
 	void onStartSession(FName sessionName, bool wasSuccessful);
 
-	void onFindSessions(bool wasSuccessful, TArray<FBlueprintSessionResult>* sessionsData, TScriptInterface<IInitSessions> widget);
-
 	void onJoinSession(FName sessionName, EOnJoinSessionCompleteResult::Type type, FStandardDelegate onSuccess, FStandardDelegate onFail);
-
-	void onJoinSessionWithInvite(FName sessionName, EOnJoinSessionCompleteResult::Type type);
 
 	void onInviteAccept(const bool wasSuccessful, const int32 controllerId, FUniqueNetIdPtr userId, const FOnlineSessionSearchResult& inviteResult);
 
@@ -38,22 +34,16 @@ private:
 	UPROPERTY(Category = Options, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	FString hostSessionOptions;
 
-public:
-	static const FName serverNameKey;
-
 private:
 	TObjectPtr<IOnlineSubsystem> subsystem;
 	IOnlineSessionPtr session;
 	TSharedPtr<FOnlineSessionSettings> sessionSettings;
-	TSharedPtr<FOnlineSessionSearch> searchSession;
 
 private:
 	FOnDestroySessionCompleteDelegate onDestroyDelegate;
 
 private:
 	void Init() override;
-
-	void initSearchSession();
 
 protected:
 	UFUNCTION(Category = Join, BlueprintImplementableEvent)
@@ -62,15 +52,10 @@ protected:
 public:
 	ULostConnectionGameInstance() = default;
 
-	void hostSession(TSharedPtr<const FUniqueNetId> userId, const FString& serverName, const TSoftObjectPtr<UWorld>& level);
-
-	void findOnlineSessions(TSharedPtr<const FUniqueNetId> userId, TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
+	void hostSession(TSharedPtr<const FUniqueNetId> userId, const TSoftObjectPtr<UWorld>& level);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
-	void createSession(const FString& serverName, TSoftObjectPtr<UWorld> level);
-
-	UFUNCTION(Category = Sessions, BlueprintCallable)
-	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
+	void createSession(TSoftObjectPtr<UWorld> level);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable, Meta = (AutoCreateRefTerm = "onSuccess, onFail"))
 	void joinSession(const FBlueprintSessionResult& sessionToJoin, const FStandardDelegate& onSuccess, const FStandardDelegate& onFail);
