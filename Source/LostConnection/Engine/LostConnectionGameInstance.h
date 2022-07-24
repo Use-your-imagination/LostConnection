@@ -32,9 +32,7 @@ private:
 
 	void onJoinSessionWithInvite(FName sessionName, EOnJoinSessionCompleteResult::Type type);
 
-	void onInviteAccepted(const bool wasSuccessful, const int32 controllerId, FUniqueNetIdPtr userId, const FOnlineSessionSearchResult& inviteResult);
-
-	void onInviteReceived(const FUniqueNetId& UserId, const FUniqueNetId& FromId, const FString& AppId, const FOnlineSessionSearchResult& InviteResult);
+	void onInviteAccept(const bool wasSuccessful, const int32 controllerId, FUniqueNetIdPtr userId, const FOnlineSessionSearchResult& inviteResult);
 
 private:
 	UPROPERTY(Category = Options, EditDefaultsOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess))
@@ -59,10 +57,7 @@ private:
 
 protected:
 	UFUNCTION(Category = Join, BlueprintImplementableEvent)
-	void onJoinSuccess();
-
-	UFUNCTION(Category = Join, BlueprintImplementableEvent)
-	void onJoinFail();
+	void onInviteAcceptProcess(const FBlueprintSessionResult& inviteResult);
 
 public:
 	ULostConnectionGameInstance() = default;
@@ -77,7 +72,7 @@ public:
 	UFUNCTION(Category = Sessions, BlueprintCallable)
 	void findSessions(UPARAM(ref) TArray<FBlueprintSessionResult>& sessionsData, TScriptInterface<IInitSessions> widget);
 
-	UFUNCTION(Category = Sessions, BlueprintCallable)
+	UFUNCTION(Category = Sessions, BlueprintCallable, Meta = (AutoCreateRefTerm = "onSuccess, onFail"))
 	void joinSession(const FBlueprintSessionResult& sessionToJoin, const FStandardDelegate& onSuccess, const FStandardDelegate& onFail);
 
 	UFUNCTION(Category = Sessions, BlueprintCallable)
