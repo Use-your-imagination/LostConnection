@@ -1,6 +1,17 @@
 ﻿{
 	"projectName": "LostConnection",
 	"projectVersion": "0.3.2.0",
+	"Steam":
+	{
+		"type": "category",
+		"Coop":
+		{
+			"type": "item",
+			"notes": [
+				"Added Steam support"
+			]
+		}
+	},
 	"Gameplay":
 	{
 		"type": "category",
@@ -31,6 +42,17 @@
 			"type": "item",
 			"notes": [
 				"Add stats showcase in inventory general information tab"
+			]
+		}
+	},
+	"Coop":
+	{
+		"type": "category",
+		"Sessions":
+		{
+			"type": "item",
+			"notes": [
+				"Added joining through Steam"
 			]
 		}
 	},
