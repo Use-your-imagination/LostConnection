@@ -42,6 +42,8 @@ public:
 	FDamageStructure(const FDamageStructure& other);
 
 	FDamageStructure& operator = (const FDamageStructure& other);
+
+	~FDamageStructure() = default;
 };
 
 UINTERFACE(BlueprintType)

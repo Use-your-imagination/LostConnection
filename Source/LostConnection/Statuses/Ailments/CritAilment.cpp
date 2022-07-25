@@ -26,11 +26,11 @@ void UCritAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 
 void UCritAilment::initDamage()
 {
-	const TArray<UBaseStatus*>& statuses = target->getStatuses();
+	const TArray<TObjectPtr<UBaseStatus>>& statuses = target->getStatuses();
 
-	for (const UBaseStatus* status : statuses)
+	for (const TObjectPtr<UBaseStatus>& status : statuses)
 	{
-		if (const UCritAilment* crit = Cast<UCritAilment>(status))
+		if (TObjectPtr<UCritAilment> crit = Cast<UCritAilment>(status))
 		{
 			damageMultiplierPercent += crit->getCritMultiplier();
 		}
