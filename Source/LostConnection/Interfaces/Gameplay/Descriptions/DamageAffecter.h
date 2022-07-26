@@ -17,7 +17,7 @@ enum class EDamageAffecterType : uint8
 	decreaser
 };
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, Meta = (CannotImplementInterfaceInBlueprint))
 class UDamageAffecter : public UInterface
 {
 	GENERATED_BODY()
@@ -30,6 +30,9 @@ class LOSTCONNECTION_API IDamageAffecter
 public:
 	IDamageAffecter() = default;
 
+	/**
+	* @param affectedActor Can be nullptr
+	*/
 	virtual bool affectCondition(const TObjectPtr<AActor>& affectedActor) const = 0;
 
 	virtual void affect(FDamageStructure& damage) = 0;

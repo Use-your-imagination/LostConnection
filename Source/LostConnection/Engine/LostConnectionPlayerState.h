@@ -16,6 +16,7 @@
 #include "Holders/Utility/CooldownableUtility.h"
 #include "Inventory/Inventory.h"
 #include "UI/EscapableWidget.h"
+#include "Interfaces/Gameplay/Descriptions/DamageAffecter.h"
 
 #include "LostConnectionPlayerState.generated.h"
 
@@ -53,8 +54,9 @@ protected:
 	UPROPERTY(Category = Respawn, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	TObjectPtr<UCooldownableUtility> respawnCooldown;
 
+	TArray<TScriptInterface<IDamageAffecter>> damageIncreasers;
+	TArray<TScriptInterface<IDamageAffecter>> damageDecreasers;
 	TSubclassOf<class ABaseDrone> droneClass;
-
 	bool isInitialized;
 
 protected:
@@ -63,6 +65,9 @@ protected:
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	void BeginPlay() override;
+
+public:
+	void onDamageAffecterChange(EDamageAffecterType type);
 
 public:
 	ALostConnectionPlayerState();

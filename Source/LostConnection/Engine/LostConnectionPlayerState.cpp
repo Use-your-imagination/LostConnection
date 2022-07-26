@@ -6,6 +6,7 @@
 #include "AssetLoading/LostConnectionAssetManager.h"
 #include "LostConnectionPlayerController.h"
 #include "Utility/Utility.h"
+#include "Characters/BaseCharacter.h"
 
 template<typename T>
 void ALostConnectionPlayerState::reduceCooldownableData(float DeltaSeconds, TArray<T>& cooldownableData)
@@ -64,6 +65,56 @@ void ALostConnectionPlayerState::BeginPlay()
 
 		inventory->init(this);
 	}
+}
+
+void ALostConnectionPlayerState::onDamageAffecterChange(EDamageAffecterType type)
+{
+	if (type == EDamageAffecterType::none)
+	{
+		UE_LOG(LogLostConnection, Warning, TEXT("Passed EDamageAffecterType::none to %s"), __FUNCTION__);
+
+		return;
+	}
+
+	TArray<TScriptInterface<IDamageAffecter>>& damageAffecters = (type == EDamageAffecterType::increaser) ?
+		damageIncreasers :
+		damageDecreasers;
+	TObjectPtr<ABaseCharacter> character = GetOwningController()->GetPawn<ABaseCharacter>();
+	auto getAffectersFromModules = [&damageAffecters, type, character](const TArray<TObjectPtr<UInventoryCell>>& cells)
+	{
+		for (const auto& module : cells)
+		{
+			if (TScriptInterface<IDamageAffecter> affecter = Cast<IDamageAffecter>(module->getItem()))
+			{
+				if (affecter->getDamageAffecterType() == type && affecter->affectCondition(character))
+				{
+					damageAffecters.Add(affecter);
+				}
+			}
+		}
+	};
+
+	damageAffecters.Empty();
+
+	if (character)
+	{
+		for (const auto& status : character->getStatuses())
+		{
+			if (TScriptInterface<IDamageAffecter> affecter = status.Get())
+			{
+				if (affecter->getDamageAffecterType() == type && affecter->affectCondition(character))
+				{
+					damageAffecters.Add(affecter);
+				}
+			}
+		}
+	}
+
+	getAffectersFromModules(inventory->getPersonalEquippedModules());
+	getAffectersFromModules(inventory->getActivePersonalModules());
+
+	getAffectersFromModules(inventory->getWeaponModules());
+	getAffectersFromModules(inventory->getActiveWeaponModules());
 }
 
 ALostConnectionPlayerState::ALostConnectionPlayerState()
