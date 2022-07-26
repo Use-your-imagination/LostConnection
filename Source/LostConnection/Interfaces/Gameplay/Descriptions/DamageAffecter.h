@@ -10,6 +10,13 @@
 
 #include "DamageAffecter.generated.h"
 
+enum class EDamageAffecterType : uint8
+{
+	none,
+	increaser,
+	decreaser
+};
+
 UINTERFACE(MinimalAPI)
 class UDamageAffecter : public UInterface
 {
@@ -23,5 +30,9 @@ class LOSTCONNECTION_API IDamageAffecter
 public:
 	IDamageAffecter() = default;
 
+	virtual bool affectCondition(const TObjectPtr<AActor>& affectedActor) const = 0;
+
 	virtual void affect(FDamageStructure& damage) = 0;
+
+	virtual EDamageAffecterType getDamageAffecterType() const;
 };

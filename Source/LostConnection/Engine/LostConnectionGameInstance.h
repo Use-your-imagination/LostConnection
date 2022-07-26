@@ -9,7 +9,6 @@
 #include "Net/UnrealNetwork.h"
 #include "FindSessionsCallbackProxy.h"
 
-#include "Interfaces/Multiplayer/InitSessions.h"
 #include "Utility/UtilityStructures.h"
 
 #include "LostConnectionGameInstance.generated.h"

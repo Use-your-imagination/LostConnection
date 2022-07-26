@@ -19,6 +19,11 @@ bool UBaseDamagePersonalModule::applyCondition(TObjectPtr<AActor> caller) const
 	return false;
 }
 
+bool UBaseDamagePersonalModule::affectCondition(const TObjectPtr<AActor>& affectedActor) const
+{
+	return this->applyCondition(affectedActor);
+}
+
 void UBaseDamagePersonalModule::affect(FDamageStructure& damage)
 {
 	float multiplier = this->getMultiplier();

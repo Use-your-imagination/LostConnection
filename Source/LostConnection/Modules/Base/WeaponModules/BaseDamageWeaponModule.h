@@ -25,6 +25,8 @@ public:
 
 	virtual bool applyCondition(TObjectPtr<AActor> caller) const override;
 
+	virtual bool affectCondition(const TObjectPtr<AActor>& affectedActor) const override;
+
 	void affect(FDamageStructure& damage) override;
 
 	virtual ~UBaseDamageWeaponModule() = default;

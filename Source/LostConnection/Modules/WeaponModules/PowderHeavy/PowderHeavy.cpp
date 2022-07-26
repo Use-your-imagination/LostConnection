@@ -15,3 +15,8 @@ bool UPowderHeavy::applyCondition(TObjectPtr<AActor> caller) const
 {
 	return true;
 }
+
+EDamageAffecterType UPowderHeavy::getDamageAffecterType() const
+{
+	return EDamageAffecterType::increaser;
+}
