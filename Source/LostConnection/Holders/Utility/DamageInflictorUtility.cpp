@@ -10,8 +10,6 @@ void UDamageInflictorUtility::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UDamageInflictorUtility, damage);
-
-	DOREPLIFETIME(UDamageInflictorUtility, damageAffecters);
 }
 
 void UDamageInflictorUtility::setDamageInstigator_Implementation(AController* newDamageInstigator)
@@ -19,32 +17,18 @@ void UDamageInflictorUtility::setDamageInstigator_Implementation(AController* ne
 	damageInstigator = newDamageInstigator;
 }
 
-bool UDamageInflictorUtility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+float UDamageInflictorUtility::calculateTotalDamage(const TScriptInterface<IDamageReceiver>& receiver) const
 {
-	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+	TArray<TScriptInterface<IDamageAffecter>> affecters;
 
-	for (const auto& damageAffecter : damageAffecters)
+	if (TObjectPtr<ALostConnectionPlayerState> playerState = damageInstigator->GetPlayerState<ALostConnectionPlayerState>())
 	{
-		wroteSomething |= Channel->ReplicateSubobject(damageAffecter, *Bunch, *RepFlags);
-
-		wroteSomething |= damageAffecter->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		affecters = playerState->getDamageAffecters();
 	}
 
-	return wroteSomething;
-}
+	FDamageStructure totalDamage(damage, affecters, const_cast<UDamageInflictorUtility*>(this), receiver);
 
-float UDamageInflictorUtility::calculateTotalDamage() const
-{
-	FDamageStructure totalDamage(damage, damageAffecters);
-
-	return UFormulaLibrary::standardFormula
-	(
-		totalDamage.baseDamage,
-		totalDamage.addedDamage,
-		totalDamage.increaseDamageCoefficients,
-		totalDamage.moreDamageCoefficients,
-		totalDamage.additionalDamage
-	);
+	return UFormulaLibrary::standardFormulaDamage(totalDamage);
 }
 
 FDamageStructure& UDamageInflictorUtility::getDamage()

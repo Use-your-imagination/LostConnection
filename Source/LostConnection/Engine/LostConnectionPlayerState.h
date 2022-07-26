@@ -174,6 +174,12 @@ public:
 
 	TArray<TObjectPtr<UEscapableWidget>>& getEscapableWidgets();
 
+	const TArray<TScriptInterface<IDamageAffecter>>& getDamageIncreasers() const;
+
+	const TArray<TScriptInterface<IDamageAffecter>>& getDamageDecreasers() const;
+
+	TArray<TScriptInterface<IDamageAffecter>> getDamageAffecters() const;
+
 	void Tick(float DeltaSeconds) override;
 
 	~ALostConnectionPlayerState() = default;

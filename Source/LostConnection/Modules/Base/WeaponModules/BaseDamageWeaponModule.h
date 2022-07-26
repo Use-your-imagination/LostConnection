@@ -25,7 +25,7 @@ public:
 
 	virtual bool applyCondition(TObjectPtr<AActor> caller) const override;
 
-	virtual bool affectCondition(const TObjectPtr<AActor>& affectedActor) const override;
+	virtual bool affectCondition(const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver) const override;
 
 	void affect(FDamageStructure& damage) override;
 

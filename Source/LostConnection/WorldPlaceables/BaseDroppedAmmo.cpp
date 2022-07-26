@@ -72,6 +72,8 @@ ABaseDroppedAmmo::ABaseDroppedAmmo() :
 
 	collisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 
+	collisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
 	collisionBox->SetSimulatePhysics(true);
 
 	collisionBox->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);

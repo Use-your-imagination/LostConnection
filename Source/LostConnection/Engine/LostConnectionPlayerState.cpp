@@ -79,14 +79,13 @@ void ALostConnectionPlayerState::onDamageAffecterChange(EDamageAffecterType type
 	TArray<TScriptInterface<IDamageAffecter>>& damageAffecters = (type == EDamageAffecterType::increaser) ?
 		damageIncreasers :
 		damageDecreasers;
-	TObjectPtr<ABaseCharacter> character = GetOwningController()->GetPawn<ABaseCharacter>();
-	auto getAffectersFromModules = [&damageAffecters, type, character](const TArray<TObjectPtr<UInventoryCell>>& cells)
+	auto getAffectersFromModules = [&damageAffecters, type](const TArray<TObjectPtr<UInventoryCell>>& cells)
 	{
 		for (const auto& module : cells)
 		{
 			if (TScriptInterface<IDamageAffecter> affecter = Cast<IDamageAffecter>(module->getItem()))
 			{
-				if (affecter->getDamageAffecterType() == type && affecter->affectCondition(character))
+				if (affecter->getDamageAffecterType() == type)
 				{
 					damageAffecters.Add(affecter);
 				}
@@ -96,13 +95,13 @@ void ALostConnectionPlayerState::onDamageAffecterChange(EDamageAffecterType type
 
 	damageAffecters.Empty();
 
-	if (character)
+	if (TObjectPtr<ABaseCharacter> character = GetOwningController()->GetPawn<ABaseCharacter>())
 	{
 		for (const auto& status : character->getStatuses())
 		{
 			if (TScriptInterface<IDamageAffecter> affecter = status.Get())
 			{
-				if (affecter->getDamageAffecterType() == type && affecter->affectCondition(character))
+				if (affecter->getDamageAffecterType() == type)
 				{
 					damageAffecters.Add(affecter);
 				}
@@ -436,6 +435,27 @@ int32 ALostConnectionPlayerState::getLootPoints() const
 TArray<TObjectPtr<UEscapableWidget>>& ALostConnectionPlayerState::getEscapableWidgets()
 {
 	return escapableWidgets;
+}
+
+const TArray<TScriptInterface<IDamageAffecter>>& ALostConnectionPlayerState::getDamageIncreasers() const
+{
+	return damageIncreasers;
+}
+
+const TArray<TScriptInterface<IDamageAffecter>>& ALostConnectionPlayerState::getDamageDecreasers() const
+{
+	return damageDecreasers;
+}
+
+TArray<TScriptInterface<IDamageAffecter>> ALostConnectionPlayerState::getDamageAffecters() const
+{
+	TArray<TScriptInterface<IDamageAffecter>> result;
+
+	result.Append(damageIncreasers);
+
+	result.Append(damageDecreasers);
+
+	return result;
 }
 
 void ALostConnectionPlayerState::Tick(float DeltaSeconds)

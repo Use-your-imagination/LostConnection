@@ -12,12 +12,15 @@ FDamageStructure::FDamageStructure() :
 
 }
 
-FDamageStructure::FDamageStructure(const FDamageStructure& base, const TArray<TObjectPtr<UNetworkObject>>& affecters) :
+FDamageStructure::FDamageStructure(const FDamageStructure& base, const TArray<TScriptInterface<IDamageAffecter>>& affecters, const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver) :
 	FDamageStructure(base)
 {
-	for (const TObjectPtr<UNetworkObject>& affecter : affecters)
+	for (const TScriptInterface<IDamageAffecter>& affecter : affecters)
 	{
-		Cast<IDamageAffecter>(affecter)->affect(*this);
+		if (affecter && affecter->affectCondition(inflictor, receiver))
+		{
+			affecter->affect(*this);
+		}
 	}
 }
 

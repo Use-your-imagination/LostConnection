@@ -19,9 +19,6 @@ protected:
 	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	FDamageStructure damage;
 
-	UPROPERTY(Category = Affecters, Replicated, BlueprintReadOnly, Meta = (MustImplement = DamageAffecter))
-	TArray<TObjectPtr<UNetworkObject>> damageAffecters;
-
 	UPROPERTY()
 	TObjectPtr<AController> damageInstigator;
 
@@ -34,9 +31,7 @@ public:
 	UFUNCTION(Server, Reliable)
 	void setDamageInstigator(AController* newDamageInstigator);
 
-	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
-
-	float calculateTotalDamage() const override;
+	float calculateTotalDamage(const TScriptInterface<class IDamageReceiver>& receiver = nullptr) const override;
 
 	FDamageStructure& getDamage() override;
 

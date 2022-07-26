@@ -5,21 +5,30 @@
 #include "Algo/Accumulate.h"
 
 #include "AssetLoading/LostConnectionAssetManager.h"
-#include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "Interfaces/Gameplay/Descriptions/DamageAffecter.h"
 
-float UFormulaLibrary::standardFormula(float base, float added, const TArray<float>& increaseCoefficients, const TArray<float>& moreCoefficients, float additional)
+float UFormulaLibrary::standardFormulaArguments(float base, float added, const TArray<float>& increaseCoefficients, const TArray<float>& moreCoefficients, float additional)
 {
-	return (base + added) *
+	static float resistHardcap = ULostConnectionAssetManager::get().getDefaults().getResistHardcap();
+	float damage = (base + added) *
 		Algo::Accumulate(increaseCoefficients, 1.0f) *
 		Algo::Accumulate(moreCoefficients, 1.0f, [](float currentValue, float nextValue) { return currentValue * (1.0f + nextValue); }) +
 		additional;
+
+	// TODO: resist
+	// return FMath::Max(damage * resistHardcap, damage * resist);
+
+	return damage;
 }
 
-float UFormulaLibrary::calculateDamageAfterResist(float base, float added, const TArray<float>& increaseCoefficients, const TArray<float>& moreCoefficients, float additional, const TScriptInterface<IDamageInflictor>& inflictor)
+float UFormulaLibrary::standardFormulaDamage(const FDamageStructure& damage)
 {
-	static float resistHardcap = ULostConnectionAssetManager::get().getDefaults().getResistHardcap();
-	float resist = UFormulaLibrary::standardFormula(base, added, increaseCoefficients, moreCoefficients, additional);
-	float damage = inflictor->calculateTotalDamage();
-
-	return FMath::Max(damage * resistHardcap, damage * resist);
+	return UFormulaLibrary::standardFormulaArguments
+	(
+		damage.baseDamage,
+		damage.addedDamage,
+		damage.increaseDamageCoefficients,
+		damage.moreDamageCoefficients,
+		damage.additionalDamage
+	);
 }

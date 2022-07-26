@@ -7,6 +7,7 @@
 #include "UObject/Interface.h"
 
 #include "Base/DamageInflictor.h"
+#include "Base/DamageReceiver.h"
 
 #include "DamageAffecter.generated.h"
 
@@ -30,10 +31,7 @@ class LOSTCONNECTION_API IDamageAffecter
 public:
 	IDamageAffecter() = default;
 
-	/**
-	* @param affectedActor Can be nullptr
-	*/
-	virtual bool affectCondition(const TObjectPtr<AActor>& affectedActor) const = 0;
+	virtual bool affectCondition(const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver) const = 0;
 
 	virtual void affect(FDamageStructure& damage) = 0;
 
