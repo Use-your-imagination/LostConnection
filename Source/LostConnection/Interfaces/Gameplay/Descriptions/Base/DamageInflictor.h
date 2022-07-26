@@ -15,6 +15,9 @@ struct LOSTCONNECTION_API FDamageStructure
 {
 	GENERATED_BODY()
 
+private:
+	void affect(const TArray<TScriptInterface<class IDamageAffecter>>& affecters, const TScriptInterface<class IDamageInflictor>& inflictor, const TScriptInterface<class IDamageReceiver>& receiver);
+
 public:
 	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, BlueprintReadOnly)
 	float baseDamage;
@@ -35,6 +38,8 @@ public:
 	FDamageStructure();
 
 	FDamageStructure(const FDamageStructure& base, const TArray<TScriptInterface<class IDamageAffecter>>& affecters, const TScriptInterface<class IDamageInflictor>& inflictor, const TScriptInterface<class IDamageReceiver>& receiver);
+
+	FDamageStructure(float baseDamage, const TArray<TScriptInterface<class IDamageAffecter>>& affecters, const TScriptInterface<class IDamageInflictor>& inflictor, const TScriptInterface<class IDamageReceiver>& receiver);
 
 	FDamageStructure(const FDamageStructure& other);
 

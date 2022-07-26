@@ -19,16 +19,30 @@ void UDamageInflictorUtility::setDamageInstigator_Implementation(AController* ne
 
 float UDamageInflictorUtility::calculateTotalDamage(const TScriptInterface<IDamageReceiver>& receiver) const
 {
-	TArray<TScriptInterface<IDamageAffecter>> affecters;
+	TArray<TScriptInterface<IDamageAffecter>> inflictorAffecters;
+	TArray<TScriptInterface<IDamageAffecter>> receiverAffecters;
+	TScriptInterface<IDamageInflictor> infictor = const_cast<UDamageInflictorUtility*>(this);
 
 	if (TObjectPtr<ALostConnectionPlayerState> playerState = damageInstigator->GetPlayerState<ALostConnectionPlayerState>())
 	{
-		affecters = playerState->getDamageAffecters();
+		inflictorAffecters = playerState->getAttackAffecters();
 	}
 
-	FDamageStructure totalDamage(damage, affecters, const_cast<UDamageInflictorUtility*>(this), receiver);
+	if (TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(Cast<APawn>(receiver)))
+	{
+		receiverAffecters = playerState->getDefenceAffecters();
+	}
 
-	return UFormulaLibrary::standardFormulaDamage(totalDamage);
+	return UFormulaLibrary::standardFormulaDamage
+	(
+		FDamageStructure
+		(
+			UFormulaLibrary::standardFormulaDamage(FDamageStructure(damage, inflictorAffecters, infictor, receiver)), // damage before resists
+			receiverAffecters,
+			infictor,
+			receiver
+		)
+	);
 }
 
 FDamageStructure& UDamageInflictorUtility::getDamage()

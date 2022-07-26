@@ -54,8 +54,8 @@ protected:
 	UPROPERTY(Category = Respawn, Instanced, EditDefaultsOnly, Replicated, BlueprintReadOnly)
 	TObjectPtr<UCooldownableUtility> respawnCooldown;
 
-	TArray<TScriptInterface<IDamageAffecter>> damageIncreasers;
-	TArray<TScriptInterface<IDamageAffecter>> damageDecreasers;
+	TArray<TScriptInterface<IDamageAffecter>> attackAffecters;
+	TArray<TScriptInterface<IDamageAffecter>> defenceAffecters;
 	TSubclassOf<class ABaseDrone> droneClass;
 	bool isInitialized;
 
@@ -174,11 +174,9 @@ public:
 
 	TArray<TObjectPtr<UEscapableWidget>>& getEscapableWidgets();
 
-	const TArray<TScriptInterface<IDamageAffecter>>& getDamageIncreasers() const;
+	const TArray<TScriptInterface<IDamageAffecter>>& getAttackAffecters() const;
 
-	const TArray<TScriptInterface<IDamageAffecter>>& getDamageDecreasers() const;
-
-	TArray<TScriptInterface<IDamageAffecter>> getDamageAffecters() const;
+	const TArray<TScriptInterface<IDamageAffecter>>& getDefenceAffecters() const;
 
 	void Tick(float DeltaSeconds) override;
 

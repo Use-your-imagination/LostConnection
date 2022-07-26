@@ -4,6 +4,17 @@
 
 #include "Interfaces/Gameplay/Descriptions/DamageAffecter.h"
 
+void FDamageStructure::affect(const TArray<TScriptInterface<IDamageAffecter>>& affecters, const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver)
+{
+	for (const TScriptInterface<IDamageAffecter>& affecter : affecters)
+	{
+		if (affecter && affecter->affectCondition(inflictor, receiver))
+		{
+			affecter->affect(*this);
+		}
+	}
+}
+
 FDamageStructure::FDamageStructure() :
 	baseDamage(0.0f),
 	addedDamage(0.0f),
@@ -15,13 +26,13 @@ FDamageStructure::FDamageStructure() :
 FDamageStructure::FDamageStructure(const FDamageStructure& base, const TArray<TScriptInterface<IDamageAffecter>>& affecters, const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver) :
 	FDamageStructure(base)
 {
-	for (const TScriptInterface<IDamageAffecter>& affecter : affecters)
-	{
-		if (affecter && affecter->affectCondition(inflictor, receiver))
-		{
-			affecter->affect(*this);
-		}
-	}
+	this->affect(affecters, inflictor, receiver);
+}
+
+FDamageStructure::FDamageStructure(float baseDamage, const TArray<TScriptInterface<IDamageAffecter>>& affecters, const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver) :
+	baseDamage(baseDamage)
+{
+	this->affect(affecters, inflictor, receiver);
 }
 
 FDamageStructure::FDamageStructure(const FDamageStructure& other)

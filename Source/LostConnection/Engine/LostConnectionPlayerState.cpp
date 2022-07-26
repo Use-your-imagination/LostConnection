@@ -77,8 +77,8 @@ void ALostConnectionPlayerState::onDamageAffecterChange(EDamageAffecterType type
 	}
 
 	TArray<TScriptInterface<IDamageAffecter>>& damageAffecters = (type == EDamageAffecterType::increaser) ?
-		damageIncreasers :
-		damageDecreasers;
+		attackAffecters :
+		defenceAffecters;
 	auto getAffectersFromModules = [&damageAffecters, type](const TArray<TObjectPtr<UInventoryCell>>& cells)
 	{
 		for (const auto& module : cells)
@@ -437,25 +437,14 @@ TArray<TObjectPtr<UEscapableWidget>>& ALostConnectionPlayerState::getEscapableWi
 	return escapableWidgets;
 }
 
-const TArray<TScriptInterface<IDamageAffecter>>& ALostConnectionPlayerState::getDamageIncreasers() const
+const TArray<TScriptInterface<IDamageAffecter>>& ALostConnectionPlayerState::getAttackAffecters() const
 {
-	return damageIncreasers;
+	return attackAffecters;
 }
 
-const TArray<TScriptInterface<IDamageAffecter>>& ALostConnectionPlayerState::getDamageDecreasers() const
+const TArray<TScriptInterface<IDamageAffecter>>& ALostConnectionPlayerState::getDefenceAffecters() const
 {
-	return damageDecreasers;
-}
-
-TArray<TScriptInterface<IDamageAffecter>> ALostConnectionPlayerState::getDamageAffecters() const
-{
-	TArray<TScriptInterface<IDamageAffecter>> result;
-
-	result.Append(damageIncreasers);
-
-	result.Append(damageDecreasers);
-
-	return result;
+	return defenceAffecters;
 }
 
 void ALostConnectionPlayerState::Tick(float DeltaSeconds)
