@@ -69,9 +69,9 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 		if (ailmentInflictorUtility->calculateTotalDamage() > 0.0f)
 		{
-			TObjectPtr<UNiagaraComponent> onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation
 			(
-				GetWorld(),
+				this,
 				onHitAsset,
 				GetActorLocation(),
 				GetActorRotation(),
@@ -79,9 +79,7 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 				true,
 				true,
 				ENCPoolMethod::AutoRelease
-			);
-
-			onHit->SetNiagaraVariableBool("DeathState", false);
+			)->SetNiagaraVariableBool("DeathState", false);
 		}
 	}
 	else if (SweepResult.PhysMaterial.IsValid() && UPhysicalMaterial::DetermineSurfaceType(SweepResult.PhysMaterial.Get()) != EPhysicalSurface::SurfaceType_Default)
@@ -116,7 +114,7 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 		tracer->Deactivate();
 
-		TObjectPtr<UNiagaraComponent> onHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation
 		(
 			GetWorld(),
 			onHitAsset,
@@ -126,9 +124,7 @@ void AAmmo::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 			true,
 			true,
 			ENCPoolMethod::AutoRelease
-		);
-
-		onHit->SetNiagaraVariableBool("DeathState", true);
+		)->SetNiagaraVariableBool("DeathState", true);
 
 		Destroy();
 	}

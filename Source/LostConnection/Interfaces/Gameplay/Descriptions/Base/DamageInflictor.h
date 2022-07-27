@@ -15,6 +15,9 @@ struct LOSTCONNECTION_API FDamageStructure
 {
 	GENERATED_BODY()
 
+private:
+	void affect(const TArray<TScriptInterface<class IDamageAffecter>>& affecters, const TScriptInterface<class IDamageInflictor>& inflictor, const TScriptInterface<class IDamageReceiver>& receiver);
+
 public:
 	UPROPERTY(Category = DamageInflictor, EditDefaultsOnly, BlueprintReadOnly)
 	float baseDamage;
@@ -34,14 +37,15 @@ public:
 public:
 	FDamageStructure();
 
-	/**
-	* @param affecters Must be Array<IDamageAffecter*>
-	*/
-	FDamageStructure(const FDamageStructure& base, const TArray<TObjectPtr<class UNetworkObject>>& affecters);
+	FDamageStructure(const FDamageStructure& base, const TArray<TScriptInterface<class IDamageAffecter>>& affecters, const TScriptInterface<class IDamageInflictor>& inflictor, const TScriptInterface<class IDamageReceiver>& receiver);
+
+	FDamageStructure(float baseDamage, const TArray<TScriptInterface<class IDamageAffecter>>& affecters, const TScriptInterface<class IDamageInflictor>& inflictor, const TScriptInterface<class IDamageReceiver>& receiver);
 
 	FDamageStructure(const FDamageStructure& other);
 
 	FDamageStructure& operator = (const FDamageStructure& other);
+
+	~FDamageStructure() = default;
 };
 
 UINTERFACE(BlueprintType)
@@ -57,7 +61,10 @@ class LOSTCONNECTION_API IDamageInflictor
 public:
 	IDamageInflictor() = default;
 
-	virtual float calculateTotalDamage() const = 0;
+	/**
+	* @param receiver Can be nullptr
+	*/
+	virtual float calculateTotalDamage(const TScriptInterface<class IDamageReceiver>& receiver = nullptr) const = 0;
 
 	virtual const TObjectPtr<AController>& getDamageInstigator() const = 0;
 

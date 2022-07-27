@@ -790,6 +790,11 @@ void ABaseCharacter::spawnStatusVFX_Implementation(UNiagaraSystem* statusVFX, co
 void ABaseCharacter::addStatus(TObjectPtr<UBaseStatus> status)
 {
 	statuses.Add(status);
+
+	if (TScriptInterface<IDamageAffecter> affecter = status.Get())
+	{
+		Utility::getPlayerState(this)->onDamageAffecterChange(affecter->getDamageAffecterType());
+	}
 }
 
 void ABaseCharacter::applySwarmAilment(const TObjectPtr<USwarmAilment>& swarm)

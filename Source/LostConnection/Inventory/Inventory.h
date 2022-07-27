@@ -96,6 +96,10 @@ private:
 	UFUNCTION(NetMulticast, Reliable)
 	void updateInventoryWidget();
 
+	void updateDamageAffecters(TObjectPtr<UInventoryCell> cell);
+
+	void updateDamageAffecters();
+
 private:
 	static bool containsItem(TObjectPtr<UInventoryCell> itemToFind, const TArray<TObjectPtr<UInventoryCell>>& cells);
 

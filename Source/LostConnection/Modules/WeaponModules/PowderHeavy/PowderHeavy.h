@@ -21,5 +21,7 @@ public:
 
 	bool applyCondition(TObjectPtr<AActor> caller) const override;
 
+	EDamageAffecterType getDamageAffecterType() const override;
+
 	~UPowderHeavy() = default;
 };

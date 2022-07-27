@@ -4,6 +4,7 @@
 
 #include "Interfaces/Holders/AilmentInflictorHolder.h"
 #include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
+#include "Utility/Utility.h"
 
 bool UBaseDamageWeaponModule::applyCondition(TObjectPtr<AActor> caller) const
 {
@@ -17,6 +18,11 @@ bool UBaseDamageWeaponModule::applyCondition(TObjectPtr<AActor> caller) const
 	}
 
 	return false;
+}
+
+bool UBaseDamageWeaponModule::affectCondition(const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver) const
+{
+	return this->applyCondition(Cast<AActor>(receiver));
 }
 
 void UBaseDamageWeaponModule::affect(FDamageStructure& damage)

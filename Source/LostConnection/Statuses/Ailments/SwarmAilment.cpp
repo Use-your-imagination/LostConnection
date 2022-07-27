@@ -59,15 +59,14 @@ float USwarmAilment::getThreshold() const
 
 void USwarmAilment::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	if (!target->_getUObject()->Implements<UAilmentReceiver>())
+	TScriptInterface<IAilmentReceiver> ailmentReceiver = Cast<IAilmentReceiver>(target);
+
+	if (!ailmentReceiver)
 	{
 		return;
 	}
 
-	const TArray<TObjectPtr<UBaseStatus>>& statuses = target->getStatuses();
-	TScriptInterface<IAilmentReceiver> ailmentReceiver = Cast<IAilmentReceiver>(target);
-
-	for (TObjectPtr<UBaseStatus> status : statuses)
+	for (const TObjectPtr<UBaseStatus>& status : target->getStatuses())
 	{
 		if (TObjectPtr<USwarmAilment> swarm = Cast<USwarmAilment>(status))
 		{

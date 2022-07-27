@@ -174,6 +174,26 @@ void AInventory::updateInventoryWidget_Implementation()
 	this->onInventoryUpdate();
 }
 
+void AInventory::updateDamageAffecters(TObjectPtr<UInventoryCell> cell)
+{
+	if (cell.IsNull())
+	{
+		return;
+	}
+
+	if (TScriptInterface<IDamageAffecter> affecter = Cast<IDamageAffecter>(cell->getItem()))
+	{
+		playerState->onDamageAffecterChange(affecter->getDamageAffecterType());
+	}
+}
+
+void AInventory::updateDamageAffecters()
+{
+	playerState->onDamageAffecterChange(EDamageAffecterType::increaser);
+
+	playerState->onDamageAffecterChange(EDamageAffecterType::decreaser);
+}
+
 bool AInventory::containsItem(TObjectPtr<UInventoryCell> itemToFind, const TArray<TObjectPtr<UInventoryCell>>& cells)
 {
 	if (itemToFind->getItem() == nullptr)
@@ -350,6 +370,8 @@ void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* mod
 	}
 
 	this->updateActivePersonalModules();
+
+	this->updateDamageAffecters(module);
 }
 
 void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule, UInventoryCell* secondModule)
@@ -409,6 +431,9 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 	}
 
 	this->updateActivePersonalModules();
+
+	this->updateDamageAffecters(firstModule);
+	this->updateDamageAffecters(secondModule);
 }
 
 void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* module)
@@ -416,6 +441,8 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 	if (!IsValid(selectedWeapon))
 	{
 		this->updateActiveWeaponModules();
+
+		this->updateDamageAffecters();
 
 		return;
 	}
@@ -451,6 +478,8 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 	}
 
 	this->updateActiveWeaponModules();
+
+	this->updateDamageAffecters(module);
 }
 
 void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon, UInventoryCell* firstModule, UInventoryCell* secondModule)
@@ -458,6 +487,8 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 	if (!IsValid(selectedWeapon))
 	{
 		this->updateActiveWeaponModules();
+
+		this->updateDamageAffecters();
 
 		return;
 	}
@@ -531,6 +562,9 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 	}
 
 	this->updateActiveWeaponModules();
+
+	this->updateDamageAffecters(firstModule);
+	this->updateDamageAffecters(secondModule);
 }
 
 void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
@@ -550,6 +584,8 @@ void AInventory::addPersonalModule_Implementation(UBasePersonalModule* module)
 	}
 
 	this->updateActivePersonalModules();
+
+	this->updateDamageAffecters(personalModuleCell);
 }
 
 void AInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
@@ -566,6 +602,8 @@ void AInventory::addWeaponModule_Implementation(UBaseWeaponModule* module)
 	}
 
 	this->updateActiveWeaponModules();
+
+	this->updateDamageAffecters(weaponModuleCell);
 }
 
 void AInventory::addUnequippedWeapon_Implementation(UBaseWeapon* weapon)

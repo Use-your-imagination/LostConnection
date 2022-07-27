@@ -36,9 +36,9 @@ bool UAilmentInflictorUtility::ReplicateSubobjects(UActorChannel* Channel, FOutB
 	return wroteSomething;
 }
 
-float UAilmentInflictorUtility::calculateTotalDamage() const
+float UAilmentInflictorUtility::calculateTotalDamage(const TScriptInterface<IDamageReceiver>& receiver) const
 {
-	return damageInflictorUtility->calculateTotalDamage();
+	return damageInflictorUtility->calculateTotalDamage(receiver);
 }
 
 FDamageStructure& UAilmentInflictorUtility::getDamage()

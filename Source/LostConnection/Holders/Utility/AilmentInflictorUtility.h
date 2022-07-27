@@ -40,7 +40,7 @@ public:
 
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
-	float calculateTotalDamage() const override;
+	float calculateTotalDamage(const TScriptInterface<class IDamageReceiver>& receiver = nullptr) const override;
 
 	UFUNCTION(Server, Reliable)
 	void setDamageType(ETypeOfDamage type) override;

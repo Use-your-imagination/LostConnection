@@ -10,8 +10,6 @@ void UDamageInflictorUtility::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UDamageInflictorUtility, damage);
-
-	DOREPLIFETIME(UDamageInflictorUtility, damageAffecters);
 }
 
 void UDamageInflictorUtility::setDamageInstigator_Implementation(AController* newDamageInstigator)
@@ -19,31 +17,31 @@ void UDamageInflictorUtility::setDamageInstigator_Implementation(AController* ne
 	damageInstigator = newDamageInstigator;
 }
 
-bool UDamageInflictorUtility::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+float UDamageInflictorUtility::calculateTotalDamage(const TScriptInterface<IDamageReceiver>& receiver) const
 {
-	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+	TArray<TScriptInterface<IDamageAffecter>> inflictorAffecters;
+	TArray<TScriptInterface<IDamageAffecter>> receiverAffecters;
+	TScriptInterface<IDamageInflictor> infictor = const_cast<UDamageInflictorUtility*>(this);
 
-	for (const auto& damageAffecter : damageAffecters)
+	if (TObjectPtr<ALostConnectionPlayerState> playerState = damageInstigator->GetPlayerState<ALostConnectionPlayerState>())
 	{
-		wroteSomething |= Channel->ReplicateSubobject(damageAffecter, *Bunch, *RepFlags);
-
-		wroteSomething |= damageAffecter->ReplicateSubobjects(Channel, Bunch, RepFlags);
+		inflictorAffecters = playerState->getAttackAffecters();
 	}
 
-	return wroteSomething;
-}
+	if (TObjectPtr<ALostConnectionPlayerState> playerState = Utility::getPlayerState(Cast<APawn>(receiver)))
+	{
+		receiverAffecters = playerState->getDefenceAffecters();
+	}
 
-float UDamageInflictorUtility::calculateTotalDamage() const
-{
-	FDamageStructure totalDamage(damage, damageAffecters);
-
-	return UFormulaLibrary::standardFormula
+	return UFormulaLibrary::standardFormulaDamage
 	(
-		totalDamage.baseDamage,
-		totalDamage.addedDamage,
-		totalDamage.increaseDamageCoefficients,
-		totalDamage.moreDamageCoefficients,
-		totalDamage.additionalDamage
+		FDamageStructure
+		(
+			UFormulaLibrary::standardFormulaDamage(FDamageStructure(damage, inflictorAffecters, infictor, receiver)), // damage before resists
+			receiverAffecters,
+			infictor,
+			receiver
+		)
 	);
 }
 

@@ -15,3 +15,8 @@ bool UOverclocking::applyCondition(TObjectPtr<AActor> caller) const
 {
 	return true;
 }
+
+EDamageAffecterType UOverclocking::getDamageAffecterType() const
+{
+	return EDamageAffecterType::increaser;
+}

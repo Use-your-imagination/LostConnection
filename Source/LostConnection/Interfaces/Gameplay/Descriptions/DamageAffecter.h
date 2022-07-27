@@ -7,10 +7,18 @@
 #include "UObject/Interface.h"
 
 #include "Base/DamageInflictor.h"
+#include "Base/DamageReceiver.h"
 
 #include "DamageAffecter.generated.h"
 
-UINTERFACE(MinimalAPI)
+enum class EDamageAffecterType : uint8
+{
+	none,
+	increaser,
+	decreaser
+};
+
+UINTERFACE(MinimalAPI, Meta = (CannotImplementInterfaceInBlueprint))
 class UDamageAffecter : public UInterface
 {
 	GENERATED_BODY()
@@ -23,5 +31,9 @@ class LOSTCONNECTION_API IDamageAffecter
 public:
 	IDamageAffecter() = default;
 
+	virtual bool affectCondition(const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver) const = 0;
+
 	virtual void affect(FDamageStructure& damage) = 0;
+
+	virtual EDamageAffecterType getDamageAffecterType() const;
 };
