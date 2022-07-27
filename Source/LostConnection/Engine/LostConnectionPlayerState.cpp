@@ -110,9 +110,9 @@ void ALostConnectionPlayerState::onDamageAffecterChange(EDamageAffecterType type
 	}
 
 	getAffectersFromModules(inventory->getPersonalEquippedModules());
+
 	getAffectersFromModules(inventory->getActivePersonalModules());
 
-	getAffectersFromModules(inventory->getWeaponModules());
 	getAffectersFromModules(inventory->getActiveWeaponModules());
 }
 

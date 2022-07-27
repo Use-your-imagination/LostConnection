@@ -37,7 +37,7 @@ public class LostConnection : ModuleRules
 
 		DynamicallyLoadedModuleNames.Add("OnlineSubsystemSteam");
 
-		if (Target.Type == TargetType.Editor)
+		if (Target.Type == TargetType.Editor && Target.Configuration != UnrealTargetConfiguration.DebugGame)
 		{
 			MinFilesUsingPrecompiledHeaderOverride = 1;
 			bUseUnity = false;

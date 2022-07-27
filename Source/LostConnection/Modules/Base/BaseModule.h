@@ -33,7 +33,7 @@ protected:
 	EModuleQuality quality;
 
 protected:
-	int32 getMultiplier() const;
+	float getMultiplier() const;
 
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
