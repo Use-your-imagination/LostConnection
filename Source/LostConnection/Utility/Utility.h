@@ -77,16 +77,31 @@ public:
 
 inline TObjectPtr<ALostConnectionGameState> Utility::getGameState(const AActor* actor)
 {
+	if (!IsValid(actor))
+	{
+		return nullptr;
+	}
+
 	return actor->GetWorld()->GetGameState<ALostConnectionGameState>();
 }
 
 inline TObjectPtr<ALostConnectionPlayerState> Utility::getPlayerState(const APawn* pawn)
 {
+	if (!IsValid(pawn))
+	{
+		return nullptr;
+	}
+
 	return pawn->GetPlayerState<ALostConnectionPlayerState>();
 }
 
 inline ALostConnectionPlayerController* Utility::getPlayerController(const APawn* pawn)
 {
+	if (!IsValid(pawn))
+	{
+		return nullptr;
+	}
+
 	return pawn->GetController<ALostConnectionPlayerController>();
 }
 

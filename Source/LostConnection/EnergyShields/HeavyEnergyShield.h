@@ -40,7 +40,7 @@ public:
 
 	float getCurrentPoolCapacity() const;
 
-	void init(class ABaseCharacter* owner) override;
+	void init(const TObjectPtr<class ABaseCharacter>& owner) override;
 
 	~UHeavyEnergyShield() = default;
 };

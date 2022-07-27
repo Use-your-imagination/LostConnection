@@ -28,7 +28,7 @@ void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 void UBaseEnergyShield::onCapacityChange()
 {
-	if (IsValid(owner))
+	if (owner)
 	{
 		owner->onHealthChange();
 	}
@@ -36,7 +36,7 @@ void UBaseEnergyShield::onCapacityChange()
 
 void UBaseEnergyShield::onCurrentCapacityChange()
 {
-	if (IsValid(owner))
+	if (owner)
 	{
 		owner->onCurrentHealthChange();
 	}
@@ -49,7 +49,7 @@ void UBaseEnergyShield::startRechargeDelay()
 	isRecharging = false;
 }
 
-void UBaseEnergyShield::init(ABaseCharacter* owner)
+void UBaseEnergyShield::init(const TObjectPtr<ABaseCharacter>& owner)
 {
 	this->owner = owner;
 
@@ -74,6 +74,8 @@ void UBaseEnergyShield::init(ABaseCharacter* owner)
 
 float UBaseEnergyShield::takeDamageFromInflictor(const TScriptInterface<IDamageInflictor>& inflictor)
 {
+	// TODO: shields damage calculation
+
 	float tem = currentCapacity - inflictor->calculateTotalDamage();
 	float remainingDamage = 0.0f;
 
