@@ -162,12 +162,17 @@ protected:
 	UPROPERTY(Category = Instigator, Replicated, BlueprintReadOnly)
 	TObjectPtr<AController> damageInstigator;
 
+	UPROPERTY(Replicated)
+	bool isWeaponEquipped;
+
 private:
 	UFUNCTION(Category = Weapons, BlueprintCallable, Meta = (AllowPrivateAccess))
 	float calculateSpreadDistance() const;
 
 protected:
 	virtual const FText& getItemDescription() const final override;
+
+	virtual bool& getIsEquipped() final override;
 
 public:
 	UBaseWeapon();

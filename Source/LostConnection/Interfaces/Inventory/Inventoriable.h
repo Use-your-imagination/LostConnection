@@ -26,8 +26,14 @@ protected:
 
 	virtual TArray<FFormatArgumentValue> getFormatArguments() const;
 
+	virtual bool& getIsEquipped() = 0;
+
 public:
 	IInventoriable() = default;
+
+	void equip();
+
+	void unequip();
 
 	UFUNCTION(Category = Inventory, BlueprintCallable)
 	virtual const FText& getItemName() const = 0;
@@ -40,4 +46,7 @@ public:
 
 	UFUNCTION(Category = Inventory, BlueprintCallable)
 	virtual const FLinearColor& getBorderColor() const = 0;
+
+	UFUNCTION(Category = Inventory, BlueprintCallable)
+	virtual bool isEquipped() const;
 };

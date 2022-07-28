@@ -7,8 +7,6 @@ void UInventoryCell::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UInventoryCell, item);
-
-	DOREPLIFETIME(UInventoryCell, isEquipped);
 }
 
 void UInventoryCell::setItem(IInventoriable* item)
@@ -18,12 +16,18 @@ void UInventoryCell::setItem(IInventoriable* item)
 
 void UInventoryCell::equip()
 {
-	isEquipped = true;
+	if (TScriptInterface<IInventoriable> inventoriable = item.Get())
+	{
+		inventoriable->equip();
+	}
 }
 
 void UInventoryCell::unequip()
 {
-	isEquipped = false;
+	if (TScriptInterface<IInventoriable> inventoriable = item.Get())
+	{
+		inventoriable->unequip();
+	}
 }
 
 bool UInventoryCell::isEmpty() const
@@ -38,14 +42,19 @@ TScriptInterface<IInventoriable> UInventoryCell::getItem() const
 
 bool UInventoryCell::getIsEquipped() const
 {
-	return isEquipped;
+	if (TScriptInterface<IInventoriable> inventoriable = item.Get())
+	{
+		return inventoriable->isEquipped();
+	}
+
+	return false;
 }
 
 bool UInventoryCell::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-	if (IsValid(item))
+	if (item)
 	{
 		wroteSomething |= Channel->ReplicateSubobject(item, *Bunch, *RepFlags);
 

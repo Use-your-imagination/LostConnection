@@ -32,11 +32,18 @@ void UBaseModule::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UBaseModule, quality);
+
+	DOREPLIFETIME(UBaseModule, isModuleEquipped);
 }
 
 const FText& UBaseModule::getItemDescription() const
 {
 	return moduleDescription;
+}
+
+bool& UBaseModule::getIsEquipped()
+{
+	return isModuleEquipped;
 }
 
 bool UBaseModule::applyCondition(TObjectPtr<AActor> caller) const

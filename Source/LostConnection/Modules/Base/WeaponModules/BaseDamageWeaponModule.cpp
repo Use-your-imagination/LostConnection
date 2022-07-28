@@ -27,7 +27,7 @@ bool UBaseDamageWeaponModule::affectCondition(const TScriptInterface<IDamageInfl
 
 void UBaseDamageWeaponModule::affect(FDamageStructure& damage)
 {
-	float multiplier = this->getMultiplier();
+	float multiplier = this->getMultiplier() * (isModuleEquipped ? 1.0f : 0.5f);
 	TArray<float> increase = moduleDamage.increaseDamageCoefficients;
 	TArray<float> more = moduleDamage.moreDamageCoefficients;
 	auto applyMultiplier = [multiplier](TArray<float>& coefficients)

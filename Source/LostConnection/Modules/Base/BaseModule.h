@@ -32,6 +32,9 @@ protected:
 	UPROPERTY(Category = Stats, BlueprintReadOnly, Replicated)
 	EModuleQuality quality;
 
+	UPROPERTY(Replicated)
+	bool isModuleEquipped;
+
 protected:
 	float getMultiplier() const;
 
@@ -39,6 +42,8 @@ protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual const FText& getItemDescription() const final override;
+
+	virtual bool& getIsEquipped() final override;
 
 public:
 	UBaseModule() = default;
