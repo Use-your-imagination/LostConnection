@@ -322,13 +322,13 @@ void AInventory::updateActiveWeaponModules()
 	{
 		const FText& name = cell->getItem()->getItemName();
 
-		for (TObjectPtr<UInventoryCell>& uneqippedCell : weapon->getWeaponModules())
+		for (TObjectPtr<UInventoryCell>& weaponModuleCell : weapon->getWeaponModules())
 		{
-			TScriptInterface<IInventoriable> currentWeaponModule = uneqippedCell->getItem();
+			TScriptInterface<IInventoriable> currentWeaponModule = weaponModuleCell->getItem();
 
-			if (currentWeaponModule && (uneqippedCell != cell) && currentWeaponModule->getItemName().EqualTo(name, ETextComparisonLevel::Type::Quinary))
+			if (currentWeaponModule && (weaponModuleCell != cell) && currentWeaponModule->getItemName().EqualTo(name, ETextComparisonLevel::Type::Quinary))
 			{
-				activeWeaponModules.Add(uneqippedCell);
+				activeWeaponModules.Add(weaponModuleCell);
 			}
 		}
 	}
