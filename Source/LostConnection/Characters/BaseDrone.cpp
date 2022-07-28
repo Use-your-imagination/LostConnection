@@ -466,7 +466,7 @@ void ABaseDrone::BeginPlay()
 				{
 					this->restoreEnergy(energyRestorationPerSecond);
 				}
-			}, 1.0f);
+			}, 1.0f / energyUpdatesPerSecond);
 
 		passiveAbility->initAbility(controller);
 		firstAbility->initAbility(controller);
@@ -802,7 +802,8 @@ ABaseDrone::ABaseDrone() :
 	energyEfficiency(100.0f),
 	AOE(100.0f),
 	castPoint(100.0f),
-	isFullyDestruction(true)
+	isFullyDestruction(true),
+	energyUpdatesPerSecond(5)
 {
 	static ConstructorHelpers::FClassFinder<UBaseGrappleHandler> grappleHandlerFinder(TEXT("/Game/Grapple/BP_BaseGrappleHandler"));
 

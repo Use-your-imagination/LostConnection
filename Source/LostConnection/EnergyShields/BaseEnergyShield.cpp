@@ -3,6 +3,7 @@
 #include "BaseEnergyShield.h"
 
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "Interfaces/Gameplay/Descriptions/Base/DamageReceiver.h"
 #include "Characters/BaseCharacter.h"
 
 void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -72,11 +73,9 @@ void UBaseEnergyShield::init(const TObjectPtr<ABaseCharacter>& owner)
 		}, 1.0f / rechargesPerSecond);
 }
 
-float UBaseEnergyShield::takeDamageFromInflictor(const TScriptInterface<IDamageInflictor>& inflictor)
+float UBaseEnergyShield::takeDamageFromInflictor(const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver)
 {
-	// TODO: shields damage calculation
-
-	float tem = currentCapacity - inflictor->calculateTotalDamage();
+	float tem = currentCapacity - inflictor->calculateTotalDamage(receiver);
 	float remainingDamage = 0.0f;
 
 	if (tem <= 0.0f)

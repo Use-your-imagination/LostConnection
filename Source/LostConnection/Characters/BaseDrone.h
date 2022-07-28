@@ -115,7 +115,8 @@ protected:
 	UPROPERTY(Category = Grapple, EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UBaseGrappleHandler> grappleHandlerClass;
 
-	TWeakObjectPtr<ABaseCharacter> lastHealthBarTraceTarget;
+	UPROPERTY(Category = "Visual|Caster Stats", EditDefaultsOnly, BlueprintReadOnly)
+	int32 energyUpdatesPerSecond;
 
 	UPROPERTY()
 	TArray<TScriptInterface<IOnCastEvent>> castEvents;
@@ -125,6 +126,8 @@ protected:
 
 	UPROPERTY()
 	TArray<TScriptInterface<IOnWaveEndEvent>> waveEndEvents;
+
+	TWeakObjectPtr<ABaseCharacter> lastHealthBarTraceTarget;
 
 #pragma region BlueprintFunctionLibrary
 	UPROPERTY(Category = Inputs, Replicated, BlueprintReadWrite)

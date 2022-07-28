@@ -740,7 +740,7 @@ void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterfa
 	this->notifyTakeDamageEvents(this);
 
 	const TObjectPtr<AController>& instigator = inflictor->getDamageInstigator();
-	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor);
+	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor, this);
 
 	if (tem < 0.0f)
 	{
@@ -753,10 +753,10 @@ void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterfa
 
 	if (TObjectPtr<AController> controller = GetController())
 	{
-		controller->TakeDamage(inflictor->calculateTotalDamage(), FDamageEvent(), instigator, instigator->GetPawn());
+		controller->TakeDamage(inflictor->calculateTotalDamage(this), FDamageEvent(), instigator, instigator->GetPawn());
 	}
 
-	TakeDamage(inflictor->calculateTotalDamage(), FDamageEvent(), instigator, instigator->GetPawn());
+	TakeDamage(inflictor->calculateTotalDamage(this), FDamageEvent(), instigator, instigator->GetPawn());
 }
 
 void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& hit)
