@@ -48,7 +48,7 @@ private:
 public:
 	UArcingCurrentAilment();
 
-	void increaseDamageConversion(const TScriptInterface<IDamageInflictor> inflictor);
+	void increaseDamageConversion();
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 

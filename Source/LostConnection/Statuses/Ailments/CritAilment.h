@@ -6,14 +6,12 @@
 
 #include "Statuses/BaseImpactStatus.h"
 #include "Interfaces/Gameplay/Statuses/Ailment.h"
-#include "Interfaces/Holders/DamageInflictorHolder.h"
 
 #include "CritAilment.generated.h"
 
 UCLASS()
 class LOSTCONNECTION_API UCritAilment : 
 	public UBaseImpactStatus,
-	public IDamageInflictorHolder,
 	public IAilment
 {
 	GENERATED_BODY()
@@ -31,26 +29,17 @@ private:
 	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
 	float critMultiplier;
 
-	UPROPERTY(Category = Crit, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	TObjectPtr<UDamageInflictorUtility> damageInflictorUtility;
-
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
-	void initDamage();
-
 public:
-	UCritAilment();
+	UCritAilment() = default;
 
 	float getCritMultiplier() const;
 
 	void applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
 
 	bool applyEffect(const TScriptInterface<class IStatusReceiver>& target, const FHitResult& hit) override;
-
-	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
-
-	UDamageInflictorUtility* getDamageInflictorUtility() const override;
 
 	ETypeOfDamage getAilmentDamageType() const override;
 

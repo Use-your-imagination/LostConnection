@@ -29,7 +29,7 @@ private:
 	float additionalIrradiationMultiplier;
 
 	UPROPERTY(Category = Irradiation, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	UDamageInflictorUtility* damageInflictorUtility;
+	TObjectPtr<UDamageInflictorUtility> damageInflictorUtility;
 
 private:
 	FString getStatusName() const override;
