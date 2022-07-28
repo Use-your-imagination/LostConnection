@@ -19,7 +19,7 @@ protected:
 public:
 	UOverclocking() = default;
 
-	bool applyCondition(TObjectPtr<AActor> caller) const override;
+	bool applyCondition(const TObjectPtr<AActor>& caller) const override;
 
 	EDamageAffecterType getDamageAffecterType() const override;
 

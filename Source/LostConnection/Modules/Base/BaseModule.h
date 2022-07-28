@@ -48,7 +48,7 @@ protected:
 public:
 	UBaseModule() = default;
 
-	virtual bool applyCondition(TObjectPtr<AActor> caller) const;
+	virtual bool applyCondition(const TObjectPtr<AActor>& caller) const;
 
 	void setQuality(EModuleQuality quality);
 

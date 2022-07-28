@@ -6,7 +6,7 @@
 #include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
 #include "Utility/Utility.h"
 
-bool UBaseDamagePersonalModule::applyCondition(TObjectPtr<AActor> caller) const
+bool UBaseDamagePersonalModule::applyCondition(const TObjectPtr<AActor>& caller) const
 {
 	if (IAilmentInflictorHolder* holder = Cast<IAilmentInflictorHolder>(caller))
 	{

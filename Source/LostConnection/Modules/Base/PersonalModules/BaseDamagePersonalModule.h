@@ -23,7 +23,7 @@ protected:
 public:
 	UBaseDamagePersonalModule() = default;
 
-	virtual bool applyCondition(TObjectPtr<AActor> caller) const override;
+	virtual bool applyCondition(const TObjectPtr<AActor>& caller) const override;
 
 	virtual bool affectCondition(const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver) const override;
 

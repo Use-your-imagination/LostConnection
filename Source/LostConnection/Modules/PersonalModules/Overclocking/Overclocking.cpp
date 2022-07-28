@@ -11,7 +11,7 @@ TArray<FFormatArgumentValue> UOverclocking::getFormatArguments() const
 	return { Utility::toPercent(Algo::Accumulate(moduleDamage.increaseDamageCoefficients, 0.0f)) };
 }
 
-bool UOverclocking::applyCondition(TObjectPtr<AActor> caller) const
+bool UOverclocking::applyCondition(const TObjectPtr<AActor>& caller) const
 {
 	return true;
 }

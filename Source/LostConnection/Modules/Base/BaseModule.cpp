@@ -46,7 +46,7 @@ bool& UBaseModule::getIsEquipped()
 	return isModuleEquipped;
 }
 
-bool UBaseModule::applyCondition(TObjectPtr<AActor> caller) const
+bool UBaseModule::applyCondition(const TObjectPtr<AActor>& caller) const
 {
 	return true;
 }
