@@ -45,7 +45,7 @@ protected:
 
 	TScriptInterface<class IStatusInflictor> inflictor;
 	TScriptInterface<class IStatusReceiver> target;
-	TWeakPtr<FDamageStructure> damage;
+	FDamageStructure* damage;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)
