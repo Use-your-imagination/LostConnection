@@ -47,7 +47,7 @@ bool UCritAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, 
 
 	if (!damage.IsValid())
 	{
-		return;
+		return false;
 	}
 
 	for (const TObjectPtr<UBaseStatus>& status : target->getStatuses())

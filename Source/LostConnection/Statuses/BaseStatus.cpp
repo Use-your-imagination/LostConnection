@@ -37,7 +37,7 @@ int32 UBaseStatus::calculateUnderStatusEffect() const
 
 void UBaseStatus::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
 {
-	this->inlifctor = inflictor;
+	this->inflictor = inflictor;
 	this->target = target;
 
 	damage = &inflictor->getDamage();
