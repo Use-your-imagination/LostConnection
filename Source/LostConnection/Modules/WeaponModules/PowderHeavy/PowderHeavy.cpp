@@ -8,7 +8,7 @@
 
 TArray<FFormatArgumentValue> UPowderHeavy::getFormatArguments() const
 {
-	return { Utility::toPercent(Algo::Accumulate(moduleDamage.increaseDamageCoefficients, 0.0f)) };
+	return { Utility::toPercent(Algo::Accumulate(moduleDamage.increaseDamageCoefficients, 0.0f)) * this->getMultiplier() };
 }
 
 bool UPowderHeavy::applyCondition(const TObjectPtr<AActor>& caller) const

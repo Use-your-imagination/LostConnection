@@ -58,7 +58,7 @@ bool UCritAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, 
 		}
 	}
 
-	damage->addedDamage += inflictor->calculateTotalDamage(target.GetObject()) * Utility::fromPercent(damageMultiplierPercent);
+	damage->moreDamageCoefficients.Add(Utility::fromPercent(damageMultiplierPercent));
 
 	critMultiplier = target->getTotalLifePercentDealt(inflictor.GetObject()) * damageMultiplierPerTotalLifePercentPool;
 
