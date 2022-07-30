@@ -107,13 +107,46 @@ void ALostConnectionPlayerState::onDamageAffecterChange(EDamageAffecterType type
 				}
 			}
 		}
+
+		if (TObjectPtr<UBaseWeapon> currentWeapon = character->getCurrentWeapon())
+		{
+			FString modules = "Weapon modules: ";
+
+			getAffectersFromModules(currentWeapon->getWeaponModules());
+
+			getAffectersFromModules(inventory->getActiveWeaponModules());
+
+			for (const auto& i : currentWeapon->getWeaponModules())
+			{
+				if (TScriptInterface<IInventoriable> item = i->getItem())
+				{
+					modules += FString::Printf(TEXT("%s: %d, "), *item->getItemName().ToString(), Cast<UBaseModule>(item)->getQuality());
+				}
+			}
+
+			modules.RemoveFromEnd(", ");
+
+			UE_LOG(LogLostConnection, Warning, TEXT("%s"), *modules);
+
+			modules = "Active weapon modules: ";
+
+			for (const auto& i : inventory->getActiveWeaponModules())
+			{
+				if (TScriptInterface<IInventoriable> item = i->getItem())
+				{
+					modules += FString::Printf(TEXT("%s: %d, "), *item->getItemName().ToString(), Cast<UBaseModule>(item)->getQuality());
+				}
+			}
+
+			modules.RemoveFromEnd(", ");
+
+			UE_LOG(LogLostConnection, Warning, TEXT("%s"), *modules);
+		}
 	}
 
 	getAffectersFromModules(inventory->getPersonalEquippedModules());
 
 	getAffectersFromModules(inventory->getActivePersonalModules());
-
-	getAffectersFromModules(inventory->getActiveWeaponModules());
 }
 
 ALostConnectionPlayerState::ALostConnectionPlayerState()
