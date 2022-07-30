@@ -62,14 +62,14 @@ bool AInventory::swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>&
 	return StaticCast<bool>(weaponCell);
 }
 
-TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules)
+TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules, const TArray<TObjectPtr<UInventoryCell>>& modulesToIgnore)
 {
 	static int32 modulesToNextTier = ULostConnectionAssetManager::get().getDefaults().getModulesToNextTier();
 	TArray<TObjectPtr<UInventoryCell>> modulesToRemove;
 
-	for (TObjectPtr<UInventoryCell>* module : modules)
+	for (const auto& module : modules)
 	{
-		if (modulesToRemove.Contains(*module))
+		if (modulesToRemove.Contains(*module) || modulesToIgnore.Contains(*module))
 		{
 			continue;
 		}
@@ -81,11 +81,13 @@ TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObje
 
 		for (int32 i = 0; i < modulesToNextTier; i++)
 		{
-			TObjectPtr<UInventoryCell>* const* result = modules.FindByPredicate([&quality, &moduleClass, &currentQualityModules](TObjectPtr<UInventoryCell>* cell)
+			TObjectPtr<UInventoryCell>* const* result = modules.FindByPredicate(
+				[&modulesToIgnore, &modulesToRemove, &quality, &moduleClass, &currentQualityModules](TObjectPtr<UInventoryCell>* cell)
 				{
 					TObjectPtr<UBaseModule> tem = (*cell)->getItem<UBaseModule>();
 
-					return tem->getQuality() == quality &&
+					return !(modulesToRemove.Contains(*cell) || modulesToIgnore.Contains(*cell)) &&
+						tem->getQuality() == quality &&
 						moduleClass == tem->GetClass() &&
 						!currentQualityModules.Contains(*cell);
 				});
@@ -120,6 +122,13 @@ TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObje
 		modulesToRemove.Append(MoveTemp(currentQualityModules));
 
 		this->upgradeModule(possibleEquippedModule);
+	}
+
+	if (modulesToRemove.Num())
+	{
+		modulesToRemove.Append(this->upgradeModules(modules, modulesToRemove));
+
+		return modulesToRemove;
 	}
 
 	return modulesToRemove;
@@ -318,7 +327,7 @@ void AInventory::updateActiveWeaponModules()
 		return;
 	}
 
-	TSet<const FText*> moduleNames;
+	TArray<const FText*> moduleNames;
 
 	for (const TObjectPtr<UInventoryCell>& weaponModuleCell : weapon->getWeaponModules())
 	{
@@ -330,9 +339,12 @@ void AInventory::updateActiveWeaponModules()
 
 	for (const TObjectPtr<UInventoryCell>& weaponModule : weaponModules)
 	{
-		if (moduleNames.Contains(&weaponModule->getItem()->getItemName()))
+		for (const auto& moduleName : moduleNames)
 		{
-			activeWeaponModules.Add(weaponModule);
+			if (moduleName->EqualTo(weaponModule->getItem()->getItemName(), ETextComparisonLevel::Type::Quinary))
+			{
+				activeWeaponModules.Add(weaponModule);
+			}
 		}
 	}
 

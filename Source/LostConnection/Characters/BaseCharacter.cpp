@@ -742,6 +742,8 @@ void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterfa
 	const TObjectPtr<AController>& instigator = inflictor->getDamageInstigator();
 	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor, this);
 
+	UE_LOG(LogLostConnection, Warning, TEXT("Damage from %s: %f"), *instigator->GetName(), inflictor->calculateTotalDamage(this));
+
 	if (tem < 0.0f)
 	{
 		this->setCurrentHealth(0.0f);
