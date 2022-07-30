@@ -174,7 +174,7 @@ void AInventory::updateInventoryWidget_Implementation()
 	this->onInventoryUpdate();
 }
 
-void AInventory::updateDamageAffecters(TObjectPtr<UInventoryCell> cell)
+void AInventory::updateDamageAffecters(const TObjectPtr<UInventoryCell>& cell)
 {
 	if (cell.IsNull())
 	{
@@ -318,18 +318,21 @@ void AInventory::updateActiveWeaponModules()
 		return;
 	}
 
-	for (TObjectPtr<UInventoryCell>& cell : weaponModules)
+	TSet<const FText*> moduleNames;
+
+	for (const TObjectPtr<UInventoryCell>& weaponModuleCell : weapon->getWeaponModules())
 	{
-		const FText& name = cell->getItem()->getItemName();
-
-		for (TObjectPtr<UInventoryCell>& weaponModuleCell : weapon->getWeaponModules())
+		if (TScriptInterface<IInventoriable> currentWeaponModule = weaponModuleCell->getItem())
 		{
-			TScriptInterface<IInventoriable> currentWeaponModule = weaponModuleCell->getItem();
+			moduleNames.Add(&currentWeaponModule->getItemName());
+		}
+	}
 
-			if (currentWeaponModule && (weaponModuleCell != cell) && currentWeaponModule->getItemName().EqualTo(name, ETextComparisonLevel::Type::Quinary))
-			{
-				activeWeaponModules.Add(weaponModuleCell);
-			}
+	for (const TObjectPtr<UInventoryCell>& weaponModule : weaponModules)
+	{
+		if (moduleNames.Contains(&weaponModule->getItem()->getItemName()))
+		{
+			activeWeaponModules.Add(weaponModule);
 		}
 	}
 

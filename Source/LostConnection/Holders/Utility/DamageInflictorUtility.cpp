@@ -38,6 +38,8 @@ float UDamageInflictorUtility::calculateTotalDamage(const TScriptInterface<IDama
 	float damageBeforeResists = UFormulaLibrary::standardFormulaDamage(FDamageStructure(damage, inflictorAffecters, infictor, receiver));
 	float damageAfterResists = UFormulaLibrary::standardFormulaDamage(FDamageStructure(damageBeforeResists, receiverAffecters, infictor, receiver));
 
+	UE_LOG(LogLostConnection, Warning, TEXT("Damage instigator: %s\nDamage before resists: %f\nDamage damage after resists: %f\nResult damage: %f\n"), *damageInstigator->GetName(), damageBeforeResists, damageAfterResists, FMath::Max(damageBeforeResists * resistHardcap, damageAfterResists));
+
 	return FMath::Max(damageBeforeResists * resistHardcap, damageAfterResists);
 }
 

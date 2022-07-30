@@ -96,7 +96,7 @@ private:
 	UFUNCTION(NetMulticast, Reliable)
 	void updateInventoryWidget();
 
-	void updateDamageAffecters(TObjectPtr<UInventoryCell> cell);
+	void updateDamageAffecters(const TObjectPtr<UInventoryCell>& cell);
 
 	void updateDamageAffecters();
 
