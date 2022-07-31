@@ -62,14 +62,14 @@ bool AInventory::swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>&
 	return StaticCast<bool>(weaponCell);
 }
 
-TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules)
+TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules, const TArray<TObjectPtr<UInventoryCell>>& modulesToIgnore)
 {
 	static int32 modulesToNextTier = ULostConnectionAssetManager::get().getDefaults().getModulesToNextTier();
 	TArray<TObjectPtr<UInventoryCell>> modulesToRemove;
 
-	for (TObjectPtr<UInventoryCell>* module : modules)
+	for (const auto& module : modules)
 	{
-		if (modulesToRemove.Contains(*module))
+		if (modulesToRemove.Contains(*module) || modulesToIgnore.Contains(*module))
 		{
 			continue;
 		}
@@ -81,11 +81,13 @@ TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObje
 
 		for (int32 i = 0; i < modulesToNextTier; i++)
 		{
-			TObjectPtr<UInventoryCell>* const* result = modules.FindByPredicate([&quality, &moduleClass, &currentQualityModules](TObjectPtr<UInventoryCell>* cell)
+			TObjectPtr<UInventoryCell>* const* result = modules.FindByPredicate(
+				[&modulesToIgnore, &modulesToRemove, &quality, &moduleClass, &currentQualityModules](TObjectPtr<UInventoryCell>* cell)
 				{
 					TObjectPtr<UBaseModule> tem = (*cell)->getItem<UBaseModule>();
 
-					return tem->getQuality() == quality &&
+					return !(modulesToRemove.Contains(*cell) || modulesToIgnore.Contains(*cell)) &&
+						tem->getQuality() == quality &&
 						moduleClass == tem->GetClass() &&
 						!currentQualityModules.Contains(*cell);
 				});
@@ -120,6 +122,13 @@ TArray<TObjectPtr<UInventoryCell>> AInventory::upgradeModules(const TArray<TObje
 		modulesToRemove.Append(MoveTemp(currentQualityModules));
 
 		this->upgradeModule(possibleEquippedModule);
+	}
+
+	if (modulesToRemove.Num())
+	{
+		modulesToRemove.Append(this->upgradeModules(modules, modulesToRemove));
+
+		return modulesToRemove;
 	}
 
 	return modulesToRemove;
@@ -174,7 +183,7 @@ void AInventory::updateInventoryWidget_Implementation()
 	this->onInventoryUpdate();
 }
 
-void AInventory::updateDamageAffecters(TObjectPtr<UInventoryCell> cell)
+void AInventory::updateDamageAffecters(const TObjectPtr<UInventoryCell>& cell)
 {
 	if (cell.IsNull())
 	{
@@ -212,6 +221,18 @@ bool AInventory::containsItem(TObjectPtr<UInventoryCell> itemToFind, const TArra
 	}
 
 	return false;
+}
+
+void AInventory::changeEquipState(TObjectPtr<UInventoryCell>& cell, TArray<TObjectPtr<UInventoryCell>>& modules)
+{
+	if (modules.Contains(cell))
+	{
+		cell->equip();
+	}
+	else
+	{
+		cell->unequip();
+	}
 }
 
 void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -318,17 +339,23 @@ void AInventory::updateActiveWeaponModules()
 		return;
 	}
 
-	for (TObjectPtr<UInventoryCell>& cell : weaponModules)
+	TArray<const FText*> moduleNames;
+
+	for (const TObjectPtr<UInventoryCell>& weaponModuleCell : weapon->getWeaponModules())
 	{
-		const FText& name = cell->getItem()->getItemName();
-
-		for (TObjectPtr<UInventoryCell>& uneqippedCell : weapon->getWeaponModules())
+		if (TScriptInterface<IInventoriable> currentWeaponModule = weaponModuleCell->getItem())
 		{
-			TScriptInterface<IInventoriable> currentWeaponModule = uneqippedCell->getItem();
+			moduleNames.Add(&currentWeaponModule->getItemName());
+		}
+	}
 
-			if (currentWeaponModule && (uneqippedCell != cell) && currentWeaponModule->getItemName().EqualTo(name, ETextComparisonLevel::Type::Quinary))
+	for (const TObjectPtr<UInventoryCell>& weaponModule : weaponModules)
+	{
+		for (const auto& moduleName : moduleNames)
+		{
+			if (moduleName->EqualTo(weaponModule->getItem()->getItemName(), ETextComparisonLevel::Type::Quinary))
 			{
-				activeWeaponModules.Add(uneqippedCell);
+				activeWeaponModules.Add(weaponModule);
 			}
 		}
 	}
@@ -346,9 +373,9 @@ void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* mod
 
 		unequippedPersonalModules.Add(newCell);
 
-		(*cell)->setItem(nullptr);
-
 		(*cell)->unequip();
+
+		(*cell)->setItem(nullptr);
 	}
 	else
 	{
@@ -402,8 +429,6 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 
 		notEmpty->setItem(nullptr);
 
-		notEmpty->unequip();
-
 		if (index != INDEX_NONE)
 		{
 			unequippedPersonalModules.RemoveAt(index);
@@ -411,23 +436,11 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 	}
 	else
 	{
-		auto changeEquipState = [this](TObjectPtr<UInventoryCell>& cell)
-		{
-			if (equippedPersonalModules.Contains(cell))
-			{
-				cell->equip();
-			}
-			else
-			{
-				cell->unequip();
-			}
-		};
-
 		Swap(first, second);
 
-		changeEquipState(first);
+		AInventory::changeEquipState(first, equippedPersonalModules);
 
-		changeEquipState(second);
+		AInventory::changeEquipState(second, equippedPersonalModules);
 	}
 
 	this->updateActivePersonalModules();
@@ -449,13 +462,8 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 
 	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
 
-	if (weaponModules.Contains(module))
+	if (!AInventory::containsItem(module, modules))
 	{
-		if (AInventory::containsItem(module, modules))
-		{
-			return;
-		}
-
 		for (TObjectPtr<UInventoryCell> weaponModule : modules)
 		{
 			if (weaponModule->isEmpty())
@@ -472,9 +480,9 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 	{
 		TObjectPtr<UInventoryCell>* cell = modules.FindByKey(module);
 
-		(*cell)->setItem(nullptr);
-
 		(*cell)->unequip();
+
+		(*cell)->setItem(nullptr);
 	}
 
 	this->updateActiveWeaponModules();
@@ -527,8 +535,6 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 
 		empty->equip();
 
-		notEmpty->unequip();
-
 		if (isSamePlace)
 		{
 			notEmpty->setItem(nullptr);
@@ -536,28 +542,13 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 	}
 	else
 	{
-		if (isSamePlace)
+		Swap(first, second);
+
+		if (!isSamePlace)
 		{
-			Swap(first, second);
-		}
-		else
-		{
-			if (modules.Contains(first))
-			{
-				first->setItem(second->getItem().GetInterface());
+			AInventory::changeEquipState(first, modules);
 
-				first->equip();
-
-				second->unequip();
-			}
-			else
-			{
-				second->setItem(first->getItem().GetInterface());
-
-				second->equip();
-
-				first->unequip();
-			}
+			AInventory::changeEquipState(second, modules);
 		}
 	}
 

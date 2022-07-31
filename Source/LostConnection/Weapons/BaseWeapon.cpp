@@ -102,6 +102,8 @@ void UBaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(UBaseWeapon, rarity);
 
 	DOREPLIFETIME(UBaseWeapon, damageInstigator);
+
+	DOREPLIFETIME(UBaseWeapon, isWeaponEquipped);
 }
 
 void UBaseWeapon::shoot()
@@ -196,6 +198,11 @@ void UBaseWeapon::shoot()
 const FText& UBaseWeapon::getItemDescription() const
 {
 	return weaponDescription;
+}
+
+bool& UBaseWeapon::getIsEquipped()
+{
+	return isWeaponEquipped;
 }
 
 UBaseWeapon::UBaseWeapon() :

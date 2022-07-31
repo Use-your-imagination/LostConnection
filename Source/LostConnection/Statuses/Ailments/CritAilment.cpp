@@ -5,6 +5,7 @@
 #include "Interfaces/Gameplay/Statuses/Base/StatusReceiver.h"
 #include "Interfaces/Gameplay/Statuses/Base/AilmentReceiver.h"
 #include "Utility/Utility.h"
+#include "Maths/FormulaLibrary.h"
 
 FString UCritAilment::getStatusName() const
 {
@@ -20,28 +21,6 @@ void UCritAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(UCritAilment, damageMultiplierPerTotalLifePercentPool);
 
 	DOREPLIFETIME(UCritAilment, critMultiplier);
-
-	DOREPLIFETIME(UCritAilment, damageInflictorUtility);
-}
-
-void UCritAilment::initDamage()
-{
-	const TArray<TObjectPtr<UBaseStatus>>& statuses = target->getStatuses();
-
-	for (const TObjectPtr<UBaseStatus>& status : statuses)
-	{
-		if (TObjectPtr<UCritAilment> crit = Cast<UCritAilment>(status))
-		{
-			damageMultiplierPercent += crit->getCritMultiplier();
-		}
-	}
-
-	damageInflictorUtility->getDamage().baseDamage = damage.baseDamage * Utility::fromPercent(damageMultiplierPercent);
-}
-
-UCritAilment::UCritAilment()
-{
-	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
 float UCritAilment::getCritMultiplier() const
@@ -66,33 +45,24 @@ bool UCritAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, 
 		return false;
 	}
 
-	this->initDamage();
+	if (!inflictor)
+	{
+		return false;
+	}
 
-	target->takeDamageFromInflictorHolder(this);
+	for (const TObjectPtr<UBaseStatus>& status : target->getStatuses())
+	{
+		if (TObjectPtr<UCritAilment> crit = Cast<UCritAilment>(status))
+		{
+			damageMultiplierPercent += crit->getCritMultiplier();
+		}
+	}
 
-	Utility::resetDamageInflictor(damageInflictorUtility);
+	damage->moreDamageCoefficients.Add(Utility::fromPercent(damageMultiplierPercent));
 
-	damageInflictorUtility->getDamage().baseDamage = damage.baseDamage;
-
-	critMultiplier = target->getTotalLifePercentDealt(this) * damageMultiplierPerTotalLifePercentPool;
+	critMultiplier = target->getTotalLifePercentDealt(inflictor.GetObject()) * damageMultiplierPerTotalLifePercentPool;
 
 	return true;
-}
-
-bool UCritAilment::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool wroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	wroteSomething |= Channel->ReplicateSubobject(damageInflictorUtility, *Bunch, *RepFlags);
-
-	wroteSomething |= damageInflictorUtility->ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	return wroteSomething;
-}
-
-UDamageInflictorUtility* UCritAilment::getDamageInflictorUtility() const
-{
-	return damageInflictorUtility;
 }
 
 ETypeOfDamage UCritAilment::getAilmentDamageType() const

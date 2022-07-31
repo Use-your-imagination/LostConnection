@@ -29,7 +29,7 @@ private:
 	float additionalFireCrushingHitChance;
 
 	UPROPERTY(Category = Burn, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	UDamageInflictorUtility* damageInflictorUtility;
+	TObjectPtr<UDamageInflictorUtility> damageInflictorUtility;
 
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

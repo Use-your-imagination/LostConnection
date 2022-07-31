@@ -28,17 +28,15 @@ void UIrradiationAilment::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 
 void UIrradiationAilment::initDamage()
 {
-	const TArray<UBaseStatus*>& statuses = target->getStatuses();
-
-	for (const UBaseStatus* status : statuses)
+	for (const TObjectPtr<UBaseStatus>& status : target->getStatuses())
 	{
-		if (const UIrradiationAilment* irradiation = Cast<UIrradiationAilment>(status))
+		if (TObjectPtr<UIrradiationAilment> irradiation = Cast<UIrradiationAilment>(status))
 		{
 			irradiationMultiplier += irradiation->getAdditionalIrradiationMultiplier();
 		}
 	}
 
-	damageInflictorUtility->getDamage().baseDamage = damage.baseDamage * Utility::fromPercent(irradiationMultiplier);
+	damageInflictorUtility->getDamage().baseDamage = inflictor->calculateTotalDamage(target.GetObject()) * Utility::fromPercent(irradiationMultiplier);
 }
 
 UIrradiationAilment::UIrradiationAilment()
@@ -70,7 +68,7 @@ bool UIrradiationAilment::applyEffect(const TScriptInterface<IStatusReceiver>& t
 
 	this->initDamage();
 
-	float tem = target->getCurrentHealth() - damageInflictorUtility->calculateTotalDamage();
+	float tem = target->getCurrentHealth() - damageInflictorUtility->calculateTotalDamage(target.GetObject());
 
 	if (tem < 0.0f)
 	{
@@ -80,10 +78,6 @@ bool UIrradiationAilment::applyEffect(const TScriptInterface<IStatusReceiver>& t
 	{
 		target->setCurrentHealth(tem);
 	}
-
-	Utility::resetDamageInflictor(damageInflictorUtility);
-
-	damageInflictorUtility->getDamage().baseDamage = damage.baseDamage;
 
 	additionalIrradiationMultiplier = target->getEnergyShieldPercentDealt(this) / irradiationMultiplierPerPercentEnergyShieldPool;
 

@@ -49,7 +49,7 @@ private:
 public:
 	USwarmAilment();
 
-	void increaseThreshold(const TScriptInterface<IDamageInflictor>& inflictor);
+	void increaseThreshold();
 
 	float getThreshold() const;
 

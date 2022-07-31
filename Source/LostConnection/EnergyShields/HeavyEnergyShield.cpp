@@ -37,7 +37,7 @@ float UHeavyEnergyShield::getCurrentPoolCapacity() const
 	return currentPoolCapacity;
 }
 
-void UHeavyEnergyShield::init(ABaseCharacter* owner)
+void UHeavyEnergyShield::init(const TObjectPtr<ABaseCharacter>& owner)
 {
 	Super::init(owner);
 

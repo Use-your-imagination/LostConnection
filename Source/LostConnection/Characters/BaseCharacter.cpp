@@ -740,7 +740,9 @@ void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterfa
 	this->notifyTakeDamageEvents(this);
 
 	const TObjectPtr<AController>& instigator = inflictor->getDamageInstigator();
-	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor);
+	float tem = currentHealth - energyShield->takeDamageFromInflictor(inflictor, this);
+
+	UE_LOG(LogLostConnection, Warning, TEXT("Damage from %s: %f"), *instigator->GetName(), inflictor->calculateTotalDamage(this));
 
 	if (tem < 0.0f)
 	{
@@ -753,10 +755,10 @@ void ABaseCharacter::takeDamageFromInflictor_Implementation(const TScriptInterfa
 
 	if (TObjectPtr<AController> controller = GetController())
 	{
-		controller->TakeDamage(inflictor->calculateTotalDamage(), FDamageEvent(), instigator, instigator->GetPawn());
+		controller->TakeDamage(inflictor->calculateTotalDamage(this), FDamageEvent(), instigator, instigator->GetPawn());
 	}
 
-	TakeDamage(inflictor->calculateTotalDamage(), FDamageEvent(), instigator, instigator->GetPawn());
+	TakeDamage(inflictor->calculateTotalDamage(this), FDamageEvent(), instigator, instigator->GetPawn());
 }
 
 void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& hit)
@@ -765,9 +767,9 @@ void ABaseCharacter::impactAction_Implementation(AAmmo* ammo, const FHitResult& 
 	{
 		this->notifyHitEvents(ammo->getOwner(), this);
 
-		this->takeDamageFromInflictor(ammo->getAilmentInflictorUtility());
-
 		this->statusInflictorImpactAction(ammo->getAilmentInflictorUtility(), hit);
+
+		this->takeDamageFromInflictor(ammo->getAilmentInflictorUtility());
 	}
 }
 
@@ -919,20 +921,24 @@ float ABaseCharacter::getEnergyShieldPool() const
 float ABaseCharacter::getTotalLifePercentDealt(const TScriptInterface<IDamageInflictor>& inflictor) const
 {
 	float pool = this->getTotalLifePool();
+	TScriptInterface<IDamageReceiver> receiver = const_cast<ABaseCharacter*>(this);
 
-	return Utility::toPercent(1.0f - (pool - inflictor->calculateTotalDamage()) / pool);
+	return Utility::toPercent(1.0f - (pool - inflictor->calculateTotalDamage(receiver)) / pool);
 }
 
 float ABaseCharacter::getLifePercentDealt(const TScriptInterface<IDamageInflictor>& inflictor) const
 {
-	return Utility::toPercent(1.0f - (health - inflictor->calculateTotalDamage()) / health);
+	TScriptInterface<IDamageReceiver> receiver = const_cast<ABaseCharacter*>(this);
+
+	return Utility::toPercent(1.0f - (health - inflictor->calculateTotalDamage(receiver)) / health);
 }
 
 float ABaseCharacter::getEnergyShieldPercentDealt(const TScriptInterface<IDamageInflictor>& inflictor) const
 {
 	float capacity = energyShield->getCapacity();
+	TScriptInterface<IDamageReceiver> receiver = const_cast<ABaseCharacter*>(this);
 
-	return Utility::toPercent(1.0f - (capacity - inflictor->calculateTotalDamage()) / capacity);
+	return Utility::toPercent(1.0f - (capacity - inflictor->calculateTotalDamage(receiver)) / capacity);
 }
 
 USkeletalMeshComponent* ABaseCharacter::getMeshComponent()

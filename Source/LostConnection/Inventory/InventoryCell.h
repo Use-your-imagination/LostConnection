@@ -20,9 +20,6 @@ private:
 	UPROPERTY(Replicated, Meta = (MustImplement = Inventoriable))
 	TObjectPtr<UNetworkObject> item;
 
-	UPROPERTY(Category = State, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	bool isEquipped;
-
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

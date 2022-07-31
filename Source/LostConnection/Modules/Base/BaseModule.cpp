@@ -4,25 +4,27 @@
 
 #include "Utility/Utility.h"
 
-int32 UBaseModule::getMultiplier() const
+float UBaseModule::getMultiplier() const
 {
 	switch (quality)
 	{
 	case EModuleQuality::broken:
+		return 0.5f;
+
 	case EModuleQuality::bronze:
-		return 1;
+		return 1.0f;
 
 	case EModuleQuality::silver:
-		return 2;
+		return 2.0f;
 
 	case EModuleQuality::gold:
-		return 4;
+		return 4.0f;
 
 	case EModuleQuality::platinum:
-		return 8;
+		return 8.0f;
 	}
 
-	return 0;
+	return 0.0f;
 }
 
 void UBaseModule::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -30,6 +32,8 @@ void UBaseModule::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UBaseModule, quality);
+
+	DOREPLIFETIME(UBaseModule, isModuleEquipped);
 }
 
 const FText& UBaseModule::getItemDescription() const
@@ -37,7 +41,12 @@ const FText& UBaseModule::getItemDescription() const
 	return moduleDescription;
 }
 
-bool UBaseModule::applyCondition(TObjectPtr<AActor> caller) const
+bool& UBaseModule::getIsEquipped()
+{
+	return isModuleEquipped;
+}
+
+bool UBaseModule::applyCondition(const TObjectPtr<AActor>& caller) const
 {
 	return true;
 }

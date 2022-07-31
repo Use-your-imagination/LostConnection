@@ -94,21 +94,6 @@ bool Utility::isYourPawn(APawn* pawn)
 	return IsValid(pawn) && (pawn->GetController() == GEngine->GetFirstLocalPlayerController(pawn->GetWorld()));
 }
 
-void Utility::resetDamageInflictor(IDamageInflictor* inflictor)
-{
-	FDamageStructure& damage = inflictor->getDamage();
-
-	damage.baseDamage = 0.0f;
-
-	damage.addedDamage = 0.0f;
-
-	damage.additionalDamage = 0.0f;
-
-	damage.increaseDamageCoefficients.Empty();
-
-	damage.moreDamageCoefficients.Empty();
-}
-
 TObjectPtr<UBaseWeapon> Utility::createWeapon(TSubclassOf<UBaseWeapon> weaponClass, EWeaponRarity rarity, TObjectPtr<AInventory> inventory)
 {
 	TObjectPtr<UBaseWeapon> weapon = NewObject<UBaseWeapon>(inventory, weaponClass);

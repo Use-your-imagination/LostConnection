@@ -3,23 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "UObject/Interface.h"
+
 #include "Buff.generated.h"
 
-// This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(BlueprintType, Meta = (CannotImplementInterfaceInBlueprint))
 class UBuff : public UInterface
 {
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class LOSTCONNECTION_API IBuff
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	IBuff() = default;
 };

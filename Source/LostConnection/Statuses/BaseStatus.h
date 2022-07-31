@@ -43,9 +43,9 @@ protected:
 	UPROPERTY(Category = Statuses, Replicated, BlueprintReadOnly)
 	float currentDuration;
 
+	TScriptInterface<class IStatusInflictor> inflictor;
 	TScriptInterface<class IStatusReceiver> target;
-
-	FDamageStructure damage;
+	FDamageStructure* damage;
 
 protected:
 	UPROPERTY(Category = Particles, EditDefaultsOnly, BlueprintReadOnly)

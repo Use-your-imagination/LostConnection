@@ -32,9 +32,9 @@ UShatterAilment::UShatterAilment()
 	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
-void UShatterAilment::updateDuration(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target)
+void UShatterAilment::updateDuration()
 {
-	duration += target->getTotalLifePercentDealt(Cast<IDamageInflictor>(inflictor)) / Utility::fromPercent(durationConversionPercent);
+	duration += target->getTotalLifePercentDealt(inflictor.GetObject()) / Utility::fromPercent(durationConversionPercent);
 }
 
 void UShatterAilment::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
@@ -48,10 +48,10 @@ void UShatterAilment::applyStatus_Implementation(const TScriptInterface<IStatusI
 	{
 		Super::applyStatus_Implementation(inflictor, target, hit);
 
-		previousLocation = Cast<AActor>(target.GetObject())->GetActorLocation();
+		previousLocation = Cast<AActor>(target)->GetActorLocation();
 	}
 
-	this->updateDuration(inflictor, target);
+	this->updateDuration();
 }
 
 bool UShatterAilment::applyEffect(const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
@@ -61,14 +61,14 @@ bool UShatterAilment::applyEffect(const TScriptInterface<IStatusReceiver>& targe
 		return false;
 	}
 
-	FVector currentTargetLocation = Cast<AActor>(target->_getUObject())->GetActorLocation();
+	FVector currentTargetLocation = Cast<AActor>(target)->GetActorLocation();
 
 	targetTotalLifePool = target->getTotalLifePool();
 
-	damageInflictorUtility->getDamage().baseDamage = targetTotalLifePool * 
+	damageInflictorUtility->getDamage().baseDamage = targetTotalLifePool *
 		Utility::fromPercent
 		(
-			(currentTargetLocation - previousLocation).Size() / 100.0f *damagePercentPerMeter
+			(currentTargetLocation - previousLocation).Size() / 100.0f * damagePercentPerMeter
 		);
 
 	target->takeDamageFromInflictor(this);

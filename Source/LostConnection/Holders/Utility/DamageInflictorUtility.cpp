@@ -4,6 +4,7 @@
 
 #include "Utility/Utility.h"
 #include "Maths/FormulaLibrary.h"
+#include "AssetLoading/LostConnectionAssetManager.h"
 
 void UDamageInflictorUtility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -19,6 +20,7 @@ void UDamageInflictorUtility::setDamageInstigator_Implementation(AController* ne
 
 float UDamageInflictorUtility::calculateTotalDamage(const TScriptInterface<IDamageReceiver>& receiver) const
 {
+	static float resistHardcap = ULostConnectionAssetManager::get().getDefaults().getResistHardcap();
 	TArray<TScriptInterface<IDamageAffecter>> inflictorAffecters;
 	TArray<TScriptInterface<IDamageAffecter>> receiverAffecters;
 	TScriptInterface<IDamageInflictor> infictor = const_cast<UDamageInflictorUtility*>(this);
@@ -33,16 +35,10 @@ float UDamageInflictorUtility::calculateTotalDamage(const TScriptInterface<IDama
 		receiverAffecters = playerState->getDefenceAffecters();
 	}
 
-	return UFormulaLibrary::standardFormulaDamage
-	(
-		FDamageStructure
-		(
-			UFormulaLibrary::standardFormulaDamage(FDamageStructure(damage, inflictorAffecters, infictor, receiver)), // damage before resists
-			receiverAffecters,
-			infictor,
-			receiver
-		)
-	);
+	float damageBeforeResists = UFormulaLibrary::standardFormulaDamage(FDamageStructure(damage, inflictorAffecters, infictor, receiver));
+	float damageAfterResists = UFormulaLibrary::standardFormulaDamage(FDamageStructure(damageBeforeResists, receiverAffecters, infictor, receiver));
+
+	return FMath::Max(damageBeforeResists * resistHardcap, damageAfterResists);
 }
 
 FDamageStructure& UDamageInflictorUtility::getDamage()

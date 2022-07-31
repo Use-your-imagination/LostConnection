@@ -86,7 +86,7 @@ private:
 
 	bool swapBetweenUnequippedWeaponsAndSlot(TObjectPtr<UInventoryCell>& slot, UBaseWeapon* weapon);
 
-	TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules);
+	TArray<TObjectPtr<UInventoryCell>> upgradeModules(const TArray<TObjectPtr<UInventoryCell>*>& modules, const TArray<TObjectPtr<UInventoryCell>>& modulesToIgnore = {});
 
 	void upgradeModule(TObjectPtr<UInventoryCell> moduleToUpgrade);
 
@@ -96,12 +96,14 @@ private:
 	UFUNCTION(NetMulticast, Reliable)
 	void updateInventoryWidget();
 
-	void updateDamageAffecters(TObjectPtr<UInventoryCell> cell);
+	void updateDamageAffecters(const TObjectPtr<UInventoryCell>& cell);
 
 	void updateDamageAffecters();
 
 private:
 	static bool containsItem(TObjectPtr<UInventoryCell> itemToFind, const TArray<TObjectPtr<UInventoryCell>>& cells);
+
+	static void changeEquipState(TObjectPtr<UInventoryCell>& cell, TArray<TObjectPtr<UInventoryCell>>& modules);
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

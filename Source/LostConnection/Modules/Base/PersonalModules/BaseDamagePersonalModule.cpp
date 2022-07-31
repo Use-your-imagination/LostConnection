@@ -6,7 +6,7 @@
 #include "Interfaces/Gameplay/Statuses/Base/AilmentInflictor.h"
 #include "Utility/Utility.h"
 
-bool UBaseDamagePersonalModule::applyCondition(TObjectPtr<AActor> caller) const
+bool UBaseDamagePersonalModule::applyCondition(const TObjectPtr<AActor>& caller) const
 {
 	if (IAilmentInflictorHolder* holder = Cast<IAilmentInflictorHolder>(caller))
 	{
@@ -27,7 +27,7 @@ bool UBaseDamagePersonalModule::affectCondition(const TScriptInterface<IDamageIn
 
 void UBaseDamagePersonalModule::affect(FDamageStructure& damage)
 {
-	float multiplier = this->getMultiplier();
+	float multiplier = this->getMultiplier() * (isModuleEquipped ? 1.0f : 0.5f);
 	TArray<float> increase = moduleDamage.increaseDamageCoefficients;
 	TArray<float> more = moduleDamage.moreDamageCoefficients;
 	auto applyMultiplier = [multiplier](TArray<float>& coefficients)

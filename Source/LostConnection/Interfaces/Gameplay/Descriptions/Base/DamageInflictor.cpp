@@ -30,7 +30,9 @@ FDamageStructure::FDamageStructure(const FDamageStructure& base, const TArray<TS
 }
 
 FDamageStructure::FDamageStructure(float baseDamage, const TArray<TScriptInterface<IDamageAffecter>>& affecters, const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver) :
-	baseDamage(baseDamage)
+	baseDamage(baseDamage),
+	addedDamage(0.0f),
+	additionalDamage(0.0f)
 {
 	this->affect(affecters, inflictor, receiver);
 }

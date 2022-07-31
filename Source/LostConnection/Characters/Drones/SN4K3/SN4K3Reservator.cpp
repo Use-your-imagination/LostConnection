@@ -3,7 +3,7 @@
 #include "SN4K3Reservator.h"
 
 #include "Characters/BaseDrone.h"
-#include "Statuses/Buffs/SN4K3/SN4K3ReservatorBuff.h"
+#include "SN4K3ReservatorBuff.h"
 
 void USN4K3Reservator::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {

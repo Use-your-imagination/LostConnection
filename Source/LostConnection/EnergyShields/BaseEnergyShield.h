@@ -49,7 +49,7 @@ protected:
 	bool isRecharging;
 
 	UPROPERTY(Replicated)
-	class ABaseCharacter* owner;
+	TObjectPtr<class ABaseCharacter> owner;
 
 	TimersUtility timers;
 
@@ -68,9 +68,9 @@ private:
 public:
 	UBaseEnergyShield() = default;
 
-	virtual void init(class ABaseCharacter* owner);
+	virtual void init(const TObjectPtr<class ABaseCharacter>& owner);
 
-	virtual float takeDamageFromInflictor(const TScriptInterface<class IDamageInflictor>& inflictor);
+	virtual float takeDamageFromInflictor(const TScriptInterface<class IDamageInflictor>& inflictor, const TScriptInterface<class IDamageReceiver>& receiver);
 
 	UFUNCTION(Server, Reliable)
 	virtual void restoreShield();

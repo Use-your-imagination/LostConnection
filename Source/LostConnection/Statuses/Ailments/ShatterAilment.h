@@ -31,7 +31,7 @@ private:
 	float damagePercentPerMeter;
 
 	UPROPERTY(Category = Shatter, Replicated, BlueprintReadOnly, Meta = (AllowPrivateAccess))
-	UDamageInflictorUtility* damageInflictorUtility;
+	TObjectPtr<UDamageInflictorUtility> damageInflictorUtility;
 
 	FVector previousLocation;
 	float targetTotalLifePool;
@@ -39,7 +39,7 @@ private:
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	void updateDuration(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target);
+	void updateDuration();
 
 public:
 	UShatterAilment();

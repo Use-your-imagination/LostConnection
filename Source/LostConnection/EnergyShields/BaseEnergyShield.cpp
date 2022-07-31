@@ -3,6 +3,7 @@
 #include "BaseEnergyShield.h"
 
 #include "Interfaces/Gameplay/Descriptions/Base/DamageInflictor.h"
+#include "Interfaces/Gameplay/Descriptions/Base/DamageReceiver.h"
 #include "Characters/BaseCharacter.h"
 
 void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -28,7 +29,7 @@ void UBaseEnergyShield::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 void UBaseEnergyShield::onCapacityChange()
 {
-	if (IsValid(owner))
+	if (owner)
 	{
 		owner->onHealthChange();
 	}
@@ -36,7 +37,7 @@ void UBaseEnergyShield::onCapacityChange()
 
 void UBaseEnergyShield::onCurrentCapacityChange()
 {
-	if (IsValid(owner))
+	if (owner)
 	{
 		owner->onCurrentHealthChange();
 	}
@@ -49,7 +50,7 @@ void UBaseEnergyShield::startRechargeDelay()
 	isRecharging = false;
 }
 
-void UBaseEnergyShield::init(ABaseCharacter* owner)
+void UBaseEnergyShield::init(const TObjectPtr<ABaseCharacter>& owner)
 {
 	this->owner = owner;
 
@@ -72,9 +73,9 @@ void UBaseEnergyShield::init(ABaseCharacter* owner)
 		}, 1.0f / rechargesPerSecond);
 }
 
-float UBaseEnergyShield::takeDamageFromInflictor(const TScriptInterface<IDamageInflictor>& inflictor)
+float UBaseEnergyShield::takeDamageFromInflictor(const TScriptInterface<IDamageInflictor>& inflictor, const TScriptInterface<IDamageReceiver>& receiver)
 {
-	float tem = currentCapacity - inflictor->calculateTotalDamage();
+	float tem = currentCapacity - inflictor->calculateTotalDamage(receiver);
 	float remainingDamage = 0.0f;
 
 	if (tem <= 0.0f)

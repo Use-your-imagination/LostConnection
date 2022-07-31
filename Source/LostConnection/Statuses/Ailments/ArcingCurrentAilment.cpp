@@ -41,9 +41,9 @@ UArcingCurrentAilment::UArcingCurrentAilment()
 	damageInflictorUtility = CreateDefaultSubobject<UDamageInflictorUtility>("DamageInflictorUtility");
 }
 
-void UArcingCurrentAilment::increaseDamageConversion(const TScriptInterface<IDamageInflictor> inflictor)
+void UArcingCurrentAilment::increaseDamageConversion()
 {
-	damageConversionPercent += target->getTotalLifePercentDealt(inflictor) * damageConvertPercentPerTotalLifePercentPool;
+	damageConversionPercent += target->getTotalLifePercentDealt(inflictor.GetObject()) * damageConvertPercentPerTotalLifePercentPool;
 }
 
 void UArcingCurrentAilment::applyStatus_Implementation(const TScriptInterface<IStatusInflictor>& inflictor, const TScriptInterface<IStatusReceiver>& target, const FHitResult& hit)
@@ -55,15 +55,13 @@ void UArcingCurrentAilment::applyStatus_Implementation(const TScriptInterface<IS
 
 	if (Utility::isTargetAlreadyUnderStatus<UArcingCurrentAilment>(target))
 	{
-		const TArray<UBaseStatus*>& statuses = target->getStatuses();
+		this->inflictor = inflictor;
 
-		for (const auto& status : statuses)
+		for (const auto& status : target->getStatuses())
 		{
-			UArcingCurrentAilment* arcing = Cast<UArcingCurrentAilment>(status);
-
-			if (arcing)
+			if (TObjectPtr<UArcingCurrentAilment> arcing = Cast<UArcingCurrentAilment>(status))
 			{
-				arcing->increaseDamageConversion(this->getDamageInflictorUtility());
+				arcing->increaseDamageConversion();
 
 				target->setUnderStatusIntVariable(this->getStatusCountKey(), this->calculateUnderStatusEffect());
 			}
@@ -73,6 +71,8 @@ void UArcingCurrentAilment::applyStatus_Implementation(const TScriptInterface<IS
 	{
 		Super::applyStatus_Implementation(inflictor, target, hit);
 	}
+
+	damageInflictorUtility->getDamage().baseDamage = inflictor->calculateTotalDamage(target.GetObject()) * Utility::fromPercent(damageConversionPercent);
 
 	this->applyEffect(target, hit);
 }
@@ -86,11 +86,11 @@ bool UArcingCurrentAilment::applyEffect(const TScriptInterface<IStatusReceiver>&
 		return false;
 	}
 
-	TArray<AActor*> targets;
+	TArray<TObjectPtr<AActor>> targets;
 
 	UKismetSystemLibrary::SphereOverlapActors
 	(
-		Cast<UObject>(target)->GetWorld(),
+		Cast<AActor>(target),
 		target->getMeshComponent()->GetComponentLocation(),
 		radius,
 		traceObjectTypes,
@@ -99,7 +99,7 @@ bool UArcingCurrentAilment::applyEffect(const TScriptInterface<IStatusReceiver>&
 		targets
 	);
 
-	for (auto& otherTarget : targets)
+	for (const TObjectPtr<AActor>& otherTarget : targets)
 	{
 		Cast<ABaseCharacter>(otherTarget)->takeDamageFromInflictor(this);
 	}
