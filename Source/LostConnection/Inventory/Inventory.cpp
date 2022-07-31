@@ -223,6 +223,18 @@ bool AInventory::containsItem(TObjectPtr<UInventoryCell> itemToFind, const TArra
 	return false;
 }
 
+void AInventory::changeEquipState(TObjectPtr<UInventoryCell>& cell, TArray<TObjectPtr<UInventoryCell>>& modules)
+{
+	if (modules.Contains(cell))
+	{
+		cell->equip();
+	}
+	else
+	{
+		cell->unequip();
+	}
+}
+
 void AInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -361,9 +373,9 @@ void AInventory::equipOrUnequipPersonalModule_Implementation(UInventoryCell* mod
 
 		unequippedPersonalModules.Add(newCell);
 
-		(*cell)->setItem(nullptr);
-
 		(*cell)->unequip();
+
+		(*cell)->setItem(nullptr);
 	}
 	else
 	{
@@ -417,8 +429,6 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 
 		notEmpty->setItem(nullptr);
 
-		notEmpty->unequip();
-
 		if (index != INDEX_NONE)
 		{
 			unequippedPersonalModules.RemoveAt(index);
@@ -426,23 +436,11 @@ void AInventory::swapPersonalModules_Implementation(UInventoryCell* firstModule,
 	}
 	else
 	{
-		auto changeEquipState = [this](TObjectPtr<UInventoryCell>& cell)
-		{
-			if (equippedPersonalModules.Contains(cell))
-			{
-				cell->equip();
-			}
-			else
-			{
-				cell->unequip();
-			}
-		};
-
 		Swap(first, second);
 
-		changeEquipState(first);
+		AInventory::changeEquipState(first, equippedPersonalModules);
 
-		changeEquipState(second);
+		AInventory::changeEquipState(second, equippedPersonalModules);
 	}
 
 	this->updateActivePersonalModules();
@@ -464,13 +462,8 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 
 	TArray<TObjectPtr<UInventoryCell>>& modules = selectedWeapon->getItem<UBaseWeapon>()->getWeaponModules();
 
-	if (weaponModules.Contains(module))
+	if (!AInventory::containsItem(module, modules))
 	{
-		if (AInventory::containsItem(module, modules))
-		{
-			return;
-		}
-
 		for (TObjectPtr<UInventoryCell> weaponModule : modules)
 		{
 			if (weaponModule->isEmpty())
@@ -487,9 +480,9 @@ void AInventory::equipOrUnequipWeaponModule_Implementation(UInventoryCell* selec
 	{
 		TObjectPtr<UInventoryCell>* cell = modules.FindByKey(module);
 
-		(*cell)->setItem(nullptr);
-
 		(*cell)->unequip();
+
+		(*cell)->setItem(nullptr);
 	}
 
 	this->updateActiveWeaponModules();
@@ -542,8 +535,6 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 
 		empty->equip();
 
-		notEmpty->unequip();
-
 		if (isSamePlace)
 		{
 			notEmpty->setItem(nullptr);
@@ -551,28 +542,13 @@ void AInventory::swapWeaponModules_Implementation(UInventoryCell* selectedWeapon
 	}
 	else
 	{
-		if (isSamePlace)
+		Swap(first, second);
+
+		if (!isSamePlace)
 		{
-			Swap(first, second);
-		}
-		else
-		{
-			if (modules.Contains(first))
-			{
-				first->setItem(second->getItem().GetInterface());
+			AInventory::changeEquipState(first, modules);
 
-				first->equip();
-
-				second->unequip();
-			}
-			else
-			{
-				second->setItem(first->getItem().GetInterface());
-
-				second->equip();
-
-				first->unequip();
-			}
+			AInventory::changeEquipState(second, modules);
 		}
 	}
 

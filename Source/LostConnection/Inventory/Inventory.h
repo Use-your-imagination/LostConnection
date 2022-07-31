@@ -103,6 +103,8 @@ private:
 private:
 	static bool containsItem(TObjectPtr<UInventoryCell> itemToFind, const TArray<TObjectPtr<UInventoryCell>>& cells);
 
+	static void changeEquipState(TObjectPtr<UInventoryCell>& cell, TArray<TObjectPtr<UInventoryCell>>& modules);
+
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
